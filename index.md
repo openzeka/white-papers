@@ -1,103 +1,105 @@
 ---
-title: Ana Sayfa
+title: Home
 layout: home
 nav_order: 1
+lang: en
+page_id: home
 description: >-
-  Openzeka Teknoloji A.Ş. teknik white paper'ları — NVIDIA DGX/HGX, Jetson gömülü
-  sistemler, DGX Spark ve Cordatus AI uç-bulut çıkarım platformu.
+  Openzeka Teknoloji A.Ş. technical white papers — NVIDIA DGX/HGX, Jetson embedded
+  systems, DGX Spark and Cordatus AI edge-cloud inference platform.
 permalink: /
 ---
 
 <div class="hero" markdown="1">
 
-# Openzeka Teknik White Paper'ları
+# Openzeka Technical White Papers
 
 <p class="subtitle">
-  Yapay zeka, yüksek başarımlı hesaplama ve gömülü sistemler üzerine derinlemesine
-  teknik analizler. NVIDIA <strong>DGX/HGX</strong> veri merkezi çözümlerinden
-  <strong>Jetson</strong> tabanlı uç (edge) çıkarıma, <strong>DGX Spark</strong>
-  mini süper bilgisayarlardan <strong>Cordatus AI</strong> gerçek zamanlı görüntü
-  analitiği platformuna kadar.
+  In-depth technical analysis on artificial intelligence, high-performance computing,
+  and embedded systems. From NVIDIA <strong>DGX/HGX</strong> data center solutions to
+  <strong>Jetson</strong>-based edge inference, from <strong>DGX Spark</strong>
+  mini supercomputers to the <strong>Cordatus AI</strong> real-time video
+  analytics platform.
 </p>
 
 <p class="meta">
-  NVIDIA Robotics Türkiye &amp; MEA Resmî Distribütörü · DGX AI Compute Systems Partner · Omniverse Partner · Visualization Elite Partner
+  NVIDIA Robotics Türkiye &amp; MEA Authorized Distributor · DGX AI Compute Systems Partner · Omniverse Partner · Visualization Elite Partner
 </p>
 
 </div>
 
 <div class="partner-badges" markdown="1">
 
-![NVIDIA Preferred Partner](/white-papers/assets/images/partner-preferred.png){: .partner-badge}
-![NVIDIA Elite Partner](/white-papers/assets/images/partner-elite.png){: .partner-badge}
-![NVIDIA Partner](/white-papers/assets/images/partner.png){: .partner-badge}
-![NVIDIA Omniverse Partner](/white-papers/assets/images/partner-omniverse.png){: .partner-badge}
+![NVIDIA Preferred Partner]({{ '/assets/images/partner-preferred.png' | relative_url }}){: .partner-badge}
+![NVIDIA Elite Partner]({{ '/assets/images/partner-elite.png' | relative_url }}){: .partner-badge}
+![NVIDIA Partner]({{ '/assets/images/partner.png' | relative_url }}){: .partner-badge}
+![NVIDIA Omniverse Partner]({{ '/assets/images/partner-omniverse.png' | relative_url }}){: .partner-badge}
 
 </div>
 
-## Yayınlanan White Paper'lar
+## Published White Papers
 
 <div class="paper-grid" markdown="1">
 
-<a class="paper-card" href="{% link papers/yerel-llm-rehberi.md %}">
-  <span class="tag">Karar Rehberi</span>
-  <h3>Yerel LLM Kullanım Rehberi</h3>
-  <p>Yerel (local) LLM için uçtan uca karar rehberi: donanım (Jetson, RTX PRO, DGX Spark, DGX/HGX), model seçimi ve yazılım stack.</p>
-  <span class="date">Haziran 2026</span>
+<a class="paper-card" href="{{ '/papers/yerel-llm-rehberi/' | relative_url }}">
+  <span class="tag">Decision Guide</span>
+  <h3>Local LLM Usage Guide</h3>
+  <p>An end-to-end decision guide for local LLM deployment: hardware (Jetson, RTX PRO, DGX Spark, DGX/HGX), model selection, and software stack.</p>
+  <span class="date">June 2026</span>
 </a>
 
-<a class="paper-card" href="{% link papers/qwen3.6-27b-dgx-spark-benchmark.md %}">
+<a class="paper-card" href="{{ '/papers/qwen3.6-27b-dgx-spark-benchmark/' | relative_url }}">
   <span class="tag">LLM Benchmark</span>
   <h3>Qwen3.6-27B DGX Spark Benchmark</h3>
-  <p>Qwen3.6-27B modelinin DGX Spark (GB10) üzerinde FP8, AWQ, NVFP4 quantization ve MTP varyantları ile performans değerlendirmesi.</p>
-  <span class="date">Temmuz 2026</span>
+  <p>Performance evaluation of the Qwen3.6-27B model on DGX Spark (GB10) with FP8, AWQ, NVFP4 quantization and MTP variants.</p>
+  <span class="date">July 2026</span>
 </a>
 
 </div>
 
-## Uzmanlık Alanları
+## Areas of Expertise
 
 <div class="expertise-grid" markdown="1">
 
 <div class="expertise-card" markdown="1">
-  <h3>Gömülü & Edge AI</h3>
-  <p>NVIDIA Jetson modül ailesi (Orin, Thor, Xavier) üzerinde gerçek zamanlı çıkarım, robotik ve fiziksel AI.</p>
+  <h3>Embedded & Edge AI</h3>
+  <p>Real-time inference, robotics, and physical AI on the NVIDIA Jetson module family (Orin, Thor, Xavier).</p>
 </div>
 
 <div class="expertise-card" markdown="1">
-  <h3>Veri Merkezi</h3>
-  <p>DGX, HGX ve PCIe tabanlı sunucu sistemleriyle ölçeklenebilir AI eğitim ve çıkarım altyapısı.</p>
+  <h3>Data Center</h3>
+  <p>Scalable AI training and inference infrastructure with DGX, HGX, and PCIe-based server systems.</p>
 </div>
 
 <div class="expertise-card" markdown="1">
-  <h3>Mini Süper Bilgisayar</h3>
-  <p>GB10 mimarisine sahip DGX Spark ailesi — kompakt, güçlü ve ölçeklenebilir kişisel AI istasyonları.</p>
+  <h3>Mini Supercomputer</h3>
+  <p>DGX Spark family with GB10 architecture — compact, powerful, and scalable personal AI workstations.</p>
 </div>
 
 <div class="expertise-card" markdown="1">
-  <h3>Profesyonel GPU</h3>
-  <p>RTX PRO ve Ada Lovelace iş istasyonu ekran kartlarıyla render, AI ve HPC iş yükleri.</p>
+  <h3>Professional GPU</h3>
+  <p>Render, AI, and HPC workloads with RTX PRO and Ada Lovelace workstation graphics cards.</p>
 </div>
 
 <div class="expertise-card" markdown="1">
   <h3>Cordatus AI</h3>
-  <p>Açık kaynak, gerçek zamanlı görüntü analitiği platformu — uçtan buluta IVA yazılımı.</p>
+  <p>Open-source, real-time video analytics platform — edge-to-cloud IVA software.</p>
 </div>
 
 <div class="expertise-card" markdown="1">
-  <h3>Dijital İkiz</h3>
-  <p>NVIDIA Omniverse ile endüstriyel simülasyon, sentetik veri üretimi ve fiziksel AI geliştirme.</p>
+  <h3>Digital Twin</h3>
+  <p>Industrial simulation, synthetic data generation, and physical AI development with NVIDIA Omniverse.</p>
 </div>
 
 </div>
 
 <div class="footer-note" markdown="1">
 
-**Openzeka Teknoloji A.Ş.** — 2016'dan bu yana Ankara Bilkent Cyberpark'ta NVIDIA
-donanım ve yazılım çözümleri sağlayıcısı. Tüm white paper'lar
-<code>https://openzeka.github.io/white-papers/</code> adresinde açık olarak yayınlanır.
+**Openzeka Teknoloji A.Ş.** — An NVIDIA hardware and software solutions provider based in
+Ankara Bilkent Cyberpark since 2016. All white papers are published openly at
+<code>https://openzeka.github.io/white-papers/</code>.
 
-**Merkez Ofis:** Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara
+**Headquarters:** Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara
 **Tel:** +90 312 266 2055 · **Web:** [openzeka.com](https://www.openzeka.com) · [Cordatus AI](https://cordatus.ai/)
 
 </div>

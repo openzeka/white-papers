@@ -6,11 +6,15 @@ gem "jekyll", "~> 4.3.4"
 # Tema (yerel geliştirme için; CI'da remote_theme kullanılır)
 gem "just-the-docs", "0.9.0"
 
+# Çok dilli (i18n) destek — EN root + TR /tr/
+gem "jekyll-polyglot", "~> 1.7"
+
 # Jekyll eklentileri
 group :jekyll_plugins do
   gem "jekyll-seo-tag"
   gem "jekyll-sitemap"
   gem "jekyll-feed"
+  gem "jekyll-polyglot"
 end
 
 # Windows / JRuby için zaman dilimi verileri

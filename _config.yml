@@ -1,11 +1,21 @@
 title: Openzeka White Papers
 description: >-
-  Openzeka Teknoloji A.Ş. teknik white paper'ları — NVIDIA DGX/HGX, Jetson gömülü
-  sistemler, Cordatus AI uç-bulut çıkarım platformu, gerçek zamanlı görüntü
-  analitiği ve dijital ikiz çözümleri.
+  Openzeka Teknoloji A.Ş. technical white papers — NVIDIA DGX/HGX, Jetson embedded
+  systems, Cordatus AI edge-cloud inference platform, real-time video analytics
+  and digital twin solutions.
 
 url: "https://openzeka.github.io"
 baseurl: "/white-papers"
+
+# Çok dilli (i18n) — jekyll-polyglot
+# EN root'ta varsayılan, TR /tr/ altında
+lang: en
+languages: ["en", "tr"]
+default_lang: "en"
+exclude_from_localization: ["javascript", "images", "css", "assets", "_sass", "CNAME"]
+parallel_localization: true
+sass:
+  sourcemap: never
 
 # Tema (CI'da Gemfile'daki gem ile yüklenir)
 theme: just-the-docs
@@ -31,7 +41,6 @@ nav_sort: order
 nav_fold: true
 
 back_to_top: true
-back_to_top_text: "Yukarı dön"
 
 # Üstteki yardımcı bağlantılar
 aux_links:
@@ -60,6 +69,7 @@ plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-feed
+  - jekyll-polyglot
 
 # Hariç tutulan dosyalar
 exclude:

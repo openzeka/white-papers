@@ -228,3 +228,37 @@ img[width] {
   max-width: 100%;
   height: auto;
 }
+
+// ===== Dil değiştirici =====
+.lang-switcher {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  padding: 0.75rem 1.5rem 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: 0.5rem;
+}
+
+.lang-switcher-item {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--openzeka-muted);
+  text-decoration: none;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.lang-switcher-item:hover {
+  border-color: rgba(118, 185, 0, 0.4);
+  color: var(--openzeka-green-dark);
+}
+
+.lang-switcher-item.active {
+  background: var(--openzeka-green);
+  color: #fff;
+  border-color: var(--openzeka-green);
+}
