@@ -1,0 +1,78 @@
+title: Openzeka White Papers
+description: >-
+  Openzeka Teknoloji A.Ş. teknik white paper'ları — NVIDIA DGX/HGX, Jetson gömülü
+  sistemler, Cordatus AI uç-bulut çıkarım platformu, gerçek zamanlı görüntü
+  analitiği ve dijital ikiz çözümleri.
+
+url: "https://cordatusai.github.io"
+baseurl: "/white-papers"
+
+# Tema (CI'da Gemfile'daki gem ile yüklenir)
+theme: just-the-docs
+
+# Site kimliği
+logo: "/assets/images/openzeka-logo.png"
+
+# Arama
+search_enabled: true
+search:
+  heading_level: 3
+  previews: 2
+  preview_words_before: 3
+  preview_words_after: 3
+  tokenizer_separator: /[\s/]+/
+  rel_url: true
+  button: false
+
+heading_anchors: true
+
+# Navigasyon
+nav_sort: order
+nav_fold: true
+
+back_to_top: true
+back_to_top_text: "Yukarı dön"
+
+# Üstteki yardımcı bağlantılar
+aux_links:
+  "openzeka.com": "https://www.openzeka.com"
+  "Cordatus AI": "https://www.cordatusai.com"
+  "GitHub": "https://github.com/CordatusAI"
+aux_links_new_tab: true
+
+# Tema rengi (Openzeka marka yeşili)
+color_scheme: openzeka
+
+# Markdown
+markdown: kramdown
+kramdown:
+  syntax_highlighter: rouge
+  parse_block_html: true
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+# Eklentiler
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+
+# Hariç tutulan dosyalar
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .github
+  - README.md
+  - LICENSE
+  - Makefile
+
+# SEO
+twitter:
+  username: openzeka
+  card: summary_large_image

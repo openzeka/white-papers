@@ -1,0 +1,32 @@
+# Jekyll build artefacts
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Bundler
+.bundle/
+vendor/
+Gemfile.lock
+
+# Ruby
+*.gem
+*.rbc
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node (ileride asset pipeline için)
+node_modules/
+
+# Local env
+.env
+.env.local
+
+# Local notes (sadece lokalde, repoya gitmesin)
+LOCAL_NOTES.md
