@@ -36,7 +36,7 @@ back_to_top_text: "Yukarı dön"
 # Üstteki yardımcı bağlantılar
 aux_links:
   "openzeka.com": "https://www.openzeka.com"
-  "Cordatus AI": "https://www.cordatusai.com"
+  "Cordatus AI": "https://cordatus.ai/"
   "GitHub": "https://github.com/openzeka"
 aux_links_new_tab: true
 

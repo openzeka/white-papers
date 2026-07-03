@@ -3,7 +3,7 @@
 Openzeka Teknoloji A.Ş. teknik white paper deposu. Jekyll + [Just the Docs](https://just-the-docs.com)
 temasıyla derlenir ve GitHub Pages üzerinden yayınlanır.
 
-**Canlı site:** <https://cordatusai.github.io/white-papers/>
+**Canlı site:** <https://openzeka.github.io/white-papers/>
 
 ## İçerik
 

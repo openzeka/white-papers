@@ -55,7 +55,7 @@ uzmanlığıyla bölgesinin öncü embedded yapay zeka sağlayıcılarından bir
 Openzeka'nın kendi geliştirdiği açık kaynak **Cordatus AI** platformu; kamera
 akışlarını gerçek zamanlı işleyerek operasyonel ve ölçülebilir veriler sağlayan
 bir IVA (Intelligent Video Analytics) yazılımıdır. Uç cihazlardan buluta kadar
-ölçeklenebilir çıkarım altyapısı sunar. Detaylar: [cordatus.ai](https://www.cordatusai.com)
+ölçeklenebilir çıkarım altyapısı sunar. Detaylar: [cordatus.ai](https://cordatus.ai/)
 
 ## Bu White Paper Deposu
 
@@ -72,7 +72,7 @@ ve teknoloji karar vericiler.
 | **Ankara Şubesi** | Mustafa Kemal Mah. Dumlupınar Bulvarı, Tepe Prime No:266 İç Kapı No:18, 06530 Çankaya/Ankara |
 | **Hollanda Şubesi** | Openzeka Netherlands, High Tech Campus 9, 5656 AE Eindhoven, The Netherlands |
 | **Telefon** | +90 312 266 2055 |
-| **Web** | [openzeka.com](https://www.openzeka.com) · [Cordatus AI](https://www.cordatusai.com) · [GitHub](https://github.com/CordatusAI) |
+| **Web** | [openzeka.com](https://www.openzeka.com) · [Cordatus AI](https://cordatus.ai/) · [GitHub](https://github.com/openzeka) |
 | **Blog** | [blog.openzeka.com](https://blog.openzeka.com) |
 
 ### Sosyal Medya
