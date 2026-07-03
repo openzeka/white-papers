@@ -4,7 +4,7 @@ nav_order: 2
 lang: tr
 page_id: about
 description: Openzeka Teknoloji A.Ş. — NVIDIA Robotics Türkiye & MEA Distribütörü, DGX/Omniverse Partner, Visualization Elite Partner.
-permalink: /tr/about/
+permalink: /about/
 ---
 
 # Hakkımızda

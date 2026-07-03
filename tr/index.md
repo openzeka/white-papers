@@ -7,7 +7,7 @@ page_id: home
 description: >-
   Openzeka Teknoloji A.Ş. teknik white paper'ları — NVIDIA DGX/HGX, Jetson gömülü
   sistemler, DGX Spark ve Cordatus AI uç-bulut çıkarım platformu.
-permalink: /tr/
+permalink: /
 ---
 
 <div class="hero" markdown="1">
@@ -41,14 +41,14 @@ permalink: /tr/
 
 <div class="paper-grid" markdown="1">
 
-<a class="paper-card" href="{{ '/tr/papers/yerel-llm-rehberi/' | relative_url }}">
+<a class="paper-card" href="{{ '/papers/yerel-llm-rehberi/' | relative_url }}">
   <span class="tag">Karar Rehberi</span>
   <h3>Yerel LLM Kullanım Rehberi</h3>
   <p>Yerel (local) LLM için uçtan uca karar rehberi: donanım (Jetson, RTX PRO, DGX Spark, DGX/HGX), model seçimi ve yazılım stack.</p>
   <span class="date">Haziran 2026</span>
 </a>
 
-<a class="paper-card" href="{{ '/tr/papers/qwen3.6-27b-dgx-spark-benchmark/' | relative_url }}">
+<a class="paper-card" href="{{ '/papers/qwen3.6-27b-dgx-spark-benchmark/' | relative_url }}">
   <span class="tag">LLM Benchmark</span>
   <h3>Qwen3.6-27B DGX Spark Benchmark</h3>
   <p>Qwen3.6-27B modelinin DGX Spark (GB10) üzerinde FP8, AWQ, NVFP4 quantization ve MTP varyantları ile performans değerlendirmesi.</p>

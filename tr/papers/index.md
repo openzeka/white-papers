@@ -5,7 +5,7 @@ has_children: true
 lang: tr
 page_id: papers-index
 description: Openzeka teknik white paper listesi.
-permalink: /tr/papers/
+permalink: /papers/
 ---
 
 # White Papers

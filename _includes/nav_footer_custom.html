@@ -1,20 +1,10 @@
 <div class="lang-switcher">
   {% for lang in site.languages %}
-    {% assign is_default = lang | ==: site.default_lang %}
-    {% if page.permalink_lang and page.permalink_lang[lang] %}
-      {% assign target_path = page.permalink_lang[lang] %}
-      {% assign target_url = target_path | prepend: site.baseurl %}
-    {% else %}
-      {% if is_default %}
-        {% assign target_url = page.url | prepend: site.baseurl %}
-      {% else %}
-        {% capture target_url %}{{ site.baseurl }}/{{ lang }}{{ page.url }}{% endcapture %}
-      {% endif %}
-    {% endif %}
+    {% capture lang_href %}{{ site.baseurl }}/{% if lang != site.default_lang %}{{ lang }}/{% endif %}{% if page.permalink_lang and page.permalink_lang[lang] and page.permalink_lang[lang] != '/' %}{{ page.permalink_lang[lang] }}{% endif %}{% endcapture %}
     {% if lang == site.active_lang %}
       <span class="lang-switcher-item active">{{ lang | upcase }}</span>
     {% else %}
-      <a class="lang-switcher-item" href="{{ target_url }}">{{ lang | upcase }}</a>
+      <a class="lang-switcher-item" {% static_href %}href="{{ lang_href }}"{% endstatic_href %}>{{ lang | upcase }}</a>
     {% endif %}
   {% endfor %}
 </div>

@@ -7,7 +7,7 @@ page_id: yerel-llm-rehberi
 description: >-
   Yerel (local) LLM kullanımı için uçtan uca karar rehberi: donanım (NVIDIA Jetson,
   RTX PRO, DGX Spark, DGX/HGX), model seçimi, yazılım stack ve senaryo eşlemesi.
-permalink: /tr/papers/yerel-llm-rehberi/
+permalink: /papers/yerel-llm-rehberi/
 last_modified_date: 2026-07-03
 toc: true
 ---
