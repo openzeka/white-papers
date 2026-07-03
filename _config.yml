@@ -4,7 +4,7 @@ description: >-
   sistemler, Cordatus AI uç-bulut çıkarım platformu, gerçek zamanlı görüntü
   analitiği ve dijital ikiz çözümleri.
 
-url: "https://cordatusai.github.io"
+url: "https://openzeka.github.io"
 baseurl: "/white-papers"
 
 # Tema (CI'da Gemfile'daki gem ile yüklenir)
@@ -37,7 +37,7 @@ back_to_top_text: "Yukarı dön"
 aux_links:
   "openzeka.com": "https://www.openzeka.com"
   "Cordatus AI": "https://www.cordatusai.com"
-  "GitHub": "https://github.com/CordatusAI"
+  "GitHub": "https://github.com/openzeka"
 aux_links_new_tab: true
 
 # Tema rengi (Openzeka marka yeşili)
