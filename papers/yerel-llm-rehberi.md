@@ -72,7 +72,7 @@ The hardware recommendations in this guide are based on this portfolio.
 
 ## 2. Why Local LLM? (Rationale)
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-2-avantajlar.png' | relative_url }}" alt="Key advantages of local LLM" width="320"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-2-advantages.png' | relative_url }}" alt="Key advantages of local LLM" width="320"/></p>
 <sub><i>Figure: Key advantages of local LLM</i></sub>
 
 ### Advantages
@@ -102,7 +102,7 @@ The hardware recommendations in this guide are based on this portfolio.
 
 ## 3. Who Needs It? (Target Audiences and Scenarios)
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-3-hedef-kitle.png' | relative_url }}" alt="Who needs local LLM?" width="760"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-3-target-audience.png' | relative_url }}" alt="Who needs local LLM?" width="760"/></p>
 <sub><i>Figure: Who needs local LLM?</i></sub>
 
 **Government and public institutions.** Ministries, public agencies, critical infrastructure, and defense — keeping data within the country and within the institution's own boundaries, and preventing it from leaking out, is a data sovereignty and national security requirement. For these institutions, local LLM is often the only suitable option.
@@ -137,7 +137,7 @@ For this reason, throughout this guide only NVIDIA is covered on the hardware si
 
 This is the **most important question** that determines hardware requirements. The answer to "Will training be done?" defines the scale of hardware you will need from the start.
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-egitim-inference.png' | relative_url }}" alt="First decision: training or inference?" width="640"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-training-inference.png' | relative_url }}" alt="First decision: training or inference?" width="640"/></p>
 <sub><i>Figure: First decision: training or inference?</i></sub>
 
 **For most organizations, the starting point is inference** — running a ready open model on your own server. Training/customization comes into play only when the model needs to be adapted to your own data, and it has three tiers:
@@ -323,7 +323,7 @@ Suitable for entry, small/quantized models, and **batch/non-interactive** work (
 
 ### 4.8. Scenario → hardware mapping
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-gpu-karar.png' | relative_url }}" alt="GPU selection decision tree" width="600"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-gpu-decision.png' | relative_url }}" alt="GPU selection decision tree" width="600"/></p>
 <sub><i>Figure: GPU selection decision tree</i></sub>
 
 **General mapping (edge to enterprise):**
@@ -362,7 +362,7 @@ Suitable for entry, small/quantized models, and **batch/non-interactive** work (
 
 ## 5. Model Selection
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-5-model-secimi.png' | relative_url }}" alt="Model selection by task" width="720"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-5-model-selection.png' | relative_url }}" alt="Model selection by task" width="720"/></p>
 <sub><i>Figure: Model selection by task</i></sub>
 
 > Size–cost balance: for most local workloads, **7–14B dense** or **~30B MoE (~3B active)** models are the optimal balance; the most demanding tasks require 70B+ / large MoE.
@@ -476,7 +476,7 @@ The general leaderboards in §5.8 are a good starting signal but **do not reflec
 
 It is healthiest to think of the software layer in seven categories: **(A) inference engines** (the backend that actually runs the model), **(B) all-in-one desktop applications**, **(C) next-generation self-hosted AI workspaces**, **(D) classic web UIs and RAG solutions**, **(E) API gateways / routing** (the layer in front of multi-model, multi-user setups), **(F) fine-tune & training tools**, and **(G) coding assistants & agents**.
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-6-yazilim-katmani.png' | relative_url }}" alt="Software layers: UI → (gateway) → engine → hardware, with fine-tune on the side" width="620"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-6-software-layers.png' | relative_url }}" alt="Software layers: UI → (gateway) → engine → hardware, with fine-tune on the side" width="620"/></p>
 <sub><i>Figure: Software layers: UI → engine → hardware</i></sub>
 
 > **Common ground — OpenAI-compatible API:** llama.cpp (llama-server), Ollama, vLLM, SGLang, and LM Studio all offer an **OpenAI-compatible endpoint**. So the same client code (just changing `base_url` to localhost) works with all of them — a critical convenience for integration.
@@ -578,7 +578,7 @@ It is healthiest to think of the software layer in seven categories: **(A) infer
 
 ## 7. Example Deployment Scenarios
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-7-senaryo.png' | relative_url }}" alt="Scenario → hardware mapping" width="420"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-7-scenario.png' | relative_url }}" alt="Scenario → hardware mapping" width="420"/></p>
 <sub><i>Figure: Scenario → hardware mapping</i></sub>
 
 **Scenario A — Individual / privacy-focused user (entry workstation).**
@@ -629,7 +629,7 @@ High-traffic (500+ concurrent) inference or full training → **8× B200 / B300 
 
 ### Hardware sizing process
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-8-surec.png' | relative_url }}" alt="Hardware sizing process" width="820"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-8-process.png' | relative_url }}" alt="Hardware sizing process" width="820"/></p>
 <sub><i>Figure: Hardware sizing process</i></sub>
 
 ### Hardware sizing checklist
