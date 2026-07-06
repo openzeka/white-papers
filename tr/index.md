@@ -55,6 +55,13 @@ permalink: /
   <span class="date">Temmuz 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}">
+  <span class="tag">LLM Ölçekleme</span>
+  <h3>Qwen3.6-27B DGX Spark Cluster Scaling</h3>
+  <p>Qwen3.6-27B-NVFP4'ün 1x/2x/4x DGX Spark üzerinde multi-node ölçeklemesi: 200GbE üzerinden tensor parallelism, SLO temelli kapasite planlama ve TP-vs-replika deployment rehberi.</p>
+  <span class="date">Temmuz 2026</span>
+</a>
+
 </div>
 
 ## Uzmanlık Alanları

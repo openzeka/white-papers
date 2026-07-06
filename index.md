@@ -55,6 +55,13 @@ permalink: /
   <span class="date">July 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}">
+  <span class="tag">LLM Scaling</span>
+  <h3>Qwen3.6-27B DGX Spark Cluster Scaling</h3>
+  <p>Multi-node scaling of Qwen3.6-27B-NVFP4 on 1x/2x/4x DGX Spark: tensor parallelism over 200GbE, SLO-driven capacity planning, and TP-vs-replication deployment guidance.</p>
+  <span class="date">July 2026</span>
+</a>
+
 </div>
 
 ## Areas of Expertise

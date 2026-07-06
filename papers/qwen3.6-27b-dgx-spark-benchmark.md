@@ -1018,6 +1018,8 @@ Three factors supporting this expectation:
 
 Nevertheless, the hardware ceiling in A.2 also applies here: on SM121, this transition should be expected at the level of **parity or single-digit percentage advantage**, not a major leap. Additionally, this comparison is speed-based only; the accuracy behavior of the two formats should be evaluated separately (Section 8.3).
 
+> **Companion paper:** The subsequent [Qwen3.6-27B DGX Spark Cluster Scaling]({{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}) report extends this work to multi-node configurations (TP1/TP2/TP4) using a newer nightly vLLM image. Its TP1 (single-node) results for the same NVFP4 model differ from the NVFP4 baseline measured here; see §1.5 of that report for a side-by-side comparison of the two runtimes.
+
 ---
 
 ## Appendix B: Variant-Based Charts

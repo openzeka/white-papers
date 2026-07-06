@@ -1018,6 +1018,8 @@ Bu beklentiyi destekleyen üç etken:
 
 Bununla birlikte A.2'deki donanım tavanı burada da geçerlidir: SM121'de bu geçiş büyük bir sıçrama değil, **parite veya tek haneli yüzde avantajı** düzeyinde beklenmelidir. Ayrıca bu karşılaştırma yalnızca hız bazlıdır; iki formatın doğruluk (accuracy) davranışı ayrıca değerlendirilmelidir (Bölüm 8.3).
 
+> **Companion paper:** Sonradan yayımlanan [Qwen3.6-27B DGX Spark Cluster Scaling]({{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}) raporu, bu çalışmayı daha yeni bir nightly vLLM image ile multi-node konfigürasyonlarına (TP1/TP2/TP4) genişletir. Aynı NVFP4 modelinin TP1 (tek node) sonuçları burada ölçülen NVFP4 baseline'ından farklıdır; iki runtime'ın yan yana karşılaştırması için ilgili raporun §1.5'ine bakınız.
+
 ---
 
 ## Ek B: Varyant Bazlı Grafikler
