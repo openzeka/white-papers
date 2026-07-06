@@ -13,6 +13,7 @@ toc: true
 ---
 
 *Hazırlayan: **Openzeka Teknoloji A.Ş.** — NVIDIA Türkiye & MEA Resmî Embedded Compute Distribütörü ve NVIDIA Elite Partner*
+
 *Test platformu: NVIDIA DGX Spark (GB10) · Model: Qwen3.6-27B · Rapor tarihi: Temmuz 2026*
 
 ---
@@ -1054,5 +1055,7 @@ Bu raporun tüm ölçümleri, Openzeka'nın açık kaynaklı **[CordatusAI/llm-b
 ---
 
 *Rapor tarihi: Temmuz 2026*
+
 *Test platformu: NVIDIA DGX Spark (GB10) · Model: Qwen3.6-27B*
+
 *Hazırlayan: Openzeka Teknoloji A.Ş.*
