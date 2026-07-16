@@ -337,6 +337,9 @@ Suitable for entry, small/quantized models, and **batch/non-interactive** work (
 | **High / single-card 70B** | 96 GB | **RTX PRO 6000 (96 GB)** — Max-Q edition if power-constrained |
 | **Multi-user production service** | 24–141 GB | **L4 / L40S** → **H100 NVL (94 GB)** → **H200 NVL (141 GB)** |
 | **Very large model / turnkey** | 128 GB+ | **DGX Spark (128 GB)** / 2–3× ring, at enterprise scale **DGX B300** |
+| **Fine-tune (LoRA/QLoRA)** | low–medium | 7B: **1× L40S / RTX PRO 6000** · 70B: **1× DGX Spark** (QLoRA) / **2–4× H200** (LoRA) |
+| **Full Fine-tune** | ~12–14× params | 7B: **1× H200** (~85–100 GB) · 70B: **4–8× H200** (ZeRO-3, ~1 TB) |
+| **Pre-training (from scratch)** | ~16× params | **8× B200 / 8–16× B300** (8-GPU team — see 4.5/D) |
 
 **Inference scenarios (model size × user capacity):**
 

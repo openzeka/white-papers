@@ -1,0 +1,10 @@
+flowchart TD
+    S{"Use case?"} --> PT["Pre-training (from scratch)"]
+    S --> FFT["Full Fine-tune"]
+    S --> FT["Fine-tune<br/>LoRA/QLoRA"]
+    S --> IN["Inference"]
+    PT --> PTG["8-16x B200/B300<br/>cluster required"]
+    FFT --> FFTG["7B: 1x H200 (~85-100 GB)<br/>70B: 4-8x H200 (ZeRO-3)"]
+    FT --> FTG["7B: 1x L40S / RTX PRO 6000<br/>13B: 1x RTX PRO 6000 / H200<br/>70B: 2-4x H200 or 1x DGX Spark"]
+    IN --> ING["7B: 1x L40S / RTX PRO 6000<br/>70B: 1x H200 / DGX Spark<br/>405B+: 8x B300 or 3x DGX Spark ring"]
+    style S fill:#76b900,color:#fff

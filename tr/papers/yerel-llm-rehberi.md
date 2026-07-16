@@ -337,6 +337,9 @@ Başlangıç, küçük/kuantize modeller ve **toplu/etkileşimsiz** işler (ör.
 | **Üst / tek kart 70B** | 96 GB | **RTX PRO 6000 (96 GB)** — güç kısıtlıysa Max-Q sürümü |
 | **Çok kullanıcılı üretim servisi** | 24–141 GB | **L4 / L40S** → **H100 NVL (94 GB)** → **H200 NVL (141 GB)** |
 | **Çok büyük model / anahtar teslim** | 128 GB+ | **DGX Spark (128 GB)** / 2–3× ring, kurumsal ölçekte **DGX B300** |
+| **Fine-tune (LoRA/QLoRA)** | düşük–orta | 7B: **1× L40S / RTX PRO 6000** · 70B: **1× DGX Spark** (QLoRA) / **2–4× H200** (LoRA) |
+| **Full Fine-tune** | ~12–14× param | 7B: **1× H200** (~85–100 GB) · 70B: **4–8× H200** (ZeRO-3, ~1 TB) |
+| **Pre-training (sıfırdan)** | ~16× param | **8× B200 / 8–16× B300** (8'li takım — bkz. 4.5/D) |
 
 **Inference senaryoları (model boyutu × kullanıcı kapasitesi):**
 
