@@ -79,6 +79,7 @@ exclude:
   - vendor
   - .github
   - README.md
+  - DEVELOPMENT.md
   - LICENSE
   - Makefile
 
