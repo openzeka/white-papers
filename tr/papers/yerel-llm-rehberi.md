@@ -58,7 +58,7 @@ Bu rehberin amacı, "yerel LLM bana/kurumuma uygun mu, uygunsa hangi donanım–
 
 #### OpenZeka hakkında
 
-![OpenZeka]({{ '/tr/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }})
+![OpenZeka]({{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }})
 
 **OpenZeka Teknoloji A.Ş.**, 2016 yılında Ankara Bilkent Cyberpark'ta kuruldu ve donanım–yazılım alanında yenilikçi yapay zekâ çözümleri sunuyor. **NVIDIA Robotics Türkiye ve MEA (MENA) Resmi Distribütörü**; aynı zamanda **NVIDIA DGX AI Compute Systems** ve **NVIDIA Omniverse Partner'ı**, NVIDIA Visualization alanında **Elite Partner**'dır.
 
@@ -72,7 +72,7 @@ Bu rehberdeki donanım önerileri bu portföye dayanır.
 
 ## 2. Neden Yerel LLM? (Gerekçeler)
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-2-avantajlar.png' | relative_url }}" alt="Yerel LLM'in başlıca avantajları" width="320"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-2-avantajlar.png' | relative_url }}" alt="Yerel LLM'in başlıca avantajları" width="320"/></p>
 <sub><i>Şekil: Yerel LLM'in başlıca avantajları</i></sub>
 
 ### Avantajlar
@@ -102,7 +102,7 @@ Bu rehberdeki donanım önerileri bu portföye dayanır.
 
 ## 3. Kimler İçin Gerekli? (Hedef Kitleler ve Senaryolar)
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-3-hedef-kitle.png' | relative_url }}" alt="Yerel LLM kimler için gerekli?" width="760"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-3-hedef-kitle.png' | relative_url }}" alt="Yerel LLM kimler için gerekli?" width="760"/></p>
 <sub><i>Şekil: Yerel LLM kimler için gerekli?</i></sub>
 
 **Kamu ve devlet kurumları.** Bakanlıklar, kamu kurumları, kritik altyapı ve savunma — verinin yurt içinde, kurumun kendi sınırları içinde kalması ve dışarı sızmaması bir veri egemenliği ve ulusal güvenlik gereğidir. Bu kurumlar için yerel LLM çoğu zaman tek uygun seçenektir.
@@ -137,7 +137,7 @@ Bu nedenle bu rehber boyunca donanım tarafında yalnızca NVIDIA ele alınmış
 
 Donanım ihtiyacını belirleyen **en önemli soru** budur. "Eğitim yapılacak mı?" sorusunun cevabı, ihtiyaç duyacağınız donanımın ölçeğini baştan belirler.
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-4-egitim-inference.png' | relative_url }}" alt="İlk karar: eğitim mi, inference mı?" width="640"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-egitim-inference.png' | relative_url }}" alt="İlk karar: eğitim mi, inference mı?" width="640"/></p>
 <sub><i>Şekil: İlk karar: eğitim mi, inference mı?</i></sub>
 
 **Çoğu kurum için başlangıç noktası inference'tır** — hazır bir açık modeli kendi sunucunuzda çalıştırmak. Eğitim/özelleştirme yalnızca modeli kendi verinizle uyarlamak gerektiğinde devreye girer ve dört kademesi vardır:
@@ -244,8 +244,8 @@ Bu rehberdeki donanım önerilerini, **OpenZeka olarak sağladığımız** NVIDI
 - **Jetson AGX Thor / T5000 (128 GB sınıfı, Blackwell nesli)** — yeni nesil fiziksel-AI/robotik amiral gemisi; uçta büyük model ve eş zamanlı yük. Uç tarafında "en yüksek bellek" seçeneği.
 
 <p>
-<img src="{{ '/tr/papers/yerel-llm-rehberi/images/jetson-orin-nano.png' | relative_url }}" alt="NVIDIA Jetson Orin Nano AI Kiti" width="300"/>
-<img src="{{ '/tr/papers/yerel-llm-rehberi/images/jetson-agx-thor.png' | relative_url }}" alt="NVIDIA Jetson AGX Thor Developer Kit" width="300"/>
+<img src="{{ '/papers/yerel-llm-rehberi/images/jetson-orin-nano.png' | relative_url }}" alt="NVIDIA Jetson Orin Nano AI Kiti" width="300"/>
+<img src="{{ '/papers/yerel-llm-rehberi/images/jetson-agx-thor.png' | relative_url }}" alt="NVIDIA Jetson AGX Thor Developer Kit" width="300"/>
 </p>
 <sub><i>Jetson Orin Nano AI kiti ve Jetson AGX Thor Developer Kit (Görsel: OpenZeka)</i></sub>
 
@@ -258,7 +258,7 @@ Bu rehberdeki donanım önerilerini, **OpenZeka olarak sağladığımız** NVIDI
 
 > **Hazır iş istasyonu olarak (OpenZeka):** Bu GPU'ları yalnızca kart olarak değil, **kurulu ve test edilmiş komple iş istasyonu** sistemleri olarak da sağlıyoruz (RTX PRO 4000 / 4500 / 5000 / 6000 Workstation ve Max-Q). Sistemler Intel Core i9-14900KF sınıfı işlemci ile gelir; **Ubuntu + optimize NVIDIA yazılım yığını kurulu**, performans/sıcaklık testlerinden geçirilmiş ve **2 yıl garantili** teslim edilir — yani yerel LLM için "kutudan çıkar çalışır". Detay: [openzeka.com/is-istasyonlari](https://openzeka.com/is-istasyonlari/).
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/rtx-pro-6000.webp' | relative_url }}" alt="NVIDIA RTX PRO 6000 Blackwell Workstation" width="360"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/rtx-pro-6000.webp' | relative_url }}" alt="NVIDIA RTX PRO 6000 Blackwell Workstation" width="360"/></p>
 <sub><i>NVIDIA RTX PRO 6000 Blackwell Workstation Edition — 96 GB (Görsel: OpenZeka)</i></sub>
 
 **C) Veri merkezi GPU'ları (tekli / az sayıda) — yüksek hacimli, çok kullanıcılı üretim servisi.** Pasif soğutmalı, sunucuya takılan kartlar; vLLM/TensorRT-LLM ile çok sayıda eş zamanlı istek için. B200/B300'ün aksine **tekli (veya sunucu başına 2–8) satılabilir.**
@@ -266,7 +266,7 @@ Bu rehberdeki donanım önerilerini, **OpenZeka olarak sağladığımız** NVIDI
 - **NVIDIA L40 / L40S — 48 GB.** Çok yönlü çıkarım + ince ayar; orta modelleri yüksek verimle servis eder (70B için tek kart yetmez — bkz. "yaygın hatalar", Bölüm 8; 70B sınıfı H100/H200 veya 2× kart ister).
 - **NVIDIA H100 NVL — 94 GB** ve **H200 NVL — 141 GB.** Tekli satılan en üst seviye; büyük MoE modelleri, uzun bağlam, yoğun eş zamanlılık. H200'ün 141 GB'ı tek kartta en yüksek model kapasitesini verir.
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/dgx-sunucu.webp' | relative_url }}" alt="NVIDIA DGX AI sunucusu" width="420"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/dgx-sunucu.webp' | relative_url }}" alt="NVIDIA DGX AI sunucusu" width="420"/></p>
 <sub><i>Veri merkezi sınıfı NVIDIA DGX/HGX sunucu altyapısı (Görsel: OpenZeka)</i></sub>
 
 **D) En üst seviye Blackwell — anahtar teslim veri merkezi sistemleri (HGX / DGX, 8'li takım).** Full training ve yüksek-trafik (500+ eş zamanlı kullanıcı) inference için. Bu sınıf **tekli kart olarak satılmaz**; 8× GPU'lu, kurulu–kablolanmış–soğutmalı bir sunucu/rack olarak gelir — bütçe ve altyapı buna göre planlanmalıdır.
@@ -284,8 +284,8 @@ Bu rehberdeki donanım önerilerini, **OpenZeka olarak sağladığımız** NVIDI
   - **3× Spark (ring topoloji)** — 384 GB, 405B+ fine-tune / yüksek throughput, switch gerektirmez.
 
 <p>
-<img src="{{ '/tr/papers/yerel-llm-rehberi/images/dgx-spark.png' | relative_url }}" alt="NVIDIA DGX Spark" width="320"/>
-<img src="{{ '/tr/papers/yerel-llm-rehberi/images/dgx-spark-3x.png' | relative_url }}" alt="3x DGX Spark ring topoloji" width="320"/>
+<img src="{{ '/papers/yerel-llm-rehberi/images/dgx-spark.png' | relative_url }}" alt="NVIDIA DGX Spark" width="320"/>
+<img src="{{ '/papers/yerel-llm-rehberi/images/dgx-spark-3x.png' | relative_url }}" alt="3x DGX Spark ring topoloji" width="320"/>
 </p>
 <sub><i>NVIDIA DGX Spark (128 GB, 240 W) ve 3× ring topoloji ile 384 GB havuz (Görsel: OpenZeka)</i></sub>
 
@@ -324,7 +324,7 @@ Başlangıç, küçük/kuantize modeller ve **toplu/etkileşimsiz** işler (ör.
 
 ### 4.8. Senaryo → donanım eşlemesi
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-4-gpu-karar.png' | relative_url }}" alt="GPU seçim karar ağacı" width="600"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-gpu-karar.png' | relative_url }}" alt="GPU seçim karar ağacı" width="600"/></p>
 <sub><i>Şekil: GPU seçim karar ağacı</i></sub>
 
 **Genel eşleme (uçtan kuruma):**
@@ -363,7 +363,7 @@ Başlangıç, küçük/kuantize modeller ve **toplu/etkileşimsiz** işler (ör.
 
 ## 5. Model Seçimi
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-5-model-secimi.png' | relative_url }}" alt="Göreve göre model seçimi" width="720"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-5-model-secimi.png' | relative_url }}" alt="Göreve göre model seçimi" width="720"/></p>
 <sub><i>Şekil: Göreve göre model seçimi</i></sub>
 
 > Boyut–maliyet dengesi: çoğu yerel iş için **7–14B yoğun** ya da **~30B MoE (~3B aktif)** modeller optimum dengedir; en zorlu görevler için 70B+ / büyük MoE gerekir.
@@ -477,7 +477,7 @@ Doğru model "en yüksek benchmark skorlu" değil, **görevinize + donanımını
 
 Yazılım katmanını yedi kategoride düşünmek en sağlıklısı: **(A) çıkarım motorları** (modeli asıl çalıştıran arka uç), **(B) hepsi-bir-arada masaüstü uygulamalar**, **(C) yeni nesil self-hosted AI workspace'ler**, **(D) klasik web arayüzleri ve RAG çözümleri**, **(E) API ağ geçitleri / yönlendirme** (çok modelli, çok kullanıcılı kurulumların önündeki katman), **(F) fine-tune & eğitim araçları** ve **(G) kodlama asistanları & ajanları**.
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-6-yazilim-katmani.png' | relative_url }}" alt="Yazılım katmanları: arayüz → (gateway) → motor → donanım, yanda fine-tune" width="620"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-6-yazilim-katmani.png' | relative_url }}" alt="Yazılım katmanları: arayüz → (gateway) → motor → donanım, yanda fine-tune" width="620"/></p>
 <sub><i>Şekil: Yazılım katmanları: arayüz → motor → donanım</i></sub>
 
 > **Ortak nokta — OpenAI uyumlu API:** llama.cpp (llama-server), Ollama, vLLM, SGLang ve LM Studio'nun hepsi **OpenAI uyumlu bir endpoint** sunar. Yani aynı istemci kodu (sadece `base_url`'i localhost'a çevirerek) hepsiyle çalışır — entegrasyon açısından kritik bir kolaylık.
@@ -579,7 +579,7 @@ Yazılım katmanını yedi kategoride düşünmek en sağlıklısı: **(A) çık
 
 ## 7. Örnek Kurulum Senaryoları
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-7-senaryo.png' | relative_url }}" alt="Senaryo → donanım eşlemesi" width="420"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-7-senaryo.png' | relative_url }}" alt="Senaryo → donanım eşlemesi" width="420"/></p>
 <sub><i>Şekil: Senaryo → donanım eşlemesi</i></sub>
 
 **Senaryo A — Bireysel / gizlilik odaklı kullanıcı (giriş iş istasyonu).**
@@ -633,7 +633,7 @@ Yüksek trafik (500+ eş zamanlı) inference veya pre-training (sıfırdan) → 
 
 ### Donanım belirleme süreci
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-8-surec.png' | relative_url }}" alt="Donanım belirleme süreci" width="820"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-8-surec.png' | relative_url }}" alt="Donanım belirleme süreci" width="820"/></p>
 <sub><i>Şekil: Donanım belirleme süreci</i></sub>
 
 ### Donanım belirleme kontrol listesi
@@ -760,6 +760,6 @@ Yüksek trafik (500+ eş zamanlı) inference veya pre-training (sıfırdan) → 
 
 ---
 
-<p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }}" alt="OpenZeka" width="220"/></p>
+<p><img src="{{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }}" alt="OpenZeka" width="220"/></p>
 
 **Yerel LLM altyapınızı birlikte planlayalım.** Doğru donanım–model–yazılım eşleştirmesi, VRAM hesabı ve TCO analizi için OpenZeka ile iletişime geçin: [openzeka.com](https://openzeka.com) · VRAM hesaplama: [Cordatus VRAM Calculator](https://app.cordatus.ai/#/vram-calculator)

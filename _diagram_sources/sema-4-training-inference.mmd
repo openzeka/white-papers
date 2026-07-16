@@ -1,0 +1,10 @@
+flowchart TD
+    Q{"Will training be done?"} -->|"No"| INF["Inference<br/>1x H200 · DGX Spark · RTX PRO 6000<br/>extra VRAM for KV cache is critical"]
+    Q -->|"Yes, from scratch"| PT["Pre-training (from scratch)<br/>8-16x B200/B300 team<br/>very high VRAM"]
+    Q -->|"Yes, full adaptation"| FFT["Full Fine-tune<br/>1-8x H200 (ZeRO-3)<br/>high VRAM"]
+    Q -->|"Yes, light adaptation"| LO["Fine-tune LoRA/QLoRA<br/>1x L40S / RTX PRO 6000 / H200<br/>medium-low VRAM"]
+    style Q fill:#76b900,color:#fff
+    style INF fill:#e8f5d0
+    style PT fill:#ffe0e0
+    style FFT fill:#ffe0e0
+    style LO fill:#fff3cd

@@ -1,0 +1,10 @@
+flowchart TD
+    Q{"Eğitim yapılacak mı?"} -->|"Hayır"| INF["Inference / Çıkarım<br/>1x H200 · DGX Spark · RTX PRO 6000<br/>KV cache için ek VRAM kritik"]
+    Q -->|"Evet, sıfırdan"| PT["Pre-training (sıfırdan)<br/>8-16x B200/B300 takım<br/>çok yüksek VRAM"]
+    Q -->|"Evet, tam uyarlama"| FFT["Full Fine-tune<br/>1-8x H200 (ZeRO-3)<br/>yüksek VRAM"]
+    Q -->|"Evet, hafif uyarlama"| LO["Fine-tune LoRA/QLoRA<br/>1x L40S / RTX PRO 6000 / H200<br/>orta-düşük VRAM"]
+    style Q fill:#76b900,color:#fff
+    style INF fill:#e8f5d0
+    style PT fill:#ffe0e0
+    style FFT fill:#ffe0e0
+    style LO fill:#fff3cd

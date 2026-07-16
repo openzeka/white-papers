@@ -1,0 +1,8 @@
+flowchart TD
+    APP["Uygulama / arayüz katmanı<br/>masaüstü: LM Studio · Jan<br/>web + RAG: Open WebUI · AnythingLLM · RAGFlow<br/>AI workspace: Odysseus · Khoj<br/>kodlama: OpenCode · Cline · Continue"]
+    APP -->|"OpenAI uyumlu API"| GW["API ağ geçidi (opsiyonel)<br/>LiteLLM · Portkey<br/>çok model / çok kullanıcı / kota"]
+    GW --> EN["Çıkarım motoru<br/>vLLM · TensorRT-LLM · SGLang<br/>llama.cpp · Ollama"]
+    APP -.->|"tek model: doğrudan"| EN
+    FT["Fine-tune / eğitim<br/>Unsloth · LLaMA-Factory · NeMo"] -.->|"modeli uyarlar"| EN
+    EN --> HW["NVIDIA GPU + CUDA"]
+    style HW fill:#76b900,color:#fff

@@ -30,3 +30,8 @@ node_modules/
 
 # Local notes (sadece lokalde, repoya gitmesin)
 LOCAL_NOTES.md
+
+# Diagram sources — build artefacts (mmd kaynakları commit edilir, çıktılar edilmez)
+_diagram_sources/output/
+__pycache__/
+*.pyc
