@@ -80,6 +80,7 @@ exclude:
   - .github
   - README.md
   - DEVELOPMENT.md
+  - _diagram_sources
   - LICENSE
   - Makefile
 

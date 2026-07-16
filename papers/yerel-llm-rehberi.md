@@ -14,7 +14,7 @@ toc: true
 
 > **Publication date:** June 2026
 > **Scope:** An end-to-end decision guide starting from why local LLM is needed and for whom, all the way to hardware → model → software selection.
-> **Note:** This field changes significantly even on a monthly basis. The product names, prices, and benchmark results below are valid as of June 2026; what endures is the categories and decision logic, not the names. On the hardware side, only NVIDIA is deliberately covered — the main reason is the CUDA ecosystem (see Section 4.1).
+> **Note:** This field changes very significantly even in a short period. The product names, prices, and benchmark results below are valid as of June 2026; what endures is not the names, but the categories and decision logic. On the hardware side, only NVIDIA is deliberately covered — the main reason is the CUDA ecosystem (see Section 4.1).
 
 ---
 
@@ -140,18 +140,19 @@ This is the **most important question** that determines hardware requirements. T
 <p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-training-inference.png' | relative_url }}" alt="First decision: training or inference?" width="640"/></p>
 <sub><i>Figure: First decision: training or inference?</i></sub>
 
-**For most organizations, the starting point is inference** — running a ready open model on your own server. Training/customization comes into play only when the model needs to be adapted to your own data, and it has three tiers:
+**For most organizations, the starting point is inference** — running a ready open model on your own server. Training/customization comes into play only when the model needs to be adapted to your own data, and it has four tiers:
 
-| | Full Training | Fine-tune (LoRA) | Fine-tune (QLoRA) | Inference |
-|---|---|---|---|---|
-| VRAM requirement | Very high | Medium | Low | Model + KV cache |
-| 7B model | 8× B200 (1 team) | 1× L40S / RTX PRO 6000 | 1× L40S | 1× L40S / RTX PRO 6000 |
-| 70B model | 8–16× B300 (1–2 teams) | 2–4× H200 | 1× DGX Spark / 1× H200 | 1× H200 (INT8) / 1× DGX Spark (INT8) — for FP16, 2× H200 (see 4.8) |
-| Duration | Days–weeks–months | Hours | Hours | — |
-| Data requirement | Millions of examples | Thousands of examples | Thousands of examples | — |
-| Cost | Very high | Medium | Low | Medium |
+| | Pre-training (from scratch) | Full Fine-tune | Fine-tune (LoRA) | Fine-tune (QLoRA) | Inference |
+|---|---|---|---|---|---|
+| VRAM requirement | Very high (~16× params) | High (~12–14× params) | Medium | Low | Model + KV cache |
+| 7B model | 8× B200 (1 team) | 1× H200 (~85–100 GB) | 1× L40S / RTX PRO 6000 | 1× L40S | 1× L40S / RTX PRO 6000 |
+| 70B model | 8–16× B300 (1–2 teams) | 4–8× H200 (ZeRO-3) | 2–4× H200 | 1× DGX Spark / 1× H200 | 1× H200 (INT8) / 1× DGX Spark (INT8) — for FP16, 2× H200 (see 4.8) |
+| Duration | Weeks–months | Days–1 week | Hours | Hours | — |
+| Data requirement | Trillions of tokens | Millions of examples | Thousands of examples | Thousands of examples | — |
+| Cost | Very high | High | Medium | Low | Medium |
 
-- **Full Training (from scratch / full training):** The heaviest scenario; only for institutions training their own base model. Requires a B200/B300 cluster. **Note:** The "8×/16×" figures in the table are not the actual compute requirement but the **minimum sales unit of B200/B300** (an 8-GPU team — see 4.5/D). The actual VRAM requirement is roughly 16× the model size (FP16 weights + gradients + Adam optimizer states): **7B full training ≈ 120–150 GB**, **70B ≈ 1 TB+** (plus activations). So 7B full training needs far less memory than a single 8-GPU team; even if the whole team is not used, this is the smallest sales unit.
+- **Pre-training (from scratch):** The heaviest scenario; only for institutions training their own base model. Requires a B200/B300 cluster. **Note:** The "8×/16×" figures in the table are not the actual compute requirement but the **minimum sales unit of B200/B300** (an 8-GPU team — see 4.5/D). The actual VRAM requirement is roughly 16× the model size (FP16 weights + gradients + Adam optimizer states): **7B full training ≈ 120–150 GB**, **70B ≈ 1 TB+** (plus activations). So 7B full training needs far less memory than a single 8-GPU team; even if the whole team is not used, this is the smallest sales unit.
+- **Full Fine-tune:** Updates **all parameters** of a pre-trained model on your own data. VRAM requirement is close to pre-training (~12–14× params — slightly lower thanks to gradient checkpointing and typically shorter sequences), but **duration and data are far less**. Suited for deep domain adaptation (specialized fields such as Turkish, medical, legal); comes into play when LoRA is insufficient. **Risk — catastrophic forgetting:** Updating all parameters can degrade or overwrite the general capabilities learned during pre-training (other languages, general knowledge, reasoning). **LoRA/QLoRA largely mitigates this risk** — base model weights are kept frozen and only small adapter layers are trained; domain adaptation is added while general capabilities are preserved. In practice, most organizations should start with LoRA/QLoRA. When full fine-tuning is chosen, mitigate the risk with: a low learning rate, **data mixing** (domain data + general data together), **regularization** (KL/L2), and limiting the number of epochs. (Open-source tools: see 6.F.)
 - **LoRA / QLoRA fine-tune:** The practical way to adapt an existing model to your own data. It does not train the whole model, only small additional layers; **QLoRA** further reduces VRAM by quantizing. Fine-tuning a 70B model even with a single **DGX Spark** is possible (with QLoRA — in FP16-based LoRA, the 70B weights alone are ~140 GB, so they do not fit in 128 GB). (Open-source tools: see 6.F.)
 - **Inference:** Just running the model. Here, the **extra VRAM allocated for KV cache is critical** (see 4.3); as the number of concurrent users grows, this load grows.
 
@@ -536,7 +537,7 @@ It is healthiest to think of the software layer in seven categories: **(A) infer
 
 ### 6.F. Fine-tune & training tools (open source)
 
-> These tools put the three tiers in §4.2 (LoRA · QLoRA · full training) into practice. Most organizations start with **LoRA/QLoRA** — possible even on a single-GPU workstation; from-scratch/large-scale training requires multi-GPU/multi-node. All run on NVIDIA CUDA. For hardware mapping, see 4.2 and Scenario F.
+> These tools put the four tiers in §4.2 (pre-training · full fine-tune · LoRA · QLoRA) into practice. Most organizations start with **LoRA/QLoRA** — possible even on a single-GPU workstation; full fine-tuning and from-scratch training require multi-GPU/multi-node. All run on NVIDIA CUDA. For hardware mapping, see 4.2 and Scenario F.
 
 **Easy entry — LoRA/QLoRA fine-tune (single / few GPUs):**
 - **Unsloth** — The fastest and lowest-VRAM LoRA/QLoRA; adapts large models on a single GPU. With **Unsloth Studio**, data → training → evaluation → export (LoRA/GGUF) is done in a **no-code, local web UI** in a single flow. *(License: Apache-2.0 / AGPL-3.0 dual — the AGPL clause requires enterprise legal review · ~67k★ · [unslothai/unsloth](https://github.com/unslothai/unsloth))*
@@ -599,8 +600,11 @@ A powerful single machine → **Odysseus** or **Khoj** → email triage, calenda
 **Scenario F — Model customization (fine-tune).**
 To adapt a model to your own data: 7B–13B LoRA/QLoRA → **1× RTX PRO 6000 (96 GB)** or **1× H200**; 70B LoRA → **2–4× H200**, 70B QLoRA → **1× DGX Spark (128 GB)**. Fine-tuning 70B on a single DGX Spark (QLoRA) is possible on the desktop; as the team grows, it scales with 2–3× ring. On the software side, **Unsloth / LLaMA-Factory / Axolotl** (LoRA/QLoRA) are used, and at large scale **NeMo / DeepSpeed** (see 6.F); validate the result on your own evaluation set (see 5.9).
 
+**Scenario F2 — Deep domain adaptation (full fine-tune).**
+For deep domain adaptation where LoRA is insufficient (e.g., Turkish continued pre-training, medical/legal specialist models): 70B full fine-tune → **4–8× H200** (with ZeRO-3), ~1 TB VRAM. A low learning rate + mixing domain data with general data is essential to mitigate catastrophic forgetting (see 4.2). Software: **NeMo / Megatron-LM / DeepSpeed** (see 6.F).
+
 **Scenario G — Large-scale production / from-scratch training.**
-High-traffic (500+ concurrent) inference or full training → **8× B200 / B300 (HGX/DGX team)**, at enterprise scale **DGX B300 "AI Factory."** InfiniBand networking, server-class cooling, and TCO planning are mandatory (see 4.9). At ministry/agency scale, deployed on-prem so that data stays entirely within the institution.
+High-traffic (500+ concurrent) inference or pre-training (from scratch) → **8× B200 / B300 (HGX/DGX team)**, at enterprise scale **DGX B300 "AI Factory."** InfiniBand networking, server-class cooling, and TCO planning are mandatory (see 4.9). At ministry/agency scale, deployed on-prem so that data stays entirely within the institution.
 
 ---
 
@@ -676,7 +680,7 @@ High-traffic (500+ concurrent) inference or full training → **8× B200 / B300 
 
 - **LLM (Large Language Model):** A model trained on very large text data that understands and generates natural language.
 - **Inference:** Running a trained model only to produce responses.
-- **Fine-tuning:** Adapting an existing model to your own data.
+- **Fine-tuning:** Adapting a pre-trained model to your own data. **Full fine-tuning** updates all model parameters (high VRAM, catastrophic forgetting risk — see 4.2); **LoRA/QLoRA** train only small adapter layers (low VRAM, base model preserved).
 - **LoRA / QLoRA:** Efficient fine-tuning methods that train small additional layers rather than the whole model; QLoRA further reduces memory by quantizing.
 - **VRAM:** Graphics card memory; the single hard constraint in local LLM.
 - **Token:** The unit of text the model processes (roughly a piece of a word).

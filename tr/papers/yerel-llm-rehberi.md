@@ -14,7 +14,7 @@ toc: true
 
 > **Yayın tarihi:** Haziran 2026
 > **Kapsam:** Yerel LLM'in neden ve kimler için gerekli olduğundan başlayıp, donanım → model → yazılım seçimine kadar uçtan uca bir karar rehberi.
-> **Not:** Bu alan ayda bir bile ciddi değişiyor. Aşağıdaki ürün isimleri, fiyatlar ve benchmark sonuçları Haziran 2026 itibarıyla geçerlidir; kalıcı olan kategoriler ve karar mantığıdır, isimler değil. Donanım tarafında bilinçli olarak yalnızca NVIDIA ele alınmıştır — temel sebebi CUDA ekosistemidir (bkz. Bölüm 4.1).
+> **Not:** Bu alan kısa sürede çok ciddi değişikler oluyor. Aşağıdaki ürün isimleri, fiyatlar ve benchmark sonuçları Haziran 2026 itibarıyla geçerlidir; kalıcı olan isimler değil, kategoriler ve karar mantığıdır. Donanım tarafında bilinçli olarak yalnızca NVIDIA ele alınmıştır — temel sebebi CUDA ekosistemidir (bkz. Bölüm 4.1).
 
 ---
 
@@ -140,18 +140,19 @@ Donanım ihtiyacını belirleyen **en önemli soru** budur. "Eğitim yapılacak 
 <p><img src="{{ '/tr/papers/yerel-llm-rehberi/images/sema-4-egitim-inference.png' | relative_url }}" alt="İlk karar: eğitim mi, inference mı?" width="640"/></p>
 <sub><i>Şekil: İlk karar: eğitim mi, inference mı?</i></sub>
 
-**Çoğu kurum için başlangıç noktası inference'tır** — hazır bir açık modeli kendi sunucunuzda çalıştırmak. Eğitim/özelleştirme yalnızca modeli kendi verinizle uyarlamak gerektiğinde devreye girer ve üç kademesi vardır:
+**Çoğu kurum için başlangıç noktası inference'tır** — hazır bir açık modeli kendi sunucunuzda çalıştırmak. Eğitim/özelleştirme yalnızca modeli kendi verinizle uyarlamak gerektiğinde devreye girer ve dört kademesi vardır:
 
-| | Full Training | Fine-tune (LoRA) | Fine-tune (QLoRA) | Inference |
-|---|---|---|---|---|
-| VRAM ihtiyacı | Çok yüksek | Orta | Düşük | Model + KV cache |
-| 7B model | 8× B200 (1 takım) | 1× L40S / RTX PRO 6000 | 1× L40S | 1× L40S / RTX PRO 6000 |
-| 70B model | 8–16× B300 (1–2 takım) | 2–4× H200 | 1× DGX Spark / 1× H200 | 1× H200 (INT8) / 1× DGX Spark (INT8) — FP16 için 2× H200 (bkz. 4.8) |
-| Süre | Günler–haftalar–aylar | Saatler | Saatler | — |
-| Veri ihtiyacı | Milyonlarca örnek | Binlerce örnek | Binlerce örnek | — |
-| Maliyet | Çok yüksek | Orta | Düşük | Orta |
+| | Pre-training (sıfırdan) | Full Fine-tune | Fine-tune (LoRA) | Fine-tune (QLoRA) | Inference |
+|---|---|---|---|---|---|
+| VRAM ihtiyacı | Çok yüksek (~16× param) | Yüksek (~12–14× param) | Orta | Düşük | Model + KV cache |
+| 7B model | 8× B200 (1 takım) | 1× H200 (~85–100 GB) | 1× L40S / RTX PRO 6000 | 1× L40S | 1× L40S / RTX PRO 6000 |
+| 70B model | 8–16× B300 (1–2 takım) | 4–8× H200 (ZeRO-3) | 2–4× H200 | 1× DGX Spark / 1× H200 | 1× H200 (INT8) / 1× DGX Spark (INT8) — FP16 için 2× H200 (bkz. 4.8) |
+| Süre | Haftalar–aylar | Günler–1 hafta | Saatler | Saatler | — |
+| Veri ihtiyacı | Trilyonlarca token | Milyonlarca örnek | Binlerce örnek | Binlerce örnek | — |
+| Maliyet | Çok yüksek | Yüksek | Orta | Düşük | Orta |
 
-- **Full Training (sıfırdan/tam eğitim):** En ağır senaryo; yalnızca kendi temel modelini eğiten kurumlar içindir. B200/B300 cluster gerektirir. **Not:** Tablodaki "8×/16×" rakamları gerçek hesaplama ihtiyacı değil, **B200/B300'ün minimum satış birimidir** (8'li takım — bkz. 4.5/D). Gerçek VRAM ihtiyacı kabaca model boyutunun ~16 katıdır (FP16 ağırlık + gradyan + Adam optimizatör durumları): **7B tam eğitim ≈ 120–150 GB**, **70B ≈ 1 TB+** (üstüne activation). Yani 7B tam eğitim tek bir 8'li takımın çok altında bellek ister; takımın tamamı kullanılmasa da en küçük satış birimi budur.
+- **Pre-training (sıfırdan ön eğitim):** En ağır senaryo; yalnızca kendi temel modelini eğiten kurumlar içindir. B200/B300 cluster gerektirir. **Not:** Tablodaki "8×/16×" rakamları gerçek hesaplama ihtiyacı değil, **B200/B300'ün minimum satış birimidir** (8'li takım — bkz. 4.5/D). Gerçek VRAM ihtiyacı kabaca model boyutunun ~16 katıdır (FP16 ağırlık + gradyan + Adam optimizatör durumları): **7B tam eğitim ≈ 120–150 GB**, **70B ≈ 1 TB+** (üstüne activation). Yani 7B tam eğitim tek bir 8'li takımın çok altında bellek ister; takımın tamamı kullanılmasa da en küçük satış birimi budur.
+- **Full Fine-tune:** Ön-eğitilmiş bir modelin **tüm parametrelerini** kendi verinizle günceller. VRAM ihtiyacı pre-training'e yakın (~12–14× param — gradient checkpointing ve tipik olarak daha kısa bağlam sayesinde pre-training'den biraz daha düşük), ancak **süre ve veri çok daha azdır**. Derin alan adaptasyonu (Türkçe, tıp, hukuk gibi özel alanlar) için uygundur; LoRA'nın yetersiz kaldığı durumlarda devreye girer. **Risk — catastrophic forgetting (felaketsel unutma):** Tüm parametreleri güncellemek, pre-training sırasında öğrenilen genel yetenekleri (diğer diller, genel bilgi, muhakeme) bozabilir veya üzerine yazabilir. **LoRA/QLoRA bu riski büyük ölçüde önler** — temel model ağırlıkları donmuş (frozen) tutulur, yalnızca küçük adapter katmanları eğitilir; dolayısıyla genel yetenekler korunarak alan uyarlama eklenir. Pratikte çoğu kurum LoRA/QLoRA ile başlamalıdır. Full fine-tune tercih edildiğinde riski azaltmak için: düşük öğrenme oranı, **veri karıştırma** (alan verisi + genel veri birlikte), **regularization** (KL/L2) ve epoch sayısını sınırlama uygulanmalıdır. (Açık kaynak araçlar: bkz. 6.F.)
 - **LoRA / QLoRA fine-tune:** Mevcut bir modeli kendi verinizle uyarlamanın pratik yolu. Tüm modeli değil, küçük ek katmanları eğitir; **QLoRA** kuantize ederek VRAM'i daha da düşürür. 70B bir modeli tek bir **DGX Spark** ile fine-tune etmek dahi mümkündür (QLoRA ile — FP16 tabanlı LoRA'da 70B ağırlıkları tek başına ~140 GB olduğundan 128 GB'a sığmaz). (Açık kaynak araçlar: bkz. 6.F.)
 - **Inference:** Modeli sadece çalıştırmak. Burada **KV cache için ayrılan ek VRAM kritiktir** (bkz. 4.3); eş zamanlı kullanıcı sayısı arttıkça bu yük büyür.
 
@@ -536,7 +537,7 @@ Yazılım katmanını yedi kategoride düşünmek en sağlıklısı: **(A) çık
 
 ### 6.F. Fine-tune & eğitim araçları (açık kaynak)
 
-> Bu araçlar §4.2'deki üç kademeyi (LoRA · QLoRA · full training) pratiğe döker. Çoğu kurum **LoRA/QLoRA** ile başlar — tek GPU'lu bir iş istasyonunda dahi mümkündür; sıfırdan/büyük ölçekli eğitim çok-GPU/çok-düğüm ister. Tümü NVIDIA CUDA üzerinde çalışır. Donanım eşlemesi için bkz. 4.2 ve Senaryo F.
+> Bu araçlar §4.2'deki dört kademeyi (pre-training · full fine-tune · LoRA · QLoRA) pratiğe döker. Çoğu kurum **LoRA/QLoRA** ile başlar — tek GPU'lu bir iş istasyonunda dahi mümkündür; full fine-tune ve sıfırdan eğitim çok-GPU/çok-düğüm ister. Tümü NVIDIA CUDA üzerinde çalışır. Donanım eşlemesi için bkz. 4.2 ve Senaryo F.
 
 **Kolay giriş — LoRA/QLoRA fine-tune (tek / az GPU):**
 - **Unsloth** — En hızlı ve en düşük VRAM'li LoRA/QLoRA; tek GPU'da büyük modelleri uyarlar. **Unsloth Studio** ile veri → eğitim → değerlendirme → dışa aktarma (LoRA/GGUF) **kodsuz, yerel web arayüzünden** tek akışta yapılır. *(Lisans: Apache-2.0 / AGPL-3.0 ikili — AGPL maddesi kurumsal hukuk incelemesi gerektirir · ~67k★ · [unslothai/unsloth](https://github.com/unslothai/unsloth))*
@@ -599,8 +600,11 @@ Güçlü tek makine → **Odysseus** veya **Khoj** → e-posta triyajı, takvim,
 **Senaryo F — Model özelleştirme (fine-tune).**
 Kendi verinizle bir modeli uyarlamak için: 7B–13B LoRA/QLoRA → **1× RTX PRO 6000 (96 GB)** veya **1× H200**; 70B LoRA → **2–4× H200**, 70B QLoRA → **1× DGX Spark (128 GB)**. Tek bir DGX Spark ile 70B fine-tune (QLoRA) masaüstünde mümkündür; ekip büyüdükçe 2–3× ring ile ölçeklenir. Yazılım tarafında **Unsloth / LLaMA-Factory / Axolotl** (LoRA/QLoRA), büyük ölçekte **NeMo / DeepSpeed** kullanılır (bkz. 6.F); sonucu kendi değerlendirme setinizde doğrulayın (bkz. 5.9).
 
+**Senaryo F2 — Derin alan adaptasyonu (full fine-tune).**
+LoRA'nın yetersiz kaldığı derin alan adaptasyonu (ör. Türkçe sürekli ön-eğitim, tıp/hukuk uzman modeli) için: 70B full fine-tune → **4–8× H200** (ZeRO-3 ile), ~1 TB VRAM. Catastrophic forgetting riskine karşı düşük öğrenme oranı + alan verisi ile genel veriyi karıştırma şart (bkz. 4.2). Yazılım: **NeMo / Megatron-LM / DeepSpeed** (bkz. 6.F).
+
 **Senaryo G — Büyük ölçek üretim / sıfırdan eğitim.**
-Yüksek trafik (500+ eş zamanlı) inference veya full training → **8× B200 / B300 (HGX/DGX takımı)**, kurumsal ölçekte **DGX B300 "AI Factory"**. InfiniBand ağ, sunucu sınıfı soğutma ve TCO planlaması zorunludur (bkz. 4.9). Bakanlık/kurum ölçeğinde, veri tamamen kurum içinde kalacak şekilde on-prem kurulur.
+Yüksek trafik (500+ eş zamanlı) inference veya pre-training (sıfırdan) → **8× B200 / B300 (HGX/DGX takımı)**, kurumsal ölçekte **DGX B300 "AI Factory"**. InfiniBand ağ, sunucu sınıfı soğutma ve TCO planlaması zorunludur (bkz. 4.9). Bakanlık/kurum ölçeğinde, veri tamamen kurum içinde kalacak şekilde on-prem kurulur.
 
 ---
 
@@ -676,7 +680,7 @@ Yüksek trafik (500+ eş zamanlı) inference veya full training → **8× B200 /
 
 - **LLM (Büyük Dil Modeli):** Çok büyük metin verisiyle eğitilmiş, doğal dili anlayıp üreten model.
 - **Inference (çıkarım):** Eğitilmiş bir modeli yalnızca çalıştırıp yanıt üretmek.
-- **Fine-tuning (ince ayar):** Mevcut bir modeli kendi verinizle uyarlamak.
+- **Fine-tuning (ince ayar):** Mevcut (ön-eğitilmiş) bir modeli kendi verinizle uyarlamak. **Full fine-tune** modelin tüm parametrelerini günceller (VRAM yüksek, catastrophic forgetting riski — bkz. 4.2); **LoRA/QLoRA** yalnızca küçük adapter katmanlarını eğitir (VRAM düşük, temel model korunur).
 - **LoRA / QLoRA:** Tüm modeli değil, küçük ek katmanları eğiten verimli ince ayar yöntemleri; QLoRA ayrıca kuantize ederek belleği daha da düşürür.
 - **VRAM:** Ekran kartı belleği; yerel LLM'de tek katı kısıt.
 - **Token:** Modelin işlediği metin birimi (kabaca bir kelime parçası).
