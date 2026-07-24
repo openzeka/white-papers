@@ -17,3 +17,4 @@ Aşağıdaki teknik white paper'lar Openzeka Teknoloji A.Ş. tarafından yayıml
 | [Yerel LLM Kullanım Rehberi](yerel-llm-rehberi) | Donanım → model → yazılım karar rehberi | Jetson, RTX PRO, DGX Spark, DGX/HGX |
 | [Qwen3.6-27B DGX Spark Benchmark](qwen3.6-27b-dgx-spark-benchmark) | LLM quantization karşılaştırması (FP8/AWQ/NVFP4 + MTP) | NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Cluster Scaling](qwen3.6-27b-dgx-spark-scaling) | Multi-node ölçekleme (TP1/TP2/TP4), SLO temelli kapasite planlama | 1x/2x/4x NVIDIA DGX Spark (GB10) |
+| [DGX Spark 4-Node AI Cluster Kurulum Rehberi](dgx-spark-4node-cluster-kurulumu) | Switch tabanlı cluster kurulumu, RoCEv2/RDMA, sparkrun, NAS | 4x NVIDIA DGX Spark (GB10) |

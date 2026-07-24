@@ -62,6 +62,13 @@ permalink: /
   <span class="date">Temmuz 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/tr/papers/dgx-spark-4node-cluster-kurulumu/' | relative_url }}">
+  <span class="tag">Cluster Kurulumu</span>
+  <h3>DGX Spark 4-Node AI Cluster Kurulum Rehberi</h3>
+  <p>4 DGX Spark node'undan oluşan switch tabanlı AI cluster kurulumu: management/compute ağları, RoCEv2/RDMA, sparkrun ve NAS yapılandırması.</p>
+  <span class="date">Temmuz 2026</span>
+</a>
+
 </div>
 
 ## Uzmanlık Alanları

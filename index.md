@@ -62,6 +62,13 @@ permalink: /
   <span class="date">July 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/papers/dgx-spark-4node-cluster-kurulumu/' | relative_url }}">
+  <span class="tag">Cluster Setup</span>
+  <h3>DGX Spark 4-Node AI Cluster Setup Guide</h3>
+  <p>Switch-based AI cluster setup with 4 DGX Spark nodes: management/compute networks, RoCEv2/RDMA, sparkrun, and NAS configuration.</p>
+  <span class="date">July 2026</span>
+</a>
+
 </div>
 
 ## Areas of Expertise
