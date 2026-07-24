@@ -209,11 +209,11 @@ portu üzerinden 200GbE hızında MikroTik CRS812 switch'e bağlanır. CRS812'ni
 
 1.  İlk breakout kablosunun QSFP-DD ucunu CRS812'nin 1 numaralı QSFP-DD portuna takın. Kablonun her iki ucundaki kilitleme mandalının tam oturduğundan emin olun.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/06-breakout-cable.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/06-breakout-cable.jpg' | relative_url }})
 
 2.  Aynı kablonun iki QSFP56 ucunu Spark 1 ve Spark 2 sistemlerinin en dışta bulunan ConnectX-7 portlarına takın.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/07-connectx7-ports.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/07-connectx7-ports.jpg' | relative_url }})
 
 3.  İkinci breakout kablosunun QSFP-DD ucunu CRS812'nin 2 numaralı QSFP-DD portuna takın.
 
