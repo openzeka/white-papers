@@ -39,7 +39,7 @@ permalink: /
 
 ## Published White Papers
 
-<div class="paper-grid" markdown="1">
+<div class="paper-grid">
 
 <a class="paper-card" href="{{ '/papers/yerel-llm-rehberi/' | relative_url }}">
   <span class="tag">Decision Guide</span>
