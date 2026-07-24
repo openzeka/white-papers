@@ -765,4 +765,4 @@ High-traffic (500+ concurrent) inference or pre-training (from scratch) → **8�
 
 <p><img src="{{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }}" alt="OpenZeka" width="220"/></p>
 
-**Let's plan your local LLM infrastructure together.** For the right hardware–model–software match, VRAM sizing, and TCO analysis, contact OpenZeka: [openzeka.com](https://openzeka.com) · VRAM calculator: [Cordatus VRAM Calculator](https://app.cordatus.ai/#/vram-calculator)
+**Let's plan your local LLM infrastructure together.** For the right hardware–model–software match, VRAM sizing, and TCO analysis, contact OpenZeka: [support@openzeka.com](https://openzeka.com/en/contact/) · [openzeka.com](https://openzeka.com/en) · VRAM calculator: [Cordatus VRAM Calculator](https://app.cordatus.ai/#/vram-calculator)

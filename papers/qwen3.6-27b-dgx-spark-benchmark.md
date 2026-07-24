@@ -1047,8 +1047,9 @@ All measurements in this report were performed with Openzeka's open source **[Co
 
 | | |
 |---|---|
-| **Web** | [openzeka.com](https://openzeka.com) |
-| **Contact** | [openzeka.com/iletisim](https://openzeka.com/iletisim) |
+| **Web** | [openzeka.com](https://openzeka.com/en) |
+| **Email** | [support@openzeka.com](https://openzeka.com/en/contact/) |
+| **Contact** | [openzeka.com/en/contact](https://openzeka.com/en/contact/) |
 | **Phone** | +90 312 266 2055 |
 | **Address** | Üniversiteler Mah. 1606. Cad. No:11, Cyberpark H Blok, 06800 Bilkent / Ankara, Türkiye |
 

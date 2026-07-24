@@ -72,7 +72,8 @@ system architects, AI engineers, DevOps teams, and technology decision-makers.
 | **Ankara Branch** | Mustafa Kemal Mah. Dumlupınar Bulvarı, Tepe Prime No:266 İç Kapı No:18, 06530 Çankaya/Ankara |
 | **Netherlands Branch** | Openzeka Netherlands, High Tech Campus 9, 5656 AE Eindhoven, The Netherlands |
 | **Phone** | +90 312 266 2055 |
-| **Web** | [openzeka.com](https://www.openzeka.com) · [Cordatus AI](https://cordatus.ai/) · [GitHub](https://github.com/openzeka) |
+| **Email** | [support@openzeka.com](https://openzeka.com/en/contact/) |
+| **Web** | [openzeka.com](https://openzeka.com/en) · [Cordatus AI](https://cordatus.ai/) · [GitHub](https://github.com/openzeka) |
 | **Blog** | [blog.openzeka.com](https://blog.openzeka.com) |
 
 ### Social Media

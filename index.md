@@ -107,6 +107,6 @@ Ankara Bilkent Cyberpark since 2016. All white papers are published openly at
 <code>https://openzeka.github.io/white-papers/</code>.
 
 **Headquarters:** Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara
-**Tel:** +90 312 266 2055 · **Web:** [openzeka.com](https://www.openzeka.com) · [Cordatus AI](https://cordatus.ai/)
+**Tel:** +90 312 266 2055 · **Email:** [support@openzeka.com](https://openzeka.com/en/contact/) · **Web:** [openzeka.com](https://openzeka.com/en) · [Cordatus AI](https://cordatus.ai/)
 
 </div>
