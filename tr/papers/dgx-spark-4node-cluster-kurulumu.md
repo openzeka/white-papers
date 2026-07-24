@@ -519,11 +519,11 @@ Kurulum esnasında sorulan sorulara uygun cevaplar verilir:
 
 4.  MESH kurulumu için Y seçilir
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/28-sparkrun-wizard.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/28-sparkrun-wizard.jpg' | relative_url }})
 
 5.  Configure CX7 networking? sorusuna Y denir, burada sorduğu nvidia değil orijinal kullanıcı şifresidir:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/29-cx7-password.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/29-cx7-password.png' | relative_url }})
 
 6.  Add 'nvidia' to the docker group on all hosts? sorusuna Y seçilir
 
@@ -533,7 +533,7 @@ Kurulum esnasında sorulan sorulara uygun cevaplar verilir:
 
 9.  Setup complete mesajı geldiğinde kurulum başarıyla tamamlanmış demektir
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/30-sparkrun-complete.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/30-sparkrun-complete.png' | relative_url }})
 
 ### DCB (Data Center Bridging) Konfigürasyonu
 
@@ -988,15 +988,15 @@ Bu dokümanda hızlı olması için ama yedeklikten feragat ederek RAID 0 yapıl
 
 3.  Remove butonuna tıklayın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/47-raid-volume.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/47-raid-volume.jpg' | relative_url }})
 
 4.  Gelen ekranda Quick Setup seçeneğini seçin
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/48-raid-quick-setup.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/48-raid-quick-setup.jpg' | relative_url }})
 
 5.  Sonraki ekranda RAID 0 seçeneğini seçin
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/49-raid0-select.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/49-raid0-select.jpg' | relative_url }})
 
 6.  Finish butonuna basın
 
@@ -1010,7 +1010,7 @@ NAS'ın iki adet 10Gbps Ethernet portunu tek bir bonding interface altında birl
 
 2.  Add → Create Link Aggregation seçeneğine tıklayın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/50-link-aggregation.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/50-link-aggregation.jpg' | relative_url }})
 
 3.  Interface alanında LAN 1 ve LAN 2'yi seçin
 
@@ -1018,7 +1018,7 @@ NAS'ın iki adet 10Gbps Ethernet portunu tek bir bonding interface altında birl
 
 5.  Next butonuna basın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/51-lacp-config.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/51-lacp-config.jpg' | relative_url }})
 
 6.  Set up IP address manually seçeneğini işaretleyin
 
@@ -1032,7 +1032,7 @@ NAS'ın iki adet 10Gbps Ethernet portunu tek bir bonding interface altında birl
 
 8.  Next butonuna basın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/52-nas-ip-config.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/52-nas-ip-config.jpg' | relative_url }})
 
 9.  Özet ekranını kontrol edin ve Finish butonuna basın
 
@@ -1076,7 +1076,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
 1.  NAS web arayüzünde File Explorer → + (Create New Shared Folder) butonuna tıklayın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/54-shared-folder.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/54-shared-folder.png' | relative_url }})
 
 2.  Add butonuna tıklayın
 
@@ -1090,7 +1090,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
     2.  Veya default olan Read and Write for admins seçeneğini bırakabilirsiniz
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/55-access-rights.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/55-access-rights.jpg' | relative_url }})
 
 5.  Next butonuna basın
 
@@ -1098,7 +1098,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
     1.  Encrypt this shared folder: İsterseniz seçebilirsiniz, bu dokümanda seçilmemiştir
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/56-protection-measures.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/56-protection-measures.jpg' | relative_url }})
 
 7.  Next → Finish butonuna basın
 
@@ -1110,7 +1110,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
 3.  Access Rights butonuna tıklayın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/57-nfs-privileges.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/57-nfs-privileges.jpg' | relative_url }})
 
 4.  NFS Privileges sekmesine geçin
 
@@ -1124,9 +1124,9 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
     3.  Root Mapping: root (0)
 
-7\. OK butonuna basın
+7. OK butonuna basın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/58-nfs-add.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/58-nfs-add.jpg' | relative_url }})
 
 **Performance Tuning Script**
 
