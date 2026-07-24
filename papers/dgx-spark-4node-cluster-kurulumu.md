@@ -16,13 +16,40 @@ This document describes the end-to-end installation and configuration steps for 
 
 The document covers the preparation of management and compute networks, ConnectX-7/QSFP port configuration, RoCEv2/RDMA settings, SSH access, NCCL communication validation, and cluster health check steps.
 
+## Table of Contents
+
+- [Architecture Overview](#architecture-overview)
+- [Prerequisites](#prerequisites)
+- [DGX Spark Node Preparation](#dgx-spark-node-preparation)
+  - [System and Firmware Updates](#system-and-firmware-updates)
+  - [Docker Configuration](#docker-configuration)
+- [Management Network (10GbE) Connection](#management-network-10gbe-connection)
+- [Compute Network (200GbE QSFP) Physical Connection](#compute-network-200gbe-qsfp-physical-connection)
+- [CRS312 MikroTik Switch Configuration](#crs312-mikrotik-switch-configuration)
+  - [Bonding NAS Ports](#bonding-nas-ports)
+- [CRS812 MikroTik Switch Configuration](#crs812-mikrotik-switch-configuration)
+  - [Switch Preparation](#switch-preparation)
+  - [Pre-installation Inventory and Backup](#pre-installation-inventory-and-backup)
+  - [QSFP-DD Port 2×200G Breakout Configuration](#qsfp-dd-port-2x200g-breakout-configuration)
+  - [Jumbo Frame and MTU Configuration](#jumbo-frame-and-mtu-configuration)
+  - [RoCEv2 Traffic Classification](#rocev2-traffic-classification)
+- [Installing sparkrun on Spark Nodes](#installing-sparkrun-on-spark-nodes)
+  - [User and SSH Configuration](#user-and-ssh-configuration)
+  - [sparkrun Installation](#sparkrun-installation)
+  - [DCB (Data Center Bridging) Configuration](#dcb-data-center-bridging-configuration)
+- [Speed and RDMA Tests](#speed-and-rdma-tests)
+- [Running Models with sparkrun](#running-models-with-sparkrun)
+- [NAS Configuration (ASUSTOR AS6808T)](#nas-configuration-asustor-as6808t)
+- [Results and Verification](#results-and-verification)
+- [Troubleshooting](#troubleshooting)
+
 ## Architecture Overview
 
 | **Component** | **Description** |
 | --- | --- |
 | **DGX Spark × 4** | Each has a ConnectX-7 200GbE QSFP56 port |
 | **MikroTik CRS312** | 10GbE management network switch; also includes NAS bonding ports |
-| **MikroTik CRS812** | **400G QSFP-DD compute network switch; provides 4×200G via breakout** |
+| **MikroTik CRS812** | 400G QSFP-DD compute network switch; provides 4×200G via breakout |
 | **ASUSTOR AS6808T** | 8-disk NAS; connected to CRS312 via 2×10Gbps LACP |
 | **sparkrun** | Cluster management, SSH mesh, and CX7 configuration toolkit |
 
@@ -56,7 +83,7 @@ The document covers the preparation of management and compute networks, ConnectX
 
 - Physical access to all devices (for cabling)
 
-**DGX Spark OS Kurulumu**
+**DGX Spark OS Installation**
 
 For DGX Spark OS installation, you can use the following video:
 
@@ -72,19 +99,15 @@ The following steps must be applied on all four Spark systems.
 
 First, the operating system packages are updated:
 
-```
+```bash
 sudo apt update
-
 sudo apt dist-upgrade
-
 ```
 Next, the system firmware is updated:
 
-```
+```bash
 sudo fwupdmgr refresh --force
-
 sudo fwupdmgr upgrade
-
 ```
 Via the DGX Dashboard, verify that there are no pending updates; if any exist, apply them:
 
@@ -92,9 +115,8 @@ Via the DGX Dashboard, verify that there are no pending updates; if any exist, a
 
 After the updates are complete, reboot the system:
 
-```
+```bash
 sudo reboot
-
 ```
 During testing performed in the installation process, it was observed that connection performance did not reach the expected level due to outdated firmware versions. For this reason, updating all systems is recommended as the first step of the installation.
 
@@ -104,19 +126,15 @@ To allow the container-based tools that will be used in the subsequent steps to 
 
 First, the current user is added to the Docker group:
 
-```
+```bash
 sudo groupadd docker
-
 sudo usermod -aG docker $USER
-
 newgrp docker
-
 ```
 The configuration can be verified with the following test:
 
-```
+```bash
 docker run hello-world
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/02-docker-hello.jpg' | relative_url }})
 
@@ -128,29 +146,21 @@ Additionally, the Docker storage driver was checked on all Spark nodes. The Stor
 
 First, the current storage driver was checked with the following command:
 
-```
+```bash
 docker info -f 'Driver={{.Driver}} DriverStatus={{.DriverStatus}} DockerRootDir={{.DockerRootDir}}'
-
 ```
 If the output showed the driver as overlay2, the following configuration was applied:
 
-```
+```bash
 sudo tee /etc/docker/daemon.json >/dev/null <<'EOF'
-
 {
-
-"features": {
-
-"containerd-snapshotter": true
-
+  "features": {
+    "containerd-snapshotter": true
+  }
 }
-
-}
-
 EOF
 
 sudo systemctl restart docker
-
 ```
 After configuration, the same check command was run again, and the storage driver was verified to be overlayfs.
 
@@ -161,9 +171,8 @@ The 10GbE Ethernet port of each DGX Spark is connected to one of the MikroTik CR
 
 Open a terminal on the Spark desktop and check whether the device has obtained an IP address:
 
-```
+```bash
 ip addr show
-
 ```
 
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/04-ip-addr.jpg' | relative_url }})
@@ -178,15 +187,19 @@ If you see an IP address on the 10GbE interface in the output, as in the example
 
 4.  Change the Method field to Manual
 
-5.  Enter the following information:
+5. Enter the following information:
 
-- Address: 192.168.1.162 (different for each Spark and according to your own network— .163, .164, .165)
+   - Address: 192.168.1.162 (different for each Spark and according to your own network— .163, .164, .165)
 
-- Netmask: 255.255.255.0
 
-- Gateway: 192.168.1.1 (if available, otherwise leave blank)
+   - Netmask: 255.255.255.0
 
-- DNS: 1.1.1.1,8.8.8.8
+
+   - Gateway: 192.168.1.1 (if available, otherwise leave blank)
+
+
+   - DNS: 1.1.1.1,8.8.8.8
+
 
 6.  Press the Apply button and toggle the connection off and back on
 
@@ -198,13 +211,10 @@ If there is internet access, the 10GbE management connection is ready. Repeat th
 
 Verify that all Sparks can see each other over the management network. Ping the others from one Spark:
 
-```
+```bash
 ping -c 4 192.168.1.157
-
 ping -c 4 192.168.1.158
-
 ping -c 4 192.168.1.161
-
 ```
 If all pings are successful, the management network is ready and all nodes can communicate with each other.
 
@@ -214,20 +224,20 @@ In the DGX Spark Quad AI Cluster, each Spark is connected to the MikroTik CRS812
 
 **Cable Plan**
 
-||
-||
-||
-||
+| **CRS812 Port** | **Port Speed** | **Breakout**    | **Connected Spark** |
+| --------------- | -------------- | --------------- | ------------------- |
+| QSFP-DD Port 1  | 400G           | 2 × 200G QSFP56 | Spark 1 + Spark 2   |
+| QSFP-DD Port 2  | 400G           | 2 × 200G QSFP56 | Spark 3 + Spark 4   |
 
 **Connection Steps**
 
 1.  Plug the QSFP-DD end of the first breakout cable into the CRS812's QSFP-DD port number 1. Ensure the locking levers on both ends of the cable are fully seated.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/06-breakout-cable.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/06-breakout-cable.jpg' | relative_url }})
 
 2.  Plug the two QSFP56 ends of the same cable into the outermost ConnectX-7 ports of the Spark 1 and Spark 2 systems.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/07-connectx7-ports.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/07-connectx7-ports.jpg' | relative_url }})
 
 3.  Plug the QSFP-DD end of the second breakout cable into the CRS812's QSFP-DD port number 2.
 
@@ -347,19 +357,15 @@ At this stage, the first thing to do is to ensure that the RouterOS software is 
 
 Connect to the switch interface via SSH over the management IP. All configuration steps will be done through the terminal.
 
-```
+```bash
 ssh admin@192.168.1.155
-
 ```
 Back up the current config before starting the RoCEv2 configuration:
 
-```
+```bash
 /export file=before-roce
-
 /system/backup/save name=before-roce
-
 /file/print
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/17-config-backup.png' | relative_url }})
 
@@ -369,17 +375,12 @@ Each of the CRS812's two QSFP-DD physical ports is 400G by default. Each 400G po
 
 After plugging in the breakout cables, configure each 200G main interface with forced speed and auto-negotiation disabled:
 
-```
+```bash
 /interface/ethernet
-
 set qsfp56-dd-1-1 auto-negotiation=no speed=200G-baseCR4
-
 set qsfp56-dd-1-5 auto-negotiation=no speed=200G-baseCR4
-
 set qsfp56-dd-2-1 auto-negotiation=no speed=200G-baseCR4
-
 set qsfp56-dd-2-5 auto-negotiation=no speed=200G-baseCR4
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/18-qsfp-breakout.png' | relative_url }})
 
@@ -387,17 +388,12 @@ set qsfp56-dd-2-5 auto-negotiation=no speed=200G-baseCR4
 
 Set both L2MTU and MTU values on the QSFP-DD ports connected to the Sparks:
 
-```
+```bash
 /interface/ethernet
-
 set qsfp56-dd-1-1 l2mtu=9500 mtu=9000
-
 set qsfp56-dd-1-5 l2mtu=9500 mtu=9000
-
 set qsfp56-dd-2-1 l2mtu=9500 mtu=9000
-
 set qsfp56-dd-2-5 l2mtu=9500 mtu=9000
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/19-mtu-config.png' | relative_url }})
 
@@ -405,27 +401,20 @@ set qsfp56-dd-2-5 l2mtu=9500 mtu=9000
 
 **QoS Profiles**
 
-```
+```bash
 /interface/ethernet/switch/qos/profile
-
 add name=roce dscp=26 traffic-class=3
-
 add name=cnp dscp=48 traffic-class=6
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/20-qos-profiles.png' | relative_url }})
 
 **Tx Queue, ETS, ECN and CNP Priority**
 
-```
+```bash
 /interface/ethernet/switch/qos/tx-manager/queue
-
 set 1 schedule=high-priority-group weight=1
-
 set 3 schedule=high-priority-group weight=1 ecn=yes
-
 set 6 schedule=strict-priority
-
 ```
 TC1 and TC3 run in the ETS group with equal weight (1:1); ECN marking is enabled on TC3; CNP control packets are prioritized with TC6 strict priority. If TC1 is idle, TC3 can use the entire port — this command does not create a permanent 100G/100G rate-limit.
 
@@ -433,11 +422,9 @@ TC1 and TC3 run in the ETS group with equal weight (1:1); ECN marking is enabled
 
 **PFC Profile**
 
-```
+```bash
 /interface/ethernet/switch/qos/priority-flow-control
-
 add name=pfc-tc3 traffic-class=3 rx=yes tx=yes
-
 ```
 Creates a bidirectional Priority-based Flow Control profile for TC3. tx=yes allows the switch to send XOFF/XON frames to the neighbor for TC3; rx=yes allows it to honor TC3 PFC frames received from the neighbor.
 
@@ -445,47 +432,36 @@ Creates a bidirectional Priority-based Flow Control profile for TC3. tx=yes allo
 
 **Trust, PFC and Queue Rate Reference for Spark Ports**
 
-```
+```bash
 /interface/ethernet/switch/qos/port
-
 set qsfp56-dd-1-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
-
 set qsfp56-dd-1-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
-
 set qsfp56-dd-2-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
-
 set qsfp56-dd-2-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/23-trust-pfc.png' | relative_url }})
 
 **Lossless Traffic Class and Buffer Pool**
 
-```
+```bash
 /interface/ethernet/switch/qos/settings
-
 set lossless-traffic-class=3 lossless-buffers=auto
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/24-lossless.png' | relative_url }})
 
 **QoS hardware offload**
 
-```
+```bash
 /interface/ethernet/switch
-
 set switch1 qos-hw-offloading=yes
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/25-qos-hw-offload.png' | relative_url }})
 
 **LLDP DCBX Advertisement**
 
-```
+```bash
 /ip/neighbor/discovery-settings
-
 set lldp-dcbx=yes
-
 ```
 
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/26-lldp-dcbx.png' | relative_url }})
@@ -499,36 +475,28 @@ After the network configuration is complete, a common user must be created on al
 
 Give each Spark a unique hostname. This is necessary for SSH known_hosts management, log analysis, and cluster node tracking:
 
-```
-# Spark 1 üzerinde:
-
+```bash
+# On Spark 1:
 sudo hostnamectl set-hostname spark1
 
-# Spark 2 üzerinde:
-
+# On Spark 2:
 sudo hostnamectl set-hostname spark2
 
-# Spark 3 üzerinde:
-
+# On Spark 3:
 sudo hostnamectl set-hostname spark3
 
-# Spark 4 üzerinde:
-
+# On Spark 4:
 sudo hostnamectl set-hostname spark4
-
 ```
 
 **Creating Common User**
 
 The same username must be created on all Spark systems. This document will use the nvidia username. The following commands are run on all four Spark systems:
 
-```
+```bash
 sudo useradd -m nvidia
-
 sudo usermod -aG sudo nvidia
-
 sudo passwd nvidia
-
 ```
 
 Use the same password on all systems — this simplifies management processes. sparkrun asks for this password on the first connection during SSH mesh setup, after which key-based authentication is used.
@@ -537,11 +505,9 @@ Use the same password on all systems — this simplifies management processes. s
 
 sparkrun runs commands with sudo during CX7 network configuration. To avoid prompting for a password each time, passwordless sudo must be configured:
 
-```
+```bash
 echo "nvidia ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nvidia
-
 sudo chmod 440 /etc/sudoers.d/nvidia
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/27-passwordless-sudo.png' | relative_url }})
 
@@ -549,25 +515,21 @@ sudo chmod 440 /etc/sudoers.d/nvidia
 
 The installation is performed on the account that has the nvidia user.
 
-```
+```bash
 su - nvidia
-
 ```
 
 First, the uv package is installed:
 
-```
+```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
-
 source ~/.bashrc
-
 ```
 
 Then sparkrun is installed:
 
-```
+```bash
 uvx sparkrun setup
-
 ```
 
 Appropriate answers are given to the questions asked during installation:
@@ -580,11 +542,11 @@ Appropriate answers are given to the questions asked during installation:
 
 4.  Y is selected for MESH setup
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/28-sparkrun-wizard.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/28-sparkrun-wizard.jpg' | relative_url }})
 
 5.  Answer Y to the Configure CX7 networking? question; here it asks for the original user password, not nvidia's:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/29-cx7-password.png' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/29-cx7-password.png' | relative_url }})
 
 6.  Select Y for the Add 'nvidia' to the docker group on all hosts? question
 
@@ -604,9 +566,8 @@ PFC and ECN were configured on the switch side, but DSCP tagging and PFC must al
 
 Detect the active CX7 interfaces on each Spark:
 
-```
+```bash
 ip link show | grep -E 'enp.*np|enP.*np'
-
 ```
 
 Interfaces with MTU 9000 and UP,LOWER_UP status are the active ones. In this document, two active interfaces are used on each Spark:
@@ -621,11 +582,9 @@ Interfaces with MTU 9000 and UP,LOWER_UP status are the active ones. In this doc
 
 The dcb app command is used to map the DSCP 26 value of RoCEv2 packets arriving at the ConnectX-7 interfaces to traffic class 3:
 
-```
+```bash
 sudo dcb app add dev enp1s0f1np1 dscp-prio 26:3
-
 sudo dcb app add dev enP2p1s0f1np1 dscp-prio 26:3
-
 ```
 
 This command ensures that packets marked with DSCP 26 are directed to the priority 3 (TC3) queue. The same traffic class is used as in the TC3 configuration on the switch side.
@@ -634,11 +593,9 @@ This command ensures that packets marked with DSCP 26 are directed to the priori
 
 Enable PFC to provide lossless communication for TC3:
 
-```
+```bash
 sudo dcb pfc set dev enp1s0f1np1 prio-pfc 3:on
-
 sudo dcb pfc set dev enP2p1s0f1np1 prio-pfc 3:on
-
 ```
 
 prio-pfc 3:on — send and receive PFC frames only for priority 3. Other priorities are not affected.
@@ -649,45 +606,29 @@ prio-pfc 3:on — send and receive PFC frames only for priority 3. Other priorit
 
 DCB commands are lost after reboot. Create a systemd service file so they are applied automatically. On each Spark:
 
-```
+```bash
 sudo tee /etc/systemd/system/dcb-roce.service > /dev/null <<'EOF'
-
 [Unit]
-
 Description=Configure DCB DSCP and PFC for RoCEv2 on CX7 interfaces
-
 After=network-online.target
-
 Wants=network-online.target
 
 [Service]
-
 Type=oneshot
-
 ExecStart=/bin/bash -c '\
-
-dcb app add dev enp1s0f1np1 dscp-prio 26:3 && \
-
-dcb app add dev enP2p1s0f1np1 dscp-prio 26:3 && \
-
-dcb pfc set dev enp1s0f1np1 prio-pfc 3:on && \
-
-dcb pfc set dev enP2p1s0f1np1 prio-pfc 3:on'
-
+  dcb app add dev enp1s0f1np1 dscp-prio 26:3 && \
+  dcb app add dev enP2p1s0f1np1 dscp-prio 26:3 && \
+  dcb pfc set dev enp1s0f1np1 prio-pfc 3:on && \
+  dcb pfc set dev enP2p1s0f1np1 prio-pfc 3:on'
 RemainAfterExit=yes
 
 [Install]
-
 WantedBy=multi-user.target
-
 EOF
 
 sudo systemctl daemon-reload
-
 sudo systemctl enable dcb-roce.service
-
 sudo systemctl start dcb-roce.service
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/33-dcb-roce-service.jpg' | relative_url }})
 ## Speed and RDMA Tests
@@ -715,24 +656,19 @@ Two CX7 subnets are used for the tests:
 
 Test connectivity and jumbo frames from Spark 1 to Spark 2 with ping:
 
-```
-# Spark 1 üzerinde:
-
+```bash
+# On Spark 1:
 ping -c 4 192.168.0.157
-
 ping -M do -s 8972 -c 4 192.168.0.157
-
 ```
 
 The first ping tests normal connectivity, the second ping tests 9000 byte MTU. -M do prevents fragmentation — if packets don't drop, MTU 9000 is working end-to-end.
 
 Repeat for the second subnet:
 
-```
+```bash
 ping -c 4 192.168.2.157
-
 ping -M do -s 8972 -c 4 192.168.2.157
-
 ```
 
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/34-ping-mtu.jpg' | relative_url }})
@@ -741,24 +677,20 @@ ping -M do -s 8972 -c 4 192.168.2.157
 
 Measure the base bandwidth over the Ethernet/IP layer. This test is not RDMA — it is a TCP transfer with CPU involvement.
 
-```
-# Spark 2 üzerinde (sunucu):
-
+```bash
+# On Spark 2 (server):
 iperf3 -s
 
-# Spark 1 üzerinde (istemci):
-
+# On Spark 1 (client):
 iperf3 -c 192.168.0.157 -P 8 -t 30
-
 ```
 
 -P 8 means eight parallel flows, -t 30 means thirty seconds test duration. Expected result: ~100-120 Gbps total throughput.
 
 Note: if iperf3 is not installed, install it:
 
-```
+```bash
 sudo apt install iperf3
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/35-iperf3.jpg' | relative_url }})
 
@@ -766,9 +698,8 @@ sudo apt install iperf3
 
 Learn the RDMA device names:
 
-```
+```bash
 ibdev2netdev
-
 ```
 
 Example output:
@@ -787,16 +718,14 @@ Measure the bandwidth of RDMA write operation over RoCEv2. This test directly te
 
 On Spark 2 (server):
 
-```
+```bash
 ib_write_bw -d rocep1s0f1 -F --report_gbits
-
 ```
 
 On Spark 1 (client):
 
-```
+```bash
 ib_write_bw -d rocep1s0f1 -F --report_gbits 192.168.0.157
-
 ```
 
 Expected result: ~100-111 Gbps.
@@ -807,16 +736,14 @@ Expected result: ~100-111 Gbps.
 
 On Spark 2 (server):
 
-```
+```bash
 ib_write_bw -d roceP2p1s0f1 -F --report_gbits
-
 ```
 
 On Spark 1 (client):
 
-```
+```bash
 ib_write_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.157
-
 ```
 
 Expected result: ~100-111 Gbps.
@@ -833,16 +760,14 @@ Measure the bandwidth of RDMA read operation:
 
 On Spark 2 (server):
 
-```
+```bash
 ib_read_bw -d rocep1s0f1 -F --report_gbits
-
 ```
 
 On Spark 1 (client):
 
-```
+```bash
 ib_read_bw -d rocep1s0f1 -F --report_gbits 192.168.0.157
-
 ```
 Expected result: ~95-110 Gbps.
 
@@ -852,16 +777,14 @@ Expected result: ~95-110 Gbps.
 
 On Spark 2 (server):
 
-```
+```bash
 ib_read_bw -d roceP2p1s0f1 -F --report_gbits
-
 ```
 
 On Spark 1 (client):
 
-```
+```bash
 ib_read_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.157
-
 ```
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/40-ib-read-bw-2.jpg' | relative_url }})
 
@@ -871,16 +794,14 @@ Expected result: ~95-110 Gbps.
 
 On Spark 2 (server):
 
-```
+```bash
 ib_write_lat -d rocep1s0f1
-
 ```
 
 On Spark 1 (client):
 
-```
+```bash
 ib_write_lat -d rocep1s0f1 192.168.0.157
-
 ```
 
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/41-ib-write-lat.jpg' | relative_url }})
@@ -899,199 +820,114 @@ The glm-5.2-int4 model is used in this test. The model is run with tensor parall
 
 Below is the command and yaml file content for the model to be run as an example:
 
-```
+```bash
 sparkrun run glm52-qt-dcp4-4spark.yaml
-
 ```
 
 The content of the executed yaml file is as follows:
 
-```
+```bash
 model: QuantTrio/GLM-5.2-Int4-Int8Mix
-
 runtime: vllm-ray
-
 container: vllm-zatz-dcp:probe
 
 min_nodes: 4
-
 max_nodes: 4
 
 metadata:
-
-description: GLM-5.2 Int4-Int8Mix TP4 DCP4 655K MTP (tonyd2wild, cudagraph NONE for GB10 host-staged NCCL)
-
-maintainer: local
-
-model_params: 744B-MoE-40B-active
-
-model_dtype: int4-int8mix
+  description: GLM-5.2 Int4-Int8Mix TP4 DCP4 655K MTP (tonyd2wild, cudagraph NONE for GB10 host-staged NCCL)
+  maintainer: local
+  model_params: 744B-MoE-40B-active
+  model_dtype: int4-int8mix
 
 defaults:
-
-port: 8210
-
-host: 0.0.0.0
-
-tensor_parallel: 4
-
-pipeline_parallel: 1
-
-decode_context_parallel: 4
-
-gpu_memory_utilization: 0.80
-
-max_model_len: 32000
-
-max_num_seqs: 16
-
-max_num_batched_tokens: 4096
-
-kv_cache_dtype: fp8_ds_mla
-
-kv_cache_memory_bytes: 9000000000
-
-load_format: auto
-
-served_model_name: glm-5.2
-
-quantization: compressed-tensors
-
-reasoning_parser: glm45
-
-tool_call_parser: glm47
+  port: 8210
+  host: 0.0.0.0
+  tensor_parallel: 4
+  pipeline_parallel: 1
+  decode_context_parallel: 4
+  gpu_memory_utilization: 0.80
+  max_model_len: 32000
+  max_num_seqs: 16
+  max_num_batched_tokens: 4096
+  kv_cache_dtype: fp8_ds_mla
+  kv_cache_memory_bytes: 9000000000
+  load_format: auto
+  served_model_name: glm-5.2
+  quantization: compressed-tensors
+  reasoning_parser: glm45
+  tool_call_parser: glm47
 
 env:
-
-NCCL_IB_TC: "106"
-
-HF_HUB_OFFLINE: "1"
-
-TRANSFORMERS_OFFLINE: "1"
-
-SAFETENSORS_FAST_GPU: "1"
-
-CUDA_DEVICE_ORDER: "PCI_BUS_ID"
-
-CUDA_DEVICE_MAX_CONNECTIONS: "32"
-
-CUTE_DSL_ARCH: "sm_121a"
-
-TORCH_CUDA_ARCH_LIST: "12.1a"
-
-VLLM_ALLOW_LONG_MAX_MODEL_LEN: "1"
-
-VLLM_RPC_TIMEOUT: "1800000"
-
-NCCL_MAX_NCHANNELS: "4"
-
-NCCL_MIN_NCHANNELS: "4"
-
-PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
-
-VLLM_WORKER_MULTIPROC_METHOD: "spawn"
-
-VLLM_USE_FLASHINFER_SAMPLER: "1"
-
-VLLM_USE_V2_MODEL_RUNNER: "1"
-
-VLLM_USE_B12X_SPARSE_INDEXER: "1"
-
-VLLM_DCP_GLOBAL_TOPK: "1"
-
-VLLM_DCP_SHARD_DRAFT: "1"
-
-VLLM_KZ_TRIM_AFTER_LOAD: "1"
-
-VLLM_USE_B12X_MOE: "0"
-
-VLLM_USE_B12X_FP8_GEMM: "0"
-
-VLLM_DISABLE_TP_MQ_BROADCASTER: "1"
-
-VLLM_ENABLE_PCIE_ALLREDUCE: "0"
-
-USES_B12X: "True"
-
-FLASHINFER_DISABLE_VERSION_CHECK: "1"
-
-RAY_memory_usage_threshold: "0.99"
-
-RAY_memory_monitor_refresh_ms: "0"
+  NCCL_IB_TC: "106"
+  HF_HUB_OFFLINE: "1"
+  TRANSFORMERS_OFFLINE: "1"
+  SAFETENSORS_FAST_GPU: "1"
+  CUDA_DEVICE_ORDER: "PCI_BUS_ID"
+  CUDA_DEVICE_MAX_CONNECTIONS: "32"
+  CUTE_DSL_ARCH: "sm_121a"
+  TORCH_CUDA_ARCH_LIST: "12.1a"
+  VLLM_ALLOW_LONG_MAX_MODEL_LEN: "1"
+  VLLM_RPC_TIMEOUT: "1800000"
+  NCCL_MAX_NCHANNELS: "4"
+  NCCL_MIN_NCHANNELS: "4"
+  PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
+  VLLM_WORKER_MULTIPROC_METHOD: "spawn"
+  VLLM_USE_FLASHINFER_SAMPLER: "1"
+  VLLM_USE_V2_MODEL_RUNNER: "1"
+  VLLM_USE_B12X_SPARSE_INDEXER: "1"
+  VLLM_DCP_GLOBAL_TOPK: "1"
+  VLLM_DCP_SHARD_DRAFT: "1"
+  VLLM_KZ_TRIM_AFTER_LOAD: "1"
+  VLLM_USE_B12X_MOE: "0"
+  VLLM_USE_B12X_FP8_GEMM: "0"
+  VLLM_DISABLE_TP_MQ_BROADCASTER: "1"
+  VLLM_ENABLE_PCIE_ALLREDUCE: "0"
+  USES_B12X: "True"
+  FLASHINFER_DISABLE_VERSION_CHECK: "1"
+  RAY_memory_usage_threshold: "0.99"
+  RAY_memory_monitor_refresh_ms: "0"
 
 command: |
-
-vllm serve {model} \
-
---served-model-name {served_model_name} \
-
---trust-remote-code \
-
---load-format {load_format} \
-
---quantization {quantization} \
-
---distributed-executor-backend ray \
-
---tensor-parallel-size {tensor_parallel} \
-
---pipeline-parallel-size {pipeline_parallel} \
-
---decode-context-parallel-size {decode_context_parallel} \
-
---dcp-comm-backend ag_rs \
-
---dcp-kv-cache-interleave-size 1 \
-
---gpu-memory-utilization {gpu_memory_utilization} \
-
---max-model-len {max_model_len} \
-
---max-num-seqs {max_num_seqs} \
-
---max-num-batched-tokens {max_num_batched_tokens} \
-
---kv-cache-dtype {kv_cache_dtype} \
-
---kv-cache-memory-bytes {kv_cache_memory_bytes} \
-
---generation-config vllm \
-
---hf-overrides '{"use_index_cache":true,"index_topk_pattern":"FFFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSS"}' \
-
---port {port} \
-
---host {host} \
-
---no-enable-log-requests \
-
---compilation-config '{"cudagraph_mode":"NONE"}' \
-
---attention-backend B12X_MLA_SPARSE \
-
---moe-backend flashinfer_cutlass \
-
---reasoning-parser {reasoning_parser} \
-
---tool-call-parser {tool_call_parser} \
-
---enable-auto-tool-choice \
-
---speculative-config '{"model":"QuantTrio/GLM-5.2-Int4-Int8Mix","method":"mtp","num_speculative_tokens":3,"moe_backend":"flashinfer_cutlass","draft_attention_backend":"B12X_MLA_SPARSE","draft_sample_method":"probabilistic"}' \
-
---long-prefill-token-threshold 2048 \
-
---async-scheduling
-
+  vllm serve {model} \
+      --served-model-name {served_model_name} \
+      --trust-remote-code \
+      --load-format {load_format} \
+      --quantization {quantization} \
+      --distributed-executor-backend ray \
+      --tensor-parallel-size {tensor_parallel} \
+      --pipeline-parallel-size {pipeline_parallel} \
+      --decode-context-parallel-size {decode_context_parallel} \
+      --dcp-comm-backend ag_rs \
+      --dcp-kv-cache-interleave-size 1 \
+      --gpu-memory-utilization {gpu_memory_utilization} \
+      --max-model-len {max_model_len} \
+      --max-num-seqs {max_num_seqs} \
+      --max-num-batched-tokens {max_num_batched_tokens} \
+      --kv-cache-dtype {kv_cache_dtype} \
+      --kv-cache-memory-bytes {kv_cache_memory_bytes} \
+      --generation-config vllm \
+      --hf-overrides '{"use_index_cache":true,"index_topk_pattern":"FFFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSS"}' \
+      --port {port} \
+      --host {host} \
+      --no-enable-log-requests \
+      --compilation-config '{"cudagraph_mode":"NONE"}' \
+      --attention-backend B12X_MLA_SPARSE \
+      --moe-backend flashinfer_cutlass \
+      --reasoning-parser {reasoning_parser} \
+      --tool-call-parser {tool_call_parser} \
+      --enable-auto-tool-choice \
+      --speculative-config '{"model":"QuantTrio/GLM-5.2-Int4-Int8Mix","method":"mtp","num_speculative_tokens":3,"moe_backend":"flashinfer_cutlass","draft_attention_backend":"B12X_MLA_SPARSE","draft_sample_method":"probabilistic"}' \
+      --long-prefill-token-threshold 2048 \
+      --async-scheduling
 ```
 
 **SSH Authorization Error Solution**
 
 If an authorization-related error is received when connecting to itself after running the sparkrun command, the following command is used and sparkrun is run again:
 
-```
+```bash
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
-
 ```
 
 ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/42-ssh-auth-fix.png' | relative_url }})
@@ -1173,15 +1009,15 @@ In this document, RAID 0 configuration will be described for speed, but at the c
 
 3.  Click the Remove button
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/47-raid-volume.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/47-raid-volume.jpg' | relative_url }})
 
 4.  On the screen that appears, select the Quick Setup option
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/48-raid-quick-setup.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/48-raid-quick-setup.jpg' | relative_url }})
 
 5.  On the next screen, select the RAID 0 option
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/49-raid0-select.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/49-raid0-select.jpg' | relative_url }})
 
 6.  Press the Finish button
 
@@ -1195,7 +1031,7 @@ Combine the two 10Gbps Ethernet ports of the NAS under a single bonding interfac
 
 2.  Click Add → Create Link Aggregation
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/50-link-aggregation.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/50-link-aggregation.jpg' | relative_url }})
 
 3.  In the Interface field, select LAN 1 and LAN 2
 
@@ -1203,7 +1039,7 @@ Combine the two 10Gbps Ethernet ports of the NAS under a single bonding interfac
 
 5.  Press the Next button
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/51-lacp-config.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/51-lacp-config.jpg' | relative_url }})
 
 6.  Check the Set up IP address manually option
 
@@ -1217,7 +1053,7 @@ Combine the two 10Gbps Ethernet ports of the NAS under a single bonding interfac
 
 8.  Press the Next button
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/52-nas-ip-config.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/52-nas-ip-config.jpg' | relative_url }})
 
 9.  Review the summary screen and press the Finish button
 
@@ -1237,7 +1073,7 @@ To install the performance tuning script, you need to connect to the NAS via SSH
 
 You can now connect to the NAS via SSH:
 
-```
+```bash
 ssh admin@192.168.1.31
 ```
 
@@ -1261,7 +1097,7 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
 1.  In the NAS web interface, click the File Explorer → + (Create New Shared Folder) button
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/54-shared-folder.png' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/54-shared-folder.png' | relative_url }})
 
 2.  Click the Add button
 
@@ -1275,7 +1111,7 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
     2.  Or you can leave the default Read and Write for admins option
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/55-access-rights.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/55-access-rights.jpg' | relative_url }})
 
 5.  Press the Next button
 
@@ -1283,7 +1119,7 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
     1.  Encrypt this shared folder: You can select this if you wish, it is not selected in this document
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/56-protection-measures.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/56-protection-measures.jpg' | relative_url }})
 
 7.  Press Next → Finish buttons
 
@@ -1295,7 +1131,7 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
 3.  Click the Access Rights button
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/57-nfs-privileges.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/57-nfs-privileges.jpg' | relative_url }})
 
 4.  Switch to the NFS Privileges tab
 
@@ -1311,140 +1147,97 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
 7\. Press the OK button
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/58-nfs-add.jpg' | relative_url }})
+​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/58-nfs-add.jpg' | relative_url }})
 
 **Performance Tuning Script**
 
 Connect to the NAS via SSH and create the performance tuning script. This script runs automatically on every reboot and changes the bonding hash policy to layer3+4:
 
-```
+```bash
 ssh admin@192.168.1.31
-
 ```
 
-```
+```bash
 sudo tee /usr/local/etc/init.d/S98nfstune > /dev/null <<'EOF'
-
 #!/bin/sh
-
 # NFS + RAID0 performance tuning - persistent across reboots
-
 case "$1" in
+  start)
+    # wait for NFS and network to be ready
+    sleep 30
 
-start)
+    # RAID0 read-ahead 8MB
+    blockdev --setra 8192 /dev/md1 2>/dev/null
+    # per-disk read-ahead 8MB
+    for d in a b c d e f g h; do blockdev --setra 8192 /dev/sd$d 2>/dev/null; done
+    # nfsd threads 64
+    echo 64 > /proc/fs/nfsd/threads 2>/dev/null
+    # RPC slot table
+    echo 128 > /proc/sys/sunrpc/tcp_slot_table_entries 2>/dev/null
+    echo 128 > /proc/sys/sunrpc/tcp_max_slot_table_entries 2>/dev/null
+    # VM writeback cache
+    echo 40 > /proc/sys/vm/dirty_ratio
+    echo 5 > /proc/sys/vm/dirty_background_ratio
+    echo 6000 > /proc/sys/vm/dirty_expire_centisecs
+    # bond xmit_hash_policy layer3+4
+    sh -c 'echo layer3+4 > /sys/class/net/bond0/bonding/xmit_hash_policy' 2>/dev/null
 
-# wait for NFS and network to be ready
-
-sleep 30
-
-# RAID0 read-ahead 8MB
-
-blockdev --setra 8192 /dev/md1 2>/dev/null
-
-# per-disk read-ahead 8MB
-
-for d in a b c d e f g h; do blockdev --setra 8192 /dev/sd$d 2>/dev/null; done
-
-# nfsd threads 64
-
-echo 64 > /proc/fs/nfsd/threads 2>/dev/null
-
-# RPC slot table
-
-echo 128 > /proc/sys/sunrpc/tcp_slot_table_entries 2>/dev/null
-
-echo 128 > /proc/sys/sunrpc/tcp_max_slot_table_entries 2>/dev/null
-
-# VM writeback cache
-
-echo 40 > /proc/sys/vm/dirty_ratio
-
-echo 5 > /proc/sys/vm/dirty_background_ratio
-
-echo 6000 > /proc/sys/vm/dirty_expire_centisecs
-
-# bond xmit_hash_policy layer3+4
-
-sh -c 'echo layer3+4 > /sys/class/net/bond0/bonding/xmit_hash_policy' 2>/dev/null
-
-# exports: async + wdelay (NO no_wdelay) - allow write batching
-
-[ -f /volume0/etc/exports ] && sed -i "s/no_wdelay,//" /volume0/etc/exports 2>/dev/null
-
-/volume0/usr/builtin/sbin/exportfs -ra 2>/dev/null
-
-;;
-
-stop)
-
-;;
-
+    # exports: async + wdelay (NO no_wdelay) - allow write batching
+    [ -f /volume0/etc/exports ] && sed -i "s/no_wdelay,//" /volume0/etc/exports 2>/dev/null
+    /volume0/usr/builtin/sbin/exportfs -ra 2>/dev/null
+    ;;
+  stop)
+    ;;
 esac
-
 exit 0
-
 EOF
-
 ```
 
-```
+```bash
 sudo chmod +x /usr/local/etc/init.d/S98nfstune
-
 sudo /usr/local/etc/init.d/S98nfstune start
-
 ```
 
 After running the script, verify that the hash policy has changed:
 
-```
+```bash
 cat /sys/class/net/bond0/bonding/xmit_hash_policy
-
 # Expected: layer3+4
-
 ```
 
 **Mounting NAS on Spark Nodes**
 
 Create an NFS mount point on each Spark and connect to the NAS:
 
-```
+```bash
 sudo mkdir -p /mnt/asustor
-
 sudo mount -t nfs \
-
--o vers=4.2,nconnect=8,rsize=1048576,wsize=1048576,hard,noatime \
-
-192.168.1.31:/volume1/openzeka /mnt/asustor
-
+  -o vers=4.2,nconnect=8,rsize=1048576,wsize=1048576,hard,noatime \
+  192.168.1.31:/volume1/openzeka /mnt/asustor
 ```
 
 **Simple Write/Read Test**
 
 After the NAS is mounted, test the basic write and read performance. Write Test:
 
-```
+```bash
 dd if=/dev/zero of=/mnt/asustor/testfile bs=1M count=10240 conv=fdatasync
-
 ```
 
 Read Test:
 
-```
+```bash
 # Flush cache:
-
 sync; echo 3 | sudo tee /proc/sys/vm/drop_caches
 
 # Read:
-
 dd if=/mnt/asustor/testfile of=/dev/null bs=1M
-
 ```
 
 Cleanup:
 
-```
+```bash
 rm /mnt/asustor/testfile
-
 ```
 
 ## Results and Verification
@@ -1453,13 +1246,13 @@ By following the steps in this document, a fully functional DGX Spark AI cluster
 
 | **Component** | **Status** | **Verification Method** |
 | --- | --- | --- |
-| Management Network (10GbE) | **Ready** | **Inter-node ping successful** |
-| Compute Network (200GbE QSFP) | **Ready** | ib_write_bw ~100-111 Gbps |
-| **RoCEv2 / RDMA** | **Ready** | **ib_write_lat ~1-3 µs** |
-| sparkrun Cluster | **Ready** | **sparkrun setup completed** |
-| **DCB / PFC** | **Ready** | **dcb pfc show output TC3:on** |
-| NAS (NFS) | **Ready** | dd write/read test |
-| **Model Service** | **Ready** | **"Application startup complete." message** |
+| Management Network (10GbE) | Ready | Inter-node ping successful |
+| Compute Network (200GbE QSFP) | Ready      | ib_write_bw ~100-111 Gbps |
+| RoCEv2 / RDMA | Ready      | ib_write_lat ~1-3 µs |
+| sparkrun Cluster | Ready      | sparkrun setup completed |
+| DCB / PFC | Ready      | dcb pfc show output TC3:on |
+| NAS (NFS) | Ready      | dd write/read test |
+| Model Service | Ready      | "Application startup complete." message |
 
 **Cluster Health Check Summary**
 
@@ -1507,9 +1300,8 @@ If you see overlay2 in the docker info output, add the containerd-snapshotter fe
 
 If you get an authorization error when running sparkrun:
 
-```
+```bash
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
-
 ```
 
 Run the command and run sparkrun again.
@@ -1522,13 +1314,10 @@ Restart the NAS after enabling the NFS service. You will get this error if you t
 
 Run the performance tuning script and verify:
 
-```
+```bash
 sudo /usr/local/etc/init.d/S98nfstune start
-
 cat /sys/class/net/bond0/bonding/xmit_hash_policy
-
 # Expected: layer3+4
-
 ```
 **CRS812 Breakout Ports Not Linking Up**
 
