@@ -1,6 +1,6 @@
 <div class="lang-switcher">
   {% for lang in site.languages %}
-    {% capture lang_href %}{{ site.baseurl }}/{% if lang != site.default_lang %}{{ lang }}/{% endif %}{% if page.permalink_lang and page.permalink_lang[lang] and page.permalink_lang[lang] != '/' %}{{ page.permalink_lang[lang] }}{% endif %}{% endcapture %}
+    {% capture lang_href %}{{ site.baseurl }}/{% if lang != site.default_lang %}{{ lang }}/{% endif %}{% if page.permalink_lang and page.permalink_lang[lang] and page.permalink_lang[lang] != '/' %}{{ page.permalink_lang[lang] | remove_first: '/' }}{% endif %}{% endcapture %}
     {% if lang == site.active_lang %}
       <span class="lang-switcher-item active">{{ lang | upcase }}</span>
     {% else %}
