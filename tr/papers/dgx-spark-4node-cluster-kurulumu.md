@@ -12,6 +12,35 @@ last_modified_date: 2026-07-24
 toc: true
 ---
 
+## İçindekiler
+
+1. [Mimari Özet](#mimari-özet)
+2. [Ön Koşullar](#ön-koşullar)
+3. [DGX Spark Düğümlerin Hazırlığı](#dgx-spark-düğümlerin-hazırlığı)
+   - [Sistem ve Firmware Güncellemeleri](#sistem-ve-firmware-güncellemeleri)
+   - [Docker Yapılandırması](#docker-yapılandırması)
+4. [Management Ağı (10GbE) Bağlantısı](#management-ağı-10gbe-bağlantısı)
+5. [Compute Ağı (200GbE QSFP) Fiziksel Bağlantısı](#compute-ağı-200gbe-qsfp-fiziksel-bağlantısı)
+6. [CRS312 MikroTik Switch Yapılandırması](#crs312-mikrotik-switch-yapılandırması)
+   - [NAS Portlarının Bond Yapılması](#nas-portlarının-bond-yapılması)
+7. [CRS812 MikroTik Switch Yapılandırması](#crs812-mikrotik-switch-yapılandırması)
+   - [Switch Hazırlığı](#switch-hazırlığı)
+   - [Kurulum Öncesi Envanter ve Yedek](#kurulum-öncesi-envanter-ve-yedek)
+   - [QSFP-DD Portlarını 2×200G Breakout Yapılandırma](#qsfp-dd-portlarını-2×200g-breakout-yapılandırma)
+   - [Jumbo Frame ve MTU Yapılandırması](#jumbo-frame-ve-mtu-yapılandırması)
+   - [RoCEv2 Trafik Sınıflandırması](#rocev2-trafik-sınıflandırması)
+8. [Spark'lara Sparkrun Yüklenmesi](#sparklara-sparkrun-yüklenmesi)
+   - [Kullanıcı ve SSH Yapılandırması](#kullanıcı-ve-ssh-yapılandırması)
+   - [sparkrun Kurulumu](#sparkrun-kurulumu)
+   - [DCB (Data Center Bridging) Konfigürasyonu](#dcb-data-center-bridging-konfigürasyonu)
+9. [Hız ve RDMA Testleri](#hız-ve-rdma-testleri)
+10. [sparkrun ile Model Çalıştırma](#sparkrun-ile-model-çalıştırma)
+11. [NAS Yapılandırmasının Yapılması (ASUSTOR AS6808T)](#nas-yapılandırmasının-yapılması-asustor-as6808t)
+12. [Sonuç ve Doğrulama](#sonuç-ve-doğrulama)
+13. [Sorun Giderme](#sorun-giderme)
+
+---
+
 Bu doküman, 4 NVIDIA DGX Spark node'undan oluşan switch tabanlı bir AI cluster'ın kurulum ve konfigürasyon adımlarını baştan sona anlatmaktadır. Cluster, dağıtık AI iş yüklerini ve model çalıştırmayı yönetmek için **sparkrun** araç setini kullanır.
 
 Doküman; management ve compute ağlarının hazırlanması, ConnectX-7/QSFP port yapılandırması, RoCEv2/RDMA ayarları, SSH erişimi, NCCL iletişim doğrulaması ve cluster sağlık kontrolü adımlarını kapsar.
