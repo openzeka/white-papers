@@ -111,7 +111,7 @@ permalink: /
 
 **Openzeka Teknoloji A.Ş.** — 2016'dan bu yana Ankara Bilkent Cyberpark'ta NVIDIA
 donanım ve yazılım çözümleri sağlayıcısı. Tüm white paper'lar
-<code>https://openzeka.github.io/white-papers/</code> adresinde açık olarak yayınlanır.
+<code>https://whitepapers.openzeka.com</code> adresinde açık olarak yayınlanır.
 
 **Merkez Ofis:** Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara
 **Tel:** +90 312 266 2055 · **Web:** [openzeka.com](https://www.openzeka.com) · [Cordatus AI](https://cordatus.ai/)

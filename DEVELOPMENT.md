@@ -1,8 +1,8 @@
 # Development & Contributing
 
 Internal notes for maintaining this Jekyll + [Just the Docs](https://just-the-docs.com)
-site published via GitHub Pages. For the published site, see
-<https://openzeka.github.io/white-papers/>.
+site published via GitHub Pages with a custom domain. For the published site, see
+<https://whitepapers.openzeka.com/>.
 
 ## Content
 
@@ -34,7 +34,7 @@ site published via GitHub Pages. For the published site, see
 ```bash
 bundle install
 bundle exec jekyll serve
-# http://127.0.0.1:4000/white-papers/
+# http://127.0.0.1:4000/
 ```
 
 Requirements: Ruby 3.3, Bundler.

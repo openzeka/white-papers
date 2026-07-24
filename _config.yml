@@ -4,8 +4,8 @@ description: >-
   systems, Cordatus AI edge-cloud inference platform, real-time video analytics
   and digital twin solutions.
 
-url: "https://openzeka.github.io"
-baseurl: "/white-papers"
+url: "https://whitepapers.openzeka.com"
+baseurl: ""
 
 # Çok dilli (i18n) — jekyll-polyglot
 # EN root'ta varsayılan, TR /tr/ altında
