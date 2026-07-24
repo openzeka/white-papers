@@ -56,7 +56,7 @@ color_scheme: openzeka
 markdown: kramdown
 kramdown:
   syntax_highlighter: rouge
-  parse_block_html: true
+  parse_block_html: false
 
 defaults:
   - scope:
