@@ -827,7 +827,6 @@ Bu testte glm-5.2-int4 modeli kullanılır. Model, 4 node üzerinde tensor paral
 
 ```bash
 docker pull registry.cordata.ai/spark-cluster/vllm-zatz-dcp:latest
-
 ```
 
 İmaj indirildikten sonra recipe YAML dosyası ile birlikte sparkrun üzerinden inference iş yükü çalıştırılabilir.
