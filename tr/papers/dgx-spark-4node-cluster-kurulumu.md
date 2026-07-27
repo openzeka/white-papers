@@ -821,7 +821,16 @@ Bu adımda, sparkrun üzerinden çok node'lu bir inference iş yükü çalışt�
 
 **Model ve Recipe**
 
-Bu testte glm-5.2-int4 modeli kullanılır. Model, 4 node üzerinde tensor parallelism ile çalıştırılır. Bu model için özel container imajı ve recipe YAML dosyası OpenZeka tarafından sağlanmaktadır. Bu modeli kullanmak istiyorsanız OpenZeka ile irtibata geçin. Ya da kendi imaj ve modelinizi kullanabilirsiniz.
+Bu testte glm-5.2-int4 modeli kullanılır. Model, 4 node üzerinde tensor parallelism ile çalıştırılır. Bu model için özel container imajı ve recipe YAML dosyası OpenZeka tarafından hazırlanmıştır.
+
+İmajı indirmek için öncelikle aşağıdaki komutu kullanın:
+
+```bash
+docker pull registry.cordata.ai/spark-cluster/vllm-zatz-dcp:latest
+
+```
+
+İmaj indirildikten sonra recipe YAML dosyası ile birlikte sparkrun üzerinden inference iş yükü çalıştırılabilir.
 
 **Modelin Çalıştırılması**
 

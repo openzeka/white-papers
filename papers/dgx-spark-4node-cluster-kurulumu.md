@@ -814,7 +814,15 @@ In this step, we will verify that the cluster works end-to-end by running a mult
 
 **Model and Recipe**
 
-The glm-5.2-int4 model is used in this test. The model is run with tensor parallelism across 4 nodes. The custom container image and recipe YAML file for this model are provided by OpenZeka. Contact OpenZeka to use this model. Or you can use your own image and model.
+The glm-5.2-int4 model is used in this test. The model runs with tensor parallelism across 4 nodes. The custom container image and recipe YAML file for this model have been prepared by OpenZeka.
+
+First, download the container image using the following command:
+
+```bash
+docker pull registry.cordata.ai/spark-cluster/vllm-zatz-dcp:latest
+```
+
+After the image has been downloaded, the inference workload can be executed with sparkrun using the provided recipe YAML file.
 
 **Running the Model**
 
