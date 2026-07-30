@@ -76,6 +76,13 @@ permalink: /
   <span class="date">Temmuz 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/papers/kimi-k3-dgx-b300-inference-benchmark/' | relative_url }}">
+  <span class="tag">LLM Benchmark</span>
+  <h3>Kimi K3 DGX-B300 Inference Benchmark</h3>
+  <p>Moonshot AI Kimi K3 (2.8T MoE, MXFP4) modelinin DGX-B300 (8× Blackwell Ultra, TP=8) üzerinde performans değerlendirmesi: vLLM vs SGLang, direct vs DSpark speculative decoding, SLO temelli kapasite planlama.</p>
+  <span class="date">Temmuz 2026</span>
+</a>
+
 </div>
 
 ## Uzmanlık Alanları

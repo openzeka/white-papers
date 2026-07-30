@@ -69,6 +69,13 @@ permalink: /
   <span class="date">July 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/papers/kimi-k3-dgx-b300-inference-benchmark/' | relative_url }}">
+  <span class="tag">LLM Benchmark</span>
+  <h3>Kimi K3 Inference Benchmark on DGX-B300</h3>
+  <p>Performance evaluation of Moonshot AI Kimi K3 (2.8T MoE, MXFP4) on DGX-B300 (8× Blackwell Ultra, TP=8): vLLM vs SGLang, direct vs DSpark speculative decoding, with SLO-driven capacity planning.</p>
+  <span class="date">July 2026</span>
+</a>
+
 </div>
 
 ## Areas of Expertise
