@@ -12,12 +12,6 @@ last_modified_date: 2026-07-29
 toc: true
 ---
 
-*To purchase this product, visit the relevant [page](https://openzeka.com/urun/nvidia-dgx-spark-triple/).*
-
-This document describes the end-to-end installation and configuration steps for an AI cluster consisting of 3 NVIDIA DGX Spark nodes in a ring (mesh) topology. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
-
-The document covers the preparation of management and compute networks, ConnectX-7 QSFP112 port configuration, RoCEv2/RDMA settings, SSH access, and cluster health check steps.
-
 ## Table of Contents
 
 - [Architecture Overview](#architecture-overview)
@@ -34,6 +28,12 @@ The document covers the preparation of management and compute networks, ConnectX
 - [Running Models with sparkrun](#running-models-with-sparkrun)
 - [Results and Verification](#results-and-verification)
 - [Troubleshooting](#troubleshooting)
+
+*To purchase this product, visit the relevant [page](https://openzeka.com/urun/nvidia-dgx-spark-triple/).*
+
+This document describes the end-to-end installation and configuration steps for an AI cluster consisting of 3 NVIDIA DGX Spark nodes in a ring (mesh) topology. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
+
+The document covers the preparation of management and compute networks, ConnectX-7 QSFP112 port configuration, RoCEv2/RDMA settings, SSH access, and cluster health check steps.
 
 ## Architecture Overview
 
