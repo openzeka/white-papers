@@ -216,7 +216,7 @@ Mevcut kurulumda her Spark, üzerinde bulunan iki ConnectX-7 QSFP portu üzerind
 
 ## Spark’lara Sparkrun Yüklenmesi
 
-   ### Kullanıcı ve SSH Yapılandırması
+### Kullanıcı ve SSH Yapılandırması
 
 Ağ yapılandırması tamamlandıktan sonra Spark sistemlerinin birbirleriyle şifresiz olarak haberleşebilmesi için tüm node'larda ortak bir kullanıcı oluşturulmalıdır. sparkrun, bu kullanıcı üzerinden tüm node'lara SSH ile bağlanır ve cluster yönetim işlemlerini gerçekleştirir.
 
@@ -284,19 +284,19 @@ Kurulum esnasında sorulan sorulara uygun cevaplar verilir:
 3. SSH kullanıcı adı olarak önceki adımda oluşturulan `nvidia` ismi girilir.  
 4. MESH kurulumu için Y seçilir
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/08-sparkrun-wizard.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/08-sparkrun-wizard.png' | relative_url }})
 
 5. Configure CX7 networking? sorusuna Y denir:  
 6. Topology seçimi “auto” olarak bırakılır veya ring de seçilebilir:
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/09-sparkrun-topology.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/09-sparkrun-topology.png' | relative_url }})
 
 7. Add 'nvidia' to the docker group on all hosts? sorusuna Y seçilir  
 8. Install sudoers entries? sorusuna “Y” seçilir  
 9. Install earlyoom? sorusuna “Y” seçilir  
 10. Setup complete mesajı geldiğinde kurulum başarıyla tamamlanmış demektir
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/10-sparkrun-complete.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/10-sparkrun-complete.png' | relative_url }})
 
 ## Hız ve RDMA Testleri
 
