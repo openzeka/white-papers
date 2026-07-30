@@ -377,7 +377,7 @@ Key configuration differences between the two engines:
 
 ### 4.2 TTFT (Time To First Token)
 
-![TTFT]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/01-TTFT.png' | relative_url }})
+![TTFT]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/01-TTFT.png' | relative_url }})
 
 **Findings:**
 - **vLLM direct has the fastest TTFT** across all load levels (c=1: 66ms, c=64: 732ms).
@@ -396,7 +396,7 @@ Key configuration differences between the two engines:
 
 ### 4.3 ITL (Inter-Token Latency)
 
-![ITL]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/02-ITL.png' | relative_url }})
+![ITL]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/02-ITL.png' | relative_url }})
 
 **Findings:**
 - **Speculative decoding halves ITL at low load:**
@@ -413,7 +413,7 @@ Key configuration differences between the two engines:
 
 ### 4.4 TPS (Per-User Tokens Per Second)
 
-![TPS]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/03-TPS.png' | relative_url }})
+![TPS]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/03-TPS.png' | relative_url }})
 
 **Findings:**
 - **Low load (c<=4):** Spec is clearly faster than direct
@@ -441,7 +441,7 @@ Key configuration differences between the two engines:
 
 ### 4.5 Latency (Total Request Duration)
 
-![Latency]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/04-Latency.png' | relative_url }})
+![Latency]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/04-Latency.png' | relative_url }})
 
 **Findings:**
 - **At low load Spec dramatically reduces latency:**
@@ -457,7 +457,7 @@ Key configuration differences between the two engines:
 
 ### 4.6 Throughput (RPS)
 
-![Throughput]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/05-Throughput.png' | relative_url }})
+![Throughput]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/05-Throughput.png' | relative_url }})
 
 **Findings:**
 - **At low load Spec yields higher RPS** (because it completes faster):
@@ -472,7 +472,7 @@ Key configuration differences between the two engines:
 
 ### 4.7 Total Tokens Produced / Second (Aggregate Output)
 
-![Aggregate Output]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/07-Aggregate-Output.png' | relative_url }})
+![Aggregate Output]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/07-Aggregate-Output.png' | relative_url }})
 
 This metric shows the **total production capacity of the system**: `TPS x Concurrency`.
 
@@ -500,7 +500,7 @@ This metric shows the **total production capacity of the system**: `TPS x Concur
 
 ### 4.8 Speculative Speedup Analysis
 
-![Spec Speedup]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/08-Spec-Speedup.png' | relative_url }})
+![Spec Speedup]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/08-Spec-Speedup.png' | relative_url }})
 
 Spec/Direct TPS ratio vs concurrency:
 
@@ -528,7 +528,7 @@ Spec/Direct TPS ratio vs concurrency:
 
 ### 5.1 SLO Compliance Matrix (P90)
 
-![SLO Heatmap]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/09-SLO-Heatmap.png' | relative_url }})
+![SLO Heatmap]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/09-SLO-Heatmap.png' | relative_url }})
 
 SLO status for each config/concurrency combination at the P90 percentile:
 
@@ -543,7 +543,7 @@ SLO status for each config/concurrency combination at the P90 percentile:
 
 ### 5.2 Maximum Concurrency (C_max) & Total Users (Little's Law)
 
-![Capacity]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/06-Kapasite.png' | relative_url }})
+![Capacity]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/06-Kapasite.png' | relative_url }})
 
 Total user count computed with `N = C_max x (1 + 45s / L_mean)`:
 
@@ -765,7 +765,7 @@ production workloads.
 
 ## Appendix B: Comparison Charts
 
-The following charts were produced for this report (`karsilastirma/` folder):
+The following charts were produced for this report (`karsilastirma-en/` folder):
 
 | # | File | Content |
 |---|---|---|
@@ -782,7 +782,7 @@ The following charts were produced for this report (`karsilastirma/` folder):
 
 ### B.1 Summary at a Glance (Dashboard)
 
-![Dashboard]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma/10-Dashboard.png' | relative_url }})
+![Dashboard]({{ '/papers/kimi-k3-dgx-b300-inference-benchmark/karsilastirma-en/10-Dashboard.png' | relative_url }})
 
 ---
 
