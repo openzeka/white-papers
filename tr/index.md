@@ -62,6 +62,13 @@ permalink: /
   <span class="date">Temmuz 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/tr/papers/dgx-spark-3node-cluster-kurulumu/' | relative_url }}">
+  <span class="tag">Cluster Kurulumu</span>
+  <h3>DGX Spark 3-Node AI Cluster Kurulum Rehberi</h3>
+  <p>3 DGX Spark node'undan oluşan ring (mesh) topolojisine sahip AI cluster kurulumu: management/compute ağları, RoCEv2/RDMA ve sparkrun yapılandırması.</p>
+  <span class="date">Temmuz 2026</span>
+</a>
+
 <a class="paper-card" href="{{ '/tr/papers/dgx-spark-4node-cluster-kurulumu/' | relative_url }}">
   <span class="tag">Cluster Kurulumu</span>
   <h3>DGX Spark 4-Node AI Cluster Kurulum Rehberi</h3>
