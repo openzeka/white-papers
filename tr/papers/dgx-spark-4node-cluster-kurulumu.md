@@ -40,6 +40,7 @@ toc: true
 13. [Sorun Giderme](#sorun-giderme)
 
 ---
+*Bu ürünü satın almak için ilgili [sayfayı](https://openzeka.com/urun/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe) ziyaret edebilirsiniz.*
 
 Bu doküman, 4 NVIDIA DGX Spark node'undan oluşan switch tabanlı bir AI cluster'ın kurulum ve konfigürasyon adımlarını baştan sona anlatmaktadır. Cluster, dağıtık AI iş yüklerini ve model çalıştırmayı yönetmek için **sparkrun** araç setini kullanır.
 
@@ -843,17 +844,18 @@ sparkrun run glm52-qt-dcp4-4spark.yaml
 
 ```bash
 model: QuantTrio/GLM-5.2-Int4-Int8Mix
-runtime: vllm-ray
+runtime: vllm-distributed
 container: vllm-zatz-dcp:probe
 
 min_nodes: 4
 max_nodes: 4
 
 metadata:
-  description: GLM-5.2 Int4-Int8Mix TP4 DCP4 655K MTP (tonyd2wild, cudagraph NONE for GB10 host-staged NCCL)
+  description: GLM-5.2 Int4-Int8Mix TP4 DCP4 128K MTP k=4 cudagraph FULL (Xanu dcp4-cc128 lane - 5 agents)
   maintainer: local
   model_params: 744B-MoE-40B-active
   model_dtype: int4-int8mix
+  lane: dcp4-cc128
 
 defaults:
   port: 8210
@@ -861,12 +863,13 @@ defaults:
   tensor_parallel: 4
   pipeline_parallel: 1
   decode_context_parallel: 4
-  gpu_memory_utilization: 0.80
-  max_model_len: 32000
-  max_num_seqs: 16
-  max_num_batched_tokens: 4096
+  gpu_memory_utilization: 0.885
+  max_model_len: 131072
+  max_num_seqs: 5
+  max_num_batched_tokens: 2048
   kv_cache_dtype: fp8_ds_mla
   kv_cache_memory_bytes: 9000000000
+  max_cudagraph_capture_size: 32
   load_format: auto
   served_model_name: glm-5.2
   quantization: compressed-tensors
@@ -876,6 +879,7 @@ defaults:
 env:
   NCCL_IB_TC: "106"
   HF_HUB_OFFLINE: "1"
+  VLLM_MARLIN_USE_ATOMIC_ADD: "1"
   TRANSFORMERS_OFFLINE: "1"
   SAFETENSORS_FAST_GPU: "1"
   CUDA_DEVICE_ORDER: "PCI_BUS_ID"
@@ -883,9 +887,19 @@ env:
   CUTE_DSL_ARCH: "sm_121a"
   TORCH_CUDA_ARCH_LIST: "12.1a"
   VLLM_ALLOW_LONG_MAX_MODEL_LEN: "1"
-  VLLM_RPC_TIMEOUT: "1800000"
+  VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS: "1800"
   NCCL_MAX_NCHANNELS: "4"
   NCCL_MIN_NCHANNELS: "4"
+  NCCL_CROSS_NIC: "1"
+  NCCL_CUMEM_ENABLE: "0"
+  NCCL_IGNORE_CPU_AFFINITY: "1"
+  NCCL_NET_PLUGIN: "none"
+  NCCL_IB_MERGE_NICS: "0"
+  NCCL_IB_SUBNET_AWARE_ROUTING: "1"
+  NCCL_DEBUG: "WARN"
+  NCCL_IB_HCA: "rocep1s0f1,roceP2p1s0f1"
+  NCCL_SOCKET_IFNAME: "enp1s0f1np1,enP2p1s0f1np1"
+  GLOO_SOCKET_IFNAME: "enp1s0f1np1,enP2p1s0f1np1"
   PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
   VLLM_WORKER_MULTIPROC_METHOD: "spawn"
   VLLM_USE_FLASHINFER_SAMPLER: "1"
@@ -898,6 +912,8 @@ env:
   VLLM_USE_B12X_FP8_GEMM: "0"
   VLLM_DISABLE_TP_MQ_BROADCASTER: "1"
   VLLM_ENABLE_PCIE_ALLREDUCE: "0"
+  VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS: "0"
+  VLLM_SPARSE_INDEXER_MAX_LOGITS_MB: "256"
   USES_B12X: "True"
   FLASHINFER_DISABLE_VERSION_CHECK: "1"
   RAY_memory_usage_threshold: "0.99"
@@ -909,7 +925,6 @@ command: |
       --trust-remote-code \
       --load-format {load_format} \
       --quantization {quantization} \
-      --distributed-executor-backend ray \
       --tensor-parallel-size {tensor_parallel} \
       --pipeline-parallel-size {pipeline_parallel} \
       --decode-context-parallel-size {decode_context_parallel} \
@@ -923,16 +938,18 @@ command: |
       --kv-cache-memory-bytes {kv_cache_memory_bytes} \
       --generation-config vllm \
       --hf-overrides '{"use_index_cache":true,"index_topk_pattern":"FFFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSS"}' \
+      --default-chat-template-kwargs '{"clear_thinking":false}' \
       --port {port} \
       --host {host} \
+      --compilation-config '{"cudagraph_mode":"FULL","max_cudagraph_capture_size":32}' \
       --no-enable-log-requests \
-      --compilation-config '{"cudagraph_mode":"NONE"}' \
       --attention-backend B12X_MLA_SPARSE \
       --moe-backend flashinfer_cutlass \
       --reasoning-parser {reasoning_parser} \
       --tool-call-parser {tool_call_parser} \
       --enable-auto-tool-choice \
-      --speculative-config '{"model":"QuantTrio/GLM-5.2-Int4-Int8Mix","method":"mtp","num_speculative_tokens":3,"moe_backend":"flashinfer_cutlass","draft_attention_backend":"B12X_MLA_SPARSE","draft_sample_method":"probabilistic"}' \
+      --enable-prefix-caching \
+      --speculative-config '{"model":"QuantTrio/GLM-5.2-Int4-Int8Mix","method":"mtp","num_speculative_tokens":4,"quantization":"compressed-tensors","moe_backend":"flashinfer_cutlass","draft_attention_backend":"B12X_MLA_SPARSE","draft_sample_method":"probabilistic"}' \
       --long-prefill-token-threshold 2048 \
       --async-scheduling
 ```
@@ -956,6 +973,15 @@ Model başladığında “Application startup complete.” şeklinde bir mesaj a
 **Benchmark Sonuçları**
 
 Bu şekilde ayağa kalkan modelde [linkte](https://github.com/CordatusAI/llm-benchmark) verdiğimiz benchmark aracıyla yapılan testler sonucunda elde edilen ortalama değerler şu şekildedir:
+
+| Concurrency | Ortalama TTFT | Ortalama ITL |  Ortalama TPS | Ortalama Gecikme | p90 Gecikme |
+| ----------: | ------------: | -----------: | ------------: | ---------------: | ----------: |
+|           1 |     490.02 ms |     32.94 ms | 27.39 token/s |           4.69 s |      5.01 s |
+|           2 |     716.95 ms |     45.33 ms | 20.02 token/s |           6.48 s |      7.22 s |
+|           4 |     955.36 ms |     63.22 ms | 14.33 token/s |           8.99 s |     10.01 s |
+|           8 |    6560.43 ms |     73.35 ms |  8.51 token/s |          15.88 s |     19.52 s |
+
+Test sonucunda, modelin 4 node üzerinde dağıtık olarak başarıyla çalıştığı ve çok node'lu inference altyapısının uçtan uca doğrulandığı görüldü. Concurrency arttıkça TTFT ve toplam gecikme değerlerinin arttığı, kullanıcı başına düşen token üretim hızının ise azaldığı gözlemlendi.
 
 ## NAS Yapılandırmasının Yapılması (ASUSTOR AS6808T)
 
