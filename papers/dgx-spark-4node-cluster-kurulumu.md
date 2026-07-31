@@ -819,7 +819,7 @@ The glm-5.2-int4 model is used in this test. The model runs with tensor parallel
 First, download the container image using the following command:
 
 ```bash
-docker pull registry.cordata.ai/spark-cluster/vllm-zatz-dcp:latest
+docker pull registry.cordata.ai/spark-cluster/vllm-zatz-dcp:probe
 ```
 
 After the image has been downloaded, the inference workload can be executed with sparkrun using the provided recipe YAML file.
