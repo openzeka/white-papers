@@ -83,6 +83,13 @@ permalink: /
   <span class="date">Temmuz 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/papers/b300-gb300-cluster-mimarisi/' | relative_url }}">
+  <span class="tag">Mimari Karşılaştırma</span>
+  <h3>NVIDIA DGX B300 ve GB300 NVL72 Cluster Mimarisi Karşılaştırması</h3>
+  <p>İki Blackwell Ultra mimarisinin — DGX B300 ve GB300 NVL72 — teknik karşılaştırması: sistem tasarımı, ölçekleme, ağ mimarisi, güç/soğutma ve iş yükü bazlı platform seçim rehberi.</p>
+  <span class="date">Temmuz 2026</span>
+</a>
+
 </div>
 
 ## Uzmanlık Alanları

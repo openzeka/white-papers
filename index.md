@@ -83,6 +83,13 @@ permalink: /
   <span class="date">July 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/papers/b300-gb300-cluster-mimarisi/' | relative_url }}">
+  <span class="tag">Architecture Comparison</span>
+  <h3>NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison</h3>
+  <p>Technical comparison of two Blackwell Ultra architectures — DGX B300 and GB300 NVL72 — covering system design, scaling, networking, power/cooling, and workload-based platform selection guidance.</p>
+  <span class="date">July 2026</span>
+</a>
+
 </div>
 
 ## Areas of Expertise

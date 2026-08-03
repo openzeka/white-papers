@@ -20,3 +20,4 @@ The following technical white papers are published by Openzeka Teknoloji A.Ş.
 | [DGX Spark 3-Node AI Cluster Setup Guide](dgx-spark-3node-cluster-kurulumu) | Ring (mesh) topology cluster setup, RoCEv2/RDMA, sparkrun | 3x NVIDIA DGX Spark (GB10) |
 | [DGX Spark 4-Node AI Cluster Setup Guide](dgx-spark-4node-cluster-kurulumu) | Switch-based cluster setup, RoCEv2/RDMA, sparkrun, NAS | 4x NVIDIA DGX Spark (GB10) |
 | [Kimi K3 Inference Benchmark on DGX-B300](kimi-k3-dgx-b300-inference-benchmark) | Inference engine + speculative decoding comparison (vLLM vs SGLang, direct vs DSpark) | NVIDIA DGX-B300 (8x Blackwell Ultra, TP=8) |
+| [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](b300-gb300-cluster-mimarisi) | Technical comparison of two Blackwell Ultra architectures, workload-based platform selection guide | NVIDIA DGX B300, GB300 NVL72 (Blackwell Ultra) |
