@@ -31,7 +31,7 @@ toc: true
 
 ---
 
-*To purchase this product, visit the relevant [page](https://openzeka.com/urun/nvidia-dgx-spark-bundle/).*
+*To purchase this product, visit the relevant [page](https://openzeka.com/en/product/nvidia-dgx-spark-bundle/).*
 
 This document describes the end-to-end installation and configuration steps for an AI cluster consisting of 2 NVIDIA DGX Spark nodes in a point-to-point topology. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
 
