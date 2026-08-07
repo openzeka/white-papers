@@ -36,7 +36,7 @@ toc: true
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Triple</h3>
 <p>3 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-triple/">Purchase This Product →</a>
+<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-triple/">Purchase This Product →</a>
 </div>
 </div>
 
@@ -605,6 +605,6 @@ Run the command above and re-run sparkrun.
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Triple</h3>
 <p>3 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-triple/">Purchase This Product →</a>
+<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-triple/">Purchase This Product →</a>
 </div>
 </div>
