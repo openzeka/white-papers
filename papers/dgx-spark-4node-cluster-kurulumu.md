@@ -41,7 +41,16 @@ toc: true
 
 ---
 
-*To purchase this product, visit the relevant [page](https://openzeka.com/en/product/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe/).*
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
+<p>4 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
+<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe/">Purchase This Product →</a>
+</div>
+</div>
 
 This document describes the end-to-end installation and configuration steps for a switch-based AI cluster consisting of 4 NVIDIA DGX Spark nodes. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
 
@@ -1366,3 +1375,16 @@ cat /sys/class/net/bond0/bonding/xmit_hash_policy
 - Make sure auto-negotiation=no and speed=200G-baseCR4 settings are applied to the correct ports.
 
 - Remove and reinsert the cable and check the port status: /interface/ethernet/print.
+
+---
+
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
+<p>4 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
+<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe/">Purchase This Product →</a>
+</div>
+</div>

@@ -40,7 +40,16 @@ toc: true
 13. [Sorun Giderme](#sorun-giderme)
 
 ---
-*Bu ürünü satın almak için ilgili [sayfayı](https://openzeka.com/urun/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe) ziyaret edebilirsiniz.*
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
+<p>4 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
+<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe">Bu Ürünü Satın Al →</a>
+</div>
+</div>
 
 Bu doküman, 4 NVIDIA DGX Spark node'undan oluşan switch tabanlı bir AI cluster'ın kurulum ve konfigürasyon adımlarını baştan sona anlatmaktadır. Cluster, dağıtık AI iş yüklerini ve model çalıştırmayı yönetmek için **sparkrun** araç setini kullanır.
 
@@ -1367,3 +1376,16 @@ cat /sys/class/net/bond0/bonding/xmit_hash_policy
 - auto-negotiation=no ve speed=200G-baseCR4 ayarlarının doğru portlara uygulandığından emin olun.
 
 - Kabloyu çıkarıp tekrar takın ve port durumunu kontrol edin: /interface/ethernet/print.
+
+---
+
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
+<p>4 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
+<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe">Bu Ürünü Satın Al →</a>
+</div>
+</div>
