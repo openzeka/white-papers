@@ -31,7 +31,16 @@ toc: true
 
 ---
 
-*Bu ürünü satın almak için ilgili [sayfayı](https://openzeka.com/urun/nvidia-dgx-spark-bundle/) ziyaret edebilirsiniz.*
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-2node-cluster-kurulumu/images/DGX_Spark_Bundle-700x700.png' | relative_url }}" alt="NVIDIA DGX Spark Bundle" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Bundle</h3>
+<p>2 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
+<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-bundle/">Bu Ürünü Satın Al →</a>
+</div>
+</div>
 
 Bu doküman, 2 NVIDIA DGX Spark node'undan oluşan point-to-point topolojisine sahip bir AI cluster'ın kurulum ve konfigürasyon adımlarını baştan sona anlatmaktadır. Cluster, dağıtık AI iş yüklerini ve model çalıştırmayı yönetmek için sparkrun araç setini kullanır.
 
@@ -575,3 +584,16 @@ cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
 Komutunu çalıştırın ve sparkrun'u tekrar çalıştırın.
+
+---
+
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-2node-cluster-kurulumu/images/DGX_Spark_Bundle-700x700.png' | relative_url }}" alt="NVIDIA DGX Spark Bundle" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Bundle</h3>
+<p>2 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
+<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-bundle/">Bu Ürünü Satın Al →</a>
+</div>
+</div>

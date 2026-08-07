@@ -31,7 +31,16 @@ toc: true
 
 ---
 
-*Bu ürünü satın almak için ilgili [sayfayı](https://openzeka.com/urun/nvidia-dgx-spark-triple/) ziyaret edebilirsiniz.*
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-3node-cluster-kurulumu/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Triple</h3>
+<p>3 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
+<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-triple/">Bu Ürünü Satın Al →</a>
+</div>
+</div>
 
 Bu doküman, 3 NVIDIA DGX Spark node'undan oluşan ring (mesh) topolojisine sahip   
 bir AI cluster'ın kurulum ve konfigürasyon adımlarını baştan sona anlatmaktadır.   
@@ -593,3 +602,16 @@ cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
 Komutunu çalıştırın ve sparkrun'u tekrar çalıştırın.
+
+---
+
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-3node-cluster-kurulumu/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Triple</h3>
+<p>3 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
+<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-triple/">Bu Ürünü Satın Al →</a>
+</div>
+</div>

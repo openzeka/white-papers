@@ -31,7 +31,16 @@ toc: true
 
 ---
 
-*To purchase this product, visit the relevant [page](https://openzeka.com/en/product/nvidia-dgx-spark-bundle/).*
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-2node-cluster-kurulumu/images/DGX_Spark_Bundle-700x700.png' | relative_url }}" alt="NVIDIA DGX Spark Bundle" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Bundle</h3>
+<p>2 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
+<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-bundle/">Purchase This Product →</a>
+</div>
+</div>
 
 This document describes the end-to-end installation and configuration steps for an AI cluster consisting of 2 NVIDIA DGX Spark nodes in a point-to-point topology. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
 
@@ -575,3 +584,16 @@ cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
 Run the command above and re-run sparkrun.
+
+---
+
+<div class="product-card" markdown="1">
+<div class="product-card-image">
+<img src="{{ '/papers/dgx-spark-2node-cluster-kurulumu/images/DGX_Spark_Bundle-700x700.png' | relative_url }}" alt="NVIDIA DGX Spark Bundle" />
+</div>
+<div class="product-card-body">
+<h3>NVIDIA DGX Spark Bundle</h3>
+<p>2 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
+<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-bundle/">Purchase This Product →</a>
+</div>
+</div>
