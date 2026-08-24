@@ -1,0 +1,42 @@
+{% comment %}
+  Cookie consent banner (KVKK / GDPR).
+  TR ziyaretçiye KVKK metni, EN ziyaretçiye GDPR metni gösterir.
+  openzeka.com/gizlilik-kisisel-veri-politikasi/ sayfasına link verir.
+{% endcomment %}
+{% assign lang = site.active_lang | default: site.lang | default: 'en' %}
+{% assign t = site.data[lang].strings %}
+<div id="cookie-consent-banner" class="cookie-consent" role="dialog"
+     aria-modal="false" aria-label="Cookie consent"
+     data-consent-state="pending" hidden>
+  <div class="cookie-consent__body">
+    <div class="cookie-consent__text">
+      <span class="cookie-consent__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+          <path d="M21 12a9 9 0 1 1-9-9 4.5 4.5 0 0 0 4.5 4.5A4.5 4.5 0 0 0 21 12zm-9-3.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm-1.5 4.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm6-1.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm-3 4.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z"/>
+        </svg>
+      </span>
+      <p>{{ t.consent_message }}
+        <a href="{{ t.consent_privacy_url }}" target="_blank" rel="noopener noreferrer"
+           class="cookie-consent__link">{{ t.consent_learn_more }}</a>
+      </p>
+    </div>
+    <div class="cookie-consent__actions">
+      <button type="button" class="cookie-consent__btn cookie-consent__btn--reject"
+              data-consent-action="rejected">{{ t.consent_reject }}</button>
+      <button type="button" class="cookie-consent__btn cookie-consent__btn--accept"
+              data-consent-action="accepted">{{ t.consent_accept }}</button>
+    </div>
+  </div>
+</div>
+<script>
+  // Eski karar önbellekte varsa bannerı gösterme
+  (function() {
+    try {
+      var v = localStorage.getItem('cookieConsent');
+      if (v === 'accepted' || v === 'rejected') {
+        document.documentElement.dataset.cookieConsent = v;
+      }
+    } catch (e) {}
+  })();
+</script>
+<script src="{{ '/assets/js/cookie-banner.js' | relative_url }}" defer></script>

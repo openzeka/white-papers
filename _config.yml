@@ -84,6 +84,9 @@ exclude:
   - LICENSE
   - Makefile
 
+# Analytics (GA4)
+google_analytics: G-FV2RMG1NQY
+
 # SEO
 twitter:
   username: openzeka

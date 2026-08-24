@@ -6,3 +6,10 @@ copy_code: "Copy code to clipboard"
 back_to_top: "Back to top"
 page_last_modified: "Page last modified"
 nav_footer_text: "Openzeka Teknoloji A.Ş."
+
+# Cookie consent banner
+consent_message: "We use cookies to analyze site traffic and improve your experience. By clicking 'Accept', you consent to the use of analytics cookies as described in our Privacy Policy."
+consent_accept: "Accept"
+consent_reject: "Reject"
+consent_learn_more: "Privacy Policy"
+consent_privacy_url: "https://openzeka.com/gizlilik-kisisel-veri-politikasi/"

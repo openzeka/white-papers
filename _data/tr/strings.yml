@@ -6,3 +6,10 @@ copy_code: "Kodu panoya kopyala"
 back_to_top: "Yukarı dön"
 page_last_modified: "Sayfa son güncelleme"
 nav_footer_text: "Openzeka Teknoloji A.Ş."
+
+# Cookie consent banner (KVKK)
+consent_message: "Sitemizi ziyaretçi davranışlarını analiz ederek iyileştirmek için çerez kullanıyoruz. KVKK Aydınlatma Metnimizde açıklandığı şekilde analitik çerezlerin kullanımını kabul ediyor musunuz?"
+consent_accept: "Kabul Et"
+consent_reject: "Reddet"
+consent_learn_more: "Gizlilik Politikası"
+consent_privacy_url: "https://openzeka.com/gizlilik-kisisel-veri-politikasi/"
