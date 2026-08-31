@@ -786,6 +786,8 @@
       for (var k = 0; k < perTick && i < tokens.length; k++) {
         el.textContent += tokens[i++];
       }
+      /* the box is a fixed size, so follow the tail instead of growing */
+      el.scrollTop = el.scrollHeight;
       if (i < tokens.length) {
         el.btTimer = setTimeout(step, Math.max(16, delay));
       } else {

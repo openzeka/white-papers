@@ -306,6 +306,11 @@
 .bt-detail-content {
   padding: 16px 20px;
   display: none;
+  /* .bt-table sets white-space: nowrap and text-align: center for the grid.
+     Both are inherited here; prose must wrap, and must start at the left edge
+     rather than growing outward from the centre of its box. */
+  white-space: normal;
+  text-align: left;
 }
 
 .bt-detail-content.bt-visible {
@@ -322,6 +327,7 @@
 .bt-detail-table td {
   padding: 6px 16px;
   text-align: center;
+  white-space: nowrap;
   border-bottom: 1px solid #eee;
 }
 
@@ -905,7 +911,7 @@ details.bt-howto > summary:focus-visible {
 .bt-detail-top {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 18px;
   margin-bottom: 16px;
 }
@@ -916,12 +922,25 @@ details.bt-howto > summary:focus-visible {
 }
 
 .bt-detail-preview {
-  flex: 1 1 320px;
-  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 340px;
+  min-width: 0;
+  max-width: 680px;
 }
 
+/* Fixed box: it fills the space beside the sweep table and does not grow as
+   text arrives, so nothing on the page shifts while it streams.
+   flex-basis must be 0 — with `auto` the base size is the content, which is
+   exactly what made the box grow token by token. */
 .bt-detail-preview .bt-preview-text {
-  min-height: 8em;
+  flex: 1 1 0;
+  min-height: 6em;
+  overflow: hidden;
+}
+
+.bt-detail-preview .bt-preview-note {
+  flex: none;
 }
 
 /* measurement rows are pickable: each one drives the preview */
@@ -944,4 +963,10 @@ details.bt-howto > summary:focus-visible {
 
 .bt-detail-table tbody tr.bt-dp-active td:first-child {
   box-shadow: inset 3px 0 0 var(--bt-green);
+}
+
+/* The model name is what the eye scans down; centring made the column ragged. */
+.bt-table thead th:first-child,
+.bt-table tbody tr.bt-row td:first-child {
+  text-align: left;
 }
