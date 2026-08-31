@@ -478,3 +478,41 @@ img[width] {
 @media (prefers-reduced-motion: reduce) {
   .cookie-consent { animation: none; }
 }
+
+// ===== Benchmark tablosu widget'ı (assets/js/benchmark-table*.js) =====
+// Widget kendi stillerini assets/css/benchmark-table.css dosyasından getirir.
+// Buradaki kurallar yalnızca temayla çakışan noktaları düzeltir; tamamı
+// .bt-container / .oz-wide altında kapsanmıştır ve bu sınıflar başka hiçbir
+// sayfada bulunmaz.
+
+// just-the-docs çıplak `th, td` seçicisini biçimlendiriyor (min-width: 7.5rem,
+// background-color: #fff, border-left). Bu kurallar widget'ın JS ile ürettiği
+// tabloya sızıyor: opak hücre arka planı satır şeritlemesini ve hover'ı
+// örtüyor, min-width ise 14 sütunun her birini 120 px'e sabitliyor.
+// Tablonun koyu başlık satırı .bt-table thead th ile (daha yüksek özgüllük)
+// tanımlandığı için buradaki transparent değerinden etkilenmez.
+.bt-container {
+  table {
+    min-width: 0;
+  }
+
+  th,
+  td {
+    min-width: 0;
+    background-color: transparent;
+    border-left: 0;
+  }
+}
+
+// Tabloyu okuma sütununa sığdırmak mümkün değil (14 sütun, .main 50rem).
+// Yalnızca front matter'ında `wide: true` olan sayfalar kendini bu sınıfla
+// işaretler; diğer sayfalar etkilenmez.
+.oz-wide {
+  .main {
+    max-width: none;
+  }
+
+  .main-content-wrap {
+    max-width: 1600px;
+  }
+}
