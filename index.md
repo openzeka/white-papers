@@ -90,6 +90,13 @@ permalink: /
   <span class="date">July 2026</span>
 </a>
 
+<a class="paper-card" href="{{ '/llm-inference-benchmarks/' | relative_url }}">
+  <span class="tag">LLM Benchmark</span>
+  <h3>LLM Inference Benchmark Table</h3>
+  <p>Interactive table of every Openzeka LLM inference benchmark on DGX Spark, DGX B300, RTX PRO 6000 and Jetson Thor — filter by device, model and quantization, and set your own service-level thresholds for capacity planning.</p>
+  <span class="date">August 2026</span>
+</a>
+
 </div>
 
 ## Areas of Expertise

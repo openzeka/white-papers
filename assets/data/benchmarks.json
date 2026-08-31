@@ -1,0 +1,4150 @@
+{
+  "config": {
+    "ttft_threshold_ms": 1000,
+    "tps_threshold": 20,
+    "chat_multiplier": 4,
+    "agentic_multiplier": 1.5
+  },
+  "benchmarks": [
+    {
+      "id": "gpt-oss-120b_1spark_mxfp4_vllm",
+      "model": "GPT-OSS 120B",
+      "device": "1× DGX Spark",
+      "quantization": "MXFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "CUTLASS MoE, FlashInfer attn, GMU 0.7, KV fp8, Ray",
+      "sources": [
+        "collegue-old-bench_marks/.../gpt-oss-120b-single-sparkrun-opt/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 219.57,
+          "tps": 55.65
+        },
+        {
+          "c": 2,
+          "ttft_ms": 294.41,
+          "tps": 37.05
+        },
+        {
+          "c": 4,
+          "ttft_ms": 320.61,
+          "tps": 25.2
+        },
+        {
+          "c": 8,
+          "ttft_ms": 395.31,
+          "tps": 16.88
+        },
+        {
+          "c": 16,
+          "ttft_ms": 444.1,
+          "tps": 11.67
+        },
+        {
+          "c": 32,
+          "ttft_ms": 551.89,
+          "tps": 8.26
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gpt-oss-120b_2spark_mxfp4_vllm",
+      "model": "GPT-OSS 120B",
+      "device": "2× DGX Spark",
+      "quantization": "MXFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "CUTLASS MoE, FlashInfer attn. +26% TPS over TP=1 at C1",
+      "sources": [
+        "collegue-old-bench_marks/.../gpt-oss-120b-double-sparkrun-opt/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 167.69,
+          "tps": 69.86
+        },
+        {
+          "c": 2,
+          "ttft_ms": 227.76,
+          "tps": 51.52
+        },
+        {
+          "c": 4,
+          "ttft_ms": 255.41,
+          "tps": 37.14
+        },
+        {
+          "c": 8,
+          "ttft_ms": 291.94,
+          "tps": 26.92
+        },
+        {
+          "c": 16,
+          "ttft_ms": 319.99,
+          "tps": 19.08
+        },
+        {
+          "c": 32,
+          "ttft_ms": 464.91,
+          "tps": 12.63
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gpt-oss-120b_rtxpro6000_mxfp4_vllm",
+      "model": "GPT-OSS 120B",
+      "device": "RTX PRO 6000",
+      "quantization": "MXFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "4K context",
+      "sources": [
+        "collegue-old-bench_marks/.../RTX Pro-6000-Blackwell/gpt-oss-120b/4k/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 52.21,
+          "tps": 169.64
+        },
+        {
+          "c": 2,
+          "ttft_ms": 58.87,
+          "tps": 125.81
+        },
+        {
+          "c": 4,
+          "ttft_ms": 64.44,
+          "tps": 98.77
+        },
+        {
+          "c": 8,
+          "ttft_ms": 79.74,
+          "tps": 76.57
+        },
+        {
+          "c": 16,
+          "ttft_ms": 122.22,
+          "tps": 55.27
+        },
+        {
+          "c": 32,
+          "ttft_ms": 160.01,
+          "tps": 41.88
+        },
+        {
+          "c": 64,
+          "ttft_ms": 205.51,
+          "tps": 31.76
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3-4b_1spark_nvfp4_vllm",
+      "model": "Qwen3-4B-Instruct-2507",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../Qwe3-4B/nvfp4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 41.57,
+          "tps": 49.63
+        },
+        {
+          "c": 2,
+          "ttft_ms": 43.89,
+          "tps": 50.42
+        },
+        {
+          "c": 4,
+          "ttft_ms": 59.53,
+          "tps": 48.71
+        },
+        {
+          "c": 8,
+          "ttft_ms": 77.06,
+          "tps": 46.66
+        },
+        {
+          "c": 16,
+          "ttft_ms": 90.63,
+          "tps": 44.07
+        },
+        {
+          "c": 32,
+          "ttft_ms": 114.21,
+          "tps": 39.3
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3-coder-30b_1spark_fp16_vllm",
+      "model": "Qwen3-Coder-30B-A3B-Instruct",
+      "device": "1× DGX Spark",
+      "quantization": "FP16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../Qwen3-30B-Coder/fp16/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 170.78,
+          "tps": 29.86
+        },
+        {
+          "c": 2,
+          "ttft_ms": 101.37,
+          "tps": 24.16
+        },
+        {
+          "c": 4,
+          "ttft_ms": 124.02,
+          "tps": 17.3
+        },
+        {
+          "c": 8,
+          "ttft_ms": 159.58,
+          "tps": 12.79
+        },
+        {
+          "c": 16,
+          "ttft_ms": 179.61,
+          "tps": 9.96
+        },
+        {
+          "c": 32,
+          "ttft_ms": 176.88,
+          "tps": 8.06
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3-coder-30b_1spark_nvfp4_vllm",
+      "model": "Qwen3-Coder-30B-A3B-Instruct",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "NVFP4 is 2.2x faster than FP16 at C1",
+      "sources": [
+        "collegue-old-bench_marks/.../Qwen3-30B-Coder/nvfp4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 66.47,
+          "tps": 64.99
+        },
+        {
+          "c": 2,
+          "ttft_ms": 48.79,
+          "tps": 53.75
+        },
+        {
+          "c": 4,
+          "ttft_ms": 59.03,
+          "tps": 42.44
+        },
+        {
+          "c": 8,
+          "ttft_ms": 76.21,
+          "tps": 33.59
+        },
+        {
+          "c": 16,
+          "ttft_ms": 78.39,
+          "tps": 27.29
+        },
+        {
+          "c": 32,
+          "ttft_ms": 92.31,
+          "tps": 21.75
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-27b_1spark_fp8_vllm",
+      "model": "Qwen3.6-27B",
+      "device": "1× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "vLLM v0.22.0",
+      "sources": [
+        "https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 270.57,
+          "tps": 8.13
+        },
+        {
+          "c": 2,
+          "ttft_ms": 357.77,
+          "tps": 8.13
+        },
+        {
+          "c": 4,
+          "ttft_ms": 447.17,
+          "tps": 7.89
+        },
+        {
+          "c": 8,
+          "ttft_ms": 511.45,
+          "tps": 7.57
+        },
+        {
+          "c": 16,
+          "ttft_ms": 866.95,
+          "tps": 6.76
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-27b_1spark_fp8_vllm_mtp",
+      "model": "Qwen3.6-27B",
+      "device": "1× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "MTP gives 2.4x TPS improvement",
+      "sources": [
+        "https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 322.95,
+          "tps": 19.5
+        },
+        {
+          "c": 2,
+          "ttft_ms": 516.27,
+          "tps": 19.83
+        },
+        {
+          "c": 4,
+          "ttft_ms": 530.8,
+          "tps": 18.56
+        },
+        {
+          "c": 8,
+          "ttft_ms": 620.59,
+          "tps": 16.62
+        },
+        {
+          "c": 16,
+          "ttft_ms": 812.93,
+          "tps": 13.84
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-27b_1spark_awq_vllm_mtp",
+      "model": "Qwen3.6-27B",
+      "device": "1× DGX Spark",
+      "quantization": "AWQ",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Model: shawnw3i/Qwen3.6-27B-AWQ-MTP",
+      "sources": [
+        "collegue-old-bench_marks/.../Qwen3.6-27B-AWQ-MTP/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 266.65,
+          "tps": 25.45
+        },
+        {
+          "c": 2,
+          "ttft_ms": 562.95,
+          "tps": 25.42
+        },
+        {
+          "c": 4,
+          "ttft_ms": 845.97,
+          "tps": 23.08
+        },
+        {
+          "c": 8,
+          "ttft_ms": 625.74,
+          "tps": 20.09
+        },
+        {
+          "c": 16,
+          "ttft_ms": 876.55,
+          "tps": 14.99
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-27b_1spark_nvfp4_vllm",
+      "model": "Qwen3.6-27B",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "unsloth NVFP4. nvidia eugr variant exists with +28% TPS but full sweep unavailable",
+      "sources": [
+        "https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 228.42,
+          "tps": 9.86
+        },
+        {
+          "c": 2,
+          "ttft_ms": 339.55,
+          "tps": 9.79
+        },
+        {
+          "c": 4,
+          "ttft_ms": 387.42,
+          "tps": 9.48
+        },
+        {
+          "c": 8,
+          "ttft_ms": 451.22,
+          "tps": 9.03
+        },
+        {
+          "c": 16,
+          "ttft_ms": 659.95,
+          "tps": 8.0
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-27b_1spark_nvfp4_vllm_mtp",
+      "model": "Qwen3.6-27B",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../Qwen3.6-27B-NVFP4-MTP/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 519.21,
+          "tps": 21.02
+        },
+        {
+          "c": 2,
+          "ttft_ms": 634.9,
+          "tps": 21.68
+        },
+        {
+          "c": 4,
+          "ttft_ms": 849.66,
+          "tps": 19.94
+        },
+        {
+          "c": 8,
+          "ttft_ms": 592.18,
+          "tps": 18.27
+        },
+        {
+          "c": 16,
+          "ttft_ms": 838.59,
+          "tps": 14.47
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-27b_2spark_nvfp4_vllm",
+      "model": "Qwen3.6-27B",
+      "device": "2× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "nvidia NVFP4, eugr nightly",
+      "sources": [
+        "collegue-old-bench_marks/.../Nvidia-Qwen3.6-27B-NVFP4_TP2/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 148.87,
+          "tps": 22.57
+        },
+        {
+          "c": 2,
+          "ttft_ms": 252.45,
+          "tps": 20.98
+        },
+        {
+          "c": 4,
+          "ttft_ms": 320.11,
+          "tps": 19.89
+        },
+        {
+          "c": 8,
+          "ttft_ms": 457.03,
+          "tps": 17.65
+        },
+        {
+          "c": 16,
+          "ttft_ms": 741.35,
+          "tps": 14.96
+        },
+        {
+          "c": 32,
+          "ttft_ms": 1196.59,
+          "tps": 11.05
+        },
+        {
+          "c": 64,
+          "ttft_ms": 2137.37,
+          "tps": 6.77
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-27b_4spark_nvfp4_vllm",
+      "model": "Qwen3.6-27B",
+      "device": "4× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "nvidia NVFP4, eugr nightly",
+      "sources": [
+        "collegue-old-bench_marks/.../Nvidia-Qwen3.6-27B-NVFP4_TP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 163.59,
+          "tps": 33.11
+        },
+        {
+          "c": 2,
+          "ttft_ms": 267.42,
+          "tps": 29.93
+        },
+        {
+          "c": 4,
+          "ttft_ms": 373.16,
+          "tps": 27.51
+        },
+        {
+          "c": 8,
+          "ttft_ms": 446.41,
+          "tps": 24.98
+        },
+        {
+          "c": 16,
+          "ttft_ms": 804.86,
+          "tps": 19.21
+        },
+        {
+          "c": 32,
+          "ttft_ms": 1005.44,
+          "tps": 14.61
+        },
+        {
+          "c": 64,
+          "ttft_ms": 1551.45,
+          "tps": 7.93
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.5-27b_rtxpro6000_fp8_vllm",
+      "model": "Qwen3.5-27B",
+      "device": "RTX PRO 6000",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../RTX Pro-6000-Blackwell/Qwen3.5-27B-FP8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 65.54,
+          "tps": 28.61
+        },
+        {
+          "c": 2,
+          "ttft_ms": 121.51,
+          "tps": 26.38
+        },
+        {
+          "c": 4,
+          "ttft_ms": 120.82,
+          "tps": 25.73
+        },
+        {
+          "c": 8,
+          "ttft_ms": 136.86,
+          "tps": 26.15
+        },
+        {
+          "c": 16,
+          "ttft_ms": 219.17,
+          "tps": 25.14
+        },
+        {
+          "c": 32,
+          "ttft_ms": 379.43,
+          "tps": 24.18
+        },
+        {
+          "c": 64,
+          "ttft_ms": 771.97,
+          "tps": 19.15
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-27b_b300_default_vllm",
+      "model": "Qwen3.6-27B",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/Qwen3.6-27B/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 68.82,
+          "tps": 82.62
+        },
+        {
+          "c": 2,
+          "ttft_ms": 201.42,
+          "tps": 74.65
+        },
+        {
+          "c": 4,
+          "ttft_ms": 121.23,
+          "tps": 76.25
+        },
+        {
+          "c": 8,
+          "ttft_ms": 895.51,
+          "tps": 69.15
+        },
+        {
+          "c": 16,
+          "ttft_ms": 236.13,
+          "tps": 65.0
+        },
+        {
+          "c": 32,
+          "ttft_ms": 241.7,
+          "tps": 62.9
+        },
+        {
+          "c": 64,
+          "ttft_ms": 289.49,
+          "tps": 53.64
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-35b-a3b_1spark_fp8_vllm",
+      "model": "Qwen3.6-35B-A3B",
+      "device": "1× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../Qwen3.6-35B-A3B/FP8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 115.21,
+          "tps": 52.24
+        },
+        {
+          "c": 2,
+          "ttft_ms": 150.5,
+          "tps": 41.98
+        },
+        {
+          "c": 4,
+          "ttft_ms": 209.06,
+          "tps": 32.0
+        },
+        {
+          "c": 8,
+          "ttft_ms": 676.26,
+          "tps": 22.29
+        },
+        {
+          "c": 16,
+          "ttft_ms": 547.58,
+          "tps": 16.18
+        },
+        {
+          "c": 32,
+          "ttft_ms": 634.16,
+          "tps": 11.22
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-35b-a3b_1spark_fp8_vllm_mtp",
+      "model": "Qwen3.6-35B-A3B",
+      "device": "1× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 3,
+      "tp": 1,
+      "notes": "Speculative MTP k=3. +24% TPS at C1 over FP8 without MTP",
+      "sources": [
+        "collegue-old-bench_marks/.../Qwen3.6-35B-A3B/FP8-Speculative/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 139.99,
+          "tps": 64.78
+        },
+        {
+          "c": 2,
+          "ttft_ms": 346.61,
+          "tps": 49.22
+        },
+        {
+          "c": 4,
+          "ttft_ms": 354.19,
+          "tps": 30.57
+        },
+        {
+          "c": 8,
+          "ttft_ms": 330.21,
+          "tps": 28.13
+        },
+        {
+          "c": 16,
+          "ttft_ms": 464.24,
+          "tps": 20.68
+        },
+        {
+          "c": 32,
+          "ttft_ms": 611.9,
+          "tps": 14.82
+        },
+        {
+          "c": 64,
+          "ttft_ms": 878.23,
+          "tps": 10.28
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-35b-a3b_4spark_nvfp4_vllm",
+      "model": "Qwen3.6-35B-A3B",
+      "device": "4× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "Model: nvidia/Qwen3.6-35B-A3B-NVFP4",
+      "sources": [
+        "collegue-old-bench_marks/.../nvidia-Qwen3.6-35B-A3B-NVFP4_TP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 230.82,
+          "tps": 91.16
+        },
+        {
+          "c": 2,
+          "ttft_ms": 282.5,
+          "tps": 73.49
+        },
+        {
+          "c": 4,
+          "ttft_ms": 276.64,
+          "tps": 64.8
+        },
+        {
+          "c": 8,
+          "ttft_ms": 530.56,
+          "tps": 51.88
+        },
+        {
+          "c": 16,
+          "ttft_ms": 595.26,
+          "tps": 40.24
+        },
+        {
+          "c": 32,
+          "ttft_ms": 690.72,
+          "tps": 29.67
+        },
+        {
+          "c": 64,
+          "ttft_ms": 4833.45,
+          "tps": 15.03
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.6-35b-a3b_b300_default_vllm",
+      "model": "Qwen3.6-35B-A3B",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/Qwen3.6-35B-A3B/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 53.89,
+          "tps": 241.37
+        },
+        {
+          "c": 2,
+          "ttft_ms": 109.79,
+          "tps": 191.91
+        },
+        {
+          "c": 4,
+          "ttft_ms": 151.63,
+          "tps": 168.21
+        },
+        {
+          "c": 8,
+          "ttft_ms": 1042.15,
+          "tps": 128.78
+        },
+        {
+          "c": 16,
+          "ttft_ms": 200.82,
+          "tps": 111.84
+        },
+        {
+          "c": 32,
+          "ttft_ms": 222.03,
+          "tps": 103.2
+        },
+        {
+          "c": 64,
+          "ttft_ms": 272.27,
+          "tps": 80.42
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.5-35b-a3b_rtxpro6000_fp8_vllm",
+      "model": "Qwen3.5-35B-A3B",
+      "device": "RTX PRO 6000",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../RTX Pro-6000-Blackwell/Qwen3.5-35B-A3B-FP8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 46.52,
+          "tps": 113.82
+        },
+        {
+          "c": 2,
+          "ttft_ms": 61.34,
+          "tps": 98.56
+        },
+        {
+          "c": 4,
+          "ttft_ms": 72.86,
+          "tps": 83.29
+        },
+        {
+          "c": 8,
+          "ttft_ms": 765.0,
+          "tps": 57.94
+        },
+        {
+          "c": 16,
+          "ttft_ms": 135.99,
+          "tps": 46.98
+        },
+        {
+          "c": 32,
+          "ttft_ms": 206.68,
+          "tps": 32.91
+        },
+        {
+          "c": 64,
+          "ttft_ms": 310.92,
+          "tps": 24.05
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_1spark_nvfp4_sglang_dflash2_ult",
+      "model": "Qwen3.8-27B",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "SGLang",
+      "mtp": true,
+      "mtp_k": 8,
+      "tp": 1,
+      "notes": "DFlash2 Ultimate, BF16-LMHead, k=8, mem-fraction 0.50, KV fp8_e4m3",
+      "sources": [
+        "vLLM on Spark/docs/run-logs/run-024-qwen38-27b-nvfp4-fp4-dflash2-mia-params-tp1.md"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 232.28,
+          "tps": 47.94
+        },
+        {
+          "c": 2,
+          "ttft_ms": 320.15,
+          "tps": 39.8
+        },
+        {
+          "c": 4,
+          "ttft_ms": 342.98,
+          "tps": 35.6
+        },
+        {
+          "c": 8,
+          "ttft_ms": 389.07,
+          "tps": 27.64
+        },
+        {
+          "c": 16,
+          "ttft_ms": 2356.76,
+          "tps": 18.62
+        },
+        {
+          "c": 32,
+          "ttft_ms": 9388.17,
+          "tps": 9.47
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_4spark_nvfp4_sglang_dflash2_tp4",
+      "model": "Qwen3.8-27B",
+      "device": "4× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "SGLang",
+      "mtp": true,
+      "mtp_k": 8,
+      "tp": 4,
+      "notes": "DFlash2 TP=4. Best multi-spark config.",
+      "sources": [
+        "vLLM on Spark/docs/qwen3.8-27B-study/benchmarks/11-nvfp4-radixark-sglang-tp4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 226.8,
+          "tps": 77.28
+        },
+        {
+          "c": 2,
+          "ttft_ms": 246.81,
+          "tps": 61.91
+        },
+        {
+          "c": 4,
+          "ttft_ms": 264.35,
+          "tps": 48.14
+        },
+        {
+          "c": 8,
+          "ttft_ms": 379.43,
+          "tps": 26.96
+        },
+        {
+          "c": 16,
+          "ttft_ms": 410.72,
+          "tps": 18.59
+        },
+        {
+          "c": 32,
+          "ttft_ms": 579.22,
+          "tps": 10.96
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_b300_default_vllm",
+      "model": "Qwen3.8-27B",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/Qwen3.8-27B/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 63.11,
+          "tps": 85.27
+        },
+        {
+          "c": 2,
+          "ttft_ms": 98.75,
+          "tps": 82.32
+        },
+        {
+          "c": 4,
+          "ttft_ms": 101.86,
+          "tps": 80.47
+        },
+        {
+          "c": 8,
+          "ttft_ms": 131.3,
+          "tps": 77.89
+        },
+        {
+          "c": 16,
+          "ttft_ms": 151.78,
+          "tps": 72.62
+        },
+        {
+          "c": 32,
+          "ttft_ms": 228.2,
+          "tps": 64.37
+        },
+        {
+          "c": 64,
+          "ttft_ms": 283.35,
+          "tps": 52.55
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_b300_default_vllm_mtp",
+      "model": "Qwen3.8-27B",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/Qwen3.8-27B_MTP/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 77.46,
+          "tps": 172.92
+        },
+        {
+          "c": 2,
+          "ttft_ms": 112.19,
+          "tps": 157.39
+        },
+        {
+          "c": 4,
+          "ttft_ms": 100.62,
+          "tps": 159.63
+        },
+        {
+          "c": 8,
+          "ttft_ms": 130.02,
+          "tps": 127.6
+        },
+        {
+          "c": 16,
+          "ttft_ms": 154.53,
+          "tps": 124.97
+        },
+        {
+          "c": 32,
+          "ttft_ms": 200.71,
+          "tps": 98.34
+        },
+        {
+          "c": 64,
+          "ttft_ms": 224.96,
+          "tps": 61.71
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-flash-next_2spark_nvfp4_sglang",
+      "model": "Qwen3.8-Flash-Next",
+      "device": "2× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "SGLang",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "262K context. 180B MoE, 6B active, 512 experts.",
+      "sources": [
+        "vLLM on Spark/docs/run-logs/run-027-qwen38-flash-next-nvfp4-tp2-sglang.md"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 200.13,
+          "tps": 35.8
+        },
+        {
+          "c": 2,
+          "ttft_ms": 205.89,
+          "tps": 29.94
+        },
+        {
+          "c": 4,
+          "ttft_ms": 243.23,
+          "tps": 22.39
+        },
+        {
+          "c": 8,
+          "ttft_ms": 2670.9,
+          "tps": 13.8
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-flash-next_b300_default_sglang",
+      "model": "Qwen3.8-Flash-Next",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "SGLang",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "TP=2",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/Qwen3.8-Flash-Next-TP2/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 107.59,
+          "tps": 250.08
+        },
+        {
+          "c": 2,
+          "ttft_ms": 152.68,
+          "tps": 181.91
+        },
+        {
+          "c": 4,
+          "ttft_ms": 183.03,
+          "tps": 144.97
+        },
+        {
+          "c": 8,
+          "ttft_ms": 206.91,
+          "tps": 104.12
+        },
+        {
+          "c": 16,
+          "ttft_ms": 376.92,
+          "tps": 78.76
+        },
+        {
+          "c": 32,
+          "ttft_ms": 287.42,
+          "tps": 65.39
+        },
+        {
+          "c": 64,
+          "ttft_ms": 333.1,
+          "tps": 49.2
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.5-397b-a17b_3spark_int4_vllm",
+      "model": "Qwen3.5-397B-A17B",
+      "device": "3× DGX Spark",
+      "quantization": "INT4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Ring topology, PP=3",
+      "sources": [
+        "collegue-old-bench_marks/.../clusterx3-Ring/Qwen3.5-397B-A17B-int4-AutoRound/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 499.65,
+          "tps": 17.05
+        },
+        {
+          "c": 2,
+          "ttft_ms": 605.85,
+          "tps": 14.47
+        },
+        {
+          "c": 4,
+          "ttft_ms": 784.64,
+          "tps": 10.44
+        },
+        {
+          "c": 8,
+          "ttft_ms": 1100.78,
+          "tps": 6.99
+        }
+      ],
+      "dp": null,
+      "pp": 3
+    },
+    {
+      "id": "qwen3.5-397b-a17b_4spark_int4_vllm",
+      "model": "Qwen3.5-397B-A17B",
+      "device": "4× DGX Spark",
+      "quantization": "INT4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "Switch topology, TP=4. 2.24x faster than PP=3 at C1.",
+      "sources": [
+        "collegue-old-bench_marks/.../clusterx4-Switch/Qwen3.5-397B-A17B-int4-AutoRound/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 324.61,
+          "tps": 38.14
+        },
+        {
+          "c": 2,
+          "ttft_ms": 392.9,
+          "tps": 30.54
+        },
+        {
+          "c": 4,
+          "ttft_ms": 540.59,
+          "tps": 24.54
+        },
+        {
+          "c": 8,
+          "ttft_ms": 621.73,
+          "tps": 18.83
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.2_4spark_int4int8mix_vllm_mtp4",
+      "model": "GLM-5.2",
+      "device": "4× DGX Spark",
+      "quantization": "INT4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 4,
+      "tp": 4,
+      "notes": "TP=4, DCP=4, cudagraph FULL, GMU 0.885, B12X_MLA_SPARSE",
+      "sources": [
+        "collegue-old-bench_marks/.../glm-5.2_128k_c5_int4/",
+        "https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-kurulumu/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 490.02,
+          "tps": 27.39
+        },
+        {
+          "c": 2,
+          "ttft_ms": 716.95,
+          "tps": 20.02
+        },
+        {
+          "c": 4,
+          "ttft_ms": 955.36,
+          "tps": 14.33
+        },
+        {
+          "c": 8,
+          "ttft_ms": 6560.43,
+          "tps": 8.51
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.2_8spark_nvfp4_vllm_mtp5_256k",
+      "model": "GLM-5.2",
+      "device": "8× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 5,
+      "tp": 8,
+      "notes": "V3 Final, 256K context, TP=8, EP, GMU 0.75, KV fp8_ds_mla",
+      "sources": [
+        "collegue-spark-dump/TP8-GLM-5.2-NVFP4/GLM-5.2-NVFP4-Ozet.md"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 466,
+          "tps": 20.73
+        },
+        {
+          "c": 2,
+          "ttft_ms": 682,
+          "tps": 16.24
+        },
+        {
+          "c": 4,
+          "ttft_ms": 875,
+          "tps": 13.75
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.2_8spark_nvfp4_vllm_128k",
+      "model": "GLM-5.2",
+      "device": "8× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 8,
+      "notes": "Original, 128K context. Model: nvidia/GLM-5.2-NVFP4",
+      "sources": [
+        "collegue-old-bench_marks/.../clusterx8-Switch/nvidia-GLM-5.2-nvfp4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 451.23,
+          "tps": 24.86
+        },
+        {
+          "c": 2,
+          "ttft_ms": 1304.82,
+          "tps": 17.99
+        },
+        {
+          "c": 4,
+          "ttft_ms": 1124.57,
+          "tps": 13.98
+        },
+        {
+          "c": 8,
+          "ttft_ms": 8744.73,
+          "tps": 7.91
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.2_b300_fp8_vllm",
+      "model": "GLM-5.2",
+      "device": "DGX B300",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/GLM-5.2-FP8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 306.71,
+          "tps": 160.07
+        },
+        {
+          "c": 2,
+          "ttft_ms": 480.6,
+          "tps": 104.88
+        },
+        {
+          "c": 4,
+          "ttft_ms": 454.07,
+          "tps": 69.26
+        },
+        {
+          "c": 8,
+          "ttft_ms": 508.88,
+          "tps": 46.93
+        },
+        {
+          "c": 16,
+          "ttft_ms": 742.23,
+          "tps": 28.58
+        },
+        {
+          "c": 32,
+          "ttft_ms": 874.85,
+          "tps": 20.28
+        },
+        {
+          "c": 64,
+          "ttft_ms": 6834.28,
+          "tps": 5.73
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.2_b300_nvfp4_vllm",
+      "model": "GLM-5.2",
+      "device": "DGX B300",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "Model: nvidia/GLM-5.2-NVFP4",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/GLM-5.2-NVFP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 89.44,
+          "tps": 213.23
+        },
+        {
+          "c": 2,
+          "ttft_ms": 216.77,
+          "tps": 174.97
+        },
+        {
+          "c": 4,
+          "ttft_ms": 129.11,
+          "tps": 157.38
+        },
+        {
+          "c": 8,
+          "ttft_ms": 156.95,
+          "tps": 117.76
+        },
+        {
+          "c": 16,
+          "ttft_ms": 192.93,
+          "tps": 86.18
+        },
+        {
+          "c": 32,
+          "ttft_ms": 243.8,
+          "tps": 73.69
+        },
+        {
+          "c": 64,
+          "ttft_ms": 409.74,
+          "tps": 36.36
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.3-flash_2spark_nvfp4_vllm",
+      "model": "GLM-5.3-Flash",
+      "device": "2× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "Model: LibertAIDAI/GLM-5.3-Flash-NVFP4. Docker: radixark/vllm-glm53-flash:sm121-v8",
+      "sources": [
+        "vLLM on Spark/docs/run-logs/run-030-glm-5.3-flash-nvfp4-tp2-2spark.md"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 394.8,
+          "tps": 24.34
+        },
+        {
+          "c": 2,
+          "ttft_ms": 575.27,
+          "tps": 17.66
+        },
+        {
+          "c": 4,
+          "ttft_ms": 765.39,
+          "tps": 13.58
+        },
+        {
+          "c": 8,
+          "ttft_ms": 4300.31,
+          "tps": 8.94
+        },
+        {
+          "c": 16,
+          "ttft_ms": 18900.28,
+          "tps": 4.51
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.3-flash_4spark_fp8_vllm",
+      "model": "GLM-5.3-Flash",
+      "device": "4× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "Model: zai-org/GLM-5.3-Flash, 500K context (full-precision FP8)",
+      "sources": [
+        "benchmarksgsgve/glm-5.3-flash_results_tp4_fp8.zip"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 382.88,
+          "tps": 29.61
+        },
+        {
+          "c": 2,
+          "ttft_ms": 558.11,
+          "tps": 20.85
+        },
+        {
+          "c": 4,
+          "ttft_ms": 705.64,
+          "tps": 13.52
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.3-flash_b300_default_sglang_tp2",
+      "model": "GLM-5.3-Flash",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "SGLang",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/GLM-5.3-Flash_TP2/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 262.32,
+          "tps": 148.68
+        },
+        {
+          "c": 2,
+          "ttft_ms": 687.11,
+          "tps": 98.42
+        },
+        {
+          "c": 4,
+          "ttft_ms": 352.98,
+          "tps": 74.65
+        },
+        {
+          "c": 8,
+          "ttft_ms": 410.39,
+          "tps": 52.18
+        },
+        {
+          "c": 16,
+          "ttft_ms": 1953.71,
+          "tps": 32.67
+        },
+        {
+          "c": 32,
+          "ttft_ms": 4250.56,
+          "tps": 20.93
+        },
+        {
+          "c": 64,
+          "ttft_ms": 4510.92,
+          "tps": 14.2
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.3-flash_b300_default_sglang_tp4",
+      "model": "GLM-5.3-Flash",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "SGLang",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/GLM-5.3-Flash_TP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 292.28,
+          "tps": 161.01
+        },
+        {
+          "c": 2,
+          "ttft_ms": 323.28,
+          "tps": 115.96
+        },
+        {
+          "c": 4,
+          "ttft_ms": 337.73,
+          "tps": 85.92
+        },
+        {
+          "c": 8,
+          "ttft_ms": 458.46,
+          "tps": 57.02
+        },
+        {
+          "c": 16,
+          "ttft_ms": 2965.62,
+          "tps": 31.79
+        },
+        {
+          "c": 32,
+          "ttft_ms": 542.33,
+          "tps": 31.89
+        },
+        {
+          "c": 64,
+          "ttft_ms": 2012.12,
+          "tps": 21.03
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "inkling_8spark_nvfp4_vllm_mtp1",
+      "model": "Inkling",
+      "device": "8× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 1,
+      "tp": 8,
+      "notes": "Model: thinkingmachines/Inkling-NVFP4 (975B MoE, 552 GB). GMU 0.80, MoE FLASHINFER_CUTLASS",
+      "sources": [
+        "collegue-old-bench_marks/.../clusterx8-Switch/Inkling-NVFP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 411.92,
+          "tps": 27.28
+        },
+        {
+          "c": 2,
+          "ttft_ms": 556.78,
+          "tps": 20.99
+        },
+        {
+          "c": 4,
+          "ttft_ms": 777.58,
+          "tps": 15.49
+        },
+        {
+          "c": 8,
+          "ttft_ms": 8618.69,
+          "tps": 8.03
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "inkling_b300_nvfp4_vllm",
+      "model": "Inkling",
+      "device": "DGX B300",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/Inkling-NVFP4_results/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 50.56,
+          "tps": 134.24
+        },
+        {
+          "c": 2,
+          "ttft_ms": 164.99,
+          "tps": 107.48
+        },
+        {
+          "c": 4,
+          "ttft_ms": 62.91,
+          "tps": 100.75
+        },
+        {
+          "c": 8,
+          "ttft_ms": 77.07,
+          "tps": 84.07
+        },
+        {
+          "c": 16,
+          "ttft_ms": 126.45,
+          "tps": 64.69
+        },
+        {
+          "c": 32,
+          "ttft_ms": 146.8,
+          "tps": 48.53
+        },
+        {
+          "c": 64,
+          "ttft_ms": 153.0,
+          "tps": 35.11
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4-flash_2spark_nvfp4_vllm_mtp5",
+      "model": "DeepSeek V4 Flash 0731",
+      "device": "2× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 5,
+      "tp": 2,
+      "notes": "B12X, DSpark k=5, GMU 0.85, block-size 256, KV fp8",
+      "sources": [
+        "vLLM on Spark/docs/v4-flash-0731-study/benchmarks/2x-spark-1M-ctx/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 307.62,
+          "tps": 47.34
+        },
+        {
+          "c": 2,
+          "ttft_ms": 415.52,
+          "tps": 32.37
+        },
+        {
+          "c": 4,
+          "ttft_ms": 532.33,
+          "tps": 22.53
+        },
+        {
+          "c": 8,
+          "ttft_ms": 685.81,
+          "tps": 15.65
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4-flash_8spark_nvfp4_vllm",
+      "model": "DeepSeek V4 Flash 0731",
+      "device": "8× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "TP=2, DP=4. Best for high concurrency.",
+      "sources": [
+        "v4-flash-0731-study/benchmarks/8x-spark/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 288.84,
+          "tps": 48.86
+        },
+        {
+          "c": 2,
+          "ttft_ms": 326.29,
+          "tps": 43.12
+        },
+        {
+          "c": 4,
+          "ttft_ms": 346.21,
+          "tps": 38.47
+        },
+        {
+          "c": 8,
+          "ttft_ms": 410.64,
+          "tps": 29.85
+        },
+        {
+          "c": 16,
+          "ttft_ms": 522.56,
+          "tps": 23.37
+        },
+        {
+          "c": 32,
+          "ttft_ms": 652.71,
+          "tps": 16.44
+        },
+        {
+          "c": 64,
+          "ttft_ms": 939.26,
+          "tps": 10.71
+        }
+      ],
+      "dp": 4,
+      "pp": null
+    },
+    {
+      "id": "minimax-m2.7_2spark_nvfp4_vllm_tp2",
+      "model": "MiniMax-M2.7",
+      "device": "2× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "Best 2-node config. 55% faster than PP=2.",
+      "sources": [
+        "collegue-old-bench_marks/.../MiniMax-M2.7-NVFP4-TP-2/",
+        "https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-kurulumu/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 288.98,
+          "tps": 26.64
+        },
+        {
+          "c": 2,
+          "ttft_ms": 258.11,
+          "tps": 24.4
+        },
+        {
+          "c": 4,
+          "ttft_ms": 408.74,
+          "tps": 17.98
+        },
+        {
+          "c": 8,
+          "ttft_ms": 474.84,
+          "tps": 12.98
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "minimax-m2.7_2spark_nvfp4_vllm_pp2",
+      "model": "MiniMax-M2.7",
+      "device": "2× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "PP=2 (pipeline parallel)",
+      "sources": [
+        "collegue-old-bench_marks/.../MiniMax-M2.7-NVFP4-PP-2/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 396.35,
+          "tps": 17.2
+        },
+        {
+          "c": 2,
+          "ttft_ms": 370.84,
+          "tps": 14.65
+        },
+        {
+          "c": 4,
+          "ttft_ms": 500.69,
+          "tps": 10.73
+        },
+        {
+          "c": 8,
+          "ttft_ms": 669.86,
+          "tps": 7.52
+        }
+      ],
+      "dp": null,
+      "pp": 2
+    },
+    {
+      "id": "minimax-m2.7_3spark_nvfp4_vllm_pp3",
+      "model": "MiniMax-M2.7",
+      "device": "3× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Ring topology, PP=3",
+      "sources": [
+        "collegue-old-bench_marks/.../clusterx3-Ring/MiniMax-M2.7-NVFP4-PP3/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 211.39,
+          "tps": 18.04
+        },
+        {
+          "c": 2,
+          "ttft_ms": 261.67,
+          "tps": 15.32
+        },
+        {
+          "c": 4,
+          "ttft_ms": 478.14,
+          "tps": 10.82
+        },
+        {
+          "c": 8,
+          "ttft_ms": 431.55,
+          "tps": 7.77
+        }
+      ],
+      "dp": null,
+      "pp": 3
+    },
+    {
+      "id": "minimax-m2.7_4spark_nvfp4_vllm_tp4",
+      "model": "MiniMax-M2.7",
+      "device": "4× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../MiniMax-M2.7-NVFP4_TP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 234.76,
+          "tps": 30.1
+        },
+        {
+          "c": 2,
+          "ttft_ms": 277.65,
+          "tps": 26.71
+        },
+        {
+          "c": 4,
+          "ttft_ms": 358.9,
+          "tps": 21.72
+        },
+        {
+          "c": 8,
+          "ttft_ms": 440.12,
+          "tps": 16.12
+        },
+        {
+          "c": 16,
+          "ttft_ms": 422.4,
+          "tps": 12.71
+        },
+        {
+          "c": 32,
+          "ttft_ms": 512.52,
+          "tps": 9.28
+        },
+        {
+          "c": 64,
+          "ttft_ms": 629.51,
+          "tps": 6.8
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "minimax-m3_4spark_nvfp4_vllm_mtp8",
+      "model": "MiniMax-M3",
+      "device": "4× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 8,
+      "tp": 4,
+      "notes": "FLASHINFER_CUTLASS, DSpark k=8",
+      "sources": [
+        "collegue-old-bench_marks/.../MiniMax-M3-NVFP4_TP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 453.27,
+          "tps": 34.49
+        },
+        {
+          "c": 2,
+          "ttft_ms": 653.31,
+          "tps": 25.21
+        },
+        {
+          "c": 4,
+          "ttft_ms": 873.86,
+          "tps": 15.61
+        },
+        {
+          "c": 8,
+          "ttft_ms": 8650.3,
+          "tps": 8.17
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "minimax-m3_b300_mxfp8_vllm",
+      "model": "MiniMax-M3",
+      "device": "DGX B300",
+      "quantization": "MXFP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/MiniMax-M3-MXFP8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 57.12,
+          "tps": 114.43
+        },
+        {
+          "c": 2,
+          "ttft_ms": 195.52,
+          "tps": 97.9
+        },
+        {
+          "c": 4,
+          "ttft_ms": 101.14,
+          "tps": 90.53
+        },
+        {
+          "c": 8,
+          "ttft_ms": 134.55,
+          "tps": 84.46
+        },
+        {
+          "c": 16,
+          "ttft_ms": 225.95,
+          "tps": 60.8
+        },
+        {
+          "c": 32,
+          "ttft_ms": 384.09,
+          "tps": 40.82
+        },
+        {
+          "c": 64,
+          "ttft_ms": 496.94,
+          "tps": 28.0
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "kimi-k3_b300_mxfp4_vllm",
+      "model": "Kimi K3",
+      "device": "DGX B300",
+      "quantization": "MXFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "2.8T MoE, 104B active, 896 experts, 1M context. GMU 0.95",
+      "sources": [
+        "https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 66.5,
+          "tps": 100.84
+        },
+        {
+          "c": 2,
+          "ttft_ms": 105.47,
+          "tps": 83.98
+        },
+        {
+          "c": 4,
+          "ttft_ms": 145.86,
+          "tps": 73.17
+        },
+        {
+          "c": 8,
+          "ttft_ms": 387.96,
+          "tps": 54.03
+        },
+        {
+          "c": 16,
+          "ttft_ms": 543.81,
+          "tps": 43.95
+        },
+        {
+          "c": 32,
+          "ttft_ms": 608.08,
+          "tps": 35.18
+        },
+        {
+          "c": 64,
+          "ttft_ms": 731.69,
+          "tps": 27.49
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "kimi-k3_b300_mxfp4_vllm_dspark",
+      "model": "Kimi K3",
+      "device": "DGX B300",
+      "quantization": "MXFP4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "DSpark speculative. Draft model: Inferact/Kimi-K3-DSpark. 1.86x speedup at C1.",
+      "sources": [
+        "https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 71.04,
+          "tps": 187.74
+        },
+        {
+          "c": 2,
+          "ttft_ms": 172.94,
+          "tps": 129.75
+        },
+        {
+          "c": 4,
+          "ttft_ms": 191.48,
+          "tps": 99.43
+        },
+        {
+          "c": 8,
+          "ttft_ms": 262.85,
+          "tps": 61.04
+        },
+        {
+          "c": 16,
+          "ttft_ms": 344.34,
+          "tps": 43.6
+        },
+        {
+          "c": 32,
+          "ttft_ms": 565.15,
+          "tps": 23.14
+        },
+        {
+          "c": 64,
+          "ttft_ms": 1030.88,
+          "tps": 11.21
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "kimi-k3_b300_mxfp4_sglang",
+      "model": "Kimi K3",
+      "device": "DGX B300",
+      "quantization": "MXFP4",
+      "engine": "SGLang",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "GMU 0.85",
+      "sources": [
+        "https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 399.5,
+          "tps": 83.4
+        },
+        {
+          "c": 2,
+          "ttft_ms": 771.7,
+          "tps": 63.79
+        },
+        {
+          "c": 4,
+          "ttft_ms": 811.0,
+          "tps": 59.33
+        },
+        {
+          "c": 8,
+          "ttft_ms": 782.6,
+          "tps": 52.88
+        },
+        {
+          "c": 16,
+          "ttft_ms": 833.6,
+          "tps": 43.54
+        },
+        {
+          "c": 32,
+          "ttft_ms": 915.2,
+          "tps": 33.55
+        },
+        {
+          "c": 64,
+          "ttft_ms": 948.4,
+          "tps": 29.11
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gemma-4-26b_1spark_fp16_vllm",
+      "model": "Gemma-4-26B-A4B-it",
+      "device": "1× DGX Spark",
+      "quantization": "FP16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../gemma-4-26B-A4B-it/fp16/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 246.83,
+          "tps": 21.64
+        },
+        {
+          "c": 2,
+          "ttft_ms": 205.91,
+          "tps": 19.49
+        },
+        {
+          "c": 4,
+          "ttft_ms": 236.21,
+          "tps": 14.59
+        },
+        {
+          "c": 8,
+          "ttft_ms": 273.88,
+          "tps": 10.93
+        },
+        {
+          "c": 16,
+          "ttft_ms": 258.04,
+          "tps": 8.41
+        },
+        {
+          "c": 32,
+          "ttft_ms": 290.71,
+          "tps": 6.69
+        },
+        {
+          "c": 64,
+          "ttft_ms": 401.86,
+          "tps": 5.52
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gemma-4-26b_1spark_fp16_vllm_mtp",
+      "model": "Gemma-4-26B-A4B-it",
+      "device": "1× DGX Spark",
+      "quantization": "FP16",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../gemma-4-26B-A4B-it/fp16-mpt/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 256.14,
+          "tps": 30.58
+        },
+        {
+          "c": 2,
+          "ttft_ms": 668.4,
+          "tps": 23.46
+        },
+        {
+          "c": 4,
+          "ttft_ms": 447.67,
+          "tps": 19.38
+        },
+        {
+          "c": 8,
+          "ttft_ms": 509.76,
+          "tps": 15.42
+        },
+        {
+          "c": 16,
+          "ttft_ms": 706.55,
+          "tps": 12.25
+        },
+        {
+          "c": 32,
+          "ttft_ms": 743.67,
+          "tps": 10.2
+        },
+        {
+          "c": 64,
+          "ttft_ms": 900.58,
+          "tps": 8.35
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gemma-4-31b_1spark_nvfp4_vllm",
+      "model": "Gemma-4-31B-it",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Model: RedHatAI/gemma-4-31B-it-NVFP4 (31B dense)",
+      "sources": [
+        "collegue-old-bench_marks/.../gemma-4-31B-it-NVFP4_single/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 201.96,
+          "tps": 10.81
+        },
+        {
+          "c": 2,
+          "ttft_ms": 283.39,
+          "tps": 11.06
+        },
+        {
+          "c": 4,
+          "ttft_ms": 293.75,
+          "tps": 10.89
+        },
+        {
+          "c": 8,
+          "ttft_ms": 316.26,
+          "tps": 10.51
+        },
+        {
+          "c": 16,
+          "ttft_ms": 346.51,
+          "tps": 10.04
+        },
+        {
+          "c": 32,
+          "ttft_ms": 398.97,
+          "tps": 8.87
+        },
+        {
+          "c": 64,
+          "ttft_ms": 531.69,
+          "tps": 7.36
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gemma-4-31b_2spark_nvfp4_vllm",
+      "model": "Gemma-4-31B-it",
+      "device": "2× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../gemma-4-31B-it-NVFP4_TP2/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 136.35,
+          "tps": 19.42
+        },
+        {
+          "c": 2,
+          "ttft_ms": 227.38,
+          "tps": 19.59
+        },
+        {
+          "c": 4,
+          "ttft_ms": 246.13,
+          "tps": 19.17
+        },
+        {
+          "c": 8,
+          "ttft_ms": 279.98,
+          "tps": 18.2
+        },
+        {
+          "c": 16,
+          "ttft_ms": 293.24,
+          "tps": 15.81
+        },
+        {
+          "c": 32,
+          "ttft_ms": 337.48,
+          "tps": 13.21
+        },
+        {
+          "c": 64,
+          "ttft_ms": 420.49,
+          "tps": 9.16
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gemma-4-31b_4spark_nvfp4_vllm",
+      "model": "Gemma-4-31B-it",
+      "device": "4× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../gemma-4-31B-it-NVFP4_TP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 279.77,
+          "tps": 30.53
+        },
+        {
+          "c": 2,
+          "ttft_ms": 244.84,
+          "tps": 29.31
+        },
+        {
+          "c": 4,
+          "ttft_ms": 305.78,
+          "tps": 28.25
+        },
+        {
+          "c": 8,
+          "ttft_ms": 379.08,
+          "tps": 26.18
+        },
+        {
+          "c": 16,
+          "ttft_ms": 368.1,
+          "tps": 20.8
+        },
+        {
+          "c": 32,
+          "ttft_ms": 480.18,
+          "tps": 13.93
+        },
+        {
+          "c": 64,
+          "ttft_ms": 565.25,
+          "tps": 7.94
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gemma-4-31b_b300_default_vllm",
+      "model": "Gemma-4-31B-it",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../dgx-b300/gemma-4-31B-it/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 34.65,
+          "tps": 74.85
+        },
+        {
+          "c": 2,
+          "ttft_ms": 41.31,
+          "tps": 72.14
+        },
+        {
+          "c": 4,
+          "ttft_ms": 47.81,
+          "tps": 70.62
+        },
+        {
+          "c": 8,
+          "ttft_ms": 56.55,
+          "tps": 70.63
+        },
+        {
+          "c": 16,
+          "ttft_ms": 82.65,
+          "tps": 68.65
+        },
+        {
+          "c": 32,
+          "ttft_ms": 80.52,
+          "tps": 63.73
+        },
+        {
+          "c": 64,
+          "ttft_ms": 91.61,
+          "tps": 55.63
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gemma-4-31b_rtxpro6000_nvfp4_vllm",
+      "model": "Gemma-4-31B-it",
+      "device": "RTX PRO 6000",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "collegue-old-bench_marks/.../RTX Pro-6000-Blackwell/Gemma-4-31B-IT-NVFP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 37.91,
+          "tps": 39.98
+        },
+        {
+          "c": 2,
+          "ttft_ms": 40.29,
+          "tps": 38.88
+        },
+        {
+          "c": 4,
+          "ttft_ms": 73.17,
+          "tps": 38.72
+        },
+        {
+          "c": 8,
+          "ttft_ms": 378.79,
+          "tps": 36.93
+        },
+        {
+          "c": 16,
+          "ttft_ms": 82.33,
+          "tps": 38.25
+        },
+        {
+          "c": 32,
+          "ttft_ms": 108.12,
+          "tps": 36.14
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "laguna-s-2.1_thor_nvfp4",
+      "model": "Laguna-S-2.1",
+      "device": "Thor",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "Jetson Thor. max_model_len 262144",
+      "sources": [
+        "collegue-old-bench_marks/bench_marks/Thor/Laguna-S-2.1-NVFP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 578.46,
+          "tps": 12.92
+        },
+        {
+          "c": 2,
+          "ttft_ms": 674.26,
+          "tps": 11.1
+        },
+        {
+          "c": 4,
+          "ttft_ms": 847.13,
+          "tps": 8.69
+        },
+        {
+          "c": 8,
+          "ttft_ms": 1031.94,
+          "tps": 6.48
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "muse-glimmer-30b_1spark_sglang",
+      "model": "Muse-Glimmer-30B",
+      "device": "1× DGX Spark",
+      "quantization": "BF16",
+      "engine": "SGLang",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "max_model_len 131072",
+      "sources": [
+        "collegue-old-bench_marks/.../Muse-Glimmer-30B-sglang/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 765.26,
+          "tps": 25.04
+        },
+        {
+          "c": 2,
+          "ttft_ms": 1001.66,
+          "tps": 22.75
+        },
+        {
+          "c": 4,
+          "ttft_ms": 1106.17,
+          "tps": 20.5
+        },
+        {
+          "c": 8,
+          "ttft_ms": 1190.36,
+          "tps": 17.42
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v3.1_b300_nvfp4_vllm",
+      "model": "DeepSeek-V3.1",
+      "device": "DGX B300",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/DeepSeek-V3.1-NVFP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 139.74,
+          "tps": 108.59
+        },
+        {
+          "c": 2,
+          "ttft_ms": 291.37,
+          "tps": 90.52
+        },
+        {
+          "c": 4,
+          "ttft_ms": 287.51,
+          "tps": 85.63
+        },
+        {
+          "c": 8,
+          "ttft_ms": 287.23,
+          "tps": 79.59
+        },
+        {
+          "c": 16,
+          "ttft_ms": 298.7,
+          "tps": 70.96
+        },
+        {
+          "c": 32,
+          "ttft_ms": 352.62,
+          "tps": 62.21
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4-pro_b300_default_vllm",
+      "model": "DeepSeek-V4-Pro",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/DeepSeek-V4-Pro/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 303.29,
+          "tps": 86.84
+        },
+        {
+          "c": 2,
+          "ttft_ms": 325.02,
+          "tps": 76.84
+        },
+        {
+          "c": 4,
+          "ttft_ms": 421.48,
+          "tps": 51.41
+        },
+        {
+          "c": 8,
+          "ttft_ms": 428.6,
+          "tps": 40.94
+        },
+        {
+          "c": 16,
+          "ttft_ms": 858.57,
+          "tps": 25.56
+        },
+        {
+          "c": 32,
+          "ttft_ms": 655.27,
+          "tps": 20.22
+        },
+        {
+          "c": 64,
+          "ttft_ms": 1055.87,
+          "tps": 14.14
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4-pro-0813_b300_default_vllm_tp4",
+      "model": "DeepSeek-V4-Pro-0813",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "1M context",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/DeepSeek-V4-Pro-0813_TP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 278.56,
+          "tps": 117.77
+        },
+        {
+          "c": 2,
+          "ttft_ms": 86.54,
+          "tps": 107.49
+        },
+        {
+          "c": 4,
+          "ttft_ms": 284.27,
+          "tps": 80.85
+        },
+        {
+          "c": 8,
+          "ttft_ms": 106.76,
+          "tps": 72.79
+        },
+        {
+          "c": 16,
+          "ttft_ms": 306.54,
+          "tps": 52.36
+        },
+        {
+          "c": 32,
+          "ttft_ms": 314.19,
+          "tps": 45.17
+        },
+        {
+          "c": 64,
+          "ttft_ms": 584.27,
+          "tps": 16.64
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "gemma-4-26b-a4b_b300_default_vllm",
+      "model": "Gemma-4-26B-A4B-it",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/gemma-4-26B-A4B-it/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 59.52,
+          "tps": 168.2
+        },
+        {
+          "c": 2,
+          "ttft_ms": 242.79,
+          "tps": 162.99
+        },
+        {
+          "c": 4,
+          "ttft_ms": 474.29,
+          "tps": 129.25
+        },
+        {
+          "c": 8,
+          "ttft_ms": 544.05,
+          "tps": 103.98
+        },
+        {
+          "c": 16,
+          "ttft_ms": 819.01,
+          "tps": 88.97
+        },
+        {
+          "c": 32,
+          "ttft_ms": 455.62,
+          "tps": 79.91
+        },
+        {
+          "c": 64,
+          "ttft_ms": 524.36,
+          "tps": 69.33
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-4.5-air_b300_default_vllm",
+      "model": "GLM-4.5-Air",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Glm-4.5-Air/full/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 61.52,
+          "tps": 107.87
+        },
+        {
+          "c": 2,
+          "ttft_ms": 39.81,
+          "tps": 76.61
+        },
+        {
+          "c": 4,
+          "ttft_ms": 44.2,
+          "tps": 65.4
+        },
+        {
+          "c": 8,
+          "ttft_ms": 58.18,
+          "tps": 50.75
+        },
+        {
+          "c": 16,
+          "ttft_ms": 116.32,
+          "tps": 38.78
+        },
+        {
+          "c": 32,
+          "ttft_ms": 371.82,
+          "tps": 28.44
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-4.6_b300_default_vllm",
+      "model": "GLM-4.6",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/GLM-4.6/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 274.74,
+          "tps": 62.1
+        },
+        {
+          "c": 2,
+          "ttft_ms": 270.25,
+          "tps": 56.02
+        },
+        {
+          "c": 4,
+          "ttft_ms": 299.2,
+          "tps": 51.48
+        },
+        {
+          "c": 8,
+          "ttft_ms": 359.66,
+          "tps": 47.05
+        },
+        {
+          "c": 16,
+          "ttft_ms": 370.95,
+          "tps": 42.24
+        },
+        {
+          "c": 32,
+          "ttft_ms": 371.5,
+          "tps": 34.2
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-4.7_b300_default_vllm_4gpu",
+      "model": "GLM-4.7",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "4 GPU",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Glm-4.7/full/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 53.38,
+          "tps": 85.92
+        },
+        {
+          "c": 2,
+          "ttft_ms": 67.69,
+          "tps": 92.25
+        },
+        {
+          "c": 4,
+          "ttft_ms": 64.13,
+          "tps": 80.46
+        },
+        {
+          "c": 8,
+          "ttft_ms": 137.95,
+          "tps": 63.65
+        },
+        {
+          "c": 16,
+          "ttft_ms": 246.79,
+          "tps": 44.84
+        },
+        {
+          "c": 32,
+          "ttft_ms": 267.97,
+          "tps": 38.33
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-4.7_b300_fp8_vllm_2gpu",
+      "model": "GLM-4.7",
+      "device": "DGX B300",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "2 GPU",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Glm-4.7/fp8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 52.62,
+          "tps": 80.4
+        },
+        {
+          "c": 2,
+          "ttft_ms": 76.17,
+          "tps": 84.93
+        },
+        {
+          "c": 4,
+          "ttft_ms": 67.95,
+          "tps": 72.46
+        },
+        {
+          "c": 8,
+          "ttft_ms": 78.99,
+          "tps": 58.26
+        },
+        {
+          "c": 16,
+          "ttft_ms": 570.52,
+          "tps": 39.63
+        },
+        {
+          "c": 32,
+          "ttft_ms": 641.6,
+          "tps": 33.11
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-4.7_1spark_nvfp4_vllm",
+      "model": "GLM-4.7",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Benchmarked on DGX Spark, not B300 (filed under B300 folder)",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Glm-4.7/fp4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 157.4,
+          "tps": 63.87
+        },
+        {
+          "c": 2,
+          "ttft_ms": 272.82,
+          "tps": 55.84
+        },
+        {
+          "c": 4,
+          "ttft_ms": 255.51,
+          "tps": 50.54
+        },
+        {
+          "c": 8,
+          "ttft_ms": 286.14,
+          "tps": 42.35
+        },
+        {
+          "c": 16,
+          "ttft_ms": 323.73,
+          "tps": 35.44
+        },
+        {
+          "c": 32,
+          "ttft_ms": 392.98,
+          "tps": 29.24
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5_b300_fp8_vllm",
+      "model": "GLM-5",
+      "device": "DGX B300",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/GLM-5-FP8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 65.84,
+          "tps": 93.97
+        },
+        {
+          "c": 2,
+          "ttft_ms": 97.46,
+          "tps": 82.49
+        },
+        {
+          "c": 4,
+          "ttft_ms": 109.86,
+          "tps": 73.56
+        },
+        {
+          "c": 8,
+          "ttft_ms": 459.57,
+          "tps": 57.77
+        },
+        {
+          "c": 16,
+          "ttft_ms": 702.77,
+          "tps": 44.27
+        },
+        {
+          "c": 32,
+          "ttft_ms": 396.17,
+          "tps": 41.29
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "glm-5.1_b300_fp8_vllm",
+      "model": "GLM-5.1",
+      "device": "DGX B300",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/GLM-5.1-FP8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 453.35,
+          "tps": 91.46
+        },
+        {
+          "c": 2,
+          "ttft_ms": 496.38,
+          "tps": 72.74
+        },
+        {
+          "c": 4,
+          "ttft_ms": 563.66,
+          "tps": 55.87
+        },
+        {
+          "c": 8,
+          "ttft_ms": 594.98,
+          "tps": 50.8
+        },
+        {
+          "c": 16,
+          "ttft_ms": 613.76,
+          "tps": 36.92
+        },
+        {
+          "c": 32,
+          "ttft_ms": 902.62,
+          "tps": 33.48
+        },
+        {
+          "c": 64,
+          "ttft_ms": 1844.13,
+          "tps": 27.69
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "kimi-k2.5_b300_nvfp4_vllm",
+      "model": "Kimi-K2.5",
+      "device": "DGX B300",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Kimi-K2.5-NVFP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 64.21,
+          "tps": 128.78
+        },
+        {
+          "c": 2,
+          "ttft_ms": 96.25,
+          "tps": 113.38
+        },
+        {
+          "c": 4,
+          "ttft_ms": 93.71,
+          "tps": 104.33
+        },
+        {
+          "c": 8,
+          "ttft_ms": 120.0,
+          "tps": 87.38
+        },
+        {
+          "c": 16,
+          "ttft_ms": 196.94,
+          "tps": 68.52
+        },
+        {
+          "c": 32,
+          "ttft_ms": 225.39,
+          "tps": 56.73
+        },
+        {
+          "c": 64,
+          "ttft_ms": 263.21,
+          "tps": 43.01
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "kimi-k2.6_b300_default_vllm",
+      "model": "Kimi-K2.6",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Kimi-K2.6/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 55.93,
+          "tps": 203.9
+        },
+        {
+          "c": 2,
+          "ttft_ms": 115.02,
+          "tps": 155.25
+        },
+        {
+          "c": 4,
+          "ttft_ms": 85.61,
+          "tps": 121.97
+        },
+        {
+          "c": 8,
+          "ttft_ms": 107.34,
+          "tps": 95.99
+        },
+        {
+          "c": 16,
+          "ttft_ms": 150.67,
+          "tps": 71.17
+        },
+        {
+          "c": 32,
+          "ttft_ms": 356.46,
+          "tps": 51.5
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "kimi-k2-thinking_b300_nvfp4_vllm",
+      "model": "Kimi-K2-Thinking",
+      "device": "DGX B300",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Kimi-K2-Thinking-NVFP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 48.44,
+          "tps": 53.58
+        },
+        {
+          "c": 2,
+          "ttft_ms": 61.84,
+          "tps": 52.89
+        },
+        {
+          "c": 4,
+          "ttft_ms": 85.53,
+          "tps": 51.94
+        },
+        {
+          "c": 8,
+          "ttft_ms": 132.38,
+          "tps": 46.56
+        },
+        {
+          "c": 16,
+          "ttft_ms": 316.01,
+          "tps": 38.46
+        },
+        {
+          "c": 32,
+          "ttft_ms": 393.41,
+          "tps": 30.21
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "mimo-v2.5-pro_b300_default_vllm",
+      "model": "MiMo-V2.5-Pro",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/MiMo-V2.5-Pro/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 64.2,
+          "tps": 137.09
+        },
+        {
+          "c": 2,
+          "ttft_ms": 184.04,
+          "tps": 105.76
+        },
+        {
+          "c": 4,
+          "ttft_ms": 64.99,
+          "tps": 104.67
+        },
+        {
+          "c": 8,
+          "ttft_ms": 90.99,
+          "tps": 84.16
+        },
+        {
+          "c": 16,
+          "ttft_ms": 119.39,
+          "tps": 67.71
+        },
+        {
+          "c": 32,
+          "ttft_ms": 174.41,
+          "tps": 44.97
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "minimax-m2_b300_default_vllm",
+      "model": "MiniMax-M2",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/MiniMax-M2/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 451.93,
+          "tps": 60.08
+        },
+        {
+          "c": 2,
+          "ttft_ms": 263.08,
+          "tps": 50.83
+        },
+        {
+          "c": 4,
+          "ttft_ms": 320.81,
+          "tps": 50.42
+        },
+        {
+          "c": 8,
+          "ttft_ms": 378.91,
+          "tps": 46.19
+        },
+        {
+          "c": 16,
+          "ttft_ms": 369.53,
+          "tps": 42.6
+        },
+        {
+          "c": 32,
+          "ttft_ms": 406.42,
+          "tps": 37.51
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "minimax-m2.5_b300_default_vllm",
+      "model": "MiniMax-M2.5",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/MiniMax-M2.5/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 169.43,
+          "tps": 66.84
+        },
+        {
+          "c": 2,
+          "ttft_ms": 193.84,
+          "tps": 53.63
+        },
+        {
+          "c": 4,
+          "ttft_ms": 250.65,
+          "tps": 51.22
+        },
+        {
+          "c": 8,
+          "ttft_ms": 297.17,
+          "tps": 44.15
+        },
+        {
+          "c": 16,
+          "ttft_ms": 419.64,
+          "tps": 35.94
+        },
+        {
+          "c": 32,
+          "ttft_ms": 339.61,
+          "tps": 29.57
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "minimax-m2.7_b300_default_vllm",
+      "model": "MiniMax-M2.7",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/MiniMax-M2.7/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 46.18,
+          "tps": 129.2
+        },
+        {
+          "c": 2,
+          "ttft_ms": 40.98,
+          "tps": 95.01
+        },
+        {
+          "c": 4,
+          "ttft_ms": 47.36,
+          "tps": 100.63
+        },
+        {
+          "c": 8,
+          "ttft_ms": 883.18,
+          "tps": 82.76
+        },
+        {
+          "c": 16,
+          "ttft_ms": 75.36,
+          "tps": 75.58
+        },
+        {
+          "c": 32,
+          "ttft_ms": 119.53,
+          "tps": 58.88
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "nemotron-3-ultra_b300_default_vllm",
+      "model": "Nemotron-3-Ultra",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/nemotron-3-ultra/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 131.64,
+          "tps": 177.32
+        },
+        {
+          "c": 2,
+          "ttft_ms": 464.92,
+          "tps": 128.5
+        },
+        {
+          "c": 4,
+          "ttft_ms": 134.43,
+          "tps": 118.36
+        },
+        {
+          "c": 8,
+          "ttft_ms": 159.4,
+          "tps": 97.07
+        },
+        {
+          "c": 16,
+          "ttft_ms": 265.59,
+          "tps": 59.35
+        },
+        {
+          "c": 32,
+          "ttft_ms": 2159.25,
+          "tps": 33.09
+        },
+        {
+          "c": 64,
+          "ttft_ms": 6064.24,
+          "tps": 17.61
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3-235b-a22b_b300_default_vllm",
+      "model": "Qwen3-235B-A22B",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Qwen3-235B-A22B-Instruct-2507/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 132.13,
+          "tps": 83.92
+        },
+        {
+          "c": 2,
+          "ttft_ms": 241.45,
+          "tps": 71.18
+        },
+        {
+          "c": 4,
+          "ttft_ms": 267.05,
+          "tps": 64.87
+        },
+        {
+          "c": 8,
+          "ttft_ms": 278.39,
+          "tps": 56.93
+        },
+        {
+          "c": 16,
+          "ttft_ms": 266.82,
+          "tps": 49.55
+        },
+        {
+          "c": 32,
+          "ttft_ms": 331.87,
+          "tps": 31.41
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.5-397b-a17b_b300_fp8_vllm",
+      "model": "Qwen3.5-397B-A17B",
+      "device": "DGX B300",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Qwen3.5-397B-A17B-FP8/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 74.44,
+          "tps": 130.13
+        },
+        {
+          "c": 2,
+          "ttft_ms": 100.43,
+          "tps": 108.98
+        },
+        {
+          "c": 4,
+          "ttft_ms": 112.34,
+          "tps": 98.74
+        },
+        {
+          "c": 8,
+          "ttft_ms": 1197.24,
+          "tps": 75.96
+        },
+        {
+          "c": 16,
+          "ttft_ms": 230.3,
+          "tps": 72.94
+        },
+        {
+          "c": 32,
+          "ttft_ms": 304.72,
+          "tps": 60.07
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-2.4t-a95b_b300_nvfp4_vllm",
+      "model": "Qwen3.8-2.4T-A95B",
+      "device": "DGX B300",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "Model: Inferact/Qwen3.8-2.4T-A95B-NVFP4, 262K context",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Qwen3.8-2.4T-A95B-NVFP4/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 112.74,
+          "tps": 115.87
+        },
+        {
+          "c": 2,
+          "ttft_ms": 94.03,
+          "tps": 104.57
+        },
+        {
+          "c": 4,
+          "ttft_ms": 169.46,
+          "tps": 87.07
+        },
+        {
+          "c": 8,
+          "ttft_ms": 191.78,
+          "tps": 75.53
+        },
+        {
+          "c": 16,
+          "ttft_ms": 364.52,
+          "tps": 58.98
+        },
+        {
+          "c": 32,
+          "ttft_ms": 421.86,
+          "tps": 45.51
+        },
+        {
+          "c": 64,
+          "ttft_ms": 718.76,
+          "tps": 31.3
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "tencent-hy3_b300_default_vllm",
+      "model": "Tencent-Hy3",
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": null,
+      "notes": "",
+      "sources": [
+        "dgx-b300-20260829T175410Z-1-001/dgx-b300/tencent-Hy3/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 36.61,
+          "tps": 149.61
+        },
+        {
+          "c": 2,
+          "ttft_ms": 42.93,
+          "tps": 94.29
+        },
+        {
+          "c": 4,
+          "ttft_ms": 51.46,
+          "tps": 103.12
+        },
+        {
+          "c": 8,
+          "ttft_ms": 64.11,
+          "tps": 82.08
+        },
+        {
+          "c": 16,
+          "ttft_ms": 102.87,
+          "tps": 63.09
+        },
+        {
+          "c": 32,
+          "ttft_ms": 100.06,
+          "tps": 48.42
+        },
+        {
+          "c": 64,
+          "ttft_ms": 106.25,
+          "tps": 40.43
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_1spark_bf16_vllm_c1",
+      "model": "Qwen3.8-27B",
+      "device": "1× DGX Spark",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Single C=1 test (config matrix)",
+      "sources": [
+        "vLLM on Spark/docs/qwen3.8-27B-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 335,
+          "tps": 4.49
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_1spark_bf16_vllm_mtp_c1",
+      "model": "Qwen3.8-27B",
+      "device": "1× DGX Spark",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Single C=1 test (config matrix)",
+      "sources": [
+        "vLLM on Spark/docs/qwen3.8-27B-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 611,
+          "tps": 9.94
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_1spark_fp8_vllm_c1",
+      "model": "Qwen3.8-27B",
+      "device": "1× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Single C=1 test (config matrix)",
+      "sources": [
+        "vLLM on Spark/docs/qwen3.8-27B-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 172,
+          "tps": 7.9
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_1spark_fp8_vllm_mtp_eugr_c1",
+      "model": "Qwen3.8-27B",
+      "device": "1× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "eugr nightly. Single C=1 test (config matrix)",
+      "sources": [
+        "vLLM on Spark/docs/qwen3.8-27B-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 330,
+          "tps": 18.45
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_1spark_nvfp4_vllm_c1",
+      "model": "Qwen3.8-27B",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "Single C=1 test (config matrix)",
+      "sources": [
+        "vLLM on Spark/docs/qwen3.8-27B-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 155,
+          "tps": 9.71
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "qwen3.8-27b_1spark_nvfp4_vllm_mtp_eugr_c1",
+      "model": "Qwen3.8-27B",
+      "device": "1× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": null,
+      "tp": 1,
+      "notes": "eugr nightly. Single C=1 test (config matrix)",
+      "sources": [
+        "vLLM on Spark/docs/qwen3.8-27B-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 281,
+          "tps": 30.58
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp2dp2_c1",
+      "model": "DeepSeek V4 Flash 0731",
+      "device": "4× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 2,
+      "notes": "TP=2, DP=2. Single C=1 test (scaling comparison)",
+      "sources": [
+        "vLLM on Spark/docs/v4-flash-0731-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 277,
+          "tps": 48.54
+        }
+      ],
+      "dp": 2,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp4_c1",
+      "model": "DeepSeek V4 Flash 0731",
+      "device": "4× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "vLLM",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "TP=4. Single C=1 test (scaling comparison). Best C=1 TPS for this model.",
+      "sources": [
+        "vLLM on Spark/docs/v4-flash-0731-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 256,
+          "tps": 69.5
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4-flash_8spark_nvfp4_sglang_c1",
+      "model": "DeepSeek V4 Flash 0731",
+      "device": "8× DGX Spark",
+      "quantization": "NVFP4",
+      "engine": "SGLang",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "TP=4, DP=2. Single C=1 test (scaling comparison)",
+      "sources": [
+        "vLLM on Spark/docs/v4-flash-0731-study/"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 238,
+          "tps": 63.56
+        }
+      ],
+      "dp": 2,
+      "pp": null
+    }
+  ]
+}

@@ -478,3 +478,101 @@ img[width] {
 @media (prefers-reduced-motion: reduce) {
   .cookie-consent { animation: none; }
 }
+
+// ===== Benchmark tablosu widget'ı (assets/js/benchmark-table*.js) =====
+// Widget kendi stillerini assets/css/benchmark-table.css dosyasından getirir.
+// Buradaki kurallar yalnızca temayla çakışan noktaları düzeltir; tamamı
+// .bt-container / .oz-wide altında kapsanmıştır ve bu sınıflar başka hiçbir
+// sayfada bulunmaz.
+
+// just-the-docs çıplak `th, td` seçicisini biçimlendiriyor (min-width: 7.5rem,
+// background-color: #fff, border-left). Bu kurallar widget'ın JS ile ürettiği
+// tabloya sızıyor: opak hücre arka planı satır şeritlemesini ve hover'ı
+// örtüyor, min-width ise 14 sütunun her birini 120 px'e sabitliyor.
+// Tablonun koyu başlık satırı .bt-table thead th ile (daha yüksek özgüllük)
+// tanımlandığı için buradaki transparent değerinden etkilenmez.
+.bt-container {
+  table {
+    min-width: 0;
+  }
+
+  th,
+  td {
+    min-width: 0;
+    background-color: transparent;
+    border-left: 0;
+  }
+}
+
+// Tabloyu okuma sütununa sığdırmak mümkün değil (14 sütun, .main 50rem).
+// Yalnızca front matter'ında `wide: true` olan sayfalar kendini bu sınıfla
+// işaretler; diğer sayfalar etkilenmez.
+.oz-wide {
+  .main {
+    max-width: none;
+  }
+
+  .main-content-wrap {
+    max-width: 1600px;
+  }
+}
+
+// Tablo 14 sütunlu; varsayılan hâlinde 1366 px'lik bir ekranda bile yatay
+// kaydırma gerektiriyordu. Aşağıdaki dört ayar birlikte tabloyu 1366 px ve
+// üzerinde tamamen sığdırıyor, altında ise kaydırmayı kullanılabilir kılıyor.
+.bt-container {
+  // Başlıkları iki satıra sarmak tablo genişliğini ~200 px azaltıyor.
+  .bt-table thead th {
+    white-space: normal;
+    vertical-align: bottom;
+  }
+
+  // Hücre iç boşluğu 14 px yerine 8 px: 14 sütunda ~170 px kazanç. Türkçe
+  // başlıklar (Kuantizasyon, Agentic Kapasitesi) İngilizcelerden birkaç piksel
+  // geniş olduğu için iki dilin de 1366 px'e sığmasını bu değer belirliyor.
+  .bt-table thead th,
+  .bt-table tbody td {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  // Tablo kaydığında Model sütunu yerinde kalsın; aksi hâlde hangi satıra
+  // baktığınızı kaybediyorsunuz. Satır şeritlemesi ve hover korunuyor.
+  .bt-table thead th:first-child,
+  .bt-table tbody tr[data-id] td:first-child {
+    position: sticky;
+    left: 0;
+    border-right: 1px solid var(--bt-border);
+  }
+
+  .bt-table thead th:first-child {
+    z-index: 3;
+    background: var(--bt-dark);
+  }
+
+  .bt-table tbody tr[data-id] td:first-child {
+    z-index: 1;
+    background: var(--bt-bg);
+  }
+
+  .bt-table tbody tr[data-id]:nth-child(even) td:first-child {
+    background: var(--bt-bg-alt);
+  }
+
+  .bt-table tbody tr[data-id]:hover td:first-child {
+    background: var(--bt-bg-hover);
+  }
+}
+
+// just-the-docs, içeriği ortalamak için kenar çubuğunu büyütür; tam genişlik
+// isteyen bu sayfada o boşluk tabloya gitsin. Yalnızca temanın kenar çubuğunu
+// büyüttüğü kırılma noktasında geçerli — altındaki mobil düzen etkilenmez.
+@media (min-width: 66.5rem) {
+  .oz-wide .side-bar {
+    width: 16.5rem;
+  }
+
+  .oz-wide .side-bar + .main {
+    margin-left: 16.5rem;
+  }
+}
