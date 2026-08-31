@@ -16,12 +16,6 @@ toc: false
 
 <script>document.body.classList.add('oz-wide')</script>
 
-*Prepared by: **Openzeka Teknoloji A.Ş.** — Official Embedded Compute Distributor for NVIDIA Türkiye & MEA, and NVIDIA Elite Partner*
-
-*Test platforms: NVIDIA DGX Spark (GB10), DGX B300 (8× Blackwell Ultra), RTX PRO 6000 Blackwell, Jetson Thor · Compiled August 2026*
-
----
-
 ## About this table
 
 This page brings together the LLM inference benchmarks Openzeka has run across

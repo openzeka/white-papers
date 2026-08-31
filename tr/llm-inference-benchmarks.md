@@ -16,12 +16,6 @@ toc: false
 
 <script>document.body.classList.add('oz-wide')</script>
 
-*Hazırlayan: **Openzeka Teknoloji A.Ş.** — NVIDIA Türkiye & MEA Resmî Embedded Compute Distribütörü ve NVIDIA Elite Partner*
-
-*Test platformları: NVIDIA DGX Spark (GB10), DGX B300 (8× Blackwell Ultra), RTX PRO 6000 Blackwell, Jetson Thor · Ağustos 2026 derlemesi*
-
----
-
 ## Bu tablo hakkında
 
 Bu sayfa, Openzeka'nın NVIDIA platformları üzerinde çalıştırdığı LLM çıkarım
