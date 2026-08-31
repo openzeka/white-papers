@@ -41,7 +41,6 @@
     tpsThreshold: "Minimum TPS Target (tok/s)",
     chatMultiplier: "Chat Usage Multiplier",
     agenticMultiplier: "Agentic Usage Multiplier",
-    previewTps: "Preview TPS Speed",
 
     /* Table */
     colModel: "Model",
@@ -79,13 +78,10 @@
     rightAxis: " — right axis",
     xTitle: "Number of Concurrent Requests",
 
-    /* TPS preview modal */
-    previewTitle: function (n) { return "What Does " + n + " TPS Look Like?"; },
-    previewSubtitle: function (n) { return "The text below is displayed at approximately " + n + " tokens/s."; },
-    previewExplain: "TPS represents the model's text generation speed. This preview lets you see how the selected TPS target may feel to an end user.",
+    /* TPS speed preview */
+    previewHeading: "What this speed looks like",
+    previewSubtitle: function (n) { return "sample text at approximately " + n + " tokens/s"; },
     previewDisclaimer: "This is an approximate simulation designed to visualize the selected TPS value. Actual response experience may vary depending on TTFT, output length, and application behavior.",
-    replay: "Replay",
-    close: "Close",
     sampleText: "Running a large language model on your own hardware means the response speed depends on the accelerator, the quantization format and how many people are using the system at the same time. At low token rates the text appears word by word and the wait becomes noticeable. As the rate increases the reply arrives faster than most people can read it, and the interface begins to feel immediate rather than sluggish.",
 
     /* Tooltips */
@@ -95,28 +91,27 @@
       quant: "<strong>Quantization</strong><p>The numerical precision or quantization format used for the model weights. Examples include BF16, FP8 and NVFP4.</p><p>Lower precision generally reduces memory requirements and can affect inference performance.</p>",
       tps: "<strong>TPS — Tokens per Second</strong><p>The token generation rate for one request at the selected concurrency level.</p><p><em>Higher is better.</em></p><p>Changing the concurrency selector updates this column to the corresponding measurement.</p>",
       ttft: "<strong>TTFT — Time to First Token</strong><p>The time between sending a request and receiving its first token.</p><p><em>Lower is better.</em></p><p>Changing the concurrency selector updates this column to the corresponding measurement.</p>",
-      maxc: "<strong>Maximum Supported Concurrency</strong><p>The highest tested concurrency level that meets both your minimum TPS and maximum TTFT targets.</p><p>Increasing the TPS target or lowering the TTFT limit makes the requirements stricter and can reduce Max C.</p>",
-      chat: "<strong>Estimated Chat User Capacity</strong><p>Calculated by multiplying Max C by the Chat Multiplier.</p><p>Chat Capacity = Max C × Chat Multiplier</p><p>Increasing the multiplier assumes that each user sends requests less frequently and therefore increases the estimated user capacity.</p>",
-      agentic: "<strong>Estimated Agentic User Capacity</strong><p>Calculated by multiplying Max C by the Agentic Multiplier.</p><p>Agentic Capacity = Max C × Agentic Multiplier</p><p>Agentic workloads typically generate LLM requests more frequently than interactive chat, so a lower multiplier is generally used.</p>",
+      maxc: "<strong>Maximum Supported Concurrency</strong><p>How many requests this configuration can serve <em>at the same time</em> while still meeting both of your performance targets.</p><p>This counts simultaneous requests, not people. One request is one generation in flight.</p><p>Stricter targets lower this number.</p>",
+      chat: "<strong>Estimated Chat Capacity</strong><p>Roughly how many <em>people</em> can use this configuration for interactive chat at the same time.</p><p>Higher than Max C because chat users are idle most of the time — reading, thinking, typing — so several people share one simultaneous request slot.</p><p>An estimate from your Chat Usage Multiplier, not a measured value.</p>",
+      agentic: "<strong>Estimated Agentic Capacity</strong><p>Roughly how many <em>people</em> this configuration can support for agentic use, where the model works through multi-step tasks and tool calls on their behalf.</p><p>Lower than the chat figure because an agentic user keeps a request slot busy far more of the time.</p><p>An estimate from your Agentic Usage Multiplier, not a measured value.</p>",
       par: "<strong>Parallelism Configuration</strong><p>Shows how the deployment uses multiple GPUs or devices.</p><p><strong>TP — Tensor Parallelism:</strong> distributes model computation across multiple GPUs.</p><p><strong>DP — Data Parallelism:</strong> uses multiple model replicas to process different requests in parallel.</p><p><strong>PP — Pipeline Parallelism:</strong> distributes model layers across multiple GPUs or devices.</p><p>— means that the corresponding method is not used.</p>",
       engine: "<strong>Inference Engine</strong><p>The inference engine used to serve the model. Examples include vLLM and SGLang.</p><p>The same model and hardware may perform differently depending on the inference engine.</p>",
       mtp: "<strong>MTP — Multi-Token Prediction</strong><p>Indicates whether multi-token prediction is used to accelerate generation.</p><p>Compare configurations with MTP enabled and disabled to see its effect on performance.</p>",
 
-      fConcurrency: "<strong>Concurrency</strong><p>Selects how many active requests are processed at the same time.</p><p>Increase concurrency to evaluate the system under heavier simultaneous load.</p><p>This selection controls which TPS and TTFT measurements are shown in the table.</p>",
+      fConcurrency: "<strong>Concurrency</strong><p>How many requests are being processed <em>at the same time</em>. This is a load level, not a number of people.</p><p>Raise it to see how a system behaves under heavier simultaneous load.</p><p>Controls which TPS and TTFT measurements the table shows.</p>",
       fModel: "<strong>Model</strong><p>Select which models are shown in the table.</p><p>Choose multiple models to compare them side by side.</p>",
       fDevice: "<strong>Device</strong><p>Limits the results to selected hardware configurations.</p><p>Choose multiple devices to compare their performance.</p>",
       fQuant: "<strong>Quantization</strong><p>Shows only results using the selected model precision or quantization formats.</p><p>For example, select FP8 and NVFP4 to compare those formats directly.</p>",
-      fEngine: "<strong>Inference Engine</strong><p>Shows only results served with the selected inference engines.</p><p>Select both to compare how the same model performs on each.</p>",
       fMtp: "<strong>MTP</strong><p>Filters configurations based on whether MTP is enabled.</p><p>Select both options to compare performance with and without MTP.</p>",
       fMinTps: "<strong>Minimum TPS</strong><p>Sets the minimum token generation rate shown in the table.</p><p>Increase this value to apply a stricter performance filter and remove slower configurations.</p>",
       fMaxTtft: "<strong>Maximum TTFT</strong><p>Sets the maximum acceptable time to first token.</p><p>Lower this value to apply a stricter latency filter and remove configurations with slower initial responses.</p>",
-      fMinChat: "<strong>Minimum Chat Capacity</strong><p>Shows only configurations that meet or exceed the selected estimated chat user capacity.</p><p>Increase the value to focus on higher-capacity systems.</p>",
-      fMinAgentic: "<strong>Minimum Agentic Capacity</strong><p>Shows only configurations that meet or exceed the selected estimated agentic user capacity.</p><p>Increase the value to focus on higher-capacity systems.</p>",
+      fMinChat: "<strong>Minimum Chat Capacity</strong><p>Hides configurations that cannot serve at least this many chat <em>users</em>.</p><p>Counted in people, not in simultaneous requests.</p>",
+      fMinAgentic: "<strong>Minimum Agentic Capacity</strong><p>Hides configurations that cannot serve at least this many agentic <em>users</em>.</p><p>Counted in people, not in simultaneous requests.</p>",
 
       aTps: "<strong>Minimum TPS Target</strong><p>The minimum TPS a configuration must provide to be considered acceptable.</p><p>Increasing this value makes the requirement stricter and may reduce Max C.</p>",
       aTtft: "<strong>Maximum TTFT Target</strong><p>The maximum TTFT a configuration may have to be considered acceptable.</p><p>Lowering this value makes the requirement stricter and may reduce Max C.</p>",
-      aChat: "<strong>Chat Usage Multiplier</strong><p>Converts maximum concurrency into an estimated number of chat users.</p><p>A higher value represents a workload where each user sends requests less frequently.</p>",
-      aAgentic: "<strong>Agentic Usage Multiplier</strong><p>Converts maximum concurrency into an estimated number of agentic users.</p><p>A higher value assumes that each agentic user consumes inference capacity less intensively.</p>",
+      aChat: "<strong>Chat Usage Multiplier</strong><p>How many chat users you assume can share one simultaneous request slot.</p><p>Raise it if your users send requests rarely; lower it if they are constantly active.</p>",
+      aAgentic: "<strong>Agentic Usage Multiplier</strong><p>How many agentic users you assume can share one simultaneous request slot.</p><p>Usually below the chat value, because agentic work keeps a slot busy for longer.</p>",
       reset: "<strong>Reset All Filters</strong><p>Clears every filter and restores the performance targets and capacity multipliers to their default values.</p>"
     }
   };
@@ -138,7 +133,6 @@
   var state = {
     devices: [],
     quants: [],
-    engines: [],
     mtp: "all",
     concurrency: 1
   };
@@ -153,7 +147,6 @@
   var allDevices = [];
   var allModels = [];
   var allQuants = [];
-  var allEngines = [];
   var allConcurrency = [];
 
   var DEVICE_ORDER = {
@@ -293,13 +286,12 @@
   }
 
   function deriveFilterOptions() {
-    var dSet = {}, mSet = {}, qSet = {}, eSet = {}, cSet = {};
+    var dSet = {}, mSet = {}, qSet = {}, cSet = {};
     for (var i = 0; i < rawData.benchmarks.length; i++) {
       var b = rawData.benchmarks[i];
       dSet[b.device] = true;
       mSet[b.model] = true;
       qSet[b.quantization] = true;
-      eSet[b.engine] = true;
       for (var j = 0; j < b.data_points.length; j++) {
         cSet[b.data_points[j].c] = true;
       }
@@ -310,7 +302,6 @@
     });
     allModels = Object.keys(mSet).sort();
     allQuants = Object.keys(qSet).sort();
-    allEngines = Object.keys(eSet).sort();
     allConcurrency = Object.keys(cSet).map(Number).sort(function (a, b) { return a - b; });
   }
 
@@ -326,7 +317,6 @@
     html += "</div>";
     html += '<div class="bt-results-count" id="bt-results-count"></div>';
     html += '<div class="bt-table-wrap" id="bt-table-wrap"></div>';
-    html += buildPreviewModal();
     html += '<div class="bt-tooltip" id="bt-tooltip" role="tooltip" hidden></div>';
 
     container.innerHTML = html;
@@ -347,14 +337,27 @@
   function buildFilters() {
     var html = '<div class="bt-filters" id="bt-filters">';
 
-    /* Concurrency leads: it frames every number in the table. */
-    var conc = '<div class="bt-filter-buttons" id="bt-filter-concurrency">';
+    /* Concurrency leads — it frames every number in the table — and the two
+       performance sliders read against it, so they share a row. */
+    var perf = '<div class="bt-filter-row bt-filter-row-perf">';
+    perf += '<span class="bt-filter-label">' + escapeHTML(S.concurrency) + tip(S.tip.fConcurrency) + "</span>";
+    perf += '<div class="bt-filter-buttons" id="bt-filter-concurrency">';
     allConcurrency.forEach(function (c) {
-      conc += '<button type="button" class="bt-btn' + (c === 1 ? " bt-active" : "") +
+      perf += '<button type="button" class="bt-btn' + (c === 1 ? " bt-active" : "") +
         '" data-conc="' + c + '">C=' + c + "</button>";
     });
-    conc += "</div>";
-    html += row(S.concurrency, S.tip.fConcurrency, conc, "bt-filter-row-conc");
+    perf += "</div>";
+    /* label and slider travel together so the row wraps cleanly */
+    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.minTps) + tip(S.tip.fMinTps) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-min-tps-val"></span>' +
+      '<input type="range" id="bt-min-tps" min="0" max="300" value="0" step="1"></div></div>';
+    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.maxTtft) + tip(S.tip.fMaxTtft) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-max-ttft-val"></span>' +
+      '<input type="range" id="bt-max-ttft" min="100" max="10000" value="10000" step="100"></div></div>';
+    perf += "</div>";
+    html += perf;
 
     var dev = '<div class="bt-filter-buttons" id="bt-filter-devices">';
     dev += '<button type="button" class="bt-btn bt-active" data-device="__all">' + escapeHTML(S.showAll) + "</button>";
@@ -382,28 +385,12 @@
     qua += "</div>";
     html += row(S.quant, S.tip.fQuant, qua);
 
-    var eng = '<div class="bt-filter-buttons" id="bt-filter-engines">';
-    eng += '<button type="button" class="bt-btn bt-active" data-engine="__all">' + escapeHTML(S.showAll) + "</button>";
-    allEngines.forEach(function (e) {
-      eng += '<button type="button" class="bt-btn" data-engine="' + escapeHTML(e) + '">' + escapeHTML(e) + "</button>";
-    });
-    eng += "</div>";
-    html += row(S.engine, S.tip.fEngine, eng);
-
     var mtp = '<div class="bt-filter-buttons" id="bt-filter-mtp">';
     mtp += '<button type="button" class="bt-btn bt-active" data-mtp="all">' + escapeHTML(S.all) + "</button>";
     mtp += '<button type="button" class="bt-btn" data-mtp="none">' + escapeHTML(S.noMtp) + "</button>";
     mtp += '<button type="button" class="bt-btn" data-mtp="with">' + escapeHTML(S.withMtp) + "</button>";
     mtp += "</div>";
     html += row(S.mtp, S.tip.fMtp, mtp);
-
-    html += row(S.minTps, S.tip.fMinTps,
-      '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-min-tps-val"></span>' +
-      '<input type="range" id="bt-min-tps" min="0" max="300" value="0" step="1"></div>');
-
-    html += row(S.maxTtft, S.tip.fMaxTtft,
-      '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-max-ttft-val"></span>' +
-      '<input type="range" id="bt-max-ttft" min="100" max="10000" value="10000" step="100"></div>');
 
     html += row(S.minChatUsers, S.tip.fMinChat,
       '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-min-chat-val"></span>' +
@@ -429,11 +416,17 @@
     html += '<div class="bt-targets-heading">' + escapeHTML(S.targetsHeading) + "</div>";
     html += '<div class="bt-targets-grid">';
     html += targetItem(S.ttftThreshold, "ttft_threshold_ms", S.tip.aTtft, "");
-    html += targetItem(S.tpsThreshold, "tps_threshold", S.tip.aTps,
-      '<button type="button" class="bt-preview-open" id="bt-preview-open">' + escapeHTML(S.previewTps) + "</button>");
+    html += targetItem(S.tpsThreshold, "tps_threshold", S.tip.aTps, "");
     html += targetItem(S.chatMultiplier, "chat_multiplier", S.tip.aChat, "");
     html += targetItem(S.agenticMultiplier, "agentic_multiplier", S.tip.aAgentic, "");
-    html += "</div></div>";
+    html += "</div>";
+    html += '<div class="bt-tps-preview">';
+    html += '<div class="bt-tps-preview-head"><span class="bt-tps-preview-title">' + escapeHTML(S.previewHeading) +
+      '</span><span class="bt-preview-sub" id="bt-preview-sub"></span></div>';
+    html += '<div class="bt-preview-text" id="bt-preview-text"></div>';
+    html += '<p class="bt-preview-note">' + escapeHTML(S.previewDisclaimer) + "</p>";
+    html += "</div>";
+    html += "</div>";
     return html;
   }
 
@@ -442,22 +435,6 @@
       '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
       '<input type="number" id="bt-assump-' + key + '" value="' + config[key] + '" step="0.1" min="0">' +
       extra + "</div>";
-  }
-
-  function buildPreviewModal() {
-    return '<div class="bt-modal" id="bt-preview" hidden>' +
-      '<div class="bt-modal-box" role="dialog" aria-modal="true" aria-labelledby="bt-preview-title">' +
-        '<button type="button" class="bt-modal-x" id="bt-preview-x" aria-label="' + escapeHTML(S.close) + '">&times;</button>' +
-        '<h3 id="bt-preview-title"></h3>' +
-        '<p class="bt-preview-sub" id="bt-preview-sub"></p>' +
-        '<p class="bt-preview-explain">' + escapeHTML(S.previewExplain) + "</p>" +
-        '<div class="bt-preview-text" id="bt-preview-text"></div>' +
-        '<p class="bt-preview-note">' + escapeHTML(S.previewDisclaimer) + "</p>" +
-        '<div class="bt-modal-actions">' +
-          '<button type="button" class="bt-btn" id="bt-preview-replay">' + escapeHTML(S.replay) + "</button>" +
-          '<button type="button" class="bt-btn" id="bt-preview-close">' + escapeHTML(S.close) + "</button>" +
-        "</div>" +
-      "</div></div>";
   }
 
   /* ── Wiring ── */
@@ -530,7 +507,6 @@
   function wireFilters(container) {
     repaint.device = wireButtonGroup(container, "device", "devices");
     repaint.quant = wireButtonGroup(container, "quant", "quants");
-    repaint.engine = wireButtonGroup(container, "engine", "engines");
 
     var searchInput = container.querySelector("#bt-model-search");
     var modelList = container.querySelector("#bt-model-list");
@@ -600,12 +576,10 @@
   function resetAll(container) {
     state.devices = [];
     state.quants = [];
-    state.engines = [];
     state.mtp = "all";
     state.concurrency = 1;
     repaint.device();
     repaint.quant();
-    repaint.engine();
 
     container.querySelectorAll("[data-mtp]").forEach(function (b) {
       b.classList.toggle("bt-active", b.getAttribute("data-mtp") === "all");
@@ -694,37 +668,24 @@
   /* ── TPS speed preview ── */
 
   function wirePreview(container) {
-    var modal = container.querySelector("#bt-preview");
+    var input = container.querySelector("#bt-assump-tps_threshold");
 
     function currentTps() {
-      var v = parseFloat(container.querySelector("#bt-assump-tps_threshold").value);
+      var v = parseFloat(input.value);
       return (isNaN(v) || v <= 0) ? 1 : v;
     }
 
+    /* The preview is always on: it restates the selected target as a speed the
+       reader can feel, and restarts whenever that target changes. */
     function run() {
       var n = currentTps();
-      var shown = Math.round(n * 10) / 10;
-      container.querySelector("#bt-preview-title").textContent = S.previewTitle(shown);
-      container.querySelector("#bt-preview-sub").textContent = S.previewSubtitle(shown);
+      container.querySelector("#bt-preview-sub").textContent =
+        S.previewSubtitle(Math.round(n * 10) / 10);
       stream(container.querySelector("#bt-preview-text"), n);
     }
 
-    function closeIt() {
-      modal.hidden = true;
-      if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
-    }
-
-    container.querySelector("#bt-preview-open").addEventListener("click", function () {
-      modal.hidden = false;
-      run();
-    });
-    container.querySelector("#bt-preview-replay").addEventListener("click", run);
-    container.querySelector("#bt-preview-x").addEventListener("click", closeIt);
-    container.querySelector("#bt-preview-close").addEventListener("click", closeIt);
-    modal.addEventListener("click", function (e) { if (e.target === modal) closeIt(); });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !modal.hidden) closeIt();
-    });
+    input.addEventListener("input", run);
+    run();
   }
 
   /* Approximate token streaming: chop the sample into word-sized pieces and
@@ -749,8 +710,8 @@
       if (i < tokens.length) {
         previewTimer = setTimeout(step, Math.max(16, delay));
       } else {
-        el.classList.remove("bt-streaming");
-        previewTimer = null;
+        /* hold the finished text briefly, then run it again */
+        previewTimer = setTimeout(function () { stream(el, tps); }, 1600);
       }
     }
     step();
@@ -780,7 +741,6 @@
     return rawData.benchmarks.filter(function (entry) {
       if (state.devices.length > 0 && state.devices.indexOf(entry.device) === -1) return false;
       if (state.quants.length > 0 && state.quants.indexOf(entry.quantization) === -1) return false;
-      if (state.engines.length > 0 && state.engines.indexOf(entry.engine) === -1) return false;
       if (filterByModel && selectedModels.indexOf(entry.model) === -1) return false;
       if (state.mtp === "none" && entry.mtp) return false;
       if (state.mtp === "with" && !entry.mtp) return false;

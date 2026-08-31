@@ -41,7 +41,6 @@
     tpsThreshold: "Minimum TPS Hedefi (tok/s)",
     chatMultiplier: "Chat Kullanım Çarpanı",
     agenticMultiplier: "Agentic Kullanım Çarpanı",
-    previewTps: "TPS Hızını Gör",
 
     /* Table */
     colModel: "Model",
@@ -79,13 +78,10 @@
     rightAxis: " — sağ eksen",
     xTitle: "Eşzamanlı İstek Sayısı",
 
-    /* TPS preview modal */
-    previewTitle: function (n) { return n + " TPS Nasıl Görünür?"; },
-    previewSubtitle: function (n) { return "Aşağıdaki metin yaklaşık " + n + " token/s hızında gösteriliyor."; },
-    previewExplain: "TPS, modelin metin üretim hızını ifade eder. Seçtiğiniz TPS değerinin kullanıcı açısından nasıl hissedildiğini burada görebilirsiniz.",
+    /* TPS speed preview */
+    previewHeading: "Bu hız nasıl görünür",
+    previewSubtitle: function (n) { return "örnek metin yaklaşık " + n + " token/s hızında"; },
     previewDisclaimer: "Bu gösterim, seçilen TPS değerini görselleştirmek için hazırlanmış yaklaşık bir simülasyondur. Gerçek yanıt deneyimi TTFT, çıktı uzunluğu ve uygulama davranışına göre değişebilir.",
-    replay: "Tekrar Oynat",
-    close: "Kapat",
     sampleText: "Bir büyük dil modelini kendi donanımınızda çalıştırmak, yanıt hızının hızlandırıcıya, kuantizasyon biçimine ve sistemi aynı anda kaç kişinin kullandığına bağlı olması demektir. Düşük token hızlarında metin kelime kelime belirir ve bekleme fark edilir hâle gelir. Hız arttıkça yanıt, çoğu kişinin okuyabileceğinden daha çabuk geldiği için arayüz yavaş değil anlık hissettirmeye başlar.",
 
     /* Tooltips */
@@ -95,28 +91,27 @@
       quant: "<strong>Kuantizasyon</strong><p>Model ağırlıklarının kullanılan hassasiyet veya kuantizasyon biçimini gösterir. Örneğin BF16, FP8 ve NVFP4.</p><p>Daha düşük hassasiyet genellikle daha düşük bellek kullanımı sağlar ve çıkarım performansını etkileyebilir.</p>",
       tps: "<strong>TPS — Tokens per Second</strong><p>Seçilen eşzamanlılık seviyesinde bir isteğin token üretim hızını gösterir.</p><p><em>Daha yüksek değer daha iyidir.</em></p><p>Eşzamanlılık seçimini değiştirdiğinizde bu sütundaki değer ilgili test noktasına göre güncellenir.</p>",
       ttft: "<strong>TTFT — Time to First Token</strong><p>Bir istek gönderildikten sonra ilk tokenın gelmesine kadar geçen süreyi gösterir.</p><p><em>Daha düşük değer daha iyidir.</em></p><p>Eşzamanlılık seçimini değiştirdiğinizde bu sütundaki değer ilgili test noktasına göre güncellenir.</p>",
-      maxc: "<strong>Maksimum Desteklenen Eşzamanlılık</strong><p>Belirlediğiniz minimum TPS ve maksimum TTFT hedeflerinin ikisini de karşılayan en yüksek test edilmiş eşzamanlılık seviyesidir.</p><p>TPS hedefini yükseltir veya TTFT sınırını düşürürseniz kriterler zorlaşır ve Maks C düşebilir.</p>",
-      chat: "<strong>Tahmini Chat Kullanıcı Kapasitesi</strong><p>Maks C değerinin Chat Çarpanı ile çarpılmasıyla hesaplanır.</p><p>Chat Kapasitesi = Maks C × Chat Çarpanı</p><p>Chat Çarpanını artırmak, her kullanıcının sistemi daha seyrek kullandığını varsayar ve tahmini kullanıcı kapasitesini artırır.</p>",
-      agentic: "<strong>Tahmini Agentic Kullanıcı Kapasitesi</strong><p>Maks C değerinin Agentic Çarpanı ile çarpılmasıyla hesaplanır.</p><p>Agentic Kapasitesi = Maks C × Agentic Çarpanı</p><p>Agentic iş yükleri genellikle chat kullanımına göre daha sık LLM isteği oluşturduğu için daha düşük bir çarpan kullanılır.</p>",
+      maxc: "<strong>Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın, performans hedeflerinizin ikisini de karşılamaya devam ederken <em>aynı anda</em> kaç isteğe hizmet verebildiğini gösterir.</p><p>Kişi sayısını değil, eşzamanlı istek sayısını ifade eder. Bir istek, o anda süren bir üretim demektir.</p><p>Hedefleri sıkılaştırmak bu sayıyı düşürür.</p>",
+      chat: "<strong>Tahmini Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç <em>kişinin</em> kullanabileceğini gösterir.</p><p>Maks C'den yüksektir: chat kullanıcıları zamanın çoğunda boştadır — okur, düşünür, yazar — bu yüzden birkaç kişi tek bir eşzamanlı istek yuvasını paylaşır.</p><p>Ölçülmüş bir değer değil, Chat Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
+      agentic: "<strong>Tahmini Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç <em>kişiyi</em> destekleyebileceğini gösterir.</p><p>Chat değerinden düşüktür: bir agentic kullanıcı istek yuvasını çok daha uzun süre meşgul tutar.</p><p>Ölçülmüş bir değer değil, Agentic Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
       par: "<strong>Paralellik Yapılandırması</strong><p>Modelin birden fazla GPU veya cihaz üzerinde nasıl çalıştırıldığını gösterir.</p><p><strong>TP — Tensor Parallelism:</strong> model hesaplamasını birden fazla GPU'ya dağıtır.</p><p><strong>DP — Data Parallelism:</strong> birden fazla model kopyasının farklı istekleri paralel olarak işlemesini sağlar.</p><p><strong>PP — Pipeline Parallelism:</strong> model katmanlarını farklı GPU veya cihazlara dağıtır.</p><p>— ilgili yöntemin kullanılmadığını gösterir.</p>",
       engine: "<strong>Inference Engine</strong><p>Modeli sunmak için kullanılan çıkarım motorunu gösterir. Örneğin vLLM veya SGLang.</p><p>Aynı model ve donanım farklı inference engine'lerle farklı performans gösterebilir.</p>",
       mtp: "<strong>MTP — Multi-Token Prediction</strong><p>Modelin bir adımda birden fazla token tahmini kullanarak üretimi hızlandırmasına yardımcı olan özelliği gösterir.</p><p>Açık ve kapalı sonuçları karşılaştırarak MTP'nin ilgili yapılandırmadaki etkisini görebilirsiniz.</p>",
 
-      fConcurrency: "<strong>Eşzamanlılık (Concurrency)</strong><p>Aynı anda işlenen aktif istek sayısını seçer.</p><p>Eşzamanlılık değerini artırarak sistemi daha yoğun eşzamanlı kullanım altında inceleyebilirsiniz.</p><p>Bu seçim tabloda gösterilen TPS ve TTFT değerlerini değiştirir.</p>",
+      fConcurrency: "<strong>Eşzamanlılık (Concurrency)</strong><p><em>Aynı anda</em> işlenen istek sayısıdır. Kişi sayısı değil, bir yük seviyesidir.</p><p>Değeri artırarak sistemin daha yoğun eşzamanlı yük altında nasıl davrandığını görebilirsiniz.</p><p>Tabloda hangi TPS ve TTFT ölçümlerinin gösterileceğini belirler.</p>",
       fModel: "<strong>Model</strong><p>Tabloda görmek istediğiniz modelleri seçin.</p><p>Birden fazla model seçerek sonuçları yan yana karşılaştırabilirsiniz.</p>",
       fDevice: "<strong>Cihaz</strong><p>Benchmark sonuçlarını belirli donanım veya cihaz yapılandırmalarıyla sınırlar.</p><p>Birden fazla cihaz seçerek donanımları karşılaştırabilirsiniz.</p>",
       fQuant: "<strong>Kuantizasyon</strong><p>Yalnızca seçtiğiniz model hassasiyetlerini veya kuantizasyon biçimlerini gösterir.</p><p>Örneğin yalnızca FP8 ve NVFP4 sonuçlarını seçerek iki formatı karşılaştırabilirsiniz.</p>",
-      fEngine: "<strong>Inference Engine</strong><p>Yalnızca seçtiğiniz çıkarım motorlarıyla sunulan sonuçları gösterir.</p><p>İkisini birden seçerek aynı modelin her birinde nasıl performans gösterdiğini karşılaştırabilirsiniz.</p>",
       fMtp: "<strong>MTP</strong><p>MTP kullanılan veya kullanılmayan yapılandırmaları filtreler.</p><p>Her ikisini seçerek MTP'nin performans üzerindeki etkisini karşılaştırabilirsiniz.</p>",
       fMinTps: "<strong>Minimum TPS</strong><p>Tabloda görmek istediğiniz en düşük token üretim hızını belirler.</p><p>Değeri artırdıkça filtre daha katı hâle gelir ve daha yavaş yapılandırmalar elenir.</p>",
       fMaxTtft: "<strong>Maksimum TTFT</strong><p>Kabul ettiğiniz en yüksek ilk token bekleme süresini belirler.</p><p>Değeri düşürdükçe filtre daha katı hâle gelir ve ilk yanıtı daha yavaş veren yapılandırmalar elenir.</p>",
-      fMinChat: "<strong>Minimum Chat Kapasitesi</strong><p>Yalnızca belirlediğiniz sayıda veya daha fazla tahmini chat kullanıcısını destekleyen yapılandırmaları gösterir.</p><p>Değeri artırdıkça daha yüksek kapasiteli sistemlere odaklanırsınız.</p>",
-      fMinAgentic: "<strong>Minimum Agentic Kapasitesi</strong><p>Yalnızca belirlediğiniz sayıda veya daha fazla tahmini agentic kullanıcıyı destekleyen yapılandırmaları gösterir.</p><p>Değeri artırdıkça daha yüksek kapasiteli sistemlere odaklanırsınız.</p>",
+      fMinChat: "<strong>Minimum Chat Kapasitesi</strong><p>En az bu kadar chat <em>kullanıcısına</em> hizmet veremeyen yapılandırmaları gizler.</p><p>Eşzamanlı istek sayısıyla değil, kişi sayısıyla ölçülür.</p>",
+      fMinAgentic: "<strong>Minimum Agentic Kapasitesi</strong><p>En az bu kadar agentic <em>kullanıcıya</em> hizmet veremeyen yapılandırmaları gizler.</p><p>Eşzamanlı istek sayısıyla değil, kişi sayısıyla ölçülür.</p>",
 
       aTps: "<strong>Minimum TPS Hedefi</strong><p>Bir yapılandırmanın kabul edilebilir sayılması için sağlaması gereken minimum TPS değeridir.</p><p>Değeri artırmak performans kriterini sıkılaştırır ve Maks C değerini düşürebilir.</p>",
       aTtft: "<strong>Maksimum TTFT Hedefi</strong><p>Bir yapılandırmanın kabul edilebilir sayılması için aşmaması gereken TTFT değeridir.</p><p>Değeri düşürmek performans kriterini sıkılaştırır ve Maks C değerini düşürebilir.</p>",
-      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Maksimum eşzamanlılık değerini tahmini chat kullanıcı sayısına dönüştürmek için kullanılır.</p><p>Daha yüksek değer, kullanıcıların daha seyrek istek gönderdiği bir kullanım senaryosunu temsil eder.</p>",
-      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Maksimum eşzamanlılık değerini tahmini agentic kullanıcı sayısına dönüştürmek için kullanılır.</p><p>Daha yüksek değer, bir agentic kullanıcının LLM kapasitesini daha az yoğun kullandığı varsayımını temsil eder.</p>",
+      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Tek bir eşzamanlı istek yuvasını kaç chat kullanıcısının paylaşabileceğine dair varsayımınızdır.</p><p>Kullanıcılarınız seyrek istek gönderiyorsa artırın; sürekli aktiflerse azaltın.</p>",
+      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Tek bir eşzamanlı istek yuvasını kaç agentic kullanıcının paylaşabileceğine dair varsayımınızdır.</p><p>Agentic çalışma yuvayı daha uzun süre meşgul tuttuğu için genellikle chat değerinin altındadır.</p>",
       reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; performans hedeflerini ve kapasite çarpanlarını varsayılan değerlerine döndürür.</p>"
     }
   };
@@ -138,7 +133,6 @@
   var state = {
     devices: [],
     quants: [],
-    engines: [],
     mtp: "all",
     concurrency: 1
   };
@@ -153,7 +147,6 @@
   var allDevices = [];
   var allModels = [];
   var allQuants = [];
-  var allEngines = [];
   var allConcurrency = [];
 
   var DEVICE_ORDER = {
@@ -293,13 +286,12 @@
   }
 
   function deriveFilterOptions() {
-    var dSet = {}, mSet = {}, qSet = {}, eSet = {}, cSet = {};
+    var dSet = {}, mSet = {}, qSet = {}, cSet = {};
     for (var i = 0; i < rawData.benchmarks.length; i++) {
       var b = rawData.benchmarks[i];
       dSet[b.device] = true;
       mSet[b.model] = true;
       qSet[b.quantization] = true;
-      eSet[b.engine] = true;
       for (var j = 0; j < b.data_points.length; j++) {
         cSet[b.data_points[j].c] = true;
       }
@@ -310,7 +302,6 @@
     });
     allModels = Object.keys(mSet).sort();
     allQuants = Object.keys(qSet).sort();
-    allEngines = Object.keys(eSet).sort();
     allConcurrency = Object.keys(cSet).map(Number).sort(function (a, b) { return a - b; });
   }
 
@@ -326,7 +317,6 @@
     html += "</div>";
     html += '<div class="bt-results-count" id="bt-results-count"></div>';
     html += '<div class="bt-table-wrap" id="bt-table-wrap"></div>';
-    html += buildPreviewModal();
     html += '<div class="bt-tooltip" id="bt-tooltip" role="tooltip" hidden></div>';
 
     container.innerHTML = html;
@@ -347,14 +337,27 @@
   function buildFilters() {
     var html = '<div class="bt-filters" id="bt-filters">';
 
-    /* Concurrency leads: it frames every number in the table. */
-    var conc = '<div class="bt-filter-buttons" id="bt-filter-concurrency">';
+    /* Concurrency leads — it frames every number in the table — and the two
+       performance sliders read against it, so they share a row. */
+    var perf = '<div class="bt-filter-row bt-filter-row-perf">';
+    perf += '<span class="bt-filter-label">' + escapeHTML(S.concurrency) + tip(S.tip.fConcurrency) + "</span>";
+    perf += '<div class="bt-filter-buttons" id="bt-filter-concurrency">';
     allConcurrency.forEach(function (c) {
-      conc += '<button type="button" class="bt-btn' + (c === 1 ? " bt-active" : "") +
+      perf += '<button type="button" class="bt-btn' + (c === 1 ? " bt-active" : "") +
         '" data-conc="' + c + '">C=' + c + "</button>";
     });
-    conc += "</div>";
-    html += row(S.concurrency, S.tip.fConcurrency, conc, "bt-filter-row-conc");
+    perf += "</div>";
+    /* label and slider travel together so the row wraps cleanly */
+    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.minTps) + tip(S.tip.fMinTps) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-min-tps-val"></span>' +
+      '<input type="range" id="bt-min-tps" min="0" max="300" value="0" step="1"></div></div>';
+    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.maxTtft) + tip(S.tip.fMaxTtft) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-max-ttft-val"></span>' +
+      '<input type="range" id="bt-max-ttft" min="100" max="10000" value="10000" step="100"></div></div>';
+    perf += "</div>";
+    html += perf;
 
     var dev = '<div class="bt-filter-buttons" id="bt-filter-devices">';
     dev += '<button type="button" class="bt-btn bt-active" data-device="__all">' + escapeHTML(S.showAll) + "</button>";
@@ -382,28 +385,12 @@
     qua += "</div>";
     html += row(S.quant, S.tip.fQuant, qua);
 
-    var eng = '<div class="bt-filter-buttons" id="bt-filter-engines">';
-    eng += '<button type="button" class="bt-btn bt-active" data-engine="__all">' + escapeHTML(S.showAll) + "</button>";
-    allEngines.forEach(function (e) {
-      eng += '<button type="button" class="bt-btn" data-engine="' + escapeHTML(e) + '">' + escapeHTML(e) + "</button>";
-    });
-    eng += "</div>";
-    html += row(S.engine, S.tip.fEngine, eng);
-
     var mtp = '<div class="bt-filter-buttons" id="bt-filter-mtp">';
     mtp += '<button type="button" class="bt-btn bt-active" data-mtp="all">' + escapeHTML(S.all) + "</button>";
     mtp += '<button type="button" class="bt-btn" data-mtp="none">' + escapeHTML(S.noMtp) + "</button>";
     mtp += '<button type="button" class="bt-btn" data-mtp="with">' + escapeHTML(S.withMtp) + "</button>";
     mtp += "</div>";
     html += row(S.mtp, S.tip.fMtp, mtp);
-
-    html += row(S.minTps, S.tip.fMinTps,
-      '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-min-tps-val"></span>' +
-      '<input type="range" id="bt-min-tps" min="0" max="300" value="0" step="1"></div>');
-
-    html += row(S.maxTtft, S.tip.fMaxTtft,
-      '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-max-ttft-val"></span>' +
-      '<input type="range" id="bt-max-ttft" min="100" max="10000" value="10000" step="100"></div>');
 
     html += row(S.minChatUsers, S.tip.fMinChat,
       '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-min-chat-val"></span>' +
@@ -429,11 +416,17 @@
     html += '<div class="bt-targets-heading">' + escapeHTML(S.targetsHeading) + "</div>";
     html += '<div class="bt-targets-grid">';
     html += targetItem(S.ttftThreshold, "ttft_threshold_ms", S.tip.aTtft, "");
-    html += targetItem(S.tpsThreshold, "tps_threshold", S.tip.aTps,
-      '<button type="button" class="bt-preview-open" id="bt-preview-open">' + escapeHTML(S.previewTps) + "</button>");
+    html += targetItem(S.tpsThreshold, "tps_threshold", S.tip.aTps, "");
     html += targetItem(S.chatMultiplier, "chat_multiplier", S.tip.aChat, "");
     html += targetItem(S.agenticMultiplier, "agentic_multiplier", S.tip.aAgentic, "");
-    html += "</div></div>";
+    html += "</div>";
+    html += '<div class="bt-tps-preview">';
+    html += '<div class="bt-tps-preview-head"><span class="bt-tps-preview-title">' + escapeHTML(S.previewHeading) +
+      '</span><span class="bt-preview-sub" id="bt-preview-sub"></span></div>';
+    html += '<div class="bt-preview-text" id="bt-preview-text"></div>';
+    html += '<p class="bt-preview-note">' + escapeHTML(S.previewDisclaimer) + "</p>";
+    html += "</div>";
+    html += "</div>";
     return html;
   }
 
@@ -442,22 +435,6 @@
       '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
       '<input type="number" id="bt-assump-' + key + '" value="' + config[key] + '" step="0.1" min="0">' +
       extra + "</div>";
-  }
-
-  function buildPreviewModal() {
-    return '<div class="bt-modal" id="bt-preview" hidden>' +
-      '<div class="bt-modal-box" role="dialog" aria-modal="true" aria-labelledby="bt-preview-title">' +
-        '<button type="button" class="bt-modal-x" id="bt-preview-x" aria-label="' + escapeHTML(S.close) + '">&times;</button>' +
-        '<h3 id="bt-preview-title"></h3>' +
-        '<p class="bt-preview-sub" id="bt-preview-sub"></p>' +
-        '<p class="bt-preview-explain">' + escapeHTML(S.previewExplain) + "</p>" +
-        '<div class="bt-preview-text" id="bt-preview-text"></div>' +
-        '<p class="bt-preview-note">' + escapeHTML(S.previewDisclaimer) + "</p>" +
-        '<div class="bt-modal-actions">' +
-          '<button type="button" class="bt-btn" id="bt-preview-replay">' + escapeHTML(S.replay) + "</button>" +
-          '<button type="button" class="bt-btn" id="bt-preview-close">' + escapeHTML(S.close) + "</button>" +
-        "</div>" +
-      "</div></div>";
   }
 
   /* ── Wiring ── */
@@ -530,7 +507,6 @@
   function wireFilters(container) {
     repaint.device = wireButtonGroup(container, "device", "devices");
     repaint.quant = wireButtonGroup(container, "quant", "quants");
-    repaint.engine = wireButtonGroup(container, "engine", "engines");
 
     var searchInput = container.querySelector("#bt-model-search");
     var modelList = container.querySelector("#bt-model-list");
@@ -600,12 +576,10 @@
   function resetAll(container) {
     state.devices = [];
     state.quants = [];
-    state.engines = [];
     state.mtp = "all";
     state.concurrency = 1;
     repaint.device();
     repaint.quant();
-    repaint.engine();
 
     container.querySelectorAll("[data-mtp]").forEach(function (b) {
       b.classList.toggle("bt-active", b.getAttribute("data-mtp") === "all");
@@ -694,37 +668,24 @@
   /* ── TPS speed preview ── */
 
   function wirePreview(container) {
-    var modal = container.querySelector("#bt-preview");
+    var input = container.querySelector("#bt-assump-tps_threshold");
 
     function currentTps() {
-      var v = parseFloat(container.querySelector("#bt-assump-tps_threshold").value);
+      var v = parseFloat(input.value);
       return (isNaN(v) || v <= 0) ? 1 : v;
     }
 
+    /* The preview is always on: it restates the selected target as a speed the
+       reader can feel, and restarts whenever that target changes. */
     function run() {
       var n = currentTps();
-      var shown = Math.round(n * 10) / 10;
-      container.querySelector("#bt-preview-title").textContent = S.previewTitle(shown);
-      container.querySelector("#bt-preview-sub").textContent = S.previewSubtitle(shown);
+      container.querySelector("#bt-preview-sub").textContent =
+        S.previewSubtitle(Math.round(n * 10) / 10);
       stream(container.querySelector("#bt-preview-text"), n);
     }
 
-    function closeIt() {
-      modal.hidden = true;
-      if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
-    }
-
-    container.querySelector("#bt-preview-open").addEventListener("click", function () {
-      modal.hidden = false;
-      run();
-    });
-    container.querySelector("#bt-preview-replay").addEventListener("click", run);
-    container.querySelector("#bt-preview-x").addEventListener("click", closeIt);
-    container.querySelector("#bt-preview-close").addEventListener("click", closeIt);
-    modal.addEventListener("click", function (e) { if (e.target === modal) closeIt(); });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !modal.hidden) closeIt();
-    });
+    input.addEventListener("input", run);
+    run();
   }
 
   /* Approximate token streaming: chop the sample into word-sized pieces and
@@ -749,8 +710,8 @@
       if (i < tokens.length) {
         previewTimer = setTimeout(step, Math.max(16, delay));
       } else {
-        el.classList.remove("bt-streaming");
-        previewTimer = null;
+        /* hold the finished text briefly, then run it again */
+        previewTimer = setTimeout(function () { stream(el, tps); }, 1600);
       }
     }
     step();
@@ -780,7 +741,6 @@
     return rawData.benchmarks.filter(function (entry) {
       if (state.devices.length > 0 && state.devices.indexOf(entry.device) === -1) return false;
       if (state.quants.length > 0 && state.quants.indexOf(entry.quantization) === -1) return false;
-      if (state.engines.length > 0 && state.engines.indexOf(entry.engine) === -1) return false;
       if (filterByModel && selectedModels.indexOf(entry.model) === -1) return false;
       if (state.mtp === "none" && entry.mtp) return false;
       if (state.mtp === "with" && !entry.mtp) return false;
