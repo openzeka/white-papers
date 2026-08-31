@@ -72,22 +72,12 @@ thresholds in the **Assumptions** panel — nothing is precomputed or stored:
 | **Chat Capacity** | Max C × chat multiplier. Interactive chat users are bursty and idle most of the time — reading, thinking, typing — so one concurrent slot serves several people. |
 | **Agentic Capacity** | Max C × agentic multiplier. Agentic workloads hold a slot through long generations and tool calls, so the multiplier is far lower. |
 
-Max C is the highest **passing** level, which is not necessarily a level below
-which everything also passes — a mid-sweep TTFT spike can leave a lower
-concurrency failing. Expand the row and read the PASS/FAIL column before
-committing to a number.
-
 ### Setting your own thresholds
 
 The defaults — TTFT under 1000 ms, 20 tok/s per request, ×4 for chat, ×1.5 for
 agentic — are a reasonable starting point, not a universal answer. **Open the
 Assumptions panel and enter your own service-level targets.** Every row
 recalculates instantly.
-
-This is the point of the page. A 300 ms TTFT budget for a customer-facing
-assistant and a 3-second budget for an overnight batch job produce completely
-different capacity numbers from the same hardware. Set the thresholds to what
-your workload actually requires and read the answer off the table.
 
 ### Choosing a concurrency level
 
@@ -96,8 +86,7 @@ columns display, and which point the two performance sliders filter on. It does
 not affect Max C, Chat or Agentic — those always consider the whole sweep.
 
 A row only appears if it was measured at the selected concurrency, so the
-visible count drops as you move up. Most configurations were swept to C=32; a
-subset reaches C=64.
+visible count drops as you move up.
 
 ### Filtering and sorting
 
@@ -123,8 +112,7 @@ single configuration and it will open expanded for whoever you send it to.
 
 ## Methodology
 
-Unless otherwise noted in a row's expanded notes, all figures were measured with
-[CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark) against
+All figures were measured with [CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark) against
 an OpenAI-compatible streaming endpoint:
 
 - 128-token input, 128-token output

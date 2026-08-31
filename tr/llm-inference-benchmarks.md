@@ -74,22 +74,12 @@ değildir:
 | **Chat Kapasitesi** | Maks C × chat çarpanı. Etkileşimli sohbet kullanıcıları düzensiz aralıklarla istek gönderir ve zamanın çoğunda boştadır — okur, düşünür, yazar — bu nedenle tek bir eşzamanlı yuva birden fazla kişiye hizmet eder. |
 | **Agentic Kapasitesi** | Maks C × agentic çarpanı. Agentic iş yükleri uzun üretimler ve araç çağrıları boyunca yuvayı elinde tutar; bu yüzden çarpan belirgin biçimde düşüktür. |
 
-Maks C, **geçen** en yüksek seviyedir; altındaki her seviyenin de geçtiği
-anlamına gelmez — tarama ortasındaki bir TTFT sıçraması daha düşük bir
-eşzamanlılığın başarısız kalmasına yol açabilir. Bir sayıya güvenmeden önce
-satırı açıp BAŞARILI/BAŞARISIZ sütununu okuyun.
-
 ### Kendi eşiklerinizi girme
 
 Varsayılan değerler — TTFT 1000 ms'nin altında, istek başına 20 tok/s, chat için
 ×4 ve agentic için ×1,5 — makul bir başlangıç noktasıdır, evrensel bir cevap
 değil. **Varsayımlar panelini açıp kendi hizmet seviyesi hedeflerinizi girin.**
 Her satır anında yeniden hesaplanır.
-
-Bu sayfanın amacı tam olarak budur. Müşteriye dönük bir asistan için 300 ms'lik
-TTFT bütçesi ile gece çalışan toplu bir iş için 3 saniyelik bütçe, aynı
-donanımdan tamamen farklı kapasite sayıları üretir. Eşikleri iş yükünüzün
-gerçekten gerektirdiği değerlere ayarlayın ve cevabı tablodan okuyun.
 
 ### Eşzamanlılık seviyesi seçme
 
@@ -99,8 +89,7 @@ filtreleyeceğini belirler. Maks C, Chat ve Agentic değerlerini etkilemez —
 bunlar her zaman taramanın tamamını dikkate alır.
 
 Bir satır yalnızca seçilen eşzamanlılıkta ölçülmüşse görünür; bu nedenle yukarı
-çıktıkça görünen satır sayısı azalır. Yapılandırmaların çoğu C=32'ye kadar
-taranmıştır; bir bölümü C=64'e ulaşır.
+çıktıkça görünen satır sayısı azalır.
 
 ### Filtreleme ve sıralama
 
@@ -128,8 +117,7 @@ görünür.
 
 ## Yöntem
 
-Bir satırın açılan notlarında aksi belirtilmedikçe tüm değerler,
-OpenAI uyumlu bir streaming uç noktasına karşı
+Tüm değerler, OpenAI uyumlu bir streaming uç noktasına karşı
 [CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark) ile
 ölçülmüştür:
 
