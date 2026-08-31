@@ -2,33 +2,165 @@
 (function () {
   "use strict";
 
-  var rawData = null;
-  var config = {
+  /* ──────────────────────────────────────────────────────────────────────
+     UI STRINGS — the ONLY block that differs between benchmark-table.js and
+     benchmark-table.tr.js. Everything below this object is byte-identical in
+     both files. When changing behaviour, edit one file and copy the body
+     across; when changing wording, edit only this object.
+     ────────────────────────────────────────────────────────────────────── */
+  var S = {
+    lang: "tr",
+
+    loading: "Benchmark verileri yükleniyor…",
+    loadFailed: "Benchmark verileri yüklenemedi: ",
+
+    /* Controls */
+    concurrency: "Eşzamanlılık (Concurrency)",
+    device: "Cihaz",
+    model: "Model",
+    quant: "Kuantizasyon",
+    engine: "Inference Engine",
+    mtp: "MTP",
+    all: "Tümü",
+    showAll: "Tümünü Göster",
+    searchModels: "Model ara…",
+    noMtp: "MTP Yok",
+    withMtp: "MTP Var",
+    resetFilters: "Tüm Filtreleri Sıfırla",
+
+    minTps: "Min. TPS",
+    maxTtft: "Maks. TTFT",
+    noLimit: "Sınırsız",
+    minChatUsers: "Min. Chat Kullanıcı Kapasitesi (kişi)",
+    minAgenticUsers: "Min. Agentic Kullanıcı Kapasitesi (kişi)",
+    atC: function (c) { return " (C=" + c + ")"; },
+
+    /* Performance targets / assumptions */
+    targetsHeading: "Performans Hedefleri ve Kapasite Varsayımları",
+    targetsIntro: "Bu dört değer, hangi performansın kabul edilebilir sayılacağını belirler. Her satırın Maks C, Tahmini Chat Kapasitesi ve Tahmini Agentic Kapasitesi değerleri bunlara göre yeniden hesaplanır; TPS ve TTFT sütunlarındaki yeşil ve kırmızı renklendirme de bunları izler. Buradaki değerler satırları filtrelemez — sayıların anlamını değiştirir.",
+    ttftThreshold: "Maksimum TTFT Hedefi (ms)",
+    tpsThreshold: "Minimum TPS Hedefi (tok/s)",
+    chatMultiplier: "Chat Kullanım Çarpanı",
+    agenticMultiplier: "Agentic Kullanım Çarpanı",
+
+    /* Table */
+    colModel: "Model",
+    colDevice: "Cihaz",
+    colQuant: "Kuantizasyon",
+    colTps: "TPS",
+    colTtft: "TTFT",
+    colMaxC: "Maks C",
+    colChat: "Tahmini Chat Kapasitesi",
+    colAgentic: "Tahmini Agentic Kapasitesi",
+    colTp: "TP", colDp: "DP", colPp: "PP",
+    colEngine: "Inference Engine",
+    colMtp: "MTP",
+    yes: "Evet",
+    users: "kişi",
+    matching: "Eşleşen Yapılandırmalar",
+    matchingCount: function (shown, total) {
+      return "<strong>" + total + "</strong> yapılandırmadan <strong>" + shown + "</strong> tanesi";
+    },
+    noMatch: "Mevcut filtrelerle eşleşen yapılandırma yok.",
+    targetMet: "Hedef karşılanıyor — bu değer mevcut performans hedefinizi karşılıyor.",
+    targetNotMet: "Hedef karşılanmıyor — bu değer mevcut performans hedefinizi karşılamıyor.",
+    viewDetails: "Ayrıntıları Göster — bu yapılandırmanın tüm eşzamanlılık taramasını, grafiğini ve ek bilgilerini gösterir.",
+
+    /* Expanded row */
+    detailC: "C", detailTtft: "TTFT (ms)", detailTps: "TPS (tok/s)", detailStatus: "Durum",
+    pass: "BAŞARILI", fail: "BAŞARISIZ",
+    notes: "Notlar:",
+    downloadChart: "Grafiği İndir",
+    chartFileSuffix: "-grafik.png",
+    tpsAxis: "TPS (tok/s)",
+    aggAxis: "Toplam TPS (tok/s)",
+    aggLabel: "Toplam TPS",
+    leftAxis: " — sol eksen",
+    rightAxis: " — sağ eksen",
+    xTitle: "Eşzamanlı İstek Sayısı",
+
+    /* TPS speed preview */
+    previewHeading: "Bu hız nasıl görünür",
+    previewSubtitle: function (n) { return "örnek metin yaklaşık " + n + " token/s hızında"; },
+    previewStopped: "durduruldu — TPS hedefi 0",
+    previewDisclaimer: "Bu gösterim, seçilen TPS değerini görselleştirmek için hazırlanmış yaklaşık bir simülasyondur. Gerçek yanıt deneyimi TTFT, çıktı uzunluğu ve uygulama davranışına göre değişebilir.",
+    sampleText: "Bir büyük dil modelini kendi donanımınızda çalıştırmak, yanıt hızının hızlandırıcıya, kuantizasyon biçimine ve sistemi aynı anda kaç kişinin kullandığına bağlı olması demektir. Düşük token hızlarında metin kelime kelime belirir ve bekleme fark edilir hâle gelir. Hız arttıkça yanıt, çoğu kişinin okuyabileceğinden daha çabuk geldiği için arayüz yavaş değil anlık hissettirmeye başlar.",
+
+    /* Tooltips */
+    tip: {
+      model: "<strong>Model</strong><p>Benchmark'ta kullanılan LLM'yi gösterir.</p><p>Aynı model farklı kuantizasyon veya çalışma yapılandırmalarıyla test edilmişse tabloda birden fazla satırda görünebilir.</p>",
+      device: "<strong>Cihaz</strong><p>Benchmark'ın çalıştırıldığı donanımı ve kullanılan cihaz sayısını gösterir.</p><p>Örneğin 4× DGX Spark, yapılandırmada dört DGX Spark kullanıldığı anlamına gelir.</p>",
+      quant: "<strong>Kuantizasyon</strong><p>Model ağırlıklarının kullanılan hassasiyet veya kuantizasyon biçimini gösterir. Örneğin BF16, FP8 ve NVFP4.</p><p>Daha düşük hassasiyet genellikle daha düşük bellek kullanımı sağlar ve çıkarım performansını etkileyebilir.</p>",
+      tps: "<strong>TPS — Tokens per Second</strong><p>Seçilen eşzamanlılık seviyesinde bir isteğin token üretim hızını gösterir.</p><p><em>Daha yüksek değer daha iyidir.</em></p><p>Eşzamanlılık seçimini değiştirdiğinizde bu sütundaki değer ilgili test noktasına göre güncellenir.</p>",
+      ttft: "<strong>TTFT — Time to First Token</strong><p>Bir istek gönderildikten sonra ilk tokenın gelmesine kadar geçen süreyi gösterir.</p><p><em>Daha düşük değer daha iyidir.</em></p><p>Eşzamanlılık seçimini değiştirdiğinizde bu sütundaki değer ilgili test noktasına göre güncellenir.</p>",
+      maxc: "<strong>Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın, performans hedeflerinizin ikisini de karşılamaya devam ederken <em>aynı anda</em> kaç isteğe hizmet verebildiğini gösterir.</p><p>Kişi sayısını değil, eşzamanlı istek sayısını ifade eder. Bir istek, o anda süren bir üretim demektir.</p><p>Hedefleri sıkılaştırmak bu sayıyı düşürür.</p>",
+      chat: "<strong>Tahmini Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç <em>kişinin</em> kullanabileceğini gösterir.</p><p>Maks C'den yüksektir: chat kullanıcıları zamanın çoğunda boştadır — okur, düşünür, yazar — bu yüzden birkaç kişi tek bir eşzamanlı istek yuvasını paylaşır.</p><p>Ölçülmüş bir değer değil, Chat Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
+      agentic: "<strong>Tahmini Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç <em>kişiyi</em> destekleyebileceğini gösterir.</p><p>Chat değerinden düşüktür: bir agentic kullanıcı istek yuvasını çok daha uzun süre meşgul tutar.</p><p>Ölçülmüş bir değer değil, Agentic Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
+      par: "<strong>Paralellik Yapılandırması</strong><p>Modelin birden fazla GPU veya cihaz üzerinde nasıl çalıştırıldığını gösterir.</p><p><strong>TP — Tensor Parallelism:</strong> model hesaplamasını birden fazla GPU'ya dağıtır.</p><p><strong>DP — Data Parallelism:</strong> birden fazla model kopyasının farklı istekleri paralel olarak işlemesini sağlar.</p><p><strong>PP — Pipeline Parallelism:</strong> model katmanlarını farklı GPU veya cihazlara dağıtır.</p><p>— ilgili yöntemin kullanılmadığını gösterir.</p>",
+      engine: "<strong>Inference Engine</strong><p>Modeli sunmak için kullanılan çıkarım motorunu gösterir. Örneğin vLLM veya SGLang.</p><p>Aynı model ve donanım farklı inference engine'lerle farklı performans gösterebilir.</p>",
+      mtp: "<strong>MTP — Multi-Token Prediction</strong><p>Modelin bir adımda birden fazla token tahmini kullanarak üretimi hızlandırmasına yardımcı olan özelliği gösterir.</p><p>Açık ve kapalı sonuçları karşılaştırarak MTP'nin ilgili yapılandırmadaki etkisini görebilirsiniz.</p>",
+
+      fConcurrency: "<strong>Eşzamanlılık (Concurrency)</strong><p><em>Aynı anda</em> işlenen istek sayısıdır. Kişi sayısı değil, bir yük seviyesidir.</p><p>Değeri artırarak sistemin daha yoğun eşzamanlı yük altında nasıl davrandığını görebilirsiniz.</p><p>Tabloda hangi TPS ve TTFT ölçümlerinin gösterileceğini belirler.</p>",
+      fModel: "<strong>Model</strong><p>Tabloda görmek istediğiniz modelleri seçin.</p><p>Birden fazla model seçerek sonuçları yan yana karşılaştırabilirsiniz.</p>",
+      fDevice: "<strong>Cihaz</strong><p>Benchmark sonuçlarını belirli donanım veya cihaz yapılandırmalarıyla sınırlar.</p><p>Birden fazla cihaz seçerek donanımları karşılaştırabilirsiniz.</p>",
+      fQuant: "<strong>Kuantizasyon</strong><p>Yalnızca seçtiğiniz model hassasiyetlerini veya kuantizasyon biçimlerini gösterir.</p><p>Örneğin yalnızca FP8 ve NVFP4 sonuçlarını seçerek iki formatı karşılaştırabilirsiniz.</p>",
+      fMtp: "<strong>MTP</strong><p>MTP kullanılan veya kullanılmayan yapılandırmaları filtreler.</p><p>Her ikisini seçerek MTP'nin performans üzerindeki etkisini karşılaştırabilirsiniz.</p>",
+      fMinTps: "<strong>Minimum TPS</strong><p>Tabloda görmek istediğiniz en düşük token üretim hızını belirler.</p><p>Değeri artırdıkça filtre daha katı hâle gelir ve daha yavaş yapılandırmalar elenir.</p>",
+      fMaxTtft: "<strong>Maksimum TTFT</strong><p>Kabul ettiğiniz en yüksek ilk token bekleme süresini belirler.</p><p>Değeri düşürdükçe filtre daha katı hâle gelir ve ilk yanıtı daha yavaş veren yapılandırmalar elenir.</p>",
+      fMinChat: "<strong>Minimum Chat Kapasitesi</strong><p>En az bu kadar chat <em>kullanıcısına</em> hizmet veremeyen yapılandırmaları gizler.</p><p>Eşzamanlı istek sayısıyla değil, kişi sayısıyla ölçülür.</p>",
+      fMinAgentic: "<strong>Minimum Agentic Kapasitesi</strong><p>En az bu kadar agentic <em>kullanıcıya</em> hizmet veremeyen yapılandırmaları gizler.</p><p>Eşzamanlı istek sayısıyla değil, kişi sayısıyla ölçülür.</p>",
+
+      aTps: "<strong>Minimum TPS Hedefi</strong><p>Bir yapılandırmanın kabul edilebilir sayılması için sağlaması gereken minimum TPS değeridir.</p><p>Değeri artırmak performans kriterini sıkılaştırır ve Maks C değerini düşürebilir.</p>",
+      aTtft: "<strong>Maksimum TTFT Hedefi</strong><p>Bir yapılandırmanın kabul edilebilir sayılması için aşmaması gereken TTFT değeridir.</p><p>Değeri düşürmek performans kriterini sıkılaştırır ve Maks C değerini düşürebilir.</p>",
+      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Tek bir eşzamanlı istek yuvasını kaç chat kullanıcısının paylaşabileceğine dair varsayımınızdır.</p><p>Kullanıcılarınız seyrek istek gönderiyorsa artırın; sürekli aktiflerse azaltın.</p>",
+      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Tek bir eşzamanlı istek yuvasını kaç agentic kullanıcının paylaşabileceğine dair varsayımınızdır.</p><p>Agentic çalışma yuvayı daha uzun süre meşgul tuttuğu için genellikle chat değerinin altındadır.</p>",
+      reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; performans hedeflerini ve kapasite çarpanlarını varsayılan değerlerine döndürür.</p>"
+    }
+  };
+
+  /* ══════════════════════════════════════════════════════════════════════
+     Everything below this line is language-independent.
+     ══════════════════════════════════════════════════════════════════════ */
+
+  var DEFAULT_CONFIG = {
     ttft_threshold_ms: 1000,
     tps_threshold: 20,
     chat_multiplier: 4,
-    agentic_multiplier: 1.5,
+    agentic_multiplier: 1.5
   };
+
+  var rawData = null;
+  var fileConfig = {};
+  var config = {};
   var state = {
-    devices: [],       // active device filters (empty = all)
-    quants: [],         // active quant filters (empty = all)
-    mtp: "all",         // "all" | "none" | "with"
-    concurrency: 1,
-    min_tps: 0,
-    max_ttft: 99999,
-    min_chat: 0,
-    min_agentic: 0,
+    devices: [],
+    quants: [],
+    mtp: "all",
+    concurrency: 1
   };
   var sortCol = "tps";
   var sortDir = "desc";
   var expanded = {};
   var chartInstances = {};
   var logoPath = null;
+  var repaint = {};
+  var previewTimer = null;
 
   var allDevices = [];
   var allModels = [];
   var allQuants = [];
   var allConcurrency = [];
+
+  var DEVICE_ORDER = {
+    "Thor": 0,
+    "1× DGX Spark": 1,
+    "2× DGX Spark": 2,
+    "3× DGX Spark": 3,
+    "4× DGX Spark": 4,
+    "8× DGX Spark": 5,
+    "RTX PRO 6000": 6,
+    "DGX B300": 7
+  };
 
   function init(src) {
     var containers = document.querySelectorAll("[data-bt-src]");
@@ -55,7 +187,7 @@
     }
     if (!logoPath) logoPath = "logo.png";
 
-    container.innerHTML = '<div class="bt-loading">Benchmark verileri yükleniyor…</div>';
+    container.innerHTML = '<div class="bt-loading">' + escapeHTML(S.loading) + "</div>";
 
     fetch(dataSource)
       .then(function (r) {
@@ -64,11 +196,16 @@
       })
       .then(function (data) {
         rawData = data;
+        fileConfig = {};
+        for (var k in DEFAULT_CONFIG) {
+          if (DEFAULT_CONFIG.hasOwnProperty(k)) fileConfig[k] = DEFAULT_CONFIG[k];
+        }
         if (data.config) {
-          for (var k in data.config) {
-            if (data.config.hasOwnProperty(k)) config[k] = data.config[k];
+          for (var k2 in data.config) {
+            if (data.config.hasOwnProperty(k2)) fileConfig[k2] = data.config[k2];
           }
         }
+        resetConfig();
         deriveFilterOptions();
 
         /* Register Chart.js plugins if available */
@@ -84,10 +221,16 @@
       })
       .catch(function (err) {
         container.innerHTML =
-          '<div class="bt-error">Benchmark verileri yüklenemedi: ' +
-          escapeHTML(err.message) +
-          "</div>";
+          '<div class="bt-error">' + escapeHTML(S.loadFailed) +
+          escapeHTML(err.message) + "</div>";
       });
+  }
+
+  function resetConfig() {
+    config = {};
+    for (var k in fileConfig) {
+      if (fileConfig.hasOwnProperty(k)) config[k] = fileConfig[k];
+    }
   }
 
   /* ── Utilities ── */
@@ -105,6 +248,13 @@
     if (n === null || n === undefined) return "—";
     if (decimals === undefined) decimals = 2;
     return Number(n).toFixed(decimals);
+  }
+
+  /* An info affordance carrying its own tooltip copy. The copy comes from S,
+     never from data, so it is safe to store as markup. */
+  function tip(html) {
+    return '<button type="button" class="bt-tip" aria-label="info" data-tip="' +
+      escapeHTML(html) + '">i</button>';
   }
 
   function getMetricAtC(entry, c, metric) {
@@ -149,17 +299,8 @@
       }
     }
     allDevices = Object.keys(dSet).sort(function (a, b) {
-      var deviceOrder = {
-        "Thor": 0,
-        "1× DGX Spark": 1,
-        "2× DGX Spark": 2,
-        "3× DGX Spark": 3,
-        "4× DGX Spark": 4,
-        "8× DGX Spark": 5,
-        "RTX PRO 6000": 6,
-        "DGX B300": 7
-      };
-      return (deviceOrder[a] != null ? deviceOrder[a] : 99) - (deviceOrder[b] != null ? deviceOrder[b] : 99);
+      return (DEVICE_ORDER[a] != null ? DEVICE_ORDER[a] : 99) -
+             (DEVICE_ORDER[b] != null ? DEVICE_ORDER[b] : 99);
     });
     allModels = Object.keys(mSet).sort();
     allQuants = Object.keys(qSet).sort();
@@ -170,138 +311,154 @@
 
   function buildUI(container) {
     container.className = "bt-container";
-    container.innerHTML = "";
 
     var html = "";
-
-    /* ── Assumptions Panel ── */
-    html += '<div class="bt-assumptions" id="bt-assumptions">';
-    html += '<button class="bt-assumptions-toggle" id="bt-assumptions-toggle"><span class="bt-arrow">&#9654;</span> Varsayımlar</button>';
-    html += '<div class="bt-assumptions-body" id="bt-assumptions-body">';
-    html += buildAssumptionItem("TTFT eşiği (ms)", "ttft_threshold_ms", config.ttft_threshold_ms);
-    html += buildAssumptionItem("TPS eşiği (tok/s)", "tps_threshold", config.tps_threshold);
-    html += buildAssumptionItem("Chat çarpanı", "chat_multiplier", config.chat_multiplier);
-    html += buildAssumptionItem("Agentic çarpanı", "agentic_multiplier", config.agentic_multiplier);
-    html += '<div class="bt-assumptions-hint">Bu değerlerin değiştirilmesi, her satırın Maks C, Chat Kapasitesi ve Agentic Kapasitesi değerlerini anında yeniden hesaplar.</div>';
-    html += "</div></div>";
-
-    /* ── Filters ── */
-    html += '<div class="bt-filters" id="bt-filters">';
+    html += '<div class="bt-controls">';
+    html += buildTargets();
     html += buildFilters();
     html += "</div>";
-
-    /* ── Results + Table ── */
     html += '<div class="bt-results-count" id="bt-results-count"></div>';
     html += '<div class="bt-table-wrap" id="bt-table-wrap"></div>';
+    html += '<div class="bt-tooltip" id="bt-tooltip" role="tooltip" hidden></div>';
 
     container.innerHTML = html;
 
-    wireAssumptions(container);
+    wireTargets(container);
     wireFilters(container);
+    wireTooltips(container);
+    wirePreview(container);
     renderTable(container);
   }
 
-  function buildAssumptionItem(label, key, val) {
-    return (
-      '<div class="bt-assumption-item">' +
-      "<label>" + label + "</label>" +
-      '<input type="number" id="bt-assump-' + key + '" value="' + val + '" step="0.1" min="0">' +
-      "</div>"
-    );
+  function row(label, tipHtml, body, extraClass) {
+    return '<div class="bt-filter-row' + (extraClass ? " " + extraClass : "") + '">' +
+      '<span class="bt-filter-label">' + escapeHTML(label) + tip(tipHtml) + "</span>" +
+      body + "</div>";
   }
 
   function buildFilters() {
-    var html = "";
+    var html = '<div class="bt-filters" id="bt-filters">';
 
-    /* ── Device filter with "All" ── */
-    html += '<div class="bt-filter-row">';
-    html += '<span class="bt-filter-label">Cihaz</span>';
-    html += '<div class="bt-filter-buttons" id="bt-filter-devices">';
-    html += '<button class="bt-btn bt-active" data-device="__all">Tümü</button>';
+
+    var dev = '<div class="bt-filter-buttons" id="bt-filter-devices">';
+    dev += '<button type="button" class="bt-btn bt-active" data-device="__all">' + escapeHTML(S.showAll) + "</button>";
     allDevices.forEach(function (d) {
-      html += '<button class="bt-btn" data-device="' + escapeHTML(d) + '">' + escapeHTML(d) + "</button>";
+      dev += '<button type="button" class="bt-btn" data-device="' + escapeHTML(d) + '">' + escapeHTML(d) + "</button>";
     });
-    html += "</div></div>";
+    dev += "</div>";
+    html += row(S.device, S.tip.fDevice, dev);
 
-    /* ── Model search + checkbox list ── */
-    html += '<div class="bt-filter-row">';
-    html += '<span class="bt-filter-label">Model</span>';
-    html += '<div class="bt-model-filter">';
-    html += '<input type="text" class="bt-model-search" id="bt-model-search" placeholder="Model ara…">';
-    html += '<div class="bt-model-list" id="bt-model-list">';
-    html += '<label class="bt-model-option"><input type="checkbox" id="bt-model-all" checked> Tümü</label>';
+    var mod = '<div class="bt-model-filter">';
+    mod += '<input type="text" class="bt-model-search" id="bt-model-search" placeholder="' + escapeHTML(S.searchModels) + '">';
+    mod += '<div class="bt-model-list" id="bt-model-list">';
+    mod += '<label class="bt-model-option"><input type="checkbox" id="bt-model-all" checked> ' + escapeHTML(S.all) + "</label>";
     allModels.forEach(function (m) {
-      html += '<label class="bt-model-option"><input type="checkbox" class="bt-model-cb" data-model="' + escapeHTML(m) + '" checked> ' + escapeHTML(m) + "</label>";
+      mod += '<label class="bt-model-option"><input type="checkbox" class="bt-model-cb" data-model="' + escapeHTML(m) + '" checked> ' + escapeHTML(m) + "</label>";
     });
-    html += "</div></div></div>";
+    mod += "</div></div>";
+    html += row(S.model, S.tip.fModel, mod);
 
-    /* ── Quant filter with "All" ── */
-    html += '<div class="bt-filter-row">';
-    html += '<span class="bt-filter-label">Kuantizasyon</span>';
-    html += '<div class="bt-filter-buttons" id="bt-filter-quants">';
-    html += '<button class="bt-btn bt-active" data-quant="__all">Tümü</button>';
+    var qua = '<div class="bt-filter-buttons" id="bt-filter-quants">';
+    qua += '<button type="button" class="bt-btn bt-active" data-quant="__all">' + escapeHTML(S.showAll) + "</button>";
     allQuants.forEach(function (q) {
-      html += '<button class="bt-btn" data-quant="' + escapeHTML(q) + '">' + escapeHTML(q) + "</button>";
+      qua += '<button type="button" class="bt-btn" data-quant="' + escapeHTML(q) + '">' + escapeHTML(q) + "</button>";
     });
-    html += "</div></div>";
+    qua += "</div>";
+    html += row(S.quant, S.tip.fQuant, qua);
 
-    /* ── MTP filter ── */
-    html += '<div class="bt-filter-row">';
-    html += '<span class="bt-filter-label">MTP</span>';
-    html += '<div class="bt-filter-buttons" id="bt-filter-mtp">';
-    html += '<button class="bt-btn bt-active" data-mtp="all">Tümü</button>';
-    html += '<button class="bt-btn" data-mtp="none">MTP Yok</button>';
-    html += '<button class="bt-btn" data-mtp="with">MTP Var</button>';
-    html += "</div></div>";
+    var mtp = '<div class="bt-filter-buttons" id="bt-filter-mtp">';
+    mtp += '<button type="button" class="bt-btn bt-active" data-mtp="all">' + escapeHTML(S.all) + "</button>";
+    mtp += '<button type="button" class="bt-btn" data-mtp="none">' + escapeHTML(S.noMtp) + "</button>";
+    mtp += '<button type="button" class="bt-btn" data-mtp="with">' + escapeHTML(S.withMtp) + "</button>";
+    mtp += "</div>";
+    html += row(S.mtp, S.tip.fMtp, mtp);
 
-    /* ── Merged: Concurrency + TPS + TTFT in one row ── */
-    html += '<div class="bt-filter-row bt-filter-row-perf">';
-    html += '<span class="bt-filter-label">Eşzamanlılık</span>';
-    html += '<div class="bt-filter-buttons" id="bt-filter-concurrency">';
+    /* Concurrency leads — it frames every number in the table — and the two
+       performance sliders read against it, so they share a row. */
+    var perf = '<div class="bt-filter-row bt-filter-row-perf">';
+    perf += '<span class="bt-filter-label">' + escapeHTML(S.concurrency) + tip(S.tip.fConcurrency) + "</span>";
+    perf += '<div class="bt-filter-buttons" id="bt-filter-concurrency">';
     allConcurrency.forEach(function (c) {
-      var cls = c === 1 ? "bt-btn bt-active" : "bt-btn";
-      html += '<button class="' + cls + '" data-conc="' + c + '">C=' + c + "</button>";
+      perf += '<button type="button" class="bt-btn' + (c === 1 ? " bt-active" : "") +
+        '" data-conc="' + c + '">C=' + c + "</button>";
     });
-    html += "</div>";
-    html += '<div class="bt-slider-group bt-slider-perf">';
-    html += '<span class="bt-slider-value" id="bt-min-tps-val">C=1 için Min TPS: 0</span>';
-    html += '<input type="range" id="bt-min-tps" min="0" max="300" value="0" step="1">';
-    html += "</div>";
-    html += '<div class="bt-slider-group bt-slider-perf">';
-    html += '<span class="bt-slider-value" id="bt-max-ttft-val">C=1 için Maks TTFT: Sınırsız</span>';
-    html += '<input type="range" id="bt-max-ttft" min="100" max="10000" value="10000" step="100">';
-    html += "</div>";
-    html += "</div>";
+    perf += "</div>";
+    /* label and slider travel together so the row wraps cleanly */
+    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.minTps) + tip(S.tip.fMinTps) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-min-tps-val"></span>' +
+      '<input type="range" id="bt-min-tps" min="0" max="300" value="0" step="1"></div></div>';
+    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.maxTtft) + tip(S.tip.fMaxTtft) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-max-ttft-val"></span>' +
+      '<input type="range" id="bt-max-ttft" min="100" max="10000" value="10000" step="100"></div></div>';
+    perf += "</div>";
+    html += perf;
 
-    /* ── Chat + Agentic sliders ── */
-    html += '<div class="bt-filter-row">';
-    html += '<span class="bt-filter-label">Min Chat</span>';
-    html += '<div class="bt-slider-group">';
-    html += '<span class="bt-slider-value" id="bt-min-chat-val">0</span>';
-    html += '<input type="range" id="bt-min-chat" min="0" max="200" value="0" step="1">';
-    html += "</div>";
-    html += '<span class="bt-filter-label">Min Agentic</span>';
-    html += '<div class="bt-slider-group">';
-    html += '<span class="bt-slider-value" id="bt-min-agentic-val">0</span>';
-    html += '<input type="range" id="bt-min-agentic" min="0" max="100" value="0" step="1">';
-    html += "</div>";
-    html += "</div>";
+    html += row(S.minChatUsers, S.tip.fMinChat,
+      '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-min-chat-val"></span>' +
+      '<input type="range" id="bt-min-chat" min="0" max="200" value="0" step="1"></div>');
 
+    html += row(S.minAgenticUsers, S.tip.fMinAgentic,
+      '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-min-agentic-val"></span>' +
+      '<input type="range" id="bt-min-agentic" min="0" max="100" value="0" step="1"></div>');
+
+    html += '<div class="bt-filter-row bt-reset-row">' +
+      '<button type="button" class="bt-reset" id="bt-reset">' + escapeHTML(S.resetFilters) + "</button>" +
+      tip(S.tip.reset) + "</div>";
+
+    html += "</div>";
     return html;
+  }
+
+  /* Targets sit apart from filters on purpose: filters decide which rows are
+     shown, targets decide what counts as acceptable and how capacity is
+     estimated. */
+  function buildTargets() {
+    var html = '<div class="bt-targets" id="bt-targets">';
+    html += '<button type="button" class="bt-targets-toggle" id="bt-targets-toggle" aria-expanded="false">' +
+      '<span class="bt-arrow">&#9654;</span> ' + escapeHTML(S.targetsHeading) + "</button>";
+    html += '<div class="bt-targets-body" id="bt-targets-body" hidden>';
+    html += '<p class="bt-targets-intro">' + escapeHTML(S.targetsIntro) + "</p>";
+    html += '<div class="bt-targets-grid">';
+    html += targetItem(S.ttftThreshold, "ttft_threshold_ms", S.tip.aTtft, "");
+    html += targetItem(S.tpsThreshold, "tps_threshold", S.tip.aTps, "");
+    html += targetItem(S.chatMultiplier, "chat_multiplier", S.tip.aChat, "");
+    html += targetItem(S.agenticMultiplier, "agentic_multiplier", S.tip.aAgentic, "");
+    html += "</div>";
+    html += '<div class="bt-tps-preview">';
+    html += '<div class="bt-tps-preview-head"><span class="bt-tps-preview-title">' + escapeHTML(S.previewHeading) +
+      '</span><span class="bt-preview-sub" id="bt-preview-sub"></span></div>';
+    html += '<div class="bt-preview-text" id="bt-preview-text"></div>';
+    html += '<p class="bt-preview-note">' + escapeHTML(S.previewDisclaimer) + "</p>";
+    html += "</div>";
+    html += "</div>";
+    html += "</div>";
+    return html;
+  }
+
+  function targetItem(label, key, tipHtml, extra) {
+    return '<div class="bt-target-item">' +
+      '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
+      '<input type="number" id="bt-assump-' + key + '" value="' + config[key] + '" step="0.1" min="0">' +
+      extra + "</div>";
   }
 
   /* ── Wiring ── */
 
-  function wireAssumptions(container) {
-    var toggle = container.querySelector("#bt-assumptions-toggle");
-    var body = container.querySelector("#bt-assumptions-body");
+  function wireTargets(container) {
+    var toggle = container.querySelector("#bt-targets-toggle");
+    var body = container.querySelector("#bt-targets-body");
     toggle.addEventListener("click", function () {
-      toggle.classList.toggle("bt-open");
-      body.classList.toggle("bt-visible");
+      var open = body.hidden;
+      body.hidden = !open;
+      toggle.classList.toggle("bt-open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      /* the preview only animates while it is on screen */
+      if (open) startPreview(container); else stopPreview();
     });
 
-    var keys = ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"];
-    keys.forEach(function (key) {
+    ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"].forEach(function (key) {
       var input = container.querySelector("#bt-assump-" + key);
       input.addEventListener("input", function () {
         var v = parseFloat(input.value);
@@ -312,62 +469,63 @@
     });
   }
 
-  function wireButtonGroup(container, selector, stateKey, allLabel) {
-    var buttons = container.querySelectorAll(selector);
+  function syncSliderLabels(container) {
+    var c = state.concurrency;
+    var tps = container.querySelector("#bt-min-tps").value;
+    var ttft = parseInt(container.querySelector("#bt-max-ttft").value, 10);
+    container.querySelector("#bt-min-tps-val").textContent = tps + S.atC(c);
+    container.querySelector("#bt-max-ttft-val").textContent =
+      (ttft >= 10000 ? S.noLimit : ttft + " ms") + S.atC(c);
+    container.querySelector("#bt-min-chat-val").textContent =
+      container.querySelector("#bt-min-chat").value + " " + S.users;
+    container.querySelector("#bt-min-agentic-val").textContent =
+      container.querySelector("#bt-min-agentic").value + " " + S.users;
+  }
 
-    // "All" button click
-    var allBtn = container.querySelector(selector + '[data-' + stateKey + '="__all"]');
+  function wireButtonGroup(container, attr, stateKey) {
+    var selector = "[data-" + attr + "]";
+    var buttons = container.querySelectorAll(selector);
+    var allBtn = container.querySelector(selector + "[data-" + attr + '="__all"]');
+
+    function paint() {
+      buttons.forEach(function (b) { b.classList.remove("bt-active"); });
+      if (state[stateKey].length === 0) {
+        if (allBtn) allBtn.classList.add("bt-active");
+      } else {
+        state[stateKey].forEach(function (v) {
+          var el = container.querySelector(selector + "[data-" + attr + '="' + CSS.escape(v) + '"]');
+          if (el) el.classList.add("bt-active");
+        });
+      }
+    }
+
     if (allBtn) {
       allBtn.addEventListener("click", function () {
-        buttons.forEach(function (b) {
-          b.classList.remove("bt-active");
-        });
-        allBtn.classList.add("bt-active");
-        if (stateKey === "device") state.devices = [];
-        else if (stateKey === "quant") state.quants = [];
+        state[stateKey] = [];
+        paint();
         renderTable(container);
       });
     }
 
-    // Individual buttons
     buttons.forEach(function (btn) {
-      if (btn.getAttribute("data-" + stateKey) === "__all") return;
+      if (btn.getAttribute("data-" + attr) === "__all") return;
       btn.addEventListener("click", function () {
-        var val = btn.getAttribute("data-" + stateKey);
-        if (stateKey === "device") {
-          var idx = state.devices.indexOf(val);
-          if (idx > -1) state.devices.splice(idx, 1);
-          else state.devices.push(val);
-        } else if (stateKey === "quant") {
-          var idx2 = state.quants.indexOf(val);
-          if (idx2 > -1) state.quants.splice(idx2, 1);
-          else state.quants.push(val);
-        }
-        // Update button active states
-        buttons.forEach(function (b) { b.classList.remove("bt-active"); });
-        var activeArr = stateKey === "device" ? state.devices : state.quants;
-        if (activeArr.length === 0) {
-          if (allBtn) allBtn.classList.add("bt-active");
-        } else {
-          activeArr.forEach(function (v) {
-            var sel = selector + '[data-' + stateKey + '="' + CSS.escape(v) + '"]';
-            var el = container.querySelector(sel);
-            if (el) el.classList.add("bt-active");
-          });
-        }
+        var val = btn.getAttribute("data-" + attr);
+        var idx = state[stateKey].indexOf(val);
+        if (idx > -1) state[stateKey].splice(idx, 1);
+        else state[stateKey].push(val);
+        paint();
         renderTable(container);
       });
     });
+
+    return paint;
   }
 
   function wireFilters(container) {
-    /* Device buttons */
-    wireButtonGroup(container, "[data-device]", "device");
+    repaint.device = wireButtonGroup(container, "device", "devices");
+    repaint.quant = wireButtonGroup(container, "quant", "quants");
 
-    /* Quant buttons */
-    wireButtonGroup(container, "[data-quant]", "quant");
-
-    /* Model search + checkboxes */
     var searchInput = container.querySelector("#bt-model-search");
     var modelList = container.querySelector("#bt-model-list");
     var allCb = container.querySelector("#bt-model-all");
@@ -376,12 +534,8 @@
     searchInput.addEventListener("input", function () {
       var term = searchInput.value.toLowerCase();
       modelList.querySelectorAll(".bt-model-option").forEach(function (label) {
-        var text = label.textContent.toLowerCase();
-        if (label.querySelector("#bt-model-all")) {
-          label.style.display = "";
-          return;
-        }
-        label.style.display = term === "" || text.indexOf(term) > -1 ? "" : "none";
+        if (label.querySelector("#bt-model-all")) { label.style.display = ""; return; }
+        label.style.display = term === "" || label.textContent.toLowerCase().indexOf(term) > -1 ? "" : "none";
       });
     });
 
@@ -402,73 +556,195 @@
       });
     });
 
-    /* MTP buttons */
     container.querySelectorAll("[data-mtp]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        container.querySelectorAll("[data-mtp]").forEach(function (b) {
-          b.classList.remove("bt-active");
-        });
+        container.querySelectorAll("[data-mtp]").forEach(function (b) { b.classList.remove("bt-active"); });
         btn.classList.add("bt-active");
         state.mtp = btn.getAttribute("data-mtp");
         renderTable(container);
       });
     });
 
-    /* Concurrency buttons */
     container.querySelectorAll("[data-conc]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        container.querySelectorAll("[data-conc]").forEach(function (b) {
-          b.classList.remove("bt-active");
-        });
+        container.querySelectorAll("[data-conc]").forEach(function (b) { b.classList.remove("bt-active"); });
         btn.classList.add("bt-active");
         state.concurrency = parseInt(btn.getAttribute("data-conc"), 10);
-
-        /* Update slider labels with selected C */
-        var c = state.concurrency;
-        var tpsVal = container.querySelector("#bt-min-tps").value;
-        var ttftVal = container.querySelector("#bt-max-ttft").value;
-        container.querySelector("#bt-min-tps-val").textContent =
-          "C=" + c + " için Min TPS: " + tpsVal;
-        container.querySelector("#bt-max-ttft-val").textContent =
-          "C=" + c + " için Maks TTFT: " + (parseInt(ttftVal, 10) >= 10000 ? "Sınırsız" : ttftVal + " ms");
-
+        syncSliderLabels(container);
         renderTable(container);
       });
     });
 
-    /* TPS slider */
-    var minTpsSlider = container.querySelector("#bt-min-tps");
-    var minTpsVal = container.querySelector("#bt-min-tps-val");
-    minTpsSlider.addEventListener("input", function () {
-      var v = parseInt(minTpsSlider.value, 10);
-      minTpsVal.textContent = "C=" + state.concurrency + " için Min TPS: " + v;
-      renderTable(container);
+    ["#bt-min-tps", "#bt-max-ttft", "#bt-min-chat", "#bt-min-agentic"].forEach(function (sel) {
+      container.querySelector(sel).addEventListener("input", function () {
+        syncSliderLabels(container);
+        renderTable(container);
+      });
     });
 
-    /* TTFT slider */
-    var maxTtftSlider = container.querySelector("#bt-max-ttft");
-    var maxTtftVal = container.querySelector("#bt-max-ttft-val");
-    maxTtftSlider.addEventListener("input", function () {
-      var v = parseInt(maxTtftSlider.value, 10);
-      maxTtftVal.textContent = "C=" + state.concurrency + " için Maks TTFT: " + (v >= 10000 ? "Sınırsız" : v + " ms");
-      renderTable(container);
+    container.querySelector("#bt-reset").addEventListener("click", function () {
+      resetAll(container);
     });
 
-    /* Chat slider */
-    var minChatSlider = container.querySelector("#bt-min-chat");
-    var minChatVal = container.querySelector("#bt-min-chat-val");
-    minChatSlider.addEventListener("input", function () {
-      minChatVal.textContent = minChatSlider.value;
-      renderTable(container);
+    syncSliderLabels(container);
+  }
+
+  /* One reset for everything. A separate "reset assumptions" action would make
+     the user reason about which of two buttons they need. */
+  function resetAll(container) {
+    state.devices = [];
+    state.quants = [];
+    state.mtp = "all";
+    state.concurrency = 1;
+    repaint.device();
+    repaint.quant();
+
+    container.querySelectorAll("[data-mtp]").forEach(function (b) {
+      b.classList.toggle("bt-active", b.getAttribute("data-mtp") === "all");
+    });
+    container.querySelectorAll("[data-conc]").forEach(function (b) {
+      b.classList.toggle("bt-active", b.getAttribute("data-conc") === "1");
     });
 
-    /* Agentic slider */
-    var minAgenticSlider = container.querySelector("#bt-min-agentic");
-    var minAgenticVal = container.querySelector("#bt-min-agentic-val");
-    minAgenticSlider.addEventListener("input", function () {
-      minAgenticVal.textContent = minAgenticSlider.value;
-      renderTable(container);
+    container.querySelector("#bt-model-search").value = "";
+    container.querySelector("#bt-model-all").checked = true;
+    container.querySelectorAll(".bt-model-cb").forEach(function (cb) { cb.checked = true; });
+    container.querySelectorAll(".bt-model-option").forEach(function (l) { l.style.display = ""; });
+
+    container.querySelector("#bt-min-tps").value = 0;
+    container.querySelector("#bt-max-ttft").value = 10000;
+    container.querySelector("#bt-min-chat").value = 0;
+    container.querySelector("#bt-min-agentic").value = 0;
+
+    resetConfig();
+    ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"].forEach(function (k) {
+      container.querySelector("#bt-assump-" + k).value = config[k];
     });
+
+    /* The preview is driven by the TPS input, not by config, so it has to be
+       told the value changed — otherwise it keeps streaming at the old rate
+       and the panel looks like it did not reset. */
+    if (container.querySelector("#bt-targets-body").hidden) stopPreview();
+    else startPreview(container);
+
+    expanded = {};
+    syncSliderLabels(container);
+    renderTable(container);
+  }
+
+  /* ── Tooltips ── */
+
+  function wireTooltips(container) {
+    var tipEl = container.querySelector("#bt-tooltip");
+    var openBtn = null;
+
+    function show(btn) {
+      tipEl.innerHTML = btn.getAttribute("data-tip");
+      tipEl.hidden = false;
+      var r = btn.getBoundingClientRect();
+      var cr = container.getBoundingClientRect();
+      tipEl.style.top = (r.bottom - cr.top + 8) + "px";
+      var left = r.left - cr.left;
+      /* keep the bubble inside the widget on narrow screens */
+      var maxLeft = container.clientWidth - tipEl.offsetWidth - 8;
+      if (left > maxLeft) left = Math.max(8, maxLeft);
+      tipEl.style.left = left + "px";
+      openBtn = btn;
+    }
+
+    function hide() {
+      tipEl.hidden = true;
+      openBtn = null;
+    }
+
+    /* Tap toggles on touch devices; hover and keyboard focus cover the rest. */
+    container.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (openBtn === btn) hide();
+        else show(btn);
+        return;
+      }
+      if (!e.target.closest || !e.target.closest("#bt-tooltip")) hide();
+    });
+
+    container.addEventListener("mouseover", function (e) {
+      var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
+      if (btn) show(btn);
+    });
+    container.addEventListener("mouseout", function (e) {
+      var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
+      if (btn && openBtn === btn) hide();
+    });
+    container.addEventListener("focusin", function (e) {
+      if (e.target.classList && e.target.classList.contains("bt-tip")) show(e.target);
+    });
+    container.addEventListener("focusout", function (e) {
+      if (e.target.classList && e.target.classList.contains("bt-tip")) hide();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") hide();
+    });
+  }
+
+  /* ── TPS speed preview ── */
+
+  function wirePreview(container) {
+    container.querySelector("#bt-assump-tps_threshold").addEventListener("input", function () {
+      if (!container.querySelector("#bt-targets-body").hidden) startPreview(container);
+    });
+  }
+
+  function startPreview(container) {
+    var v = parseFloat(container.querySelector("#bt-assump-tps_threshold").value);
+    var sub = container.querySelector("#bt-preview-sub");
+    var el = container.querySelector("#bt-preview-text");
+    /* A target of zero means no speed to demonstrate: stop rather than
+       silently substituting some other rate. */
+    if (isNaN(v) || v <= 0) {
+      stopPreview();
+      sub.textContent = S.previewStopped;
+      el.textContent = "";
+      el.classList.remove("bt-streaming");
+      return;
+    }
+    sub.textContent = S.previewSubtitle(Math.round(v * 10) / 10);
+    stream(el, v);
+  }
+
+  function stopPreview() {
+    if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
+  }
+
+  /* Approximate token streaming: chop the sample into word-sized pieces and
+     reveal them at the selected rate. Not a real tokenizer — just enough that
+     the difference between 5 and 50 tok/s is obvious. */
+  function stream(el, tps) {
+    if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
+    var tokens = S.sampleText.match(/\S+\s*/g) || [];
+    var i = 0;
+    el.textContent = "";
+    el.classList.add("bt-streaming");
+    var delay = 1000 / tps;
+
+    function step() {
+      /* Above ~60 tok/s a timer cannot keep up, so emit several tokens per
+         tick instead of throttling. 100 tok/s then really does look near
+         instant rather than capped at the timer floor. */
+      var perTick = delay < 16 ? Math.ceil(16 / delay) : 1;
+      for (var k = 0; k < perTick && i < tokens.length; k++) {
+        el.textContent += tokens[i++];
+      }
+      if (i < tokens.length) {
+        previewTimer = setTimeout(step, Math.max(16, delay));
+      } else {
+        /* hold the finished text briefly, then run it again */
+        previewTimer = setTimeout(function () { stream(el, tps); }, 1600);
+      }
+    }
+    step();
   }
 
   /* ── Filtering ── */
@@ -530,39 +806,22 @@
         if (va === null) va = 99999;
         if (vb === null) vb = 99999;
       } else if (sortCol === "maxc") {
-        va = getMaxC(a);
-        vb = getMaxC(b);
+        va = getMaxC(a); vb = getMaxC(b);
       } else if (sortCol === "chat") {
-        va = getChatUsers(a);
-        vb = getChatUsers(b);
+        va = getChatUsers(a); vb = getChatUsers(b);
       } else if (sortCol === "agentic") {
-        va = getAgenticUsers(a);
-        vb = getAgenticUsers(b);
+        va = getAgenticUsers(a); vb = getAgenticUsers(b);
       } else if (sortCol === "tp") {
-        va = a.tp || 0;
-        vb = b.tp || 0;
+        va = a.tp || 0; vb = b.tp || 0;
       } else if (sortCol === "dp") {
-        va = a.dp || 0;
-        vb = b.dp || 0;
+        va = a.dp || 0; vb = b.dp || 0;
       } else if (sortCol === "pp") {
-        va = a.pp || 0;
-        vb = b.pp || 0;
+        va = a.pp || 0; vb = b.pp || 0;
       } else if (sortCol === "device") {
-        var deviceOrder = {
-          "Thor": 0,
-          "1× DGX Spark": 1,
-          "2× DGX Spark": 2,
-          "3× DGX Spark": 3,
-          "4× DGX Spark": 4,
-          "8× DGX Spark": 5,
-          "RTX PRO 6000": 6,
-          "DGX B300": 7
-        };
-        va = deviceOrder[a.device] != null ? deviceOrder[a.device] : 99;
-        vb = deviceOrder[b.device] != null ? deviceOrder[b.device] : 99;
+        va = DEVICE_ORDER[a.device] != null ? DEVICE_ORDER[a.device] : 99;
+        vb = DEVICE_ORDER[b.device] != null ? DEVICE_ORDER[b.device] : 99;
       } else {
-        va = a[sortCol] || "";
-        vb = b[sortCol] || "";
+        va = a[sortCol] || ""; vb = b[sortCol] || "";
         return sortDir === "asc"
           ? String(va).localeCompare(String(vb))
           : String(vb).localeCompare(String(va));
@@ -572,33 +831,32 @@
 
     var countEl = container.querySelector("#bt-results-count");
     if (countEl) {
-      countEl.innerHTML =
-        "<strong>" + rawData.benchmarks.length + "</strong> yapılandırmadan <strong>" +
-        entries.length + "</strong> tanesi gösteriliyor";
+      countEl.innerHTML = '<span class="bt-count-label">' + escapeHTML(S.matching) + "</span> " +
+        S.matchingCount(entries.length, rawData.benchmarks.length);
     }
 
     var wrap = container.querySelector("#bt-table-wrap");
     if (entries.length === 0) {
-      wrap.innerHTML = '<div class="bt-empty">Mevcut filtrelerle eşleşen yapılandırma yok.</div>';
+      wrap.innerHTML = '<div class="bt-empty">' + escapeHTML(S.noMatch) + "</div>";
       return;
     }
 
     var c = state.concurrency;
     var cols = [
-      { key: "model",        label: "Model",              sortable: true,  num: false },
-      { key: "device",       label: "Cihaz",              sortable: true,  num: false },
-      { key: "quantization", label: "Kuantizasyon",       sortable: true,  num: false },
-      { key: "tps",          label: "TPS @ C=" + c,       sortable: true,  num: true  },
-      { key: "ttft",         label: "TTFT @ C=" + c,     sortable: true,  num: true  },
-      { key: "maxc",         label: "Maks C",             sortable: true,  num: true  },
-      { key: "chat",         label: "Chat Kapasitesi",    sortable: true,  num: true  },
-      { key: "agentic",      label: "Agentic Kapasitesi", sortable: true,  num: true  },
-      { key: "tp",           label: "TP",                 sortable: true,  num: true  },
-      { key: "dp",           label: "DP",                 sortable: true,  num: true  },
-      { key: "pp",           label: "PP",                 sortable: true,  num: true  },
-      { key: "engine",       label: "Motor",              sortable: true,  num: false },
-      { key: "mtp",          label: "MTP",                sortable: true,  num: false },
-      { key: "expand",       label: "",                   sortable: false, num: false },
+      { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false },
+      { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false },
+      { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
+      { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
+      { key: "ttft",         label: S.colTtft + " @ C=" + c, t: S.tip.ttft, sortable: true, num: true },
+      { key: "maxc",         label: S.colMaxC,    t: S.tip.maxc,    sortable: true,  num: true  },
+      { key: "chat",         label: S.colChat,    t: S.tip.chat,    sortable: true,  num: true  },
+      { key: "agentic",      label: S.colAgentic, t: S.tip.agentic, sortable: true,  num: true  },
+      { key: "tp",           label: S.colTp,      t: S.tip.par,     sortable: true,  num: true  },
+      { key: "dp",           label: S.colDp,      t: S.tip.par,     sortable: true,  num: true  },
+      { key: "pp",           label: S.colPp,      t: S.tip.par,     sortable: true,  num: true  },
+      { key: "engine",       label: S.colEngine,  t: S.tip.engine,  sortable: true,  num: false },
+      { key: "mtp",          label: S.colMtp,     t: S.tip.mtp,     sortable: true,  num: false },
+      { key: "expand",       label: "",           t: null,          sortable: false, num: false }
     ];
 
     var html = '<table class="bt-table"><thead><tr>';
@@ -606,14 +864,13 @@
       var classes = [];
       if (col.sortable) {
         classes.push("bt-sortable");
-        if (sortCol === col.key) {
-          classes.push(sortDir === "asc" ? "bt-sorted-asc" : "bt-sorted-desc");
-        }
+        if (sortCol === col.key) classes.push(sortDir === "asc" ? "bt-sorted-asc" : "bt-sorted-desc");
       } else {
         classes.push("bt-no-sort");
       }
       if (col.num) classes.push("bt-th-num");
-      html += '<th class="' + classes.join(" ") + '" data-col="' + col.key + '">' + col.label + "</th>";
+      html += '<th class="' + classes.join(" ") + '" data-col="' + col.key + '">' +
+        escapeHTML(col.label) + (col.t ? tip(col.t) : "") + "</th>";
     });
     html += "</tr></thead><tbody>";
 
@@ -621,127 +878,93 @@
       var maxC = getMaxC(entry);
       var tps = getMetricAtC(entry, c, "tps");
       var ttft = getMetricAtC(entry, c, "ttft_ms");
-      var chat = getChatUsers(entry);
-      var agentic = getAgenticUsers(entry);
-      var isExpanded = expanded[entry.id];
+      var isExpanded = !!expanded[entry.id];
 
-      html += '<tr data-id="' + escapeHTML(entry.id) + '">';
+      html += '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '" tabindex="0" role="button" aria-expanded="' +
+        (isExpanded ? "true" : "false") + '" title="' + escapeHTML(S.viewDetails) + '">';
 
-      /* Model */
       html += "<td>" + escapeHTML(entry.model) + "</td>";
-      /* Device */
       html += "<td>" + escapeHTML(entry.device) + "</td>";
-      /* Quant */
       html += "<td>" + escapeHTML(entry.quantization) + "</td>";
 
-      /* TPS */
-      var tpsCls = "bt-num";
-      if (tps !== null && tps >= config.tps_threshold) tpsCls += " bt-good";
-      else if (tps !== null && tps < config.tps_threshold) tpsCls += " bt-bad";
-      html += '<td class="' + tpsCls + '">' + fmt(tps, 2) + "</td>";
+      var tpsCls = "bt-num", tpsTitle = "";
+      if (tps !== null) {
+        var tpsOk = tps >= config.tps_threshold;
+        tpsCls += tpsOk ? " bt-good" : " bt-bad";
+        tpsTitle = ' title="' + escapeHTML(tpsOk ? S.targetMet : S.targetNotMet) + '"';
+      }
+      html += '<td class="' + tpsCls + '"' + tpsTitle + ">" + fmt(tps, 2) + "</td>";
 
-      /* TTFT */
-      var ttftCls = "bt-num";
-      if (ttft !== null && ttft < config.ttft_threshold_ms) ttftCls += " bt-good";
-      else if (ttft !== null && ttft >= config.ttft_threshold_ms) ttftCls += " bt-bad";
-      html += '<td class="' + ttftCls + '">' + (ttft !== null ? fmt(ttft, 0) : "—") + "</td>";
+      var ttftCls = "bt-num", ttftTitle = "";
+      if (ttft !== null) {
+        var ttftOk = ttft < config.ttft_threshold_ms;
+        ttftCls += ttftOk ? " bt-good" : " bt-bad";
+        ttftTitle = ' title="' + escapeHTML(ttftOk ? S.targetMet : S.targetNotMet) + '"';
+      }
+      html += '<td class="' + ttftCls + '"' + ttftTitle + ">" + (ttft !== null ? fmt(ttft, 0) : "—") + "</td>";
 
-      /* Max C */
       html += '<td class="bt-num">' + (maxC > 0 ? maxC : '<span class="bt-muted">0</span>') + "</td>";
-
-      /* Chat Capacity */
-      html += '<td class="bt-num">' + chat + "</td>";
-
-      /* Agentic Capacity */
-      html += '<td class="bt-num">' + agentic + "</td>";
-
-      /* TP */
+      html += '<td class="bt-num">' + getChatUsers(entry) + "</td>";
+      html += '<td class="bt-num">' + getAgenticUsers(entry) + "</td>";
       html += '<td class="bt-num">' + (entry.tp != null && entry.tp !== 1 ? entry.tp : '<span class="bt-muted">—</span>') + "</td>";
-
-      /* DP */
       html += '<td class="bt-num">' + (entry.dp != null && entry.dp !== 1 ? entry.dp : '<span class="bt-muted">—</span>') + "</td>";
-
-      /* PP */
       html += '<td class="bt-num">' + (entry.pp != null && entry.pp !== 1 ? entry.pp : '<span class="bt-muted">—</span>') + "</td>";
-
-      /* Engine */
       html += "<td>" + escapeHTML(entry.engine) + "</td>";
-
-      /* MTP */
-      html += entry.mtp
-        ? '<td class="bt-mtp-yes">Evet</td>'
-        : '<td class="bt-muted">—</td>';
-
-      /* Expand */
-      html += '<td class="bt-expand-cell" data-expand="' + escapeHTML(entry.id) + '">' + (isExpanded ? "&#9660;" : "&#9654;") + "</td>";
-
+      html += entry.mtp ? '<td class="bt-mtp-yes">' + escapeHTML(S.yes) + "</td>" : '<td class="bt-muted">—</td>';
+      html += '<td class="bt-expand-cell">' + (isExpanded ? "&#9660;" : "&#9654;") + "</td>";
       html += "</tr>";
 
-      /* Expanded detail row */
       if (isExpanded) {
         html += '<tr class="bt-detail-row"><td colspan="' + cols.length + '">';
         html += '<div class="bt-detail-content bt-visible">';
         html += '<table class="bt-detail-table"><thead><tr>';
-        html += "<th>C</th><th>TTFT (ms)</th><th>TPS (tok/s)</th><th>Durum</th>";
+        html += "<th>" + escapeHTML(S.detailC) + "</th><th>" + escapeHTML(S.detailTtft) +
+                "</th><th>" + escapeHTML(S.detailTps) + "</th><th>" + escapeHTML(S.detailStatus) + "</th>";
         html += "</tr></thead><tbody>";
 
         entry.data_points.forEach(function (dp) {
           var passes = dp.ttft_ms != null && dp.ttft_ms < config.ttft_threshold_ms && dp.tps > config.tps_threshold;
-          html += "<tr>";
-          html += "<td>" + dp.c + "</td>";
+          html += "<tr><td>" + dp.c + "</td>";
           html += "<td>" + (dp.ttft_ms != null ? fmt(dp.ttft_ms, 0) : "—") + "</td>";
           html += "<td>" + fmt(dp.tps, 2) + "</td>";
-          html += '<td class="' + (passes ? "bt-detail-pass" : "bt-detail-fail") + '">' + (passes ? "BAŞARILI" : "BAŞARISIZ") + "</td>";
-          html += "</tr>";
+          html += '<td class="' + (passes ? "bt-detail-pass" : "bt-detail-fail") + '">' +
+            escapeHTML(passes ? S.pass : S.fail) + "</td></tr>";
         });
 
         html += "</tbody></table>";
 
-        /* Chart card */
         var deviceStr = escapeHTML(entry.device);
         if (entry.tp != null && entry.tp !== 1) {
           deviceStr += " (TP=" + entry.tp;
-          if (entry.dp != null && entry.dp !== 1) {
-            deviceStr += ", DP=" + entry.dp;
-          }
+          if (entry.dp != null && entry.dp !== 1) deviceStr += ", DP=" + entry.dp;
           deviceStr += ")";
         } else if (entry.dp != null && entry.dp !== 1) {
           deviceStr += " (DP=" + entry.dp + ")";
         }
-        var headerParts = [
-          escapeHTML(entry.model),
-          deviceStr,
-          escapeHTML(entry.quantization),
-          escapeHTML(entry.engine),
-        ];
+        var headerParts = [escapeHTML(entry.model), deviceStr, escapeHTML(entry.quantization), escapeHTML(entry.engine)];
         if (entry.mtp) headerParts.push("MTP");
 
         html += '<div class="bt-chart-card" id="bt-chart-card-' + escapeHTML(entry.id) + '">';
         html += '<div class="bt-chart-header">' + headerParts.join(" &middot; ") + "</div>";
         html += '<div class="bt-chart-legend">';
-        html += '<span class="bt-legend-item"><span class="bt-legend-swatch" style="background:#2196F3"></span> TPS (tok/s) &mdash; sol eksen</span>';
-        html += '<span class="bt-legend-item"><span class="bt-legend-swatch" style="background:#FF6D00"></span> Toplam TPS (tok/s) &mdash; sağ eksen</span>';
+        html += '<span class="bt-legend-item"><span class="bt-legend-swatch" style="background:#2196F3"></span> ' + escapeHTML(S.tpsAxis + S.leftAxis) + "</span>";
+        html += '<span class="bt-legend-item"><span class="bt-legend-swatch" style="background:#FF6D00"></span> ' + escapeHTML(S.aggAxis + S.rightAxis) + "</span>";
         html += "</div>";
         html += '<div class="bt-chart-axis-titles">';
-        html += '<span class="bt-axis-title-left" style="color:#2196F3">TPS (tok/s)</span>';
-        html += '<span class="bt-axis-title-right" style="color:#FF6D00">Toplam TPS (tok/s)</span>';
+        html += '<span class="bt-axis-title-left" style="color:#2196F3">' + escapeHTML(S.tpsAxis) + "</span>";
+        html += '<span class="bt-axis-title-right" style="color:#FF6D00">' + escapeHTML(S.aggAxis) + "</span>";
         html += "</div>";
-        html += '<div class="bt-chart-canvas-wrap">';
-        html += '<canvas id="bt-chart-' + escapeHTML(entry.id) + '"></canvas>';
-        html += "</div>";
-        html += '<div class="bt-chart-x-title">Eşzamanlı İstek Sayısı</div>';
-        html += '<div class="bt-chart-footer">';
-        html += '<span></span>';
+        html += '<div class="bt-chart-canvas-wrap"><canvas id="bt-chart-' + escapeHTML(entry.id) + '"></canvas></div>';
+        html += '<div class="bt-chart-x-title">' + escapeHTML(S.xTitle) + "</div>";
+        html += '<div class="bt-chart-footer"><span></span>';
         html += '<span class="bt-chart-logo"><img src="' + (logoPath || "logo.png") + '" alt="OpenZeka" class="bt-chart-logo-img" style="height:72px;width:auto;"></span>';
-        html += "</div>";
-        html += "</div>";
+        html += "</div></div>";
 
         if (entry.notes) {
-          html += '<div class="bt-detail-notes"><strong>Notlar:</strong> ' + escapeHTML(entry.notes) + "</div>";
+          html += '<div class="bt-detail-notes"><strong>' + escapeHTML(S.notes) + "</strong> " + escapeHTML(entry.notes) + "</div>";
         }
 
-        html += '<button class="bt-chart-download" data-download="' + escapeHTML(entry.id) + '">Grafiği İndir</button>';
-
+        html += '<button type="button" class="bt-chart-download" data-download="' + escapeHTML(entry.id) + '">' + escapeHTML(S.downloadChart) + "</button>";
         html += "</div></td></tr>";
       }
     });
@@ -749,48 +972,49 @@
     html += "</tbody></table>";
     wrap.innerHTML = html;
 
-    /* Wire sort headers */
     wrap.querySelectorAll("th[data-col]").forEach(function (th) {
       if (th.classList.contains("bt-no-sort")) return;
-      th.addEventListener("click", function () {
+      th.addEventListener("click", function (e) {
+        if (e.target.closest(".bt-tip")) return;
         var col = th.getAttribute("data-col");
-        if (sortCol === col) {
-          sortDir = sortDir === "asc" ? "desc" : "asc";
-        } else {
-          sortCol = col;
-          sortDir = "asc";
-        }
+        if (sortCol === col) sortDir = sortDir === "asc" ? "desc" : "asc";
+        else { sortCol = col; sortDir = "asc"; }
         renderTable(container);
       });
     });
 
-    /* Wire expand cells */
-    wrap.querySelectorAll("[data-expand]").forEach(function (cell) {
-      cell.addEventListener("click", function () {
-        var id = cell.getAttribute("data-expand");
-        expanded[id] = !expanded[id];
-        if (expanded[id]) {
-          history.replaceState(null, "", "#" + id);
-        } else {
-          history.replaceState(null, "", window.location.pathname + window.location.search);
+    /* The whole row is the control, not just the arrow at the end. */
+    function toggleRow(id) {
+      expanded[id] = !expanded[id];
+      if (expanded[id]) history.replaceState(null, "", "#" + id);
+      else history.replaceState(null, "", window.location.pathname + window.location.search);
+      renderTable(container);
+      var back = container.querySelector('[data-id="' + CSS.escape(id) + '"]');
+      if (back) back.focus();
+    }
+
+    wrap.querySelectorAll("tr.bt-row").forEach(function (tr) {
+      tr.addEventListener("click", function (e) {
+        if (e.target.closest("a, button, input, label")) return;
+        toggleRow(tr.getAttribute("data-id"));
+      });
+      tr.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+          e.preventDefault();
+          toggleRow(tr.getAttribute("data-id"));
         }
-        renderTable(container);
       });
     });
 
-    /* Render charts for expanded rows */
     entries.forEach(function (entry) {
-      if (expanded[entry.id]) {
-        renderChart(entry, container);
-      }
+      if (expanded[entry.id]) renderChart(entry, container);
     });
 
-    /* Wire download buttons */
     wrap.querySelectorAll("[data-download]").forEach(function (btn) {
       btn.addEventListener("click", function (e) {
         e.preventDefault();
-        var id = btn.getAttribute("data-download");
-        downloadChart(id, container);
+        e.stopPropagation();
+        downloadChart(btn.getAttribute("data-download"), container);
       });
     });
   }
@@ -802,21 +1026,11 @@
     if (!canvas) return;
     if (typeof Chart === "undefined") return;
 
-    if (chartInstances[entry.id]) {
-      chartInstances[entry.id].destroy();
-    }
+    if (chartInstances[entry.id]) chartInstances[entry.id].destroy();
 
-    var cValues = entry.data_points.map(function (dp) {
-      return dp.c;
-    });
-
-    var tpsData = entry.data_points.map(function (dp) {
-      return dp.tps;
-    });
-
-    var aggData = entry.data_points.map(function (dp) {
-      return dp.tps * dp.c;
-    });
+    var cValues = entry.data_points.map(function (dp) { return dp.c; });
+    var tpsData = entry.data_points.map(function (dp) { return dp.tps; });
+    var aggData = entry.data_points.map(function (dp) { return dp.tps * dp.c; });
 
     var tpsColor = "#2196F3";
     var aggColor = "#FF6D00";
@@ -824,57 +1038,24 @@
     chartInstances[entry.id] = new Chart(canvas, {
       type: "line",
       data: {
-        labels: cValues.map(function(c) { return "C=" + c; }),
+        labels: cValues.map(function (c) { return "C=" + c; }),
         datasets: [
-          {
-            label: "TPS",
-            data: tpsData,
-            yAxisID: "y_tps",
-            borderColor: tpsColor,
-            backgroundColor: tpsColor,
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            tension: 0,
-          },
-          {
-            label: "Toplam TPS",
-            data: aggData,
-            yAxisID: "y_agg",
-            borderColor: aggColor,
-            backgroundColor: aggColor,
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            tension: 0,
-          },
-        ],
+          { label: "TPS", data: tpsData, yAxisID: "y_tps", borderColor: tpsColor,
+            backgroundColor: tpsColor, pointRadius: 5, pointHoverRadius: 7, tension: 0 },
+          { label: S.aggLabel, data: aggData, yAxisID: "y_agg", borderColor: aggColor,
+            backgroundColor: aggColor, pointRadius: 5, pointHoverRadius: 7, tension: 0 }
+        ]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        interaction: {
-          mode: "index",
-          intersect: false,
-        },
+        interaction: { mode: "index", intersect: false },
         scales: {
-          x: {
-            type: "category",
-            grid: { color: "#eeeeee" },
-            ticks: { font: { size: 12 } },
-          },
-          y_tps: {
-            position: "left",
-            beginAtZero: true,
-            ticks: { color: tpsColor, font: { size: 12 } },
-            grid: { color: "#eeeeee" },
-            title: { display: false },
-          },
-          y_agg: {
-            position: "right",
-            beginAtZero: true,
-            ticks: { color: aggColor, font: { size: 12 } },
-            grid: { drawOnChartArea: false },
-            title: { display: false },
-          },
+          x: { type: "category", grid: { color: "#eeeeee" }, ticks: { font: { size: 12 } } },
+          y_tps: { position: "left", beginAtZero: true, ticks: { color: tpsColor, font: { size: 12 } },
+                   grid: { color: "#eeeeee" }, title: { display: false } },
+          y_agg: { position: "right", beginAtZero: true, ticks: { color: aggColor, font: { size: 12 } },
+                   grid: { drawOnChartArea: false }, title: { display: false } }
         },
         plugins: {
           legend: { display: false },
@@ -882,30 +1063,23 @@
             callbacks: {
               label: function (ctx) {
                 var label = ctx.dataset.label || "";
-                if (label === "TPS") {
-                  return "TPS: " + ctx.parsed.y.toFixed(2) + " tok/s";
-                } else {
-                  return "Toplam TPS: " + Math.round(ctx.parsed.y) + " tok/s";
-                }
-              },
-            },
+                if (label === "TPS") return "TPS: " + ctx.parsed.y.toFixed(2) + " tok/s";
+                return S.aggLabel + ": " + Math.round(ctx.parsed.y) + " tok/s";
+              }
+            }
           },
           datalabels: {
             align: "bottom",
             anchor: "end",
-            color: function (ctx) {
-              return ctx.datasetIndex === 0 ? tpsColor : aggColor;
-            },
+            color: function (ctx) { return ctx.datasetIndex === 0 ? tpsColor : aggColor; },
             font: { weight: "bold", size: 11 },
             formatter: function (value, ctx) {
               if (value === null) return "";
-              return ctx.datasetIndex === 0
-                ? value.toFixed(1)
-                : Math.round(value);
-            },
-          },
-        },
-      },
+              return ctx.datasetIndex === 0 ? value.toFixed(1) : Math.round(value);
+            }
+          }
+        }
+      }
     });
   }
 
@@ -925,18 +1099,15 @@
       var canvas = container.querySelector("#bt-chart-" + CSS.escape(entryId));
       if (!canvas) return;
       var link = document.createElement("a");
-      link.download = entryId + "-grafik.png";
+      link.download = entryId + S.chartFileSuffix;
       link.href = canvas.toDataURL("image/png");
       link.click();
       return;
     }
 
-    html2canvas(card, {
-      backgroundColor: "#ffffff",
-      scale: 4,
-    }).then(function (canvas) {
+    html2canvas(card, { backgroundColor: "#ffffff", scale: 4 }).then(function (canvas) {
       var link = document.createElement("a");
-      link.download = entryId + "-grafik.png";
+      link.download = entryId + S.chartFileSuffix;
       link.href = canvas.toDataURL("image/png");
       link.click();
     });
@@ -966,19 +1137,15 @@
     if (hash && !rawData.benchmarks.some(function (b) { return b.id === hash; })) {
       return;
     }
-    /* Collapse rows not matching hash */
     for (var id in expanded) {
       if (expanded.hasOwnProperty(id) && expanded[id] && id !== hash) {
         expanded[id] = false;
         destroyChart(id);
       }
     }
-    /* Expand hash-matched row */
     if (hash) {
       var found = rawData.benchmarks.some(function (b) { return b.id === hash; });
-      if (found) {
-        expanded[hash] = true;
-      }
+      if (found) expanded[hash] = true;
     }
     renderTable(container);
     if (hash) {

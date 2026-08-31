@@ -576,3 +576,52 @@ img[width] {
     margin-left: 16.5rem;
   }
 }
+
+// ===== Benchmark bölümü — sayfa içi bağlantılar =====
+// Landing ve "nasıl kullanılır" sayfalarındaki yönlendirme düğmeleri.
+.bt-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1.75rem 0 0.5rem;
+}
+
+.bt-cta a {
+  display: inline-block;
+  padding: 0.6rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  background-image: none;
+}
+
+.bt-cta a.bt-cta-primary {
+  color: #fff;
+  background: var(--openzeka-green);
+  border: 1px solid var(--openzeka-green);
+
+  &:hover {
+    background: var(--openzeka-green-dark);
+    border-color: var(--openzeka-green-dark);
+    color: #fff;
+  }
+}
+
+.bt-cta a.bt-cta-secondary {
+  color: var(--openzeka-green-darker);
+  background: transparent;
+  border: 1px solid var(--openzeka-green);
+
+  &:hover {
+    background: rgba(118, 185, 0, 0.08);
+  }
+}
+
+// Tablonun üstündeki ikincil yardım bağlantısı: görünür ama öne çıkmayan.
+a.bt-inline-help {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}

@@ -1,101 +1,30 @@
 /* ── Benchmark Table — bt- prefixed, self-contained ── */
 
-.bt-container {
+/* Declared on :root, not on .bt-container, because the how-to disclosure sits
+   on the page outside the widget and needs the same palette. */
+:root {
+  /* Values mirror the site's own tokens (--openzeka-*) rather than
+     referencing them, because this stylesheet also ships to openzeka.com
+     where those variables do not exist. */
   --bt-green: #76b900;
+  --bt-green-dark: #5a8c00;
   --bt-dark: #1a1a1a;
-  --bt-border: #d0d0d0;
+  --bt-border: #e3e6ea;
   --bt-bg: #ffffff;
-  --bt-bg-alt: #f7f7f7;
+  --bt-bg-alt: #f6f8fa;
   --bt-bg-hover: #eef5e6;
-  --bt-text: #333333;
-  --bt-text-muted: #777777;
+  --bt-text: #1a1a1a;
+  --bt-text-muted: #525f7a;
   --bt-radius: 6px;
-  --bt-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-family: var(--bt-font);
+}
+
+.bt-container {
+  font-family: inherit;
   color: var(--bt-text);
   font-size: 14px;
   line-height: 1.5;
   max-width: 100%;
   overflow-x: auto;
-}
-
-/* ── Assumptions Panel ── */
-
-.bt-assumptions {
-  background: var(--bt-bg-alt);
-  border: 1px solid var(--bt-border);
-  border-radius: var(--bt-radius);
-  padding: 16px 20px;
-  margin-bottom: 16px;
-}
-
-.bt-assumptions-toggle {
-  background: none;
-  border: none;
-  font-family: var(--bt-font);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--bt-text);
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.bt-assumptions-toggle .bt-arrow {
-  display: inline-block;
-  transition: transform 0.2s;
-  font-size: 10px;
-}
-
-.bt-assumptions-toggle.bt-open .bt-arrow {
-  transform: rotate(90deg);
-}
-
-.bt-assumptions-body {
-  display: none;
-  margin-top: 14px;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.bt-assumptions-body.bt-visible {
-  display: flex;
-}
-
-.bt-assumption-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.bt-assumption-item label {
-  font-size: 12px;
-  color: var(--bt-text-muted);
-  font-weight: 500;
-}
-
-.bt-assumption-item input {
-  width: 80px;
-  padding: 4px 8px;
-  border: 1px solid var(--bt-border);
-  border-radius: 4px;
-  font-family: var(--bt-font);
-  font-size: 14px;
-  color: var(--bt-text);
-}
-
-.bt-assumption-item input:focus {
-  outline: 2px solid var(--bt-green);
-  border-color: var(--bt-green);
-}
-
-.bt-assumptions-hint {
-  font-size: 12px;
-  color: var(--bt-text-muted);
-  margin-top: 8px;
-  width: 100%;
 }
 
 /* ── Filters ── */
@@ -141,7 +70,7 @@
   border: 1px solid var(--bt-border);
   border-radius: 20px;
   background: var(--bt-bg);
-  font-family: var(--bt-font);
+  font-family: inherit;
   font-size: 13px;
   color: var(--bt-text);
   cursor: pointer;
@@ -199,7 +128,7 @@
   padding: 5px 10px;
   border: 1px solid var(--bt-border);
   border-radius: 4px;
-  font-family: var(--bt-font);
+  font-family: inherit;
   font-size: 13px;
   color: var(--bt-text);
   background: var(--bt-bg);
@@ -283,17 +212,13 @@
   color: #fff;
   font-weight: 600;
   padding: 10px 14px;
-  text-align: left;
+  text-align: center;
   cursor: pointer;
   user-select: none;
   position: sticky;
   top: 0;
   z-index: 1;
   border-bottom: 2px solid var(--bt-green);
-}
-
-.bt-table thead th.bt-th-num {
-  text-align: right;
 }
 
 .bt-table thead th:hover {
@@ -335,11 +260,10 @@
 
 .bt-table tbody td {
   padding: 8px 14px;
-  text-align: left;
+  text-align: center;
 }
 
 .bt-table tbody td.bt-num {
-  text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
@@ -397,7 +321,7 @@
 .bt-detail-table th,
 .bt-detail-table td {
   padding: 6px 16px;
-  text-align: right;
+  text-align: center;
   border-bottom: 1px solid #eee;
 }
 
@@ -406,11 +330,6 @@
   font-weight: 600;
   text-transform: uppercase;
   font-size: 11px;
-}
-
-.bt-detail-table td:first-child,
-.bt-detail-table th:first-child {
-  text-align: left;
 }
 
 .bt-detail-table .bt-detail-fail {
@@ -516,7 +435,7 @@
   border: 1px solid var(--bt-border);
   border-radius: 4px;
   background: var(--bt-bg);
-  font-family: var(--bt-font);
+  font-family: inherit;
   font-size: 12px;
   color: var(--bt-text);
   cursor: pointer;
@@ -598,3 +517,385 @@
     gap: 12px;
   }
 }
+
+/* ── Controls shell ── */
+
+.bt-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.bt-filter-row-perf {
+  flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.bt-filter-row-perf .bt-btn.bt-active {
+  font-weight: 700;
+}
+
+.bt-perf-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bt-inline-label {
+  margin-left: 14px;
+}
+
+.bt-slider-perf {
+  min-width: 160px;
+}
+
+.bt-reset-row {
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.bt-reset {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--bt-text);
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-radius: var(--bt-radius);
+  cursor: pointer;
+}
+
+.bt-reset:hover {
+  border-color: var(--bt-green);
+  color: var(--bt-green-dark, #5a8c00);
+}
+
+/* ── Performance targets / capacity assumptions ──
+   Visually distinct from filters: filters choose which rows are shown, these
+   decide what counts as acceptable and how capacity is estimated. */
+
+.bt-targets {
+  background: var(--bt-bg-alt);
+  border: 1px solid var(--bt-border);
+  border-radius: var(--bt-radius);
+}
+
+.bt-targets-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bt-text);
+  background: transparent;
+  border: 0;
+  border-radius: var(--bt-radius);
+  cursor: pointer;
+}
+
+.bt-targets-toggle:hover { color: var(--bt-green-dark, #5a8c00); }
+
+.bt-targets-toggle .bt-arrow {
+  display: inline-block;
+  font-size: 10px;
+  color: var(--bt-green);
+  transition: transform 0.15s;
+}
+
+.bt-targets-toggle.bt-open .bt-arrow { transform: rotate(90deg); }
+
+.bt-targets-body {
+  padding: 0 16px 16px;
+}
+
+.bt-targets-body[hidden] { display: none; }
+
+.bt-targets-intro {
+  margin: 0 0 14px;
+  max-width: 78ch;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--bt-text-muted);
+}
+
+.bt-targets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px 20px;
+}
+
+.bt-target-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bt-target-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bt-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bt-target-item input[type="number"] {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--bt-text);
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-radius: 4px;
+}
+
+.bt-target-item input[type="number"]:focus {
+  outline: none;
+  border-color: var(--bt-green);
+}
+
+.bt-preview-open {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--bt-green-dark, #5a8c00);
+  background: transparent;
+  border: 1px solid var(--bt-green);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.bt-preview-open:hover {
+  background: var(--bt-bg-hover);
+}
+
+/* ── Info tooltips ── */
+
+.bt-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  padding: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--bt-text-muted);
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  cursor: help;
+  flex: none;
+  vertical-align: middle;
+}
+
+.bt-table thead th .bt-tip {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.bt-tip:hover,
+.bt-tip:focus-visible {
+  color: var(--bt-green);
+  outline: none;
+}
+
+.bt-tooltip {
+  position: absolute;
+  z-index: 40;
+  max-width: min(340px, calc(100vw - 32px));
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  font-weight: 400;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: normal;
+  color: #f5f5f5;
+  background: #262626;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+
+.bt-tooltip strong { color: #fff; }
+.bt-tooltip p { margin: 6px 0 0; }
+.bt-tooltip p:first-of-type { margin-top: 4px; }
+.bt-tooltip em { color: var(--bt-green); font-style: normal; font-weight: 600; }
+
+/* ── Results count ── */
+
+.bt-count-label {
+  font-weight: 600;
+  color: var(--bt-text);
+}
+
+/* ── Clickable rows ──
+   The whole row is the control, so it needs to look like one. */
+
+.bt-table tbody tr.bt-row {
+  cursor: pointer;
+}
+
+.bt-table tbody tr.bt-row:focus-visible {
+  outline: 2px solid var(--bt-green);
+  outline-offset: -2px;
+}
+
+.bt-table tbody tr.bt-row[aria-expanded="true"] {
+  background: var(--bt-bg-hover);
+}
+
+.bt-table tbody tr.bt-row[aria-expanded="true"] td:first-child {
+  box-shadow: inset 3px 0 0 var(--bt-green);
+}
+
+/* ── TPS speed preview — always on, inline under the targets ── */
+
+.bt-tps-preview {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--bt-border);
+}
+
+.bt-tps-preview-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.bt-tps-preview-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bt-text);
+}
+
+.bt-preview-sub {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bt-green-dark, #5a8c00);
+}
+
+.bt-preview-text {
+  min-height: 6.5em;
+  padding: 16px 18px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--bt-text);
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-radius: 6px;
+}
+
+.bt-preview-text.bt-streaming::after {
+  content: "▍";
+  font-size: 0.9em;
+  color: var(--bt-green);
+  animation: bt-blink 1s steps(2, start) infinite;
+}
+
+@keyframes bt-blink { to { visibility: hidden; } }
+
+.bt-preview-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--bt-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bt-preview-text.bt-streaming::after { animation: none; }
+}
+
+/* ── How-to disclosure ──
+   Deliberately not a panel: it is page copy, and must not read as a third
+   control surface stacked above the targets and filters. */
+
+details.bt-howto {
+  margin: 0 0 22px;
+}
+
+details.bt-howto > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bt-green-dark);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+details.bt-howto > summary::-webkit-details-marker { display: none; }
+
+details.bt-howto > summary::before {
+  content: "\25B6";
+  font-size: 0.7em;
+  color: var(--bt-green);
+  transition: transform 0.15s;
+}
+
+details.bt-howto[open] > summary::before { transform: rotate(90deg); }
+
+details.bt-howto > summary:hover { color: var(--bt-green); }
+
+details.bt-howto > summary:focus-visible {
+  outline: 2px solid var(--bt-green);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.bt-howto-body {
+  margin-top: 10px;
+  padding-left: 18px;
+  border-left: 2px solid var(--bt-border);
+  max-width: 76ch;
+}
+
+.bt-howto-body h3 {
+  margin: 22px 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bt-text);
+}
+
+.bt-howto-body h3:first-child { margin-top: 4px; }
+
+.bt-howto-body p {
+  margin: 0 0 10px;
+  line-height: 1.65;
+}
+
+.bt-howto-body ul { margin: 0 0 10px; }
+
+.bt-howto-example {
+  margin: 4px 0 12px;
+  padding: 12px 14px;
+  background: var(--bt-bg-alt);
+  border-radius: var(--bt-radius);
+  font-size: 0.95em;
+}
+
+.bt-howto-example p:last-child { margin-bottom: 0; }
