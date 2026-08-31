@@ -27,6 +27,37 @@ detailed results for that configuration.
 <summary>How to use the benchmark table</summary>
 <div class="bt-howto-body" markdown="1">
 
+### What the parameters mean
+
+**Token** — the unit a model reads and writes, roughly three quarters of a word.
+
+**TPS (tokens per second)** — how fast text is produced for one request. Higher
+is better.
+
+**TTFT (time to first token)** — the wait before the first word appears. Lower
+is better.
+
+**Concurrency (C)** — how many requests the system is working on at the same
+instant. A load level, not a number of people.
+
+**Quantization** — the number format the weights are stored in. Fewer bits per
+weight means less memory and usually more speed, at some risk to quality. BF16
+is the full-precision baseline; FP8, NVFP4, MXFP4 and INT4 are progressively
+more compressed.
+
+**MTP (multi-token prediction)** — the model guesses several tokens ahead in one
+step and then verifies them. Correct guesses are kept, so the same output
+arrives faster.
+
+**Inference engine** — the server software that loads the model and answers
+requests. It controls batching, memory and scheduling, so it affects speed as
+much as the hardware. vLLM and SGLang are two of them.
+
+**TP / DP / PP** — three ways of splitting one model across several GPUs.
+Tensor parallelism divides the maths inside a layer; data parallelism runs
+complete copies side by side; pipeline parallelism puts different layers on
+different devices.
+
 ### Two distinctions worth fixing first
 
 **Filters decide which rows appear. Targets change what the numbers mean.**
@@ -54,12 +85,9 @@ configuration with and without MTP.
 
 ### 3. Set your targets
 
-**TTFT** is how long a user waits for the first token; it decides whether the
-interface feels dead or alive. **TPS** is how fast text then streams; it decides
-whether the answer keeps up with your reading.
-
-They protect different things. In a chat interface, low TTFT matters first. For
-long-form generation, TPS dominates.
+The two metrics protect different things. In a chat interface low TTFT matters
+first — a fast answer that starts late still feels broken. For long-form
+generation TPS dominates, because the wait is spread across the whole reply.
 
 If you are unsure how a TPS value feels, the preview inside **Performance
 Targets and Capacity Assumptions** streams sample text at exactly that rate.

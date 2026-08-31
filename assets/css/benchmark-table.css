@@ -306,6 +306,11 @@
 .bt-detail-content {
   padding: 16px 20px;
   display: none;
+  /* .bt-table sets white-space: nowrap and text-align: center for the grid.
+     Both are inherited here; prose must wrap, and must start at the left edge
+     rather than growing outward from the centre of its box. */
+  white-space: normal;
+  text-align: left;
 }
 
 .bt-detail-content.bt-visible {
@@ -322,6 +327,7 @@
 .bt-detail-table td {
   padding: 6px 16px;
   text-align: center;
+  white-space: nowrap;
   border-bottom: 1px solid #eee;
 }
 
@@ -716,7 +722,7 @@
 }
 
 .bt-tooltip {
-  position: absolute;
+  position: fixed;
   z-index: 40;
   max-width: min(340px, calc(100vw - 32px));
   padding: 10px 12px;
@@ -794,6 +800,11 @@
   font-size: 12px;
   font-weight: 600;
   color: var(--bt-green-dark, #5a8c00);
+}
+
+/* the picked speed misses the TPS target */
+.bt-preview-sub.bt-sub-bad {
+  color: #c0392b;
 }
 
 .bt-preview-text {
@@ -899,3 +910,83 @@ details.bt-howto > summary:focus-visible {
 }
 
 .bt-howto-example p:last-child { margin-bottom: 0; }
+
+/* ── Expanded row: sweep table beside the speed preview ── */
+
+.bt-detail-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.bt-detail-top .bt-detail-table {
+  flex: 0 1 auto;
+  margin-bottom: 0;
+}
+
+.bt-detail-preview {
+  display: flex;
+  flex-direction: column;
+  /* No max-width: the preview takes whatever the sweep table leaves, so the
+     pair spans the same width as the chart below and their right edges line
+     up instead of the preview stopping short. */
+  flex: 1 1 340px;
+  min-width: 0;
+}
+
+/* Fixed box: it fills the space beside the sweep table and does not grow as
+   text arrives, so nothing on the page shifts while it streams.
+   flex-basis must be 0 — with `auto` the base size is the content, which is
+   exactly what made the box grow token by token. */
+.bt-detail-preview .bt-preview-text {
+  flex: 1 1 0;
+  min-height: 6em;
+  overflow: hidden;
+}
+
+.bt-detail-preview .bt-preview-note {
+  flex: none;
+}
+
+/* The metric that caused a FAIL, marked on the number itself. Colour only —
+   the STATUS column keeps the bold, so the row still reads status-first. */
+.bt-detail-table td.bt-dp-good {
+  color: #2d8a2d;
+}
+
+.bt-detail-table td.bt-dp-bad {
+  color: #c0392b;
+}
+
+/* measurement rows are pickable: each one drives the preview */
+.bt-detail-table tbody tr.bt-dp-row {
+  cursor: pointer;
+}
+
+.bt-detail-table tbody tr.bt-dp-row:hover {
+  background: var(--bt-bg-hover);
+}
+
+.bt-detail-table tbody tr.bt-dp-row:focus-visible {
+  outline: 2px solid var(--bt-green);
+  outline-offset: -2px;
+}
+
+.bt-detail-table tbody tr.bt-dp-active {
+  background: var(--bt-bg-hover);
+}
+
+.bt-detail-table tbody tr.bt-dp-active td:first-child {
+  box-shadow: inset 3px 0 0 var(--bt-green);
+}
+
+/* The model name is what the eye scans down; centring made the column ragged.
+   Child combinators throughout: the expanded row nests a second table inside
+   .bt-table, so a descendant selector here also caught the sweep table's first
+   header cell and left-aligned it over a centred column. */
+.bt-table > thead > tr > th:first-child,
+.bt-table > tbody > tr.bt-row > td:first-child {
+  text-align: left;
+}

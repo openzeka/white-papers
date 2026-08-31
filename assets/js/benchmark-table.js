@@ -83,38 +83,42 @@
     previewHeading: "What this speed looks like",
     previewSubtitle: function (n) { return "sample text at approximately " + n + " tokens/s"; },
     previewStopped: "stopped — the TPS target is 0",
+    previewRowHeading: "What this speed looks like",
+    previewRowSub: function (c, n) { return "C=" + c + " · approximately " + n + " tokens/s"; },
+    previewPick: "Pick any measured concurrency to preview the speed recorded there.",
+    previewRowLabel: function (c) { return "Preview the speed measured at C=" + c; },
     previewDisclaimer: "This is an approximate simulation designed to visualize the selected TPS value. Actual response experience may vary depending on TTFT, output length, and application behavior.",
-    sampleText: "Running a large language model on your own hardware means the response speed depends on the accelerator, the quantization format and how many people are using the system at the same time. At low token rates the text appears word by word and the wait becomes noticeable. As the rate increases the reply arrives faster than most people can read it, and the interface begins to feel immediate rather than sluggish.",
+    sampleText: "Running a large language model on your own hardware means the response speed depends on the accelerator, the quantization format and how many people are using the system at the same time. At low token rates the text appears word by word and the wait becomes noticeable, so the interface feels like it is thinking out loud. As the rate increases the reply arrives faster than most people can read it, and the experience changes character entirely: instead of watching the answer being assembled, you simply read it. Somewhere between those two extremes is the point where a chat assistant stops feeling like a machine you are waiting on and starts feeling like a tool that keeps up with you. Where exactly that point falls depends on the task. Skimming a short answer tolerates far less speed than reading a long technical explanation, and a background job that nobody watches tolerates less still.",
 
     /* Tooltips */
     tip: {
-      model: "<strong>Model</strong><p>The LLM used in the benchmark.</p><p>The same model may appear in multiple rows when different quantization or serving configurations were tested.</p>",
-      device: "<strong>Device</strong><p>The hardware and number of devices used for the benchmark.</p><p>For example, 4× DGX Spark means the configuration uses four DGX Spark systems.</p>",
-      quant: "<strong>Quantization</strong><p>The numerical precision or quantization format used for the model weights. Examples include BF16, FP8 and NVFP4.</p><p>Lower precision generally reduces memory requirements and can affect inference performance.</p>",
-      tps: "<strong>TPS — Tokens per Second</strong><p>The token generation rate for one request at the selected concurrency level.</p><p><em>Higher is better.</em></p><p>Changing the concurrency selector updates this column to the corresponding measurement.</p>",
-      ttft: "<strong>TTFT — Time to First Token</strong><p>The time between sending a request and receiving its first token.</p><p><em>Lower is better.</em></p><p>Changing the concurrency selector updates this column to the corresponding measurement.</p>",
-      maxc: "<strong>Maximum Supported Concurrency</strong><p>How many requests this configuration can serve <em>at the same time</em> while still meeting both of your performance targets.</p><p>This counts simultaneous requests, not people. One request is one generation in flight.</p><p>Stricter targets lower this number.</p>",
-      chat: "<strong>Estimated Chat Capacity</strong><p>Roughly how many <em>people</em> can use this configuration for interactive chat at the same time.</p><p>Higher than Max C because chat users are idle most of the time — reading, thinking, typing — so several people share one simultaneous request slot.</p><p>An estimate from your Chat Usage Multiplier, not a measured value.</p>",
-      agentic: "<strong>Estimated Agentic Capacity</strong><p>Roughly how many <em>people</em> this configuration can support for agentic use, where the model works through multi-step tasks and tool calls on their behalf.</p><p>Lower than the chat figure because an agentic user keeps a request slot busy far more of the time.</p><p>An estimate from your Agentic Usage Multiplier, not a measured value.</p>",
-      par: "<strong>Parallelism Configuration</strong><p>Shows how the deployment uses multiple GPUs or devices.</p><p><strong>TP — Tensor Parallelism:</strong> distributes model computation across multiple GPUs.</p><p><strong>DP — Data Parallelism:</strong> uses multiple model replicas to process different requests in parallel.</p><p><strong>PP — Pipeline Parallelism:</strong> distributes model layers across multiple GPUs or devices.</p><p>— means that the corresponding method is not used.</p>",
-      engine: "<strong>Inference Engine</strong><p>The inference engine used to serve the model. Examples include vLLM and SGLang.</p><p>The same model and hardware may perform differently depending on the inference engine.</p>",
-      mtp: "<strong>MTP — Multi-Token Prediction</strong><p>Indicates whether multi-token prediction is used to accelerate generation.</p><p>Compare configurations with MTP enabled and disabled to see its effect on performance.</p>",
+      model: "<strong>Model</strong><p>The large language model being served — its identity, size and vendor.</p><p>The same model appears in several rows when it was tested at different quantizations or serving configurations.</p>",
+      device: "<strong>Device</strong><p>The hardware the model ran on, and how many units of it were used together.</p><p>4× DGX Spark means four machines serving one model as a single system, not four separate runs.</p>",
+      quant: "<strong>Quantization</strong><p>The number format the model weights are stored in. Lower precision uses fewer bits per weight, so the model takes less memory and usually runs faster, at some risk to output quality.</p><p>BF16 is the full-precision baseline; FP8, NVFP4, MXFP4 and INT4 are progressively more compressed.</p>",
+      tps: "<strong>TPS — Tokens per Second</strong><p>How fast the model produces text for a single request, measured in tokens per second. A token is roughly three quarters of a word.</p><p><em>Higher is better.</em> Shown at the selected concurrency.</p>",
+      ttft: "<strong>TTFT — Time to First Token</strong><p>How long a user waits between sending a request and the first word appearing, in milliseconds.</p><p><em>Lower is better.</em> Shown at the selected concurrency.</p>",
+      maxc: "<strong>Max C — Maximum Supported Concurrency</strong><p>How many requests this configuration can serve at the same time while still meeting both of your performance targets.</p><p>Counts simultaneous requests, not people. Stricter targets lower it.</p>",
+      chat: "<strong>Estimated Chat Capacity</strong><p>Roughly how many people can use this configuration for interactive chat at once.</p><p>Higher than Max C because chat users are idle most of the time — reading, thinking, typing — so several share one request slot.</p><p>An estimate from your Chat Usage Multiplier, not a measurement.</p>",
+      agentic: "<strong>Estimated Agentic Capacity</strong><p>Roughly how many people this configuration supports for agentic use, where the model works through multi-step tasks and tool calls on their behalf.</p><p>Lower than the chat figure because an agentic user holds a request slot far longer.</p><p>An estimate from your Agentic Usage Multiplier, not a measurement.</p>",
+      par: "<strong>Parallelism — TP / DP / PP</strong><p>How one model is split across several GPUs or machines so it can run at all, or run faster.</p><p><strong>TP — Tensor Parallelism:</strong> one layer\u2019s maths is divided across GPUs, which all work on the same request.</p><p><strong>DP — Data Parallelism:</strong> several complete copies of the model each handle different requests.</p><p><strong>PP — Pipeline Parallelism:</strong> different layers live on different devices and requests pass through them in turn.</p><p>— means the method was not used.</p>",
+      engine: "<strong>Inference Engine</strong><p>The server software that loads the model and answers requests. It handles batching, memory and scheduling, so it affects speed as much as the hardware does.</p><p>vLLM and SGLang are two such servers; the same model on the same hardware can differ measurably between them.</p>",
+      mtp: "<strong>MTP — Multi-Token Prediction</strong><p>A technique where the model guesses several tokens ahead in one step instead of one at a time, then verifies them. Correct guesses are kept, so text comes out faster with the same output.</p><p>Compare rows with and without MTP to see what it bought on that configuration.</p>",
 
-      fConcurrency: "<strong>Concurrency</strong><p>How many requests are being processed <em>at the same time</em>. This is a load level, not a number of people.</p><p>Raise it to see how a system behaves under heavier simultaneous load.</p><p>Controls which TPS and TTFT measurements the table shows.</p>",
-      fModel: "<strong>Model</strong><p>Select which models are shown in the table.</p><p>Choose multiple models to compare them side by side.</p>",
-      fDevice: "<strong>Device</strong><p>Limits the results to selected hardware configurations.</p><p>Choose multiple devices to compare their performance.</p>",
-      fQuant: "<strong>Quantization</strong><p>Shows only results using the selected model precision or quantization formats.</p><p>For example, select FP8 and NVFP4 to compare those formats directly.</p>",
-      fMtp: "<strong>MTP</strong><p>Filters configurations based on whether MTP is enabled.</p><p>Select both options to compare performance with and without MTP.</p>",
-      fMinTps: "<strong>Minimum TPS</strong><p>Sets the minimum token generation rate shown in the table.</p><p>Increase this value to apply a stricter performance filter and remove slower configurations.</p>",
-      fMaxTtft: "<strong>Maximum TTFT</strong><p>Sets the maximum acceptable time to first token.</p><p>Lower this value to apply a stricter latency filter and remove configurations with slower initial responses.</p>",
-      fMinChat: "<strong>Minimum Chat Capacity</strong><p>Hides configurations that cannot serve at least this many chat <em>users</em>.</p><p>Counted in people, not in simultaneous requests.</p>",
-      fMinAgentic: "<strong>Minimum Agentic Capacity</strong><p>Hides configurations that cannot serve at least this many agentic <em>users</em>.</p><p>Counted in people, not in simultaneous requests.</p>",
+      fConcurrency: "<strong>Concurrency</strong><p>The number of requests being processed at the same instant — a load level, not a number of people. At C=8 the machine is working on eight generations at once.</p><p>Selects which measurement the TPS and TTFT columns show. Raise it to see behaviour under load.</p>",
+      fModel: "<strong>Model filter</strong><p>The large language model being served.</p><p>Pick several to compare them side by side.</p>",
+      fDevice: "<strong>Device filter</strong><p>The hardware a configuration ran on, and how many units were used together.</p><p>Pick several to compare hardware directly.</p>",
+      fQuant: "<strong>Quantization filter</strong><p>The number format the model weights are stored in — lower precision means less memory and usually more speed.</p><p>Select FP8 and NVFP4 together to compare those two formats.</p>",
+      fMtp: "<strong>MTP filter</strong><p>Multi-token prediction: the model guesses several tokens ahead per step and verifies them, which speeds generation up.</p><p>Select both options to compare performance with it on and off.</p>",
+      fMinTps: "<strong>Minimum TPS</strong><p>TPS is how fast text is produced for one request, in tokens per second.</p><p>Hides configurations slower than this at the selected concurrency.</p>",
+      fMaxTtft: "<strong>Maximum TTFT</strong><p>TTFT is how long a user waits before the first word appears.</p><p>Hides configurations that take longer than this at the selected concurrency.</p>",
+      fMinChat: "<strong>Minimum Chat Capacity</strong><p>The estimated number of interactive chat users a configuration can serve.</p><p>Hides anything below this. Counted in people, not simultaneous requests.</p>",
+      fMinAgentic: "<strong>Minimum Agentic Capacity</strong><p>The estimated number of agentic users a configuration can serve, where each user drives multi-step model work.</p><p>Hides anything below this. Counted in people, not simultaneous requests.</p>",
 
-      aTps: "<strong>Minimum TPS Target</strong><p>The minimum TPS a configuration must provide to be considered acceptable.</p><p>Increasing this value makes the requirement stricter and may reduce Max C.</p>",
-      aTtft: "<strong>Maximum TTFT Target</strong><p>The maximum TTFT a configuration may have to be considered acceptable.</p><p>Lowering this value makes the requirement stricter and may reduce Max C.</p>",
-      aChat: "<strong>Chat Usage Multiplier</strong><p>How many chat users you assume can share one simultaneous request slot.</p><p>Raise it if your users send requests rarely; lower it if they are constantly active.</p>",
+      aTps: "<strong>Minimum TPS Target</strong><p>The generation speed you consider acceptable for one request, in tokens per second.</p><p>Raising it makes the requirement stricter and can lower Max C.</p>",
+      aTtft: "<strong>Maximum TTFT Target</strong><p>The longest first-token wait you consider acceptable, in milliseconds.</p><p>Lowering it makes the requirement stricter and can lower Max C.</p>",
+      aChat: "<strong>Chat Usage Multiplier</strong><p>How many chat users you assume can share one simultaneous request slot, given that they spend most of their time reading and typing rather than waiting on the model.</p><p>Raise it for lighter usage, lower it for constant activity.</p>",
       aAgentic: "<strong>Agentic Usage Multiplier</strong><p>How many agentic users you assume can share one simultaneous request slot.</p><p>Usually below the chat value, because agentic work keeps a slot busy for longer.</p>",
-      reset: "<strong>Reset All Filters</strong><p>Clears every filter and restores the performance targets and capacity multipliers to their default values.</p>"
+      reset: "<strong>Reset All Filters</strong><p>Clears every filter and returns the performance targets and capacity multipliers to their defaults.</p>"
     }
   };
 
@@ -144,7 +148,7 @@
   var chartInstances = {};
   var logoPath = null;
   var repaint = {};
-  var previewTimer = null;
+
 
   var allDevices = [];
   var allModels = [];
@@ -264,17 +268,28 @@
     return null;
   }
 
+  /* One definition of "meets the target" per metric, driving every coloured
+     cell in both tables as well as Max C. A minimum of 20 tok/s is met by
+     exactly 20, and a maximum of 1000 ms is met by exactly 1000, so both
+     bounds are inclusive. They used to disagree: a cell could be green while
+     its own sweep row read FAIL. */
+  function ttftMeets(ttft) {
+    return ttft != null && ttft <= config.ttft_threshold_ms;
+  }
+
+  function tpsMeets(tps) {
+    return tps != null && tps >= config.tps_threshold;
+  }
+
+  function meetsTargets(dp) {
+    return ttftMeets(dp.ttft_ms) && tpsMeets(dp.tps);
+  }
+
   function getMaxC(entry) {
     var maxC = 0;
     for (var i = 0; i < entry.data_points.length; i++) {
       var dp = entry.data_points[i];
-      if (
-        dp.ttft_ms != null &&
-        dp.ttft_ms < config.ttft_threshold_ms &&
-        dp.tps > config.tps_threshold
-      ) {
-        if (dp.c > maxC) maxC = dp.c;
-      }
+      if (meetsTargets(dp) && dp.c > maxC) maxC = dp.c;
     }
     return maxC;
   }
@@ -437,10 +452,17 @@
     return html;
   }
 
+  /* A millisecond target and a tokens-per-second target are whole positive
+     counts; the multipliers are genuinely fractional (1.5 by default). */
+  var WHOLE_NUMBER_TARGETS = { ttft_threshold_ms: true, tps_threshold: true };
+
   function targetItem(label, key, tipHtml, extra) {
+    var whole = WHOLE_NUMBER_TARGETS[key];
     return '<div class="bt-target-item">' +
       '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
-      '<input type="number" id="bt-assump-' + key + '" value="' + config[key] + '" step="0.1" min="0">' +
+      '<input type="number" id="bt-assump-' + key + '" value="' + config[key] +
+      '" step="' + (whole ? "1" : "0.1") + '" min="' + (whole ? "1" : "0") + '"' +
+      (whole ? ' inputmode="numeric"' : "") + ">" +
       extra + "</div>";
   }
 
@@ -462,9 +484,19 @@
       var input = container.querySelector("#bt-assump-" + key);
       input.addEventListener("input", function () {
         var v = parseFloat(input.value);
-        if (isNaN(v) || v < 0) return;
+        if (isNaN(v)) return;
+        if (WHOLE_NUMBER_TARGETS[key]) {
+          if (v < 1 || v !== Math.floor(v)) return;
+        } else if (v < 0) {
+          return;
+        }
         config[key] = v;
         renderTable(container);
+      });
+      /* Snap the field back once the reader leaves it, so it can never sit
+         there showing a number the table is not actually using. */
+      input.addEventListener("change", function () {
+        if (input.value !== String(config[key])) input.value = config[key];
       });
     });
   }
@@ -637,25 +669,54 @@
   function wireTooltips(container) {
     var tipEl = container.querySelector("#bt-tooltip");
     var openBtn = null;
+    /* Touch browsers send a synthetic mouseover before the click, so by the
+       time the click lands the bubble is already open and a plain toggle would
+       close what the tap was meant to open. Only a second tap should close. */
+    var openedByTap = false;
 
     function show(btn) {
       tipEl.innerHTML = btn.getAttribute("data-tip");
       tipEl.hidden = false;
+      /* Positioned against the viewport rather than the container: the
+         container is not a positioned ancestor, so absolute coordinates
+         resolved against something further up the tree and the bubble landed
+         well above the icon. */
       var r = btn.getBoundingClientRect();
-      var cr = container.getBoundingClientRect();
-      tipEl.style.top = (r.bottom - cr.top + 8) + "px";
-      var left = r.left - cr.left;
-      /* keep the bubble inside the widget on narrow screens */
-      var maxLeft = container.clientWidth - tipEl.offsetWidth - 8;
-      if (left > maxLeft) left = Math.max(8, maxLeft);
+      var w = tipEl.offsetWidth, h = tipEl.offsetHeight;
+      var left = Math.min(Math.max(8, r.left), window.innerWidth - w - 8);
+      var top = r.bottom + 8;
+      /* flip above the icon when there is no room below */
+      if (top + h > window.innerHeight - 8 && r.top - h - 8 > 0) top = r.top - h - 8;
       tipEl.style.left = left + "px";
+      tipEl.style.top = top + "px";
       openBtn = btn;
     }
 
     function hide() {
       tipEl.hidden = true;
       openBtn = null;
+      openedByTap = false;
     }
+
+    /* The bubble is position:fixed, so it does not travel with the page. A
+       tooltip held open by keyboard focus or a tap would sit still while its
+       icon scrolled away, so re-anchor it — and drop it once the icon leaves
+       the viewport, where there is nothing left to point at. */
+    var reanchorQueued = false;
+    function reanchor() {
+      if (!openBtn || tipEl.hidden || reanchorQueued) return;
+      reanchorQueued = true;
+      requestAnimationFrame(function () {
+        reanchorQueued = false;
+        if (!openBtn || tipEl.hidden) return;
+        var r = openBtn.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) { hide(); return; }
+        show(openBtn);
+      });
+    }
+    /* capture, so a scroll inside the table wrapper counts too */
+    window.addEventListener("scroll", reanchor, { capture: true, passive: true });
+    window.addEventListener("resize", reanchor);
 
     /* Tap toggles on touch devices; hover and keyboard focus cover the rest. */
     container.addEventListener("click", function (e) {
@@ -663,8 +724,8 @@
       if (btn) {
         e.preventDefault();
         e.stopPropagation();
-        if (openBtn === btn) hide();
-        else show(btn);
+        if (openBtn === btn && openedByTap) hide();
+        else { show(btn); openedByTap = true; }
         return;
       }
       if (!e.target.closest || !e.target.closest("#bt-tooltip")) hide();
@@ -672,7 +733,7 @@
 
     container.addEventListener("mouseover", function (e) {
       var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
-      if (btn) show(btn);
+      if (btn && openBtn !== btn) { show(btn); openedByTap = false; }
     });
     container.addEventListener("mouseout", function (e) {
       var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
@@ -698,13 +759,15 @@
   }
 
   function startPreview(container) {
-    var v = parseFloat(container.querySelector("#bt-assump-tps_threshold").value);
+    /* config, not the input: a half-typed or rejected value would otherwise
+       demonstrate a speed the table is not using. */
+    var v = config.tps_threshold;
     var sub = container.querySelector("#bt-preview-sub");
     var el = container.querySelector("#bt-preview-text");
     /* A target of zero means no speed to demonstrate: stop rather than
        silently substituting some other rate. */
     if (isNaN(v) || v <= 0) {
-      stopPreview();
+      stopStream(el);
       sub.textContent = S.previewStopped;
       el.textContent = "";
       el.classList.remove("bt-streaming");
@@ -715,36 +778,104 @@
   }
 
   function stopPreview() {
-    if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
+    stopStream(document.querySelector("#bt-preview-text"));
   }
 
+  function stopStream(el) {
+    if (!el) return;
+    if (el.btTimer) { clearTimeout(el.btTimer); el.btTimer = null; }
+    el.classList.remove("bt-streaming");
+  }
+
+  /* Speed preview inside an expanded row. Defaults to the concurrency the
+     table is currently showing, so it opens on the number the reader was
+     already looking at. */
+  function wireRowPreview(entry, container) {
+    var textEl = container.querySelector('[data-rowtext="' + CSS.escape(entry.id) + '"]');
+    var subEl = container.querySelector('[data-rowsub="' + CSS.escape(entry.id) + '"]');
+    if (!textEl || !subEl) return;
+    var detail = textEl.closest(".bt-detail-content");
+    var dpRows = detail.querySelectorAll("tr.bt-dp-row");
+
+    function pick(tr) {
+      dpRows.forEach(function (r) { r.classList.remove("bt-dp-active"); });
+      tr.classList.add("bt-dp-active");
+      var tps = parseFloat(tr.getAttribute("data-tps"));
+      var c = tr.getAttribute("data-c");
+      subEl.textContent = S.previewRowSub(c, Math.round(tps * 10) / 10);
+      /* Match the colour of the TPS cell it came from, so the heading does not
+         read as approval of a speed the table just marked red. */
+      subEl.classList.toggle("bt-sub-bad", !tpsMeets(tps));
+      if (isNaN(tps) || tps <= 0) { stopStream(textEl); textEl.textContent = ""; return; }
+      stream(textEl, tps);
+    }
+
+    dpRows.forEach(function (tr) {
+      tr.addEventListener("click", function () { pick(tr); });
+      tr.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); pick(tr); }
+      });
+    });
+
+    var start = null;
+    dpRows.forEach(function (tr) {
+      if (tr.getAttribute("data-c") === String(state.concurrency)) start = tr;
+    });
+    if (!start && dpRows.length) start = dpRows[0];
+    if (start) pick(start);
+  }
+
+  /* One emitted piece is a whole word, but this page defines a token as
+     roughly three quarters of a word, so a word is about 1.33 tokens.
+     Releasing words at the token rate ran a third too fast. */
+  var WORDS_PER_TOKEN = 0.75;
+
   /* Approximate token streaming: chop the sample into word-sized pieces and
-     reveal them at the selected rate. Not a real tokenizer — just enough that
-     the difference between 5 and 50 tok/s is obvious. */
+     reveal them at the selected rate. Not a real tokenizer — but the average
+     rate it plays at is the rate on the label. */
   function stream(el, tps) {
-    if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
-    var tokens = S.sampleText.match(/\S+\s*/g) || [];
-    var i = 0;
-    el.textContent = "";
+    stopStream(el);
+    /* Every filter, sort or target change rebuilds the table markup, which
+       detaches the preview box of any expanded row. Without this guard the
+       timer chain below keeps running against that orphaned node for the life
+       of the page — one more chain per re-render, none ever collected. */
+    if (!document.contains(el)) return;
+    var pieces = S.sampleText.match(/\S+\s*/g) || [];
+    var wordsPerSec = tps * WORDS_PER_TOKEN;
+    if (!(wordsPerSec > 0) || !pieces.length) return;
+    var interval = 1000 / wordsPerSec;
+
+    /* Show the first word at once, then time everything after it, so the box
+       never sits blank waiting for the first tick at low rates. */
+    el.textContent = pieces[0];
     el.classList.add("bt-streaming");
-    var delay = 1000 / tps;
+    var i = 1;
+    var base = 1;
+    var t0 = Date.now();
 
     function step() {
-      /* Above ~60 tok/s a timer cannot keep up, so emit several tokens per
-         tick instead of throttling. 100 tok/s then really does look near
-         instant rather than capped at the timer floor. */
-      var perTick = delay < 16 ? Math.ceil(16 / delay) : 1;
-      for (var k = 0; k < perTick && i < tokens.length; k++) {
-        el.textContent += tokens[i++];
-      }
-      if (i < tokens.length) {
-        previewTimer = setTimeout(step, Math.max(16, delay));
+      /* Same reason as above: the node may have been replaced since the last
+         tick, and this is the only place that can notice. */
+      if (!document.contains(el)) { el.btTimer = null; return; }
+      /* Release however many words the elapsed time has earned, rather than a
+         fixed count per tick. A whole number of words against a 16 ms floor
+         snapped the rate to multiples of 62.5/s — 70 tok/s played at 125.
+         Reading the clock also self-corrects when the browser throttles
+         timers, and the cap stops a backgrounded tab dumping its backlog in
+         one frame. */
+      var due = base + Math.floor((Date.now() - t0) / 1000 * wordsPerSec);
+      if (due > i + 240) due = i + 240;
+      while (i < due && i < pieces.length) el.textContent += pieces[i++];
+      /* the box is a fixed size, so follow the tail instead of growing */
+      el.scrollTop = el.scrollHeight;
+      if (i < pieces.length) {
+        el.btTimer = setTimeout(step, Math.max(16, interval));
       } else {
         /* hold the finished text briefly, then run it again */
-        previewTimer = setTimeout(function () { stream(el, tps); }, 1600);
+        el.btTimer = setTimeout(function () { stream(el, tps); }, 1600);
       }
     }
-    step();
+    el.btTimer = setTimeout(step, Math.max(16, interval));
   }
 
   /* ── Filtering ── */
@@ -889,7 +1020,7 @@
 
       var tpsCls = "bt-num", tpsTitle = "";
       if (tps !== null) {
-        var tpsOk = tps >= config.tps_threshold;
+        var tpsOk = tpsMeets(tps);
         tpsCls += tpsOk ? " bt-good" : " bt-bad";
         tpsTitle = ' title="' + escapeHTML(tpsOk ? S.targetMet : S.targetNotMet) + '"';
       }
@@ -897,7 +1028,7 @@
 
       var ttftCls = "bt-num", ttftTitle = "";
       if (ttft !== null) {
-        var ttftOk = ttft < config.ttft_threshold_ms;
+        var ttftOk = ttftMeets(ttft);
         ttftCls += ttftOk ? " bt-good" : " bt-bad";
         ttftTitle = ' title="' + escapeHTML(ttftOk ? S.targetMet : S.targetNotMet) + '"';
       }
@@ -917,21 +1048,49 @@
       if (isExpanded) {
         html += '<tr class="bt-detail-row"><td colspan="' + cols.length + '">';
         html += '<div class="bt-detail-content bt-visible">';
+        html += '<div class="bt-detail-top">';
         html += '<table class="bt-detail-table"><thead><tr>';
         html += "<th>" + escapeHTML(S.detailC) + "</th><th>" + escapeHTML(S.detailTtft) +
                 "</th><th>" + escapeHTML(S.detailTps) + "</th><th>" + escapeHTML(S.detailStatus) + "</th>";
         html += "</tr></thead><tbody>";
 
         entry.data_points.forEach(function (dp) {
-          var passes = dp.ttft_ms != null && dp.ttft_ms < config.ttft_threshold_ms && dp.tps > config.tps_threshold;
-          html += "<tr><td>" + dp.c + "</td>";
-          html += "<td>" + (dp.ttft_ms != null ? fmt(dp.ttft_ms, 0) : "—") + "</td>";
-          html += "<td>" + fmt(dp.tps, 2) + "</td>";
+          var passes = meetsTargets(dp);
+          /* Focusable and Enter/Space-activated, so it has to announce itself
+             as a control. The label carries the concurrency, because one
+             shared title on every row tells a screen reader nothing. */
+          html += '<tr class="bt-dp-row" data-tps="' + dp.tps + '" data-c="' + dp.c +
+            '" tabindex="0" role="button" aria-label="' +
+            escapeHTML(S.previewRowLabel(dp.c)) + '">';
+          /* Colour each metric on its own, so a FAIL shows which of the two
+             caused it rather than only that one of them did. The title gives
+             the same answer in words, because colour alone would not. */
+          var dpTtftOk = ttftMeets(dp.ttft_ms);
+          var dpTpsOk = tpsMeets(dp.tps);
+          html += "<td>" + dp.c + "</td>";
+          html += '<td class="' + (dpTtftOk ? "bt-dp-good" : "bt-dp-bad") + '" title="' +
+            escapeHTML(dpTtftOk ? S.targetMet : S.targetNotMet) + '">' +
+            (dp.ttft_ms != null ? fmt(dp.ttft_ms, 0) : "—") + "</td>";
+          html += '<td class="' + (dpTpsOk ? "bt-dp-good" : "bt-dp-bad") + '" title="' +
+            escapeHTML(dpTpsOk ? S.targetMet : S.targetNotMet) + '">' +
+            fmt(dp.tps, 2) + "</td>";
           html += '<td class="' + (passes ? "bt-detail-pass" : "bt-detail-fail") + '">' +
             escapeHTML(passes ? S.pass : S.fail) + "</td></tr>";
         });
 
         html += "</tbody></table>";
+
+        /* The same speed preview as the targets panel, but driven by whichever
+           measured point the reader picks — so the number in the table turns
+           into something they can feel. */
+        html += '<div class="bt-detail-preview">';
+        html += '<div class="bt-tps-preview-head"><span class="bt-tps-preview-title">' +
+          escapeHTML(S.previewRowHeading) + '</span>' +
+          '<span class="bt-preview-sub" data-rowsub="' + escapeHTML(entry.id) + '"></span></div>';
+        html += '<div class="bt-preview-text" data-rowtext="' + escapeHTML(entry.id) + '"></div>';
+        html += '<p class="bt-preview-note">' + escapeHTML(S.previewPick) + "</p>";
+        html += "</div>";
+        html += "</div>";
 
         var deviceStr = escapeHTML(entry.device);
         if (entry.tp != null && entry.tp !== 1) {
@@ -986,6 +1145,9 @@
     /* The whole row is the control, not just the arrow at the end. */
     function toggleRow(id) {
       expanded[id] = !expanded[id];
+      /* Chart.js keeps a live registry entry and resize hook per instance, so
+         a chart whose row just closed has to be told to let go. */
+      if (!expanded[id]) destroyChart(id);
       if (expanded[id]) history.replaceState(null, "", "#" + id);
       else history.replaceState(null, "", window.location.pathname + window.location.search);
       renderTable(container);
@@ -1007,7 +1169,10 @@
     });
 
     entries.forEach(function (entry) {
-      if (expanded[entry.id]) renderChart(entry, container);
+      if (expanded[entry.id]) {
+        renderChart(entry, container);
+        wireRowPreview(entry, container);
+      }
     });
 
     wrap.querySelectorAll("[data-download]").forEach(function (btn) {
