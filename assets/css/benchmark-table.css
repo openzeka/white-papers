@@ -965,8 +965,11 @@ details.bt-howto > summary:focus-visible {
   box-shadow: inset 3px 0 0 var(--bt-green);
 }
 
-/* The model name is what the eye scans down; centring made the column ragged. */
-.bt-table thead th:first-child,
-.bt-table tbody tr.bt-row td:first-child {
+/* The model name is what the eye scans down; centring made the column ragged.
+   Child combinators throughout: the expanded row nests a second table inside
+   .bt-table, so a descendant selector here also caught the sweep table's first
+   header cell and left-aligned it over a centred column. */
+.bt-table > thead > tr > th:first-child,
+.bt-table > tbody > tr.bt-row > td:first-child {
   text-align: left;
 }

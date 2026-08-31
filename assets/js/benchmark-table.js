@@ -85,7 +85,8 @@
     previewStopped: "stopped — the TPS target is 0",
     previewRowHeading: "What this speed looks like",
     previewRowSub: function (c, n) { return "C=" + c + " · approximately " + n + " tokens/s"; },
-    previewPick: "Click any row above to preview the speed measured at that concurrency.",
+    previewPick: "Pick any measured concurrency to preview the speed recorded there.",
+    previewRowLabel: function (c) { return "Preview the speed measured at C=" + c; },
     previewDisclaimer: "This is an approximate simulation designed to visualize the selected TPS value. Actual response experience may vary depending on TTFT, output length, and application behavior.",
     sampleText: "Running a large language model on your own hardware means the response speed depends on the accelerator, the quantization format and how many people are using the system at the same time. At low token rates the text appears word by word and the wait becomes noticeable, so the interface feels like it is thinking out loud. As the rate increases the reply arrives faster than most people can read it, and the experience changes character entirely: instead of watching the answer being assembled, you simply read it. Somewhere between those two extremes is the point where a chat assistant stops feeling like a machine you are waiting on and starts feeling like a tool that keeps up with you. Where exactly that point falls depends on the task. Skimming a short answer tolerates far less speed than reading a long technical explanation, and a background job that nobody watches tolerates less still.",
 
@@ -267,17 +268,22 @@
     return null;
   }
 
+  /* One definition of "meets the targets", used by the Max C column, the
+     PASS/FAIL sweep and the green/red cells alike. A minimum of 20 tok/s is
+     met by exactly 20, and a maximum of 1000 ms is met by exactly 1000, so
+     both bounds are inclusive. They used to disagree: a cell could be green
+     while its own sweep row read FAIL. */
+  function meetsTargets(dp) {
+    return dp.ttft_ms != null &&
+      dp.ttft_ms <= config.ttft_threshold_ms &&
+      dp.tps >= config.tps_threshold;
+  }
+
   function getMaxC(entry) {
     var maxC = 0;
     for (var i = 0; i < entry.data_points.length; i++) {
       var dp = entry.data_points[i];
-      if (
-        dp.ttft_ms != null &&
-        dp.ttft_ms < config.ttft_threshold_ms &&
-        dp.tps > config.tps_threshold
-      ) {
-        if (dp.c > maxC) maxC = dp.c;
-      }
+      if (meetsTargets(dp) && dp.c > maxC) maxC = dp.c;
     }
     return maxC;
   }
@@ -640,6 +646,10 @@
   function wireTooltips(container) {
     var tipEl = container.querySelector("#bt-tooltip");
     var openBtn = null;
+    /* Touch browsers send a synthetic mouseover before the click, so by the
+       time the click lands the bubble is already open and a plain toggle would
+       close what the tap was meant to open. Only a second tap should close. */
+    var openedByTap = false;
 
     function show(btn) {
       tipEl.innerHTML = btn.getAttribute("data-tip");
@@ -662,7 +672,28 @@
     function hide() {
       tipEl.hidden = true;
       openBtn = null;
+      openedByTap = false;
     }
+
+    /* The bubble is position:fixed, so it does not travel with the page. A
+       tooltip held open by keyboard focus or a tap would sit still while its
+       icon scrolled away, so re-anchor it — and drop it once the icon leaves
+       the viewport, where there is nothing left to point at. */
+    var reanchorQueued = false;
+    function reanchor() {
+      if (!openBtn || tipEl.hidden || reanchorQueued) return;
+      reanchorQueued = true;
+      requestAnimationFrame(function () {
+        reanchorQueued = false;
+        if (!openBtn || tipEl.hidden) return;
+        var r = openBtn.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) { hide(); return; }
+        show(openBtn);
+      });
+    }
+    /* capture, so a scroll inside the table wrapper counts too */
+    window.addEventListener("scroll", reanchor, { capture: true, passive: true });
+    window.addEventListener("resize", reanchor);
 
     /* Tap toggles on touch devices; hover and keyboard focus cover the rest. */
     container.addEventListener("click", function (e) {
@@ -670,8 +701,8 @@
       if (btn) {
         e.preventDefault();
         e.stopPropagation();
-        if (openBtn === btn) hide();
-        else show(btn);
+        if (openBtn === btn && openedByTap) hide();
+        else { show(btn); openedByTap = true; }
         return;
       }
       if (!e.target.closest || !e.target.closest("#bt-tooltip")) hide();
@@ -679,7 +710,7 @@
 
     container.addEventListener("mouseover", function (e) {
       var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
-      if (btn) show(btn);
+      if (btn && openBtn !== btn) { show(btn); openedByTap = false; }
     });
     container.addEventListener("mouseout", function (e) {
       var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
@@ -737,7 +768,6 @@
   function wireRowPreview(entry, container) {
     var textEl = container.querySelector('[data-rowtext="' + CSS.escape(entry.id) + '"]');
     var subEl = container.querySelector('[data-rowsub="' + CSS.escape(entry.id) + '"]');
-    var rows = container.querySelectorAll('#bt-chart-card-' + CSS.escape(entry.id));
     if (!textEl || !subEl) return;
     var detail = textEl.closest(".bt-detail-content");
     var dpRows = detail.querySelectorAll("tr.bt-dp-row");
@@ -772,6 +802,11 @@
      the difference between 5 and 50 tok/s is obvious. */
   function stream(el, tps) {
     stopStream(el);
+    /* Every filter, sort or target change rebuilds the table markup, which
+       detaches the preview box of any expanded row. Without this guard the
+       timer chain below keeps running against that orphaned node for the life
+       of the page — one more chain per re-render, none ever collected. */
+    if (!document.contains(el)) return;
     var tokens = S.sampleText.match(/\S+\s*/g) || [];
     var i = 0;
     el.textContent = "";
@@ -779,6 +814,9 @@
     var delay = 1000 / tps;
 
     function step() {
+      /* Same reason as above: the node may have been replaced since the last
+         tick, and this is the only place that can notice. */
+      if (!document.contains(el)) { el.btTimer = null; return; }
       /* Above ~60 tok/s a timer cannot keep up, so emit several tokens per
          tick instead of throttling. 100 tok/s then really does look near
          instant rather than capped at the timer floor. */
@@ -941,6 +979,7 @@
       var tpsCls = "bt-num", tpsTitle = "";
       if (tps !== null) {
         var tpsOk = tps >= config.tps_threshold;
+        /* matches meetsTargets(); see the note there */
         tpsCls += tpsOk ? " bt-good" : " bt-bad";
         tpsTitle = ' title="' + escapeHTML(tpsOk ? S.targetMet : S.targetNotMet) + '"';
       }
@@ -948,7 +987,7 @@
 
       var ttftCls = "bt-num", ttftTitle = "";
       if (ttft !== null) {
-        var ttftOk = ttft < config.ttft_threshold_ms;
+        var ttftOk = ttft <= config.ttft_threshold_ms;
         ttftCls += ttftOk ? " bt-good" : " bt-bad";
         ttftTitle = ' title="' + escapeHTML(ttftOk ? S.targetMet : S.targetNotMet) + '"';
       }
@@ -975,9 +1014,13 @@
         html += "</tr></thead><tbody>";
 
         entry.data_points.forEach(function (dp) {
-          var passes = dp.ttft_ms != null && dp.ttft_ms < config.ttft_threshold_ms && dp.tps > config.tps_threshold;
+          var passes = meetsTargets(dp);
+          /* Focusable and Enter/Space-activated, so it has to announce itself
+             as a control. The label carries the concurrency, because one
+             shared title on every row tells a screen reader nothing. */
           html += '<tr class="bt-dp-row" data-tps="' + dp.tps + '" data-c="' + dp.c +
-            '" tabindex="0" title="' + escapeHTML(S.previewPick) + '">';
+            '" tabindex="0" role="button" aria-label="' +
+            escapeHTML(S.previewRowLabel(dp.c)) + '">';
           html += "<td>" + dp.c + "</td>";
           html += "<td>" + (dp.ttft_ms != null ? fmt(dp.ttft_ms, 0) : "—") + "</td>";
           html += "<td>" + fmt(dp.tps, 2) + "</td>";
@@ -1052,6 +1095,9 @@
     /* The whole row is the control, not just the arrow at the end. */
     function toggleRow(id) {
       expanded[id] = !expanded[id];
+      /* Chart.js keeps a live registry entry and resize hook per instance, so
+         a chart whose row just closed has to be told to let go. */
+      if (!expanded[id]) destroyChart(id);
       if (expanded[id]) history.replaceState(null, "", "#" + id);
       else history.replaceState(null, "", window.location.pathname + window.location.search);
       renderTable(container);

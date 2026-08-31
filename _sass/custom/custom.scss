@@ -538,28 +538,31 @@ img[width] {
 
   // Tablo kaydığında Model sütunu yerinde kalsın; aksi hâlde hangi satıra
   // baktığınızı kaybediyorsunuz. Satır şeritlemesi ve hover korunuyor.
-  .bt-table thead th:first-child,
-  .bt-table tbody tr[data-id] td:first-child {
+  // Doğrudan çocuk seçiciler: genişletilmiş satır .bt-table içine ikinci bir
+  // tablo yerleştiriyor, torun seçici o tablonun ilk başlık hücresine de
+  // yapışkanlık ve sağ kenarlık veriyordu.
+  .bt-table > thead > tr > th:first-child,
+  .bt-table > tbody > tr[data-id] > td:first-child {
     position: sticky;
     left: 0;
     border-right: 1px solid var(--bt-border);
   }
 
-  .bt-table thead th:first-child {
+  .bt-table > thead > tr > th:first-child {
     z-index: 3;
     background: var(--bt-dark);
   }
 
-  .bt-table tbody tr[data-id] td:first-child {
+  .bt-table > tbody > tr[data-id] > td:first-child {
     z-index: 1;
     background: var(--bt-bg);
   }
 
-  .bt-table tbody tr[data-id]:nth-child(even) td:first-child {
+  .bt-table > tbody > tr[data-id]:nth-child(even) > td:first-child {
     background: var(--bt-bg-alt);
   }
 
-  .bt-table tbody tr[data-id]:hover td:first-child {
+  .bt-table > tbody > tr[data-id]:hover > td:first-child {
     background: var(--bt-bg-hover);
   }
 }
