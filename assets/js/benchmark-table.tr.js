@@ -621,6 +621,12 @@
       container.querySelector("#bt-assump-" + k).value = config[k];
     });
 
+    /* The preview is driven by the TPS input, not by config, so it has to be
+       told the value changed — otherwise it keeps streaming at the old rate
+       and the panel looks like it did not reset. */
+    if (container.querySelector("#bt-targets-body").hidden) stopPreview();
+    else startPreview(container);
+
     expanded = {};
     syncSliderLabels(container);
     renderTable(container);
