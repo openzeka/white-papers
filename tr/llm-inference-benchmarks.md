@@ -27,6 +27,36 @@ ayrıntılı sonuçlarını görmek için ilgili satırı açabilirsiniz.
 <summary>Benchmark tablosu nasıl kullanılır?</summary>
 <div class="bt-howto-body" markdown="1">
 
+### Parametreler ne anlama geliyor
+
+**Token** — modelin okuyup yazdığı birim, kabaca bir kelimenin dörtte üçü.
+
+**TPS (saniyedeki token)** — tek bir istek için metnin üretilme hızı. Yüksek
+olması iyidir.
+
+**TTFT (ilk token süresi)** — ilk kelime belirene kadarki bekleme. Düşük olması
+iyidir.
+
+**Eşzamanlılık (C)** — sistemin aynı anda üzerinde çalıştığı istek sayısı. Kişi
+sayısı değil, bir yük seviyesidir.
+
+**Kuantizasyon** — ağırlıkların saklandığı sayı biçimi. Ağırlık başına daha az
+bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar
+risk taşır. BF16 tam hassasiyet referansıdır; FP8, NVFP4, MXFP4 ve INT4 giderek
+daha sıkıştırılmıştır.
+
+**MTP (çoklu token tahmini)** — model tek adımda birkaç token ilerisini tahmin
+edip doğrular. Doğru tahminler korunduğu için aynı çıktı daha hızlı gelir.
+
+**Inference engine** — modeli belleğe yükleyip istekleri yanıtlayan sunucu
+yazılımı. Toplu işleme, bellek ve zamanlamayı yönettiği için hıza donanım kadar
+etki eder. vLLM ve SGLang bunlardan ikisidir.
+
+**TP / DP / PP** — tek modeli birden fazla GPU'ya bölmenin üç yolu. Tensor
+paralelliği bir katmanın içindeki hesabı böler; data paralelliği tam kopyaları
+yan yana çalıştırır; pipeline paralelliği farklı katmanları farklı cihazlara
+yerleştirir.
+
 ### Önce iki ayrımı netleştirin
 
 **Filtreler hangi satırların görüneceğini belirler. Hedefler ise sayıların ne
@@ -55,12 +85,9 @@ FP8 ve NVFP4 sürümleri, ya da aynı yapılandırmanın MTP'li ve MTP'siz hâll
 
 ### 3. Hedeflerinizi girin
 
-**TTFT** kullanıcının ilk tokenı beklediği süredir; arayüzün donuk mu yoksa
-canlı mı hissettirdiğini belirler. **TPS** metnin akış hızıdır; yanıtın okuma
-hızınıza yetişip yetişmediğini belirler.
-
-İkisi farklı şeyleri korur. Sohbet arayüzünde düşük TTFT önceliklidir. Uzun
-metin üreten işlerde TPS daha belirleyicidir.
+İki metrik farklı şeyleri korur. Sohbet arayüzünde önce TTFT gelir — geç
+başlayan hızlı bir yanıt yine de bozuk hissettirir. Uzun metin üreten işlerde
+ise TPS belirleyicidir, çünkü bekleme yanıtın tamamına yayılır.
 
 Bir TPS değerinin nasıl hissedildiğinden emin değilseniz **Performans Hedefleri
 ve Kapasite Varsayımları** bölümündeki önizleme örnek metni tam o hızda akıtır.

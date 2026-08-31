@@ -716,7 +716,7 @@
 }
 
 .bt-tooltip {
-  position: absolute;
+  position: fixed;
   z-index: 40;
   max-width: min(340px, calc(100vw - 32px));
   padding: 10px 12px;
@@ -899,3 +899,49 @@ details.bt-howto > summary:focus-visible {
 }
 
 .bt-howto-example p:last-child { margin-bottom: 0; }
+
+/* ── Expanded row: sweep table beside the speed preview ── */
+
+.bt-detail-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.bt-detail-top .bt-detail-table {
+  flex: 0 1 auto;
+  margin-bottom: 0;
+}
+
+.bt-detail-preview {
+  flex: 1 1 320px;
+  min-width: 280px;
+}
+
+.bt-detail-preview .bt-preview-text {
+  min-height: 8em;
+}
+
+/* measurement rows are pickable: each one drives the preview */
+.bt-detail-table tbody tr.bt-dp-row {
+  cursor: pointer;
+}
+
+.bt-detail-table tbody tr.bt-dp-row:hover {
+  background: var(--bt-bg-hover);
+}
+
+.bt-detail-table tbody tr.bt-dp-row:focus-visible {
+  outline: 2px solid var(--bt-green);
+  outline-offset: -2px;
+}
+
+.bt-detail-table tbody tr.bt-dp-active {
+  background: var(--bt-bg-hover);
+}
+
+.bt-detail-table tbody tr.bt-dp-active td:first-child {
+  box-shadow: inset 3px 0 0 var(--bt-green);
+}

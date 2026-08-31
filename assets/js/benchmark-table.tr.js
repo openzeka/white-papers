@@ -83,38 +83,41 @@
     previewHeading: "Bu hız nasıl görünür",
     previewSubtitle: function (n) { return "örnek metin yaklaşık " + n + " token/s hızında"; },
     previewStopped: "durduruldu — TPS hedefi 0",
+    previewRowHeading: "Bu hız nasıl görünür",
+    previewRowSub: function (c, n) { return "C=" + c + " · yaklaşık " + n + " token/s"; },
+    previewPick: "Yukarıdaki herhangi bir satıra tıklayarak o eşzamanlılıkta ölçülen hızı izleyin.",
     previewDisclaimer: "Bu gösterim, seçilen TPS değerini görselleştirmek için hazırlanmış yaklaşık bir simülasyondur. Gerçek yanıt deneyimi TTFT, çıktı uzunluğu ve uygulama davranışına göre değişebilir.",
-    sampleText: "Bir büyük dil modelini kendi donanımınızda çalıştırmak, yanıt hızının hızlandırıcıya, kuantizasyon biçimine ve sistemi aynı anda kaç kişinin kullandığına bağlı olması demektir. Düşük token hızlarında metin kelime kelime belirir ve bekleme fark edilir hâle gelir. Hız arttıkça yanıt, çoğu kişinin okuyabileceğinden daha çabuk geldiği için arayüz yavaş değil anlık hissettirmeye başlar.",
+    sampleText: "Bir büyük dil modelini kendi donanımınızda çalıştırmak, yanıt hızının hızlandırıcıya, kuantizasyon biçimine ve sistemi aynı anda kaç kişinin kullandığına bağlı olması demektir. Düşük token hızlarında metin kelime kelime belirir ve bekleme fark edilir hâle gelir; arayüz sesli düşünüyormuş gibi hissettirir. Hız arttıkça yanıt, çoğu kişinin okuyabileceğinden daha çabuk gelir ve deneyim tümüyle karakter değiştirir: cevabın kurulmasını izlemek yerine yalnızca okursunuz. Bu iki uç arasında bir yerde, sohbet asistanının beklenen bir makine olmaktan çıkıp size ayak uyduran bir araca dönüştüğü nokta vardır. O noktanın tam olarak nerede olduğu göreve bağlıdır. Kısa bir cevaba göz atmak, uzun bir teknik açıklamayı okumaya kıyasla çok daha az hıza tahammül eder; kimsenin izlemediği arka plan işi ise daha da azına.",
 
     /* Tooltips */
     tip: {
-      model: "<strong>Model</strong><p>Benchmark'ta kullanılan LLM'yi gösterir.</p><p>Aynı model farklı kuantizasyon veya çalışma yapılandırmalarıyla test edilmişse tabloda birden fazla satırda görünebilir.</p>",
-      device: "<strong>Cihaz</strong><p>Benchmark'ın çalıştırıldığı donanımı ve kullanılan cihaz sayısını gösterir.</p><p>Örneğin 4× DGX Spark, yapılandırmada dört DGX Spark kullanıldığı anlamına gelir.</p>",
-      quant: "<strong>Kuantizasyon</strong><p>Model ağırlıklarının kullanılan hassasiyet veya kuantizasyon biçimini gösterir. Örneğin BF16, FP8 ve NVFP4.</p><p>Daha düşük hassasiyet genellikle daha düşük bellek kullanımı sağlar ve çıkarım performansını etkileyebilir.</p>",
-      tps: "<strong>TPS — Tokens per Second</strong><p>Seçilen eşzamanlılık seviyesinde bir isteğin token üretim hızını gösterir.</p><p><em>Daha yüksek değer daha iyidir.</em></p><p>Eşzamanlılık seçimini değiştirdiğinizde bu sütundaki değer ilgili test noktasına göre güncellenir.</p>",
-      ttft: "<strong>TTFT — Time to First Token</strong><p>Bir istek gönderildikten sonra ilk tokenın gelmesine kadar geçen süreyi gösterir.</p><p><em>Daha düşük değer daha iyidir.</em></p><p>Eşzamanlılık seçimini değiştirdiğinizde bu sütundaki değer ilgili test noktasına göre güncellenir.</p>",
-      maxc: "<strong>Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın, performans hedeflerinizin ikisini de karşılamaya devam ederken <em>aynı anda</em> kaç isteğe hizmet verebildiğini gösterir.</p><p>Kişi sayısını değil, eşzamanlı istek sayısını ifade eder. Bir istek, o anda süren bir üretim demektir.</p><p>Hedefleri sıkılaştırmak bu sayıyı düşürür.</p>",
-      chat: "<strong>Tahmini Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç <em>kişinin</em> kullanabileceğini gösterir.</p><p>Maks C'den yüksektir: chat kullanıcıları zamanın çoğunda boştadır — okur, düşünür, yazar — bu yüzden birkaç kişi tek bir eşzamanlı istek yuvasını paylaşır.</p><p>Ölçülmüş bir değer değil, Chat Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
-      agentic: "<strong>Tahmini Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç <em>kişiyi</em> destekleyebileceğini gösterir.</p><p>Chat değerinden düşüktür: bir agentic kullanıcı istek yuvasını çok daha uzun süre meşgul tutar.</p><p>Ölçülmüş bir değer değil, Agentic Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
-      par: "<strong>Paralellik Yapılandırması</strong><p>Modelin birden fazla GPU veya cihaz üzerinde nasıl çalıştırıldığını gösterir.</p><p><strong>TP — Tensor Parallelism:</strong> model hesaplamasını birden fazla GPU'ya dağıtır.</p><p><strong>DP — Data Parallelism:</strong> birden fazla model kopyasının farklı istekleri paralel olarak işlemesini sağlar.</p><p><strong>PP — Pipeline Parallelism:</strong> model katmanlarını farklı GPU veya cihazlara dağıtır.</p><p>— ilgili yöntemin kullanılmadığını gösterir.</p>",
-      engine: "<strong>Inference Engine</strong><p>Modeli sunmak için kullanılan çıkarım motorunu gösterir. Örneğin vLLM veya SGLang.</p><p>Aynı model ve donanım farklı inference engine'lerle farklı performans gösterebilir.</p>",
-      mtp: "<strong>MTP — Multi-Token Prediction</strong><p>Modelin bir adımda birden fazla token tahmini kullanarak üretimi hızlandırmasına yardımcı olan özelliği gösterir.</p><p>Açık ve kapalı sonuçları karşılaştırarak MTP'nin ilgili yapılandırmadaki etkisini görebilirsiniz.</p>",
+      model: "<strong>Model</strong><p>Sunulan büyük dil modeli — kimliği, boyutu ve üreticisi.</p><p>Aynı model farklı kuantizasyon veya çalışma yapılandırmalarıyla test edildiyse birden fazla satırda görünür.</p>",
+      device: "<strong>Cihaz</strong><p>Modelin üzerinde çalıştığı donanım ve kaç adedinin birlikte kullanıldığı.</p><p>4× DGX Spark, dört makinenin tek bir sistem olarak tek modeli sunması demektir; dört ayrı çalışma değil.</p>",
+      quant: "<strong>Kuantizasyon</strong><p>Model ağırlıklarının saklandığı sayı biçimi. Düşük hassasiyet, ağırlık başına daha az bit kullanır; model daha az bellek kaplar ve genellikle daha hızlı çalışır, çıktı kalitesinde bir miktar risk vardır.</p><p>BF16 tam hassasiyet referansıdır; FP8, NVFP4, MXFP4 ve INT4 giderek daha sıkıştırılmıştır.</p>",
+      tps: "<strong>TPS — Tokens per Second</strong><p>Modelin tek bir istek için saniyede ürettiği token sayısı. Bir token kabaca bir kelimenin dörtte üçü kadardır.</p><p><em>Yüksek olması iyidir.</em> Seçili eşzamanlılıktaki değer gösterilir.</p>",
+      ttft: "<strong>TTFT — Time to First Token</strong><p>Kullanıcının isteği gönderdikten sonra ilk kelimenin belirmesine kadar beklediği süre, milisaniye cinsinden.</p><p><em>Düşük olması iyidir.</em> Seçili eşzamanlılıktaki değer gösterilir.</p>",
+      maxc: "<strong>Maks C — Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın, performans hedeflerinizin ikisini de karşılamaya devam ederken aynı anda kaç isteğe hizmet verebildiği.</p><p>Kişi değil, eşzamanlı istek sayar. Katı hedefler bu değeri düşürür.</p>",
+      chat: "<strong>Tahmini Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç kişinin kullanabileceği.</p><p>Maks C\u2019den yüksektir: chat kullanıcıları zamanın çoğunda okur, düşünür ve yazar; birkaç kişi tek bir istek yuvasını paylaşır.</p><p>Ölçüm değil, Chat Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
+      agentic: "<strong>Tahmini Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç kişiyi desteklediği.</p><p>Chat değerinden düşüktür: agentic kullanıcı istek yuvasını çok daha uzun tutar.</p><p>Ölçüm değil, Agentic Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
+      par: "<strong>Paralellik — TP / DP / PP</strong><p>Tek bir modelin, çalışabilmesi ya da daha hızlı çalışması için birden fazla GPU veya makineye nasıl bölündüğü.</p><p><strong>TP — Tensor Parallelism:</strong> tek bir katmanın hesabı GPU\u2019lara bölünür; hepsi aynı istek üzerinde çalışır.</p><p><strong>DP — Data Parallelism:</strong> modelin birden fazla tam kopyası farklı istekleri işler.</p><p><strong>PP — Pipeline Parallelism:</strong> farklı katmanlar farklı cihazlarda durur, istekler sırayla bunlardan geçer.</p><p>— yöntemin kullanılmadığını gösterir.</p>",
+      engine: "<strong>Inference Engine</strong><p>Modeli belleğe yükleyip istekleri yanıtlayan sunucu yazılımı. Toplu işleme, bellek ve zamanlamayı o yönettiği için hıza donanım kadar etki eder.</p><p>vLLM ve SGLang bu sunuculardan ikisidir; aynı model aynı donanımda ikisi arasında ölçülebilir biçimde farklılaşabilir.</p>",
+      mtp: "<strong>MTP — Multi-Token Prediction</strong><p>Modelin tek adımda birer birer değil, birkaç token ilerisini birden tahmin edip sonra doğruladığı teknik. Doğru tahminler korunduğu için aynı çıktı daha hızlı üretilir.</p><p>MTP\u2019li ve MTP\u2019siz satırları karşılaştırarak o yapılandırmada ne kazandırdığını görebilirsiniz.</p>",
 
-      fConcurrency: "<strong>Eşzamanlılık (Concurrency)</strong><p><em>Aynı anda</em> işlenen istek sayısıdır. Kişi sayısı değil, bir yük seviyesidir.</p><p>Değeri artırarak sistemin daha yoğun eşzamanlı yük altında nasıl davrandığını görebilirsiniz.</p><p>Tabloda hangi TPS ve TTFT ölçümlerinin gösterileceğini belirler.</p>",
-      fModel: "<strong>Model</strong><p>Tabloda görmek istediğiniz modelleri seçin.</p><p>Birden fazla model seçerek sonuçları yan yana karşılaştırabilirsiniz.</p>",
-      fDevice: "<strong>Cihaz</strong><p>Benchmark sonuçlarını belirli donanım veya cihaz yapılandırmalarıyla sınırlar.</p><p>Birden fazla cihaz seçerek donanımları karşılaştırabilirsiniz.</p>",
-      fQuant: "<strong>Kuantizasyon</strong><p>Yalnızca seçtiğiniz model hassasiyetlerini veya kuantizasyon biçimlerini gösterir.</p><p>Örneğin yalnızca FP8 ve NVFP4 sonuçlarını seçerek iki formatı karşılaştırabilirsiniz.</p>",
-      fMtp: "<strong>MTP</strong><p>MTP kullanılan veya kullanılmayan yapılandırmaları filtreler.</p><p>Her ikisini seçerek MTP'nin performans üzerindeki etkisini karşılaştırabilirsiniz.</p>",
-      fMinTps: "<strong>Minimum TPS</strong><p>Tabloda görmek istediğiniz en düşük token üretim hızını belirler.</p><p>Değeri artırdıkça filtre daha katı hâle gelir ve daha yavaş yapılandırmalar elenir.</p>",
-      fMaxTtft: "<strong>Maksimum TTFT</strong><p>Kabul ettiğiniz en yüksek ilk token bekleme süresini belirler.</p><p>Değeri düşürdükçe filtre daha katı hâle gelir ve ilk yanıtı daha yavaş veren yapılandırmalar elenir.</p>",
-      fMinChat: "<strong>Minimum Chat Kapasitesi</strong><p>En az bu kadar chat <em>kullanıcısına</em> hizmet veremeyen yapılandırmaları gizler.</p><p>Eşzamanlı istek sayısıyla değil, kişi sayısıyla ölçülür.</p>",
-      fMinAgentic: "<strong>Minimum Agentic Kapasitesi</strong><p>En az bu kadar agentic <em>kullanıcıya</em> hizmet veremeyen yapılandırmaları gizler.</p><p>Eşzamanlı istek sayısıyla değil, kişi sayısıyla ölçülür.</p>",
+      fConcurrency: "<strong>Eşzamanlılık</strong><p>Aynı anda işlenmekte olan istek sayısı — kişi sayısı değil, bir yük seviyesi. C=8\u2019de makine aynı anda sekiz üretim üzerinde çalışıyordur.</p><p>TPS ve TTFT sütunlarının hangi ölçümü göstereceğini seçer. Yük altındaki davranışı görmek için yükseltin.</p>",
+      fModel: "<strong>Model filtresi</strong><p>Sunulan büyük dil modeli.</p><p>Birkaçını seçerek yan yana karşılaştırabilirsiniz.</p>",
+      fDevice: "<strong>Cihaz filtresi</strong><p>Yapılandırmanın üzerinde çalıştığı donanım ve kaç adedinin birlikte kullanıldığı.</p><p>Birkaçını seçerek donanımları doğrudan karşılaştırabilirsiniz.</p>",
+      fQuant: "<strong>Kuantizasyon filtresi</strong><p>Model ağırlıklarının saklandığı sayı biçimi — düşük hassasiyet daha az bellek, genellikle daha çok hız demektir.</p><p>FP8 ve NVFP4\u2019ü birlikte seçerek iki biçimi karşılaştırabilirsiniz.</p>",
+      fMtp: "<strong>MTP filtresi</strong><p>Çoklu token tahmini: model her adımda birkaç token ilerisini tahmin edip doğrular, bu da üretimi hızlandırır.</p><p>Her ikisini seçerek açık ve kapalı hâlleri karşılaştırabilirsiniz.</p>",
+      fMinTps: "<strong>Minimum TPS</strong><p>TPS, tek bir istek için saniyede üretilen token sayısıdır.</p><p>Seçili eşzamanlılıkta bundan yavaş olan yapılandırmaları gizler.</p>",
+      fMaxTtft: "<strong>Maksimum TTFT</strong><p>TTFT, kullanıcının ilk kelime belirene kadar beklediği süredir.</p><p>Seçili eşzamanlılıkta bundan uzun süren yapılandırmaları gizler.</p>",
+      fMinChat: "<strong>Minimum Chat Kapasitesi</strong><p>Bir yapılandırmanın hizmet verebileceği tahmini etkileşimli sohbet kullanıcısı sayısı.</p><p>Bunun altındakileri gizler. Eşzamanlı istekle değil, kişiyle ölçülür.</p>",
+      fMinAgentic: "<strong>Minimum Agentic Kapasitesi</strong><p>Her kullanıcının çok adımlı model işi yürüttüğü agentic kullanımda hizmet verilebilecek tahmini kişi sayısı.</p><p>Bunun altındakileri gizler. Eşzamanlı istekle değil, kişiyle ölçülür.</p>",
 
-      aTps: "<strong>Minimum TPS Hedefi</strong><p>Bir yapılandırmanın kabul edilebilir sayılması için sağlaması gereken minimum TPS değeridir.</p><p>Değeri artırmak performans kriterini sıkılaştırır ve Maks C değerini düşürebilir.</p>",
-      aTtft: "<strong>Maksimum TTFT Hedefi</strong><p>Bir yapılandırmanın kabul edilebilir sayılması için aşmaması gereken TTFT değeridir.</p><p>Değeri düşürmek performans kriterini sıkılaştırır ve Maks C değerini düşürebilir.</p>",
-      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Tek bir eşzamanlı istek yuvasını kaç chat kullanıcısının paylaşabileceğine dair varsayımınızdır.</p><p>Kullanıcılarınız seyrek istek gönderiyorsa artırın; sürekli aktiflerse azaltın.</p>",
-      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Tek bir eşzamanlı istek yuvasını kaç agentic kullanıcının paylaşabileceğine dair varsayımınızdır.</p><p>Agentic çalışma yuvayı daha uzun süre meşgul tuttuğu için genellikle chat değerinin altındadır.</p>",
-      reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; performans hedeflerini ve kapasite çarpanlarını varsayılan değerlerine döndürür.</p>"
+      aTps: "<strong>Minimum TPS Hedefi</strong><p>Tek bir istek için kabul edilebilir gördüğünüz üretim hızı, saniyede token cinsinden.</p><p>Yükseltmek kriteri sıkılaştırır ve Maks C\u2019yi düşürebilir.</p>",
+      aTtft: "<strong>Maksimum TTFT Hedefi</strong><p>Kabul edilebilir gördüğünüz en uzun ilk token bekleme süresi, milisaniye cinsinden.</p><p>Düşürmek kriteri sıkılaştırır ve Maks C\u2019yi düşürebilir.</p>",
+      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Kullanıcıların zamanının çoğunu modeli beklemek yerine okuyup yazarak geçirdiği düşünüldüğünde, tek bir eşzamanlı istek yuvasını kaç chat kullanıcısının paylaşabileceğine dair varsayımınız.</p><p>Hafif kullanım için yükseltin, sürekli etkinlik için düşürün.</p>",
+      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Tek bir eşzamanlı istek yuvasını kaç agentic kullanıcının paylaşabileceğine dair varsayımınız.</p><p>Agentic çalışma yuvayı daha uzun tuttuğu için genellikle chat değerinin altındadır.</p>",
+      reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; performans hedeflerini ve kapasite çarpanlarını varsayılana döndürür.</p>"
     }
   };
 
@@ -144,7 +147,7 @@
   var chartInstances = {};
   var logoPath = null;
   var repaint = {};
-  var previewTimer = null;
+
 
   var allDevices = [];
   var allModels = [];
@@ -641,14 +644,18 @@
     function show(btn) {
       tipEl.innerHTML = btn.getAttribute("data-tip");
       tipEl.hidden = false;
+      /* Positioned against the viewport rather than the container: the
+         container is not a positioned ancestor, so absolute coordinates
+         resolved against something further up the tree and the bubble landed
+         well above the icon. */
       var r = btn.getBoundingClientRect();
-      var cr = container.getBoundingClientRect();
-      tipEl.style.top = (r.bottom - cr.top + 8) + "px";
-      var left = r.left - cr.left;
-      /* keep the bubble inside the widget on narrow screens */
-      var maxLeft = container.clientWidth - tipEl.offsetWidth - 8;
-      if (left > maxLeft) left = Math.max(8, maxLeft);
+      var w = tipEl.offsetWidth, h = tipEl.offsetHeight;
+      var left = Math.min(Math.max(8, r.left), window.innerWidth - w - 8);
+      var top = r.bottom + 8;
+      /* flip above the icon when there is no room below */
+      if (top + h > window.innerHeight - 8 && r.top - h - 8 > 0) top = r.top - h - 8;
       tipEl.style.left = left + "px";
+      tipEl.style.top = top + "px";
       openBtn = btn;
     }
 
@@ -704,7 +711,7 @@
     /* A target of zero means no speed to demonstrate: stop rather than
        silently substituting some other rate. */
     if (isNaN(v) || v <= 0) {
-      stopPreview();
+      stopStream(el);
       sub.textContent = S.previewStopped;
       el.textContent = "";
       el.classList.remove("bt-streaming");
@@ -715,14 +722,56 @@
   }
 
   function stopPreview() {
-    if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
+    stopStream(document.querySelector("#bt-preview-text"));
+  }
+
+  function stopStream(el) {
+    if (!el) return;
+    if (el.btTimer) { clearTimeout(el.btTimer); el.btTimer = null; }
+    el.classList.remove("bt-streaming");
+  }
+
+  /* Speed preview inside an expanded row. Defaults to the concurrency the
+     table is currently showing, so it opens on the number the reader was
+     already looking at. */
+  function wireRowPreview(entry, container) {
+    var textEl = container.querySelector('[data-rowtext="' + CSS.escape(entry.id) + '"]');
+    var subEl = container.querySelector('[data-rowsub="' + CSS.escape(entry.id) + '"]');
+    var rows = container.querySelectorAll('#bt-chart-card-' + CSS.escape(entry.id));
+    if (!textEl || !subEl) return;
+    var detail = textEl.closest(".bt-detail-content");
+    var dpRows = detail.querySelectorAll("tr.bt-dp-row");
+
+    function pick(tr) {
+      dpRows.forEach(function (r) { r.classList.remove("bt-dp-active"); });
+      tr.classList.add("bt-dp-active");
+      var tps = parseFloat(tr.getAttribute("data-tps"));
+      var c = tr.getAttribute("data-c");
+      subEl.textContent = S.previewRowSub(c, Math.round(tps * 10) / 10);
+      if (isNaN(tps) || tps <= 0) { stopStream(textEl); textEl.textContent = ""; return; }
+      stream(textEl, tps);
+    }
+
+    dpRows.forEach(function (tr) {
+      tr.addEventListener("click", function () { pick(tr); });
+      tr.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") { e.preventDefault(); pick(tr); }
+      });
+    });
+
+    var start = null;
+    dpRows.forEach(function (tr) {
+      if (tr.getAttribute("data-c") === String(state.concurrency)) start = tr;
+    });
+    if (!start && dpRows.length) start = dpRows[0];
+    if (start) pick(start);
   }
 
   /* Approximate token streaming: chop the sample into word-sized pieces and
      reveal them at the selected rate. Not a real tokenizer — just enough that
      the difference between 5 and 50 tok/s is obvious. */
   function stream(el, tps) {
-    if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
+    stopStream(el);
     var tokens = S.sampleText.match(/\S+\s*/g) || [];
     var i = 0;
     el.textContent = "";
@@ -738,10 +787,10 @@
         el.textContent += tokens[i++];
       }
       if (i < tokens.length) {
-        previewTimer = setTimeout(step, Math.max(16, delay));
+        el.btTimer = setTimeout(step, Math.max(16, delay));
       } else {
         /* hold the finished text briefly, then run it again */
-        previewTimer = setTimeout(function () { stream(el, tps); }, 1600);
+        el.btTimer = setTimeout(function () { stream(el, tps); }, 1600);
       }
     }
     step();
@@ -917,6 +966,7 @@
       if (isExpanded) {
         html += '<tr class="bt-detail-row"><td colspan="' + cols.length + '">';
         html += '<div class="bt-detail-content bt-visible">';
+        html += '<div class="bt-detail-top">';
         html += '<table class="bt-detail-table"><thead><tr>';
         html += "<th>" + escapeHTML(S.detailC) + "</th><th>" + escapeHTML(S.detailTtft) +
                 "</th><th>" + escapeHTML(S.detailTps) + "</th><th>" + escapeHTML(S.detailStatus) + "</th>";
@@ -924,7 +974,9 @@
 
         entry.data_points.forEach(function (dp) {
           var passes = dp.ttft_ms != null && dp.ttft_ms < config.ttft_threshold_ms && dp.tps > config.tps_threshold;
-          html += "<tr><td>" + dp.c + "</td>";
+          html += '<tr class="bt-dp-row" data-tps="' + dp.tps + '" data-c="' + dp.c +
+            '" tabindex="0" title="' + escapeHTML(S.previewPick) + '">';
+          html += "<td>" + dp.c + "</td>";
           html += "<td>" + (dp.ttft_ms != null ? fmt(dp.ttft_ms, 0) : "—") + "</td>";
           html += "<td>" + fmt(dp.tps, 2) + "</td>";
           html += '<td class="' + (passes ? "bt-detail-pass" : "bt-detail-fail") + '">' +
@@ -932,6 +984,18 @@
         });
 
         html += "</tbody></table>";
+
+        /* The same speed preview as the targets panel, but driven by whichever
+           measured point the reader picks — so the number in the table turns
+           into something they can feel. */
+        html += '<div class="bt-detail-preview">';
+        html += '<div class="bt-tps-preview-head"><span class="bt-tps-preview-title">' +
+          escapeHTML(S.previewRowHeading) + '</span>' +
+          '<span class="bt-preview-sub" data-rowsub="' + escapeHTML(entry.id) + '"></span></div>';
+        html += '<div class="bt-preview-text" data-rowtext="' + escapeHTML(entry.id) + '"></div>';
+        html += '<p class="bt-preview-note">' + escapeHTML(S.previewPick) + "</p>";
+        html += "</div>";
+        html += "</div>";
 
         var deviceStr = escapeHTML(entry.device);
         if (entry.tp != null && entry.tp !== 1) {
@@ -1007,7 +1071,10 @@
     });
 
     entries.forEach(function (entry) {
-      if (expanded[entry.id]) renderChart(entry, container);
+      if (expanded[entry.id]) {
+        renderChart(entry, container);
+        wireRowPreview(entry, container);
+      }
     });
 
     wrap.querySelectorAll("[data-download]").forEach(function (btn) {
