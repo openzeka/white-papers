@@ -92,7 +92,7 @@ permalink: /
 
 <a class="paper-card" href="{{ '/llm-inference-benchmarks/' | relative_url }}">
   <span class="tag">LLM Benchmark</span>
-  <h3>LLM Çıkarım Benchmark Tablosu</h3>
+  <h3>LLM Çıkarım Benchmarkları</h3>
   <p>Openzeka'nın DGX Spark, DGX B300, RTX PRO 6000 ve Jetson Thor üzerindeki tüm LLM çıkarım benchmark'larını içeren etkileşimli tablo — cihaza, modele ve kuantizasyona göre filtreleyin, kendi hizmet seviyesi eşiklerinizi girerek kapasite planlaması yapın.</p>
   <span class="date">Ağustos 2026</span>
 </a>

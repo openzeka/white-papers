@@ -19,85 +19,6 @@
   overflow-x: auto;
 }
 
-/* ── Assumptions Panel ── */
-
-.bt-assumptions {
-  background: var(--bt-bg-alt);
-  border: 1px solid var(--bt-border);
-  border-radius: var(--bt-radius);
-  padding: 16px 20px;
-  margin-bottom: 16px;
-}
-
-.bt-assumptions-toggle {
-  background: none;
-  border: none;
-  font-family: var(--bt-font);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--bt-text);
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.bt-assumptions-toggle .bt-arrow {
-  display: inline-block;
-  transition: transform 0.2s;
-  font-size: 10px;
-}
-
-.bt-assumptions-toggle.bt-open .bt-arrow {
-  transform: rotate(90deg);
-}
-
-.bt-assumptions-body {
-  display: none;
-  margin-top: 14px;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.bt-assumptions-body.bt-visible {
-  display: flex;
-}
-
-.bt-assumption-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.bt-assumption-item label {
-  font-size: 12px;
-  color: var(--bt-text-muted);
-  font-weight: 500;
-}
-
-.bt-assumption-item input {
-  width: 80px;
-  padding: 4px 8px;
-  border: 1px solid var(--bt-border);
-  border-radius: 4px;
-  font-family: var(--bt-font);
-  font-size: 14px;
-  color: var(--bt-text);
-}
-
-.bt-assumption-item input:focus {
-  outline: 2px solid var(--bt-green);
-  border-color: var(--bt-green);
-}
-
-.bt-assumptions-hint {
-  font-size: 12px;
-  color: var(--bt-text-muted);
-  margin-top: 8px;
-  width: 100%;
-}
-
 /* ── Filters ── */
 
 .bt-filters {
@@ -597,4 +518,303 @@
   .bt-assumptions-body {
     gap: 12px;
   }
+}
+
+/* ── Controls shell ── */
+
+.bt-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.bt-filter-row-conc {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.bt-filter-row-conc .bt-btn.bt-active {
+  font-weight: 700;
+}
+
+.bt-reset-row {
+  justify-content: flex-start;
+  gap: 6px;
+}
+
+.bt-reset {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--bt-text);
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-radius: var(--bt-radius);
+  cursor: pointer;
+}
+
+.bt-reset:hover {
+  border-color: var(--bt-green);
+  color: var(--bt-green-dark, #5a8c00);
+}
+
+/* ── Performance targets / capacity assumptions ──
+   Visually distinct from filters: filters choose which rows are shown, these
+   decide what counts as acceptable and how capacity is estimated. */
+
+.bt-targets {
+  padding: 14px 16px;
+  background: var(--bt-bg-alt);
+  border: 1px solid var(--bt-border);
+  border-left: 3px solid var(--bt-green);
+  border-radius: var(--bt-radius);
+}
+
+.bt-targets-heading {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bt-text);
+  margin-bottom: 12px;
+}
+
+.bt-targets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px 20px;
+}
+
+.bt-target-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.bt-target-item label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--bt-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bt-target-item input[type="number"] {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--bt-text);
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-radius: 4px;
+}
+
+.bt-target-item input[type="number"]:focus {
+  outline: none;
+  border-color: var(--bt-green);
+}
+
+.bt-preview-open {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--bt-green-dark, #5a8c00);
+  background: transparent;
+  border: 1px solid var(--bt-green);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.bt-preview-open:hover {
+  background: var(--bt-bg-hover);
+}
+
+/* ── Info tooltips ── */
+
+.bt-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  padding: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--bt-text-muted);
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  cursor: help;
+  flex: none;
+  vertical-align: middle;
+}
+
+.bt-table thead th .bt-tip {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.bt-tip:hover,
+.bt-tip:focus-visible {
+  color: var(--bt-green);
+  outline: none;
+}
+
+.bt-tooltip {
+  position: absolute;
+  z-index: 40;
+  max-width: min(340px, calc(100vw - 32px));
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  font-weight: 400;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: normal;
+  color: #f5f5f5;
+  background: #262626;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+
+.bt-tooltip strong { color: #fff; }
+.bt-tooltip p { margin: 6px 0 0; }
+.bt-tooltip p:first-of-type { margin-top: 4px; }
+.bt-tooltip em { color: var(--bt-green); font-style: normal; font-weight: 600; }
+
+/* ── Results count ── */
+
+.bt-count-label {
+  font-weight: 600;
+  color: var(--bt-text);
+}
+
+/* ── Clickable rows ──
+   The whole row is the control, so it needs to look like one. */
+
+.bt-table tbody tr.bt-row {
+  cursor: pointer;
+}
+
+.bt-table tbody tr.bt-row:focus-visible {
+  outline: 2px solid var(--bt-green);
+  outline-offset: -2px;
+}
+
+.bt-table tbody tr.bt-row[aria-expanded="true"] {
+  background: var(--bt-bg-hover);
+}
+
+.bt-table tbody tr.bt-row[aria-expanded="true"] td:first-child {
+  box-shadow: inset 3px 0 0 var(--bt-green);
+}
+
+/* ── TPS preview modal ── */
+
+.bt-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.bt-modal[hidden] { display: none; }
+
+.bt-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 22px 24px;
+  background: var(--bt-bg);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.bt-modal-box h3 {
+  margin: 0 34px 4px 0;
+  font-size: 18px;
+  color: var(--bt-text);
+}
+
+.bt-preview-sub {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--bt-green-dark, #5a8c00);
+  font-weight: 600;
+}
+
+.bt-preview-explain {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--bt-text-muted);
+}
+
+.bt-preview-text {
+  min-height: 8.5em;
+  padding: 14px 16px;
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--bt-text);
+  background: var(--bt-bg-alt);
+  border: 1px solid var(--bt-border);
+  border-radius: 6px;
+}
+
+.bt-preview-text.bt-streaming::after {
+  content: "▍";
+  color: var(--bt-green);
+  animation: bt-blink 1s steps(2, start) infinite;
+}
+
+@keyframes bt-blink { to { visibility: hidden; } }
+
+.bt-preview-note {
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--bt-text-muted);
+}
+
+.bt-modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.bt-modal-x {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--bt-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.bt-modal-x:hover { color: var(--bt-text); background: var(--bt-bg-alt); }
+
+@media (prefers-reduced-motion: reduce) {
+  .bt-preview-text.bt-streaming::after { animation: none; }
 }
