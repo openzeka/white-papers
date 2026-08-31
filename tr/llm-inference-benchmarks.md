@@ -27,7 +27,7 @@ ayrıntılı sonuçlarını görmek için ilgili satırı açabilirsiniz.
 <summary>Benchmark tablosu nasıl kullanılır?</summary>
 <div class="bt-howto-body" markdown="1">
 
-### Parametreler ne anlama geliyor
+### Parametreler ne anlama geliyor {#parametreler-ne-anlama-geliyor}
 
 **Token** — modelin okuyup yazdığı birim, kabaca bir kelimenin dörtte üçü.
 
@@ -57,7 +57,7 @@ paralelliği bir katmanın içindeki hesabı böler; data paralelliği tam kopya
 yan yana çalıştırır; pipeline paralelliği farklı katmanları farklı cihazlara
 yerleştirir.
 
-### Önce iki ayrımı netleştirin
+### Önce iki ayrımı netleştirin {#once-iki-ayrimi-netlestirin}
 
 **Filtreler hangi satırların görüneceğini belirler. Hedefler ise sayıların ne
 anlama geldiğini değiştirir.** Bir cihazı filtrelediğinizde tablo kısalır;
@@ -68,7 +68,7 @@ sütunları yeniden hesaplanır.
 işlendiği anlamına gelir. 32 kişilik chat kapasitesi ise otuz iki kullanıcıyı
 ifade eder. İkisi farklı birimlerdir.
 
-### 1. Eşzamanlılık seviyesini seçin
+### 1. Eşzamanlılık seviyesini seçin {#eszamanlilik-seviyesini-secin}
 
 Seçtiğiniz C değeri, TPS ve TTFT sütunlarının hangi ölçüm noktasını
 göstereceğini belirler. C=1 tek kullanıcının gördüğü en iyi durumdur. Yüksek C
@@ -77,13 +77,13 @@ değerleri sistem yük altındayken ne olduğunu gösterir.
 Bir satır yalnızca o seviyede ölçülmüşse görünür; bu yüzden C yükseldikçe
 listedeki satır sayısı azalır.
 
-### 2. Yapılandırmaları daraltın
+### 2. Yapılandırmaları daraltın {#yapilandirmalari-daraltin}
 
 Model, cihaz, kuantizasyon ve MTP filtrelerini birlikte kullanabilirsiniz. En
 öğretici karşılaştırmalar tek değişkeni değiştirdiğinizde çıkar: aynı modelin
 FP8 ve NVFP4 sürümleri, ya da aynı yapılandırmanın MTP'li ve MTP'siz hâlleri.
 
-### 3. Hedeflerinizi girin
+### 3. Hedeflerinizi girin {#hedeflerinizi-girin}
 
 İki metrik farklı şeyleri korur. Sohbet arayüzünde önce TTFT gelir — geç
 başlayan hızlı bir yanıt yine de bozuk hissettirir. Uzun metin üreten işlerde
@@ -92,7 +92,7 @@ ise TPS belirleyicidir, çünkü bekleme yanıtın tamamına yayılır.
 Bir TPS değerinin nasıl hissedildiğinden emin değilseniz **Performans Hedefleri
 ve Kapasite Varsayımları** bölümündeki önizleme örnek metni tam o hızda akıtır.
 
-### 4. Maks C ve kapasite sütunlarını okuyun
+### 4. Maks C ve kapasite sütunlarını okuyun {#maks-c-ve-kapasite-sutunlarini-okuyun}
 
 **Maks C**, hedeflerinizin ikisini birden karşılayan en yüksek eşzamanlılıktır.
 Hedefleri sıkılaştırmak bu değeri düşürür.
@@ -110,7 +110,7 @@ olur. Chat çarpanı 4 ile bu satır yaklaşık 32 chat kullanıcısı, agentic 
 satır C=4'te kalabilir ve kapasite yarıya iner.
 </div>
 
-### 5. Satırı açıp ayrıntıya inin
+### 5. Satırı açıp ayrıntıya inin {#satiri-acip-ayrintiya-inin}
 
 Satıra tıklamak tüm eşzamanlılık taramasını açar. Buradaki tablo her seviyede
 hedefin karşılanıp karşılanmadığını gösterir; başlıktaki tek bir sayının
