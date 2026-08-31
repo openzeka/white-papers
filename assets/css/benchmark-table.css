@@ -1,7 +1,10 @@
 /* ── Benchmark Table — bt- prefixed, self-contained ── */
 
-.bt-container {
+/* Declared on :root, not on .bt-container, because the how-to disclosure sits
+   on the page outside the widget and needs the same palette. */
+:root {
   --bt-green: #76b900;
+  --bt-green-dark: #5a8c00;
   --bt-dark: #1a1a1a;
   --bt-border: #d0d0d0;
   --bt-bg: #ffffff;
@@ -11,6 +14,9 @@
   --bt-text-muted: #777777;
   --bt-radius: 6px;
   --bt-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.bt-container {
   font-family: var(--bt-font);
   color: var(--bt-text);
   font-size: 14px;
@@ -570,20 +576,54 @@
    decide what counts as acceptable and how capacity is estimated. */
 
 .bt-targets {
-  padding: 14px 16px;
   background: var(--bt-bg-alt);
   border: 1px solid var(--bt-border);
   border-left: 3px solid var(--bt-green);
   border-radius: var(--bt-radius);
 }
 
-.bt-targets-heading {
+.bt-targets-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 16px;
+  font-family: inherit;
   font-size: 13px;
   font-weight: 700;
+  text-align: left;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--bt-text);
-  margin-bottom: 12px;
+  background: transparent;
+  border: 0;
+  border-radius: var(--bt-radius);
+  cursor: pointer;
+}
+
+.bt-targets-toggle:hover { color: var(--bt-green-dark, #5a8c00); }
+
+.bt-targets-toggle .bt-arrow {
+  display: inline-block;
+  font-size: 10px;
+  color: var(--bt-green);
+  transition: transform 0.15s;
+}
+
+.bt-targets-toggle.bt-open .bt-arrow { transform: rotate(90deg); }
+
+.bt-targets-body {
+  padding: 0 16px 16px;
+}
+
+.bt-targets-body[hidden] { display: none; }
+
+.bt-targets-intro {
+  margin: 0 0 14px;
+  max-width: 78ch;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--bt-text-muted);
 }
 
 .bt-targets-grid {
@@ -756,10 +796,10 @@
 }
 
 .bt-preview-text {
-  min-height: 5.4em;
-  padding: 11px 13px;
-  font-size: 13.5px;
-  line-height: 1.6;
+  min-height: 6.5em;
+  padding: 16px 18px;
+  font-size: 17px;
+  line-height: 1.7;
   color: var(--bt-text);
   background: var(--bt-bg);
   border: 1px solid var(--bt-border);
@@ -768,6 +808,7 @@
 
 .bt-preview-text.bt-streaming::after {
   content: "▍";
+  font-size: 0.9em;
   color: var(--bt-green);
   animation: bt-blink 1s steps(2, start) infinite;
 }
@@ -783,4 +824,66 @@
 
 @media (prefers-reduced-motion: reduce) {
   .bt-preview-text.bt-streaming::after { animation: none; }
+}
+
+/* ── How-to disclosure (page-level, above the widget) ── */
+
+details.bt-howto {
+  margin: 0 0 20px;
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-left: 3px solid var(--bt-green);
+  border-radius: var(--bt-radius);
+}
+
+details.bt-howto > summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--bt-text);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+details.bt-howto > summary::-webkit-details-marker { display: none; }
+
+details.bt-howto > summary::before {
+  content: "\25B6";
+  font-size: 11px;
+  color: var(--bt-green);
+  transition: transform 0.15s;
+}
+
+details.bt-howto[open] > summary::before { transform: rotate(90deg); }
+
+details.bt-howto > summary:hover { color: var(--bt-green-dark, #5a8c00); }
+
+details.bt-howto > summary:focus-visible {
+  outline: 2px solid var(--bt-green);
+  outline-offset: -2px;
+  border-radius: var(--bt-radius);
+}
+
+.bt-howto-body {
+  padding: 4px 22px 18px;
+  border-top: 1px solid var(--bt-border);
+  max-width: 82ch;
+}
+
+.bt-howto-body h3 {
+  margin: 20px 0 6px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.bt-howto-body h3:first-child { margin-top: 14px; }
+
+.bt-howto-body p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.65;
 }

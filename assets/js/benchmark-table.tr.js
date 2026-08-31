@@ -37,6 +37,7 @@
 
     /* Performance targets / assumptions */
     targetsHeading: "Performans Hedefleri ve Kapasite Varsayımları",
+    targetsIntro: "Bu dört değer, hangi performansın kabul edilebilir sayılacağını belirler. Her satırın Maks C, Tahmini Chat Kapasitesi ve Tahmini Agentic Kapasitesi değerleri bunlara göre yeniden hesaplanır; TPS ve TTFT sütunlarındaki yeşil ve kırmızı renklendirme de bunları izler. Buradaki değerler satırları filtrelemez — sayıların anlamını değiştirir.",
     ttftThreshold: "Maksimum TTFT Hedefi (ms)",
     tpsThreshold: "Minimum TPS Hedefi (tok/s)",
     chatMultiplier: "Chat Kullanım Çarpanı",
@@ -81,6 +82,7 @@
     /* TPS speed preview */
     previewHeading: "Bu hız nasıl görünür",
     previewSubtitle: function (n) { return "örnek metin yaklaşık " + n + " token/s hızında"; },
+    previewStopped: "durduruldu — TPS hedefi 0",
     previewDisclaimer: "Bu gösterim, seçilen TPS değerini görselleştirmek için hazırlanmış yaklaşık bir simülasyondur. Gerçek yanıt deneyimi TTFT, çıktı uzunluğu ve uygulama davranışına göre değişebilir.",
     sampleText: "Bir büyük dil modelini kendi donanımınızda çalıştırmak, yanıt hızının hızlandırıcıya, kuantizasyon biçimine ve sistemi aynı anda kaç kişinin kullandığına bağlı olması demektir. Düşük token hızlarında metin kelime kelime belirir ve bekleme fark edilir hâle gelir. Hız arttıkça yanıt, çoğu kişinin okuyabileceğinden daha çabuk geldiği için arayüz yavaş değil anlık hissettirmeye başlar.",
 
@@ -312,8 +314,8 @@
 
     var html = "";
     html += '<div class="bt-controls">';
-    html += buildFilters();
     html += buildTargets();
+    html += buildFilters();
     html += "</div>";
     html += '<div class="bt-results-count" id="bt-results-count"></div>';
     html += '<div class="bt-table-wrap" id="bt-table-wrap"></div>';
@@ -337,27 +339,6 @@
   function buildFilters() {
     var html = '<div class="bt-filters" id="bt-filters">';
 
-    /* Concurrency leads — it frames every number in the table — and the two
-       performance sliders read against it, so they share a row. */
-    var perf = '<div class="bt-filter-row bt-filter-row-perf">';
-    perf += '<span class="bt-filter-label">' + escapeHTML(S.concurrency) + tip(S.tip.fConcurrency) + "</span>";
-    perf += '<div class="bt-filter-buttons" id="bt-filter-concurrency">';
-    allConcurrency.forEach(function (c) {
-      perf += '<button type="button" class="bt-btn' + (c === 1 ? " bt-active" : "") +
-        '" data-conc="' + c + '">C=' + c + "</button>";
-    });
-    perf += "</div>";
-    /* label and slider travel together so the row wraps cleanly */
-    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
-      escapeHTML(S.minTps) + tip(S.tip.fMinTps) + "</span>" +
-      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-min-tps-val"></span>' +
-      '<input type="range" id="bt-min-tps" min="0" max="300" value="0" step="1"></div></div>';
-    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
-      escapeHTML(S.maxTtft) + tip(S.tip.fMaxTtft) + "</span>" +
-      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-max-ttft-val"></span>' +
-      '<input type="range" id="bt-max-ttft" min="100" max="10000" value="10000" step="100"></div></div>';
-    perf += "</div>";
-    html += perf;
 
     var dev = '<div class="bt-filter-buttons" id="bt-filter-devices">';
     dev += '<button type="button" class="bt-btn bt-active" data-device="__all">' + escapeHTML(S.showAll) + "</button>";
@@ -392,6 +373,28 @@
     mtp += "</div>";
     html += row(S.mtp, S.tip.fMtp, mtp);
 
+    /* Concurrency leads — it frames every number in the table — and the two
+       performance sliders read against it, so they share a row. */
+    var perf = '<div class="bt-filter-row bt-filter-row-perf">';
+    perf += '<span class="bt-filter-label">' + escapeHTML(S.concurrency) + tip(S.tip.fConcurrency) + "</span>";
+    perf += '<div class="bt-filter-buttons" id="bt-filter-concurrency">';
+    allConcurrency.forEach(function (c) {
+      perf += '<button type="button" class="bt-btn' + (c === 1 ? " bt-active" : "") +
+        '" data-conc="' + c + '">C=' + c + "</button>";
+    });
+    perf += "</div>";
+    /* label and slider travel together so the row wraps cleanly */
+    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.minTps) + tip(S.tip.fMinTps) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-min-tps-val"></span>' +
+      '<input type="range" id="bt-min-tps" min="0" max="300" value="0" step="1"></div></div>';
+    perf += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.maxTtft) + tip(S.tip.fMaxTtft) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-max-ttft-val"></span>' +
+      '<input type="range" id="bt-max-ttft" min="100" max="10000" value="10000" step="100"></div></div>';
+    perf += "</div>";
+    html += perf;
+
     html += row(S.minChatUsers, S.tip.fMinChat,
       '<div class="bt-slider-group"><span class="bt-slider-value" id="bt-min-chat-val"></span>' +
       '<input type="range" id="bt-min-chat" min="0" max="200" value="0" step="1"></div>');
@@ -413,7 +416,10 @@
      estimated. */
   function buildTargets() {
     var html = '<div class="bt-targets" id="bt-targets">';
-    html += '<div class="bt-targets-heading">' + escapeHTML(S.targetsHeading) + "</div>";
+    html += '<button type="button" class="bt-targets-toggle" id="bt-targets-toggle" aria-expanded="false">' +
+      '<span class="bt-arrow">&#9654;</span> ' + escapeHTML(S.targetsHeading) + "</button>";
+    html += '<div class="bt-targets-body" id="bt-targets-body" hidden>';
+    html += '<p class="bt-targets-intro">' + escapeHTML(S.targetsIntro) + "</p>";
     html += '<div class="bt-targets-grid">';
     html += targetItem(S.ttftThreshold, "ttft_threshold_ms", S.tip.aTtft, "");
     html += targetItem(S.tpsThreshold, "tps_threshold", S.tip.aTps, "");
@@ -425,6 +431,7 @@
       '</span><span class="bt-preview-sub" id="bt-preview-sub"></span></div>';
     html += '<div class="bt-preview-text" id="bt-preview-text"></div>';
     html += '<p class="bt-preview-note">' + escapeHTML(S.previewDisclaimer) + "</p>";
+    html += "</div>";
     html += "</div>";
     html += "</div>";
     return html;
@@ -440,6 +447,17 @@
   /* ── Wiring ── */
 
   function wireTargets(container) {
+    var toggle = container.querySelector("#bt-targets-toggle");
+    var body = container.querySelector("#bt-targets-body");
+    toggle.addEventListener("click", function () {
+      var open = body.hidden;
+      body.hidden = !open;
+      toggle.classList.toggle("bt-open", open);
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      /* the preview only animates while it is on screen */
+      if (open) startPreview(container); else stopPreview();
+    });
+
     ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"].forEach(function (key) {
       var input = container.querySelector("#bt-assump-" + key);
       input.addEventListener("input", function () {
@@ -668,24 +686,30 @@
   /* ── TPS speed preview ── */
 
   function wirePreview(container) {
-    var input = container.querySelector("#bt-assump-tps_threshold");
+    container.querySelector("#bt-assump-tps_threshold").addEventListener("input", function () {
+      if (!container.querySelector("#bt-targets-body").hidden) startPreview(container);
+    });
+  }
 
-    function currentTps() {
-      var v = parseFloat(input.value);
-      return (isNaN(v) || v <= 0) ? 1 : v;
+  function startPreview(container) {
+    var v = parseFloat(container.querySelector("#bt-assump-tps_threshold").value);
+    var sub = container.querySelector("#bt-preview-sub");
+    var el = container.querySelector("#bt-preview-text");
+    /* A target of zero means no speed to demonstrate: stop rather than
+       silently substituting some other rate. */
+    if (isNaN(v) || v <= 0) {
+      stopPreview();
+      sub.textContent = S.previewStopped;
+      el.textContent = "";
+      el.classList.remove("bt-streaming");
+      return;
     }
+    sub.textContent = S.previewSubtitle(Math.round(v * 10) / 10);
+    stream(el, v);
+  }
 
-    /* The preview is always on: it restates the selected target as a speed the
-       reader can feel, and restarts whenever that target changes. */
-    function run() {
-      var n = currentTps();
-      container.querySelector("#bt-preview-sub").textContent =
-        S.previewSubtitle(Math.round(n * 10) / 10);
-      stream(container.querySelector("#bt-preview-text"), n);
-    }
-
-    input.addEventListener("input", run);
-    run();
+  function stopPreview() {
+    if (previewTimer) { clearTimeout(previewTimer); previewTimer = null; }
   }
 
   /* Approximate token streaming: chop the sample into word-sized pieces and
