@@ -268,15 +268,21 @@
     return null;
   }
 
-  /* One definition of "meets the targets", used by the Max C column, the
-     PASS/FAIL sweep and the green/red cells alike. A minimum of 20 tok/s is
-     met by exactly 20, and a maximum of 1000 ms is met by exactly 1000, so
-     both bounds are inclusive. They used to disagree: a cell could be green
-     while its own sweep row read FAIL. */
+  /* One definition of "meets the target" per metric, driving every coloured
+     cell in both tables as well as Max C. A minimum of 20 tok/s is met by
+     exactly 20, and a maximum of 1000 ms is met by exactly 1000, so both
+     bounds are inclusive. They used to disagree: a cell could be green while
+     its own sweep row read FAIL. */
+  function ttftMeets(ttft) {
+    return ttft != null && ttft <= config.ttft_threshold_ms;
+  }
+
+  function tpsMeets(tps) {
+    return tps != null && tps >= config.tps_threshold;
+  }
+
   function meetsTargets(dp) {
-    return dp.ttft_ms != null &&
-      dp.ttft_ms <= config.ttft_threshold_ms &&
-      dp.tps >= config.tps_threshold;
+    return ttftMeets(dp.ttft_ms) && tpsMeets(dp.tps);
   }
 
   function getMaxC(entry) {
@@ -446,10 +452,17 @@
     return html;
   }
 
+  /* A millisecond target and a tokens-per-second target are whole positive
+     counts; the multipliers are genuinely fractional (1.5 by default). */
+  var WHOLE_NUMBER_TARGETS = { ttft_threshold_ms: true, tps_threshold: true };
+
   function targetItem(label, key, tipHtml, extra) {
+    var whole = WHOLE_NUMBER_TARGETS[key];
     return '<div class="bt-target-item">' +
       '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
-      '<input type="number" id="bt-assump-' + key + '" value="' + config[key] + '" step="0.1" min="0">' +
+      '<input type="number" id="bt-assump-' + key + '" value="' + config[key] +
+      '" step="' + (whole ? "1" : "0.1") + '" min="' + (whole ? "1" : "0") + '"' +
+      (whole ? ' inputmode="numeric"' : "") + ">" +
       extra + "</div>";
   }
 
@@ -471,9 +484,19 @@
       var input = container.querySelector("#bt-assump-" + key);
       input.addEventListener("input", function () {
         var v = parseFloat(input.value);
-        if (isNaN(v) || v < 0) return;
+        if (isNaN(v)) return;
+        if (WHOLE_NUMBER_TARGETS[key]) {
+          if (v < 1 || v !== Math.floor(v)) return;
+        } else if (v < 0) {
+          return;
+        }
         config[key] = v;
         renderTable(container);
+      });
+      /* Snap the field back once the reader leaves it, so it can never sit
+         there showing a number the table is not actually using. */
+      input.addEventListener("change", function () {
+        if (input.value !== String(config[key])) input.value = config[key];
       });
     });
   }
@@ -736,7 +759,9 @@
   }
 
   function startPreview(container) {
-    var v = parseFloat(container.querySelector("#bt-assump-tps_threshold").value);
+    /* config, not the input: a half-typed or rejected value would otherwise
+       demonstrate a speed the table is not using. */
+    var v = config.tps_threshold;
     var sub = container.querySelector("#bt-preview-sub");
     var el = container.querySelector("#bt-preview-text");
     /* A target of zero means no speed to demonstrate: stop rather than
@@ -778,6 +803,9 @@
       var tps = parseFloat(tr.getAttribute("data-tps"));
       var c = tr.getAttribute("data-c");
       subEl.textContent = S.previewRowSub(c, Math.round(tps * 10) / 10);
+      /* Match the colour of the TPS cell it came from, so the heading does not
+         read as approval of a speed the table just marked red. */
+      subEl.classList.toggle("bt-sub-bad", !tpsMeets(tps));
       if (isNaN(tps) || tps <= 0) { stopStream(textEl); textEl.textContent = ""; return; }
       stream(textEl, tps);
     }
@@ -797,9 +825,14 @@
     if (start) pick(start);
   }
 
+  /* One emitted piece is a whole word, but this page defines a token as
+     roughly three quarters of a word, so a word is about 1.33 tokens.
+     Releasing words at the token rate ran a third too fast. */
+  var WORDS_PER_TOKEN = 0.75;
+
   /* Approximate token streaming: chop the sample into word-sized pieces and
-     reveal them at the selected rate. Not a real tokenizer — just enough that
-     the difference between 5 and 50 tok/s is obvious. */
+     reveal them at the selected rate. Not a real tokenizer — but the average
+     rate it plays at is the rate on the label. */
   function stream(el, tps) {
     stopStream(el);
     /* Every filter, sort or target change rebuilds the table markup, which
@@ -807,33 +840,42 @@
        timer chain below keeps running against that orphaned node for the life
        of the page — one more chain per re-render, none ever collected. */
     if (!document.contains(el)) return;
-    var tokens = S.sampleText.match(/\S+\s*/g) || [];
-    var i = 0;
-    el.textContent = "";
+    var pieces = S.sampleText.match(/\S+\s*/g) || [];
+    var wordsPerSec = tps * WORDS_PER_TOKEN;
+    if (!(wordsPerSec > 0) || !pieces.length) return;
+    var interval = 1000 / wordsPerSec;
+
+    /* Show the first word at once, then time everything after it, so the box
+       never sits blank waiting for the first tick at low rates. */
+    el.textContent = pieces[0];
     el.classList.add("bt-streaming");
-    var delay = 1000 / tps;
+    var i = 1;
+    var base = 1;
+    var t0 = Date.now();
 
     function step() {
       /* Same reason as above: the node may have been replaced since the last
          tick, and this is the only place that can notice. */
       if (!document.contains(el)) { el.btTimer = null; return; }
-      /* Above ~60 tok/s a timer cannot keep up, so emit several tokens per
-         tick instead of throttling. 100 tok/s then really does look near
-         instant rather than capped at the timer floor. */
-      var perTick = delay < 16 ? Math.ceil(16 / delay) : 1;
-      for (var k = 0; k < perTick && i < tokens.length; k++) {
-        el.textContent += tokens[i++];
-      }
+      /* Release however many words the elapsed time has earned, rather than a
+         fixed count per tick. A whole number of words against a 16 ms floor
+         snapped the rate to multiples of 62.5/s — 70 tok/s played at 125.
+         Reading the clock also self-corrects when the browser throttles
+         timers, and the cap stops a backgrounded tab dumping its backlog in
+         one frame. */
+      var due = base + Math.floor((Date.now() - t0) / 1000 * wordsPerSec);
+      if (due > i + 240) due = i + 240;
+      while (i < due && i < pieces.length) el.textContent += pieces[i++];
       /* the box is a fixed size, so follow the tail instead of growing */
       el.scrollTop = el.scrollHeight;
-      if (i < tokens.length) {
-        el.btTimer = setTimeout(step, Math.max(16, delay));
+      if (i < pieces.length) {
+        el.btTimer = setTimeout(step, Math.max(16, interval));
       } else {
         /* hold the finished text briefly, then run it again */
         el.btTimer = setTimeout(function () { stream(el, tps); }, 1600);
       }
     }
-    step();
+    el.btTimer = setTimeout(step, Math.max(16, interval));
   }
 
   /* ── Filtering ── */
@@ -978,8 +1020,7 @@
 
       var tpsCls = "bt-num", tpsTitle = "";
       if (tps !== null) {
-        var tpsOk = tps >= config.tps_threshold;
-        /* matches meetsTargets(); see the note there */
+        var tpsOk = tpsMeets(tps);
         tpsCls += tpsOk ? " bt-good" : " bt-bad";
         tpsTitle = ' title="' + escapeHTML(tpsOk ? S.targetMet : S.targetNotMet) + '"';
       }
@@ -987,7 +1028,7 @@
 
       var ttftCls = "bt-num", ttftTitle = "";
       if (ttft !== null) {
-        var ttftOk = ttft <= config.ttft_threshold_ms;
+        var ttftOk = ttftMeets(ttft);
         ttftCls += ttftOk ? " bt-good" : " bt-bad";
         ttftTitle = ' title="' + escapeHTML(ttftOk ? S.targetMet : S.targetNotMet) + '"';
       }
@@ -1021,9 +1062,18 @@
           html += '<tr class="bt-dp-row" data-tps="' + dp.tps + '" data-c="' + dp.c +
             '" tabindex="0" role="button" aria-label="' +
             escapeHTML(S.previewRowLabel(dp.c)) + '">';
+          /* Colour each metric on its own, so a FAIL shows which of the two
+             caused it rather than only that one of them did. The title gives
+             the same answer in words, because colour alone would not. */
+          var dpTtftOk = ttftMeets(dp.ttft_ms);
+          var dpTpsOk = tpsMeets(dp.tps);
           html += "<td>" + dp.c + "</td>";
-          html += "<td>" + (dp.ttft_ms != null ? fmt(dp.ttft_ms, 0) : "—") + "</td>";
-          html += "<td>" + fmt(dp.tps, 2) + "</td>";
+          html += '<td class="' + (dpTtftOk ? "bt-dp-good" : "bt-dp-bad") + '" title="' +
+            escapeHTML(dpTtftOk ? S.targetMet : S.targetNotMet) + '">' +
+            (dp.ttft_ms != null ? fmt(dp.ttft_ms, 0) : "—") + "</td>";
+          html += '<td class="' + (dpTpsOk ? "bt-dp-good" : "bt-dp-bad") + '" title="' +
+            escapeHTML(dpTpsOk ? S.targetMet : S.targetNotMet) + '">' +
+            fmt(dp.tps, 2) + "</td>";
           html += '<td class="' + (passes ? "bt-detail-pass" : "bt-detail-fail") + '">' +
             escapeHTML(passes ? S.pass : S.fail) + "</td></tr>";
         });

@@ -802,6 +802,11 @@
   color: var(--bt-green-dark, #5a8c00);
 }
 
+/* the picked speed misses the TPS target */
+.bt-preview-sub.bt-sub-bad {
+  color: #c0392b;
+}
+
 .bt-preview-text {
   min-height: 6.5em;
   padding: 16px 18px;
@@ -924,9 +929,11 @@ details.bt-howto > summary:focus-visible {
 .bt-detail-preview {
   display: flex;
   flex-direction: column;
+  /* No max-width: the preview takes whatever the sweep table leaves, so the
+     pair spans the same width as the chart below and their right edges line
+     up instead of the preview stopping short. */
   flex: 1 1 340px;
   min-width: 0;
-  max-width: 680px;
 }
 
 /* Fixed box: it fills the space beside the sweep table and does not grow as
@@ -941,6 +948,16 @@ details.bt-howto > summary:focus-visible {
 
 .bt-detail-preview .bt-preview-note {
   flex: none;
+}
+
+/* The metric that caused a FAIL, marked on the number itself. Colour only —
+   the STATUS column keeps the bold, so the row still reads status-first. */
+.bt-detail-table td.bt-dp-good {
+  color: #2d8a2d;
+}
+
+.bt-detail-table td.bt-dp-bad {
+  color: #c0392b;
 }
 
 /* measurement rows are pickable: each one drives the preview */
