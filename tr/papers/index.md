@@ -20,6 +20,7 @@ Aşağıdaki teknik white paper'lar Openzeka Teknoloji A.Ş. tarafından yayıml
 | [DGX Spark 2-Node AI Cluster Kurulum Rehberi](dgx-spark-2node-cluster-kurulumu) | Point-to-point topolojisinde cluster kurulumu, RoCEv2/RDMA, sparkrun | 2x NVIDIA DGX Spark (GB10) |
 | [DGX Spark 3-Node AI Cluster Kurulum Rehberi](dgx-spark-3node-cluster-kurulumu) | Ring (mesh) topolojisinde cluster kurulumu, RoCEv2/RDMA, sparkrun | 3x NVIDIA DGX Spark (GB10) |
 | [DGX Spark 4-Node AI Cluster Kurulum Rehberi](dgx-spark-4node-cluster-kurulumu) | Switch tabanlı cluster kurulumu, RoCEv2/RDMA, sparkrun, NAS | 4x NVIDIA DGX Spark (GB10) |
+| [DGX Spark 8-Node AI Cluster Kurulum Rehberi](dgx-spark-8node-cluster-kurulumu) | Switch tabanlı cluster kurulumu, RoCEv2/RDMA, sparkrun, NAS | 8x NVIDIA DGX Spark (GB10) |
 | [Kimi K3 DGX-B300 Inference Benchmark](kimi-k3-dgx-b300-inference-benchmark) | Inference engine + speculative decoding karşılaştırması (vLLM vs SGLang, direct vs DSpark) | NVIDIA DGX-B300 (8x Blackwell Ultra, TP=8) |
 | [NVIDIA DGX B300 ve GB300 NVL72 Cluster Mimarisi Karşılaştırması](b300-gb300-cluster-mimarisi) | İki Blackwell Ultra mimarisinin teknik karşılaştırması, iş yükü bazlı platform seçim rehberi | NVIDIA DGX B300, GB300 NVL72 (Blackwell Ultra) |
 | [LLM Benchmark Tablosu]({{ '/llm-inference-benchmarks/' | relative_url }}) | Etkileşimli benchmark tablosu: cihaz, model ve kuantizasyona göre filtreleyin, kendi hizmet seviyesi eşiklerinizi girin | DGX Spark (GB10), DGX B300, RTX PRO 6000, Jetson Thor |
