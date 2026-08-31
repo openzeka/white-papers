@@ -3,21 +3,23 @@
 /* Declared on :root, not on .bt-container, because the how-to disclosure sits
    on the page outside the widget and needs the same palette. */
 :root {
+  /* Values mirror the site's own tokens (--openzeka-*) rather than
+     referencing them, because this stylesheet also ships to openzeka.com
+     where those variables do not exist. */
   --bt-green: #76b900;
   --bt-green-dark: #5a8c00;
   --bt-dark: #1a1a1a;
-  --bt-border: #d0d0d0;
+  --bt-border: #e3e6ea;
   --bt-bg: #ffffff;
-  --bt-bg-alt: #f7f7f7;
+  --bt-bg-alt: #f6f8fa;
   --bt-bg-hover: #eef5e6;
-  --bt-text: #333333;
-  --bt-text-muted: #777777;
+  --bt-text: #1a1a1a;
+  --bt-text-muted: #525f7a;
   --bt-radius: 6px;
-  --bt-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .bt-container {
-  font-family: var(--bt-font);
+  font-family: inherit;
   color: var(--bt-text);
   font-size: 14px;
   line-height: 1.5;
@@ -68,7 +70,7 @@
   border: 1px solid var(--bt-border);
   border-radius: 20px;
   background: var(--bt-bg);
-  font-family: var(--bt-font);
+  font-family: inherit;
   font-size: 13px;
   color: var(--bt-text);
   cursor: pointer;
@@ -126,7 +128,7 @@
   padding: 5px 10px;
   border: 1px solid var(--bt-border);
   border-radius: 4px;
-  font-family: var(--bt-font);
+  font-family: inherit;
   font-size: 13px;
   color: var(--bt-text);
   background: var(--bt-bg);
@@ -433,7 +435,7 @@
   border: 1px solid var(--bt-border);
   border-radius: 4px;
   background: var(--bt-bg);
-  font-family: var(--bt-font);
+  font-family: inherit;
   font-size: 12px;
   color: var(--bt-text);
   cursor: pointer;
@@ -578,7 +580,6 @@
 .bt-targets {
   background: var(--bt-bg-alt);
   border: 1px solid var(--bt-border);
-  border-left: 3px solid var(--bt-green);
   border-radius: var(--bt-radius);
 }
 
@@ -826,24 +827,22 @@
   .bt-preview-text.bt-streaming::after { animation: none; }
 }
 
-/* ── How-to disclosure (page-level, above the widget) ── */
+/* ── How-to disclosure ──
+   Deliberately not a panel: it is page copy, and must not read as a third
+   control surface stacked above the targets and filters. */
 
 details.bt-howto {
-  margin: 0 0 20px;
-  background: var(--bt-bg);
-  border: 1px solid var(--bt-border);
-  border-left: 3px solid var(--bt-green);
-  border-radius: var(--bt-radius);
+  margin: 0 0 22px;
 }
 
 details.bt-howto > summary {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 9px;
-  padding: 13px 18px;
-  font-size: 15px;
+  gap: 8px;
+  padding: 2px 0;
+  font-size: 1rem;
   font-weight: 600;
-  color: var(--bt-text);
+  color: var(--bt-green-dark);
   cursor: pointer;
   list-style: none;
   user-select: none;
@@ -853,37 +852,50 @@ details.bt-howto > summary::-webkit-details-marker { display: none; }
 
 details.bt-howto > summary::before {
   content: "\25B6";
-  font-size: 11px;
+  font-size: 0.7em;
   color: var(--bt-green);
   transition: transform 0.15s;
 }
 
 details.bt-howto[open] > summary::before { transform: rotate(90deg); }
 
-details.bt-howto > summary:hover { color: var(--bt-green-dark, #5a8c00); }
+details.bt-howto > summary:hover { color: var(--bt-green); }
 
 details.bt-howto > summary:focus-visible {
   outline: 2px solid var(--bt-green);
-  outline-offset: -2px;
-  border-radius: var(--bt-radius);
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 
 .bt-howto-body {
-  padding: 4px 22px 18px;
-  border-top: 1px solid var(--bt-border);
-  max-width: 82ch;
+  margin-top: 10px;
+  padding-left: 18px;
+  border-left: 2px solid var(--bt-border);
+  max-width: 76ch;
 }
 
 .bt-howto-body h3 {
-  margin: 20px 0 6px;
-  font-size: 15px;
+  margin: 22px 0 6px;
+  font-size: 1rem;
   font-weight: 600;
+  color: var(--bt-text);
 }
 
-.bt-howto-body h3:first-child { margin-top: 14px; }
+.bt-howto-body h3:first-child { margin-top: 4px; }
 
 .bt-howto-body p {
   margin: 0 0 10px;
-  font-size: 14px;
   line-height: 1.65;
 }
+
+.bt-howto-body ul { margin: 0 0 10px; }
+
+.bt-howto-example {
+  margin: 4px 0 12px;
+  padding: 12px 14px;
+  background: var(--bt-bg-alt);
+  border-radius: var(--bt-radius);
+  font-size: 0.95em;
+}
+
+.bt-howto-example p:last-child { margin-bottom: 0; }

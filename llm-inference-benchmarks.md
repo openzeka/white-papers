@@ -27,53 +27,71 @@ detailed results for that configuration.
 <summary>How to use the benchmark table</summary>
 <div class="bt-howto-body" markdown="1">
 
+### Two distinctions worth fixing first
+
+**Filters decide which rows appear. Targets change what the numbers mean.**
+Filtering to one device shortens the table; lowering the TTFT target leaves the
+row count alone but recalculates Max C and the capacity columns.
+
+**Concurrency counts requests, capacity counts people.** C=8 means eight
+requests in flight at once. A chat capacity of 32 means thirty-two users. They
+are different units.
+
 ### 1. Choose a concurrency level
 
-**Concurrency (C)** is the number of active requests being processed at the same
-time — a load level, not a number of people. C=1 means one active request, C=32
-means thirty-two at once. Raise it to see how a system behaves under heavier
-simultaneous load. The selected concurrency determines which **TPS** and **TTFT**
-measurements the table displays.
+The selected C decides which measurement the TPS and TTFT columns show. C=1 is
+the best case a single user sees. Higher values show what happens once the
+system is loaded.
 
-### 2. Select the configurations you want to compare
+A row appears only if it was measured at that level, so the list shortens as C
+rises.
 
-Use the model, device, quantization and MTP filters to narrow the table — for
-example only models running on DGX Spark, only NVFP4 models, or only
-configurations using MTP. Select multiple options to compare them side by side.
+### 2. Narrow the configurations
 
-### 3. Set your performance targets
+Model, device, quantization and MTP filters combine. The most instructive
+comparisons change one variable: the same model at FP8 and NVFP4, or the same
+configuration with and without MTP.
 
-**TPS** measures token generation speed; higher is better. **TTFT** measures how
-long the user waits before the first token arrives; lower is better.
+### 3. Set your targets
 
-Open **Performance Targets and Capacity Assumptions** to enter your own limits.
-If you are unsure what a given TPS value feels like in practice, the preview
-inside that panel streams sample text at exactly that rate.
+**TTFT** is how long a user waits for the first token; it decides whether the
+interface feels dead or alive. **TPS** is how fast text then streams; it decides
+whether the answer keeps up with your reading.
 
-### 4. Check the maximum supported concurrency
+They protect different things. In a chat interface, low TTFT matters first. For
+long-form generation, TPS dominates.
 
-**Max C** is the highest tested concurrency level that meets both your TPS and
-TTFT targets. If C=8 meets both and C=16 does not, Max C is 8. It counts
-simultaneous requests, not people. Stricter targets lower it; relaxed targets
-raise it.
+If you are unsure how a TPS value feels, the preview inside **Performance
+Targets and Capacity Assumptions** streams sample text at exactly that rate.
 
-### 5. Estimate user capacity
+### 4. Read Max C and the capacity columns
 
-**Estimated Chat Capacity** and **Estimated Agentic Capacity** convert Max C into
-an approximate number of *people*.
+**Max C** is the highest concurrency meeting both targets at once. Tightening a
+target lowers it.
 
-Chat users do not send requests continuously — while they read, think or type,
-capacity is free for someone else — so a given concurrency level serves more
-chat users than it has simultaneous request slots. Agentic workloads issue more
-frequent, sequential requests, so each user needs more capacity. Both
-multipliers are adjustable.
+The capacity columns convert Max C into people. Chat users leave the system idle
+while they read and type, so the multiplier is above one. Agentic users hold a
+slot far longer, so theirs is lower. Both are adjustable.
 
-### 6. Expand a configuration for detailed results
+<div class="bt-howto-example" markdown="1">
+**Example.** Say your targets are 1000 ms TTFT and 20 tok/s. A configuration
+meets both up to C=8 but drops below 20 tok/s at C=16, so Max C is 8. With a
+chat multiplier of 4 that row reads about 32 chat users, and 12 agentic users at
+1.5. Tighten TTFT to 500 ms and the same row may stop at C=4, halving both.
+</div>
 
-Click anywhere on a row to see its complete concurrency sweep: TPS and TTFT at
-each level, whether your targets are met, how performance changes as concurrency
-rises, and any configuration notes. The chart can be downloaded as a PNG for
-reports and presentations.
+### 5. Open a row for the detail
+
+Clicking a row opens its full concurrency sweep. The table there shows whether
+your targets are met at every level — the behaviour a single headline figure
+hides.
+
+The chart carries two curves. The left axis is per-request TPS, which falls as
+concurrency rises. The right axis is aggregate throughput, which usually climbs.
+Individual users get slower while the machine as a whole does more; capacity
+planning lives between those two curves.
+
+The chart downloads as a PNG for reports and presentations.
 
 </div>
 </details>

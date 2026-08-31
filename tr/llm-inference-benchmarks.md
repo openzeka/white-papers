@@ -27,55 +27,74 @@ ayrıntılı sonuçlarını görmek için ilgili satırı açabilirsiniz.
 <summary>Benchmark tablosu nasıl kullanılır?</summary>
 <div class="bt-howto-body" markdown="1">
 
+### Önce iki ayrımı netleştirin
+
+**Filtreler hangi satırların görüneceğini belirler. Hedefler ise sayıların ne
+anlama geldiğini değiştirir.** Bir cihazı filtrelediğinizde tablo kısalır;
+TTFT hedefini düşürdüğünüzde satır sayısı aynı kalır ama Maks C ve kapasite
+sütunları yeniden hesaplanır.
+
+**Eşzamanlılık istek sayar, kapasite kişi sayar.** C=8, aynı anda sekiz isteğin
+işlendiği anlamına gelir. 32 kişilik chat kapasitesi ise otuz iki kullanıcıyı
+ifade eder. İkisi farklı birimlerdir.
+
 ### 1. Eşzamanlılık seviyesini seçin
 
-**Eşzamanlılık (Concurrency, C)**, aynı anda işlenen aktif istek sayısıdır —
-kişi sayısı değil, bir yük seviyesidir. C=1 aynı anda bir istek, C=32 aynı anda
-otuz iki istek demektir. Değeri artırarak sistemin daha yoğun eşzamanlı yük
-altında nasıl davrandığını görebilirsiniz. Seçtiğiniz eşzamanlılık, tabloda
-gösterilen **TPS** ve **TTFT** ölçümlerini belirler.
+Seçtiğiniz C değeri, TPS ve TTFT sütunlarının hangi ölçüm noktasını
+göstereceğini belirler. C=1 tek kullanıcının gördüğü en iyi durumdur. Yüksek C
+değerleri sistem yük altındayken ne olduğunu gösterir.
 
-### 2. Karşılaştırmak istediğiniz yapılandırmaları seçin
+Bir satır yalnızca o seviyede ölçülmüşse görünür; bu yüzden C yükseldikçe
+listedeki satır sayısı azalır.
 
-Model, cihaz, kuantizasyon ve MTP filtreleriyle tabloyu daraltın — örneğin
-yalnızca DGX Spark üzerinde çalışan modelleri, yalnızca NVFP4 modelleri ya da
-yalnızca MTP kullanılan yapılandırmaları görüntüleyebilirsiniz. Birden fazla
-seçenek seçerek yan yana karşılaştırma yapabilirsiniz.
+### 2. Yapılandırmaları daraltın
 
-### 3. Performans hedeflerinizi belirleyin
+Model, cihaz, kuantizasyon ve MTP filtrelerini birlikte kullanabilirsiniz. En
+öğretici karşılaştırmalar tek değişkeni değiştirdiğinizde çıkar: aynı modelin
+FP8 ve NVFP4 sürümleri, ya da aynı yapılandırmanın MTP'li ve MTP'siz hâlleri.
 
-**TPS**, token üretim hızını gösterir; yüksek olması iyidir. **TTFT**,
-kullanıcının ilk tokenı görene kadar beklediği süredir; düşük olması iyidir.
+### 3. Hedeflerinizi girin
 
-Kendi sınırlarınızı girmek için **Performans Hedefleri ve Kapasite Varsayımları**
-bölümünü açın. Bir TPS değerinin pratikte nasıl hissedildiğinden emin
-değilseniz, o bölümdeki önizleme örnek metni tam olarak o hızda akıtır.
+**TTFT** kullanıcının ilk tokenı beklediği süredir; arayüzün donuk mu yoksa
+canlı mı hissettirdiğini belirler. **TPS** metnin akış hızıdır; yanıtın okuma
+hızınıza yetişip yetişmediğini belirler.
 
-### 4. Maksimum eşzamanlılığı kontrol edin
+İkisi farklı şeyleri korur. Sohbet arayüzünde düşük TTFT önceliklidir. Uzun
+metin üreten işlerde TPS daha belirleyicidir.
 
-**Maks C**, TPS ve TTFT hedeflerinizin ikisini de karşılayan en yüksek test
-edilmiş eşzamanlılık seviyesidir. C=8 hedefleri karşılıyor, C=16 karşılamıyorsa
-Maks C 8'dir. Kişi sayısını değil, eşzamanlı istek sayısını ifade eder. Katı
-hedefler bu değeri düşürür, gevşek hedefler yükseltir.
+Bir TPS değerinin nasıl hissedildiğinden emin değilseniz **Performans Hedefleri
+ve Kapasite Varsayımları** bölümündeki önizleme örnek metni tam o hızda akıtır.
 
-### 5. Kullanıcı kapasitesini değerlendirin
+### 4. Maks C ve kapasite sütunlarını okuyun
 
-**Tahmini Chat Kapasitesi** ve **Tahmini Agentic Kapasitesi**, Maks C değerini
-yaklaşık bir *kişi* sayısına dönüştürür.
+**Maks C**, hedeflerinizin ikisini birden karşılayan en yüksek eşzamanlılıktır.
+Hedefleri sıkılaştırmak bu değeri düşürür.
 
-Chat kullanıcıları sürekli istek göndermez — okurken, düşünürken ve yazarken
-kapasite başkasına açıktır — bu nedenle belirli bir eşzamanlılık seviyesi,
-sahip olduğu eşzamanlı istek yuvasından daha fazla chat kullanıcısına hizmet
-eder. Agentic iş yükleri daha sık ve ardışık istek ürettiği için kullanıcı
-başına daha fazla kapasite gerekir. Her iki çarpan da değiştirilebilir.
+Kapasite sütunları Maks C'yi kişi sayısına çevirir. Chat kullanıcıları okurken
+ve yazarken sistemi boşta bıraktığı için çarpan birden büyüktür. Agentic
+kullanıcılar yuvayı daha uzun süre meşgul ettiği için çarpan daha düşüktür. Her
+iki çarpanı da kendi kullanımınıza göre değiştirebilirsiniz.
 
-### 6. Bir satırı açarak ayrıntıları inceleyin
+<div class="bt-howto-example" markdown="1">
+**Örnek.** Hedefleriniz 1000 ms TTFT ve 20 tok/s olsun. Bir yapılandırma C=8'e
+kadar bu ikisini karşılıyor, C=16'da TPS 20'nin altına düşüyorsa Maks C 8
+olur. Chat çarpanı 4 ile bu satır yaklaşık 32 chat kullanıcısı, agentic çarpanı
+1,5 ile 12 agentic kullanıcı gösterir. TTFT hedefini 500 ms'ye çekerseniz aynı
+satır C=4'te kalabilir ve kapasite yarıya iner.
+</div>
 
-Bir satırın herhangi bir yerine tıklayarak tüm eşzamanlılık taramasını
-görebilirsiniz: her seviyedeki TPS ve TTFT, hedeflerinizin karşılanıp
-karşılanmadığı, eşzamanlılık arttıkça performansın nasıl değiştiği ve
-yapılandırmaya ait notlar. Grafik, rapor ve sunumlarda kullanmak üzere PNG
-olarak indirilebilir.
+### 5. Satırı açıp ayrıntıya inin
+
+Satıra tıklamak tüm eşzamanlılık taramasını açar. Buradaki tablo her seviyede
+hedefin karşılanıp karşılanmadığını gösterir; başlıktaki tek bir sayının
+gizlediği davranışı burada görürsünüz.
+
+Grafikte iki eğri vardır. Soldaki eksen istek başına TPS'tir ve eşzamanlılık
+arttıkça düşer. Sağdaki eksen toplam verimdir ve genellikle yükselir. Tek
+kullanıcı yavaşlarken makinenin tamamı daha çok iş çıkarır; kapasite planlaması
+bu iki eğrinin arasında yapılır.
+
+Grafik, sunum ve raporlarda kullanmak üzere PNG olarak indirilebilir.
 
 </div>
 </details>
