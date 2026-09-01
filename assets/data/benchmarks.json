@@ -1791,6 +1791,60 @@
       "pp": null
     },
     {
+      "id": "glm-5.3_b300_default_sglang_tp4",
+      "model": "GLM-5.3",
+      "params": "753B",
+      "device": "DGX B300",
+      "quantization": "FP8",
+      "engine": "SGLang",
+      "mtp": false,
+      "mtp_k": null,
+      "tp": 4,
+      "notes": "Model: zai-org/GLM-5.3, 1M context",
+      "sources": [
+        "GLM-5.3-TP4-SGLANG-20260901T172920Z-1-001.zip"
+      ],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 286.05,
+          "tps": 155.91
+        },
+        {
+          "c": 2,
+          "ttft_ms": 356.59,
+          "tps": 103.66
+        },
+        {
+          "c": 4,
+          "ttft_ms": 384.19,
+          "tps": 74.39
+        },
+        {
+          "c": 8,
+          "ttft_ms": 436.66,
+          "tps": 52.55
+        },
+        {
+          "c": 16,
+          "ttft_ms": 560.91,
+          "tps": 31.85
+        },
+        {
+          "c": 32,
+          "ttft_ms": 613.68,
+          "tps": 23.43
+        },
+        {
+          "c": 64,
+          "ttft_ms": 570.23,
+          "tps": 17.17
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
       "id": "inkling_8spark_nvfp4_vllm_mtp1",
       "model": "Inkling",
       "params": "952B",
