@@ -5,8 +5,9 @@ lang: tr
 page_id: llm-inference-benchmarks
 description: >-
   NVIDIA DGX Spark, DGX B300, RTX PRO 6000 Blackwell ve Jetson Thor için
-  etkileşimli LLM çıkarım benchmark tablosu. Modele, cihaza, kuantizasyona ve
-  eşzamanlılığa göre filtreleyin, kendi performans hedeflerinizi girin.
+  etkileşimli LLM çıkarım benchmark tablosu. Modele, parametre sayısına, cihaza,
+  kuantizasyona ve eşzamanlılığa göre filtreleyin, kendi performans
+  hedeflerinizi girin.
 permalink: /llm-inference-benchmarks/
 last_modified_date: 2026-08-31
 wide: true
@@ -39,6 +40,11 @@ iyidir.
 
 **Eşzamanlılık (C)** — sistemin aynı anda üzerinde çalıştığı istek sayısı. Kişi
 sayısı değil, bir yük seviyesidir.
+
+**Parametre sayısı** — modelin yayımlanan hâlindeki toplam ağırlık sayısı.
+Uzman karışımı (MoE) modellerde bu değer toplamı gösterir, tek bir token için
+etkin olan daha küçük sayıyı değil; yani token başına yapılan işi değil, modelin
+kapladığı belleği yansıtır.
 
 **Kuantizasyon** — ağırlıkların saklandığı sayı biçimi. Ağırlık başına daha az
 bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar
@@ -79,7 +85,8 @@ listedeki satır sayısı azalır.
 
 ### 2. Yapılandırmaları daraltın {#yapilandirmalari-daraltin}
 
-Model, cihaz, kuantizasyon ve MTP filtrelerini birlikte kullanabilirsiniz. En
+Model, parametre sayısı, cihaz, kuantizasyon ve MTP filtrelerini birlikte
+kullanabilirsiniz. En
 öğretici karşılaştırmalar tek değişkeni değiştirdiğinizde çıkar: aynı modelin
 FP8 ve NVFP4 sürümleri, ya da aynı yapılandırmanın MTP'li ve MTP'siz hâlleri.
 

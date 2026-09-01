@@ -488,7 +488,7 @@ img[width] {
 // just-the-docs çıplak `th, td` seçicisini biçimlendiriyor (min-width: 7.5rem,
 // background-color: #fff, border-left). Bu kurallar widget'ın JS ile ürettiği
 // tabloya sızıyor: opak hücre arka planı satır şeritlemesini ve hover'ı
-// örtüyor, min-width ise 14 sütunun her birini 120 px'e sabitliyor.
+// örtüyor, min-width ise 15 sütunun her birini 120 px'e sabitliyor.
 // Tablonun koyu başlık satırı .bt-table thead th ile (daha yüksek özgüllük)
 // tanımlandığı için buradaki transparent değerinden etkilenmez.
 .bt-container {
@@ -504,7 +504,7 @@ img[width] {
   }
 }
 
-// Tabloyu okuma sütununa sığdırmak mümkün değil (14 sütun, .main 50rem).
+// Tabloyu okuma sütununa sığdırmak mümkün değil (15 sütun, .main 50rem).
 // Yalnızca front matter'ında `wide: true` olan sayfalar kendini bu sınıfla
 // işaretler; diğer sayfalar etkilenmez.
 .oz-wide {
@@ -517,8 +517,8 @@ img[width] {
   }
 }
 
-// Tablo 14 sütunlu; varsayılan hâlinde 1366 px'lik bir ekranda bile yatay
-// kaydırma gerektiriyordu. Aşağıdaki dört ayar birlikte tabloyu 1366 px ve
+// Tablo 15 sütunlu (Parametre sütunu eklendi); varsayılan hâlinde 1366 px'lik
+// bir ekranda bile yatay kaydırma gerektiriyordu. Aşağıdaki dört ayar birlikte tabloyu 1366 px ve
 // üzerinde tamamen sığdırıyor, altında ise kaydırmayı kullanılabilir kılıyor.
 .bt-container {
   // Başlıkları iki satıra sarmak tablo genişliğini ~200 px azaltıyor.
@@ -527,13 +527,16 @@ img[width] {
     vertical-align: bottom;
   }
 
-  // Hücre iç boşluğu 14 px yerine 8 px: 14 sütunda ~170 px kazanç. Türkçe
-  // başlıklar (Kuantizasyon, Agentic Kapasitesi) İngilizcelerden birkaç piksel
-  // geniş olduğu için iki dilin de 1366 px'e sığmasını bu değer belirliyor.
+  // Hücre iç boşluğu 14 px yerine 4 px. Parametre sütunu eklenince 7 px ile
+  // Türkçe sayfa 81 px taşıyordu; kenar çubuğunun 1,5 rem daraltılması 24 px,
+  // 4 px'lik boşluk ise 15 sütunda 90 px kazandırıyor. 5 px yalnızca 2 px pay
+  // bırakıyordu — farklı bir yazı tipi ölçümü onu kaydırmaya çevirirdi.
+  // Sınırı Türkçe belirliyor: başlıkları (Kuantizasyon, Inference Engine)
+  // İngilizcelerden geniş.
   .bt-table thead th,
   .bt-table tbody td {
-    padding-left: 7px;
-    padding-right: 7px;
+    padding-left: 4px;
+    padding-right: 4px;
   }
 
   // Tablo kaydığında Model sütunu yerinde kalsın; aksi hâlde hangi satıra
@@ -572,11 +575,11 @@ img[width] {
 // büyüttüğü kırılma noktasında geçerli — altındaki mobil düzen etkilenmez.
 @media (min-width: 66.5rem) {
   .oz-wide .side-bar {
-    width: 16.5rem;
+    width: 15rem;
   }
 
   .oz-wide .side-bar + .main {
-    margin-left: 16.5rem;
+    margin-left: 15rem;
   }
 }
 

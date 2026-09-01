@@ -29,8 +29,10 @@
     resetFilters: "Reset All Filters",
 
     minTps: "Min TPS",
+    minParams: "Min Parameters",
     maxTtft: "Max TTFT",
     noLimit: "No limit",
+    paramsAll: "All sizes",
     minChatUsers: "Min. Chat User Capacity (users)",
     minAgenticUsers: "Min. Agentic User Capacity (users)",
     atC: function (c) { return " at C=" + c; },
@@ -45,6 +47,7 @@
 
     /* Table */
     colModel: "Model",
+    colParams: "Parameters",
     colDevice: "Device",
     colQuant: "Quantization",
     colTps: "TPS",
@@ -93,6 +96,7 @@
     /* Tooltips */
     tip: {
       model: "<strong>Model</strong><p>The large language model being served — its identity, size and vendor.</p><p>The same model appears in several rows when it was tested at different quantizations or serving configurations.</p>",
+      params: "<strong>Parameter Count</strong><p>The total number of weights in the model as released, counted from the published checkpoint.</p><p>For mixture-of-experts models this is the total, not the smaller number active on any one token, so it reflects the memory the model occupies rather than the work done per token.</p>",
       device: "<strong>Device</strong><p>The hardware the model ran on, and how many units of it were used together.</p><p>4× DGX Spark means four machines serving one model as a single system, not four separate runs.</p>",
       quant: "<strong>Quantization</strong><p>The number format the model weights are stored in. Lower precision uses fewer bits per weight, so the model takes less memory and usually runs faster, at some risk to output quality.</p><p>BF16 is the full-precision baseline; FP8, NVFP4, MXFP4 and INT4 are progressively more compressed.</p>",
       tps: "<strong>TPS — Tokens per Second</strong><p>How fast the model produces text for a single request, measured in tokens per second. A token is roughly three quarters of a word.</p><p><em>Higher is better.</em> Shown at the selected concurrency.</p>",
@@ -106,6 +110,7 @@
 
       fConcurrency: "<strong>Concurrency</strong><p>The number of requests being processed at the same instant — a load level, not a number of people. At C=8 the machine is working on eight generations at once.</p><p>Selects which measurement the TPS and TTFT columns show. Raise it to see behaviour under load.</p>",
       fModel: "<strong>Model filter</strong><p>The large language model being served.</p><p>Pick several to compare them side by side.</p>",
+      fMinParams: "<strong>Minimum Parameter Count</strong><p>The total size of the model in parameters.</p><p>Hides models smaller than this, so you can look at only the large models or only the ones that fit modest hardware. The scale is logarithmic, because the models here span 4B to 2.8T.</p>",
       fDevice: "<strong>Device filter</strong><p>The hardware a configuration ran on, and how many units were used together.</p><p>Pick several to compare hardware directly.</p>",
       fQuant: "<strong>Quantization filter</strong><p>The number format the model weights are stored in — lower precision means less memory and usually more speed.</p><p>Select FP8 and NVFP4 together to compare those two formats.</p>",
       fMtp: "<strong>MTP filter</strong><p>Multi-token prediction: the model guesses several tokens ahead per step and verifies them, which speeds generation up.</p><p>Select both options to compare performance with it on and off.</p>",
@@ -254,6 +259,50 @@
     return Number(n).toFixed(decimals);
   }
 
+  /* The Parameters column prints entry.params verbatim, exactly as the Model
+     and Quantization columns print theirs. Nothing rounds or reformats it — the
+     value in benchmarks.json is the value on screen, so a wrong figure is fixed
+     by editing the data, not this file.
+
+     Sorting and the size filter still need a number, so the written value is
+     read back once per comparison. "27B" -> 2.7e10, "1.65T" -> 1.65e12. A bare
+     number is taken as a literal parameter count, and anything unrecognised
+     returns null, which sorts last and is never hidden by the size filter —
+     a malformed entry stays visible instead of silently vanishing. */
+  function parseParams(v) {
+    if (typeof v === "number") return isFinite(v) ? v : null;
+    if (typeof v !== "string") return null;
+    var m = v.match(/(\d+(?:\.\d+)?)\s*([KMBT]?)/i);
+    if (!m) return null;
+    var num = parseFloat(m[1]);
+    if (!isFinite(num)) return null;
+    var unit = (m[2] || "B").toUpperCase();
+    var mult = unit === "T" ? 1e12 : unit === "M" ? 1e6 : unit === "K" ? 1e3 : 1e9;
+    return num * mult;
+  }
+
+  /* Labels the size slider — a threshold the user picked, not a model's figure,
+     so this one is computed. */
+  function formatThreshold(n) {
+    if (n === null || n === undefined) return "—";
+    var b = n / 1e9;
+    if (b >= 1000) return (b / 1000).toFixed(2) + "T";
+    return Math.round(b) + "B";
+  }
+
+  /* The slider is an index, not a parameter count: a linear scale over this
+     range would spend nine tenths of its travel above 300B, where only a
+     handful of models live. Index 0 is the off position. */
+  var PARAM_SLIDER_STEPS = 100;
+  var PARAM_SLIDER_MIN_B = 4;
+  var PARAM_SLIDER_MAX_B = 5000;
+
+  function sliderToParams(idx) {
+    if (idx <= 0) return 0;
+    var t = (idx - 1) / (PARAM_SLIDER_STEPS - 1);
+    return PARAM_SLIDER_MIN_B * Math.pow(PARAM_SLIDER_MAX_B / PARAM_SLIDER_MIN_B, t) * 1e9;
+  }
+
   /* An info affordance carrying its own tooltip copy. The copy comes from S,
      never from data, so it is safe to store as markup. */
   function tip(html) {
@@ -363,7 +412,10 @@
     dev += "</div>";
     html += row(S.device, S.tip.fDevice, dev);
 
-    var mod = '<div class="bt-model-filter">';
+    /* Size sits beside the search box rather than on its own row: both answer
+       "which models am I looking at", and the two together still fit one row. */
+    var mod = '<div class="bt-model-row">';
+    mod += '<div class="bt-model-filter">';
     mod += '<input type="text" class="bt-model-search" id="bt-model-search" placeholder="' + escapeHTML(S.searchModels) + '">';
     mod += '<div class="bt-model-list" id="bt-model-list">';
     mod += '<label class="bt-model-option"><input type="checkbox" id="bt-model-all" checked> ' + escapeHTML(S.all) + "</label>";
@@ -371,6 +423,12 @@
       mod += '<label class="bt-model-option"><input type="checkbox" class="bt-model-cb" data-model="' + escapeHTML(m) + '" checked> ' + escapeHTML(m) + "</label>";
     });
     mod += "</div></div>";
+    mod += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.minParams) + tip(S.tip.fMinParams) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-min-params-val"></span>' +
+      '<input type="range" id="bt-min-params" min="0" max="' + PARAM_SLIDER_STEPS +
+      '" value="0" step="1"></div></div>';
+    mod += "</div>";
     html += row(S.model, S.tip.fModel, mod);
 
     var qua = '<div class="bt-filter-buttons" id="bt-filter-quants">';
@@ -512,6 +570,9 @@
       container.querySelector("#bt-min-chat").value + " " + S.users;
     container.querySelector("#bt-min-agentic-val").textContent =
       container.querySelector("#bt-min-agentic").value + " " + S.users;
+    var pIdx = parseInt(container.querySelector("#bt-min-params").value, 10);
+    container.querySelector("#bt-min-params-val").textContent =
+      pIdx <= 0 ? S.paramsAll : "≥ " + formatThreshold(sliderToParams(pIdx));
   }
 
   function wireButtonGroup(container, attr, stateKey) {
@@ -607,7 +668,7 @@
       });
     });
 
-    ["#bt-min-tps", "#bt-max-ttft", "#bt-min-chat", "#bt-min-agentic"].forEach(function (sel) {
+    ["#bt-min-tps", "#bt-max-ttft", "#bt-min-chat", "#bt-min-agentic", "#bt-min-params"].forEach(function (sel) {
       container.querySelector(sel).addEventListener("input", function () {
         syncSliderLabels(container);
         renderTable(container);
@@ -647,6 +708,7 @@
     container.querySelector("#bt-max-ttft").value = 10000;
     container.querySelector("#bt-min-chat").value = 0;
     container.querySelector("#bt-min-agentic").value = 0;
+    container.querySelector("#bt-min-params").value = 0;
 
     resetConfig();
     ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"].forEach(function (k) {
@@ -885,6 +947,7 @@
     var maxTtft = parseInt(container.querySelector("#bt-max-ttft").value, 10);
     var minChat = parseInt(container.querySelector("#bt-min-chat").value, 10);
     var minAgentic = parseInt(container.querySelector("#bt-min-agentic").value, 10);
+    var minParams = sliderToParams(parseInt(container.querySelector("#bt-min-params").value, 10));
 
     /* "All" checked means no model filter at all. Once it is off we filter to
        exactly the ticked models — including when that is none, which must show
@@ -903,6 +966,8 @@
       if (state.devices.length > 0 && state.devices.indexOf(entry.device) === -1) return false;
       if (state.quants.length > 0 && state.quants.indexOf(entry.quantization) === -1) return false;
       if (filterByModel && selectedModels.indexOf(entry.model) === -1) return false;
+      var ep = parseParams(entry.params);
+      if (minParams > 0 && ep !== null && ep < minParams) return false;
       if (state.mtp === "none" && entry.mtp) return false;
       if (state.mtp === "with" && !entry.mtp) return false;
 
@@ -936,6 +1001,10 @@
         vb = getMetricAtC(b, state.concurrency, "ttft_ms");
         if (va === null) va = 99999;
         if (vb === null) vb = 99999;
+      } else if (sortCol === "params") {
+        va = parseParams(a.params); vb = parseParams(b.params);
+        if (va === null) va = -1;
+        if (vb === null) vb = -1;
       } else if (sortCol === "maxc") {
         va = getMaxC(a); vb = getMaxC(b);
       } else if (sortCol === "chat") {
@@ -975,6 +1044,7 @@
     var c = state.concurrency;
     var cols = [
       { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false },
+      { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true  },
       { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false },
       { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
       { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
@@ -1015,6 +1085,7 @@
         (isExpanded ? "true" : "false") + '" title="' + escapeHTML(S.viewDetails) + '">';
 
       html += "<td>" + escapeHTML(entry.model) + "</td>";
+      html += '<td class="bt-num">' + escapeHTML(entry.params) + "</td>";
       html += "<td>" + escapeHTML(entry.device) + "</td>";
       html += "<td>" + escapeHTML(entry.quantization) + "</td>";
 
