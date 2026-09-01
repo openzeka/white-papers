@@ -118,6 +118,15 @@
 
 /* ── Model search + checkbox list ── */
 
+/* The model picker and the parameter-count slider sit side by side; the slider
+   aligns to the top so it lands beside the search box, not the checkbox list. */
+.bt-model-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px 20px;
+}
+
 .bt-model-filter {
   display: flex;
   flex-direction: column;
@@ -808,9 +817,15 @@
 }
 
 .bt-preview-text {
-  min-height: 6.5em;
+  /* 110.5px is 6.5em at the 17px this box used before; pinned in px so the
+     panel keeps its height now that the type is table-sized. */
+  min-height: 110.5px;
   padding: 16px 18px;
-  font-size: 17px;
+  /* Matches the sweep table beside it. Note that is 14px, NOT the 13px on
+     .bt-table below — just-the-docs styles bare `td`/`th` at 14px and wins,
+     so every cell in both tables actually renders at 14px. Measured, not
+     inferred: reading .bt-table alone gives the wrong number. */
+  font-size: 14px;
   line-height: 1.7;
   color: var(--bt-text);
   background: var(--bt-bg);
@@ -942,7 +957,8 @@ details.bt-howto > summary:focus-visible {
    exactly what made the box grow token by token. */
 .bt-detail-preview .bt-preview-text {
   flex: 1 1 0;
-  min-height: 6em;
+  /* 6em at the previous 17px */
+  min-height: 102px;
   overflow: hidden;
 }
 

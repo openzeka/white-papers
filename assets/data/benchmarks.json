@@ -9,6 +9,7 @@
     {
       "id": "gpt-oss-120b_1spark_mxfp4_vllm",
       "model": "GPT-OSS 120B",
+      "params": "120B",
       "device": "1× DGX Spark",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -57,6 +58,7 @@
     {
       "id": "gpt-oss-120b_2spark_mxfp4_vllm",
       "model": "GPT-OSS 120B",
+      "params": "120B",
       "device": "2× DGX Spark",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -105,6 +107,7 @@
     {
       "id": "gpt-oss-120b_rtxpro6000_mxfp4_vllm",
       "model": "GPT-OSS 120B",
+      "params": "120B",
       "device": "RTX PRO 6000",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -158,6 +161,7 @@
     {
       "id": "qwen3-4b_1spark_nvfp4_vllm",
       "model": "Qwen3-4B-Instruct-2507",
+      "params": "4B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -206,6 +210,7 @@
     {
       "id": "qwen3-coder-30b_1spark_fp16_vllm",
       "model": "Qwen3-Coder-30B-A3B-Instruct",
+      "params": "30B",
       "device": "1× DGX Spark",
       "quantization": "FP16",
       "engine": "vLLM",
@@ -254,6 +259,7 @@
     {
       "id": "qwen3-coder-30b_1spark_nvfp4_vllm",
       "model": "Qwen3-Coder-30B-A3B-Instruct",
+      "params": "30B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -302,6 +308,7 @@
     {
       "id": "qwen3.6-27b_1spark_fp8_vllm",
       "model": "Qwen3.6-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -345,6 +352,7 @@
     {
       "id": "qwen3.6-27b_1spark_fp8_vllm_mtp",
       "model": "Qwen3.6-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -388,6 +396,7 @@
     {
       "id": "qwen3.6-27b_1spark_awq_vllm_mtp",
       "model": "Qwen3.6-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "AWQ",
       "engine": "vLLM",
@@ -431,6 +440,7 @@
     {
       "id": "qwen3.6-27b_1spark_nvfp4_vllm",
       "model": "Qwen3.6-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -474,6 +484,7 @@
     {
       "id": "qwen3.6-27b_1spark_nvfp4_vllm_mtp",
       "model": "Qwen3.6-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -517,6 +528,7 @@
     {
       "id": "qwen3.6-27b_2spark_nvfp4_vllm",
       "model": "Qwen3.6-27B",
+      "params": "27B",
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -570,6 +582,7 @@
     {
       "id": "qwen3.6-27b_4spark_nvfp4_vllm",
       "model": "Qwen3.6-27B",
+      "params": "27B",
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -623,6 +636,7 @@
     {
       "id": "qwen3.5-27b_rtxpro6000_fp8_vllm",
       "model": "Qwen3.5-27B",
+      "params": "27B",
       "device": "RTX PRO 6000",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -676,6 +690,7 @@
     {
       "id": "qwen3.6-27b_b300_default_vllm",
       "model": "Qwen3.6-27B",
+      "params": "27B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -729,6 +744,7 @@
     {
       "id": "qwen3.6-35b-a3b_1spark_fp8_vllm",
       "model": "Qwen3.6-35B-A3B",
+      "params": "35B",
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -777,6 +793,7 @@
     {
       "id": "qwen3.6-35b-a3b_1spark_fp8_vllm_mtp",
       "model": "Qwen3.6-35B-A3B",
+      "params": "35B",
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -830,6 +847,7 @@
     {
       "id": "qwen3.6-35b-a3b_4spark_nvfp4_vllm",
       "model": "Qwen3.6-35B-A3B",
+      "params": "35B",
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -883,6 +901,7 @@
     {
       "id": "qwen3.6-35b-a3b_b300_default_vllm",
       "model": "Qwen3.6-35B-A3B",
+      "params": "35B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -936,6 +955,7 @@
     {
       "id": "qwen3.5-35b-a3b_rtxpro6000_fp8_vllm",
       "model": "Qwen3.5-35B-A3B",
+      "params": "35B",
       "device": "RTX PRO 6000",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -989,6 +1009,7 @@
     {
       "id": "qwen3.8-27b_1spark_nvfp4_sglang_dflash2_ult",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "SGLang",
@@ -1037,6 +1058,7 @@
     {
       "id": "qwen3.8-27b_4spark_nvfp4_sglang_dflash2_tp4",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "SGLang",
@@ -1085,6 +1107,7 @@
     {
       "id": "qwen3.8-27b_b300_default_vllm",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -1138,6 +1161,7 @@
     {
       "id": "qwen3.8-27b_b300_default_vllm_mtp",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -1191,6 +1215,7 @@
     {
       "id": "qwen3.8-flash-next_2spark_nvfp4_sglang",
       "model": "Qwen3.8-Flash-Next",
+      "params": "180B",
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "SGLang",
@@ -1229,6 +1254,7 @@
     {
       "id": "qwen3.8-flash-next_b300_default_sglang",
       "model": "Qwen3.8-Flash-Next",
+      "params": "180B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "SGLang",
@@ -1282,6 +1308,7 @@
     {
       "id": "qwen3.5-397b-a17b_3spark_int4_vllm",
       "model": "Qwen3.5-397B-A17B",
+      "params": "397B",
       "device": "3× DGX Spark",
       "quantization": "INT4",
       "engine": "vLLM",
@@ -1320,6 +1347,7 @@
     {
       "id": "qwen3.5-397b-a17b_4spark_int4_vllm",
       "model": "Qwen3.5-397B-A17B",
+      "params": "397B",
       "device": "4× DGX Spark",
       "quantization": "INT4",
       "engine": "vLLM",
@@ -1358,6 +1386,7 @@
     {
       "id": "glm-5.2_4spark_int4int8mix_vllm_mtp4",
       "model": "GLM-5.2",
+      "params": "753B",
       "device": "4× DGX Spark",
       "quantization": "INT4",
       "engine": "vLLM",
@@ -1397,6 +1426,7 @@
     {
       "id": "glm-5.2_8spark_nvfp4_vllm_mtp5_256k",
       "model": "GLM-5.2",
+      "params": "753B",
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1430,6 +1460,7 @@
     {
       "id": "glm-5.2_8spark_nvfp4_vllm_128k",
       "model": "GLM-5.2",
+      "params": "753B",
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1468,6 +1499,7 @@
     {
       "id": "glm-5.2_b300_fp8_vllm",
       "model": "GLM-5.2",
+      "params": "753B",
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -1521,6 +1553,7 @@
     {
       "id": "glm-5.2_b300_nvfp4_vllm",
       "model": "GLM-5.2",
+      "params": "753B",
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1574,6 +1607,7 @@
     {
       "id": "glm-5.3-flash_2spark_nvfp4_vllm",
       "model": "GLM-5.3-Flash",
+      "params": "321B",
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1617,6 +1651,7 @@
     {
       "id": "glm-5.3-flash_4spark_fp8_vllm",
       "model": "GLM-5.3-Flash",
+      "params": "321B",
       "device": "4× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -1650,8 +1685,9 @@
     {
       "id": "glm-5.3-flash_b300_default_sglang_tp2",
       "model": "GLM-5.3-Flash",
+      "params": "321B",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "FP8",
       "engine": "SGLang",
       "mtp": false,
       "mtp_k": null,
@@ -1703,8 +1739,9 @@
     {
       "id": "glm-5.3-flash_b300_default_sglang_tp4",
       "model": "GLM-5.3-Flash",
+      "params": "321B",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "FP8",
       "engine": "SGLang",
       "mtp": false,
       "mtp_k": null,
@@ -1756,6 +1793,7 @@
     {
       "id": "inkling_8spark_nvfp4_vllm_mtp1",
       "model": "Inkling",
+      "params": "952B",
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1794,6 +1832,7 @@
     {
       "id": "inkling_b300_nvfp4_vllm",
       "model": "Inkling",
+      "params": "952B",
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1847,6 +1886,7 @@
     {
       "id": "deepseek-v4-flash_2spark_nvfp4_vllm_mtp5",
       "model": "DeepSeek V4 Flash 0731",
+      "params": "304B",
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1885,6 +1925,7 @@
     {
       "id": "deepseek-v4-flash_8spark_nvfp4_vllm",
       "model": "DeepSeek V4 Flash 0731",
+      "params": "304B",
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1938,6 +1979,7 @@
     {
       "id": "minimax-m2.7_2spark_nvfp4_vllm_tp2",
       "model": "MiniMax-M2.7",
+      "params": "229B",
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1977,6 +2019,7 @@
     {
       "id": "minimax-m2.7_2spark_nvfp4_vllm_pp2",
       "model": "MiniMax-M2.7",
+      "params": "229B",
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2015,6 +2058,7 @@
     {
       "id": "minimax-m2.7_3spark_nvfp4_vllm_pp3",
       "model": "MiniMax-M2.7",
+      "params": "229B",
       "device": "3× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2053,6 +2097,7 @@
     {
       "id": "minimax-m2.7_4spark_nvfp4_vllm_tp4",
       "model": "MiniMax-M2.7",
+      "params": "229B",
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2106,6 +2151,7 @@
     {
       "id": "minimax-m3_4spark_nvfp4_vllm_mtp8",
       "model": "MiniMax-M3",
+      "params": "427B",
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2144,6 +2190,7 @@
     {
       "id": "minimax-m3_b300_mxfp8_vllm",
       "model": "MiniMax-M3",
+      "params": "427B",
       "device": "DGX B300",
       "quantization": "MXFP8",
       "engine": "vLLM",
@@ -2197,6 +2244,7 @@
     {
       "id": "kimi-k3_b300_mxfp4_vllm",
       "model": "Kimi K3",
+      "params": "2.78T",
       "device": "DGX B300",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -2250,6 +2298,7 @@
     {
       "id": "kimi-k3_b300_mxfp4_vllm_dspark",
       "model": "Kimi K3",
+      "params": "2.78T",
       "device": "DGX B300",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -2303,6 +2352,7 @@
     {
       "id": "kimi-k3_b300_mxfp4_sglang",
       "model": "Kimi K3",
+      "params": "2.78T",
       "device": "DGX B300",
       "quantization": "MXFP4",
       "engine": "SGLang",
@@ -2356,6 +2406,7 @@
     {
       "id": "gemma-4-26b_1spark_fp16_vllm",
       "model": "Gemma-4-26B-A4B-it",
+      "params": "26B",
       "device": "1× DGX Spark",
       "quantization": "FP16",
       "engine": "vLLM",
@@ -2409,6 +2460,7 @@
     {
       "id": "gemma-4-26b_1spark_fp16_vllm_mtp",
       "model": "Gemma-4-26B-A4B-it",
+      "params": "26B",
       "device": "1× DGX Spark",
       "quantization": "FP16",
       "engine": "vLLM",
@@ -2462,6 +2514,7 @@
     {
       "id": "gemma-4-31b_1spark_nvfp4_vllm",
       "model": "Gemma-4-31B-it",
+      "params": "31B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2515,6 +2568,7 @@
     {
       "id": "gemma-4-31b_2spark_nvfp4_vllm",
       "model": "Gemma-4-31B-it",
+      "params": "31B",
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2568,6 +2622,7 @@
     {
       "id": "gemma-4-31b_4spark_nvfp4_vllm",
       "model": "Gemma-4-31B-it",
+      "params": "31B",
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2621,6 +2676,7 @@
     {
       "id": "gemma-4-31b_b300_default_vllm",
       "model": "Gemma-4-31B-it",
+      "params": "31B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -2674,6 +2730,7 @@
     {
       "id": "gemma-4-31b_rtxpro6000_nvfp4_vllm",
       "model": "Gemma-4-31B-it",
+      "params": "31B",
       "device": "RTX PRO 6000",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2722,6 +2779,7 @@
     {
       "id": "laguna-s-2.1_thor_nvfp4",
       "model": "Laguna-S-2.1",
+      "params": "118B",
       "device": "Thor",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2760,6 +2818,7 @@
     {
       "id": "muse-glimmer-30b_1spark_sglang",
       "model": "Muse-Glimmer-30B",
+      "params": "30B",
       "device": "1× DGX Spark",
       "quantization": "BF16",
       "engine": "SGLang",
@@ -2798,6 +2857,7 @@
     {
       "id": "deepseek-v3.1_b300_nvfp4_vllm",
       "model": "DeepSeek-V3.1",
+      "params": "685B",
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2846,8 +2906,9 @@
     {
       "id": "deepseek-v4-pro_b300_default_vllm",
       "model": "DeepSeek-V4-Pro",
+      "params": "1.60T",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "FP4",
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
@@ -2899,8 +2960,9 @@
     {
       "id": "deepseek-v4-pro-0813_b300_default_vllm_tp4",
       "model": "DeepSeek-V4-Pro-0813",
+      "params": "1.65T",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "FP8",
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
@@ -2952,6 +3014,7 @@
     {
       "id": "gemma-4-26b-a4b_b300_default_vllm",
       "model": "Gemma-4-26B-A4B-it",
+      "params": "26B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3005,6 +3068,7 @@
     {
       "id": "glm-4.5-air_b300_default_vllm",
       "model": "GLM-4.5-Air",
+      "params": "110B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3053,6 +3117,7 @@
     {
       "id": "glm-4.6_b300_default_vllm",
       "model": "GLM-4.6",
+      "params": "357B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3101,6 +3166,7 @@
     {
       "id": "glm-4.7_b300_default_vllm_4gpu",
       "model": "GLM-4.7",
+      "params": "358B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3149,6 +3215,7 @@
     {
       "id": "glm-4.7_b300_fp8_vllm_2gpu",
       "model": "GLM-4.7",
+      "params": "358B",
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3197,6 +3264,7 @@
     {
       "id": "glm-4.7_1spark_nvfp4_vllm",
       "model": "GLM-4.7",
+      "params": "358B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -3245,6 +3313,7 @@
     {
       "id": "glm-5_b300_fp8_vllm",
       "model": "GLM-5",
+      "params": "754B",
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3293,6 +3362,7 @@
     {
       "id": "glm-5.1_b300_fp8_vllm",
       "model": "GLM-5.1",
+      "params": "754B",
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3346,6 +3416,7 @@
     {
       "id": "kimi-k2.5_b300_nvfp4_vllm",
       "model": "Kimi-K2.5",
+      "params": "1.03T",
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -3399,8 +3470,9 @@
     {
       "id": "kimi-k2.6_b300_default_vllm",
       "model": "Kimi-K2.6",
+      "params": "1.03T",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "INT4",
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
@@ -3447,6 +3519,7 @@
     {
       "id": "kimi-k2-thinking_b300_nvfp4_vllm",
       "model": "Kimi-K2-Thinking",
+      "params": "1.03T",
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -3495,8 +3568,9 @@
     {
       "id": "mimo-v2.5-pro_b300_default_vllm",
       "model": "MiMo-V2.5-Pro",
+      "params": "1.02T",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "FP8",
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
@@ -3543,8 +3617,9 @@
     {
       "id": "minimax-m2_b300_default_vllm",
       "model": "MiniMax-M2",
+      "params": "229B",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "FP8",
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
@@ -3591,8 +3666,9 @@
     {
       "id": "minimax-m2.5_b300_default_vllm",
       "model": "MiniMax-M2.5",
+      "params": "229B",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "FP8",
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
@@ -3639,8 +3715,9 @@
     {
       "id": "minimax-m2.7_b300_default_vllm",
       "model": "MiniMax-M2.7",
+      "params": "229B",
       "device": "DGX B300",
-      "quantization": "BF16",
+      "quantization": "FP8",
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
@@ -3687,6 +3764,7 @@
     {
       "id": "nemotron-3-ultra_b300_default_vllm",
       "model": "Nemotron-3-Ultra",
+      "params": "550B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3740,6 +3818,7 @@
     {
       "id": "qwen3-235b-a22b_b300_default_vllm",
       "model": "Qwen3-235B-A22B",
+      "params": "235B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3788,6 +3867,7 @@
     {
       "id": "qwen3.5-397b-a17b_b300_fp8_vllm",
       "model": "Qwen3.5-397B-A17B",
+      "params": "397B",
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3836,6 +3916,7 @@
     {
       "id": "qwen3.8-2.4t-a95b_b300_nvfp4_vllm",
       "model": "Qwen3.8-2.4T-A95B",
+      "params": "2.4T",
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -3889,6 +3970,7 @@
     {
       "id": "tencent-hy3_b300_default_vllm",
       "model": "Tencent-Hy3",
+      "params": "299B",
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3942,6 +4024,7 @@
     {
       "id": "qwen3.8-27b_1spark_bf16_vllm_c1",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3965,6 +4048,7 @@
     {
       "id": "qwen3.8-27b_1spark_bf16_vllm_mtp_c1",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3988,6 +4072,7 @@
     {
       "id": "qwen3.8-27b_1spark_fp8_vllm_c1",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -4011,6 +4096,7 @@
     {
       "id": "qwen3.8-27b_1spark_fp8_vllm_mtp_eugr_c1",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -4034,6 +4120,7 @@
     {
       "id": "qwen3.8-27b_1spark_nvfp4_vllm_c1",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -4057,6 +4144,7 @@
     {
       "id": "qwen3.8-27b_1spark_nvfp4_vllm_mtp_eugr_c1",
       "model": "Qwen3.8-27B",
+      "params": "27B",
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -4080,6 +4168,7 @@
     {
       "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp2dp2_c1",
       "model": "DeepSeek V4 Flash 0731",
+      "params": "304B",
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -4103,6 +4192,7 @@
     {
       "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp4_c1",
       "model": "DeepSeek V4 Flash 0731",
+      "params": "304B",
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -4126,6 +4216,7 @@
     {
       "id": "deepseek-v4-flash_8spark_nvfp4_sglang_c1",
       "model": "DeepSeek V4 Flash 0731",
+      "params": "304B",
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "SGLang",

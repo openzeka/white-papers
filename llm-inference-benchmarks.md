@@ -5,8 +5,8 @@ lang: en
 page_id: llm-inference-benchmarks
 description: >-
   Interactive LLM inference benchmark table for NVIDIA DGX Spark, DGX B300,
-  RTX PRO 6000 Blackwell and Jetson Thor. Filter by model, device, quantization
-  and concurrency, and set your own performance targets.
+  RTX PRO 6000 Blackwell and Jetson Thor. Filter by model, parameter count,
+  device, quantization and concurrency, and set your own performance targets.
 permalink: /llm-inference-benchmarks/
 last_modified_date: 2026-08-31
 wide: true
@@ -39,6 +39,11 @@ is better.
 
 **Concurrency (C)** — how many requests the system is working on at the same
 instant. A load level, not a number of people.
+
+**Parameter count** — the total number of weights in the model as released.
+For mixture-of-experts models this is the total, not the smaller number active
+on any one token, so it tracks the memory the model occupies rather than the
+work done per token.
 
 **Quantization** — the number format the weights are stored in. Fewer bits per
 weight means less memory and usually more speed, at some risk to quality. BF16
@@ -79,7 +84,7 @@ rises.
 
 ### 2. Narrow the configurations
 
-Model, device, quantization and MTP filters combine. The most instructive
+Model, parameter count, device, quantization and MTP filters combine. The most instructive
 comparisons change one variable: the same model at FP8 and NVFP4, or the same
 configuration with and without MTP.
 
