@@ -1,4 +1,9 @@
 {
+  "attribution": {
+    "intelligence_index": "Artificial Analysis — https://artificialanalysis.ai",
+    "agentic_index": "Artificial Analysis — https://artificialanalysis.ai",
+    "note": "The two index fields are republished from Artificial Analysis and require attribution wherever they are shown. Every other field is OpenZeka's own measurement."
+  },
   "config": {
     "ttft_threshold_ms": 1000,
     "tps_threshold": 20,
@@ -10,6 +15,8 @@
       "id": "gpt-oss-120b_1spark_mxfp4_vllm",
       "model": "GPT-OSS 120B",
       "params": "120B",
+      "intelligence_index": 24.1,
+      "agentic_index": 13.4,
       "device": "1× DGX Spark",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -17,9 +24,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "CUTLASS MoE, FlashInfer attn, GMU 0.7, KV fp8, Ray",
-      "sources": [
-        "collegue-old-bench_marks/.../gpt-oss-120b-single-sparkrun-opt/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -59,6 +64,8 @@
       "id": "gpt-oss-120b_2spark_mxfp4_vllm",
       "model": "GPT-OSS 120B",
       "params": "120B",
+      "intelligence_index": 24.1,
+      "agentic_index": 13.4,
       "device": "2× DGX Spark",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -66,9 +73,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "CUTLASS MoE, FlashInfer attn. +26% TPS over TP=1 at C1",
-      "sources": [
-        "collegue-old-bench_marks/.../gpt-oss-120b-double-sparkrun-opt/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -108,6 +113,8 @@
       "id": "gpt-oss-120b_rtxpro6000_mxfp4_vllm",
       "model": "GPT-OSS 120B",
       "params": "120B",
+      "intelligence_index": 24.1,
+      "agentic_index": 13.4,
       "device": "RTX PRO 6000",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -115,9 +122,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "4K context",
-      "sources": [
-        "collegue-old-bench_marks/.../RTX Pro-6000-Blackwell/gpt-oss-120b/4k/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -162,6 +167,8 @@
       "id": "qwen3-4b_1spark_nvfp4_vllm",
       "model": "Qwen3-4B-Instruct-2507",
       "params": "4B",
+      "intelligence_index": 11.9,
+      "agentic_index": null,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -169,9 +176,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../Qwe3-4B/nvfp4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -211,6 +216,8 @@
       "id": "qwen3-coder-30b_1spark_fp16_vllm",
       "model": "Qwen3-Coder-30B-A3B-Instruct",
       "params": "30B",
+      "intelligence_index": 13.6,
+      "agentic_index": null,
       "device": "1× DGX Spark",
       "quantization": "FP16",
       "engine": "vLLM",
@@ -218,9 +225,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../Qwen3-30B-Coder/fp16/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -260,6 +265,8 @@
       "id": "qwen3-coder-30b_1spark_nvfp4_vllm",
       "model": "Qwen3-Coder-30B-A3B-Instruct",
       "params": "30B",
+      "intelligence_index": 13.6,
+      "agentic_index": null,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -267,9 +274,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "NVFP4 is 2.2x faster than FP16 at C1",
-      "sources": [
-        "collegue-old-bench_marks/.../Qwen3-30B-Coder/nvfp4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -309,6 +314,8 @@
       "id": "qwen3.6-27b_1spark_fp8_vllm",
       "model": "Qwen3.6-27B",
       "params": "27B",
+      "intelligence_index": 37.7,
+      "agentic_index": 27.5,
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -353,6 +360,8 @@
       "id": "qwen3.6-27b_1spark_fp8_vllm_mtp",
       "model": "Qwen3.6-27B",
       "params": "27B",
+      "intelligence_index": 37.7,
+      "agentic_index": 27.5,
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -397,6 +406,8 @@
       "id": "qwen3.6-27b_1spark_awq_vllm_mtp",
       "model": "Qwen3.6-27B",
       "params": "27B",
+      "intelligence_index": 37.7,
+      "agentic_index": 27.5,
       "device": "1× DGX Spark",
       "quantization": "AWQ",
       "engine": "vLLM",
@@ -404,9 +415,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Model: shawnw3i/Qwen3.6-27B-AWQ-MTP",
-      "sources": [
-        "collegue-old-bench_marks/.../Qwen3.6-27B-AWQ-MTP/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -441,6 +450,8 @@
       "id": "qwen3.6-27b_1spark_nvfp4_vllm",
       "model": "Qwen3.6-27B",
       "params": "27B",
+      "intelligence_index": 37.7,
+      "agentic_index": 27.5,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -485,6 +496,8 @@
       "id": "qwen3.6-27b_1spark_nvfp4_vllm_mtp",
       "model": "Qwen3.6-27B",
       "params": "27B",
+      "intelligence_index": 37.7,
+      "agentic_index": 27.5,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -492,9 +505,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../Qwen3.6-27B-NVFP4-MTP/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -529,6 +540,8 @@
       "id": "qwen3.6-27b_2spark_nvfp4_vllm",
       "model": "Qwen3.6-27B",
       "params": "27B",
+      "intelligence_index": 37.7,
+      "agentic_index": 27.5,
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -536,9 +549,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "nvidia NVFP4, eugr nightly",
-      "sources": [
-        "collegue-old-bench_marks/.../Nvidia-Qwen3.6-27B-NVFP4_TP2/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -583,6 +594,8 @@
       "id": "qwen3.6-27b_4spark_nvfp4_vllm",
       "model": "Qwen3.6-27B",
       "params": "27B",
+      "intelligence_index": 37.7,
+      "agentic_index": 27.5,
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -590,9 +603,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "nvidia NVFP4, eugr nightly",
-      "sources": [
-        "collegue-old-bench_marks/.../Nvidia-Qwen3.6-27B-NVFP4_TP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -637,6 +648,8 @@
       "id": "qwen3.5-27b_rtxpro6000_fp8_vllm",
       "model": "Qwen3.5-27B",
       "params": "27B",
+      "intelligence_index": 34.6,
+      "agentic_index": null,
       "device": "RTX PRO 6000",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -644,9 +657,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../RTX Pro-6000-Blackwell/Qwen3.5-27B-FP8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -691,6 +702,8 @@
       "id": "qwen3.6-27b_b300_default_vllm",
       "model": "Qwen3.6-27B",
       "params": "27B",
+      "intelligence_index": 37.7,
+      "agentic_index": 27.5,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -698,9 +711,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/Qwen3.6-27B/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -745,6 +756,8 @@
       "id": "qwen3.6-35b-a3b_1spark_fp8_vllm",
       "model": "Qwen3.6-35B-A3B",
       "params": "35B",
+      "intelligence_index": 32.1,
+      "agentic_index": 21.6,
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -752,9 +765,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../Qwen3.6-35B-A3B/FP8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -794,6 +805,8 @@
       "id": "qwen3.6-35b-a3b_1spark_fp8_vllm_mtp",
       "model": "Qwen3.6-35B-A3B",
       "params": "35B",
+      "intelligence_index": 32.1,
+      "agentic_index": 21.6,
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -801,9 +814,7 @@
       "mtp_k": 3,
       "tp": 1,
       "notes": "Speculative MTP k=3. +24% TPS at C1 over FP8 without MTP",
-      "sources": [
-        "collegue-old-bench_marks/.../Qwen3.6-35B-A3B/FP8-Speculative/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -848,6 +859,8 @@
       "id": "qwen3.6-35b-a3b_4spark_nvfp4_vllm",
       "model": "Qwen3.6-35B-A3B",
       "params": "35B",
+      "intelligence_index": 32.1,
+      "agentic_index": 21.6,
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -855,9 +868,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "Model: nvidia/Qwen3.6-35B-A3B-NVFP4",
-      "sources": [
-        "collegue-old-bench_marks/.../nvidia-Qwen3.6-35B-A3B-NVFP4_TP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -902,6 +913,8 @@
       "id": "qwen3.6-35b-a3b_b300_default_vllm",
       "model": "Qwen3.6-35B-A3B",
       "params": "35B",
+      "intelligence_index": 32.1,
+      "agentic_index": 21.6,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -909,9 +922,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/Qwen3.6-35B-A3B/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -956,6 +967,8 @@
       "id": "qwen3.5-35b-a3b_rtxpro6000_fp8_vllm",
       "model": "Qwen3.5-35B-A3B",
       "params": "35B",
+      "intelligence_index": 29.9,
+      "agentic_index": null,
       "device": "RTX PRO 6000",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -963,9 +976,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../RTX Pro-6000-Blackwell/Qwen3.5-35B-A3B-FP8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1010,6 +1021,8 @@
       "id": "qwen3.8-27b_1spark_nvfp4_sglang_dflash2_ult",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "SGLang",
@@ -1017,9 +1030,7 @@
       "mtp_k": 8,
       "tp": 1,
       "notes": "DFlash2 Ultimate, BF16-LMHead, k=8, mem-fraction 0.50, KV fp8_e4m3",
-      "sources": [
-        "vLLM on Spark/docs/run-logs/run-024-qwen38-27b-nvfp4-fp4-dflash2-mia-params-tp1.md"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1059,6 +1070,8 @@
       "id": "qwen3.8-27b_4spark_nvfp4_sglang_dflash2_tp4",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "SGLang",
@@ -1066,9 +1079,7 @@
       "mtp_k": 8,
       "tp": 4,
       "notes": "DFlash2 TP=4. Best multi-spark config.",
-      "sources": [
-        "vLLM on Spark/docs/qwen3.8-27B-study/benchmarks/11-nvfp4-radixark-sglang-tp4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1108,6 +1119,8 @@
       "id": "qwen3.8-27b_b300_default_vllm",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -1115,9 +1128,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/Qwen3.8-27B/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1162,6 +1173,8 @@
       "id": "qwen3.8-27b_b300_default_vllm_mtp",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -1169,9 +1182,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/Qwen3.8-27B_MTP/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1216,6 +1227,8 @@
       "id": "qwen3.8-flash-next_2spark_nvfp4_sglang",
       "model": "Qwen3.8-Flash-Next",
       "params": "180B",
+      "intelligence_index": 55.8,
+      "agentic_index": 56.4,
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "SGLang",
@@ -1223,9 +1236,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "262K context. 180B MoE, 6B active, 512 experts.",
-      "sources": [
-        "vLLM on Spark/docs/run-logs/run-027-qwen38-flash-next-nvfp4-tp2-sglang.md"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1255,6 +1266,8 @@
       "id": "qwen3.8-flash-next_b300_default_sglang",
       "model": "Qwen3.8-Flash-Next",
       "params": "180B",
+      "intelligence_index": 55.8,
+      "agentic_index": 56.4,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "SGLang",
@@ -1262,9 +1275,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "TP=2",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/Qwen3.8-Flash-Next-TP2/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1309,6 +1320,8 @@
       "id": "qwen3.5-397b-a17b_3spark_int4_vllm",
       "model": "Qwen3.5-397B-A17B",
       "params": "397B",
+      "intelligence_index": 34.3,
+      "agentic_index": 19.8,
       "device": "3× DGX Spark",
       "quantization": "INT4",
       "engine": "vLLM",
@@ -1316,9 +1329,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Ring topology, PP=3",
-      "sources": [
-        "collegue-old-bench_marks/.../clusterx3-Ring/Qwen3.5-397B-A17B-int4-AutoRound/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1348,6 +1359,8 @@
       "id": "qwen3.5-397b-a17b_4spark_int4_vllm",
       "model": "Qwen3.5-397B-A17B",
       "params": "397B",
+      "intelligence_index": 34.3,
+      "agentic_index": 19.8,
       "device": "4× DGX Spark",
       "quantization": "INT4",
       "engine": "vLLM",
@@ -1355,9 +1368,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "Switch topology, TP=4. 2.24x faster than PP=3 at C1.",
-      "sources": [
-        "collegue-old-bench_marks/.../clusterx4-Switch/Qwen3.5-397B-A17B-int4-AutoRound/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1387,6 +1398,8 @@
       "id": "glm-5.2_4spark_int4int8mix_vllm_mtp4",
       "model": "GLM-5.2",
       "params": "753B",
+      "intelligence_index": 52.6,
+      "agentic_index": 45.7,
       "device": "4× DGX Spark",
       "quantization": "INT4",
       "engine": "vLLM",
@@ -1395,7 +1408,6 @@
       "tp": 4,
       "notes": "TP=4, DCP=4, cudagraph FULL, GMU 0.885, B12X_MLA_SPARSE",
       "sources": [
-        "collegue-old-bench_marks/.../glm-5.2_128k_c5_int4/",
         "https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-kurulumu/"
       ],
       "data_points": [
@@ -1427,6 +1439,8 @@
       "id": "glm-5.2_8spark_nvfp4_vllm_mtp5_256k",
       "model": "GLM-5.2",
       "params": "753B",
+      "intelligence_index": 52.6,
+      "agentic_index": 45.7,
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1434,9 +1448,7 @@
       "mtp_k": 5,
       "tp": 8,
       "notes": "V3 Final, 256K context, TP=8, EP, GMU 0.75, KV fp8_ds_mla",
-      "sources": [
-        "collegue-spark-dump/TP8-GLM-5.2-NVFP4/GLM-5.2-NVFP4-Ozet.md"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1461,6 +1473,8 @@
       "id": "glm-5.2_8spark_nvfp4_vllm_128k",
       "model": "GLM-5.2",
       "params": "753B",
+      "intelligence_index": 52.6,
+      "agentic_index": 45.7,
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1468,9 +1482,7 @@
       "mtp_k": null,
       "tp": 8,
       "notes": "Original, 128K context. Model: nvidia/GLM-5.2-NVFP4",
-      "sources": [
-        "collegue-old-bench_marks/.../clusterx8-Switch/nvidia-GLM-5.2-nvfp4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1500,6 +1512,8 @@
       "id": "glm-5.2_b300_fp8_vllm",
       "model": "GLM-5.2",
       "params": "753B",
+      "intelligence_index": 52.6,
+      "agentic_index": 45.7,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -1507,9 +1521,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/GLM-5.2-FP8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1554,6 +1566,8 @@
       "id": "glm-5.2_b300_nvfp4_vllm",
       "model": "GLM-5.2",
       "params": "753B",
+      "intelligence_index": 52.6,
+      "agentic_index": 45.7,
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1561,9 +1575,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "Model: nvidia/GLM-5.2-NVFP4",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/GLM-5.2-NVFP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1608,6 +1620,8 @@
       "id": "glm-5.3-flash_2spark_nvfp4_vllm",
       "model": "GLM-5.3-Flash",
       "params": "321B",
+      "intelligence_index": 57.5,
+      "agentic_index": 58.2,
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1615,9 +1629,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "Model: LibertAIDAI/GLM-5.3-Flash-NVFP4. Docker: radixark/vllm-glm53-flash:sm121-v8",
-      "sources": [
-        "vLLM on Spark/docs/run-logs/run-030-glm-5.3-flash-nvfp4-tp2-2spark.md"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1652,6 +1664,8 @@
       "id": "glm-5.3-flash_4spark_fp8_vllm",
       "model": "GLM-5.3-Flash",
       "params": "321B",
+      "intelligence_index": 57.5,
+      "agentic_index": 58.2,
       "device": "4× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -1659,9 +1673,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "Model: zai-org/GLM-5.3-Flash, 500K context (full-precision FP8)",
-      "sources": [
-        "benchmarksgsgve/glm-5.3-flash_results_tp4_fp8.zip"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1686,6 +1698,8 @@
       "id": "glm-5.3-flash_b300_default_sglang_tp2",
       "model": "GLM-5.3-Flash",
       "params": "321B",
+      "intelligence_index": 57.5,
+      "agentic_index": 58.2,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "SGLang",
@@ -1693,9 +1707,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/GLM-5.3-Flash_TP2/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1740,6 +1752,8 @@
       "id": "glm-5.3-flash_b300_default_sglang_tp4",
       "model": "GLM-5.3-Flash",
       "params": "321B",
+      "intelligence_index": 57.5,
+      "agentic_index": 58.2,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "SGLang",
@@ -1747,9 +1761,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/GLM-5.3-Flash_TP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1794,6 +1806,8 @@
       "id": "glm-5.3_b300_default_sglang_tp4",
       "model": "GLM-5.3",
       "params": "753B",
+      "intelligence_index": 59.5,
+      "agentic_index": 59.1,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "SGLang",
@@ -1801,9 +1815,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "Model: zai-org/GLM-5.3, 1M context",
-      "sources": [
-        "GLM-5.3-TP4-SGLANG-20260901T172920Z-1-001.zip"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1848,6 +1860,8 @@
       "id": "inkling_8spark_nvfp4_vllm_mtp1",
       "model": "Inkling",
       "params": "952B",
+      "intelligence_index": 42.3,
+      "agentic_index": 34.1,
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1855,9 +1869,7 @@
       "mtp_k": 1,
       "tp": 8,
       "notes": "Model: thinkingmachines/Inkling-NVFP4 (975B MoE, 552 GB). GMU 0.80, MoE FLASHINFER_CUTLASS",
-      "sources": [
-        "collegue-old-bench_marks/.../clusterx8-Switch/Inkling-NVFP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1887,6 +1899,8 @@
       "id": "inkling_b300_nvfp4_vllm",
       "model": "Inkling",
       "params": "952B",
+      "intelligence_index": 42.3,
+      "agentic_index": 34.1,
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1894,9 +1908,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/Inkling-NVFP4_results/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1941,6 +1953,8 @@
       "id": "deepseek-v4-flash_2spark_nvfp4_vllm_mtp5",
       "model": "DeepSeek V4 Flash 0731",
       "params": "304B",
+      "intelligence_index": 51.8,
+      "agentic_index": 48.4,
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1948,9 +1962,7 @@
       "mtp_k": 5,
       "tp": 2,
       "notes": "B12X, DSpark k=5, GMU 0.85, block-size 256, KV fp8",
-      "sources": [
-        "vLLM on Spark/docs/v4-flash-0731-study/benchmarks/2x-spark-1M-ctx/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -1980,6 +1992,8 @@
       "id": "deepseek-v4-flash_8spark_nvfp4_vllm",
       "model": "DeepSeek V4 Flash 0731",
       "params": "304B",
+      "intelligence_index": 51.8,
+      "agentic_index": 48.4,
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -1987,9 +2001,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "TP=2, DP=4. Best for high concurrency.",
-      "sources": [
-        "v4-flash-0731-study/benchmarks/8x-spark/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2034,6 +2046,8 @@
       "id": "minimax-m2.7_2spark_nvfp4_vllm_tp2",
       "model": "MiniMax-M2.7",
       "params": "229B",
+      "intelligence_index": 38.9,
+      "agentic_index": 25.9,
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2042,7 +2056,6 @@
       "tp": 2,
       "notes": "Best 2-node config. 55% faster than PP=2.",
       "sources": [
-        "collegue-old-bench_marks/.../MiniMax-M2.7-NVFP4-TP-2/",
         "https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-kurulumu/"
       ],
       "data_points": [
@@ -2074,6 +2087,8 @@
       "id": "minimax-m2.7_2spark_nvfp4_vllm_pp2",
       "model": "MiniMax-M2.7",
       "params": "229B",
+      "intelligence_index": 38.9,
+      "agentic_index": 25.9,
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2081,9 +2096,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "PP=2 (pipeline parallel)",
-      "sources": [
-        "collegue-old-bench_marks/.../MiniMax-M2.7-NVFP4-PP-2/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2113,6 +2126,8 @@
       "id": "minimax-m2.7_3spark_nvfp4_vllm_pp3",
       "model": "MiniMax-M2.7",
       "params": "229B",
+      "intelligence_index": 38.9,
+      "agentic_index": 25.9,
       "device": "3× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2120,9 +2135,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Ring topology, PP=3",
-      "sources": [
-        "collegue-old-bench_marks/.../clusterx3-Ring/MiniMax-M2.7-NVFP4-PP3/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2152,6 +2165,8 @@
       "id": "minimax-m2.7_4spark_nvfp4_vllm_tp4",
       "model": "MiniMax-M2.7",
       "params": "229B",
+      "intelligence_index": 38.9,
+      "agentic_index": 25.9,
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2159,9 +2174,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../MiniMax-M2.7-NVFP4_TP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2206,6 +2219,8 @@
       "id": "minimax-m3_4spark_nvfp4_vllm_mtp8",
       "model": "MiniMax-M3",
       "params": "427B",
+      "intelligence_index": 45.4,
+      "agentic_index": 36.1,
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2213,9 +2228,7 @@
       "mtp_k": 8,
       "tp": 4,
       "notes": "FLASHINFER_CUTLASS, DSpark k=8",
-      "sources": [
-        "collegue-old-bench_marks/.../MiniMax-M3-NVFP4_TP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2245,6 +2258,8 @@
       "id": "minimax-m3_b300_mxfp8_vllm",
       "model": "MiniMax-M3",
       "params": "427B",
+      "intelligence_index": 45.4,
+      "agentic_index": 36.1,
       "device": "DGX B300",
       "quantization": "MXFP8",
       "engine": "vLLM",
@@ -2252,9 +2267,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/MiniMax-M3-MXFP8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2299,6 +2312,8 @@
       "id": "kimi-k3_b300_mxfp4_vllm",
       "model": "Kimi K3",
       "params": "2.78T",
+      "intelligence_index": 59.7,
+      "agentic_index": 54.3,
       "device": "DGX B300",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -2353,6 +2368,8 @@
       "id": "kimi-k3_b300_mxfp4_vllm_dspark",
       "model": "Kimi K3",
       "params": "2.78T",
+      "intelligence_index": 59.7,
+      "agentic_index": 54.3,
       "device": "DGX B300",
       "quantization": "MXFP4",
       "engine": "vLLM",
@@ -2407,6 +2424,8 @@
       "id": "kimi-k3_b300_mxfp4_sglang",
       "model": "Kimi K3",
       "params": "2.78T",
+      "intelligence_index": 59.7,
+      "agentic_index": 54.3,
       "device": "DGX B300",
       "quantization": "MXFP4",
       "engine": "SGLang",
@@ -2461,6 +2480,8 @@
       "id": "gemma-4-26b_1spark_fp16_vllm",
       "model": "Gemma-4-26B-A4B-it",
       "params": "26B",
+      "intelligence_index": 26.1,
+      "agentic_index": 11,
       "device": "1× DGX Spark",
       "quantization": "FP16",
       "engine": "vLLM",
@@ -2468,9 +2489,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../gemma-4-26B-A4B-it/fp16/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2515,6 +2534,8 @@
       "id": "gemma-4-26b_1spark_fp16_vllm_mtp",
       "model": "Gemma-4-26B-A4B-it",
       "params": "26B",
+      "intelligence_index": 26.1,
+      "agentic_index": 11,
       "device": "1× DGX Spark",
       "quantization": "FP16",
       "engine": "vLLM",
@@ -2522,9 +2543,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../gemma-4-26B-A4B-it/fp16-mpt/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2569,6 +2588,8 @@
       "id": "gemma-4-31b_1spark_nvfp4_vllm",
       "model": "Gemma-4-31B-it",
       "params": "31B",
+      "intelligence_index": 29.7,
+      "agentic_index": 14.4,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2576,9 +2597,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Model: RedHatAI/gemma-4-31B-it-NVFP4 (31B dense)",
-      "sources": [
-        "collegue-old-bench_marks/.../gemma-4-31B-it-NVFP4_single/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2623,6 +2642,8 @@
       "id": "gemma-4-31b_2spark_nvfp4_vllm",
       "model": "Gemma-4-31B-it",
       "params": "31B",
+      "intelligence_index": 29.7,
+      "agentic_index": 14.4,
       "device": "2× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2630,9 +2651,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../gemma-4-31B-it-NVFP4_TP2/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2677,6 +2696,8 @@
       "id": "gemma-4-31b_4spark_nvfp4_vllm",
       "model": "Gemma-4-31B-it",
       "params": "31B",
+      "intelligence_index": 29.7,
+      "agentic_index": 14.4,
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2684,9 +2705,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../gemma-4-31B-it-NVFP4_TP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2731,6 +2750,8 @@
       "id": "gemma-4-31b_b300_default_vllm",
       "model": "Gemma-4-31B-it",
       "params": "31B",
+      "intelligence_index": 29.7,
+      "agentic_index": 14.4,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -2738,9 +2759,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../dgx-b300/gemma-4-31B-it/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2785,6 +2804,8 @@
       "id": "gemma-4-31b_rtxpro6000_nvfp4_vllm",
       "model": "Gemma-4-31B-it",
       "params": "31B",
+      "intelligence_index": 29.7,
+      "agentic_index": 14.4,
       "device": "RTX PRO 6000",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2792,9 +2813,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "collegue-old-bench_marks/.../RTX Pro-6000-Blackwell/Gemma-4-31B-IT-NVFP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2834,6 +2853,8 @@
       "id": "laguna-s-2.1_thor_nvfp4",
       "model": "Laguna-S-2.1",
       "params": "118B",
+      "intelligence_index": null,
+      "agentic_index": null,
       "device": "Thor",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2841,9 +2862,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "Jetson Thor. max_model_len 262144",
-      "sources": [
-        "collegue-old-bench_marks/bench_marks/Thor/Laguna-S-2.1-NVFP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2873,6 +2892,8 @@
       "id": "muse-glimmer-30b_1spark_sglang",
       "model": "Muse-Glimmer-30B",
       "params": "30B",
+      "intelligence_index": 35.1,
+      "agentic_index": 22.9,
       "device": "1× DGX Spark",
       "quantization": "BF16",
       "engine": "SGLang",
@@ -2880,9 +2901,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "max_model_len 131072",
-      "sources": [
-        "collegue-old-bench_marks/.../Muse-Glimmer-30B-sglang/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2912,6 +2931,8 @@
       "id": "deepseek-v3.1_b300_nvfp4_vllm",
       "model": "DeepSeek-V3.1",
       "params": "685B",
+      "intelligence_index": 21.4,
+      "agentic_index": null,
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -2919,9 +2940,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/DeepSeek-V3.1-NVFP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -2961,6 +2980,8 @@
       "id": "deepseek-v4-pro_b300_default_vllm",
       "model": "DeepSeek-V4-Pro",
       "params": "1.60T",
+      "intelligence_index": 45.3,
+      "agentic_index": 37.8,
       "device": "DGX B300",
       "quantization": "FP4",
       "engine": "vLLM",
@@ -2968,9 +2989,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/DeepSeek-V4-Pro/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3015,6 +3034,8 @@
       "id": "deepseek-v4-pro-0813_b300_default_vllm_tp4",
       "model": "DeepSeek-V4-Pro-0813",
       "params": "1.65T",
+      "intelligence_index": 53.2,
+      "agentic_index": 49.6,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3022,9 +3043,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "1M context",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/DeepSeek-V4-Pro-0813_TP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3069,6 +3088,8 @@
       "id": "gemma-4-26b-a4b_b300_default_vllm",
       "model": "Gemma-4-26B-A4B-it",
       "params": "26B",
+      "intelligence_index": 26.1,
+      "agentic_index": 11,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3076,9 +3097,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/gemma-4-26B-A4B-it/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3123,6 +3142,8 @@
       "id": "glm-4.5-air_b300_default_vllm",
       "model": "GLM-4.5-Air",
       "params": "110B",
+      "intelligence_index": 16.7,
+      "agentic_index": null,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3130,9 +3151,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Glm-4.5-Air/full/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3172,6 +3191,8 @@
       "id": "glm-4.6_b300_default_vllm",
       "model": "GLM-4.6",
       "params": "357B",
+      "intelligence_index": 29.3,
+      "agentic_index": 18.6,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3179,9 +3200,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/GLM-4.6/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3221,6 +3240,8 @@
       "id": "glm-4.7_b300_default_vllm_4gpu",
       "model": "GLM-4.7",
       "params": "358B",
+      "intelligence_index": 34.5,
+      "agentic_index": 26.2,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3228,9 +3249,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "4 GPU",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Glm-4.7/full/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3270,6 +3289,8 @@
       "id": "glm-4.7_b300_fp8_vllm_2gpu",
       "model": "GLM-4.7",
       "params": "358B",
+      "intelligence_index": 34.5,
+      "agentic_index": 26.2,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3277,9 +3298,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "2 GPU",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Glm-4.7/fp8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3319,6 +3338,8 @@
       "id": "glm-4.7_1spark_nvfp4_vllm",
       "model": "GLM-4.7",
       "params": "358B",
+      "intelligence_index": 34.5,
+      "agentic_index": 26.2,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -3326,9 +3347,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Benchmarked on DGX Spark, not B300 (filed under B300 folder)",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Glm-4.7/fp4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3368,6 +3387,8 @@
       "id": "glm-5_b300_fp8_vllm",
       "model": "GLM-5",
       "params": "754B",
+      "intelligence_index": 40.6,
+      "agentic_index": null,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3375,9 +3396,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/GLM-5-FP8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3417,6 +3436,8 @@
       "id": "glm-5.1_b300_fp8_vllm",
       "model": "GLM-5.1",
       "params": "754B",
+      "intelligence_index": 41,
+      "agentic_index": 30.6,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3424,9 +3445,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/GLM-5.1-FP8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3471,6 +3490,8 @@
       "id": "kimi-k2.5_b300_nvfp4_vllm",
       "model": "Kimi-K2.5",
       "params": "1.03T",
+      "intelligence_index": 36,
+      "agentic_index": 21.7,
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -3478,9 +3499,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Kimi-K2.5-NVFP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3525,6 +3544,8 @@
       "id": "kimi-k2.6_b300_default_vllm",
       "model": "Kimi-K2.6",
       "params": "1.03T",
+      "intelligence_index": 45.1,
+      "agentic_index": 31.2,
       "device": "DGX B300",
       "quantization": "INT4",
       "engine": "vLLM",
@@ -3532,9 +3553,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Kimi-K2.6/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3574,6 +3593,8 @@
       "id": "kimi-k2-thinking_b300_nvfp4_vllm",
       "model": "Kimi-K2-Thinking",
       "params": "1.03T",
+      "intelligence_index": 33.5,
+      "agentic_index": null,
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -3581,9 +3602,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Kimi-K2-Thinking-NVFP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3623,6 +3642,8 @@
       "id": "mimo-v2.5-pro_b300_default_vllm",
       "model": "MiMo-V2.5-Pro",
       "params": "1.02T",
+      "intelligence_index": 42.9,
+      "agentic_index": 29.5,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3630,9 +3651,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/MiMo-V2.5-Pro/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3672,6 +3691,8 @@
       "id": "minimax-m2_b300_default_vllm",
       "model": "MiniMax-M2",
       "params": "229B",
+      "intelligence_index": 28.9,
+      "agentic_index": null,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3679,9 +3700,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/MiniMax-M2/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3721,6 +3740,8 @@
       "id": "minimax-m2.5_b300_default_vllm",
       "model": "MiniMax-M2.5",
       "params": "229B",
+      "intelligence_index": 34.5,
+      "agentic_index": null,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3728,9 +3749,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/MiniMax-M2.5/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3770,6 +3789,8 @@
       "id": "minimax-m2.7_b300_default_vllm",
       "model": "MiniMax-M2.7",
       "params": "229B",
+      "intelligence_index": 38.9,
+      "agentic_index": 25.9,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3777,9 +3798,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/MiniMax-M2.7/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3819,6 +3838,8 @@
       "id": "nemotron-3-ultra_b300_default_vllm",
       "model": "Nemotron-3-Ultra",
       "params": "550B",
+      "intelligence_index": 38.3,
+      "agentic_index": 27.5,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3826,9 +3847,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/nemotron-3-ultra/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3873,6 +3892,8 @@
       "id": "qwen3-235b-a22b_b300_default_vllm",
       "model": "Qwen3-235B-A22B",
       "params": "235B",
+      "intelligence_index": 13.5,
+      "agentic_index": null,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -3880,9 +3901,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Qwen3-235B-A22B-Instruct-2507/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3922,6 +3941,8 @@
       "id": "qwen3.5-397b-a17b_b300_fp8_vllm",
       "model": "Qwen3.5-397B-A17B",
       "params": "397B",
+      "intelligence_index": 34.3,
+      "agentic_index": 19.8,
       "device": "DGX B300",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -3929,9 +3950,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Qwen3.5-397B-A17B-FP8/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -3971,6 +3990,8 @@
       "id": "qwen3.8-2.4t-a95b_b300_nvfp4_vllm",
       "model": "Qwen3.8-2.4T-A95B",
       "params": "2.4T",
+      "intelligence_index": 57.7,
+      "agentic_index": 57.1,
       "device": "DGX B300",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -3978,9 +3999,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "Model: Inferact/Qwen3.8-2.4T-A95B-NVFP4, 262K context",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/Qwen3.8-2.4T-A95B-NVFP4/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4025,6 +4044,8 @@
       "id": "tencent-hy3_b300_default_vllm",
       "model": "Tencent-Hy3",
       "params": "299B",
+      "intelligence_index": 42.2,
+      "agentic_index": 31.4,
       "device": "DGX B300",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -4032,9 +4053,7 @@
       "mtp_k": null,
       "tp": null,
       "notes": "",
-      "sources": [
-        "dgx-b300-20260829T175410Z-1-001/dgx-b300/tencent-Hy3/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4079,6 +4098,8 @@
       "id": "qwen3.8-27b_1spark_bf16_vllm_c1",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "1× DGX Spark",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -4086,9 +4107,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Single C=1 test (config matrix)",
-      "sources": [
-        "vLLM on Spark/docs/qwen3.8-27B-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4103,6 +4122,8 @@
       "id": "qwen3.8-27b_1spark_bf16_vllm_mtp_c1",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "1× DGX Spark",
       "quantization": "BF16",
       "engine": "vLLM",
@@ -4110,9 +4131,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Single C=1 test (config matrix)",
-      "sources": [
-        "vLLM on Spark/docs/qwen3.8-27B-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4127,6 +4146,8 @@
       "id": "qwen3.8-27b_1spark_fp8_vllm_c1",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -4134,9 +4155,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Single C=1 test (config matrix)",
-      "sources": [
-        "vLLM on Spark/docs/qwen3.8-27B-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4151,6 +4170,8 @@
       "id": "qwen3.8-27b_1spark_fp8_vllm_mtp_eugr_c1",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "1× DGX Spark",
       "quantization": "FP8",
       "engine": "vLLM",
@@ -4158,9 +4179,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "eugr nightly. Single C=1 test (config matrix)",
-      "sources": [
-        "vLLM on Spark/docs/qwen3.8-27B-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4175,6 +4194,8 @@
       "id": "qwen3.8-27b_1spark_nvfp4_vllm_c1",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -4182,9 +4203,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "Single C=1 test (config matrix)",
-      "sources": [
-        "vLLM on Spark/docs/qwen3.8-27B-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4199,6 +4218,8 @@
       "id": "qwen3.8-27b_1spark_nvfp4_vllm_mtp_eugr_c1",
       "model": "Qwen3.8-27B",
       "params": "27B",
+      "intelligence_index": 52,
+      "agentic_index": 50.9,
       "device": "1× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -4206,9 +4227,7 @@
       "mtp_k": null,
       "tp": 1,
       "notes": "eugr nightly. Single C=1 test (config matrix)",
-      "sources": [
-        "vLLM on Spark/docs/qwen3.8-27B-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4223,6 +4242,8 @@
       "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp2dp2_c1",
       "model": "DeepSeek V4 Flash 0731",
       "params": "304B",
+      "intelligence_index": 51.8,
+      "agentic_index": 48.4,
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -4230,9 +4251,7 @@
       "mtp_k": null,
       "tp": 2,
       "notes": "TP=2, DP=2. Single C=1 test (scaling comparison)",
-      "sources": [
-        "vLLM on Spark/docs/v4-flash-0731-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4247,6 +4266,8 @@
       "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp4_c1",
       "model": "DeepSeek V4 Flash 0731",
       "params": "304B",
+      "intelligence_index": 51.8,
+      "agentic_index": 48.4,
       "device": "4× DGX Spark",
       "quantization": "NVFP4",
       "engine": "vLLM",
@@ -4254,9 +4275,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "TP=4. Single C=1 test (scaling comparison). Best C=1 TPS for this model.",
-      "sources": [
-        "vLLM on Spark/docs/v4-flash-0731-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,
@@ -4271,6 +4290,8 @@
       "id": "deepseek-v4-flash_8spark_nvfp4_sglang_c1",
       "model": "DeepSeek V4 Flash 0731",
       "params": "304B",
+      "intelligence_index": 51.8,
+      "agentic_index": 48.4,
       "device": "8× DGX Spark",
       "quantization": "NVFP4",
       "engine": "SGLang",
@@ -4278,9 +4299,7 @@
       "mtp_k": null,
       "tp": 4,
       "notes": "TP=4, DP=2. Single C=1 test (scaling comparison)",
-      "sources": [
-        "vLLM on Spark/docs/v4-flash-0731-study/"
-      ],
+      "sources": [],
       "data_points": [
         {
           "c": 1,

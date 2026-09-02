@@ -39,7 +39,7 @@
 
     /* Performance targets / assumptions */
     targetsHeading: "Performance Targets and Capacity Assumptions",
-    targetsIntro: "These four values decide what counts as acceptable performance. Every row's Max C, Estimated Chat Capacity and Estimated Agentic Capacity is recalculated from them, and the green and red colouring of the TPS and TTFT columns follows them too. Nothing here filters rows out — it changes what the numbers mean.",
+    targetsIntro: "These four values decide what counts as acceptable performance. Every row's Max C, Chat Capacity and Agentic Capacity is recalculated from them, and the green and red colouring of the TPS and TTFT columns follows them too. Nothing here filters rows out — it changes what the numbers mean.",
     ttftThreshold: "Maximum TTFT Target (ms)",
     tpsThreshold: "Minimum TPS Target (tok/s)",
     chatMultiplier: "Chat Usage Multiplier",
@@ -48,13 +48,15 @@
     /* Table */
     colModel: "Model",
     colParams: "Parameters",
+    colIntel: "Intelligence Index",
+    colAgenticIdx: "Agentic Index",
     colDevice: "Device",
     colQuant: "Quantization",
     colTps: "TPS",
     colTtft: "TTFT",
     colMaxC: "Max C",
-    colChat: "Estimated Chat Capacity",
-    colAgentic: "Estimated Agentic Capacity",
+    colChat: "Chat Capacity",
+    colAgentic: "Agentic Capacity",
     colTp: "TP", colDp: "DP", colPp: "PP",
     colEngine: "Engine",
     colMtp: "MTP",
@@ -97,13 +99,15 @@
     tip: {
       model: "<strong>Model</strong><p>The large language model being served — its identity, size and vendor.</p><p>The same model appears in several rows when it was tested at different quantizations or serving configurations.</p>",
       params: "<strong>Parameter Count</strong><p>The total number of weights in the model as released, counted from the published checkpoint.</p><p>For mixture-of-experts models this is the total, not the smaller number active on any one token, so it reflects the memory the model occupies rather than the work done per token.</p>",
+      intel: "<strong>Intelligence Index</strong><p>Artificial Analysis’ composite score for how capable this model is, on a scale where higher is better. It combines nine independent evaluations covering reasoning, coding, science and long-context work.</p><p>A property of the model, not of this benchmark run — every row for the same model carries the same value, whatever the hardware or quantization. It says nothing about speed.</p><p>Where AA scores several reasoning-effort settings of one model, the highest-scoring one is shown. A dash means AA has not published a score.</p><p>Source: Artificial Analysis.</p>",
+      agenticIdx: "<strong>Agentic Index</strong><p>Artificial Analysis’ separate score for agentic work — following multi-step tasks, calling tools and staying on track without supervision. Higher is better.</p><p>Not a rescaling of the Intelligence Index: a model can rank well on one and poorly on the other.</p><p>Do not confuse it with <em>Agentic Capacity</em> further along the row, which counts how many people this hardware could serve. This column is about the model’s ability; that one is about your machine’s throughput.</p><p>AA publishes it for a minority of the models it tracks, so a dash is common here.</p><p>Source: Artificial Analysis.</p>",
       device: "<strong>Device</strong><p>The hardware the model ran on, and how many units of it were used together.</p><p>4× DGX Spark means four machines serving one model as a single system, not four separate runs.</p>",
       quant: "<strong>Quantization</strong><p>The number format the model weights are stored in. Lower precision uses fewer bits per weight, so the model takes less memory and usually runs faster, at some risk to output quality.</p><p>BF16 is the full-precision baseline; FP8, NVFP4, MXFP4 and INT4 are progressively more compressed.</p>",
       tps: "<strong>TPS — Tokens per Second</strong><p>How fast the model produces text for a single request, measured in tokens per second. A token is roughly three quarters of a word.</p><p><em>Higher is better.</em> Shown at the selected concurrency.</p>",
       ttft: "<strong>TTFT — Time to First Token</strong><p>How long a user waits between sending a request and the first word appearing, in milliseconds.</p><p><em>Lower is better.</em> Shown at the selected concurrency.</p>",
       maxc: "<strong>Max C — Maximum Supported Concurrency</strong><p>How many requests this configuration can serve at the same time while still meeting both of your performance targets.</p><p>Counts simultaneous requests, not people. Stricter targets lower it.</p>",
-      chat: "<strong>Estimated Chat Capacity</strong><p>Roughly how many people can use this configuration for interactive chat at once.</p><p>Higher than Max C because chat users are idle most of the time — reading, thinking, typing — so several share one request slot.</p><p>An estimate from your Chat Usage Multiplier, not a measurement.</p>",
-      agentic: "<strong>Estimated Agentic Capacity</strong><p>Roughly how many people this configuration supports for agentic use, where the model works through multi-step tasks and tool calls on their behalf.</p><p>Lower than the chat figure because an agentic user holds a request slot far longer.</p><p>An estimate from your Agentic Usage Multiplier, not a measurement.</p>",
+      chat: "<strong>Chat Capacity</strong><p>Roughly how many people can use this configuration for interactive chat at once.</p><p>Higher than Max C because chat users are idle most of the time — reading, thinking, typing — so several share one request slot.</p><p>An estimate from your Chat Usage Multiplier, not a measurement.</p>",
+      agentic: "<strong>Agentic Capacity</strong><p>Roughly how many people this configuration supports for agentic use, where the model works through multi-step tasks and tool calls on their behalf.</p><p>Lower than the chat figure because an agentic user holds a request slot far longer.</p><p>An estimate from your Agentic Usage Multiplier, not a measurement.</p>",
       par: "<strong>Parallelism — TP / DP / PP</strong><p>How one model is split across several GPUs or machines so it can run at all, or run faster.</p><p><strong>TP — Tensor Parallelism:</strong> one layer\u2019s maths is divided across GPUs, which all work on the same request.</p><p><strong>DP — Data Parallelism:</strong> several complete copies of the model each handle different requests.</p><p><strong>PP — Pipeline Parallelism:</strong> different layers live on different devices and requests pass through them in turn.</p><p>— means the method was not used.</p>",
       engine: "<strong>Inference Engine</strong><p>The server software that loads the model and answers requests. It handles batching, memory and scheduling, so it affects speed as much as the hardware does.</p><p>vLLM and SGLang are two such servers; the same model on the same hardware can differ measurably between them.</p>",
       mtp: "<strong>MTP — Multi-Token Prediction</strong><p>A technique where the model guesses several tokens ahead in one step instead of one at a time, then verifies them. Correct guesses are kept, so text comes out faster with the same output.</p><p>Compare rows with and without MTP to see what it bought on that configuration.</p>",
@@ -984,6 +988,62 @@
     });
   }
 
+  /* Artificial Analysis leaves both indexes null for models it has not scored,
+     and the Agentic Index is null far more often than the Intelligence one.
+     Render that as the same em dash the TP/DP/PP columns use for "not
+     applicable", rather than a 0 that would sort and read as a real score. */
+  function idxCell(v) {
+    return v == null ? '<span class="bt-muted">—</span>' : fmt(v, 1);
+  }
+
+  /* The leading columns marked `frozen` stay put while the measurement columns
+     scroll under them, so the row never loses its identity. Two things have to
+     happen after the table is built, and both are driven by the header row —
+     which already carries the classes the column definitions asked for, so this
+     is the only place that needs to know which columns are frozen:
+
+       1. copy the frozen classes onto the body cells, so the td strings below
+          do not each have to repeat them;
+       2. write each frozen cell's `left`, which CSS cannot express — it is the
+          summed width of the cells before it, and those widths come from the
+          content (model names run from "GLM-5" to "Qwen3-Coder-30B-A3B-Instruct").
+
+     Runs after every `innerHTML =`, because renderTable rebuilds the table on
+     any filter, sort or target change and a stale offset shows as a gap or an
+     overlap at the block's right edge. */
+  function applyFrozen(wrap) {
+    var head = wrap.querySelector(".bt-table > thead > tr");
+    if (!head) return;
+
+    var frozen = [], x = 0;
+    [].forEach.call(head.children, function (th, i) {
+      if (!th.classList.contains("bt-frozen")) return;
+      frozen.push({ i: i, left: x, edge: th.classList.contains("bt-frozen-edge") });
+      /* getBoundingClientRect, not offsetWidth: the cells carry a 1px border and
+         offsetWidth rounds, which accumulated into a visible 2-3px seam by the
+         fourth column. */
+      x += th.getBoundingClientRect().width;
+    });
+
+    /* Direct children only — the expanded row nests a second table whose cells
+       must not be touched. */
+    wrap.querySelectorAll(".bt-table > tbody > tr[data-id]").forEach(function (tr) {
+      frozen.forEach(function (f) {
+        var td = tr.children[f.i];
+        if (!td) return;
+        td.classList.add("bt-frozen");
+        if (f.edge) td.classList.add("bt-frozen-edge");
+      });
+    });
+
+    wrap.querySelectorAll(".bt-table > thead > tr, .bt-table > tbody > tr[data-id]")
+      .forEach(function (tr) {
+        frozen.forEach(function (f) {
+          if (tr.children[f.i]) tr.children[f.i].style.left = f.left + "px";
+        });
+      });
+  }
+
   /* ── Rendering ── */
 
   function renderTable(container) {
@@ -1005,6 +1065,14 @@
         va = parseParams(a.params); vb = parseParams(b.params);
         if (va === null) va = -1;
         if (vb === null) vb = -1;
+      } else if (sortCol === "intelligence_index" || sortCol === "agentic_index") {
+        /* Null means Artificial Analysis publishes no score, which is not the
+           same as zero. Sink those rows to the bottom in both directions, so
+           flipping the sort never parks the blanks at the top. */
+        va = a[sortCol]; vb = b[sortCol];
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
       } else if (sortCol === "maxc") {
         va = getMaxC(a); vb = getMaxC(b);
       } else if (sortCol === "chat") {
@@ -1043,9 +1111,11 @@
 
     var c = state.concurrency;
     var cols = [
-      { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false },
-      { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true  },
-      { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false },
+      { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false, left: true, frozen: true },
+      { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true,  frozen: true },
+      { key: "intelligence_index", label: S.colIntel, t: S.tip.intel, sortable: true, num: true, frozen: true },
+      { key: "agentic_index",  label: S.colAgenticIdx, t: S.tip.agenticIdx, sortable: true, num: true, frozen: true },
+      { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false, left: true },
       { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
       { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
       { key: "ttft",         label: S.colTtft + " @ C=" + c, t: S.tip.ttft, sortable: true, num: true },
@@ -1055,13 +1125,19 @@
       { key: "tp",           label: S.colTp,      t: S.tip.par,     sortable: true,  num: true  },
       { key: "dp",           label: S.colDp,      t: S.tip.par,     sortable: true,  num: true  },
       { key: "pp",           label: S.colPp,      t: S.tip.par,     sortable: true,  num: true  },
-      { key: "engine",       label: S.colEngine,  t: S.tip.engine,  sortable: true,  num: false },
+      { key: "engine",       label: S.colEngine,  t: S.tip.engine,  sortable: true,  num: false, left: true },
       { key: "mtp",          label: S.colMtp,     t: S.tip.mtp,     sortable: true,  num: false },
       { key: "expand",       label: "",           t: null,          sortable: false, num: false }
     ];
 
+    /* The frozen block is however many leading columns carry `frozen: true` —
+       declared once, on the column definitions above. The separating rule goes
+       on the last of them. */
+    var lastFrozen = -1;
+    cols.forEach(function (col, i) { if (col.frozen) lastFrozen = i; });
+
     var html = '<table class="bt-table"><thead><tr>';
-    cols.forEach(function (col) {
+    cols.forEach(function (col, i) {
       var classes = [];
       if (col.sortable) {
         classes.push("bt-sortable");
@@ -1070,6 +1146,12 @@
         classes.push("bt-no-sort");
       }
       if (col.num) classes.push("bt-th-num");
+      /* The four columns whose values are names, not numbers. Flagged on the
+         column definition rather than matched by position, so reordering the
+         table cannot silently re-align the wrong column. */
+      if (col.left) classes.push("bt-th-left");
+      if (col.frozen) classes.push("bt-frozen");
+      if (i === lastFrozen) classes.push("bt-frozen-edge");
       html += '<th class="' + classes.join(" ") + '" data-col="' + col.key + '">' +
         escapeHTML(col.label) + (col.t ? tip(col.t) : "") + "</th>";
     });
@@ -1084,9 +1166,11 @@
       html += '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '" tabindex="0" role="button" aria-expanded="' +
         (isExpanded ? "true" : "false") + '" title="' + escapeHTML(S.viewDetails) + '">';
 
-      html += "<td>" + escapeHTML(entry.model) + "</td>";
+      html += '<td class="bt-left">' + escapeHTML(entry.model) + "</td>";
       html += '<td class="bt-num">' + escapeHTML(entry.params) + "</td>";
-      html += "<td>" + escapeHTML(entry.device) + "</td>";
+      html += '<td class="bt-num">' + idxCell(entry.intelligence_index) + "</td>";
+      html += '<td class="bt-num">' + idxCell(entry.agentic_index) + "</td>";
+      html += '<td class="bt-left">' + escapeHTML(entry.device) + "</td>";
       html += "<td>" + escapeHTML(entry.quantization) + "</td>";
 
       var tpsCls = "bt-num", tpsTitle = "";
@@ -1111,7 +1195,7 @@
       html += '<td class="bt-num">' + (entry.tp != null && entry.tp !== 1 ? entry.tp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-num">' + (entry.dp != null && entry.dp !== 1 ? entry.dp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-num">' + (entry.pp != null && entry.pp !== 1 ? entry.pp : '<span class="bt-muted">—</span>') + "</td>";
-      html += "<td>" + escapeHTML(entry.engine) + "</td>";
+      html += '<td class="bt-left">' + escapeHTML(entry.engine) + "</td>";
       html += entry.mtp ? '<td class="bt-mtp-yes">' + escapeHTML(S.yes) + "</td>" : '<td class="bt-muted">—</td>';
       html += '<td class="bt-expand-cell">' + (isExpanded ? "&#9660;" : "&#9654;") + "</td>";
       html += "</tr>";
@@ -1201,6 +1285,7 @@
 
     html += "</tbody></table>";
     wrap.innerHTML = html;
+    applyFrozen(wrap);
 
     wrap.querySelectorAll("th[data-col]").forEach(function (th) {
       if (th.classList.contains("bt-no-sort")) return;

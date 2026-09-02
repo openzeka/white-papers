@@ -39,7 +39,7 @@
 
     /* Performance targets / assumptions */
     targetsHeading: "Performans Hedefleri ve Kapasite Varsayımları",
-    targetsIntro: "Bu dört değer, hangi performansın kabul edilebilir sayılacağını belirler. Her satırın Maks C, Tahmini Chat Kapasitesi ve Tahmini Agentic Kapasitesi değerleri bunlara göre yeniden hesaplanır; TPS ve TTFT sütunlarındaki yeşil ve kırmızı renklendirme de bunları izler. Buradaki değerler satırları filtrelemez — sayıların anlamını değiştirir.",
+    targetsIntro: "Bu dört değer, hangi performansın kabul edilebilir sayılacağını belirler. Her satırın Maks C, Chat Kapasitesi ve Agentic Kapasitesi değerleri bunlara göre yeniden hesaplanır; TPS ve TTFT sütunlarındaki yeşil ve kırmızı renklendirme de bunları izler. Buradaki değerler satırları filtrelemez — sayıların anlamını değiştirir.",
     ttftThreshold: "Maksimum TTFT Hedefi (ms)",
     tpsThreshold: "Minimum TPS Hedefi (tok/s)",
     chatMultiplier: "Chat Kullanım Çarpanı",
@@ -48,13 +48,15 @@
     /* Table */
     colModel: "Model",
     colParams: "Parametre",
+    colIntel: "Zekâ Endeksi",
+    colAgenticIdx: "Agentic Endeksi",
     colDevice: "Cihaz",
     colQuant: "Kuantizasyon",
     colTps: "TPS",
     colTtft: "TTFT",
     colMaxC: "Maks C",
-    colChat: "Tahmini Chat Kapasitesi",
-    colAgentic: "Tahmini Agentic Kapasitesi",
+    colChat: "Chat Kapasitesi",
+    colAgentic: "Agentic Kapasitesi",
     colTp: "TP", colDp: "DP", colPp: "PP",
     colEngine: "Inference Engine",
     colMtp: "MTP",
@@ -97,13 +99,15 @@
     tip: {
       model: "<strong>Model</strong><p>Sunulan büyük dil modeli — kimliği, boyutu ve üreticisi.</p><p>Aynı model farklı kuantizasyon veya çalışma yapılandırmalarıyla test edildiyse birden fazla satırda görünür.</p>",
       params: "<strong>Parametre Sayısı</strong><p>Modelin yayımlanan ağırlıklarındaki toplam parametre sayısı; yayımlanan kontrol noktasından sayılmıştır.</p><p>Uzman karışımı (MoE) modellerde bu değer toplamı gösterir, tek bir token için etkin olan daha küçük sayıyı değil. Yani token başına yapılan işi değil, modelin kapladığı belleği yansıtır.</p>",
+      intel: "<strong>Zekâ Endeksi</strong><p>Artificial Analysis’in bu modelin ne kadar yetenekli olduğunu gösteren bileşik puanı; yüksek olan iyidir. Akıl yürütme, kodlama, bilim ve uzun bağlam çalışmasını kapsayan dokuz bağımsız değerlendirmeyi birleştirir.</p><p>Bu, modelin bir özelliği — bu benchmark koşusunun değil. Aynı modelin her satırı, donanım veya kuantizasyon ne olursa olsun aynı değeri taşır. Hız hakkında hiçbir şey söylemez.</p><p>AA bir modelin birden çok akıl yürütme seviyesini puanladığında, en yüksek puanlı olan gösterilir. Tire, AA’in puan yayımlamadığı anlamına gelir.</p><p>Kaynak: Artificial Analysis.</p>",
+      agenticIdx: "<strong>Agentic Endeksi</strong><p>Artificial Analysis’in agentic çalışma için ayrı puanı — çok adımlı görevleri izlemek, araç çağırmak ve gözetim olmadan yolda kalmak. Yüksek olan iyidir.</p><p>Zekâ Endeksi’nin yeniden ölçeklenmiş hâli değildir: bir model birinde iyi, diğerinde kötü sıralanabilir.</p><p>Satırın devamındaki <em>Agentic Kapasitesi</em> ile karıştırmayın; o, bu donanımın kaç kişiye hizmet edebileceğini sayar. Bu sütun modelin yeteneğiyle, o ise makinenizin kapasitesiyle ilgilidir.</p><p>AA bunu izlediği modellerin azınlığı için yayımlar, bu yüzden burada tire sık görülür.</p><p>Kaynak: Artificial Analysis.</p>",
       device: "<strong>Cihaz</strong><p>Modelin üzerinde çalıştığı donanım ve kaç adedinin birlikte kullanıldığı.</p><p>4× DGX Spark, dört makinenin tek bir sistem olarak tek modeli sunması demektir; dört ayrı çalışma değil.</p>",
       quant: "<strong>Kuantizasyon</strong><p>Model ağırlıklarının saklandığı sayı biçimi. Düşük hassasiyet, ağırlık başına daha az bit kullanır; model daha az bellek kaplar ve genellikle daha hızlı çalışır, çıktı kalitesinde bir miktar risk vardır.</p><p>BF16 tam hassasiyet referansıdır; FP8, NVFP4, MXFP4 ve INT4 giderek daha sıkıştırılmıştır.</p>",
       tps: "<strong>TPS — Tokens per Second</strong><p>Modelin tek bir istek için saniyede ürettiği token sayısı. Bir token kabaca bir kelimenin dörtte üçü kadardır.</p><p><em>Yüksek olması iyidir.</em> Seçili eşzamanlılıktaki değer gösterilir.</p>",
       ttft: "<strong>TTFT — Time to First Token</strong><p>Kullanıcının isteği gönderdikten sonra ilk kelimenin belirmesine kadar beklediği süre, milisaniye cinsinden.</p><p><em>Düşük olması iyidir.</em> Seçili eşzamanlılıktaki değer gösterilir.</p>",
       maxc: "<strong>Maks C — Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın, performans hedeflerinizin ikisini de karşılamaya devam ederken aynı anda kaç isteğe hizmet verebildiği.</p><p>Kişi değil, eşzamanlı istek sayar. Katı hedefler bu değeri düşürür.</p>",
-      chat: "<strong>Tahmini Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç kişinin kullanabileceği.</p><p>Maks C\u2019den yüksektir: chat kullanıcıları zamanın çoğunda okur, düşünür ve yazar; birkaç kişi tek bir istek yuvasını paylaşır.</p><p>Ölçüm değil, Chat Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
-      agentic: "<strong>Tahmini Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç kişiyi desteklediği.</p><p>Chat değerinden düşüktür: agentic kullanıcı istek yuvasını çok daha uzun tutar.</p><p>Ölçüm değil, Agentic Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
+      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç kişinin kullanabileceği.</p><p>Maks C\u2019den yüksektir: chat kullanıcıları zamanın çoğunda okur, düşünür ve yazar; birkaç kişi tek bir istek yuvasını paylaşır.</p><p>Ölçüm değil, Chat Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
+      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç kişiyi desteklediği.</p><p>Chat değerinden düşüktür: agentic kullanıcı istek yuvasını çok daha uzun tutar.</p><p>Ölçüm değil, Agentic Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
       par: "<strong>Paralellik — TP / DP / PP</strong><p>Tek bir modelin, çalışabilmesi ya da daha hızlı çalışması için birden fazla GPU veya makineye nasıl bölündüğü.</p><p><strong>TP — Tensor Parallelism:</strong> tek bir katmanın hesabı GPU\u2019lara bölünür; hepsi aynı istek üzerinde çalışır.</p><p><strong>DP — Data Parallelism:</strong> modelin birden fazla tam kopyası farklı istekleri işler.</p><p><strong>PP — Pipeline Parallelism:</strong> farklı katmanlar farklı cihazlarda durur, istekler sırayla bunlardan geçer.</p><p>— yöntemin kullanılmadığını gösterir.</p>",
       engine: "<strong>Inference Engine</strong><p>Modeli belleğe yükleyip istekleri yanıtlayan sunucu yazılımı. Toplu işleme, bellek ve zamanlamayı o yönettiği için hıza donanım kadar etki eder.</p><p>vLLM ve SGLang bu sunuculardan ikisidir; aynı model aynı donanımda ikisi arasında ölçülebilir biçimde farklılaşabilir.</p>",
       mtp: "<strong>MTP — Multi-Token Prediction</strong><p>Modelin tek adımda birer birer değil, birkaç token ilerisini birden tahmin edip sonra doğruladığı teknik. Doğru tahminler korunduğu için aynı çıktı daha hızlı üretilir.</p><p>MTP\u2019li ve MTP\u2019siz satırları karşılaştırarak o yapılandırmada ne kazandırdığını görebilirsiniz.</p>",
@@ -984,6 +988,62 @@
     });
   }
 
+  /* Artificial Analysis leaves both indexes null for models it has not scored,
+     and the Agentic Index is null far more often than the Intelligence one.
+     Render that as the same em dash the TP/DP/PP columns use for "not
+     applicable", rather than a 0 that would sort and read as a real score. */
+  function idxCell(v) {
+    return v == null ? '<span class="bt-muted">—</span>' : fmt(v, 1);
+  }
+
+  /* The leading columns marked `frozen` stay put while the measurement columns
+     scroll under them, so the row never loses its identity. Two things have to
+     happen after the table is built, and both are driven by the header row —
+     which already carries the classes the column definitions asked for, so this
+     is the only place that needs to know which columns are frozen:
+
+       1. copy the frozen classes onto the body cells, so the td strings below
+          do not each have to repeat them;
+       2. write each frozen cell's `left`, which CSS cannot express — it is the
+          summed width of the cells before it, and those widths come from the
+          content (model names run from "GLM-5" to "Qwen3-Coder-30B-A3B-Instruct").
+
+     Runs after every `innerHTML =`, because renderTable rebuilds the table on
+     any filter, sort or target change and a stale offset shows as a gap or an
+     overlap at the block's right edge. */
+  function applyFrozen(wrap) {
+    var head = wrap.querySelector(".bt-table > thead > tr");
+    if (!head) return;
+
+    var frozen = [], x = 0;
+    [].forEach.call(head.children, function (th, i) {
+      if (!th.classList.contains("bt-frozen")) return;
+      frozen.push({ i: i, left: x, edge: th.classList.contains("bt-frozen-edge") });
+      /* getBoundingClientRect, not offsetWidth: the cells carry a 1px border and
+         offsetWidth rounds, which accumulated into a visible 2-3px seam by the
+         fourth column. */
+      x += th.getBoundingClientRect().width;
+    });
+
+    /* Direct children only — the expanded row nests a second table whose cells
+       must not be touched. */
+    wrap.querySelectorAll(".bt-table > tbody > tr[data-id]").forEach(function (tr) {
+      frozen.forEach(function (f) {
+        var td = tr.children[f.i];
+        if (!td) return;
+        td.classList.add("bt-frozen");
+        if (f.edge) td.classList.add("bt-frozen-edge");
+      });
+    });
+
+    wrap.querySelectorAll(".bt-table > thead > tr, .bt-table > tbody > tr[data-id]")
+      .forEach(function (tr) {
+        frozen.forEach(function (f) {
+          if (tr.children[f.i]) tr.children[f.i].style.left = f.left + "px";
+        });
+      });
+  }
+
   /* ── Rendering ── */
 
   function renderTable(container) {
@@ -1005,6 +1065,14 @@
         va = parseParams(a.params); vb = parseParams(b.params);
         if (va === null) va = -1;
         if (vb === null) vb = -1;
+      } else if (sortCol === "intelligence_index" || sortCol === "agentic_index") {
+        /* Null means Artificial Analysis publishes no score, which is not the
+           same as zero. Sink those rows to the bottom in both directions, so
+           flipping the sort never parks the blanks at the top. */
+        va = a[sortCol]; vb = b[sortCol];
+        if (va == null && vb == null) return 0;
+        if (va == null) return 1;
+        if (vb == null) return -1;
       } else if (sortCol === "maxc") {
         va = getMaxC(a); vb = getMaxC(b);
       } else if (sortCol === "chat") {
@@ -1043,9 +1111,11 @@
 
     var c = state.concurrency;
     var cols = [
-      { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false },
-      { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true  },
-      { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false },
+      { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false, left: true, frozen: true },
+      { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true,  frozen: true },
+      { key: "intelligence_index", label: S.colIntel, t: S.tip.intel, sortable: true, num: true, frozen: true },
+      { key: "agentic_index",  label: S.colAgenticIdx, t: S.tip.agenticIdx, sortable: true, num: true, frozen: true },
+      { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false, left: true },
       { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
       { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
       { key: "ttft",         label: S.colTtft + " @ C=" + c, t: S.tip.ttft, sortable: true, num: true },
@@ -1055,13 +1125,19 @@
       { key: "tp",           label: S.colTp,      t: S.tip.par,     sortable: true,  num: true  },
       { key: "dp",           label: S.colDp,      t: S.tip.par,     sortable: true,  num: true  },
       { key: "pp",           label: S.colPp,      t: S.tip.par,     sortable: true,  num: true  },
-      { key: "engine",       label: S.colEngine,  t: S.tip.engine,  sortable: true,  num: false },
+      { key: "engine",       label: S.colEngine,  t: S.tip.engine,  sortable: true,  num: false, left: true },
       { key: "mtp",          label: S.colMtp,     t: S.tip.mtp,     sortable: true,  num: false },
       { key: "expand",       label: "",           t: null,          sortable: false, num: false }
     ];
 
+    /* The frozen block is however many leading columns carry `frozen: true` —
+       declared once, on the column definitions above. The separating rule goes
+       on the last of them. */
+    var lastFrozen = -1;
+    cols.forEach(function (col, i) { if (col.frozen) lastFrozen = i; });
+
     var html = '<table class="bt-table"><thead><tr>';
-    cols.forEach(function (col) {
+    cols.forEach(function (col, i) {
       var classes = [];
       if (col.sortable) {
         classes.push("bt-sortable");
@@ -1070,6 +1146,12 @@
         classes.push("bt-no-sort");
       }
       if (col.num) classes.push("bt-th-num");
+      /* The four columns whose values are names, not numbers. Flagged on the
+         column definition rather than matched by position, so reordering the
+         table cannot silently re-align the wrong column. */
+      if (col.left) classes.push("bt-th-left");
+      if (col.frozen) classes.push("bt-frozen");
+      if (i === lastFrozen) classes.push("bt-frozen-edge");
       html += '<th class="' + classes.join(" ") + '" data-col="' + col.key + '">' +
         escapeHTML(col.label) + (col.t ? tip(col.t) : "") + "</th>";
     });
@@ -1084,9 +1166,11 @@
       html += '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '" tabindex="0" role="button" aria-expanded="' +
         (isExpanded ? "true" : "false") + '" title="' + escapeHTML(S.viewDetails) + '">';
 
-      html += "<td>" + escapeHTML(entry.model) + "</td>";
+      html += '<td class="bt-left">' + escapeHTML(entry.model) + "</td>";
       html += '<td class="bt-num">' + escapeHTML(entry.params) + "</td>";
-      html += "<td>" + escapeHTML(entry.device) + "</td>";
+      html += '<td class="bt-num">' + idxCell(entry.intelligence_index) + "</td>";
+      html += '<td class="bt-num">' + idxCell(entry.agentic_index) + "</td>";
+      html += '<td class="bt-left">' + escapeHTML(entry.device) + "</td>";
       html += "<td>" + escapeHTML(entry.quantization) + "</td>";
 
       var tpsCls = "bt-num", tpsTitle = "";
@@ -1111,7 +1195,7 @@
       html += '<td class="bt-num">' + (entry.tp != null && entry.tp !== 1 ? entry.tp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-num">' + (entry.dp != null && entry.dp !== 1 ? entry.dp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-num">' + (entry.pp != null && entry.pp !== 1 ? entry.pp : '<span class="bt-muted">—</span>') + "</td>";
-      html += "<td>" + escapeHTML(entry.engine) + "</td>";
+      html += '<td class="bt-left">' + escapeHTML(entry.engine) + "</td>";
       html += entry.mtp ? '<td class="bt-mtp-yes">' + escapeHTML(S.yes) + "</td>" : '<td class="bt-muted">—</td>';
       html += '<td class="bt-expand-cell">' + (isExpanded ? "&#9660;" : "&#9654;") + "</td>";
       html += "</tr>";
@@ -1201,6 +1285,7 @@
 
     html += "</tbody></table>";
     wrap.innerHTML = html;
+    applyFrozen(wrap);
 
     wrap.querySelectorAll("th[data-col]").forEach(function (th) {
       if (th.classList.contains("bt-no-sort")) return;

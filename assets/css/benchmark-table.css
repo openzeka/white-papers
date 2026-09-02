@@ -998,11 +998,30 @@ details.bt-howto > summary:focus-visible {
   box-shadow: inset 3px 0 0 var(--bt-green);
 }
 
-/* The model name is what the eye scans down; centring made the column ragged.
-   Child combinators throughout: the expanded row nests a second table inside
-   .bt-table, so a descendant selector here also caught the sweep table's first
-   header cell and left-aligned it over a centred column. */
-.bt-table > thead > tr > th:first-child,
-.bt-table > tbody > tr.bt-row > td:first-child {
+/* Columns whose values are names, not numbers: Model, Device, Quantization,
+   Engine. Centring made them ragged — "1× DGX Spark" against "4× DGX Spark"
+   against "RTX PRO 6000" reads as a list only when the left edges line up.
+   Parameters, Intelligence and Agentic stay centred with the rest of the
+   numbers, even though the first four columns are frozen together.
+
+   Selected by class, not by position, so adding or reordering a column cannot
+   re-align the wrong one. Child combinators throughout: the expanded row nests
+   a second table inside .bt-table, so a descendant selector here also caught
+   the sweep table's cells. */
+.bt-table > thead > tr > th.bt-th-left,
+.bt-table > tbody > tr.bt-row > td.bt-left {
   text-align: left;
+}
+
+/* ── Attribution ──
+   Artificial Analysis require credit wherever their index values are shown, so
+   this line is a licensing obligation, not decoration: it must stay visible and
+   must stay next to the table. Sits outside .bt-container because the widget
+   replaces its own innerHTML on every filter change. */
+.bt-attribution {
+  max-width: 100%;
+  margin: 10px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--bt-text-muted);
 }

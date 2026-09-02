@@ -8,12 +8,121 @@
   --openzeka-ink: #1a1a1a;
   --openzeka-muted: #525f7a;
   --openzeka-bg-soft: #f6f8fa;
+
+  // ===== Yatay ölçüler — sayfa genişliğinin tek kaynağı =====
+  // Düzen tek bir kalıp: sabit genişlikte gri panel + kalan yerin ortasına
+  // oturan tek bir gövde sütunu. Hiçbir sayfa kendi genişliğini tanımlamaz;
+  // bir sayfa için genişlik ezmek yerine buradaki değeri değiştir.
+  //
+  //   --oz-nav-w    Gri panel. Sabit bir sayı — temanın kendisi de
+  //                 ($nav-width: 16.5rem), Docusaurus da, VitePress de böyle
+  //                 yapar. Uzun bir navigasyon başlığı iki satıra sarar; bu
+  //                 beklenen davranış, bozulma değil.
+  //   --oz-gutter   Panel ile gövde arasındaki ve gövdenin sağındaki boşluk.
+  //                 İkisi eşittir; gövde ikisinin ortasında kalır. 2,5rem
+  //                 seçildi: 3rem'de 1440 px ekranda gövde 1009 px kalıyor ve
+  //                 Türkçe benchmark tablosu (doğal genişliği 1014 px) 7 px
+  //                 için yatay kaydırmaya düşüyordu.
+  //   --oz-page-w   Gövde için üst sınır. Normalde devreye girmez; gövde
+  //                 panelden artan yeri doldurur. Yalnızca çok geniş
+  //                 ekranlarda satırların aşırı uzamasını engeller.
+  //   --oz-cell-min Markdown tablolarında hücre taban genişliği. Temanın
+  //                 7,5rem'i içeriğe bakmadığı için 10 sütunlu bir tabloyu
+  //                 1200 px'e sabitliyor ve kendi kaydırma çubuğunu
+  //                 doğuruyordu. Taban yine gerekli: sıfırlanırsa sütunlar
+  //                 40 px'e kadar iniyor.
+  --oz-nav-w: 20rem;
+  --oz-gutter: 2.5rem;
+  --oz-page-w: 100rem;
+  --oz-cell-min: 5.5rem;
+}
+
+// ===== Merkezî sayfa kabuğu =====
+// just-the-docs, "nav + içerik" ikilisini ekranda ortalamak için kenar
+// çubuğunu büyütür: `width: calc((100% - 66.5rem) / 2 + 16.5rem)`. Kenar
+// çubuğu gri olduğu için soldaki tüm pay gri bir bloğa dönüşüyor, artan yer
+// ise tümüyle sağa yığılıyordu — 2560 px'de ekranın %39'u gri, %29'u içerik,
+// %30'u sağda boşluk. Üstüne yalnızca benchmark sayfası `.oz-wide` ile kendi
+// genişliğini tanımlıyor, o sınıfı da sayfa gövdesindeki bir `<script>`
+// eklediği için sayfa açılırken düzen bir kez zıplıyordu.
+//
+// Yerine standart iki sütunlu kalıp: panel sabit, gövde kalan yerin
+// ortasında — solda panele, sağda ekran kenarına eşit uzaklıkta. Beş kural,
+// dört değişken, sayfa başına istisna yok.
+@media (min-width: 50rem) {
+  .side-bar {
+    width: var(--oz-nav-w);
+    // Temanın `min-width: $nav-width`i, `width`ten büyük kaldığında onu
+    // eziyordu ve ayırıcı çizgiyi içerik kenarından kaydırıyordu.
+    min-width: 0;
+  }
+
+  // Tema bu üçüne sabit `$nav-width` verir; sabit genişlikli kenar çubuğunda
+  // taşıp logoyu ve gezinme bağlantılarını sola kaydırırlar. `100%` kenar
+  // çubuğunun içerik kutusuna (genişlik eksi 1 px kenarlık) tam oturur.
+  .site-header,
+  .site-nav,
+  .site-footer {
+    width: 100%;
+  }
+
+  .side-bar + .main {
+    margin-left: var(--oz-nav-w);
+  }
+
+  // Genişlik artık `.main`de değil, aşağıdaki ortalanmış kabukta.
+  .main {
+    max-width: none;
+  }
+
+  // Başlık şeridi ve içerik aynı eksende ortalanır. Şeridin alt kenarlığı tam
+  // genişlikte kalsın diye ortalama `margin: auto` ile değil padding ile
+  // yapılıyor. `Max` büyük harfle yazıldı: Sass'ın kendi `max()` fonksiyonuna
+  // yakalanmadan CSS'e olduğu gibi geçsin (tema da aynı yolu izliyor).
+  // stylelint-disable function-name-case
+  .main-header,
+  .main-content-wrap {
+    padding-right: Max(var(--oz-gutter), calc((100% - var(--oz-page-w)) / 2));
+    padding-left: Max(var(--oz-gutter), calc((100% - var(--oz-page-w)) / 2));
+  }
+  // stylelint-enable function-name-case
+
+  // Temanın kendi 16 px'i, sağdaki bağlantı kutusunu merkez ekseninden
+  // içeri itiyordu.
+  .aux-nav {
+    padding-right: 0;
+  }
+}
+
+// Tema çıplak `th, td`ye `min-width: 7.5rem` verir. İçeriğe bakmadığı için 10
+// sütunlu bir tablo 10 × 120 = 1200 px'e sabitleniyor ve sayfa ne kadar geniş
+// olursa olsun kendi yatay kaydırma çubuğunu doğuruyordu (kimi-k3 sayfasında
+// dört tablo; sütunların hiçbiri o genişliğe ihtiyaç duymuyordu). Taban
+// küçültülünce sütunlar içeriğe göre boyutlanıyor, `table { min-width: 100% }`
+// zaten tabloyu sütunun tamamına yayıyor.
+//
+// Kapsam `.table-wrapper`: bu sarmalayıcıyı `table_wrappers` düzeni yalnızca
+// markdown tablolarına ekler. Widget'ın JS ile ürettiği tablo onun içinde
+// değil, `#bt-table-wrap` içindedir — dolayısıyla bu kural ona değmez.
+.table-wrapper {
+  th,
+  td {
+    min-width: var(--oz-cell-min);
+  }
 }
 
 // Site başlığı (logo yanında)
 .site-title {
   font-weight: 700;
   letter-spacing: -0.01em;
+}
+
+// Logo panelin ortasında. Tema `background-position: left center` verir; panel
+// en uzun navigasyon girdisine göre genişlediği için logo solda küçük kalıyordu.
+// `.site-title` bağlantının tamamı tıklanabilir kalır — yalnızca görselin
+// hizası değişiyor.
+.site-logo {
+  background-position: center center;
 }
 
 // ===== Landing hero =====
@@ -38,7 +147,6 @@
 .hero .subtitle {
   font-size: 1.18rem;
   color: var(--openzeka-muted);
-  max-width: 68ch;
   line-height: 1.55;
 }
 
@@ -482,8 +590,8 @@ img[width] {
 // ===== Benchmark tablosu widget'ı (assets/js/benchmark-table*.js) =====
 // Widget kendi stillerini assets/css/benchmark-table.css dosyasından getirir.
 // Buradaki kurallar yalnızca temayla çakışan noktaları düzeltir; tamamı
-// .bt-container / .oz-wide altında kapsanmıştır ve bu sınıflar başka hiçbir
-// sayfada bulunmaz.
+// .bt-container altında kapsanmıştır ve bu sınıf başka hiçbir sayfada
+// bulunmaz.
 
 // just-the-docs çıplak `th, td` seçicisini biçimlendiriyor (min-width: 7.5rem,
 // background-color: #fff, border-left). Bu kurallar widget'ın JS ile ürettiği
@@ -504,19 +612,6 @@ img[width] {
   }
 }
 
-// Tabloyu okuma sütununa sığdırmak mümkün değil (15 sütun, .main 50rem).
-// Yalnızca front matter'ında `wide: true` olan sayfalar kendini bu sınıfla
-// işaretler; diğer sayfalar etkilenmez.
-.oz-wide {
-  .main {
-    max-width: none;
-  }
-
-  .main-content-wrap {
-    max-width: 1600px;
-  }
-}
-
 // Tablo 15 sütunlu (Parametre sütunu eklendi); varsayılan hâlinde 1366 px'lik
 // bir ekranda bile yatay kaydırma gerektiriyordu. Aşağıdaki dört ayar birlikte tabloyu 1366 px ve
 // üzerinde tamamen sığdırıyor, altında ise kaydırmayı kullanılabilir kılıyor.
@@ -527,59 +622,70 @@ img[width] {
     vertical-align: bottom;
   }
 
-  // Hücre iç boşluğu 14 px yerine 4 px. Parametre sütunu eklenince 7 px ile
-  // Türkçe sayfa 81 px taşıyordu; kenar çubuğunun 1,5 rem daraltılması 24 px,
-  // 4 px'lik boşluk ise 15 sütunda 90 px kazandırıyor. 5 px yalnızca 2 px pay
-  // bırakıyordu — farklı bir yazı tipi ölçümü onu kaydırmaya çevirirdi.
-  // Sınırı Türkçe belirliyor: başlıkları (Kuantizasyon, Inference Engine)
+  // Hücre iç boşluğu 14 px yerine 7 px.
+  //
+  // Bir süre 4 px'ti. O değerin tek gerekçesi tabloyu 1440 px'lik ekranda
+  // sığdırmaktı; Zekâ ve Agentic Endeksi sütunları eklenince o eşik zaten
+  // kaybedildi (tablo 1124/1138 px, 1440'ta kullanılabilir alan 1025 px), yani
+  // 4 px artık hiçbir şeyi kurtarmıyordu — yalnızca tabloyu sıkıştırıyordu.
+  //
+  // Sıkışıklık ölçülebilir bir sorundu: Cihaz sütunu 101 px ve içindeki en uzun
+  // metin ("1× DGX Spark") 92 px, yani toplam 9 px boşluk. Üstelik `table-layout:
+  // auto` artan genişliği boş yeri olan sütunlara dağıttığı için Cihaz ve Model
+  // bu paydan hiç almıyor: 1920 px'de tabloda 379 px fazla varken TP/DP/PP
+  // sütunları 14 px'lik metin için 39-41 px'e çıkarken bu ikisi tabanda kalıyor.
+  //
+  // 7 px, 17 sütunda 102 px ekliyor (tablo 1226/1240 px) ve sığma eşiğini
+  // ~1540/1555'ten ~1640/1655'e taşıyor — 1920 px hâlâ rahat sığıyor. Sınırı
+  // Türkçe belirliyor: başlıkları (Kuantizasyon, Inference Engine)
   // İngilizcelerden geniş.
   .bt-table thead th,
   .bt-table tbody td {
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 7px;
+    padding-right: 7px;
   }
 
-  // Tablo kaydığında Model sütunu yerinde kalsın; aksi hâlde hangi satıra
+  // Tablo kaydığında modelin kimliği yerinde kalsın; aksi hâlde hangi satıra
   // baktığınızı kaybediyorsunuz. Satır şeritlemesi ve hover korunuyor.
+  //
+  // Hangi sütunların donduğu tek bir yerde tanımlıdır: JS'teki sütun
+  // tanımlarında `frozen: true`. Oradan `bt-frozen` sınıfı geliyor, ayırıcı
+  // dikey çizgi de bloğun son sütunundaki `bt-frozen-edge`den. Buradaki
+  // kurallar sıra numarası değil sınıf kullanır — sütun eklenip çıkarıldığında
+  // yanlış sütunu dondurmasın diye.
+  //
+  // `left` değerlerini CSS veremez; her hücrenin kendisinden öncekilerin
+  // toplam genişliği kadar ötelenmesi gerekir ve o genişlikler içerikten gelir.
+  // Ölçümü `applyFrozen()` her render sonrası yapıp inline `left` yazıyor.
+  //
   // Doğrudan çocuk seçiciler: genişletilmiş satır .bt-table içine ikinci bir
-  // tablo yerleştiriyor, torun seçici o tablonun ilk başlık hücresine de
-  // yapışkanlık ve sağ kenarlık veriyordu.
-  .bt-table > thead > tr > th:first-child,
-  .bt-table > tbody > tr[data-id] > td:first-child {
+  // tablo yerleştiriyor, torun seçici onun hücrelerine de değiyordu.
+  .bt-table > thead > tr > th.bt-frozen,
+  .bt-table > tbody > tr[data-id] > td.bt-frozen {
     position: sticky;
-    left: 0;
+  }
+
+  .bt-table > thead > tr > th.bt-frozen-edge,
+  .bt-table > tbody > tr[data-id] > td.bt-frozen-edge {
     border-right: 1px solid var(--bt-border);
   }
 
-  .bt-table > thead > tr > th:first-child {
+  .bt-table > thead > tr > th.bt-frozen {
     z-index: 3;
     background: var(--bt-dark);
   }
 
-  .bt-table > tbody > tr[data-id] > td:first-child {
+  .bt-table > tbody > tr[data-id] > td.bt-frozen {
     z-index: 1;
     background: var(--bt-bg);
   }
 
-  .bt-table > tbody > tr[data-id]:nth-child(even) > td:first-child {
+  .bt-table > tbody > tr[data-id]:nth-child(even) > td.bt-frozen {
     background: var(--bt-bg-alt);
   }
 
-  .bt-table > tbody > tr[data-id]:hover > td:first-child {
+  .bt-table > tbody > tr[data-id]:hover > td.bt-frozen {
     background: var(--bt-bg-hover);
-  }
-}
-
-// just-the-docs, içeriği ortalamak için kenar çubuğunu büyütür; tam genişlik
-// isteyen bu sayfada o boşluk tabloya gitsin. Yalnızca temanın kenar çubuğunu
-// büyüttüğü kırılma noktasında geçerli — altındaki mobil düzen etkilenmez.
-@media (min-width: 66.5rem) {
-  .oz-wide .side-bar {
-    width: 15rem;
-  }
-
-  .oz-wide .side-bar + .main {
-    margin-left: 15rem;
   }
 }
 
