@@ -1,4 +1,9 @@
 {
+  "attribution": {
+    "intelligence_index": "Artificial Analysis — https://artificialanalysis.ai",
+    "agentic_index": "Artificial Analysis — https://artificialanalysis.ai",
+    "note": "The two index fields are republished from Artificial Analysis and require attribution wherever they are shown. Every other field is OpenZeka's own measurement."
+  },
   "config": {
     "ttft_threshold_ms": 1000,
     "tps_threshold": 20,
