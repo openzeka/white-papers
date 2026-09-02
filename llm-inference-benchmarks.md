@@ -8,12 +8,9 @@ description: >-
   RTX PRO 6000 Blackwell and Jetson Thor. Filter by model, parameter count,
   device, quantization and concurrency, and set your own performance targets.
 permalink: /llm-inference-benchmarks/
-last_modified_date: 2026-08-31
-wide: true
+last_modified_date: 2026-09-02
 toc: false
 ---
-
-<script>document.body.classList.add('oz-wide')</script>
 
 # LLM Benchmark Table
 
@@ -44,6 +41,24 @@ instant. A load level, not a number of people.
 For mixture-of-experts models this is the total, not the smaller number active
 on any one token, so it tracks the memory the model occupies rather than the
 work done per token.
+
+**Intelligence Index** and **Agentic Index** — two published capability scores
+from [Artificial Analysis](https://artificialanalysis.ai), on scales where
+higher is better. The first is a composite of nine evaluations covering
+reasoning, coding, science and long-context work; the second is a separate score
+for agentic work — multi-step tasks, tool calls, staying on track unsupervised.
+A model can rank well on one and poorly on the other.
+
+Both describe **the model**, not the run, so every row for the same model
+carries the same pair of numbers whatever the hardware or quantization. Neither
+says anything about speed. Where Artificial Analysis scores several
+reasoning-effort settings of one model, the highest-scoring one is shown. A dash
+means no score has been published — common in the Agentic column, which
+Artificial Analysis fills in for a minority of the models it tracks.
+
+Do not read the Agentic Index as a smaller version of **Agentic Capacity**
+further along the row. The index is about what the model can do; the capacity
+column is about how many people your hardware could serve.
 
 **Quantization** — the number format the weights are stored in. Fewer bits per
 weight means less memory and usually more speed, at some risk to quality. BF16
@@ -133,6 +148,11 @@ The chart downloads as a PNG for reports and presentations.
 
 <div data-bt-src="/assets/data/benchmarks.json"
      data-bt-logo="/assets/images/benchmark-logo.png"></div>
+
+<p class="bt-attribution">Intelligence Index and Agentic Index values are
+published by <a href="https://artificialanalysis.ai" rel="noopener">Artificial
+Analysis</a> and are reproduced here with attribution. All other columns are
+OpenZeka&rsquo;s own measurements.</p>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>

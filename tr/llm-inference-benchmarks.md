@@ -9,12 +9,9 @@ description: >-
   kuantizasyona ve eşzamanlılığa göre filtreleyin, kendi performans
   hedeflerinizi girin.
 permalink: /llm-inference-benchmarks/
-last_modified_date: 2026-08-31
-wide: true
+last_modified_date: 2026-09-02
 toc: false
 ---
-
-<script>document.body.classList.add('oz-wide')</script>
 
 # LLM Benchmark Tablosu
 
@@ -45,6 +42,25 @@ sayısı değil, bir yük seviyesidir.
 Uzman karışımı (MoE) modellerde bu değer toplamı gösterir, tek bir token için
 etkin olan daha küçük sayıyı değil; yani token başına yapılan işi değil, modelin
 kapladığı belleği yansıtır.
+
+**Zekâ Endeksi** ve **Agentic Endeksi** —
+[Artificial Analysis](https://artificialanalysis.ai) tarafından yayımlanan iki
+yetenek puanı; her ikisinde de yüksek olan iyidir. İlki akıl yürütme, kodlama,
+bilim ve uzun bağlam çalışmasını kapsayan dokuz değerlendirmenin bileşimidir;
+ikincisi agentic çalışma için ayrı bir puandır — çok adımlı görevler, araç
+çağrıları, gözetim olmadan yolda kalmak. Bir model birinde iyi, diğerinde kötü
+sıralanabilir.
+
+İkisi de **modeli** tanımlar, koşuyu değil; bu yüzden aynı modelin her satırı,
+donanım veya kuantizasyon ne olursa olsun aynı iki sayıyı taşır. Hiçbiri hız
+hakkında bir şey söylemez. Artificial Analysis bir modelin birden çok akıl
+yürütme seviyesini puanladığında, en yüksek puanlı olan gösterilir. Tire, puan
+yayımlanmadığı anlamına gelir — Artificial Analysis bunu izlediği modellerin
+azınlığı için doldurduğundan, Agentic sütununda sık görülür.
+
+Agentic Endeksi'ni, satırın devamındaki **Agentic Kapasitesi**'nin küçük
+bir hâli gibi okumayın. Endeks modelin ne yapabildiğiyle, kapasite sütunu ise
+donanımınızın kaç kişiye hizmet edebileceğiyle ilgilidir.
 
 **Kuantizasyon** — ağırlıkların saklandığı sayı biçimi. Ağırlık başına daha az
 bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar
@@ -137,6 +153,11 @@ Grafik, sunum ve raporlarda kullanmak üzere PNG olarak indirilebilir.
 
 <div data-bt-src="/assets/data/benchmarks.json"
      data-bt-logo="/assets/images/benchmark-logo.png"></div>
+
+<p class="bt-attribution">Zekâ Endeksi ve Agentic Endeksi değerleri
+<a href="https://artificialanalysis.ai" rel="noopener">Artificial Analysis</a>
+tarafından yayımlanmıştır ve kaynak belirtilerek burada aktarılmıştır. Diğer
+tüm sütunlar OpenZeka&rsquo;nın kendi ölçümleridir.</p>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>

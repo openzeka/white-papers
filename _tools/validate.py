@@ -31,6 +31,12 @@ KNOWN_DEVICES = {
 REQUIRED = ["id", "model", "device", "quantization", "engine",
             "mtp", "tp", "dp", "pp", "data_points"]
 
+# The two Artificial Analysis columns. Required so a new entry cannot ship with
+# the cells simply absent — `null` is the way to say "AA publishes no score",
+# and the widget renders that as an em dash. Refresh them with
+# `_tools/aa_index_fetch.py`, which fills both or leaves them alone.
+AA_INDEXES = ["intelligence_index", "agentic_index"]
+
 errors, warnings = [], []
 
 
@@ -85,6 +91,14 @@ def main():
         if e.get("device") not in KNOWN_DEVICES:
             err(f"{eid}: unknown device {e.get('device')!r} — it will sort last "
                 f"in the filter row. Known values: {', '.join(sorted(KNOWN_DEVICES))}")
+
+        for field in AA_INDEXES:
+            if field not in e:
+                err(f"{eid}: missing '{field}' — use null if Artificial Analysis "
+                    f"publishes no score, or run _tools/aa_index_fetch.py")
+            elif not isinstance(e[field], (int, float, type(None))) \
+                    or isinstance(e[field], bool):
+                err(f"{eid}: {field} is {e[field]!r} — must be a number or null")
 
         q = e.get("quantization", "")
         if q and q != q.upper():
