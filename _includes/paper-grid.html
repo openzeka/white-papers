@@ -1,0 +1,26 @@
+{%- comment -%}
+  Kart ızgarası — iki ana sayfanın "Published White Papers" bölümü.
+
+  Tamamen ön bilgiden (front matter) beslenir: `card_order` taşıyan her sayfa
+  otomatik olarak kart olur. Yeni bir white paper eklemek, iki sayfa dosyasını
+  oluşturmaktan başka bir iş gerektirmez — kart her iki ana sayfada kendiliğinden
+  görünür. Elle tutulan listede 2-node ve 8-node rehberleri unutulmuştu.
+
+  Okunan alanlar: title, description, card_tag, card_date, permalink.
+  Dil `page.lang` ile süzülür; sıra `card_order` (sayısal).
+
+  Bağlantı `permalink`ten kurulur, `url`den değil: `permalink` her dilde aynı
+  ("/papers/x/"), `/tr` önekini `relative_url` ekler.
+
+  DİKKAT — kartın içinde başlık etiketi (h1–h6) KULLANMAYIN. _layouts/default.html
+  içindeki `heading_anchors`, içerikteki her başlığa bir <a class="anchor-heading">
+  enjekte eder; <a> içinde <a> görünce tarayıcının çözümleyicisi dıştaki
+  <a class="paper-card">'ı erken kapatır ve kart dört ayrı ızgara hücresine
+  dağılır (8 kart -> 32 hücre). Başlık bu yüzden <span>.
+{%- endcomment -%}
+{%- assign cards = site.pages | where: "lang", page.lang | where_exp: "p", "p.card_order" | sort: "card_order" -%}
+<div class="paper-grid">
+{%- for p in cards %}
+  <a class="paper-card" href="{{ p.permalink | relative_url }}"><span class="tag">{{ p.card_tag }}</span><span class="paper-card-title">{{ p.title }}</span><p>{{ p.description | strip_newlines | strip }}</p><span class="date">{{ p.card_date }}</span></a>
+{%- endfor %}
+</div>

@@ -4,6 +4,9 @@ parent: White Papers
 nav_order: 5
 lang: tr
 page_id: dgx-spark-3node-cluster-kurulumu
+card_order: 5
+card_tag: "Cluster Kurulumu"
+card_date: "Temmuz 2026"
 description: >-
   3 NVIDIA DGX Spark node'undan oluşan ring (mesh) topolojisine sahip AI cluster
   kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun yapılandırması.

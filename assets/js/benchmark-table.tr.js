@@ -97,17 +97,17 @@
 
     /* Tooltips */
     tip: {
-      model: "<strong>Model</strong><p>Sunulan büyük dil modeli — kimliği, boyutu ve üreticisi.</p><p>Aynı model farklı kuantizasyon veya çalışma yapılandırmalarıyla test edildiyse birden fazla satırda görünür.</p>",
+      model: "<strong>Model</strong><p>Sunulan büyük dil modeli — kimliği, boyutu ve üreticisi.</p><p>Bir satır bir modeli değil eksiksiz bir kurulum yapılandırmasını anlatır; bu yüzden aynı model farklı donanım, kuantizasyon, engine, paralellik veya MTP ayarıyla birkaç satırda görünür.</p>",
       params: "<strong>Parametre Sayısı</strong><p>Modelin yayımlanan ağırlıklarındaki toplam parametre sayısı; yayımlanan kontrol noktasından sayılmıştır.</p><p>Uzman karışımı (MoE) modellerde bu değer toplamı gösterir, tek bir token için etkin olan daha küçük sayıyı değil. Yani token başına yapılan işi değil, modelin kapladığı belleği yansıtır.</p>",
       intel: "<strong>Zekâ Endeksi</strong><p>Artificial Analysis’in bu modelin ne kadar yetenekli olduğunu gösteren bileşik puanı; yüksek olan iyidir. Akıl yürütme, kodlama, bilim ve uzun bağlam çalışmasını kapsayan dokuz bağımsız değerlendirmeyi birleştirir.</p><p>Bu, modelin bir özelliği — bu benchmark koşusunun değil. Aynı modelin her satırı, donanım veya kuantizasyon ne olursa olsun aynı değeri taşır. Hız hakkında hiçbir şey söylemez.</p><p>AA bir modelin birden çok akıl yürütme seviyesini puanladığında, en yüksek puanlı olan gösterilir. Tire, AA’in puan yayımlamadığı anlamına gelir.</p><p>Kaynak: Artificial Analysis.</p>",
       agenticIdx: "<strong>Agentic Endeksi</strong><p>Artificial Analysis’in agentic çalışma için ayrı puanı — çok adımlı görevleri izlemek, araç çağırmak ve gözetim olmadan yolda kalmak. Yüksek olan iyidir.</p><p>Zekâ Endeksi’nin yeniden ölçeklenmiş hâli değildir: bir model birinde iyi, diğerinde kötü sıralanabilir.</p><p>Satırın devamındaki <em>Agentic Kapasitesi</em> ile karıştırmayın; o, bu donanımın kaç kişiye hizmet edebileceğini sayar. Bu sütun modelin yeteneğiyle, o ise makinenizin kapasitesiyle ilgilidir.</p><p>AA bunu izlediği modellerin azınlığı için yayımlar, bu yüzden burada tire sık görülür.</p><p>Kaynak: Artificial Analysis.</p>",
       device: "<strong>Cihaz</strong><p>Modelin üzerinde çalıştığı donanım ve kaç adedinin birlikte kullanıldığı.</p><p>4× DGX Spark, dört makinenin tek bir sistem olarak tek modeli sunması demektir; dört ayrı çalışma değil.</p>",
       quant: "<strong>Kuantizasyon</strong><p>Model ağırlıklarının saklandığı sayı biçimi. Düşük hassasiyet, ağırlık başına daha az bit kullanır; model daha az bellek kaplar ve genellikle daha hızlı çalışır, çıktı kalitesinde bir miktar risk vardır.</p><p>BF16 tam hassasiyet referansıdır; FP8, NVFP4, MXFP4 ve INT4 giderek daha sıkıştırılmıştır.</p>",
-      tps: "<strong>TPS — Tokens per Second</strong><p>Modelin tek bir istek için saniyede ürettiği token sayısı. Bir token kabaca bir kelimenin dörtte üçü kadardır.</p><p><em>Yüksek olması iyidir.</em> Seçili eşzamanlılıktaki değer gösterilir.</p>",
-      ttft: "<strong>TTFT — Time to First Token</strong><p>Kullanıcının isteği gönderdikten sonra ilk kelimenin belirmesine kadar beklediği süre, milisaniye cinsinden.</p><p><em>Düşük olması iyidir.</em> Seçili eşzamanlılıktaki değer gösterilir.</p>",
-      maxc: "<strong>Maks C — Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın, performans hedeflerinizin ikisini de karşılamaya devam ederken aynı anda kaç isteğe hizmet verebildiği.</p><p>Kişi değil, eşzamanlı istek sayar. Katı hedefler bu değeri düşürür.</p>",
-      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç kişinin kullanabileceği.</p><p>Maks C\u2019den yüksektir: chat kullanıcıları zamanın çoğunda okur, düşünür ve yazar; birkaç kişi tek bir istek yuvasını paylaşır.</p><p>Ölçüm değil, Chat Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
-      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç kişiyi desteklediği.</p><p>Chat değerinden düşüktür: agentic kullanıcı istek yuvasını çok daha uzun tutar.</p><p>Ölçüm değil, Agentic Kullanım Çarpanınıza dayanan bir tahmindir.</p>",
+      tps: "<strong>TPS — Tokens per Second</strong><p>Modelin <em>tek</em> bir istek için saniyede ürettiği token sayısı. Bir token kabaca bir kelimenin dörtte üçü kadardır.</p><p>İstek başına hızdır, toplam üretim değil — toplam eğri satırı açtığınızda görünür. Seçili eşzamanlılıkta, 128 token girdi ve 128 token çıktı ile yapılan on turun ortalamasıdır.</p><p><em>Yüksek olması iyidir.</em></p>",
+      ttft: "<strong>TTFT — Time to First Token</strong><p>Kullanıcının isteği gönderdikten sonra ilk kelimenin belirmesine kadar beklediği süre, milisaniye cinsinden.</p><p>Seçili eşzamanlılıkta, 128 token'lık girdiyle yapılan on turun ortalamasıdır. Prefill işi istemle birlikte büyüdüğü için, daha uzun girdilerde TTFT'nin kabaca oranlı biçimde artmasını bekleyin.</p><p><em>Düşük olması iyidir.</em></p>",
+      maxc: "<strong>Maks C — Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın performans hedeflerinizin ikisini birden karşıladığı en yüksek <em>ölçülmüş</em> eşzamanlılık.</p><p>Yalnızca ölçülmüş noktalardan alınır; hiçbiri iki hedefi birden sağlamıyorsa 0 görünür. Kişi değil, eşzamanlı istek sayar.</p><p>Yapılandırmanın sabit bir özelliği değildir — bir hedefi değiştirdiğinizde oynar; aynı satır bir şartta 16'ya çıkarken daha katı bir şartta 8'e inebilir.</p>",
+      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç kişinin kullanabileceği — <code>floor(Maks C × Chat Kullanım Çarpanı)</code>.</p><p>Maks C'den yüksektir: chat kullanıcıları zamanının çoğunda okur, düşünür ve yazar; bu sürede istek yuvası tutmadıkları için birkaç kişi tek yuvayı paylaşır.</p><p>Ölçülmüş bir Maks C'den türetilmiş tahmindir. Sisteme bu kadar kullanıcı bağlanmadı.</p>",
+      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç kişiyi desteklediği — <code>floor(Maks C × Agentic Kullanım Çarpanı)</code>.</p><p>Chat değerinden düşüktür: bir ajan planlarken, araç çağırırken ve sonuçları değerlendirirken art arda çağrı yapabilir ve yuvayı çok daha uzun tutar.</p><p>Ölçülmüş bir Maks C'den türetilmiş tahmindir; o kadar kullanıcıyla yapılmış bir ölçüm değildir.</p>",
       par: "<strong>Paralellik — TP / DP / PP</strong><p>Tek bir modelin, çalışabilmesi ya da daha hızlı çalışması için birden fazla GPU veya makineye nasıl bölündüğü.</p><p><strong>TP — Tensor Parallelism:</strong> tek bir katmanın hesabı GPU\u2019lara bölünür; hepsi aynı istek üzerinde çalışır.</p><p><strong>DP — Data Parallelism:</strong> modelin birden fazla tam kopyası farklı istekleri işler.</p><p><strong>PP — Pipeline Parallelism:</strong> farklı katmanlar farklı cihazlarda durur, istekler sırayla bunlardan geçer.</p><p>— yöntemin kullanılmadığını gösterir.</p>",
       engine: "<strong>Inference Engine</strong><p>Modeli belleğe yükleyip istekleri yanıtlayan sunucu yazılımı. Toplu işleme, bellek ve zamanlamayı o yönettiği için hıza donanım kadar etki eder.</p><p>vLLM ve SGLang bu sunuculardan ikisidir; aynı model aynı donanımda ikisi arasında ölçülebilir biçimde farklılaşabilir.</p>",
       mtp: "<strong>MTP — Multi-Token Prediction</strong><p>Modelin tek adımda birer birer değil, birkaç token ilerisini birden tahmin edip sonra doğruladığı teknik. Doğru tahminler korunduğu için aynı çıktı daha hızlı üretilir.</p><p>MTP\u2019li ve MTP\u2019siz satırları karşılaştırarak o yapılandırmada ne kazandırdığını görebilirsiniz.</p>",
@@ -125,8 +125,8 @@
 
       aTps: "<strong>Minimum TPS Hedefi</strong><p>Tek bir istek için kabul edilebilir gördüğünüz üretim hızı, saniyede token cinsinden.</p><p>Yükseltmek kriteri sıkılaştırır ve Maks C\u2019yi düşürebilir.</p>",
       aTtft: "<strong>Maksimum TTFT Hedefi</strong><p>Kabul edilebilir gördüğünüz en uzun ilk token bekleme süresi, milisaniye cinsinden.</p><p>Düşürmek kriteri sıkılaştırır ve Maks C\u2019yi düşürebilir.</p>",
-      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Kullanıcıların zamanının çoğunu modeli beklemek yerine okuyup yazarak geçirdiği düşünüldüğünde, tek bir eşzamanlı istek yuvasını kaç chat kullanıcısının paylaşabileceğine dair varsayımınız.</p><p>Hafif kullanım için yükseltin, sürekli etkinlik için düşürün.</p>",
-      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Tek bir eşzamanlı istek yuvasını kaç agentic kullanıcının paylaşabileceğine dair varsayımınız.</p><p>Agentic çalışma yuvayı daha uzun tuttuğu için genellikle chat değerinin altındadır.</p>",
+      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Bir chat kullanıcısını ne kadar yoğun saydığınız: zamanının çoğunu modeli beklemek yerine okuyup yazarak geçirdiği düşünüldüğünde, tek bir eşzamanlı istek yuvasını kaç kullanıcının paylaşabileceği.</p><p>Hafif kullanım için yükseltin, sürekli etkinlik için düşürün.</p>",
+      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Bir agentic kullanıcıyı ne kadar yoğun saydığınız: tek bir eşzamanlı istek yuvasını kaç kullanıcının paylaşabileceği.</p><p>Agentic çalışma yuvayı daha uzun tuttuğu için genellikle chat değerinin altındadır. Neredeyse kesintisiz çalışan ajanlar için düşürün; aralıklı kullanım için yükseltin.</p>",
       reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; performans hedeflerini ve kapasite çarpanlarını varsayılana döndürür.</p>"
     }
   };
@@ -996,54 +996,6 @@
     return v == null ? '<span class="bt-muted">—</span>' : fmt(v, 1);
   }
 
-  /* The leading columns marked `frozen` stay put while the measurement columns
-     scroll under them, so the row never loses its identity. Two things have to
-     happen after the table is built, and both are driven by the header row —
-     which already carries the classes the column definitions asked for, so this
-     is the only place that needs to know which columns are frozen:
-
-       1. copy the frozen classes onto the body cells, so the td strings below
-          do not each have to repeat them;
-       2. write each frozen cell's `left`, which CSS cannot express — it is the
-          summed width of the cells before it, and those widths come from the
-          content (model names run from "GLM-5" to "Qwen3-Coder-30B-A3B-Instruct").
-
-     Runs after every `innerHTML =`, because renderTable rebuilds the table on
-     any filter, sort or target change and a stale offset shows as a gap or an
-     overlap at the block's right edge. */
-  function applyFrozen(wrap) {
-    var head = wrap.querySelector(".bt-table > thead > tr");
-    if (!head) return;
-
-    var frozen = [], x = 0;
-    [].forEach.call(head.children, function (th, i) {
-      if (!th.classList.contains("bt-frozen")) return;
-      frozen.push({ i: i, left: x, edge: th.classList.contains("bt-frozen-edge") });
-      /* getBoundingClientRect, not offsetWidth: the cells carry a 1px border and
-         offsetWidth rounds, which accumulated into a visible 2-3px seam by the
-         fourth column. */
-      x += th.getBoundingClientRect().width;
-    });
-
-    /* Direct children only — the expanded row nests a second table whose cells
-       must not be touched. */
-    wrap.querySelectorAll(".bt-table > tbody > tr[data-id]").forEach(function (tr) {
-      frozen.forEach(function (f) {
-        var td = tr.children[f.i];
-        if (!td) return;
-        td.classList.add("bt-frozen");
-        if (f.edge) td.classList.add("bt-frozen-edge");
-      });
-    });
-
-    wrap.querySelectorAll(".bt-table > thead > tr, .bt-table > tbody > tr[data-id]")
-      .forEach(function (tr) {
-        frozen.forEach(function (f) {
-          if (tr.children[f.i]) tr.children[f.i].style.left = f.left + "px";
-        });
-      });
-  }
-
   /* ── Rendering ── */
 
   function renderTable(container) {
@@ -1111,10 +1063,10 @@
 
     var c = state.concurrency;
     var cols = [
-      { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false, left: true, frozen: true },
-      { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true,  frozen: true },
-      { key: "intelligence_index", label: S.colIntel, t: S.tip.intel, sortable: true, num: true, frozen: true },
-      { key: "agentic_index",  label: S.colAgenticIdx, t: S.tip.agenticIdx, sortable: true, num: true, frozen: true },
+      { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false, left: true },
+      { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true },
+      { key: "intelligence_index", label: S.colIntel, t: S.tip.intel, sortable: true, num: true },
+      { key: "agentic_index",  label: S.colAgenticIdx, t: S.tip.agenticIdx, sortable: true, num: true },
       { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false, left: true },
       { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
       { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
@@ -1130,12 +1082,6 @@
       { key: "expand",       label: "",           t: null,          sortable: false, num: false }
     ];
 
-    /* The frozen block is however many leading columns carry `frozen: true` —
-       declared once, on the column definitions above. The separating rule goes
-       on the last of them. */
-    var lastFrozen = -1;
-    cols.forEach(function (col, i) { if (col.frozen) lastFrozen = i; });
-
     var html = '<table class="bt-table"><thead><tr>';
     cols.forEach(function (col, i) {
       var classes = [];
@@ -1150,8 +1096,6 @@
          column definition rather than matched by position, so reordering the
          table cannot silently re-align the wrong column. */
       if (col.left) classes.push("bt-th-left");
-      if (col.frozen) classes.push("bt-frozen");
-      if (i === lastFrozen) classes.push("bt-frozen-edge");
       html += '<th class="' + classes.join(" ") + '" data-col="' + col.key + '">' +
         escapeHTML(col.label) + (col.t ? tip(col.t) : "") + "</th>";
     });
@@ -1285,7 +1229,6 @@
 
     html += "</tbody></table>";
     wrap.innerHTML = html;
-    applyFrozen(wrap);
 
     wrap.querySelectorAll("th[data-col]").forEach(function (th) {
       if (th.classList.contains("bt-no-sort")) return;

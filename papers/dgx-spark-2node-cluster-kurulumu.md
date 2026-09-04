@@ -4,6 +4,9 @@ parent: White Papers
 nav_order: 3.5
 lang: en
 page_id: dgx-spark-2node-cluster-kurulumu
+card_order: 4
+card_tag: "Cluster Setup"
+card_date: "August 2026"
 description: >-
   Point-to-point topology AI cluster setup with 2 NVIDIA DGX Spark nodes:
   management and compute networks, RoCEv2/RDMA, sparkrun configuration.

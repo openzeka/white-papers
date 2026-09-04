@@ -4,6 +4,9 @@ parent: White Papers
 nav_order: 1
 lang: tr
 page_id: qwen3.6-27b-dgx-spark-benchmark
+card_order: 2
+card_tag: "LLM Benchmark"
+card_date: "Temmuz 2026"
 description: >-
   Qwen3.6-27B modelinin NVIDIA DGX Spark (GB10) platformunda FP8, FP8-MTP,
   AWQ-MTP, NVFP4 ve NVFP4-MTP quantization varyantları ile performans değerlendirmesi.
@@ -1050,7 +1053,7 @@ Bu raporun tüm ölçümleri, Openzeka'nın açık kaynaklı **[CordatusAI/llm-b
 | **Web** | [openzeka.com](https://openzeka.com) |
 | **İletişim** | [openzeka.com/iletisim](https://openzeka.com/iletisim) |
 | **Telefon** | +90 312 266 2055 |
-| **Adres** | Üniversiteler Mah. 1606. Cad. No:11, Cyberpark H Blok, 06800 Bilkent / Ankara, Türkiye |
+| **Adres** | Üniversiteler Mah. 1606. Cad. No:11, Cyberpark H Blok, 06800 Bilkent/Ankara, Türkiye |
 
 ---
 

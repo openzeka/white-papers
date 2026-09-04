@@ -4,6 +4,9 @@ parent: White Papers
 nav_order: 3
 lang: en
 page_id: qwen3.6-27b-dgx-spark-scaling
+card_order: 3
+card_tag: "LLM Scaling"
+card_date: "July 2026"
 description: >-
   Multi-node scaling study of Qwen3.6-27B-NVFP4 on 1x, 2x, and 4x NVIDIA DGX Spark
   (GB10): tensor parallelism over 200GbE, SLO-driven capacity planning, and
@@ -439,4 +442,4 @@ Accuracy cost is under 1 point on every benchmark, against a ~4x memory footprin
 
 *Openzeka Teknoloji A.Ş. — [openzeka.com](https://openzeka.com/en) · [support@openzeka.com](https://openzeka.com/en/contact/) · Tel: +90 312 266 2055*
 
-*Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara*
+*Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye*

@@ -4,9 +4,12 @@ parent: White Papers
 nav_order: 4
 lang: en
 page_id: dgx-spark-4node-cluster-kurulumu
+card_order: 6
+card_tag: "Cluster Setup"
+card_date: "July 2026"
 description: >-
-  Switch-based AI cluster setup with 4 NVIDIA DGX Spark nodes:
-  management and compute networks, RoCEv2/RDMA, sparkrun and NAS configuration.
+  Switch-based AI cluster setup with 4 NVIDIA DGX Spark nodes over a MikroTik
+  CRS812: management and compute networks, RoCEv2/RDMA, sparkrun and NAS.
 permalink: /papers/dgx-spark-4node-cluster-kurulumu/
 last_modified_date: 2026-07-24
 toc: true

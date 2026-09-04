@@ -39,65 +39,7 @@ permalink: /
 
 ## Published White Papers
 
-<div class="paper-grid">
-
-<a class="paper-card" href="{{ '/papers/yerel-llm-rehberi/' | relative_url }}">
-  <span class="tag">Decision Guide</span>
-  <h3>Local LLM Usage Guide</h3>
-  <p>An end-to-end decision guide for local LLM deployment: hardware (Jetson, RTX PRO, DGX Spark, DGX/HGX), model selection, and software stack.</p>
-  <span class="date">June 2026</span>
-</a>
-
-<a class="paper-card" href="{{ '/papers/qwen3.6-27b-dgx-spark-benchmark/' | relative_url }}">
-  <span class="tag">LLM Benchmark</span>
-  <h3>Qwen3.6-27B DGX Spark Benchmark</h3>
-  <p>Performance evaluation of the Qwen3.6-27B model on DGX Spark (GB10) with FP8, AWQ, NVFP4 quantization and MTP variants.</p>
-  <span class="date">July 2026</span>
-</a>
-
-<a class="paper-card" href="{{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}">
-  <span class="tag">LLM Scaling</span>
-  <h3>Qwen3.6-27B DGX Spark Cluster Scaling</h3>
-  <p>Multi-node scaling of Qwen3.6-27B-NVFP4 on 1x/2x/4x DGX Spark: tensor parallelism over 200GbE, SLO-driven capacity planning, and TP-vs-replication deployment guidance.</p>
-  <span class="date">July 2026</span>
-</a>
-
-<a class="paper-card" href="{{ '/papers/dgx-spark-3node-cluster-kurulumu/' | relative_url }}">
-  <span class="tag">Cluster Setup</span>
-  <h3>DGX Spark 3-Node AI Cluster Setup Guide</h3>
-  <p>Ring (mesh) topology AI cluster setup with 3 DGX Spark nodes: management/compute networks, RoCEv2/RDMA, and sparkrun configuration.</p>
-  <span class="date">July 2026</span>
-</a>
-
-<a class="paper-card" href="{{ '/papers/dgx-spark-4node-cluster-kurulumu/' | relative_url }}">
-  <span class="tag">Cluster Setup</span>
-  <h3>DGX Spark 4-Node AI Cluster Setup Guide</h3>
-  <p>Switch-based AI cluster setup with 4 DGX Spark nodes: management/compute networks, RoCEv2/RDMA, sparkrun, and NAS configuration.</p>
-  <span class="date">July 2026</span>
-</a>
-
-<a class="paper-card" href="{{ '/papers/kimi-k3-dgx-b300-inference-benchmark/' | relative_url }}">
-  <span class="tag">LLM Benchmark</span>
-  <h3>Kimi K3 Inference Benchmark on DGX-B300</h3>
-  <p>Performance evaluation of Moonshot AI Kimi K3 (2.8T MoE, MXFP4) on DGX-B300 (8× Blackwell Ultra, TP=8): vLLM vs SGLang, direct vs DSpark speculative decoding, with SLO-driven capacity planning.</p>
-  <span class="date">July 2026</span>
-</a>
-
-<a class="paper-card" href="{{ '/papers/b300-gb300-cluster-mimarisi/' | relative_url }}">
-  <span class="tag">Architecture Comparison</span>
-  <h3>NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison</h3>
-  <p>Technical comparison of two Blackwell Ultra architectures — DGX B300 and GB300 NVL72 — covering system design, scaling, networking, power/cooling, and workload-based platform selection guidance.</p>
-  <span class="date">July 2026</span>
-</a>
-
-<a class="paper-card" href="{{ '/llm-inference-benchmarks/' | relative_url }}">
-  <span class="tag">LLM Benchmark</span>
-  <h3>LLM Benchmark Table</h3>
-  <p>Interactive table of every Openzeka LLM inference benchmark on DGX Spark, DGX B300, RTX PRO 6000 and Jetson Thor — filter by device, model and quantization, and set your own service-level thresholds for capacity planning.</p>
-  <span class="date">August 2026</span>
-</a>
-
-</div>
+{% include paper-grid.html %}
 
 ## Areas of Expertise
 
@@ -141,7 +83,7 @@ permalink: /
 Ankara Bilkent Cyberpark since 2016. All white papers are published openly at
 <code>https://whitepapers.openzeka.com</code>.
 
-**Headquarters:** Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara
+**Headquarters:** Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye
 **Tel:** +90 312 266 2055 · **Email:** [support@openzeka.com](https://openzeka.com/en/contact/) · **Web:** [openzeka.com](https://openzeka.com/en) · [Cordatus AI](https://cordatus.ai/)
 
 </div>

@@ -68,8 +68,8 @@ system architects, AI engineers, DevOps teams, and technology decision-makers.
 
 | | |
 | --- | --- |
-| **Headquarters** | Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara |
-| **Ankara Branch** | Mustafa Kemal Mah. Dumlupınar Bulvarı, Tepe Prime No:266 İç Kapı No:18, 06530 Çankaya/Ankara |
+| **Headquarters** | Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye |
+| **Ankara Branch** | Mustafa Kemal Mah. Dumlupınar Bulvarı, Tepe Prime No:266 İç Kapı No:18, 06530 Çankaya/Ankara, Türkiye |
 | **Netherlands Branch** | Openzeka Netherlands, High Tech Campus 9, 5656 AE Eindhoven, The Netherlands |
 | **Phone** | +90 312 266 2055 |
 | **Email** | [support@openzeka.com](https://openzeka.com/en/contact/) |

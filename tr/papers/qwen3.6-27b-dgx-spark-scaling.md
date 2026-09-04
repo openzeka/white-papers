@@ -4,6 +4,9 @@ parent: White Papers
 nav_order: 3
 lang: tr
 page_id: qwen3.6-27b-dgx-spark-scaling
+card_order: 3
+card_tag: "LLM Ölçekleme"
+card_date: "Temmuz 2026"
 description: >-
   Qwen3.6-27B-NVFP4 modelinin 1x, 2x ve 4x NVIDIA DGX Spark (GB10) üzerinde
   multi-node ölçekleme çalışması: 200GbE üzerinden tensor parallelism, SLO
@@ -439,4 +442,4 @@ TP, bellek bant genişliğini havuzlayarak *her isteği* hızlandırır; replika
 
 *Openzeka Teknoloji A.Ş. — [openzeka.com](https://www.openzeka.com) · Tel: +90 312 266 2055*
 
-*Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara*
+*Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye*

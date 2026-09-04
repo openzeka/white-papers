@@ -1002,7 +1002,7 @@ details.bt-howto > summary:focus-visible {
    Engine. Centring made them ragged — "1× DGX Spark" against "4× DGX Spark"
    against "RTX PRO 6000" reads as a list only when the left edges line up.
    Parameters, Intelligence and Agentic stay centred with the rest of the
-   numbers, even though the first four columns are frozen together.
+   numbers.
 
    Selected by class, not by position, so adding or reordering a column cannot
    re-align the wrong one. Child combinators throughout: the expanded row nests

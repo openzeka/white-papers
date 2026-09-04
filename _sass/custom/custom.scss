@@ -243,9 +243,14 @@
   margin-bottom: 0.7rem;
 }
 
-.paper-card h3 {
+// Kart başlığı bilinçli olarak <span>: bkz. _includes/paper-grid.html.
+// Bir h3 olsaydı `heading_anchors` içine <a> enjekte eder ve kartı dağıtırdı.
+.paper-card .paper-card-title {
+  display: block;
   margin: 0 0 0.4rem;
   font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.3;
   color: var(--openzeka-ink);
 }
 
@@ -643,49 +648,6 @@ img[width] {
   .bt-table tbody td {
     padding-left: 7px;
     padding-right: 7px;
-  }
-
-  // Tablo kaydığında modelin kimliği yerinde kalsın; aksi hâlde hangi satıra
-  // baktığınızı kaybediyorsunuz. Satır şeritlemesi ve hover korunuyor.
-  //
-  // Hangi sütunların donduğu tek bir yerde tanımlıdır: JS'teki sütun
-  // tanımlarında `frozen: true`. Oradan `bt-frozen` sınıfı geliyor, ayırıcı
-  // dikey çizgi de bloğun son sütunundaki `bt-frozen-edge`den. Buradaki
-  // kurallar sıra numarası değil sınıf kullanır — sütun eklenip çıkarıldığında
-  // yanlış sütunu dondurmasın diye.
-  //
-  // `left` değerlerini CSS veremez; her hücrenin kendisinden öncekilerin
-  // toplam genişliği kadar ötelenmesi gerekir ve o genişlikler içerikten gelir.
-  // Ölçümü `applyFrozen()` her render sonrası yapıp inline `left` yazıyor.
-  //
-  // Doğrudan çocuk seçiciler: genişletilmiş satır .bt-table içine ikinci bir
-  // tablo yerleştiriyor, torun seçici onun hücrelerine de değiyordu.
-  .bt-table > thead > tr > th.bt-frozen,
-  .bt-table > tbody > tr[data-id] > td.bt-frozen {
-    position: sticky;
-  }
-
-  .bt-table > thead > tr > th.bt-frozen-edge,
-  .bt-table > tbody > tr[data-id] > td.bt-frozen-edge {
-    border-right: 1px solid var(--bt-border);
-  }
-
-  .bt-table > thead > tr > th.bt-frozen {
-    z-index: 3;
-    background: var(--bt-dark);
-  }
-
-  .bt-table > tbody > tr[data-id] > td.bt-frozen {
-    z-index: 1;
-    background: var(--bt-bg);
-  }
-
-  .bt-table > tbody > tr[data-id]:nth-child(even) > td.bt-frozen {
-    background: var(--bt-bg-alt);
-  }
-
-  .bt-table > tbody > tr[data-id]:hover > td.bt-frozen {
-    background: var(--bt-bg-hover);
   }
 }
 

@@ -4,10 +4,13 @@ parent: White Papers
 nav_order: 7
 lang: en
 page_id: b300-gb300-cluster-mimarisi
+card_order: 9
+card_tag: "Architecture Comparison"
+card_date: "July 2026"
 description: >-
-  Technical comparison of two NVIDIA Blackwell Ultra based architectures — DGX B300
-  and GB300 NVL72 — covering system design, scaling approach, network architecture,
-  power/cooling requirements, and workload-based platform selection guidance.
+  Technical comparison of two NVIDIA Blackwell Ultra architectures, DGX B300 and
+  GB300 NVL72: system design, scaling approach, network fabric, power and cooling,
+  and which workloads suit which platform.
 permalink: /papers/b300-gb300-cluster-mimarisi/
 last_modified_date: 2026-07-31
 toc: true

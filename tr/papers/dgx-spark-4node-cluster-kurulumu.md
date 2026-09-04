@@ -4,9 +4,12 @@ parent: White Papers
 nav_order: 4
 lang: tr
 page_id: dgx-spark-4node-cluster-kurulumu
+card_order: 6
+card_tag: "Cluster Kurulumu"
+card_date: "Temmuz 2026"
 description: >-
-  4 NVIDIA DGX Spark node'undan oluşan switch tabanlı AI cluster kurulumu:
-  management ve compute ağları, RoCEv2/RDMA, sparkrun ve NAS yapılandırması.
+  MikroTik CRS812 üzerinden 4 NVIDIA DGX Spark node'u ile switch tabanlı AI
+  cluster kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun ve NAS.
 permalink: /papers/dgx-spark-4node-cluster-kurulumu/
 last_modified_date: 2026-07-24
 toc: true

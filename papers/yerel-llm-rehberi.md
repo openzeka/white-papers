@@ -4,6 +4,9 @@ parent: White Papers
 nav_order: 2
 lang: en
 page_id: yerel-llm-rehberi
+card_order: 1
+card_tag: "Decision Guide"
+card_date: "June 2026"
 description: >-
   End-to-end decision guide for local LLM usage: hardware (NVIDIA Jetson,
   RTX PRO, DGX Spark, DGX/HGX), model selection, software stack and scenario mapping.

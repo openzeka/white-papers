@@ -70,9 +70,9 @@ ve teknoloji karar vericiler.
 
 | | |
 | --- | --- |
-| **Merkez Ofis** | Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara |
-| **Ankara Şubesi** | Mustafa Kemal Mah. Dumlupınar Bulvarı, Tepe Prime No:266 İç Kapı No:18, 06530 Çankaya/Ankara |
-| **Hollanda Şubesi** | Openzeka Netherlands, High Tech Campus 9, 5656 AE Eindhoven, The Netherlands |
+| **Merkez Ofis** | Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye |
+| **Ankara Şubesi** | Mustafa Kemal Mah. Dumlupınar Bulvarı, Tepe Prime No:266 İç Kapı No:18, 06530 Çankaya/Ankara, Türkiye |
+| **Hollanda Şubesi** | Openzeka Netherlands, High Tech Campus 9, 5656 AE Eindhoven, Hollanda |
 | **Telefon** | +90 312 266 2055 |
 | **Web** | [openzeka.com](https://www.openzeka.com) · [Cordatus AI](https://cordatus.ai/) · [GitHub](https://github.com/openzeka) |
 | **Blog** | [blog.openzeka.com](https://blog.openzeka.com) |

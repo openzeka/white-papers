@@ -4,6 +4,9 @@ parent: White Papers
 nav_order: 6
 lang: en
 page_id: kimi-k3-dgx-b300-inference-benchmark
+card_order: 8
+card_tag: "LLM Benchmark"
+card_date: "July 2026"
 description: >-
   Performance evaluation of Moonshot AI Kimi K3 (2.8T MoE, MXFP4) on NVIDIA
   DGX-B300 (8x Blackwell Ultra, TP=8): vLLM vs SGLang, direct vs DSpark
