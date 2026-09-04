@@ -205,7 +205,10 @@ def cmd_inspect(a):
     print(f"  quantization  guess from the name: {quant or '(none)'}")
     print(f"  engine        guess from owned_by: "
           f"{ENGINE_BY_OWNER.get(str(mj.get('owned_by')).lower(), '(unknown)')}")
-    print(f"  mtp / mtp_k   name {'suggests MTP' if mtp_hint else 'does not mention MTP'}")
+    # Column is headed "Speculative Decoding"; the fields keep the older mtp
+    # names because benchmarks.json is consumed cross-origin by another site.
+    print(f"  mtp / mtp_k   speculative decoding — name "
+          f"{'suggests MTP' if mtp_hint else 'does not mention a mechanism'}")
     print("  tp / dp / pp  parallelism actually used")
     if len(names) != 1:
         print("  params, intelligence_index, agentic_index  (model not resolved above)")
