@@ -2962,6 +2962,60 @@
       "pp": null
     },
     {
+      "id": "muse-glimmer-30b_rtxpro6000_bf16_vllm_mtp",
+      "model": "Muse-Glimmer-30B",
+      "params": "30B",
+      "intelligence_index": 35.1,
+      "agentic_index": 22.9,
+      "device": "RTX PRO 6000",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 15,
+      "tp": 1,
+      "notes": "DFlash, native MTP k=15",
+      "sources": [],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 118.49,
+          "tps": 165.38
+        },
+        {
+          "c": 2,
+          "ttft_ms": 162.77,
+          "tps": 155.93
+        },
+        {
+          "c": 4,
+          "ttft_ms": 177.58,
+          "tps": 138.39
+        },
+        {
+          "c": 8,
+          "ttft_ms": 214.59,
+          "tps": 121.33
+        },
+        {
+          "c": 16,
+          "ttft_ms": 327.52,
+          "tps": 83.91
+        },
+        {
+          "c": 32,
+          "ttft_ms": 580.45,
+          "tps": 46.2
+        },
+        {
+          "c": 64,
+          "ttft_ms": 3301.37,
+          "tps": 23.13
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
       "id": "deepseek-v3.1_b300_nvfp4_vllm",
       "model": "DeepSeek-V3.1",
       "params": "685B",
