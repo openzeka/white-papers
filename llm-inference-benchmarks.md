@@ -30,7 +30,8 @@ detailed results for that configuration.
 ### What a row is
 
 A row is a **complete deployment configuration**, not a model. Hardware,
-quantization format, inference engine, TP/DP/PP topology and MTP setting are all
+quantization format, inference engine, TP/DP/PP topology and speculative-decoding
+setting are all
 part of what was tested, so the same model appears several times with different
 values in those columns. Comparing two rows is only meaningful once you know
 which of those columns differ between them.
@@ -42,7 +43,7 @@ open-source [CordatusAI LLM Benchmark
 Tool](https://github.com/CordatusAI/llm-benchmark) on NVIDIA DGX B300, one- to
 eight-node DGX Spark, RTX PRO 6000 Blackwell and Jetson AGX Thor. The pool grows
 as we test further models, hardware, inference engines, quantization formats,
-parallelism strategies and MTP configurations.
+parallelism strategies and speculative-decoding configurations.
 
 Each configuration is run with **128 input tokens and 128 output tokens**, ten
 rounds per concurrency level, with prompts covering different topics. The sweep
@@ -109,9 +110,13 @@ is the full-precision baseline; FP8, NVFP4, MXFP4, FP4 and INT4 are
 progressively more compressed. MXFP8 is an alternative 8-bit format, AWQ is a
 weight-only 4-bit scheme, and FP16 is a second full-precision baseline.
 
-**MTP (multi-token prediction)** — the model guesses several tokens ahead in one
-step and then verifies them. Correct guesses are kept, so the same output
-arrives faster.
+**Speculative decoding** — the model guesses several tokens ahead in one step and
+then verifies them in a single pass. Correct guesses are kept, so the same output
+arrives faster. The column says only whether a run used it; which mechanism, and
+how far ahead it guessed, is in the row's notes. One common form is
+**multi-token prediction (MTP)**, where the model itself predicts the next few
+tokens to a depth *k*; others use a separate draft model or a vendor
+implementation such as DSpark.
 
 **Inference engine** — the server software that loads the model and answers
 requests. It controls batching, memory and scheduling, so it affects speed as
@@ -145,11 +150,12 @@ rises.
 
 ### 2. Narrow the configurations
 
-Model, parameter count, device, quantization and MTP filters combine, and every
+Model, parameter count, device, quantization and speculative-decoding filters
+combine, and every
 data column sorts — so you can come at the table from model capability, model
 size, hardware, speed, latency, parallelism or estimated capacity. The most
 instructive comparisons change one variable: the same model at FP8 and NVFP4, or
-the same configuration with and without MTP.
+the same configuration with and without speculative decoding.
 
 ### 3. Set your targets
 
@@ -231,7 +237,8 @@ The chart carries two curves:
 That is the trade-off worth seeing: individual responsiveness drops while the
 machine as a whole produces more. Capacity planning lives between the two
 curves. Configuration notes sit below the chart — KV-cache precision, kernel
-selection, GPU-memory utilization, MTP depth — and the chart downloads as a PNG
+selection, GPU-memory utilization, speculation depth — and the chart downloads as
+a PNG
 for reports and presentations.
 
 ### Where to start
@@ -243,14 +250,15 @@ match the application. What remains are candidate hardware and serving
 configurations.
 
 **"How does this model do on DGX B300 versus DGX Spark?"** Select the model and
-both device families, then compare rows with matching quantization, engine, MTP
+both device families, then compare rows with matching quantization, engine,
+speculative decoding
 and parallelism. Changing the selected concurrency shows how the gap develops
 under load.
 
-**"What does quantization, MTP or the engine actually change?"** Hold the model
-and hardware constant and compare the relevant rows — FP8 against NVFP4, MTP on
-against off, vLLM against SGLang — so the effect is not mixed with a hardware
-change.
+**"What does quantization, speculative decoding or the engine actually change?"**
+Hold the model and hardware constant and compare the relevant rows — FP8 against
+NVFP4, speculative decoding on against off, vLLM against SGLang — so the effect
+is not mixed with a hardware change.
 
 **"We already own this hardware; what can we run on it?"** Start with the device
 filter, then sort the remaining models by capability or parameter count and

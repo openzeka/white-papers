@@ -81,8 +81,18 @@ this list is recoverable from the folder.
    default; that is an existing data problem the validator already warns about.
 3. **Inference engine** — confirm the `owned_by` hint. `vLLM` or `SGLang`,
    spelled exactly like that.
-4. **MTP** — was multi-token prediction on? If yes, ask for the depth `k`
-   (`mtp_k`); if no, `mtp: false` and `mtp_k: null`.
+4. **Speculative decoding** — did the run guess tokens ahead and verify them?
+   Ask it in those words: that is what the column is called. If yes, ask which
+   mechanism and how far ahead — multi-token prediction (MTP) to a depth *k*, a
+   draft model, or a vendor implementation such as DSpark — then set
+   `mtp: true`, put the depth in `mtp_k`, and name the mechanism in the notes,
+   because the column itself only shows Yes. If no, `mtp: false` and
+   `mtp_k: null`.
+
+   **The two fields are still named `mtp` and `mtp_k`.** That is deliberate, not
+   a leftover: the column was renamed from MTP to Speculative Decoding because
+   MTP is only one mechanism, but `benchmarks.json` is fetched cross-origin by
+   another site, so the field names did not change with it. Do not "fix" them.
 5. **TP / DP / PP** — the parallelism actually used. `null` for any not used.
    For an *N*× DGX Spark device the validator expects `tp × dp × pp == N`.
 6. **Notes** — optional, one line. Tell the user what usefully goes here:
@@ -91,7 +101,8 @@ this list is recoverable from the folder.
    - engine build — `vLLM v0.22.0`, `eugr nightly`
    - kernels and backends — `CUTLASS MoE, FlashInfer attn`
    - memory settings — `GMU 0.7`, `KV fp8`
-   - MTP depth and what it bought — `Speculative MTP k=3. +24% TPS at C1`
+   - the speculative-decoding mechanism, its depth, and what it bought —
+     `Speculative MTP k=3. +24% TPS at C1`, or `DSpark k=8`
    - a comparison against a sibling run — `NVFP4 is 2.2x faster than FP16 at C1`
 
    If the notes mention `PP=` or `DP=`, the matching field must be set or the
@@ -137,8 +148,8 @@ apply:
 | `device` | string | user; one of the eight exact strings |
 | `quantization` | string | user; uppercase |
 | `engine` | string | user; `vLLM` or `SGLang` |
-| `mtp` | boolean | user |
-| `mtp_k` | number \| null | user; null when `mtp` is false |
+| `mtp` | boolean | user; the column headed **Speculative Decoding** |
+| `mtp_k` | number \| null | user; the depth guessed ahead, null when `mtp` is false |
 | `tp` | number \| null | user |
 | `notes` | string | user; `""` when there is nothing to say |
 | `sources` | array | `[]`, or the URL of the white paper this run came from |

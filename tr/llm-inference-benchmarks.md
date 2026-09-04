@@ -31,8 +31,8 @@ ayrıntılı sonuçlarını görmek için ilgili satırı açabilirsiniz.
 ### Bir satır ne anlatır {#bir-satir-ne-anlatir}
 
 Bir satır bir modeli değil, **eksiksiz bir kurulum yapılandırmasını** anlatır.
-Donanım, kuantizasyon biçimi, inference engine, TP/DP/PP topolojisi ve MTP
-ayarı test edilenin parçasıdır; bu yüzden aynı model, bu sütunlarda farklı
+Donanım, kuantizasyon biçimi, inference engine, TP/DP/PP topolojisi ve
+spekülatif kod çözme ayarı test edilenin parçasıdır; bu yüzden aynı model, bu sütunlarda farklı
 değerlerle birkaç kez görünür. İki satırı karşılaştırmak, ancak aralarında hangi
 sütunların farklı olduğunu bildiğinizde anlam taşır.
 
@@ -43,7 +43,8 @@ Tablodaki her TPS ve TTFT değeri OpenZeka ölçümüdür; açık kaynaklı
 Tool](https://github.com/CordatusAI/llm-benchmark) ile NVIDIA DGX B300, bir ile
 sekiz node arası DGX Spark, RTX PRO 6000 Blackwell ve Jetson AGX Thor
 üzerinde üretilmiştir. Yeni modeller, donanımlar, inference engine'ler,
-kuantizasyon biçimleri, paralellik stratejileri ve MTP yapılandırmaları test
+kuantizasyon biçimleri, paralellik stratejileri ve spekülatif kod çözme
+yapılandırmaları test
 edildikçe havuz büyümeye devam ediyor.
 
 Her yapılandırma **128 girdi ve 128 çıktı token'ı** ile, her eşzamanlılık
@@ -112,8 +113,14 @@ giderek daha sıkıştırılmıştır. MXFP8 alternatif bir 8 bit biçimi, AWQ y
 ağırlıkları 4 bite indiren bir yöntem, FP16 ise ikinci bir tam hassasiyet
 referansıdır.
 
-**MTP (çoklu token tahmini)** — model tek adımda birkaç token ilerisini tahmin
-edip doğrular. Doğru tahminler korunduğu için aynı çıktı daha hızlı gelir.
+**Spekülatif kod çözme** — model tek adımda birkaç token ilerisini tahmin edip
+bunları tek geçişte doğrular. Doğru tahminler korunduğu için aynı çıktı daha
+hızlı gelir. Sütun yalnızca bir koşunun bunu kullanıp kullanmadığını söyler;
+hangi mekanizmanın kullanıldığı ve ne kadar ileri tahmin edildiği satırın
+notlarındadır. Yaygın biçimlerinden biri **çoklu token tahmini (MTP)**'dir:
+modelin kendisi sonraki birkaç token'ı *k* derinliğinde tahmin eder. Diğerleri
+ayrı bir taslak (draft) model ya da DSpark gibi bir üretici uygulaması
+kullanır.
 
 **Inference engine** — modeli belleğe yükleyip istekleri yanıtlayan sunucu
 yazılımı. Toplu işleme, bellek ve zamanlamayı yönettiği için hıza donanım kadar
@@ -147,12 +154,13 @@ listedeki satır sayısı azalır.
 
 ### 2. Yapılandırmaları daraltın {#yapilandirmalari-daraltin}
 
-Model, parametre sayısı, cihaz, kuantizasyon ve MTP filtreleri birlikte
+Model, parametre sayısı, cihaz, kuantizasyon ve spekülatif kod çözme filtreleri
+birlikte
 çalışır; ayrıca her veri sütunu sıralanabilir — tabloya model yeteneği, model
 boyutu, donanım, hız, gecikme, paralellik veya tahmini kapasite üzerinden
 girebilirsiniz. En öğretici karşılaştırmalar tek değişkeni değiştirdiğinizde
-çıkar: aynı modelin FP8 ve NVFP4 sürümleri, ya da aynı yapılandırmanın MTP'li ve
-MTP'siz hâlleri.
+çıkar: aynı modelin FP8 ve NVFP4 sürümleri, ya da aynı yapılandırmanın
+spekülatif kod çözmeli ve çözmesiz hâlleri.
 
 ### 3. Hedeflerinizi girin {#hedeflerinizi-girin}
 
@@ -238,7 +246,8 @@ Grafik iki eğri taşır:
 Görülmesi gereken ödünleşme budur: bireysel yanıt hızı düşerken makinenin
 bütünü daha fazla üretir. Kapasite planlaması bu iki eğrinin arasında yaşar.
 Yapılandırma notları grafiğin altındadır — KV-cache hassasiyeti, kernel seçimi,
-GPU bellek kullanımı, MTP derinliği — ve grafik, rapor ve sunumlar için PNG
+GPU bellek kullanımı, spekülasyon derinliği — ve grafik, rapor ve sunumlar için
+PNG
 olarak indirilebilir.
 
 ### Nereden başlamalı {#nereden-baslamali}
@@ -249,14 +258,15 @@ için hedefleri ve agentic çarpanını varsayılanda bırakın ya da uygulaman�
 ayarlayın. Geriye kalanlar aday donanım ve sunum yapılandırmalarıdır.
 
 **"Bu model DGX B300'de DGX Spark'a kıyasla nasıl?"** Modeli ve iki cihaz
-ailesini seçin, ardından kuantizasyon, engine, MTP ve paralelliği eşleşen
+ailesini seçin, ardından kuantizasyon, engine, spekülatif kod çözme ve
+paralelliği eşleşen
 satırları karşılaştırın. Seçtiğiniz eşzamanlılığı değiştirmek, farkın yük
 altında nasıl geliştiğini gösterir.
 
-**"Kuantizasyon, MTP ya da engine gerçekte neyi değiştiriyor?"** Modeli ve
-donanımı sabit tutup ilgili satırları karşılaştırın — FP8'e karşı NVFP4, MTP
-açık-kapalı, vLLM'e karşı SGLang — böylece etki bir donanım değişikliğiyle
-karışmaz.
+**"Kuantizasyon, spekülatif kod çözme ya da engine gerçekte neyi değiştiriyor?"**
+Modeli ve donanımı sabit tutup ilgili satırları karşılaştırın — FP8'e karşı
+NVFP4, spekülatif kod çözme açık-kapalı, vLLM'e karşı SGLang — böylece etki bir
+donanım değişikliğiyle karışmaz.
 
 **"Bu donanım elimizde; üzerinde ne çalıştırabiliriz?"** Cihaz filtresiyle
 başlayın, kalan modelleri yetenek ya da parametre sayısına göre sıralayın ve
