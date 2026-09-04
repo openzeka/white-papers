@@ -81,8 +81,7 @@ exclude:
   - README.md
   - DEVELOPMENT.md
   - CLAUDE.md
-  - AGENTS.md
-  - .claude
+  - skills
   - _diagram_sources
   - LICENSE
   - Makefile

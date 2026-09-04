@@ -4,7 +4,7 @@
     python3 _tools/bench_import.py inspect <folder>      # what the folder tells us
     python3 _tools/bench_import.py add <entry.json>      # insert a finished entry
 
-Driven by .claude/skills/add-benchmark/SKILL.md. `inspect` reads only what the
+Driven by skills/add-benchmark/SKILL.md. `inspect` reads only what the
 tool actually recorded and lists what a human still has to supply; it never
 guesses a number. `add` writes the entry with the canonical field order and the
 file's exact formatting, so the diff is only the new entry.
