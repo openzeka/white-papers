@@ -14,7 +14,7 @@ than guess, and never invent a value.
 
 **Adding a run is a data-only change.** The table is generated from this file, so
 no page, no JS and no CSS needs touching. Editing those is only for adding a
-*column*, which is a different job — see `AGENTS.md` and the `cols` array in
+*column*, which is a different job — see the `cols` array and the row loop in
 `assets/js/benchmark-table.js`.
 
 ## 1. Read the folder
