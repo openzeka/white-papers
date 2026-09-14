@@ -4397,6 +4397,153 @@
       ],
       "dp": 2,
       "pp": null
+    },
+    {
+      "id": "deepseek-v4.1-flash_b300_fp8_vllm_tp4",
+      "model": "DeepSeek-V4.1-Flash",
+      "params": "763B",
+      "intelligence_index": 40,
+      "agentic_index": null,
+      "device": "DGX B300",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 3,
+      "tp": 4,
+      "notes": "DSpark k=3, 1M context. Model: deepseek-ai/DeepSeek-V4.1-Flash",
+      "sources": [],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 64.46,
+          "tps": 284.54
+        },
+        {
+          "c": 2,
+          "ttft_ms": 64.17,
+          "tps": 294.56
+        },
+        {
+          "c": 4,
+          "ttft_ms": 73.23,
+          "tps": 252.6
+        },
+        {
+          "c": 8,
+          "ttft_ms": 80.28,
+          "tps": 209.41
+        },
+        {
+          "c": 16,
+          "ttft_ms": 142.11,
+          "tps": 162.02
+        },
+        {
+          "c": 32,
+          "ttft_ms": 166.79,
+          "tps": 136.99
+        },
+        {
+          "c": 64,
+          "ttft_ms": 122.58,
+          "tps": 110.09
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "tencent-hy4-preview_b300_bf16_vllm_tp8",
+      "model": "Tencent-Hy4-preview",
+      "params": "780B",
+      "intelligence_index": null,
+      "agentic_index": null,
+      "device": "DGX B300",
+      "quantization": "BF16",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 3,
+      "tp": 8,
+      "notes": "MTP k=3, 512K context. Model: tencent/Hy4-preview",
+      "sources": [],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 109.58,
+          "tps": 65.66
+        },
+        {
+          "c": 2,
+          "ttft_ms": 123.11,
+          "tps": 61.16
+        },
+        {
+          "c": 4,
+          "ttft_ms": 146.46,
+          "tps": 55.73
+        },
+        {
+          "c": 8,
+          "ttft_ms": 189.83,
+          "tps": 46.8
+        },
+        {
+          "c": 16,
+          "ttft_ms": 267.57,
+          "tps": 38.96
+        },
+        {
+          "c": 32,
+          "ttft_ms": 398.24,
+          "tps": 30.76
+        },
+        {
+          "c": 64,
+          "ttft_ms": 476.07,
+          "tps": 24.81
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4-flash-vision-exp_2spark_fp8_vllm_tp2",
+      "model": "DeepSeek-V4-Flash-Vision-Exp",
+      "params": "305B",
+      "intelligence_index": 35,
+      "agentic_index": null,
+      "device": "2× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 3,
+      "tp": 2,
+      "notes": "DSpark k=3, 131K context. Model: deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+      "sources": [],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 299.6,
+          "tps": 35.99
+        },
+        {
+          "c": 2,
+          "ttft_ms": 496.14,
+          "tps": 23.14
+        },
+        {
+          "c": 4,
+          "ttft_ms": 633.23,
+          "tps": 16.18
+        },
+        {
+          "c": 8,
+          "ttft_ms": 907.71,
+          "tps": 8.75
+        }
+      ],
+      "dp": null,
+      "pp": null
     }
   ]
 }
