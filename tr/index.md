@@ -79,11 +79,20 @@ permalink: /
 
 <div class="footer-note" markdown="1">
 
-**Openzeka Teknoloji A.Ş.** — 2016'dan bu yana Ankara Bilkent Cyberpark'ta NVIDIA
-donanım ve yazılım çözümleri sağlayıcısı. Tüm white paper'lar
-<code>https://whitepapers.openzeka.com</code> adresinde açık olarak yayınlanır.
+**OpenZeka Teknoloji A.Ş.** — 2016'dan bu yana NVIDIA donanım ve yazılım
+çözümleri sağlayıcısı. Tüm white paper'lar
+[whitepapers.openzeka.com](https://whitepapers.openzeka.com) adresinde açık olarak yayınlanır.
 
-**Merkez Ofis:** Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye
-**Tel:** +90 312 266 2055 · **Web:** [openzeka.com](https://www.openzeka.com) · [Cordatus AI](https://cordatus.ai/)
+**Türkiye Ofisi — OpenZeka Teknoloji A.Ş.**
+Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye
+Tel: +90 312 266 2055 · Web: [openzeka.com](https://www.openzeka.com)
+
+**Hollanda Ofisi — OpenZeka Netherlands**
+High Tech Campus 9, Unit BK222, 5656 AE Eindhoven, The Netherlands
+Web: [openzeka.com/en](https://openzeka.com/en)
+
+**Cordatus AI — Cordatus B.V.**
+High Tech Campus 9, Unit BK222, 5656 AE Eindhoven, The Netherlands
+Web: [cordatus.ai](https://cordatus.ai)
 
 </div>
