@@ -86,9 +86,7 @@ DSpark, yarı-otoregresif draft üretimi ve güvenlik tabanlı doğrulama ile ç
 
 ---
 
-## 3. Donanım ve Cluster Yapısı
-
-### 3.1 DGX Spark (GB10) Donanımı
+## 3. Donanım
 
 | Bileşen | Değer |
 |---|---|
@@ -101,55 +99,19 @@ DSpark, yarı-otoregresif draft üretimi ve güvenlik tabanlı doğrulama ile ç
 
 > **Kritik mimari gerçek:** DGX Spark'lar arasında **NVLink yoktur**. Bu çalışmadaki TP=4, ConnectX-7 200 GbE ağı üzerinden **multi-node tensor parallelism**'dir — her all-reduce işlemi Ethernet ağını geçer.
 
-### 3.2 Cluster Düğümleri
-
-| # | Hostname | IP | sparkrun | GPU | Rol |
-|---|---|---|---|---|---|
-| 1 | Spark-1 (head) | 192.168.1.153 | 0.3.9 | GB10 | head (rank 0) |
-| 2 | spark2 | 192.168.1.147 | 0.3.9 | GB10 | worker (rank 1) |
-| 3 | spark-5b81 | 192.168.1.166 | 0.3.9 | GB10 | worker (rank 2) |
-| 4 | spark1 | 192.168.1.148 | 0.3.9 | GB10 | worker (rank 3) |
-
-ConnectX-7 arayüzleri sparkrun tarafından otomatik yapılandırılır (ray 1: 192.168.0.x, ray 2: 192.168.2.x).
-
-### 3.3 sparkrun Orkestrasyonu
-
-Multi-node dağıtım, Cordatus sparkrun aracı ile yönetilir. sparkrun, Docker imajını tüm düğümlere sync eder, CX7 ağ yapılandırmasını ayarlar ve `mp` (multiprocess) distributed executor backend ile vLLM'i 4 düğümde başlatır.
-
-Tüm düğümlerde sparkrun 0.3.9'a yükseltildi (166 ve 148'de eski sürüm 0.3.3/0.3.4 vardı): `uv tool install --upgrade sparkrun`
-
-### 3.4 Host Hardening
-
-Tüm düğümlerde kernel parametreleri ayarlandı:
-
-- `vm.min_free_kbytes=1048576` (1 GB minimum boş bellek)
-- `vm.watermark_scale_factor=200` (daha agresif bellek geri kazanımı)
-
 ---
 
-## 4. Model Transferi
-
-Model checkpoint'i, DGX-B300'den Spark head düğümüne transfer edildi.
-
-- **Kaynak:** DGX-B300 (`/raid/models/huggingface/hub/models--deepseek-ai--DeepSeek-V4.1-Flash/`)
-- **Hedef:** Spark head (`~/.cache/huggingface/hub/models--deepseek-ai--DeepSeek-V4.1-Flash/`)
-- **Yöntem:** B300'den Spark head'e keyless SSH kuruldu, ardından rsync ile HF hub formatında transfer
-- **Boyut:** 476 GB, 120 safetensors blob
-- **Dağıtım:** sparkrun, modeli head'den 4 düğüme otomatik sync etti
-
----
-
-## 5. vLLM Build ve Patch Zinciri
+## 4. vLLM Build ve Patch Zinciri
 
 vLLM'in stock nightly imajı, SM 12.1a (GB10) için DeepSeek-V4.1-Flash kod yollarında eksiklikler içerir. Bu bölüm, özel Docker imajı (`vllm-dsv41:latest`, 33.8 GB) oluşturmak için uygulanan build zincirini ve 7 patch'i belgeler.
 
-### 5.1 Temel İmaj ve vLLM Branch
+### 4.1 Temel İmaj ve vLLM Branch
 
 - **Base image:** `vllm/vllm-openai:nightly-8a728663c1c3eeace834a95f5654fa653cc1998c`
 - **vLLM branch:** `build/fetch_vllm_branch.sh` ile checkout edildi, commit `e47aa780b`
 - **Kaynak repo:** [tonyd2wild/DeepSeek-V4.1-Flash-vLLM-DGX-Spark](https://github.com/tonyd2wild/DeepSeek-V4.1-Flash-vLLM-DGX-Spark) (boot10 config)
 
-### 5.2 Overlay Build Zinciri
+### 4.2 Overlay Build Zinciri
 
 Build, 5 overlay katmanı ve bir patch katmanından oluşur. Her overlay, bir öncekinin üzerine inşa eder:
 
@@ -164,7 +126,7 @@ Build, 5 overlay katmanı ve bir patch katmanından oluşur. Her overlay, bir ö
 
 > **Önemli not:** Dockerfile'da `COPY vllm/vllm/` (vllm/ değil, vllm/vllm/) kullanılmalıdır — `vllm/` bir git repo, Python package `vllm/vllm/` altında bulunur.
 
-### 5.3 Patch'ler
+### 4.3 Patch'ler
 
 Aşağıdaki 7 patch, image'a gömülmüştür:
 
@@ -178,7 +140,7 @@ Aşağıdaki 7 patch, image'a gömülmüştür:
 | 6 | `sparse_swa.py` | `v1/attention/backends/mla/sparse_swa.py` | SWA block size hook |
 | 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM12x top_k_per_row_decode |
 
-### 5.4 Optimizasyonlar
+### 4.4 Optimizasyonlar
 
 - **OMP_NUM_THREADS=1** — reçeteye eklendi (spin-wait contention'ı azaltır)
 - **GPU clock kontrolü** — 4/4 node sağlıklı (2106-2249 MHz, 85-93W, 85-88 TFLOPS)
@@ -186,9 +148,9 @@ Aşağıdaki 7 patch, image'a gömülmüştür:
 
 ---
 
-## 6. Yapılandırma
+## 5. Yapılandırma
 
-### 6.1 sparkrun Reçetesi
+### 5.1 sparkrun Reçetesi
 
 sparkrun reçetesi (`deepseek-v41-flash-tp4.yaml`) aşağıdaki parametreleri içerir:
 
@@ -202,7 +164,7 @@ sparkrun reçetesi (`deepseek-v41-flash-tp4.yaml`) aşağıdaki parametreleri i�
 | `block_size` | 128 | KV önbellek blok boyutu |
 | `distributed-executor-backend` | mp | Multiprocess backend |
 
-### 6.2 Speculative Decoding Yapılandırması
+### 5.2 Speculative Decoding Yapılandırması
 
 ```json
 {
@@ -216,7 +178,7 @@ sparkrun reçetesi (`deepseek-v41-flash-tp4.yaml`) aşağıdaki parametreleri i�
 
 DSpark k=5 derinliği ile her decode adımında 5 token önceden tahmin edilir.
 
-### 6.3 Engram-on-disk Yapılandırması
+### 5.3 Engram-on-disk Yapılandırması
 
 ```bash
 DSV41_ENGRAM_DISK=1
@@ -226,7 +188,7 @@ DSV41_ENGRAM_DISK_CHUNK=16
 
 Engram satırları diskte tutulur, 32 thread ile paralel okunur ve 16'lık chunk'lar halinde GPU belleğine stage'lenir.
 
-### 6.4 Çalıştırma Komutu
+### 5.4 Çalıştırma Komutu
 
 ```bash
 sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp4.yaml \
@@ -234,7 +196,7 @@ sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp4.yaml
   --foreground
 ```
 
-### 6.5 Çalıştırma Parametreleri
+### 5.5 Çalıştırma Parametreleri
 
 Model, düşünme modu kapalı (`"thinking": false`), araç çağırma ve çok modlu (görüntü) desteği açık olarak servis edilir:
 
@@ -246,9 +208,9 @@ Model, düşünme modu kapalı (`"thinking": false`), araç çağırma ve çok m
 
 ---
 
-## 7. Performans Sonuçları
+## 6. Performans Sonuçları
 
-### 7.1 Benchmark Tablosu
+### 6.1 Benchmark Tablosu
 
 Ölçümler [CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark) aracı ile alınmıştır (2. çalıştırma, JIT ısındıktan sonra).
 
@@ -259,7 +221,7 @@ Model, düşünme modu kapalı (`"thinking": false`), araç çağırma ve çok m
 | 4 | 577.41 | 73.86 | 13.09 | 9.96 | 0.10 |
 | 8 | 805.89 | 110.28 | 8.79 | 14.81 | 0.07 |
 
-### 7.2 Grafikler
+### 6.2 Grafikler
 
 ![TTFT]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/deepseek-v4.1-flash-TTFT.png' | relative_url }})
 
@@ -271,14 +233,14 @@ Model, düşünme modu kapalı (`"thinking": false`), araç çağırma ve çok m
 
 ![Throughput]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/deepseek-v4.1-flash-Throughput.png' | relative_url }})
 
-### 7.3 Değerlendirme
+### 6.3 Değerlendirme
 
 - **C=1'de 29.5 tok/s**, interaktif kullanım için yeterli bir hıztır. Okuma hızı (~15 tok/s) eşiğinin üzerindedir.
 - **TTFT**, concurrency artışıyla beklenen biçimde yükselir (272→806 ms, ~3x) — prefill aşaması hesaplama sınırlıdır (compute-bound).
 - **TPS düşüşü**, GPU'nun doygunluğa yaklaşmasıyla bellek bant genişliği çekişmesinin artmasından kaynaklanır (29.5→8.8 tok/s, ~%70 düşüş).
 - **Max C = 2** (dosyanın varsayılan hedeflerinde: TTFT≤1000ms ve TPS≥20) — sohbet kapasitesi 2, agentic kapasite 1.
 
-### 7.4 DSpark Acceptance
+### 6.4 DSpark Acceptance
 
 DSpark speculative decoding'in etkinliği, kabul oranı (acceptance) ve draft hızı (draft rate) ile ölçülür:
 
@@ -289,7 +251,7 @@ DSpark speculative decoding'in etkinliği, kabul oranı (acceptance) ve draft h�
 
 Repo boot10 ortalaması: 3.57 acceptance, %60 draft rate (8 kategori ortalaması). Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9-5.3 / 5), kodun tekrarlı yapısından kaynaklanır.
 
-### 7.5 GPU Metrikleri
+### 6.5 GPU Metrikleri
 
 Yük altında 4 düğümün GPU clock ve güç tüketimi:
 
@@ -304,9 +266,9 @@ Tüm düğümler sağlıklı çalışıyor — clock ~2.1-2.25 GHz aralığında
 
 ---
 
-## 8. Karşılaştırmalı Analiz
+## 7. Karşılaştırmalı Analiz
 
-### 8.1 DGX-B300 ile Karşılaştırma
+### 7.1 DGX-B300 ile Karşılaştırma
 
 DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inference-benchmarks/' | relative_url }}) üzerinde DGX-B300 (8× Blackwell Ultra, TP=4) ile de ölçülmüştür. B300 satırı aynı modeli DSpark k=3 (k=5 yerine), 1M bağlam (300K yerine) ve FP8 nicelemesiyle servis eder.
 
@@ -329,7 +291,7 @@ DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inferenc
 
 > **Sonuç:** 4× DGX Spark, 763B'lik bir veri merkezi modelini **çalıştırabilir** — ancak veri merkezi donanımının yerini almaz. Bu yapılandırma, geliştirme, prototipleme ve sınırlı kullanıcı sayılı production senaryoları için uygundur.
 
-### 8.2 DeepSeek-V4-Flash 0731 ile Karşılaştırma
+### 7.2 DeepSeek-V4-Flash 0731 ile Karşılaştırma
 
 DeepSeek-V4-Flash 0731 (304B, NVFP4) modelinin 4× DGX Spark TP4 ölçümü de mevcuttur:
 
@@ -342,7 +304,7 @@ V4.1-Flash, V4-Flash 0731'in **2.51× daha fazla parametresine** sahiptir (763B 
 
 ---
 
-## 9. SLO ve Kapasite
+## 8. SLO ve Kapasite
 
 Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), bu yapılandırma **Max C = 2** değerini verir:
 
@@ -356,7 +318,7 @@ Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), 
 
 ---
 
-## 10. Sonuç
+## 9. Sonuç
 
 1. **763B'lik DeepSeek-V4.1-Flash, 4× DGX Spark üzerinde çalıştırılabilir** — bu, ofis dostu mini süper bilgisayarların ulaştığı ölçeklenebilirliğin bir göstergesidir.
 2. **7 SM121 patch'i zorunludur** — stock vLLM nightly imajı, GB10 (SM 12.1a) için Engram-on-disk, FlashInfer sparse attention ve SWA kod yollarında eksiklikler içerir.

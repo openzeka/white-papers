@@ -86,9 +86,7 @@ DSpark is a speculative decoding mechanism using semi-autoregressive draft gener
 
 ---
 
-## 3. Hardware and Cluster Setup
-
-### 3.1 DGX Spark (GB10) Hardware
+## 3. Hardware
 
 | Component | Value |
 |---|---|
@@ -101,55 +99,19 @@ DSpark is a speculative decoding mechanism using semi-autoregressive draft gener
 
 > **Critical architectural fact:** There is **no NVLink** between DGX Sparks. TP=4 in this deployment is **multi-node tensor parallelism** over a ConnectX-7 200 GbE network — every all-reduce operation crosses the Ethernet fabric.
 
-### 3.2 Cluster Nodes
-
-| # | Hostname | IP | sparkrun | GPU | Role |
-|---|---|---|---|---|---|
-| 1 | Spark-1 (head) | 192.168.1.153 | 0.3.9 | GB10 | head (rank 0) |
-| 2 | spark2 | 192.168.1.147 | 0.3.9 | GB10 | worker (rank 1) |
-| 3 | spark-5b81 | 192.168.1.166 | 0.3.9 | GB10 | worker (rank 2) |
-| 4 | spark1 | 192.168.1.148 | 0.3.9 | GB10 | worker (rank 3) |
-
-ConnectX-7 interfaces are auto-configured by sparkrun (ray 1: 192.168.0.x, ray 2: 192.168.2.x).
-
-### 3.3 sparkrun Orchestration
-
-Multi-node deployment is managed by the Cordatus sparkrun tool. sparkrun syncs the Docker image to all nodes, configures the CX7 network, and launches vLLM across 4 nodes using the `mp` (multiprocess) distributed executor backend.
-
-All nodes were upgraded to sparkrun 0.3.9 (nodes 166 and 148 had older versions 0.3.3/0.3.4): `uv tool install --upgrade sparkrun`
-
-### 3.4 Host Hardening
-
-Kernel parameters were tuned on all nodes:
-
-- `vm.min_free_kbytes=1048576` (1 GB minimum free memory)
-- `vm.watermark_scale_factor=200` (more aggressive memory reclamation)
-
 ---
 
-## 4. Model Transfer
-
-The model checkpoint was transferred from a DGX-B300 to the Spark head node.
-
-- **Source:** DGX-B300 (`/raid/models/huggingface/hub/models--deepseek-ai--DeepSeek-V4.1-Flash/`)
-- **Destination:** Spark head (`~/.cache/huggingface/hub/models--deepseek-ai--DeepSeek-V4.1-Flash/`)
-- **Method:** Keyless SSH from B300 to Spark head, then rsync in HF hub format
-- **Size:** 476 GB, 120 safetensors blobs
-- **Distribution:** sparkrun auto-synced the model from head to all 4 nodes
-
----
-
-## 5. vLLM Build and Patch Chain
+## 4. vLLM Build and Patch Chain
 
 The stock vLLM nightly image has missing code paths for SM 12.1a (GB10) in the DeepSeek-V4.1-Flash code paths. This section documents the build chain and 7 patches applied to create the custom Docker image (`vllm-dsv41:latest`, 33.8 GB).
 
-### 5.1 Base Image and vLLM Branch
+### 4.1 Base Image and vLLM Branch
 
 - **Base image:** `vllm/vllm-openai:nightly-8a728663c1c3eeace834a95f5654fa653cc1998c`
 - **vLLM branch:** Checked out via `build/fetch_vllm_branch.sh`, commit `e47aa780b`
 - **Source repo:** [tonyd2wild/DeepSeek-V4.1-Flash-vLLM-DGX-Spark](https://github.com/tonyd2wild/DeepSeek-V4.1-Flash-vLLM-DGX-Spark) (boot10 config)
 
-### 5.2 Overlay Build Chain
+### 4.2 Overlay Build Chain
 
 The build consists of 5 overlay layers and a patch layer. Each overlay builds on top of the previous one:
 
@@ -164,7 +126,7 @@ The build consists of 5 overlay layers and a patch layer. Each overlay builds on
 
 > **Important:** The Dockerfile must use `COPY vllm/vllm/` (not `vllm/`) — `vllm/` is a git repo, the Python package is under `vllm/vllm/`.
 
-### 5.3 Patches
+### 4.3 Patches
 
 The following 7 patches are baked into the image:
 
@@ -178,7 +140,7 @@ The following 7 patches are baked into the image:
 | 6 | `sparse_swa.py` | `v1/attention/backends/mla/sparse_swa.py` | SWA block size hook |
 | 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM12x top_k_per_row_decode |
 
-### 5.4 Optimizations
+### 4.4 Optimizations
 
 - **OMP_NUM_THREADS=1** — added to the recipe (reduces spin-wait contention)
 - **GPU clock monitoring** — all 4 nodes healthy (2106-2249 MHz, 85-93W, 85-88 TFLOPS)
@@ -186,9 +148,9 @@ The following 7 patches are baked into the image:
 
 ---
 
-## 6. Configuration
+## 5. Configuration
 
-### 6.1 sparkrun Recipe
+### 5.1 sparkrun Recipe
 
 The sparkrun recipe (`deepseek-v41-flash-tp4.yaml`) contains the following parameters:
 
@@ -202,7 +164,7 @@ The sparkrun recipe (`deepseek-v41-flash-tp4.yaml`) contains the following param
 | `block_size` | 128 | KV cache block size |
 | `distributed-executor-backend` | mp | Multiprocess backend |
 
-### 6.2 Speculative Decoding Configuration
+### 5.2 Speculative Decoding Configuration
 
 ```json
 {
@@ -216,7 +178,7 @@ The sparkrun recipe (`deepseek-v41-flash-tp4.yaml`) contains the following param
 
 With DSpark k=5 depth, 5 tokens are predicted ahead at each decode step.
 
-### 6.3 Engram-on-disk Configuration
+### 5.3 Engram-on-disk Configuration
 
 ```bash
 DSV41_ENGRAM_DISK=1
@@ -226,7 +188,7 @@ DSV41_ENGRAM_DISK_CHUNK=16
 
 Engram rows are stored on disk, read in parallel with 32 threads, and staged into GPU memory in chunks of 16.
 
-### 6.4 Launch Command
+### 5.4 Launch Command
 
 ```bash
 sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp4.yaml \
@@ -234,7 +196,7 @@ sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp4.yaml
   --foreground
 ```
 
-### 6.5 Serving Parameters
+### 5.5 Serving Parameters
 
 The model is served with thinking mode disabled (`"thinking": false`), tool calling and multimodal (vision) support enabled:
 
@@ -246,9 +208,9 @@ The model is served with thinking mode disabled (`"thinking": false`), tool call
 
 ---
 
-## 7. Performance Results
+## 6. Performance Results
 
-### 7.1 Benchmark Table
+### 6.1 Benchmark Table
 
 Measurements were taken with [CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark) (2nd run, after JIT warmup).
 
@@ -259,7 +221,7 @@ Measurements were taken with [CordatusAI/llm-benchmark](https://github.com/Corda
 | 4 | 577.41 | 73.86 | 13.09 | 9.96 | 0.10 |
 | 8 | 805.89 | 110.28 | 8.79 | 14.81 | 0.07 |
 
-### 7.2 Charts
+### 6.2 Charts
 
 ![TTFT]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/deepseek-v4.1-flash-TTFT.png' | relative_url }})
 
@@ -271,14 +233,14 @@ Measurements were taken with [CordatusAI/llm-benchmark](https://github.com/Corda
 
 ![Throughput]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/deepseek-v4.1-flash-Throughput.png' | relative_url }})
 
-### 7.3 Assessment
+### 6.3 Assessment
 
 - **29.5 tok/s at C=1** is sufficient for interactive use, above the reading speed threshold (~15 tok/s).
 - **TTFT** rises as expected with concurrency (272→806 ms, ~3x) — prefill is compute-bound.
 - **TPS decline** reflects growing memory bandwidth contention as the GPU approaches saturation (29.5→8.8 tok/s, ~70% drop).
 - **Max C = 2** at the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20) — chat capacity 2, agentic capacity 1.
 
-### 7.4 DSpark Acceptance
+### 6.4 DSpark Acceptance
 
 The effectiveness of DSpark speculative decoding is measured by acceptance ratio and draft rate:
 
@@ -289,7 +251,7 @@ The effectiveness of DSpark speculative decoding is measured by acceptance ratio
 
 Repo boot10 average: 3.57 acceptance, 60% draft rate (8-category average). The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the repetitive structure of code.
 
-### 7.5 GPU Metrics
+### 6.5 GPU Metrics
 
 GPU clock and power consumption under load across 4 nodes:
 
@@ -304,9 +266,9 @@ All nodes are healthy — clocks in the 2.1-2.25 GHz range, 85-93W power draw.
 
 ---
 
-## 8. Comparative Analysis
+## 7. Comparative Analysis
 
-### 8.1 Comparison with DGX-B300
+### 7.1 Comparison with DGX-B300
 
 DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) on DGX-B300 (8× Blackwell Ultra, TP=4). The B300 row serves the same model with DSpark k=3 (instead of k=5), 1M context (instead of 300K), and FP8 quantization.
 
@@ -329,7 +291,7 @@ DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explo
 
 > **Conclusion:** 4× DGX Spark **can run** a 763B data center model — but it does not replace data center hardware. This configuration is suitable for development, prototyping, and limited-user production scenarios.
 
-### 8.2 Comparison with DeepSeek-V4-Flash 0731
+### 7.2 Comparison with DeepSeek-V4-Flash 0731
 
 The 4× DGX Spark TP4 measurement of DeepSeek-V4-Flash 0731 (304B, NVFP4) is also available:
 
@@ -342,7 +304,7 @@ V4.1-Flash has **2.51× more parameters** than V4-Flash 0731 (763B / 304B). The 
 
 ---
 
-## 9. SLO and Capacity
+## 8. SLO and Capacity
 
 At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s), this configuration yields **Max C = 2**:
 
@@ -356,7 +318,7 @@ At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s), thi
 
 ---
 
-## 10. Conclusion
+## 9. Conclusion
 
 1. **DeepSeek-V4.1-Flash (763B) can run on 4× DGX Spark** — demonstrating the scalability ceiling of office-friendly mini supercomputers.
 2. **7 SM121 patches are mandatory** — the stock vLLM nightly image has missing code paths for GB10 (SM 12.1a) in Engram-on-disk, FlashInfer sparse attention, and SWA paths.
