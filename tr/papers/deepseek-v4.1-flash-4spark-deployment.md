@@ -415,19 +415,6 @@ curl http://192.168.1.153:8000/v1/chat/completions \
        "messages":[{"role":"user","content":"Count from 1 to 10."}]}'
 ```
 
-### Container Log'ları
-
-```bash
-docker exec $(docker ps -q --filter name=node_0) bash -c 'tail -100 /tmp/sparkrun_serve.log'
-```
-
-### DSpark Metrikleri
-
-```bash
-docker exec $(docker ps -q --filter name=node_0) bash -c \
-  'grep -E "SpecDecoding|generation throughput" /tmp/sparkrun_serve.log | tail -20'
-```
-
 ---
 
 *Openzeka Teknoloji A.Ş. — [openzeka.com](https://www.openzeka.com) · Tel: +90 312 266 2055*
