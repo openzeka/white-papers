@@ -137,7 +137,7 @@
 
   var DEFAULT_CONFIG = {
     ttft_threshold_ms: 1000,
-    tps_threshold: 20,
+    tps_threshold: 15,
     chat_multiplier: 4,
     agentic_multiplier: 1.5
   };
@@ -322,8 +322,8 @@
   }
 
   /* One definition of "meets the target" per metric, driving every coloured
-     cell in both tables as well as Max C. A minimum of 20 tok/s is met by
-     exactly 20, and a maximum of 1000 ms is met by exactly 1000, so both
+     cell in both tables as well as Max C. A minimum of 15 tok/s is met by
+     exactly 15, and a maximum of 1000 ms is met by exactly 1000, so both
      bounds are inclusive. They used to disagree: a cell could be green while
      its own sweep row read FAIL. */
   function ttftMeets(ttft) {

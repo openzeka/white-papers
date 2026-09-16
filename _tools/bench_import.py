@@ -162,7 +162,7 @@ def cmd_inspect(a):
         print(f"\n  columns present but NOT stored (no field in the table): {', '.join(dropped)}")
 
     # What Max C would be at the file's own default targets.
-    tt, tp = cfg.get("ttft_threshold_ms", 1000), cfg.get("tps_threshold", 20)
+    tt, tp = cfg.get("ttft_threshold_ms", 1000), cfg.get("tps_threshold", 15)
     ok = [p["c"] for p in pts
           if p["ttft_ms"] is not None and p["ttft_ms"] <= tt and (p["tps"] or 0) >= tp]
     print(f"\nAt the file's default targets (TTFT<={tt}ms, TPS>={tp}): "

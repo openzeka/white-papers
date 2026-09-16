@@ -9,7 +9,7 @@ card_tag: "LLM Dağıtımı"
 card_date: "Eylül 2026"
 description: >-
   DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) modelinin 4× NVIDIA DGX Spark
-  (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM121 patch'i,
+  (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM 12.1 patch'i,
   Engram-on-disk, benchmark sonuçları ve B300 karşılaştırması.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
 last_modified_date: 2026-09-16
@@ -36,10 +36,10 @@ DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-E
 
 Bu rapor, söz konusu modelin **4× NVIDIA DGX Spark (GB10)** platformunda tensor-parallel (TP=4) dağıtımını belgeler. DGX Spark, 128 GB birleşik LPDDR5X bellek ve 273 GB/s bant genişliği ile veri merkezi GPU'larının (~8 TB/s HBM3e) yaklaşık 1/30'u bant genişliğine sahip, ofis dostu bir mini süper bilgisayardır. 763B'lik bir veri merkezi modelinin bu donanımda çalıştırılması, özellikle çoklu düğüm Ethernet tensor parallelism ve Engram-on-disk teknikleri sayesinde mümkün olmaktadır.
 
-Bu çalışmanın belgelemeye değer kılan iki özelliği:
+Bu çalışmayı belgelemeye değer kılan iki özellik:
 
-- **Model, veri merkezi sınıfında.** DeepSeek-V4.1-Flash normally DGX-B300 / GB300 NVL72 sınıfı donanımda servis edilir. 4× DGX Spark, mimarinin ölçeklenebilir ucunu temsil eder.
-- **7 SM121'e özgü patch.** vLLM'in stock nightly imajında SM 12.1a (GB10) için eksik veya hatalı olan kod yolları — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — topluluk patch'leri ile düzeltilmiştir.
+- **Model, veri merkezi sınıfında.** DeepSeek-V4.1-Flash normalde DGX-B300 / GB300 NVL72 sınıfı donanımda servis edilir. 4× DGX Spark, mimarinin ölçeklenebilir ucunu temsil eder.
+- **7 SM 12.1'e özgü patch.** vLLM'in stock nightly imajında SM 12.1a (GB10) için eksik veya hatalı olan kod yolları — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — topluluk patch'leri ile düzeltilmiştir.
 
 > **Bu çalışma bir dağıtım rehberidir, bir benchmark karşılaştırması değildir.** Benchmark sonuçları Bölüm 6'da sunulmuştur, ancak 4 veri noktası ile sınırlıdır ve donanım sınıfının karakterizasyonu için yeterlidir; kapsamlı bir SLO/kapasite analizi için [Qwen3.6-27B DGX Spark Cluster Scaling]({{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}) raporuna bakınız.
 
@@ -62,7 +62,7 @@ DeepSeek-V4.1-Flash, önceki nesillere kıyasla KV önbellek ayak izini dramatik
 | Maksimum bağlam | 1.000.000 token |
 | Ağırlık nicelemesi | FP8 (F8_E4M3, checkpoint) |
 | KV önbellek nicelemesi | FP4 (E2M1, runtime — CSA2 mimari özelliği) |
-| Checkpoint boyutu | 476 GB (120 safetensors blob) |
+| Checkpoint boyutu | 476 GB (120 safetensors blob — MoE yapısı ve karışık hassasiyet nedeniyle teorik 763 GB'ın altında) |
 
 ### 2.2 Causal Encoder-Decoder (CED) Mimarisi
 
@@ -135,10 +135,10 @@ Aşağıdaki 7 patch, image'a gömülmüştür:
 | 1 | `engram.py` | `models/deepseek_v4_1/common/engram.py` | Engram-on-disk, rank-offset fix |
 | 2 | `model_state.py` | `models/deepseek_v4_1/nvidia/model_state.py` | Engram staging before forward (CUDA graph safe) |
 | 3 | `weight_utils.py` | `model_executor/model_loader/weight_utils.py` | Engram tablolarını load'ta skip |
-| 4 | `attention.py` | `models/deepseek_v4_1/attention.py` | SM12x page sizes |
+| 4 | `attention.py` | `models/deepseek_v4_1/attention.py` | SM 12.1 page sizes |
 | 5 | `flashinfer_sparse.py` | `models/deepseek_v4_1/nvidia/flashinfer_sparse.py` | 64-state pages |
 | 6 | `sparse_swa.py` | `v1/attention/backends/mla/sparse_swa.py` | SWA block size hook |
-| 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM12x top_k_per_row_decode |
+| 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM 12.1 top_k_per_row_decode |
 
 ### 4.4 Optimizasyonlar
 
@@ -238,7 +238,7 @@ Model, düşünme modu kapalı (`"thinking": false`), araç çağırma ve çok m
 - **C=1'de 29.5 tok/s**, interaktif kullanım için yeterli bir hıztır. Okuma hızı (~15 tok/s) eşiğinin üzerindedir.
 - **TTFT**, concurrency artışıyla beklenen biçimde yükselir (272→806 ms, ~3x) — prefill aşaması hesaplama sınırlıdır (compute-bound).
 - **TPS düşüşü**, GPU'nun doygunluğa yaklaşmasıyla bellek bant genişliği çekişmesinin artmasından kaynaklanır (29.5→8.8 tok/s, ~%70 düşüş).
-- **Max C = 2** (dosyanın varsayılan hedeflerinde: TTFT≤1000ms ve TPS≥20) — sohbet kapasitesi 2, agentic kapasite 1.
+- **Max C = 2** (Benchmark Gezgini'nin varsayılan hedeflerinde: TTFT≤1000ms ve TPS≥15) — sohbet kapasitesi 2, agentic kapasite 1.
 
 ### 6.4 DSpark Acceptance
 
@@ -249,7 +249,7 @@ DSpark speculative decoding'in etkinliği, kabul oranı (acceptance) ve draft h�
 | Prose (bench) | 2.1–2.3 | %22 |
 | Kodlama | 4.9–5.3 | %80–86 |
 
-Repo boot10 ortalaması: 3.57 acceptance, %60 draft rate (8 kategori ortalaması). Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9-5.3 / 5), kodun tekrarlı yapısından kaynaklanır.
+Kaynak repo (boot10 config) test ortalaması: 3.57 acceptance, %60 draft rate (8 kategori ortalaması). Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9-5.3 / 5), kodun tekrarlı yapısından kaynaklanır.
 
 ---
 
@@ -257,7 +257,7 @@ Repo boot10 ortalaması: 3.57 acceptance, %60 draft rate (8 kategori ortalaması
 
 ### 7.1 DGX-B300 ile Karşılaştırma
 
-DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inference-benchmarks/' | relative_url }}) üzerinde DGX-B300 (8× Blackwell Ultra, TP=4) ile de ölçülmüştür. B300 satırı aynı modeli DSpark k=3 (k=5 yerine), 1M bağlam (300K yerine) ve FP8 nicelemesiyle servis eder.
+DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inference-benchmarks/' | relative_url }}) üzerinde DGX-B300 (8× Blackwell Ultra, TP=4) ile de ölçülmüştür. B300 satırı aynı modeli farklı parametrelerle servis eder: DSpark k=3 (bu çalışmadaki k=5 yerine), 1M bağlam (300K yerine) ve FP8 nicelemesi.
 
 | Concurrency | 4× Spark TP4 TPS | B300 TP4 TPS | Oran |
 |---|---|---|---|
@@ -282,22 +282,21 @@ DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inferenc
 
 ## 8. SLO ve Kapasite
 
-Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), bu yapılandırma **Max C = 2** değerini verir:
+Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥15 tok/s), bu yapılandırma **Max C = 2** değerini verir:
 
 | SLO | Eşik | C=2 durumu |
 |---|---|---|
 | TTFT | ≤ 1000 ms | 396 ms ✓ |
 | TPS | ≥ 15 tok/s | 21.32 tok/s ✓ |
-| TPS | ≥ 20 tok/s | 21.32 tok/s ✓ (kıl payı) |
 
-> **Uyarı:** C=2'de TPS (21.32) 20 tok/s eşiğinin kıl payı üstündedir. C=4'te TPS 13.09'a düşerek eşiğin altına iner. Bu nedenle interaktif sohbet servisleri için **1-2 eşzamanlı kullanıcı** önerilir; daha yüksek yük için veri merkezi donanımı (B300/GB300) tercih edilmelidir.
+> **Uyarı:** C=4'te TPS 13.09'a düşerek 15 tok/s eşiğinin altına iner. Bu nedenle interaktif sohbet servisleri için **1-2 eşzamanlı kullanıcı** önerilir; daha yüksek yük için veri merkezi donanımı (B300/GB300) tercih edilmelidir.
 
 ---
 
 ## 9. Sonuç
 
 1. **763B'lik DeepSeek-V4.1-Flash, 4× DGX Spark üzerinde çalıştırılabilir** — bu, ofis dostu mini süper bilgisayarların ulaştığı ölçeklenebilirliğin bir göstergesidir.
-2. **7 SM121 patch'i zorunludur** — stock vLLM nightly imajı, GB10 (SM 12.1a) için Engram-on-disk, FlashInfer sparse attention ve SWA kod yollarında eksiklikler içerir.
+2. **7 SM 12.1 patch'i zorunludur** — stock vLLM nightly imajı, GB10 (SM 12.1a) için Engram-on-disk, FlashInfer sparse attention ve SWA kod yollarında eksiklikler içerir.
 3. **Engram-on-disk, modelin belleğe sığmasını sağlar** — 196B'lik koşullu bellek diske taşınarak 763B'lik modelin 512 GB toplam birleşik belleğe sığması mümkün olur.
 4. **DSpark k=5, kodlama prompt'larında %80-86 draft hızı** ile etkindir; prose prompt'larında bu oran %22'ye düşer.
 5. **C=1'de 29.5 tok/s**, geliştirme ve prototipleme için yeterlidir; production servis için B300 sınıfı donanım ~10× daha hızlıdır.

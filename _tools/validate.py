@@ -70,7 +70,7 @@ def main():
             warn(f"config is missing '{key}' — the widget will fall back to its built-in default")
 
     ttft_max = cfg.get("ttft_threshold_ms", 1000)
-    tps_min = cfg.get("tps_threshold", 20)
+    tps_min = cfg.get("tps_threshold", 15)
 
     # Must stay identical to meetsTargets() in assets/js/benchmark-table.js:
     # both bounds inclusive, so a run landing exactly on a threshold is judged

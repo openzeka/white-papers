@@ -6,7 +6,7 @@
   },
   "config": {
     "ttft_threshold_ms": 1000,
-    "tps_threshold": 20,
+    "tps_threshold": 15,
     "chat_multiplier": 4,
     "agentic_multiplier": 1.5
   },

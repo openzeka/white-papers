@@ -168,9 +168,9 @@ Neyin kabul edilebilir olduğuna iki değer karar verir. Varsayılanlarda bir
 eşzamanlılık seviyesi, **ikisi birden** sağlandığında desteklenmiş sayılır:
 
 - ortalama TTFT ≤ `1000 ms`
-- ortalama TPS ≥ `20 tok/s`
+- ortalama TPS ≥ `15 tok/s`
 
-**İki sınır da dahildir** — tam 1000 ms ya da tam 20 tok/s hâlâ geçer.
+**İki sınır da dahildir** — tam 1000 ms ya da tam 15 tok/s hâlâ geçer.
 Varsayılanlar bir öneri değil, pratik bir başlangıç noktasıdır; ilk
 karşılaştırma için oldukları gibi bırakabilir ya da kendi iş yükünüze göre
 değiştirebilirsiniz.
@@ -216,8 +216,8 @@ meşgul eder; varsayılanı bu yüzden düşüktür (1,5). Neredeyse kesintisiz 
 ajanlar için agentic çarpanını düşürün; aralıklı kullanım için yükseltin.
 
 <div class="bt-howto-example" markdown="1">
-**Örnek.** Hedefleriniz 1000 ms TTFT ve 20 tok/s olsun. Bir yapılandırma C=8'e
-kadar bu ikisini karşılıyor, C=16'da TPS 20'nin altına düşüyorsa Maks C 8 olur.
+**Örnek.** Hedefleriniz 1000 ms TTFT ve 15 tok/s olsun. Bir yapılandırma C=8'e
+kadar bu ikisini karşılıyor, C=16'da TPS 15'in altına düşüyorsa Maks C 8 olur.
 Varsayılan çarpanlarla bu satır 32 chat kullanıcısı ya da 12 agentic kullanıcı
 gösterir. TTFT hedefini 500 ms'ye çekerseniz aynı satır C=4'te kalabilir ve
 kapasite yarıya iner.

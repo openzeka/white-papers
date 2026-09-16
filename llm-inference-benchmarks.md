@@ -163,9 +163,9 @@ Two values decide what counts as acceptable. Under the defaults a concurrency
 level is supported when **both** hold:
 
 - mean TTFT ≤ `1000 ms`
-- mean TPS ≥ `20 tok/s`
+- mean TPS ≥ `15 tok/s`
 
-**Both bounds are inclusive** — exactly 1000 ms, or exactly 20 tok/s, still
+**Both bounds are inclusive** — exactly 1000 ms, or exactly 15 tok/s, still
 passes. The defaults are a practical starting point, not a recommendation; leave
 them for a first comparison, or set them to your own workload.
 
@@ -210,8 +210,8 @@ agentic multiplier for agents that run almost continuously; raise it for
 intermittent use.
 
 <div class="bt-howto-example" markdown="1">
-**Example.** With targets of 1000 ms TTFT and 20 tok/s, a configuration meets
-both up to C=8 but drops below 20 tok/s at C=16, so Max C is 8. At the default
+**Example.** With targets of 1000 ms TTFT and 15 tok/s, a configuration meets
+both up to C=8 but drops below 15 tok/s at C=16, so Max C is 8. At the default
 multipliers that row reads 32 chat users or 12 agentic users. Tighten TTFT to
 500 ms and the same row may stop at C=4, halving both.
 </div>

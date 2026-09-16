@@ -9,7 +9,7 @@ card_tag: "LLM Deployment"
 card_date: "September 2026"
 description: >-
   Deployment of DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) on 4× NVIDIA DGX
-  Spark (GB10) with tensor parallelism: vLLM build chain, 7 SM121 patches,
+  Spark (GB10) with tensor parallelism: vLLM build chain, 7 SM 12.1 patches,
   Engram-on-disk, benchmark results and B300 comparison.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
 last_modified_date: 2026-09-16
@@ -39,7 +39,7 @@ This report documents the deployment of this model on **4× NVIDIA DGX Spark (GB
 Two aspects make this work worth documenting:
 
 - **The model is data center class.** DeepSeek-V4.1-Flash is normally served on DGX-B300 / GB300 NVL72 hardware. 4× DGX Spark represents the scalable edge of the architecture.
-- **7 SM121-specific patches.** The stock vLLM nightly image has missing or broken code paths for SM 12.1a (GB10) — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — which are fixed with community patches.
+- **7 SM 12.1-specific patches.** The stock vLLM nightly image has missing or broken code paths for SM 12.1a (GB10) — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — which are fixed with community patches.
 
 > **This is a deployment guide, not a benchmark comparison.** Benchmark results are presented in Section 6, but limited to 4 data points — sufficient to characterize the hardware class but not for comprehensive SLO/capacity analysis. For that, see the [Qwen3.6-27B DGX Spark Cluster Scaling]({{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}) report.
 
@@ -62,7 +62,7 @@ DeepSeek-V4.1-Flash introduces an architecture that dramatically reduces the KV 
 | Maximum context | 1,000,000 tokens |
 | Weight quantization | FP8 (F8_E4M3, in checkpoint) |
 | KV cache quantization | FP4 (E2M1, runtime — CSA2 architectural feature) |
-| Checkpoint size | 476 GB (120 safetensors blobs) |
+| Checkpoint size | 476 GB (120 safetensors blobs — below theoretical 763 GB due to MoE structure and mixed precision) |
 
 ### 2.2 Causal Encoder-Decoder (CED) Architecture
 
@@ -135,10 +135,10 @@ The following 7 patches are baked into the image:
 | 1 | `engram.py` | `models/deepseek_v4_1/common/engram.py` | Engram-on-disk, rank-offset fix |
 | 2 | `model_state.py` | `models/deepseek_v4_1/nvidia/model_state.py` | Engram staging before forward (CUDA graph safe) |
 | 3 | `weight_utils.py` | `model_executor/model_loader/weight_utils.py` | Skip Engram tables on load |
-| 4 | `attention.py` | `models/deepseek_v4_1/attention.py` | SM12x page sizes |
+| 4 | `attention.py` | `models/deepseek_v4_1/attention.py` | SM 12.1 page sizes |
 | 5 | `flashinfer_sparse.py` | `models/deepseek_v4_1/nvidia/flashinfer_sparse.py` | 64-state pages |
 | 6 | `sparse_swa.py` | `v1/attention/backends/mla/sparse_swa.py` | SWA block size hook |
-| 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM12x top_k_per_row_decode |
+| 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM 12.1 top_k_per_row_decode |
 
 ### 4.4 Optimizations
 
@@ -238,7 +238,7 @@ Measurements were taken with [CordatusAI/llm-benchmark](https://github.com/Corda
 - **29.5 tok/s at C=1** is sufficient for interactive use, above the reading speed threshold (~15 tok/s).
 - **TTFT** rises as expected with concurrency (272→806 ms, ~3x) — prefill is compute-bound.
 - **TPS decline** reflects growing memory bandwidth contention as the GPU approaches saturation (29.5→8.8 tok/s, ~70% drop).
-- **Max C = 2** at the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20) — chat capacity 2, agentic capacity 1.
+- **Max C = 2** at the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥15) — chat capacity 2, agentic capacity 1.
 
 ### 6.4 DSpark Acceptance
 
@@ -249,7 +249,7 @@ The effectiveness of DSpark speculative decoding is measured by acceptance ratio
 | Prose (bench) | 2.1–2.3 | 22% |
 | Coding | 4.9–5.3 | 80–86% |
 
-Repo boot10 average: 3.57 acceptance, 60% draft rate (8-category average). The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the repetitive structure of code.
+Source repo (boot10 config) test average: 3.57 acceptance, 60% draft rate (8-category average). The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the repetitive structure of code.
 
 ---
 
@@ -257,7 +257,7 @@ Repo boot10 average: 3.57 acceptance, 60% draft rate (8-category average). The h
 
 ### 7.1 Comparison with DGX-B300
 
-DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) on DGX-B300 (8× Blackwell Ultra, TP=4). The B300 row serves the same model with DSpark k=3 (instead of k=5), 1M context (instead of 300K), and FP8 quantization.
+DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) on DGX-B300 (8× Blackwell Ultra, TP=4). The B300 row serves the same model with different parameters: DSpark k=3 (instead of the k=5 used here), 1M context (instead of 300K), and FP8 quantization.
 
 | Concurrency | 4× Spark TP4 TPS | B300 TP4 TPS | Ratio |
 |---|---|---|---|
@@ -282,22 +282,21 @@ DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explo
 
 ## 8. SLO and Capacity
 
-At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s), this configuration yields **Max C = 2**:
+At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥15 tok/s), this configuration yields **Max C = 2**:
 
 | SLO | Threshold | C=2 status |
 |---|---|---|
 | TTFT | ≤ 1000 ms | 396 ms ✓ |
 | TPS | ≥ 15 tok/s | 21.32 tok/s ✓ |
-| TPS | ≥ 20 tok/s | 21.32 tok/s ✓ (marginal) |
 
-> **Warning:** At C=2, TPS (21.32) is marginally above the 20 tok/s threshold. At C=4, TPS drops to 13.09, falling below the threshold. For interactive chat services, **1-2 concurrent users** are recommended; for higher loads, data center hardware (B300/GB300) should be preferred.
+> **Warning:** At C=4, TPS drops to 13.09, falling below the 15 tok/s threshold. For interactive chat services, **1-2 concurrent users** are recommended; for higher loads, data center hardware (B300/GB300) should be preferred.
 
 ---
 
 ## 9. Conclusion
 
 1. **DeepSeek-V4.1-Flash (763B) can run on 4× DGX Spark** — demonstrating the scalability ceiling of office-friendly mini supercomputers.
-2. **7 SM121 patches are mandatory** — the stock vLLM nightly image has missing code paths for GB10 (SM 12.1a) in Engram-on-disk, FlashInfer sparse attention, and SWA paths.
+2. **7 SM 12.1 patches are mandatory** — the stock vLLM nightly image has missing code paths for GB10 (SM 12.1a) in Engram-on-disk, FlashInfer sparse attention, and SWA paths.
 3. **Engram-on-disk enables the model to fit in memory** — offloading the 196B conditional memory to disk allows the 763B model to fit within 512 GB total unified memory.
 4. **DSpark k=5 is effective on coding prompts** with 80-86% draft rate; on prose prompts, this drops to 22%.
 5. **29.5 tok/s at C=1** is sufficient for development and prototyping; for production serving, B300-class hardware is ~10× faster.
