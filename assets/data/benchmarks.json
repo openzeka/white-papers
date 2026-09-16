@@ -4453,6 +4453,45 @@
       "pp": null
     },
     {
+      "id": "deepseek-v4.1-flash_4spark_fp8_vllm_tp4",
+      "model": "DeepSeek-V4.1-Flash",
+      "params": "763B",
+      "intelligence_index": 40,
+      "agentic_index": null,
+      "device": "4× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 5,
+      "tp": 4,
+      "notes": "DSpark k=5, 300K context. Model: deepseek-ai/DeepSeek-V4.1-Flash. vLLM vllm-dsv41:latest.",
+      "sources": [],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 271.63,
+          "tps": 29.48
+        },
+        {
+          "c": 2,
+          "ttft_ms": 395.75,
+          "tps": 21.32
+        },
+        {
+          "c": 4,
+          "ttft_ms": 577.41,
+          "tps": 13.09
+        },
+        {
+          "c": 8,
+          "ttft_ms": 805.89,
+          "tps": 8.79
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
       "id": "tencent-hy4-preview_b300_bf16_vllm_tp8",
       "model": "Tencent-Hy4-preview",
       "params": "780B",
