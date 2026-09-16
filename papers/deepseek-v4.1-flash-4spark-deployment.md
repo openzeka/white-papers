@@ -251,19 +251,6 @@ The effectiveness of DSpark speculative decoding is measured by acceptance ratio
 
 Repo boot10 average: 3.57 acceptance, 60% draft rate (8-category average). The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the repetitive structure of code.
 
-### 6.5 GPU Metrics
-
-GPU clock and power consumption under load across 4 nodes:
-
-| Node | Clock | Power | TFLOPS |
-|---|---|---|---|
-| 153 (head) | 2249 MHz | 92W | 86.4 |
-| 147 | 2190 MHz | 91W | 87.7 |
-| 166 | 2106 MHz | 85W | 85.5 |
-| 148 | 2190 MHz | 93W | 86.5 |
-
-All nodes are healthy — clocks in the 2.1-2.25 GHz range, 85-93W power draw.
-
 ---
 
 ## 7. Comparative Analysis
@@ -290,17 +277,6 @@ DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explo
 | FP4 peak | ~9 PFLOP | ~1 PFLOP |
 
 > **Conclusion:** 4× DGX Spark **can run** a 763B data center model — but it does not replace data center hardware. This configuration is suitable for development, prototyping, and limited-user production scenarios.
-
-### 7.2 Comparison with DeepSeek-V4-Flash 0731
-
-The 4× DGX Spark TP4 measurement of DeepSeek-V4-Flash 0731 (304B, NVFP4) is also available:
-
-| Model | Params | Quant | C=1 TPS | C=1 TTFT |
-|---|---|---|---|---|
-| DeepSeek-V4-Flash 0731 | 304B | NVFP4 | 69.50 | 256 ms |
-| DeepSeek-V4.1-Flash | 763B | FP8 | 29.48 | 271 ms |
-
-V4.1-Flash has **2.51× more parameters** than V4-Flash 0731 (763B / 304B). The C=1 TPS ratio (29.48 / 69.50 = 0.42) closely matches the parameter ratio (304 / 763 = 0.40) — confirming that decode speed scales with weight memory, and the model behaves as expected. TTFT values are similar (271 ms vs 256 ms), since both models activate a small number of parameters during prefill (8B in V4.1-Flash).
 
 ---
 

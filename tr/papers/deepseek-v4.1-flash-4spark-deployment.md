@@ -251,19 +251,6 @@ DSpark speculative decoding'in etkinliği, kabul oranı (acceptance) ve draft h�
 
 Repo boot10 ortalaması: 3.57 acceptance, %60 draft rate (8 kategori ortalaması). Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9-5.3 / 5), kodun tekrarlı yapısından kaynaklanır.
 
-### 6.5 GPU Metrikleri
-
-Yük altında 4 düğümün GPU clock ve güç tüketimi:
-
-| Node | Clock | Power | TFLOPS |
-|---|---|---|---|
-| 153 (head) | 2249 MHz | 92W | 86.4 |
-| 147 | 2190 MHz | 91W | 87.7 |
-| 166 | 2106 MHz | 85W | 85.5 |
-| 148 | 2190 MHz | 93W | 86.5 |
-
-Tüm düğümler sağlıklı çalışıyor — clock ~2.1-2.25 GHz aralığında, 85-93W güç tüketimi.
-
 ---
 
 ## 7. Karşılaştırmalı Analiz
@@ -290,17 +277,6 @@ DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inferenc
 | FP4 tepe | ~9 PFLOP | ~1 PFLOP |
 
 > **Sonuç:** 4× DGX Spark, 763B'lik bir veri merkezi modelini **çalıştırabilir** — ancak veri merkezi donanımının yerini almaz. Bu yapılandırma, geliştirme, prototipleme ve sınırlı kullanıcı sayılı production senaryoları için uygundur.
-
-### 7.2 DeepSeek-V4-Flash 0731 ile Karşılaştırma
-
-DeepSeek-V4-Flash 0731 (304B, NVFP4) modelinin 4× DGX Spark TP4 ölçümü de mevcuttur:
-
-| Model | Params | Quant | C=1 TPS | C=1 TTFT |
-|---|---|---|---|---|
-| DeepSeek-V4-Flash 0731 | 304B | NVFP4 | 69.50 | 256 ms |
-| DeepSeek-V4.1-Flash | 763B | FP8 | 29.48 | 271 ms |
-
-V4.1-Flash, V4-Flash 0731'in **2.51× daha fazla parametresine** sahiptir (763B / 304B). C=1 TPS oranı (29.48 / 69.50 = 0.42) ile parametre oranı (304 / 763 = 0.40) birbirine yakındır — bu, decode hızının ağırlık belleği ile orantılı olduğunu ve modelin beklenen biçimde ölçeklendiğini gösterir. TTFT değerleri ise benzerdir (271 ms vs 256 ms), çünkü her iki modelin prefill sırasında aktive ettiği parametre sayısı düşüktür (V4.1-Flash'te 8B).
 
 ---
 
