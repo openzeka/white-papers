@@ -1,0 +1,145 @@
+{
+  "generated_at": 1789541915.301505,
+  "config": {
+    "target_fps": 15.0,
+    "max_drop_pct": 2.0
+  },
+  "source_profiles": {
+    "live-1080p20": {
+      "id": "live-1080p20",
+      "kind": "live-rtsp",
+      "resolution": "1920x1080",
+      "fps": 20,
+      "codec": "H.264",
+      "note": "live office IP cameras, fixed 20 FPS"
+    }
+  },
+  "default_source_profile": "live-1080p20",
+  "attribution": {
+    "note": "Every figure is OpenZeka's own measurement, taken with the cordatus-benchmark tool against the Cordatus Inference Engine."
+  },
+  "devices": [
+    {
+      "name": "GB10",
+      "slug": "gb10",
+      "kind": "dGPU",
+      "path": "gb10/device.json",
+      "models": [
+        {
+          "name": "PeopleNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "gb10/peoplenet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jetson Orin Nano",
+      "slug": "jetson-orin-nano",
+      "kind": "Jetson",
+      "path": "jetson-orin-nano/device.json",
+      "models": [
+        {
+          "name": "PeopleNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-orin-nano/peoplenet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RTX 3060",
+      "slug": "rtx-3060",
+      "kind": "dGPU",
+      "path": "rtx-3060/device.json",
+      "models": [
+        {
+          "name": "PeopleNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "rtx-3060/peoplenet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RTX 3090",
+      "slug": "rtx-3090",
+      "kind": "dGPU",
+      "path": "rtx-3090/device.json",
+      "models": [
+        {
+          "name": "PeopleNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "rtx-3090/peoplenet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26
+          ]
+        },
+        {
+          "name": "YOLO11-N",
+          "precision": "",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolo11-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            14,
+            16,
+            24,
+            26,
+            28
+          ]
+        }
+      ]
+    }
+  ]
+}

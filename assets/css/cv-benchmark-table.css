@@ -1,0 +1,257 @@
+/* CV Inference Benchmark Explorer — the few rules the LLM widget's stylesheet
+   does not already provide. Everything else (filters, table, detail layout,
+   the pickable sweep rows) is shared with benchmark-table.css, which this file
+   is loaded after. */
+
+/* The stream preview. Sits where the LLM widget puts its TPS text preview, so
+   it inherits .bt-detail-preview's flex sizing and only needs its own skin.
+   Intrinsic size is 640x200; width:100% + height:auto keeps that ratio at any
+   column width, so the canvas never has to be re-rendered on resize. */
+.cvbt-preview {
+  display: block;
+  width: 100%;
+  height: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  border: 1px solid var(--bt-border);
+  border-radius: 6px;
+  background: #0c1116;
+}
+
+/* The clip both panes sample. It sits outside the table (which is re-rendered
+   on every interaction) and off-screen rather than display:none, which browsers
+   are free to treat as "not worth decoding". */
+.cvbt-preview-src {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 160px;
+  height: 92px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* The performance target opens with the row it applies to, rather than sitting
+   in the filter block above the table: it changes what the numbers in this
+   sweep mean, so it belongs beside them. */
+.cvbt-target-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.cvbt-target-hint {
+  font-size: 12px;
+  color: var(--bt-text-muted);
+}
+
+/* The shared .bt-container sets `overflow-x: auto`, and CSS promotes the other
+   axis to `auto` with it - which makes the widget its own scroll container and
+   traps the filter panel: a sticky element sticks inside its nearest scrolling
+   ancestor, so the panel stopped following the page and shifted by its own
+   `top` whenever the container's content grew (expanding a row moved it down
+   76px). This widget does not need that scroller; the table has its own. */
+.cvbt-container {
+  overflow: visible;
+}
+
+/* ── Layout: table left, filters right ──
+   The filter panel sticks while the table scrolls. With a sweep expanded the
+   table runs several screens long, and a control you have to scroll back up to
+   reach is a control that stops being used. */
+.cvbt-layout {
+  display: flex;
+  /* stretch, not flex-start: a sticky child can only travel inside its own
+     parent's box, so the filter column has to be as tall as the table beside
+     it or the panel would stop following after a few hundred pixels. */
+  align-items: stretch;
+  gap: 20px;
+}
+
+.cvbt-main {
+  flex: 1 1 auto;
+  min-width: 0;          /* lets the table's own scroller do the work */
+}
+
+.cvbt-side {
+  flex: 0 0 248px;
+  width: 248px;
+}
+
+.cvbt-side-inner {
+  position: sticky;
+  /* Level with the top of the table, and stays there. Centring it in the
+     viewport was tried and removed: a centred sticky element sits at a
+     different offset from the content above it depending on the panel's own
+     height, so expanding a row - which reflows the page under it - made the
+     panel jump. This offset clears the theme's fixed header and never moves.
+     The value is the header's height plus a little air, not a guess. */
+  top: 76px;
+  width: 100%;
+  /* A panel taller than the screen scrolls inside itself instead of hanging
+     off both edges. */
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--bt-bg-alt, #f7f8f9);
+  border: 1px solid var(--bt-border);
+  border-radius: 8px;
+}
+
+.cvbt-side-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bt-text-muted);
+  margin-bottom: 14px;
+}
+
+.cvbt-side-group {
+  margin-bottom: 18px;
+}
+
+.cvbt-side-group:last-of-type {
+  margin-bottom: 14px;
+}
+
+.cvbt-side-group .bt-filter-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Stacked, because 248px cannot hold a label and a slider side by side. */
+.cvbt-side .bt-slider-group.cvbt-slider {
+  display: block;
+}
+
+.cvbt-side .cvbt-slider input[type="range"] {
+  width: 100%;
+  display: block;
+}
+
+.cvbt-side .cvbt-slider .bt-slider-value {
+  display: block;
+  margin-top: 6px;
+}
+
+.cvbt-side .bt-filter-buttons {
+  gap: 6px;
+}
+
+.cvbt-side-hint {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--bt-text-muted);
+}
+
+.cvbt-reset {
+  width: 100%;
+}
+
+/* One column below the point where 248px of filters would leave the table
+   unreadably narrow. The panel stops sticking here: on a phone it would eat
+   the screen. */
+@media (max-width: 900px) {
+  .cvbt-layout {
+    display: block;
+  }
+
+  .cvbt-side,
+  .cvbt-side-inner {
+    width: auto;
+    display: block;
+    position: static;
+    max-height: none;
+  }
+
+  .cvbt-side {
+    margin-top: 18px;
+  }
+}
+
+/* The filter panel takes 248px out of the content column, so the table has to
+   give some back: tighter cells and a header that does not wrap into three
+   lines. It still scrolls horizontally on very narrow screens. */
+.cvbt-main .bt-table thead th,
+.cvbt-main .bt-table tbody td {
+  padding-left: 9px;
+  padding-right: 9px;
+}
+
+/* Headers wrap, cells do not: two short lines in the header costs nothing,
+   while a wrapped number is unreadable. Without this the widest header
+   ("Max cameras (≥ 15 FPS)") sets the table's width and pushes the last
+   columns out of view. */
+.cvbt-main .bt-table thead th {
+  white-space: normal;
+  line-height: 1.25;
+}
+
+/* The expanded row must not widen the table either: sweep table plus preview
+   have to fit the same width as the columns above them. */
+.cvbt-main .bt-detail-preview {
+  flex: 1 1 280px;
+}
+
+.cvbt-main .bt-detail-table {
+  font-size: 12.5px;
+}
+
+/* Precision beside the model name it belongs to. */
+.cvbt-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bt-text-muted);
+  margin-left: 4px;
+}
+
+/* ── Filter lists ──
+   Checkboxes, because both lists grow with every device and model added. The
+   list keeps its height and scrolls instead of reflowing the panel, and what
+   is selected is readable without decoding which buttons look active. */
+.cvbt-list-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.cvbt-list-count {
+  font-size: 11px;
+  color: var(--bt-text-muted);
+}
+
+.cvbt-clear {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: 11px;
+  color: var(--bt-green-dark, #5a8c00);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cvbt-side .bt-model-list {
+  max-height: 168px;
+}
+
+.cvbt-side .cvbt-search {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 6px;
+}
+
+.cvbt-list-empty {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--bt-text-muted);
+}

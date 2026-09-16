@@ -1,0 +1,53 @@
+{
+  "name": "PeopleNet",
+  "model_id": "M-15",
+  "task": "detector",
+  "classes": 3,
+  "input_resolution": "960x544",
+  "precision": "INT8",
+  "deepstream": "7.1.0",
+  "source_profile": "live-1080p20",
+  "measure_s": 30,
+  "notes": "",
+  "runs": [
+    "20260914_164401"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.87,
+      "fps_total": 19.87,
+      "drop_pct": 1.28,
+      "measured_at": 1789393441.739,
+      "run": "20260914_164401",
+      "run_id": "M-15_1cam_93d9d921"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.95,
+      "fps_total": 39.91,
+      "drop_pct": -0.45,
+      "measured_at": 1789394107.496,
+      "run": "20260914_164401",
+      "run_id": "M-15_2cam_c8e6b10d"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 12.95,
+      "fps_total": 51.79,
+      "drop_pct": 0.92,
+      "measured_at": 1789394185.398,
+      "run": "20260914_164401",
+      "run_id": "M-15_4cam_585f866b"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 7.22,
+      "fps_total": 57.73,
+      "drop_pct": -1.6,
+      "measured_at": 1789394258.739,
+      "run": "20260914_164401",
+      "run_id": "M-15_8cam_96fdf5d2"
+    }
+  }
+}

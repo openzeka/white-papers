@@ -402,11 +402,46 @@ white-papers/
 ├── _includes/             # Shared Jekyll components
 ├── _layouts/              # Site layouts
 ├── _sass/                 # Site styling
+├── _tools/                # Maintenance scripts, kept out of the build
+├── docker-compose.yml     # Local development server
 ├── index.md
 └── README.md
 ```
 
 This repository is also the source for the public OpenZeka White Papers website.
+
+---
+
+# Running the Site Locally
+
+```bash
+docker compose up          # site  http://localhost:4000
+                           # data  http://localhost:4001
+```
+
+No Ruby on the host: the container carries Jekyll and the build tools the
+native gems need. The first start installs the gems into `vendor/bundle`
+(gitignored) and takes a couple of minutes; later starts are a second or two.
+The site rebuilds on save, LiveReload is on, and `docker compose down` stops it.
+
+Two services come up:
+
+| Port | What |
+|---|---|
+| **4000** | The site itself — every page, exactly as it will be published |
+| **4001** | The CV benchmark data store: what has been published, and delete buttons for a device, a model or a single camera count. The site is static and cannot delete its own files, so deletion needs a process. It is never deployed (`_tools/` is excluded from the build) and its port is bound to 127.0.0.1. |
+
+The container runs as your user, so `_site/` and `.jekyll-cache/` are not left
+owned by root. It defaults to uid/gid 1000; if yours differs, write them once
+into `.env` (also gitignored):
+
+```bash
+printf 'UID=%s\nGID=%s\n' "$(id -u)" "$(id -g)" > .env
+```
+
+Publishing still goes through git: commit and push, and GitHub Actions builds
+and deploys. See [`DEVELOPMENT.md`](DEVELOPMENT.md) for the rest — adding a
+paper, updating gems, and running Jekyll directly on the host.
 
 ---
 

@@ -1,0 +1,161 @@
+{
+  "name": "PeopleNet",
+  "model_id": "M-15",
+  "task": "detector",
+  "classes": 3,
+  "input_resolution": "960x544",
+  "precision": "INT8",
+  "deepstream": "8.0.0",
+  "source_profile": "live-1080p20",
+  "measure_s": 30,
+  "notes": "",
+  "runs": [
+    "20260916_085101"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.88,
+      "fps_total": 19.88,
+      "drop_pct": 0.43,
+      "measured_at": 1789537861.775,
+      "run": "20260916_085101",
+      "run_id": "M-15_1cam_6b4413a0"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 20.34,
+      "fps_total": 40.67,
+      "drop_pct": -2.5,
+      "measured_at": 1789537925.163,
+      "run": "20260916_085101",
+      "run_id": "M-15_2cam_813eeebf"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.11,
+      "fps_total": 80.43,
+      "drop_pct": -1.36,
+      "measured_at": 1789537988.691,
+      "run": "20260916_085101",
+      "run_id": "M-15_4cam_e0e1cd8c"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 20.01,
+      "fps_total": 160.05,
+      "drop_pct": -0.66,
+      "measured_at": 1789538053.224,
+      "run": "20260916_085101",
+      "run_id": "M-15_8cam_a73ceea4"
+    },
+    "10": {
+      "cameras": 10,
+      "fps_per_camera": 19.39,
+      "fps_total": 193.93,
+      "drop_pct": -0.04,
+      "measured_at": 1789538118.785,
+      "run": "20260916_085101",
+      "run_id": "M-15_10cam_01c730f3"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 19.42,
+      "fps_total": 233.03,
+      "drop_pct": 0.03,
+      "measured_at": 1789538183.871,
+      "run": "20260916_085101",
+      "run_id": "M-15_12cam_2cd097e3"
+    },
+    "14": {
+      "cameras": 14,
+      "fps_per_camera": 19.5,
+      "fps_total": 272.95,
+      "drop_pct": -0.27,
+      "measured_at": 1789538250.4,
+      "run": "20260916_085101",
+      "run_id": "M-15_14cam_151b21b0"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.49,
+      "fps_total": 311.91,
+      "drop_pct": 0.02,
+      "measured_at": 1789538317.038,
+      "run": "20260916_085101",
+      "run_id": "M-15_16cam_dcd62db1"
+    },
+    "18": {
+      "cameras": 18,
+      "fps_per_camera": 19.6,
+      "fps_total": 352.74,
+      "drop_pct": 0.22,
+      "measured_at": 1789538383.767,
+      "run": "20260916_085101",
+      "run_id": "M-15_18cam_c088b675"
+    },
+    "20": {
+      "cameras": 20,
+      "fps_per_camera": 19.59,
+      "fps_total": 391.87,
+      "drop_pct": 0.08,
+      "measured_at": 1789538451.489,
+      "run": "20260916_085101",
+      "run_id": "M-15_20cam_7a9e6583"
+    },
+    "22": {
+      "cameras": 22,
+      "fps_per_camera": 19.57,
+      "fps_total": 430.51,
+      "drop_pct": 0.51,
+      "measured_at": 1789538519.343,
+      "run": "20260916_085101",
+      "run_id": "M-15_22cam_93a3d3f7"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 19.66,
+      "fps_total": 471.96,
+      "drop_pct": 0.69,
+      "measured_at": 1789538588.347,
+      "run": "20260916_085101",
+      "run_id": "M-15_24cam_0c9427ed"
+    },
+    "26": {
+      "cameras": 26,
+      "fps_per_camera": 19.0,
+      "fps_total": 494.09,
+      "drop_pct": 0.12,
+      "measured_at": 1789538656.772,
+      "run": "20260916_085101",
+      "run_id": "M-15_26cam_b76677bf"
+    },
+    "28": {
+      "cameras": 28,
+      "fps_per_camera": 17.63,
+      "fps_total": 493.51,
+      "drop_pct": 0.65,
+      "measured_at": 1789538726.535,
+      "run": "20260916_085101",
+      "run_id": "M-15_28cam_21c671d3"
+    },
+    "30": {
+      "cameras": 30,
+      "fps_per_camera": 15.54,
+      "fps_total": 466.34,
+      "drop_pct": -1.07,
+      "measured_at": 1789538796.173,
+      "run": "20260916_085101",
+      "run_id": "M-15_30cam_44ee5260"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 14.13,
+      "fps_total": 452.07,
+      "drop_pct": 0.55,
+      "measured_at": 1789538866.172,
+      "run": "20260916_085101",
+      "run_id": "M-15_32cam_a769de06"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "GB10",
+  "slug": "gb10",
+  "kind": "dGPU",
+  "gpu": "NVIDIA GB10",
+  "device_model": "NVIDIA_DGX_Spark",
+  "driver": "580.173.02",
+  "cuda": "13.0.2",
+  "ram_gb": 121.7
+}

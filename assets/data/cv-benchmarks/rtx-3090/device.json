@@ -1,0 +1,11 @@
+{
+  "name": "RTX 3090",
+  "slug": "rtx-3090",
+  "kind": "dGPU",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "gpu_memory": "24576 MiB",
+  "driver": "580.178.04",
+  "cuda": "13.2.1",
+  "cpu": "Intel(R) Core(TM) i9-14900KF",
+  "ram_gb": 94.0
+}

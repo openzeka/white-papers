@@ -1,0 +1,60 @@
+# Yerel geliştirme sunucusu: docker compose up
+#
+# Siteyi makineye Ruby kurmadan ayağa kaldırır — native gem'ler (ffi, sass)
+# için gereken derleme araçları da container'ın içinde geliyor.
+#
+#   docker compose up            → site  http://localhost:4000
+#                                  veri  http://localhost:4001  (yerel yönetim)
+#   docker compose up -d         → arka planda
+#   docker compose down          → durdur
+#   docker compose run --rm site bundle update   → gem'leri güncelle
+#
+# Alpine tabanlı jekyll/jekyll imajı kullanılmıyor: oradaki sass-embedded'in
+# dart-sass ikilisi musl ile çalışmıyor ve tema derlenmiyor. ruby:3.1 (Debian)
+# glibc olduğu için sorun çıkmıyor.
+
+services:
+  site:
+    image: ruby:3.1
+    working_dir: /srv
+    # Container'ı senin kullanıcınla çalıştırır, yoksa _site/ ve .jekyll-cache/
+    # root'a ait olur ve silmek için sudo gerekir.
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      # Gem'ler repo içinde (vendor/ zaten .gitignore'da), böylece named volume
+      # izin sorunu çıkarmıyor ve `docker compose down -v` gem'leri silmiyor.
+      BUNDLE_PATH: /srv/vendor/bundle
+      BUNDLE_APP_CONFIG: /srv/.bundle
+      # Rastgele bir UID'nin ev dizini yok; bundler ve jekyll yazacak yer arar.
+      HOME: /tmp
+      JEKYLL_ENV: development
+    ports:
+      - "4000:4000"     # site
+      - "35729:35729"   # livereload
+    volumes:
+      - .:/srv
+    # bundle check: gem'ler duruyorsa kurulumu atlar — ilk açılış birkaç dakika,
+    #   sonrakiler birkaç saniye.
+    # force_polling: mount edilmiş dosya sisteminde inotify olayları güvenilmez.
+    # Liste biçimi (tek satır): YAML'ın katlanmış (>) bloğunda girintisi artan
+    #   satırlar satır sonlarını KORUR, bu da bayrakları ayrı komutlara bölüyor
+    #   ve jekyll --host'u hiç görmeden 127.0.0.1'e bağlanıyordu.
+    command: ["bash", "-lc", "bundle check || bundle install && bundle exec jekyll serve --host 0.0.0.0 --port 4000 --livereload --livereload-port 35729 --force_polling"]
+
+  # Yayınlanmış CV benchmark verisini listeler ve siler (_tools/data_admin.py).
+  # Site statik olduğu için silmeyi bir sayfa yapamaz; bu servis yapar ve
+  # index.json'u tazeler. Yalnızca bu makineden erişilebilir: port eşlemesi
+  # 127.0.0.1'e bağlı, container içinde 0.0.0.0'ı dinlemesi yalnızca eşlemenin
+  # çalışması için. Siteye dahil değildir - Jekyll `_tools/` altını derlemez.
+  data-admin:
+    image: python:3.12-alpine
+    working_dir: /srv
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      HOME: /tmp
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "127.0.0.1:4001:4001"
+    volumes:
+      - .:/srv
+    command: ["python3", "_tools/data_admin.py", "--host", "0.0.0.0", "--port", "4001"]

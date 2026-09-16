@@ -1,0 +1,12 @@
+{
+  "name": "Jetson Orin Nano",
+  "slug": "jetson-orin-nano",
+  "kind": "Jetson",
+  "gpu": "Orin (nvgpu)",
+  "device_model": "NVIDIA Jetson Orin Nano Developer Kit",
+  "cuda": "12.2.12",
+  "ram_gb": 7.4,
+  "jetpack": "6.x",
+  "l4t": "36.3.0",
+  "jetson_module": "p3767-0005"
+}
