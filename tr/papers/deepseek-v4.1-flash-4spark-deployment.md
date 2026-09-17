@@ -250,7 +250,7 @@ DSpark speculative decoding'in etkinliği, kabul oranı (acceptance) ve draft h�
 | Prose (bench) | 2.1–2.3 | %22 |
 | Kodlama | 4.9–5.3 | %80–86 |
 
-Kaynak repo (boot10 config) test ortalaması: 3.57 acceptance, %60 draft rate (8 kategori ortalaması). Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9-5.3 / 5), kodun tekrarlı yapısından kaynaklanır.
+Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9-5.3 / 5), kodun tekrarlı yapısından kaynaklanır.
 
 ---
 

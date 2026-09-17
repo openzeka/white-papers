@@ -250,7 +250,7 @@ The effectiveness of DSpark speculative decoding is measured by acceptance ratio
 | Prose (bench) | 2.1–2.3 | 22% |
 | Coding | 4.9–5.3 | 80–86% |
 
-Source repo (boot10 config) test average: 3.57 acceptance, 60% draft rate (8-category average). The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the repetitive structure of code.
+The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the repetitive structure of code.
 
 ---
 
