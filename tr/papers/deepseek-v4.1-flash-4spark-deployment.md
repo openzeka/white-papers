@@ -32,7 +32,7 @@ toc: true
 
 ## 1. Giriş
 
-DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-Experts (MoE) modelidir. Hugging Face checkpoint'i 763B parametre içerir: 552B omurga + 196B Engram koşullu bellek (modelin teknik raporuna göre) + ~15B görsel kodlayıcı, MLP projektörü ve DSpark draft modeli. Model, FP8 (F8_E4M3) ağırlık nicelemesi ve FP4 (E2M1) KV önbelleği ile gelir ve 1M token'a kadar bağlam destekler.
+DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-Experts (MoE) modelidir. Hugging Face checkpoint'i 763B parametre içerir: 552B omurga + 196B Engram koşullu bellek (modelin teknik raporuna göre) + ~15B görsel kodlayıcı, MLP projektörü ve DSpark draft modeli. Model, MXFP8 dense + MXFP4 expert ağırlık nicelemesi ve FP4 (E2M1) KV önbelleği ile gelir ve 1M token'a kadar bağlam destekler.
 
 Bu rapor, söz konusu modelin **4× NVIDIA DGX Spark (GB10)** platformunda tensor-parallel (TP=4) dağıtımını belgeler. DGX Spark, 128 GB birleşik LPDDR5X bellek ve 273 GB/s bant genişliği ile veri merkezi GPU'larının (~8 TB/s HBM3e) yaklaşık 1/30'u bant genişliğine sahip, ofis dostu bir mini süper bilgisayardır. 763B'lik bir veri merkezi modelinin bu donanımda çalıştırılması, çoklu düğüm tensor parallelism ve özellikle Engram-on-disk tekniği sayesinde mümkün olmaktadır.
 
@@ -60,7 +60,7 @@ DeepSeek-V4.1-Flash, önceki nesillere kıyasla KV önbellek ayak izini dramatik
 | Engram koşullu bellek | 196B (token tabanlı lookup ile seyrek erişim) |
 | Paylaşılan expert / yönlendirilen expert | 1 / 384 (token başına 6 aktif) |
 | Maksimum bağlam | 1.000.000 token |
-| Ağırlık nicelemesi | FP8 (F8_E4M3, checkpoint) |
+| Ağırlık nicelemesi | MXFP8 dense + MXFP4 experts (block 32×32, ue8m0 scale) |
 | KV önbellek nicelemesi | FP4 (E2M1, runtime — CSA2 mimari özelliği) |
 | Checkpoint boyutu | 510 GB (48 safetensors dosyası — FP4 expert ağırlıkları ve karışık hassasiyet nedeniyle teorik 763 GB'ın altında) |
 
@@ -145,7 +145,6 @@ Aşağıdaki 7 patch, image'a gömülmüştür:
 ### 4.4 Optimizasyonlar
 
 - **OMP_NUM_THREADS=1** — reçeteye eklendi (spin-wait contention'ı azaltır)
-- **GPU clock kontrolü** — 4/4 node sağlıklı (2106-2249 MHz, 85-93W, 85-88 TFLOPS)
 - **Build kalıntıları temizlendi** — overlay1/3/4/5, base image, build cache silindi (~258 GB kazanç)
 
 ---
