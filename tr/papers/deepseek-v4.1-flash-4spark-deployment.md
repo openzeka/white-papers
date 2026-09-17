@@ -258,7 +258,7 @@ Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9
 
 ### 7.1 DGX-B300 ile Karşılaştırma
 
-DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inference-benchmarks/' | relative_url }}) üzerinde DGX-B300 (8× Blackwell Ultra, TP=4) ile de ölçülmüştür. B300 satırı aynı modeli farklı parametrelerle servis eder: DSpark k=3 (bu çalışmadaki k=5 yerine), 1M bağlam (300K yerine) ve FP8 nicelemesi.
+DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inference-benchmarks/' | relative_url }}) üzerinde DGX-B300 (8× Blackwell Ultra, TP=4) ile de ölçülmüştür. B300 satırı aynı modeli farklı parametrelerle servis eder: DSpark k=3 (bu çalışmadaki k=5 yerine) ve 1M bağlam (300K yerine).
 
 | Concurrency | 4× Spark TP4 TPS | B300 TP4 TPS | Oran |
 |---|---|---|---|

@@ -258,7 +258,7 @@ The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the r
 
 ### 7.1 Comparison with DGX-B300
 
-DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) on DGX-B300 (8× Blackwell Ultra, TP=4). The B300 row serves the same model with different parameters: DSpark k=3 (instead of the k=5 used here), 1M context (instead of 300K), and FP8 quantization.
+DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) on DGX-B300 (8× Blackwell Ultra, TP=4). The B300 row serves the same model with different parameters: DSpark k=3 (instead of the k=5 used here) and 1M context (instead of 300K).
 
 | Concurrency | 4× Spark TP4 TPS | B300 TP4 TPS | Ratio |
 |---|---|---|---|
