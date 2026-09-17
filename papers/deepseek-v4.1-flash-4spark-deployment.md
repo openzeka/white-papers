@@ -32,7 +32,7 @@ toc: true
 
 ## 1. Introduction
 
-DeepSeek-V4.1-Flash is a multimodal Mixture-of-Experts (MoE) model with 552B backbone parameters. Its Hugging Face checkpoint contains 763B parameters: 552B backbone + 196B Engram conditional memory (per the model's technical report) + ~15B vision encoder and MLP projector. The model ships with FP8 (F8_E4M3) weight quantization and FP4 (E2M1) KV cache, and supports contexts of up to one million tokens.
+DeepSeek-V4.1-Flash is a multimodal Mixture-of-Experts (MoE) model with 552B backbone parameters. Its Hugging Face checkpoint contains 763B parameters: 552B backbone + 196B Engram conditional memory (per the model's technical report) + ~15B for the vision encoder, MLP projector, and DSpark draft model. The model ships with FP8 (F8_E4M3) weight quantization and FP4 (E2M1) KV cache, and supports contexts of up to one million tokens.
 
 This report documents the deployment of this model on **4× NVIDIA DGX Spark (GB10)** using tensor parallelism (TP=4). DGX Spark is an office-friendly mini supercomputer with 128 GB unified LPDDR5X memory and 273 GB/s bandwidth — approximately 1/30th the bandwidth of data center GPUs (~8 TB/s HBM3e). Running a 763B data center model on this hardware is made possible by multi-node tensor parallelism and especially the Engram-on-disk technique.
 
@@ -62,7 +62,7 @@ DeepSeek-V4.1-Flash introduces an architecture that dramatically reduces the KV 
 | Maximum context | 1,000,000 tokens |
 | Weight quantization | FP8 (F8_E4M3, in checkpoint) |
 | KV cache quantization | FP4 (E2M1, runtime — CSA2 architectural feature) |
-| Checkpoint size | 476 GB (120 safetensors blobs — below theoretical 763 GB due to MoE structure and mixed precision) |
+| Checkpoint size | 510 GB (48 safetensors files — below theoretical 763 GB due to FP4 expert weights and mixed precision) |
 
 ### 2.2 Causal Encoder-Decoder (CED) Architecture
 

@@ -32,7 +32,7 @@ toc: true
 
 ## 1. Giriş
 
-DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-Experts (MoE) modelidir. Hugging Face checkpoint'i 763B parametre içerir: 552B omurga + 196B Engram koşullu bellek (modelin teknik raporuna göre) + ~15B görsel kodlayıcı ve MLP projektörü. Model, FP8 (F8_E4M3) ağırlık nicelemesi ve FP4 (E2M1) KV önbelleği ile gelir ve 1M token'a kadar bağlam destekler.
+DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-Experts (MoE) modelidir. Hugging Face checkpoint'i 763B parametre içerir: 552B omurga + 196B Engram koşullu bellek (modelin teknik raporuna göre) + ~15B görsel kodlayıcı, MLP projektörü ve DSpark draft modeli. Model, FP8 (F8_E4M3) ağırlık nicelemesi ve FP4 (E2M1) KV önbelleği ile gelir ve 1M token'a kadar bağlam destekler.
 
 Bu rapor, söz konusu modelin **4× NVIDIA DGX Spark (GB10)** platformunda tensor-parallel (TP=4) dağıtımını belgeler. DGX Spark, 128 GB birleşik LPDDR5X bellek ve 273 GB/s bant genişliği ile veri merkezi GPU'larının (~8 TB/s HBM3e) yaklaşık 1/30'u bant genişliğine sahip, ofis dostu bir mini süper bilgisayardır. 763B'lik bir veri merkezi modelinin bu donanımda çalıştırılması, çoklu düğüm tensor parallelism ve özellikle Engram-on-disk tekniği sayesinde mümkün olmaktadır.
 
@@ -62,7 +62,7 @@ DeepSeek-V4.1-Flash, önceki nesillere kıyasla KV önbellek ayak izini dramatik
 | Maksimum bağlam | 1.000.000 token |
 | Ağırlık nicelemesi | FP8 (F8_E4M3, checkpoint) |
 | KV önbellek nicelemesi | FP4 (E2M1, runtime — CSA2 mimari özelliği) |
-| Checkpoint boyutu | 476 GB (120 safetensors blob — MoE yapısı ve karışık hassasiyet nedeniyle teorik 763 GB'ın altında) |
+| Checkpoint boyutu | 510 GB (48 safetensors dosyası — FP4 expert ağırlıkları ve karışık hassasiyet nedeniyle teorik 763 GB'ın altında) |
 
 ### 2.2 Causal Encoder-Decoder (CED) Mimarisi
 
