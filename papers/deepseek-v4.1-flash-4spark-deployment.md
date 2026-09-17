@@ -9,7 +9,7 @@ card_tag: "LLM Deployment"
 card_date: "September 2026"
 description: >-
   Deployment of DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) on 4× NVIDIA DGX
-  Spark (GB10) with tensor parallelism: vLLM build chain, 7 SM 12.1 patches,
+  Spark (GB10) with tensor parallelism: vLLM build chain, 7 SM 12.1a patches,
   Engram-on-disk, benchmark results and B300 comparison.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
 last_modified_date: 2026-09-16
@@ -32,14 +32,14 @@ toc: true
 
 ## 1. Introduction
 
-DeepSeek-V4.1-Flash is a multimodal Mixture-of-Experts (MoE) model with 552B backbone parameters. Its Hugging Face checkpoint contains 763B parameters (552B backbone + 196B Engram conditional memory + vision encoder). The model ships with FP8 (F8_E4M3) weight quantization and FP4 (E2M1) KV cache, and supports contexts of up to one million tokens.
+DeepSeek-V4.1-Flash is a multimodal Mixture-of-Experts (MoE) model with 552B backbone parameters. Its Hugging Face checkpoint contains 763B parameters: 552B backbone + 196B Engram conditional memory (per the model's technical report) + ~15B vision encoder and MLP projector. The model ships with FP8 (F8_E4M3) weight quantization and FP4 (E2M1) KV cache, and supports contexts of up to one million tokens.
 
-This report documents the deployment of this model on **4× NVIDIA DGX Spark (GB10)** using tensor parallelism (TP=4). DGX Spark is an office-friendly mini supercomputer with 128 GB unified LPDDR5X memory and 273 GB/s bandwidth — approximately 1/30th the bandwidth of data center GPUs (~8 TB/s HBM3e). Running a 763B data center model on this hardware is made possible by multi-node Ethernet tensor parallelism and the Engram-on-disk technique.
+This report documents the deployment of this model on **4× NVIDIA DGX Spark (GB10)** using tensor parallelism (TP=4). DGX Spark is an office-friendly mini supercomputer with 128 GB unified LPDDR5X memory and 273 GB/s bandwidth — approximately 1/30th the bandwidth of data center GPUs (~8 TB/s HBM3e). Running a 763B data center model on this hardware is made possible by multi-node tensor parallelism and especially the Engram-on-disk technique.
 
 Two aspects make this work worth documenting:
 
 - **The model is data center class.** DeepSeek-V4.1-Flash is normally served on DGX-B300 / GB300 NVL72 hardware. 4× DGX Spark represents the scalable edge of the architecture.
-- **7 SM 12.1-specific patches.** The stock vLLM nightly image has missing or broken code paths for SM 12.1a (GB10) — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — which are fixed with community patches.
+- **7 SM 12.1a-specific patches.** The stock vLLM nightly image has missing or broken code paths for SM 12.1a (GB10) — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — which are fixed with community patches.
 
 > **This is a deployment guide, not a benchmark comparison.** Benchmark results are presented in Section 6, but limited to 4 data points — sufficient to characterize the hardware class but not for comprehensive SLO/capacity analysis. For that, see the [Qwen3.6-27B DGX Spark Cluster Scaling]({{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}) report.
 
@@ -90,7 +90,7 @@ DSpark is a speculative decoding mechanism using semi-autoregressive draft gener
 
 | Component | Value |
 |---|---|
-| GPU | Blackwell architecture (GB10), SM 12.1 (CC 12.1), 48 SMs |
+| GPU | Blackwell architecture (GB10), SM 12.1a (CC 12.1), 48 SMs |
 | GPU memory | 128 GB unified LPDDR5X (shared CPU+GPU) |
 | Memory bandwidth | ~273 GB/s (unified) |
 | FP4 peak (with sparsity) | ~1 PFLOP |
@@ -135,10 +135,10 @@ The following 7 patches are baked into the image:
 | 1 | `engram.py` | `models/deepseek_v4_1/common/engram.py` | Engram-on-disk, rank-offset fix |
 | 2 | `model_state.py` | `models/deepseek_v4_1/nvidia/model_state.py` | Engram staging before forward (CUDA graph safe) |
 | 3 | `weight_utils.py` | `model_executor/model_loader/weight_utils.py` | Skip Engram tables on load |
-| 4 | `attention.py` | `models/deepseek_v4_1/attention.py` | SM 12.1 page sizes |
+| 4 | `attention.py` | `models/deepseek_v4_1/attention.py` | SM 12.1a page sizes |
 | 5 | `flashinfer_sparse.py` | `models/deepseek_v4_1/nvidia/flashinfer_sparse.py` | 64-state pages |
 | 6 | `sparse_swa.py` | `v1/attention/backends/mla/sparse_swa.py` | SWA block size hook |
-| 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM 12.1 top_k_per_row_decode |
+| 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM 12.1a top_k_per_row_decode |
 
 ### 4.4 Optimizations
 
@@ -296,7 +296,7 @@ At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥15 tok/s), thi
 ## 9. Conclusion
 
 1. **DeepSeek-V4.1-Flash (763B) can run on 4× DGX Spark** — demonstrating the scalability ceiling of office-friendly mini supercomputers.
-2. **7 SM 12.1 patches are mandatory** — the stock vLLM nightly image has missing code paths for GB10 (SM 12.1a) in Engram-on-disk, FlashInfer sparse attention, and SWA paths.
+2. **7 SM 12.1a patches are mandatory** — the stock vLLM nightly image has missing code paths for GB10 (SM 12.1a) in Engram-on-disk, FlashInfer sparse attention, and SWA paths.
 3. **Engram-on-disk enables the model to fit in memory** — offloading the 196B conditional memory to disk allows the 763B model to fit within 512 GB total unified memory.
 4. **DSpark k=5 is effective on coding prompts** with 80-86% draft rate; on prose prompts, this drops to 22%.
 5. **29.5 tok/s at C=1** is sufficient for development and prototyping; for production serving, B300-class hardware is ~10× faster.

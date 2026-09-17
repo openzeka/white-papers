@@ -9,7 +9,7 @@ card_tag: "LLM Dağıtımı"
 card_date: "Eylül 2026"
 description: >-
   DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) modelinin 4× NVIDIA DGX Spark
-  (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM 12.1 patch'i,
+  (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM 12.1a patch'i,
   Engram-on-disk, benchmark sonuçları ve B300 karşılaştırması.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
 last_modified_date: 2026-09-16
@@ -32,14 +32,14 @@ toc: true
 
 ## 1. Giriş
 
-DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-Experts (MoE) modelidir. Hugging Face checkpoint'i 763B parametre içerir (552B omurga + 196B Engram koşullu bellek + görsel kodlayıcı). Model, FP8 (F8_E4M3) ağırlık nicelemesi ve FP4 (E2M1) KV önbelleği ile gelir ve 1M token'a kadar bağlam destekler.
+DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-Experts (MoE) modelidir. Hugging Face checkpoint'i 763B parametre içerir: 552B omurga + 196B Engram koşullu bellek (modelin teknik raporuna göre) + ~15B görsel kodlayıcı ve MLP projektörü. Model, FP8 (F8_E4M3) ağırlık nicelemesi ve FP4 (E2M1) KV önbelleği ile gelir ve 1M token'a kadar bağlam destekler.
 
-Bu rapor, söz konusu modelin **4× NVIDIA DGX Spark (GB10)** platformunda tensor-parallel (TP=4) dağıtımını belgeler. DGX Spark, 128 GB birleşik LPDDR5X bellek ve 273 GB/s bant genişliği ile veri merkezi GPU'larının (~8 TB/s HBM3e) yaklaşık 1/30'u bant genişliğine sahip, ofis dostu bir mini süper bilgisayardır. 763B'lik bir veri merkezi modelinin bu donanımda çalıştırılması, özellikle çoklu düğüm Ethernet tensor parallelism ve Engram-on-disk teknikleri sayesinde mümkün olmaktadır.
+Bu rapor, söz konusu modelin **4× NVIDIA DGX Spark (GB10)** platformunda tensor-parallel (TP=4) dağıtımını belgeler. DGX Spark, 128 GB birleşik LPDDR5X bellek ve 273 GB/s bant genişliği ile veri merkezi GPU'larının (~8 TB/s HBM3e) yaklaşık 1/30'u bant genişliğine sahip, ofis dostu bir mini süper bilgisayardır. 763B'lik bir veri merkezi modelinin bu donanımda çalıştırılması, çoklu düğüm tensor parallelism ve özellikle Engram-on-disk tekniği sayesinde mümkün olmaktadır.
 
 Bu çalışmayı belgelemeye değer kılan iki özellik:
 
 - **Model, veri merkezi sınıfında.** DeepSeek-V4.1-Flash normalde DGX-B300 / GB300 NVL72 sınıfı donanımda servis edilir. 4× DGX Spark, mimarinin ölçeklenebilir ucunu temsil eder.
-- **7 SM 12.1'e özgü patch.** vLLM'in stock nightly imajında SM 12.1a (GB10) için eksik veya hatalı olan kod yolları — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — topluluk patch'leri ile düzeltilmiştir.
+- **7 SM 12.1a'ya özgü patch.** vLLM'in stock nightly imajında SM 12.1a (GB10) için eksik veya hatalı olan kod yolları — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — topluluk patch'leri ile düzeltilmiştir.
 
 > **Bu çalışma bir dağıtım rehberidir, bir benchmark karşılaştırması değildir.** Benchmark sonuçları Bölüm 6'da sunulmuştur, ancak 4 veri noktası ile sınırlıdır ve donanım sınıfının karakterizasyonu için yeterlidir; kapsamlı bir SLO/kapasite analizi için [Qwen3.6-27B DGX Spark Cluster Scaling]({{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}) raporuna bakınız.
 
@@ -90,7 +90,7 @@ DSpark, yarı-otoregresif draft üretimi ve güvenlik tabanlı doğrulama ile ç
 
 | Bileşen | Değer |
 |---|---|
-| GPU | Blackwell mimarisi (GB10), SM 12.1 (CC 12.1), 48 SM |
+| GPU | Blackwell mimarisi (GB10), SM 12.1a (CC 12.1), 48 SM |
 | GPU belleği | 128 GB unified LPDDR5X (CPU+GPU paylaşımlı) |
 | Bellek bant genişliği | ~273 GB/s (unified) |
 | FP4 tepe (seyreklik ile) | ~1 PFLOP |
@@ -135,10 +135,10 @@ Aşağıdaki 7 patch, image'a gömülmüştür:
 | 1 | `engram.py` | `models/deepseek_v4_1/common/engram.py` | Engram-on-disk, rank-offset fix |
 | 2 | `model_state.py` | `models/deepseek_v4_1/nvidia/model_state.py` | Engram staging before forward (CUDA graph safe) |
 | 3 | `weight_utils.py` | `model_executor/model_loader/weight_utils.py` | Engram tablolarını load'ta skip |
-| 4 | `attention.py` | `models/deepseek_v4_1/attention.py` | SM 12.1 page sizes |
+| 4 | `attention.py` | `models/deepseek_v4_1/attention.py` | SM 12.1a page sizes |
 | 5 | `flashinfer_sparse.py` | `models/deepseek_v4_1/nvidia/flashinfer_sparse.py` | 64-state pages |
 | 6 | `sparse_swa.py` | `v1/attention/backends/mla/sparse_swa.py` | SWA block size hook |
-| 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM 12.1 top_k_per_row_decode |
+| 7 | `sparse_attn_indexer.py` | `model_executor/layers/sparse_attn_indexer.py` | SM 12.1a top_k_per_row_decode |
 
 ### 4.4 Optimizasyonlar
 
@@ -296,7 +296,7 @@ Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥15 tok/s), 
 ## 9. Sonuç
 
 1. **763B'lik DeepSeek-V4.1-Flash, 4× DGX Spark üzerinde çalıştırılabilir** — bu, ofis dostu mini süper bilgisayarların ulaştığı ölçeklenebilirliğin bir göstergesidir.
-2. **7 SM 12.1 patch'i zorunludur** — stock vLLM nightly imajı, GB10 (SM 12.1a) için Engram-on-disk, FlashInfer sparse attention ve SWA kod yollarında eksiklikler içerir.
+2. **7 SM 12.1a patch'i zorunludur** — stock vLLM nightly imajı, GB10 (SM 12.1a) için Engram-on-disk, FlashInfer sparse attention ve SWA kod yollarında eksiklikler içerir.
 3. **Engram-on-disk, modelin belleğe sığmasını sağlar** — 196B'lik koşullu bellek diske taşınarak 763B'lik modelin 512 GB toplam birleşik belleğe sığması mümkün olur.
 4. **DSpark k=5, kodlama prompt'larında %80-86 draft hızı** ile etkindir; prose prompt'larında bu oran %22'ye düşer.
 5. **C=1'de 29.5 tok/s**, geliştirme ve prototipleme için yeterlidir; production servis için B300 sınıfı donanım ~10× daha hızlıdır.
