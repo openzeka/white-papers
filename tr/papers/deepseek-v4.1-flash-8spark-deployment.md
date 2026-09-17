@@ -60,19 +60,6 @@ Her iki yapılandırma da DSpark k=5 speculative decoding, CUDA graphs (`FULL_AN
 
 8 düğüm × 128 GB = küme genelinde **1024 GB toplam birleşik bellek**.
 
-### Cluster Düzeni
-
-| # | Hostname | IP | sparkrun | Rol |
-|---|---|---|---|---|
-| 1 | Spark-1 (head) | 192.168.1.153 | 0.3.9 | head (rank 0) |
-| 2 | spark2 | 192.168.1.147 | 0.3.9 | worker (rank 1) |
-| 3 | spark2 | 192.168.1.157 | 0.3.9 | worker (rank 2) |
-| 4 | spark3 | 192.168.1.158 | 0.3.9 | worker (rank 3) |
-| 5 | spark4 | 192.168.1.161 | 0.3.9 | worker (rank 4) |
-| 6 | spark1 | 192.168.1.162 | 0.3.9 | worker (rank 5) |
-| 7 | spark-5b81 | 192.168.1.166 | 0.3.9 | worker (rank 6) |
-| 8 | spark1 | 192.168.1.148 | 0.3.9 | worker (rank 7) |
-
 ---
 
 ## 3. Docker Image'lar
