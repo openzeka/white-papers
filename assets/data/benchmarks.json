@@ -4492,6 +4492,84 @@
       "pp": null
     },
     {
+      "id": "deepseek-v4.1-flash_8spark_fp8_vllm_tp8",
+      "model": "DeepSeek-V4.1-Flash",
+      "params": "763B",
+      "intelligence_index": 40,
+      "agentic_index": null,
+      "device": "8× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 5,
+      "tp": 8,
+      "notes": "DSpark k=5, 300K context, Engram in memory (stock vLLM). Model: deepseek-ai/DeepSeek-V4.1-Flash",
+      "sources": [],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 213.19,
+          "tps": 35.98
+        },
+        {
+          "c": 2,
+          "ttft_ms": 279.55,
+          "tps": 28.21
+        },
+        {
+          "c": 4,
+          "ttft_ms": 370.36,
+          "tps": 20.1
+        },
+        {
+          "c": 8,
+          "ttft_ms": 488.22,
+          "tps": 13.63
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
+      "id": "deepseek-v4.1-flash_8spark_fp8_vllm_tp8_1m",
+      "model": "DeepSeek-V4.1-Flash",
+      "params": "763B",
+      "intelligence_index": 40,
+      "agentic_index": null,
+      "device": "8× DGX Spark",
+      "quantization": "FP8",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 5,
+      "tp": 8,
+      "notes": "DSpark k=5, 1M context, Engram-on-disk. Model: deepseek-ai/DeepSeek-V4.1-Flash",
+      "sources": [],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 198.54,
+          "tps": 33.28
+        },
+        {
+          "c": 2,
+          "ttft_ms": 301.32,
+          "tps": 26.76
+        },
+        {
+          "c": 4,
+          "ttft_ms": 400.58,
+          "tps": 17.07
+        },
+        {
+          "c": 8,
+          "ttft_ms": 553.68,
+          "tps": 11.74
+        }
+      ],
+      "dp": null,
+      "pp": null
+    },
+    {
       "id": "tencent-hy4-preview_b300_bf16_vllm_tp8",
       "model": "Tencent-Hy4-preview",
       "params": "780B",
