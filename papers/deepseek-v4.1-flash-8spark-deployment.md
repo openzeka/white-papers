@@ -65,7 +65,7 @@ Both configurations use DSpark k=5 speculative decoding, CUDA graphs (`FULL_AND_
 
 ## 3. Docker Images
 
-Two images are used, both built from the same base as the TP4 deployment (`vllm-dsv41:latest`).
+Two images are used, both derived from the same base image as the TP4 deployment. The first (`vllm-dsv41:latest`) is that base image itself; the second (`vllm-dsv41:engram-mem`) is built on top of it.
 
 ### 3.1 `vllm-dsv41:latest` (7 patches, Engram-on-disk)
 
@@ -73,7 +73,7 @@ Used by the TP8-1M configuration. Identical to the TP4 image — all 7 SM 12.1a 
 
 ### 3.2 `vllm-dsv41:engram-mem` (4 patches, Engram in memory)
 
-Used by the TP8-300K configuration. Built on top of `vllm-dsv41:latest` with the three Engram patch files **restored to stock vLLM**:
+Used by the TP8-300K configuration. Built on top of `vllm-dsv41:latest` with the three Engram patch files **reverted to the original vLLM versions**:
 
 ```dockerfile
 FROM vllm-dsv41:latest
@@ -83,12 +83,12 @@ COPY vllm/vllm/models/deepseek_v4_1/nvidia/model_state.py /usr/local/lib/python3
 ENTRYPOINT []
 ```
 
-The remaining 4 patches (attention, FlashInfer sparse, SWA, sparse indexer) are kept. With stock Engram handling, the tables load into pinned host memory and the forward pass makes a host round-trip on each step — CUDA graphs cannot capture the Engram lookup.
+The remaining 4 patches (attention, FlashInfer sparse, SWA, sparse indexer) are kept. With the original Engram handling, the tables load into pinned host memory and the forward pass makes a host round-trip on each step — CUDA graphs cannot capture the Engram lookup.
 
 | Image | Engram.py | model_state.py | weight_utils.py | attention.py | flashinfer_sparse.py | sparse_swa.py | sparse_attn_indexer.py |
 |---|---|---|---|---|---|---|---|
 | `vllm-dsv41:latest` | patched | patched | patched | patched | patched | patched | patched |
-| `vllm-dsv41:engram-mem` | **stock** | **stock** | **stock** | patched | patched | patched | patched |
+| `vllm-dsv41:engram-mem` | **original** | **original** | **original** | patched | patched | patched | patched |
 
 ---
 

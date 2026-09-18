@@ -63,17 +63,17 @@ Her iki yapılandırma da DSpark k=5 speculative decoding, CUDA graphs (`FULL_AN
 
 ---
 
-## 3. Docker Image'lar
+## 3. Docker İmajları
 
-TP4 dağıtımıyla aynı base'den üretilen iki image kullanılır (`vllm-dsv41:latest`).
+İki imaj kullanılır; ikisi de TP4 dağıtımıyla aynı temel imajdan türetilir. Birincisi (`vllm-dsv41:latest`) bu temel imajın kendisidir; ikincisi (`vllm-dsv41:engram-mem`) onun üzerine inşa edilir.
 
 ### 3.1 `vllm-dsv41:latest` (7 patch, Engram-on-disk)
 
-TP8-1M yapılandırması tarafından kullanılır. TP4 image'ı ile aynıdır — Engram-on-disk dahil 7 SM 12.1a patch'inin hepsi gömülüdür. Tam patch listesi ve build talimatları için [TP4 dağıtım raporu, Bölüm 4]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/' | relative_url }})'e bakınız.
+TP8-1M yapılandırması tarafından kullanılır. TP4 imajıyla aynıdır — Engram-on-disk dahil 7 SM 12.1a patch'inin tamamı gömülüdür. Tam patch listesi ve build talimatları için [TP4 dağıtım raporu, Bölüm 4]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/' | relative_url }})'e bakınız.
 
 ### 3.2 `vllm-dsv41:engram-mem` (4 patch, Engram bellekte)
 
-TP8-300K yapılandırması tarafından kullanılır. `vllm-dsv41:latest` üzerine, üç Engram patch dosyası **orijinal vLLM'e restore edilerek** üretilir:
+TP8-300K yapılandırması tarafından kullanılır. `vllm-dsv41:latest` üzerine, üç Engram patch dosyası **orijinal vLLM sürümüne geri döndürülerek** üretilir:
 
 ```dockerfile
 FROM vllm-dsv41:latest
@@ -85,7 +85,7 @@ ENTRYPOINT []
 
 Kalan 4 patch (attention, FlashInfer sparse, SWA, sparse indexer) korunur. Orijinal Engram işleyişiyle tablolar sabitlenmiş host belleğine yüklenir ve forward her adımda bir host round-trip yapar — CUDA graph'ler Engram lookup'ı capture edemez.
 
-| Image | Engram.py | model_state.py | weight_utils.py | attention.py | flashinfer_sparse.py | sparse_swa.py | sparse_attn_indexer.py |
+| İmaj | Engram.py | model_state.py | weight_utils.py | attention.py | flashinfer_sparse.py | sparse_swa.py | sparse_attn_indexer.py |
 |---|---|---|---|---|---|---|---|
 | `vllm-dsv41:latest` | patch'li | patch'li | patch'li | patch'li | patch'li | patch'li | patch'li |
 | `vllm-dsv41:engram-mem` | **orijinal** | **orijinal** | **orijinal** | patch'li | patch'li | patch'li | patch'li |
@@ -140,7 +140,7 @@ NCCL_DEBUG: 'WARN'
 
 | Parametre | Değer | Açıklama |
 |---|---|---|
-| Image | `vllm-dsv41:engram-mem` | Orijinal Engram işleyişi |
+| İmaj | `vllm-dsv41:engram-mem` | Orijinal Engram işleyişi |
 | `tensor_parallel` | 8 | 8 düğüm × 1 GPU |
 | `gpu_memory_utilization` | 0.80 | %80 GMU |
 | `max_model_len` | 300000 | 300K bağlam |
@@ -154,7 +154,7 @@ NCCL_DEBUG: 'WARN'
 
 | Parametre | Değer | Açıklama |
 |---|---|---|
-| Image | `vllm-dsv41:latest` | Engram-on-disk patch aktif |
+| İmaj | `vllm-dsv41:latest` | Engram-on-disk patch aktif |
 | `tensor_parallel` | 8 | 8 düğüm × 1 GPU |
 | `gpu_memory_utilization` | 0.75 | %75 GMU (1M KV için daha düşük) |
 | `max_model_len` | 1048576 | 1M bağlam |
@@ -329,7 +329,7 @@ Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), 
 4. **Engram-on-disk, C=1 TTFT'de paradoksal olarak daha hızlıdır** (199 ms vs 213 ms) — Engram-on-disk yolu satırları forward öncesinde stage eder ve orijinal Engram-bellekte yolunun her adımda yaptığı host round-trip'ini önler.
 5. **AutoTuner OOM'a sebep olabilir.** `VLLM_FLASHINFER_AUTOTUNE: '0'` FlashInfer autotune'u kapatır ama DeepGEMM/CUTLASS mxfp8_gemm autotune'ını kapatmaz; bu da profiling sırasında ~10 GB tüketir. 1M yapılandırmasında yeterli headroom vardır; 300K yapılandırmasında kapatılır.
 6. **sparkrun cluster yönetimi.** `sparkrun cluster set-default <name>` aktif cluster'ı değiştirir; `sparkrun cluster default` yalnızca görüntüler.
-7. **Docker `ENTRYPOINT []` zorunludur.** Orijinal `vllm/vllm-openai` image'ında `ENTRYPOINT ["vllm","serve"]` vardır ve sparkrun komutunu append etmeyi engeller. Final image'da entrypoint temizlenmelidir.
+7. **Docker `ENTRYPOINT []` zorunludur.** Orijinal `vllm/vllm-openai` imajında `ENTRYPOINT ["vllm","serve"]` vardır ve sparkrun komutunu append etmeyi engeller. Son imajda entrypoint temizlenmelidir.
 
 ---
 
