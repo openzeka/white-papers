@@ -102,7 +102,7 @@ DSpark is a speculative decoding mechanism using semi-autoregressive draft gener
 | FP4 peak (with sparsity) | ~1 PFLOP |
 | CPU | 20-core Arm (10× Cortex-X925 + 10× Cortex-A725) |
 | Node interconnect | NVIDIA ConnectX-7, 200 Gb/s RDMA (QSFP) |
-| Storage | 8× NVMe SSD (1× 1 TB + 7× 4 TB across 4 nodes) |
+| Storage | 4× NVMe SSD (4× 4 TB across 4 nodes) |
 | Network topology | 200 GbE switch (no NVLink; all-reduce over Ethernet) |
 
 > **Critical architectural fact:** There is **no NVLink** between DGX Sparks. TP=4 in this deployment is **multi-node tensor parallelism** over a ConnectX-7 200 GbE network — every all-reduce operation crosses the Ethernet fabric via a 200 GbE switch.

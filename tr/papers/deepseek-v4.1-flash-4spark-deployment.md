@@ -102,7 +102,7 @@ DSpark, yarı-otoregresif draft üretimi ve güvenlik tabanlı doğrulama ile ç
 | FP4 tepe (seyreklik ile) | ~1 PFLOP |
 | CPU | 20 çekirdekli Arm (10× Cortex-X925 + 10× Cortex-A725) |
 | Node interconnect | NVIDIA ConnectX-7, 200 Gb/s RDMA (QSFP) |
-| Depolama | 8× NVMe SSD (1× 1 TB + 7× 4 TB, 4 düğüm genelinde) |
+| Depolama | 4× NVMe SSD (4× 4 TB, 4 düğüm genelinde) |
 | Ağ topolojisi | 200 GbE switch (NVLink yok; all-reduce Ethernet üzerinden) |
 
 > **Kritik mimari gerçek:** DGX Spark'lar arasında **NVLink yoktur**. Bu çalışmadaki TP=4, ConnectX-7 200 GbE ağı üzerinden **multi-node tensor parallelism**'dir — her all-reduce işlemi 200 GbE switch üzerinden Ethernet ağını geçer.
