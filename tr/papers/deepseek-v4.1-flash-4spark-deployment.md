@@ -32,16 +32,22 @@ toc: true
 
 ## 1. Giriş
 
-DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-Experts (MoE) modelidir. Hugging Face checkpoint'i 763B parametre içerir: 552B omurga + 196B Engram koşullu bellek (modelin teknik raporuna göre) + ~15B görsel kodlayıcı, MLP projektörü ve DSpark draft modeli. Model, MXFP8 dense + MXFP4 expert ağırlık nicelemesi ve FP4 (E2M1) KV önbelleği ile gelir ve 1M token'a kadar bağlam destekler.
+DeepSeek-V4.1-Flash, 552B omurga parametresine sahip çok modlu bir Mixture-of-Experts (MoE) modelidir. 
 
-Bu rapor, söz konusu modelin **4× NVIDIA DGX Spark (GB10)** platformunda tensor-parallel (TP=4) dağıtımını belgeler. DGX Spark, 128 GB birleşik LPDDR5X bellek ve 273 GB/s bant genişliği ile veri merkezi GPU'larının (~8 TB/s HBM3e) yaklaşık 1/30'u bant genişliğine sahip, ofis dostu bir mini süper bilgisayardır. 763B'lik bir veri merkezi modelinin bu donanımda çalıştırılması, çoklu düğüm tensor parallelism ve özellikle Engram-on-disk tekniği sayesinde mümkün olmaktadır.
+Hugging Face checkpoint'i 763B parametre içerir: 552B omurga + 196B Engram koşullu bellek (modelin teknik raporuna göre) + ~15B görsel kodlayıcı, MLP projektörü ve DSpark draft modeli. 
+
+Model, MXFP8 dense + MXFP4 expert ağırlık nicelemesi ve FP4 (E2M1) KV önbelleği ile gelir ve 1M token'a kadar bağlam destekler.
+
+Bu rapor, söz konusu modelin **4× NVIDIA DGX Spark (GB10)** platformunda tensor-parallel (TP=4) dağıtımını anlatır. 
+
+DGX Spark, 128 GB birleşik LPDDR5X bellek ve 273 GB/s bant genişliği  ile bir mini süper bilgisayardır. 763B'lik bir veri merkezi modelinin bu donanımda çalıştırılması, çoklu düğüm tensor parallelism ve özellikle **Engram-on-disk** tekniği sayesinde mümkün olmaktadır.
 
 Bu çalışmayı belgelemeye değer kılan iki özellik:
 
-- **Model, veri merkezi sınıfında.** DeepSeek-V4.1-Flash normalde DGX-B300 / GB300 NVL72 sınıfı donanımda servis edilir. 4× DGX Spark, mimarinin ölçeklenebilir ucunu temsil eder.
+- **Model, veri merkezi sınıfında.** DeepSeek-V4.1-Flash normalde DGX-B300 ve benzeri sınıfı donanımda servis edilir. 4× DGX Spark, mimarinin ölçeklenebilir ucunu temsil eder.
 - **7 SM 12.1a'ya özgü patch.** vLLM'in stock nightly imajında SM 12.1a (GB10) için eksik veya hatalı olan kod yolları — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — topluluk patch'leri ile düzeltilmiştir.
 
-> **Bu çalışma bir dağıtım rehberidir, bir benchmark karşılaştırması değildir.** Benchmark sonuçları Bölüm 6'da sunulmuştur, ancak 4 veri noktası ile sınırlıdır ve donanım sınıfının karakterizasyonu için yeterlidir; kapsamlı bir SLO/kapasite analizi için [Qwen3.6-27B DGX Spark Cluster Scaling]({{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}) raporuna bakınız.
+> **Bu çalışma bir dağıtım rehberidir, bir benchmark karşılaştırması değildir.** Benchmark sonuçları Bölüm 6'da sunulmuştur, 
 
 ---
 
@@ -68,7 +74,7 @@ DeepSeek-V4.1-Flash, önceki nesillere kıyasla KV önbellek ayak izini dramatik
 
 Model, 40 katmanlı bir Transformer olup 20 katmanlı causal encoder + 20 katmanlı decoder olarak yapılandırılmıştır. CED'nin temel avantajı: decoder'ın global KV önbelleği, her decoder katmanının kendi hidden state'inden değil, encoder'ın son hidden state'inden türetilir. Bu, prefill sırasında yalnızca 8B parametre, decode sırasında 16B parametre aktive edilmesini sağlar — özellikle input-ağır agentic iş yükleri için maliyet verimliliği önemli.
 
-**SWA Bounded Replay**, Sliding Window Attention (SWA) KV state'lerini kalıcı SSD'ye yazmak yerine yalnızca en son *n_win* token'ı yeniden işleyerek eksik state'leri yeniden inşa eder. Bu, DeepSeek-V4-Flash'a kıyasla kalıcı KV önbellek ayak izini yaklaşık 1/8'e indirir.
+**SWA Bounded Replay**, Sliding Window Attention (SWA) için gereken KV durumlarını kalıcı depolamada saklamak yerine, yalnızca en son *n_win* token'ı yeniden işleyerek eksik KV durumlarını yeniden oluşturur. Böylece SWA KV durumlarının kalıcı depolamaya aktarılmasına gerek kalmaz ve DeepSeek-V4-Flash'a kıyasla kalıcı KV önbelleğinin depolama ayak izi yaklaşık **1/8'e** düşer.
 
 ### 2.3 Compressed Sparse Attention 2 (CSA2)
 
@@ -250,7 +256,7 @@ DSpark speculative decoding'in etkinliği, kabul oranı (acceptance) ve draft h�
 | Prose (bench) | 2.1–2.3 | %22 |
 | Kodlama | 4.9–5.3 | %80–86 |
 
-Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9-5.3 / 5), kodun tekrarlı yapısından kaynaklanır.
+Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9-5.3 / 5), Kodun daha **yapısal, kalıplı ve öngörülebilir token dizilerine** sahip olması, bu yüksek kabul oranına katkıda bulunur. Bu tip cevaplarda tps değeride yükselir.
 
 ---
 
@@ -258,28 +264,32 @@ Kodlama prompt'larında DSpark k=5'in acceptance oranının yüksek olması (4.9
 
 ### 7.1 DGX-B300 ile Karşılaştırma
 
-DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inference-benchmarks/' | relative_url }}) üzerinde DGX-B300 (8× Blackwell Ultra, TP=4) ile de ölçülmüştür. B300 satırı aynı modeli farklı parametrelerle servis eder: DSpark k=3 (bu çalışmadaki k=5 yerine) ve 1M bağlam (300K yerine).
+DeepSeek-V4.1-Flash modeli, [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inference-benchmarks/' | relative_url }}) üzerinde DGX-B300 (8× Blackwell Ultra, TP=4) ve 4× DGX Spark yapılandırmalarında da ölçülmüştür.
 
-| Concurrency | 4× Spark TP4 TPS | B300 TP4 TPS | Oran |
-|---|---|---|---|
-| 1 | 29.48 | 284.54 | 9.65× |
-| 2 | 21.32 | 294.56 | 13.82× |
-| 4 | 13.09 | 252.60 | 19.30× |
-| 8 | 8.79 | 209.41 | 23.83× |
+Bu sonuçlar **doğrudan birebir donanım karşılaştırması olarak değerlendirilmemelidir**. İki yapılandırmada speculative decoding parametreleri ve desteklenen context uzunluğu farklıdır: Spark tarafında **k=5 ve 300K context**, B300 tarafında ise **k=3 ve 1M context** kullanılmıştır. Bu nedenle ölçülen TPS farkı; donanım, bellek sistemi, inference server yapılandırmasının birlikte etkisini yansıtır.
 
-**B300, C=1'de ~9.65× daha hızlıdır.** Bu fark beklenendir ve iki donanım sınıfı arasındaki temel farklardan kaynaklanır:
+| Concurrency | 4× Spark TP4 TPS | B300 TP4 TPS | B300 / Spark |
+| ----------- | ---------------- | ------------ | ------------ |
+| 1           | 29.48            | 284.54       | 9.65×        |
+| 2           | 21.32            | 294.56       | 13.82×       |
+| 4           | 13.09            | 252.60       | 19.30×       |
+| 8           | 8.79             | 209.41       | 23.83×       |
 
-| Özellik | DGX-B300 | 4× DGX Spark |
-|---|---|---|
-| GPU belleği | HBM3e (~8 TB/s) | LPDDR5X unified (273 GB/s) |
-| Bellek bant genişliği oranı | 1× | ~1/30 |
-| GPU interconnect | NVLink | ConnectX-7 200 GbE RDMA |
-| GPU başına SM | 148 (B200) | 48 (GB10) |
-| FP4 tepe | ~9 PFLOP | ~1 PFLOP |
+Bu ölçüm setinde B300 yapılandırması, **C=1'de Spark yapılandırmasının yaklaşık 9.65 katı**, C=8'de ise yaklaşık 23.83 katı aggregate TPS üretmiştir. 
 
-> **Sonuç:** 4× DGX Spark, 763B'lik bir veri merkezi modelini **çalıştırabilir** — ancak veri merkezi donanımının yerini almaz. Bu yapılandırma, geliştirme, prototipleme ve sınırlı kullanıcı sayılı production senaryoları için uygundur.
+Donanım düzeyinde temel farklar şunlardır:
 
----
+| Özellik               | DGX-B300                                       | 4× DGX Spark                |
+| --------------------- | ---------------------------------------------- | --------------------------- |
+| Bellek tipi           | HBM3e                                          | LPDDR5X unified memory      |
+| Bellek bant genişliği | Çok yüksek, TB/s sınıfı                        | ~273 GB/s / sistem          |
+| GPU interconnect      | NVLink tabanlı yüksek bant genişlikli bağlantı | 200 GbE RDMA                |
+| GPU mimarisi          | Blackwell Ultra                                | GB10                        |
+| Ölçekleme hedefi      | Veri merkezi / yüksek yoğunluklu inference     | Masaüstü/edge ve geliştirme |
+
+Özellikle büyük MoE modellerinde yalnızca toplam bellek kapasitesi değil, **bellek bant genişliği ve GPU'lar arası iletişim kapasitesi** de performansı önemli ölçüde etkiler. Bu nedenle 4× DGX Spark üzerinde modelin çalıştırılabilmesi, aynı modelin DGX-B300 üzerinde benzer throughput seviyesine ulaşacağı anlamına gelmez.
+
+> **Sonuç:** 4× DGX Spark, büyük ölçekli MoE modellerini çalıştırmak için kullanılabilir ve geliştirme, prototipleme, model doğrulama ve düşük/orta concurrency gerektiren deployment senaryolarında değerlendirilebilir. Ancak ölçülen throughput sonuçları, DGX-B300 gibi veri merkezi sınıfı sistemlerin yerini tuttuğu şeklinde yorumlanmamalıdır. Bu iki platform, bellek bant genişliği, interconnect ve ölçekleme kapasitesi açısından farklı kullanım hedeflerine sahiptir.
 
 ## 8. SLO ve Kapasite
 
@@ -299,7 +309,7 @@ Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥15 tok/s), 
 1. **763B'lik DeepSeek-V4.1-Flash, 4× DGX Spark üzerinde çalıştırılabilir** — bu, ofis dostu mini süper bilgisayarların ulaştığı ölçeklenebilirliğin bir göstergesidir.
 2. **7 SM 12.1a patch'i zorunludur** — stock vLLM nightly imajı, GB10 (SM 12.1a) için Engram-on-disk, FlashInfer sparse attention ve SWA kod yollarında eksiklikler içerir.
 3. **Engram-on-disk, modelin belleğe sığmasını sağlar** — 196B'lik koşullu bellek diske taşınarak 763B'lik modelin 512 GB toplam birleşik belleğe sığması mümkün olur.
-4. **DSpark k=5, kodlama prompt'larında %80-86 draft hızı** ile etkindir; prose prompt'larında bu oran %22'ye düşer.
+4. **DSpark k=5, kodlama prompt'larında %80-86 draft hızı** ile etkindir; doğal dilde yazılmış, **düz metin/nesir biçimindeki**  prompt'larında bu oran %22'ye düşer.
 5. **C=1'de 29.5 tok/s**, geliştirme ve prototipleme için yeterlidir; production servis için B300 sınıfı donanım ~10× daha hızlıdır.
 6. **Bu yapılandırma bir veri merkezi alternatifi değil, bir geliştirme platformudur.** 763B'lik bir modelin ofis donanımında çalışabilmesi, edge ve on-premises deployment senaryolarının sınırlarını gösterir.
 

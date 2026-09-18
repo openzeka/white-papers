@@ -32,16 +32,22 @@ toc: true
 
 ## 1. Introduction
 
-DeepSeek-V4.1-Flash is a multimodal Mixture-of-Experts (MoE) model with 552B backbone parameters. Its Hugging Face checkpoint contains 763B parameters: 552B backbone + 196B Engram conditional memory (per the model's technical report) + ~15B for the vision encoder, MLP projector, and DSpark draft model. The model ships with MXFP8 dense + MXFP4 expert weight quantization and FP4 (E2M1) KV cache, and supports contexts of up to one million tokens.
+DeepSeek-V4.1-Flash is a multimodal Mixture-of-Experts (MoE) model with 552B backbone parameters.
 
-This report documents the deployment of this model on **4× NVIDIA DGX Spark (GB10)** using tensor parallelism (TP=4). DGX Spark is an office-friendly mini supercomputer with 128 GB unified LPDDR5X memory and 273 GB/s bandwidth — approximately 1/30th the bandwidth of data center GPUs (~8 TB/s HBM3e). Running a 763B data center model on this hardware is made possible by multi-node tensor parallelism and especially the Engram-on-disk technique.
+Its Hugging Face checkpoint contains 763B parameters: 552B backbone + 196B Engram conditional memory (per the model's technical report) + ~15B for the vision encoder, MLP projector, and DSpark draft model.
+
+The model ships with MXFP8 dense + MXFP4 expert weight quantization and FP4 (E2M1) KV cache, and supports contexts of up to one million tokens.
+
+This report describes the deployment of this model on **4× NVIDIA DGX Spark (GB10)** using tensor parallelism (TP=4).
+
+DGX Spark is a mini supercomputer with 128 GB unified LPDDR5X memory and 273 GB/s bandwidth. Running a 763B data center model on this hardware is made possible by multi-node tensor parallelism and especially the **Engram-on-disk** technique.
 
 Two aspects make this work worth documenting:
 
-- **The model is data center class.** DeepSeek-V4.1-Flash is normally served on DGX-B300 / GB300 NVL72 hardware. 4× DGX Spark represents the scalable edge of the architecture.
+- **The model is data center class.** DeepSeek-V4.1-Flash is normally served on DGX-B300 and similar-class hardware. 4× DGX Spark represents the scalable edge of the architecture.
 - **7 SM 12.1a-specific patches.** The stock vLLM nightly image has missing or broken code paths for SM 12.1a (GB10) — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — which are fixed with community patches.
 
-> **This is a deployment guide, not a benchmark comparison.** Benchmark results are presented in Section 6, but limited to 4 data points — sufficient to characterize the hardware class but not for comprehensive SLO/capacity analysis. For that, see the [Qwen3.6-27B DGX Spark Cluster Scaling]({{ '/papers/qwen3.6-27b-dgx-spark-scaling/' | relative_url }}) report.
+> **This is a deployment guide, not a benchmark comparison.** Benchmark results are presented in Section 6,
 
 ---
 
@@ -68,7 +74,7 @@ DeepSeek-V4.1-Flash introduces an architecture that dramatically reduces the KV 
 
 The model is a 40-layer Transformer organized as a 20-layer causal encoder followed by a 20-layer decoder. The key advantage of CED: the decoder's global KV cache is projected from the encoder's final hidden states rather than derived from each decoder layer's own hidden states. This allows activating only 8B parameters during prefill and 16B during decode — significant cost efficiency for input-heavy agentic workloads.
 
-**SWA Bounded Replay** reconstructs missing Sliding Window Attention (SWA) KV states by replaying only the most recent *n_win* tokens, avoiding the need to persist SWA KV to SSD. This reduces the persistent KV cache footprint to roughly 1/8 of that of DeepSeek-V4-Flash.
+**SWA Bounded Replay** reconstructs missing KV states by replaying only the most recent *n_win* tokens instead of storing the KV states required for Sliding Window Attention (SWA) in persistent storage. This eliminates the need to write SWA KV states to persistent storage and reduces the persistent KV cache storage footprint to roughly **1/8** of that of DeepSeek-V4-Flash.
 
 ### 2.3 Compressed Sparse Attention 2 (CSA2)
 
@@ -250,7 +256,7 @@ The effectiveness of DSpark speculative decoding is measured by acceptance ratio
 | Prose (bench) | 2.1–2.3 | 22% |
 | Coding | 4.9–5.3 | 80–86% |
 
-The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the repetitive structure of code.
+The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) is driven by code having more **structural, patterned, and predictable token sequences**, which contributes to this high acceptance rate. TPS also rises in this type of response.
 
 ---
 
@@ -258,26 +264,32 @@ The high acceptance of DSpark k=5 on coding prompts (4.9-5.3 / 5) reflects the r
 
 ### 7.1 Comparison with DGX-B300
 
-DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) on DGX-B300 (8× Blackwell Ultra, TP=4). The B300 row serves the same model with different parameters: DSpark k=3 (instead of the k=5 used here) and 1M context (instead of 300K).
+DeepSeek-V4.1-Flash has also been measured on the [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) on both DGX-B300 (8× Blackwell Ultra, TP=4) and 4× DGX Spark configurations.
 
-| Concurrency | 4× Spark TP4 TPS | B300 TP4 TPS | Ratio |
-|---|---|---|---|
-| 1 | 29.48 | 284.54 | 9.65× |
-| 2 | 21.32 | 294.56 | 13.82× |
-| 4 | 13.09 | 252.60 | 19.30× |
-| 8 | 8.79 | 209.41 | 23.83× |
+These results **should not be evaluated as a direct one-to-one hardware comparison**. The speculative decoding parameters and supported context lengths differ between the two configurations: the Spark side uses **k=5 and 300K context**, while the B300 side uses **k=3 and 1M context**. The measured TPS difference therefore reflects the combined effect of hardware, memory system, and inference server configuration.
 
-**B300 is ~9.65× faster at C=1.** This gap is expected and stems from the fundamental difference between the two hardware classes:
+| Concurrency | 4× Spark TP4 TPS | B300 TP4 TPS | B300 / Spark |
+| ----------- | ---------------- | ------------ | ------------ |
+| 1           | 29.48            | 284.54       | 9.65×        |
+| 2           | 21.32            | 294.56       | 13.82×       |
+| 4           | 13.09            | 252.60       | 19.30×       |
+| 8           | 8.79             | 209.41       | 23.83×       |
 
-| Feature | DGX-B300 | 4× DGX Spark |
-|---|---|---|
-| GPU memory | HBM3e (~8 TB/s) | LPDDR5X unified (273 GB/s) |
-| Memory bandwidth ratio | 1× | ~1/30 |
-| GPU interconnect | NVLink | ConnectX-7 200 GbE RDMA |
-| SMs per GPU | 148 (B200) | 48 (GB10) |
-| FP4 peak | ~9 PFLOP | ~1 PFLOP |
+In this measurement set, the B300 configuration produced approximately **9.65× the aggregate TPS of the Spark configuration at C=1**, and approximately 23.83× at C=8.
 
-> **Conclusion:** 4× DGX Spark **can run** a 763B data center model — but it does not replace data center hardware. This configuration is suitable for development, prototyping, and limited-user production scenarios.
+The fundamental hardware-level differences are as follows:
+
+| Feature               | DGX-B300                                       | 4× DGX Spark                |
+| --------------------- | ---------------------------------------------- | --------------------------- |
+| Memory type           | HBM3e                                          | LPDDR5X unified memory      |
+| Memory bandwidth      | Very high, TB/s class                          | ~273 GB/s / system          |
+| GPU interconnect      | High-bandwidth NVLink-based connection         | 200 GbE RDMA                |
+| GPU architecture      | Blackwell Ultra                                | GB10                        |
+| Scaling target        | Data center / high-density inference           | Desktop/edge and development|
+
+Especially in large MoE models, not only total memory capacity but also **memory bandwidth and inter-GPU communication capacity** significantly affect performance. Therefore, the fact that the model can run on 4× DGX Spark does not mean that the same model will reach a similar throughput level on DGX-B300.
+
+> **Conclusion:** 4× DGX Spark can be used to run large-scale MoE models and can be considered for development, prototyping, model validation, and deployment scenarios requiring low/medium concurrency. However, the measured throughput results should not be interpreted as replacing data center class systems such as DGX-B300. These two platforms have different usage targets in terms of memory bandwidth, interconnect, and scaling capacity.
 
 ---
 
@@ -299,7 +311,7 @@ At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥15 tok/s), thi
 1. **DeepSeek-V4.1-Flash (763B) can run on 4× DGX Spark** — demonstrating the scalability ceiling of office-friendly mini supercomputers.
 2. **7 SM 12.1a patches are mandatory** — the stock vLLM nightly image has missing code paths for GB10 (SM 12.1a) in Engram-on-disk, FlashInfer sparse attention, and SWA paths.
 3. **Engram-on-disk enables the model to fit in memory** — offloading the 196B conditional memory to disk allows the 763B model to fit within 512 GB total unified memory.
-4. **DSpark k=5 is effective on coding prompts** with 80-86% draft rate; on prose prompts, this drops to 22%.
+4. **DSpark k=5 is effective on coding prompts** with 80-86% draft rate; on prompts written in natural language in a **plain text/prose form**, this drops to 22%.
 5. **29.5 tok/s at C=1** is sufficient for development and prototyping; for production serving, B300-class hardware is ~10× faster.
 6. **This configuration is a development platform, not a data center alternative.** The ability to run a 763B model on office hardware demonstrates the boundaries of edge and on-premises deployment.
 
