@@ -52,13 +52,15 @@ Both configurations use DSpark k=5 speculative decoding, CUDA graphs (`FULL_AND_
 | GPU | Blackwell architecture (GB10), SM 12.1a (CC 12.1), 48 SMs |
 | GPU memory | 128 GB unified LPDDR5X (shared CPU+GPU) per node |
 | Memory bandwidth | ~273 GB/s (unified) per node |
-| FP4 peak (with sparsity) | ~1 PFLOP per node |
+| FP4 peak performance (with sparsity) | ~1 PFLOP per node |
 | CPU | 20-core Arm (10× Cortex-X925 + 10× Cortex-A725) per node |
 | Node interconnect | NVIDIA ConnectX-7, 200 Gb/s RDMA (QSFP) |
-| Storage | 8× NVMe SSD (1× 1 TB + 7× 4 TB across 8 nodes) |
+| Storage | 8× NVMe SSD (1× 1 TB + 7× 4 TB; 8 nodes total) |
 | Network topology | 200 GbE switch (no NVLink; all-reduce over Ethernet) |
 
 8 nodes × 128 GB = **1024 GB total unified memory** across the cluster.
+
+> **Critical architectural fact:** There is **no NVLink** between DGX Sparks. TP=8 in this report is **multi-node tensor parallelism** over the ConnectX-7 200 GbE network — every all-reduce crosses the Ethernet fabric through the 200 GbE switch.
 
 ---
 
