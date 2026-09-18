@@ -32,16 +32,16 @@ toc: true
 
 ## 1. Giriş
 
-Bu rapor, DeepSeek-V4.1-Flash (763B MoE) modelinin **8× NVIDIA DGX Spark (GB10)** üzerinde tensor-parallel (TP=8) dağıtımını belgeler. [4× DGX Spark TP4 dağıtım raporunun]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/' | relative_url }}) devamıdır; model mimarisi, vLLM build zinciri ve SM 12.1a patch'leri orada açıklanmıştır ve burada tekrar edilmeyecektir.
+Bu rapor, DeepSeek-V4.1-Flash (763B MoE) modelinin **8× NVIDIA DGX Spark (GB10)** üzerinde tensor-parallel (TP=8) dağıtımını belgeler. [4× DGX Spark TP4 dağıtım raporunun]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/' | relative_url }}) devamıdır; model mimarisi, vLLM build zinciri ve SM 12.1a patch'leri orada açıklandığı için burada tekrar edilmemiştir.
 
 İki yapılandırma test edilmiştir:
 
-- **TP8-300K (Engram bellekte):** 300K bağlam, Engram tabloları pinned host belleğine stock vLLM ile yüklenir, GMU 0.80, AutoTuner kapalı.
-- **TP8-1M (Engram diskte):** 1M bağlam, Engram tabloları yerel NVMe'de Engram-on-disk patch'i ile tutulur, GMU 0.75, AutoTuner açık.
+- **TP8-300K (Engram bellekte):** 300K bağlam; Engram tabloları orijinal (stock) vLLM ile sabitlenmiş (pinned) host belleğine yüklenir, GMU 0.80, AutoTuner kapalı.
+- **TP8-1M (Engram diskte):** 1M bağlam; Engram tabloları Engram-on-disk patch'i ile yerel NVMe'de tutulur, GMU 0.75, AutoTuner açık.
 
-Her iki yapılandırma da DSpark k=5 speculative decoding, CUDA graphs (`FULL_AND_PIECEWISE` modu) ve vision + araç çağırma (tool calling) destekini kullanır.
+Her iki yapılandırma da DSpark k=5 speculative decoding, CUDA graphs (`FULL_AND_PIECEWISE` modu) ile görüntü (vision) ve araç çağırma (tool calling) desteğini kullanır.
 
-> **Neden iki yapılandırma?** Engram-on-disk patch'i satırları forward öncesinde GPU belleğine stage eder ve CUDA graph capture'ı etkinleştirir — ancak 300K bağlamda 8 rank ile birleşik bellekte Engram'ı pinned host belleğinde tutmak için yeterli yer vardır. 300K-bellek yapılandırması, bağlam sınırlıyken stock yolun daha hızlı olup olmadığını test eder. 1M-disk yapılandırması ise maksimum bağlam tavanını test eder.
+> **Neden iki yapılandırma?** Engram-on-disk patch'i satırları forward öncesinde GPU belleğine stage eder ve CUDA graph capture'ı etkinleştirir. Ancak 300K bağlamda 8 rank'in birleşik belleği, Engram'ı sabitlenmiş host belleğinde tutmak için yeterlidir. 300K-bellek yapılandırması, bağlam sınırlıyken orijinal yolun daha hızlı olup olmadığını test eder; 1M-disk yapılandırması ise maksimum bağlam tavanını test eder.
 
 ---
 
@@ -72,7 +72,7 @@ TP8-1M yapılandırması tarafından kullanılır. TP4 image'ı ile aynıdır �
 
 ### 3.2 `vllm-dsv41:engram-mem` (4 patch, Engram bellekte)
 
-TP8-300K yapılandırması tarafından kullanılır. `vllm-dsv41:latest` üzerine, üç Engram patch dosyası **stock vLLM'e restore edilerek** üretilir:
+TP8-300K yapılandırması tarafından kullanılır. `vllm-dsv41:latest` üzerine, üç Engram patch dosyası **orijinal vLLM'e restore edilerek** üretilir:
 
 ```dockerfile
 FROM vllm-dsv41:latest
@@ -82,12 +82,12 @@ COPY vllm/vllm/models/deepseek_v4_1/nvidia/model_state.py /usr/local/lib/python3
 ENTRYPOINT []
 ```
 
-Kalan 4 patch (attention, FlashInfer sparse, SWA, sparse indexer) korunur. Stock Engram işleyişiyle tablolar pinned host belleğine yüklenir ve forward her adımda bir host round-trip yapar — CUDA graph'ler Engram lookup'ı capture edemez.
+Kalan 4 patch (attention, FlashInfer sparse, SWA, sparse indexer) korunur. Orijinal Engram işleyişiyle tablolar sabitlenmiş host belleğine yüklenir ve forward her adımda bir host round-trip yapar — CUDA graph'ler Engram lookup'ı capture edemez.
 
 | Image | Engram.py | model_state.py | weight_utils.py | attention.py | flashinfer_sparse.py | sparse_swa.py | sparse_attn_indexer.py |
 |---|---|---|---|---|---|---|---|
 | `vllm-dsv41:latest` | patch'li | patch'li | patch'li | patch'li | patch'li | patch'li | patch'li |
-| `vllm-dsv41:engram-mem` | **stock** | **stock** | **stock** | patch'li | patch'li | patch'li | patch'li |
+| `vllm-dsv41:engram-mem` | **orijinal** | **orijinal** | **orijinal** | patch'li | patch'li | patch'li | patch'li |
 
 ---
 
@@ -139,7 +139,7 @@ NCCL_DEBUG: 'WARN'
 
 | Parametre | Değer | Açıklama |
 |---|---|---|
-| Image | `vllm-dsv41:engram-mem` | Stock Engram işleyişi |
+| Image | `vllm-dsv41:engram-mem` | Orijinal Engram işleyişi |
 | `tensor_parallel` | 8 | 8 düğüm × 1 GPU |
 | `gpu_memory_utilization` | 0.80 | %80 GMU |
 | `max_model_len` | 300000 | 300K bağlam |
@@ -199,7 +199,7 @@ sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp8-1m.y
 | Bileşen | GB/rank |
 |---|---|
 | Model (GPU) | 49.55 |
-| Engram (pinned host) | 23.60 |
+| Engram (sabitlenmiş host) | 23.60 |
 | NCCL (8 kanal) | ~11 |
 | CUDA graphs | ~1.5 |
 | **Toplam** | **~85.5** |
@@ -325,10 +325,10 @@ Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥15 tok/s), 
 1. **NCCL 8-rank overhead'i büyüktür.** Default 64 kanal, rank başına ~37 GB tüketir. `NCCL_MAX_NCHANNELS=8` ve `NCCL_BUFFSIZE=1048576` bunu ~11 GB'a düşürür — olmadan model belleğe sığmaz.
 2. **`memlock=-1` ve `IPC_LOCK` 8-rank RDMA için zorunludur.** Olmadan NCCL init `ibv_reg_mr_iova2 failed with error Cannot allocate memory` hatasıyla başarısız olur.
 3. **`nofile=1048576` NCCL 2.30 için gereklidir.** 8-rank socket accept, container'ın default 1024 soft limitini aşar.
-4. **Engram-on-disk, C=1 TTFT'de paradoksal olarak daha hızlıdır** (199 ms vs 213 ms) — Engram-on-disk yolu satırları forward öncesinde stage eder ve stock Engram-bellekte yolunun her adımda yaptığı host round-trip'ini önler.
+4. **Engram-on-disk, C=1 TTFT'de paradoksal olarak daha hızlıdır** (199 ms vs 213 ms) — Engram-on-disk yolu satırları forward öncesinde stage eder ve orijinal Engram-bellekte yolunun her adımda yaptığı host round-trip'ini önler.
 5. **AutoTuner OOM'a sebep olabilir.** `VLLM_FLASHINFER_AUTOTUNE: '0'` FlashInfer autotune'u kapatır ama DeepGEMM/CUTLASS mxfp8_gemm autotune'ını kapatmaz; bu da profiling sırasında ~10 GB tüketir. 1M yapılandırmasında yeterli headroom vardır; 300K yapılandırmasında kapatılır.
 6. **sparkrun cluster yönetimi.** `sparkrun cluster set-default <name>` aktif cluster'ı değiştirir; `sparkrun cluster default` yalnızca görüntüler.
-7. **Docker `ENTRYPOINT []` zorunludur.** Stock `vllm/vllm-openai` image'ında `ENTRYPOINT ["vllm","serve"]` vardır ve sparkrun komutunu append etmeyi engeller. Final image'da entrypoint temizlenmelidir.
+7. **Docker `ENTRYPOINT []` zorunludur.** Orijinal `vllm/vllm-openai` image'ında `ENTRYPOINT ["vllm","serve"]` vardır ve sparkrun komutunu append etmeyi engeller. Final image'da entrypoint temizlenmelidir.
 
 ---
 

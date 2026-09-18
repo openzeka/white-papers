@@ -36,12 +36,12 @@ This report documents the deployment of DeepSeek-V4.1-Flash (763B MoE) on **8× 
 
 Two configurations were tested:
 
-- **TP8-300K (Engram in memory):** 300K context, Engram tables loaded into pinned host memory via stock vLLM, GMU 0.80, AutoTuner off.
-- **TP8-1M (Engram-on-disk):** 1M context, Engram tables on local NVMe via the Engram-on-disk patch, GMU 0.75, AutoTuner on.
+- **TP8-300K (Engram in memory):** 300K context; Engram tables are loaded into pinned host memory via stock vLLM, GMU 0.80, AutoTuner off.
+- **TP8-1M (Engram-on-disk):** 1M context; Engram tables are held on local NVMe via the Engram-on-disk patch, GMU 0.75, AutoTuner on.
 
-Both configurations use DSpark k=5 speculative decoding, CUDA graphs (`FULL_AND_PIECEWISE` mode), and vision + tool calling enabled.
+Both configurations use DSpark k=5 speculative decoding, CUDA graphs (`FULL_AND_PIECEWISE` mode), and vision and tool calling enabled.
 
-> **Why two configurations?** The Engram-on-disk patch stages rows into GPU memory before the forward pass, enabling CUDA graph capture — but at 300K context with 8 ranks there is enough unified memory to hold Engram in pinned host memory instead. The 300K-memory configuration tests whether the simpler stock path is faster when context is bounded. The 1M-disk configuration tests the maximum context ceiling.
+> **Why two configurations?** The Engram-on-disk patch stages rows into GPU memory before the forward pass, enabling CUDA graph capture. At 300K context, however, the unified memory across 8 ranks is enough to hold Engram in pinned host memory instead. The 300K-memory configuration tests whether the simpler stock path is faster when context is bounded; the 1M-disk configuration tests the maximum context ceiling.
 
 ---
 
