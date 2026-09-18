@@ -1,0 +1,126 @@
+{
+  "name": "PeopleNet",
+  "model_id": "M-15",
+  "task": "detector",
+  "classes": 3,
+  "input_resolution": "960x544",
+  "precision": "INT8",
+  "deepstream": "8.0.0",
+  "source_profile": "live-1080p20",
+  "measure_s": 30,
+  "notes": "",
+  "runs": [
+    "20260917_082219",
+    "20260917_095049"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 17.86,
+      "fps_total": 17.86,
+      "drop_pct": -2.1,
+      "measured_at": 1789627849.926,
+      "run": "20260917_095049",
+      "run_id": "M-15_1cam_4d0ce5c8"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 15.97,
+      "fps_total": 31.94,
+      "drop_pct": 0.41,
+      "measured_at": 1789627985.197,
+      "run": "20260917_095049",
+      "run_id": "M-15_2cam_ed0cda83"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 19.91,
+      "fps_total": 79.64,
+      "drop_pct": 0.04,
+      "measured_at": 1789622669.463,
+      "run": "20260917_082219",
+      "run_id": "M-15_4cam_4334864c"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 20.0,
+      "fps_total": 159.98,
+      "drop_pct": -0.68,
+      "measured_at": 1789622734.906,
+      "run": "20260917_082219",
+      "run_id": "M-15_8cam_31641208"
+    },
+    "10": {
+      "cameras": 10,
+      "fps_per_camera": 19.3,
+      "fps_total": 193.05,
+      "drop_pct": 0.45,
+      "measured_at": 1789622801.376,
+      "run": "20260917_082219",
+      "run_id": "M-15_10cam_e0cd3c5e"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 19.48,
+      "fps_total": 233.76,
+      "drop_pct": -0.15,
+      "measured_at": 1789622868.918,
+      "run": "20260917_082219",
+      "run_id": "M-15_12cam_9f8dbe47"
+    },
+    "14": {
+      "cameras": 14,
+      "fps_per_camera": 19.59,
+      "fps_total": 274.19,
+      "drop_pct": -0.21,
+      "measured_at": 1789622936.521,
+      "run": "20260917_082219",
+      "run_id": "M-15_14cam_9fe93c56"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.6,
+      "fps_total": 313.61,
+      "drop_pct": -0.43,
+      "measured_at": 1789623004.37,
+      "run": "20260917_082219",
+      "run_id": "M-15_16cam_b3d5f4e2"
+    },
+    "18": {
+      "cameras": 18,
+      "fps_per_camera": 18.36,
+      "fps_total": 330.53,
+      "drop_pct": 0.43,
+      "measured_at": 1789623089.344,
+      "run": "20260917_082219",
+      "run_id": "M-15_18cam_012fc299"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 14.08,
+      "fps_total": 337.92,
+      "drop_pct": -0.12,
+      "measured_at": 1789623318.096,
+      "run": "20260917_082219",
+      "run_id": "M-15_24cam_671b36e5"
+    },
+    "26": {
+      "cameras": 26,
+      "fps_per_camera": 12.67,
+      "fps_total": 329.49,
+      "drop_pct": -0.44,
+      "measured_at": 1789623394.49,
+      "run": "20260917_082219",
+      "run_id": "M-15_26cam_0bf2efe0"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 10.0,
+      "fps_total": 319.91,
+      "drop_pct": 0.32,
+      "measured_at": 1789623608.669,
+      "run": "20260917_082219",
+      "run_id": "M-15_32cam_7a7c52f5"
+    }
+  }
+}

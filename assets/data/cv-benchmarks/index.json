@@ -1,5 +1,5 @@
 {
-  "generated_at": 1789541915.301505,
+  "generated_at": 1789707461.269818,
   "config": {
     "target_fps": 15.0,
     "max_drop_pct": 2.0
@@ -30,6 +30,121 @@
           "precision": "INT8",
           "input_resolution": "960x544",
           "path": "gb10/peoplenet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jetson AGX Thor",
+      "slug": "jetson-agx-thor",
+      "kind": "Jetson",
+      "path": "jetson-agx-thor/device.json",
+      "models": [
+        {
+          "name": "PeopleNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-agx-thor/peoplenet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            24,
+            26,
+            32
+          ]
+        },
+        {
+          "name": "YOLO11-N",
+          "precision": "",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-thor/yolo11-n.json",
+          "cameras": [
+            1,
+            2,
+            10,
+            12,
+            14,
+            16,
+            18,
+            24,
+            26,
+            28,
+            30
+          ]
+        },
+        {
+          "name": "YOLO11L",
+          "precision": "",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-thor/yolo11l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            26,
+            32
+          ]
+        },
+        {
+          "name": "YOLO11M",
+          "precision": "",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-thor/yolo11m.json",
+          "cameras": [
+            1,
+            2,
+            8,
+            10,
+            12,
+            14,
+            16,
+            18,
+            20,
+            22,
+            24,
+            26,
+            28,
+            30,
+            32
+          ]
+        },
+        {
+          "name": "YOLO11S",
+          "precision": "",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-thor/yolo11s.json",
           "cameras": [
             1,
             2,
@@ -117,7 +232,9 @@
             20,
             22,
             24,
-            26
+            26,
+            28,
+            30
           ]
         },
         {

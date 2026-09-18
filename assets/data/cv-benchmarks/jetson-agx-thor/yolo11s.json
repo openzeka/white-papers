@@ -1,0 +1,161 @@
+{
+  "name": "YOLO11S",
+  "model_id": "M-448",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "",
+  "deepstream": "8.0.0",
+  "source_profile": "live-1080p20",
+  "measure_s": 30,
+  "notes": "",
+  "runs": [
+    "20260917_165238"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.97,
+      "fps_total": 19.97,
+      "drop_pct": -0.64,
+      "measured_at": 1789658253.391,
+      "run": "20260917_165238",
+      "run_id": "M-448_1cam_ae0686f2"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.84,
+      "fps_total": 39.69,
+      "drop_pct": 0.64,
+      "measured_at": 1789658323.355,
+      "run": "20260917_165238",
+      "run_id": "M-448_2cam_fb65f1ae"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 19.94,
+      "fps_total": 79.76,
+      "drop_pct": 0.51,
+      "measured_at": 1789658393.259,
+      "run": "20260917_165238",
+      "run_id": "M-448_4cam_2313e5aa"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 19.99,
+      "fps_total": 159.95,
+      "drop_pct": 0.18,
+      "measured_at": 1789658464.099,
+      "run": "20260917_165238",
+      "run_id": "M-448_8cam_f1a87fb4"
+    },
+    "10": {
+      "cameras": 10,
+      "fps_per_camera": 19.96,
+      "fps_total": 199.61,
+      "drop_pct": 0.17,
+      "measured_at": 1789658536.473,
+      "run": "20260917_165238",
+      "run_id": "M-448_10cam_3f0428fb"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 19.91,
+      "fps_total": 238.86,
+      "drop_pct": 0.33,
+      "measured_at": 1789658609.482,
+      "run": "20260917_165238",
+      "run_id": "M-448_12cam_c200115a"
+    },
+    "14": {
+      "cameras": 14,
+      "fps_per_camera": 19.93,
+      "fps_total": 279.07,
+      "drop_pct": 0.0,
+      "measured_at": 1789658682.323,
+      "run": "20260917_165238",
+      "run_id": "M-448_14cam_e017a16b"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.9,
+      "fps_total": 318.4,
+      "drop_pct": 0.14,
+      "measured_at": 1789658755.694,
+      "run": "20260917_165238",
+      "run_id": "M-448_16cam_c1fa44f1"
+    },
+    "18": {
+      "cameras": 18,
+      "fps_per_camera": 20.02,
+      "fps_total": 360.37,
+      "drop_pct": -0.07,
+      "measured_at": 1789658938.212,
+      "run": "20260917_165238",
+      "run_id": "M-448_18cam_9c923a46"
+    },
+    "20": {
+      "cameras": 20,
+      "fps_per_camera": 19.99,
+      "fps_total": 399.79,
+      "drop_pct": -0.02,
+      "measured_at": 1789659125.134,
+      "run": "20260917_165238",
+      "run_id": "M-448_20cam_2319dc81"
+    },
+    "22": {
+      "cameras": 22,
+      "fps_per_camera": 19.25,
+      "fps_total": 423.45,
+      "drop_pct": -0.22,
+      "measured_at": 1789659308.837,
+      "run": "20260917_165238",
+      "run_id": "M-448_22cam_7fa23fcd"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 17.16,
+      "fps_total": 411.77,
+      "drop_pct": -0.63,
+      "measured_at": 1789659494.902,
+      "run": "20260917_165238",
+      "run_id": "M-448_24cam_c4097c1c"
+    },
+    "26": {
+      "cameras": 26,
+      "fps_per_camera": 15.75,
+      "fps_total": 409.62,
+      "drop_pct": -0.16,
+      "measured_at": 1789659679.804,
+      "run": "20260917_165238",
+      "run_id": "M-448_26cam_084c486e"
+    },
+    "28": {
+      "cameras": 28,
+      "fps_per_camera": 14.87,
+      "fps_total": 416.27,
+      "drop_pct": -0.21,
+      "measured_at": 1789659867.392,
+      "run": "20260917_165238",
+      "run_id": "M-448_28cam_bf369414"
+    },
+    "30": {
+      "cameras": 30,
+      "fps_per_camera": 13.69,
+      "fps_total": 410.74,
+      "drop_pct": 0.34,
+      "measured_at": 1789660118.118,
+      "run": "20260917_165238",
+      "run_id": "M-448_30cam_715c4ebf"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 12.97,
+      "fps_total": 415.02,
+      "drop_pct": 1.14,
+      "measured_at": 1789660370.006,
+      "run": "20260917_165238",
+      "run_id": "M-448_32cam_7dd3a7df"
+    }
+  }
+}

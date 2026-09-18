@@ -1,0 +1,12 @@
+{
+  "name": "Jetson AGX Thor",
+  "slug": "jetson-agx-thor",
+  "kind": "Jetson",
+  "gpu": "NVIDIA Thor",
+  "device_model": "NVIDIA Jetson AGX Thor Developer Kit",
+  "driver": "580.00",
+  "cuda": "13.0.0",
+  "ram_gb": 122.8,
+  "l4t": "38.4.0",
+  "jetson_module": "p3834-0008"
+}

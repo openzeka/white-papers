@@ -1,0 +1,152 @@
+{
+  "name": "YOLO11M",
+  "model_id": "M-449",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "",
+  "deepstream": "8.0.0",
+  "source_profile": "live-1080p20",
+  "measure_s": 30,
+  "notes": "",
+  "runs": [
+    "20260917_165238"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.93,
+      "fps_total": 19.93,
+      "drop_pct": -1.67,
+      "measured_at": 1789660566.215,
+      "run": "20260917_165238",
+      "run_id": "M-449_1cam_d2932bc2"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.9,
+      "fps_total": 39.8,
+      "drop_pct": 1.02,
+      "measured_at": 1789660636.512,
+      "run": "20260917_165238",
+      "run_id": "M-449_2cam_312125b0"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 19.91,
+      "fps_total": 159.32,
+      "drop_pct": 0.12,
+      "measured_at": 1789660777.406,
+      "run": "20260917_165238",
+      "run_id": "M-449_8cam_649eabbc"
+    },
+    "10": {
+      "cameras": 10,
+      "fps_per_camera": 19.91,
+      "fps_total": 199.14,
+      "drop_pct": 0.35,
+      "measured_at": 1789660849.428,
+      "run": "20260917_165238",
+      "run_id": "M-449_10cam_a87774e4"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 20.05,
+      "fps_total": 240.62,
+      "drop_pct": -0.1,
+      "measured_at": 1789660922.431,
+      "run": "20260917_165238",
+      "run_id": "M-449_12cam_2b443395"
+    },
+    "14": {
+      "cameras": 14,
+      "fps_per_camera": 19.99,
+      "fps_total": 279.81,
+      "drop_pct": -0.88,
+      "measured_at": 1789660995.918,
+      "run": "20260917_165238",
+      "run_id": "M-449_14cam_cfd063ee"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 18.17,
+      "fps_total": 290.72,
+      "drop_pct": -0.31,
+      "measured_at": 1789661069.091,
+      "run": "20260917_165238",
+      "run_id": "M-449_16cam_0d2ea282"
+    },
+    "18": {
+      "cameras": 18,
+      "fps_per_camera": 16.13,
+      "fps_total": 290.39,
+      "drop_pct": -0.7,
+      "measured_at": 1789661266.972,
+      "run": "20260917_165238",
+      "run_id": "M-449_18cam_66448175"
+    },
+    "20": {
+      "cameras": 20,
+      "fps_per_camera": 14.64,
+      "fps_total": 292.9,
+      "drop_pct": -0.47,
+      "measured_at": 1789661466.935,
+      "run": "20260917_165238",
+      "run_id": "M-449_20cam_8037d332"
+    },
+    "22": {
+      "cameras": 22,
+      "fps_per_camera": 13.14,
+      "fps_total": 289.16,
+      "drop_pct": 0.76,
+      "measured_at": 1789661671.554,
+      "run": "20260917_165238",
+      "run_id": "M-449_22cam_8ad14ccf"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 11.81,
+      "fps_total": 283.36,
+      "drop_pct": 0.06,
+      "measured_at": 1789661869.23,
+      "run": "20260917_165238",
+      "run_id": "M-449_24cam_b410fb43"
+    },
+    "26": {
+      "cameras": 26,
+      "fps_per_camera": 11.18,
+      "fps_total": 290.58,
+      "drop_pct": 0.27,
+      "measured_at": 1789662071.347,
+      "run": "20260917_165238",
+      "run_id": "M-449_26cam_62cca660"
+    },
+    "28": {
+      "cameras": 28,
+      "fps_per_camera": 10.13,
+      "fps_total": 283.53,
+      "drop_pct": 0.37,
+      "measured_at": 1789662276.786,
+      "run": "20260917_165238",
+      "run_id": "M-449_28cam_c55b420f"
+    },
+    "30": {
+      "cameras": 30,
+      "fps_per_camera": 9.03,
+      "fps_total": 270.87,
+      "drop_pct": -0.04,
+      "measured_at": 1789662485.508,
+      "run": "20260917_165238",
+      "run_id": "M-449_30cam_58085b1c"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 8.69,
+      "fps_total": 278.09,
+      "drop_pct": -0.79,
+      "measured_at": 1789662691.436,
+      "run": "20260917_165238",
+      "run_id": "M-449_32cam_df5f9671"
+    }
+  }
+}

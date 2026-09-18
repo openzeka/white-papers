@@ -10,125 +10,144 @@
   "measure_s": 30,
   "notes": "",
   "runs": [
-    "20260915_124900"
+    "20260915_124900",
+    "20260916_112942"
   ],
   "points": {
     "1": {
       "cameras": 1,
-      "fps_per_camera": 19.76,
-      "fps_total": 19.76,
-      "drop_pct": -0.17,
-      "measured_at": 1789465740.861,
-      "run": "20260915_124900",
-      "run_id": "M-15_1cam_59d020e2"
+      "fps_per_camera": 19.85,
+      "fps_total": 19.85,
+      "drop_pct": 0.0,
+      "measured_at": 1789547382.735,
+      "run": "20260916_112942",
+      "run_id": "M-15_1cam_6cf92f3b"
     },
     "2": {
       "cameras": 2,
       "fps_per_camera": 19.91,
-      "fps_total": 39.83,
-      "drop_pct": 0.55,
-      "measured_at": 1789465806.059,
-      "run": "20260915_124900",
-      "run_id": "M-15_2cam_c1464c57"
+      "fps_total": 39.81,
+      "drop_pct": 0.17,
+      "measured_at": 1789547447.938,
+      "run": "20260916_112942",
+      "run_id": "M-15_2cam_e3f45f7d"
     },
     "4": {
       "cameras": 4,
-      "fps_per_camera": 19.95,
-      "fps_total": 79.8,
-      "drop_pct": 0.03,
-      "measured_at": 1789465871.256,
-      "run": "20260915_124900",
-      "run_id": "M-15_4cam_9332d2d7"
+      "fps_per_camera": 19.92,
+      "fps_total": 79.69,
+      "drop_pct": -0.08,
+      "measured_at": 1789547513.981,
+      "run": "20260916_112942",
+      "run_id": "M-15_4cam_164c1761"
     },
     "8": {
       "cameras": 8,
-      "fps_per_camera": 19.9,
-      "fps_total": 159.21,
-      "drop_pct": 0.04,
-      "measured_at": 1789465937.26,
-      "run": "20260915_124900",
-      "run_id": "M-15_8cam_65baca04"
+      "fps_per_camera": 19.87,
+      "fps_total": 158.93,
+      "drop_pct": 0.38,
+      "measured_at": 1789547579.995,
+      "run": "20260916_112942",
+      "run_id": "M-15_8cam_5a8eb36d"
     },
     "10": {
       "cameras": 10,
-      "fps_per_camera": 19.38,
-      "fps_total": 193.78,
-      "drop_pct": 0.3,
-      "measured_at": 1789466003.325,
-      "run": "20260915_124900",
-      "run_id": "M-15_10cam_f88063b9"
+      "fps_per_camera": 19.29,
+      "fps_total": 192.85,
+      "drop_pct": 0.34,
+      "measured_at": 1789547687.338,
+      "run": "20260916_112942",
+      "run_id": "M-15_10cam_825c462c"
     },
     "12": {
       "cameras": 12,
       "fps_per_camera": 19.48,
-      "fps_total": 233.82,
-      "drop_pct": 0.04,
-      "measured_at": 1789466069.34,
-      "run": "20260915_124900",
-      "run_id": "M-15_12cam_dfa8be4b"
+      "fps_total": 233.79,
+      "drop_pct": 0.16,
+      "measured_at": 1789547780.38,
+      "run": "20260916_112942",
+      "run_id": "M-15_12cam_c92402c2"
     },
     "14": {
       "cameras": 14,
-      "fps_per_camera": 19.5,
-      "fps_total": 272.97,
+      "fps_per_camera": 19.47,
+      "fps_total": 272.63,
       "drop_pct": 0.15,
-      "measured_at": 1789466136.405,
-      "run": "20260915_124900",
-      "run_id": "M-15_14cam_dfaf3402"
+      "measured_at": 1789547983.567,
+      "run": "20260916_112942",
+      "run_id": "M-15_14cam_456b2d28"
     },
     "16": {
       "cameras": 16,
-      "fps_per_camera": 19.64,
-      "fps_total": 314.32,
-      "drop_pct": -0.11,
-      "measured_at": 1789466203.355,
-      "run": "20260915_124900",
-      "run_id": "M-15_16cam_ad05c488"
+      "fps_per_camera": 19.61,
+      "fps_total": 313.83,
+      "drop_pct": -0.03,
+      "measured_at": 1789548185.742,
+      "run": "20260916_112942",
+      "run_id": "M-15_16cam_94b2c56c"
     },
     "18": {
       "cameras": 18,
-      "fps_per_camera": 19.63,
-      "fps_total": 353.39,
-      "drop_pct": 0.47,
-      "measured_at": 1789466270.378,
-      "run": "20260915_124900",
-      "run_id": "M-15_18cam_df2a6246"
+      "fps_per_camera": 19.69,
+      "fps_total": 354.37,
+      "drop_pct": 0.19,
+      "measured_at": 1789548388.099,
+      "run": "20260916_112942",
+      "run_id": "M-15_18cam_7f3e90b5"
     },
     "20": {
       "cameras": 20,
-      "fps_per_camera": 19.57,
-      "fps_total": 391.49,
-      "drop_pct": -0.03,
-      "measured_at": 1789466338.456,
-      "run": "20260915_124900",
-      "run_id": "M-15_20cam_4182f395"
+      "fps_per_camera": 19.63,
+      "fps_total": 392.59,
+      "drop_pct": 0.03,
+      "measured_at": 1789548502.392,
+      "run": "20260916_112942",
+      "run_id": "M-15_20cam_822be7bb"
     },
     "22": {
       "cameras": 22,
-      "fps_per_camera": 19.73,
-      "fps_total": 433.97,
-      "drop_pct": 0.11,
-      "measured_at": 1789466406.521,
-      "run": "20260915_124900",
-      "run_id": "M-15_22cam_2b309f06"
+      "fps_per_camera": 19.74,
+      "fps_total": 434.2,
+      "drop_pct": -0.21,
+      "measured_at": 1789548707.676,
+      "run": "20260916_112942",
+      "run_id": "M-15_22cam_670546e8"
     },
     "24": {
       "cameras": 24,
-      "fps_per_camera": 19.76,
-      "fps_total": 474.3,
-      "drop_pct": 0.34,
-      "measured_at": 1789466474.861,
-      "run": "20260915_124900",
-      "run_id": "M-15_24cam_57c17f95"
+      "fps_per_camera": 19.89,
+      "fps_total": 477.39,
+      "drop_pct": -0.08,
+      "measured_at": 1789548776.861,
+      "run": "20260916_112942",
+      "run_id": "M-15_24cam_cf696d12"
     },
     "26": {
       "cameras": 26,
-      "fps_per_camera": 19.56,
-      "fps_total": 508.6,
-      "drop_pct": 0.03,
-      "measured_at": 1789466542.944,
-      "run": "20260915_124900",
-      "run_id": "M-15_26cam_f3362430"
+      "fps_per_camera": 19.49,
+      "fps_total": 506.62,
+      "drop_pct": -0.28,
+      "measured_at": 1789548847.078,
+      "run": "20260916_112942",
+      "run_id": "M-15_26cam_fdfd9cf9"
+    },
+    "28": {
+      "cameras": 28,
+      "fps_per_camera": 19.58,
+      "fps_total": 548.14,
+      "drop_pct": 0.21,
+      "measured_at": 1789548917.64,
+      "run": "20260916_112942",
+      "run_id": "M-15_28cam_7a656500"
+    },
+    "30": {
+      "cameras": 30,
+      "fps_per_camera": 19.44,
+      "fps_total": 583.22,
+      "drop_pct": 0.21,
+      "measured_at": 1789548987.978,
+      "run": "20260916_112942",
+      "run_id": "M-15_30cam_624f04ac"
     }
   }
 }

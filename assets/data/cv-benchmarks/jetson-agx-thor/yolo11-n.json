@@ -1,0 +1,116 @@
+{
+  "name": "YOLO11-N",
+  "model_id": "M-451",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "",
+  "deepstream": "8.0.0",
+  "source_profile": "live-1080p20",
+  "measure_s": 30,
+  "notes": "",
+  "runs": [
+    "20260917_165238"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 20.17,
+      "fps_total": 20.17,
+      "drop_pct": -0.41,
+      "measured_at": 1789653158.347,
+      "run": "20260917_165238",
+      "run_id": "M-451_1cam_3491a3f5"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.88,
+      "fps_total": 39.76,
+      "drop_pct": 0.05,
+      "measured_at": 1789653235.376,
+      "run": "20260917_165238",
+      "run_id": "M-451_2cam_7f31ca10"
+    },
+    "10": {
+      "cameras": 10,
+      "fps_per_camera": 19.91,
+      "fps_total": 199.11,
+      "drop_pct": 0.18,
+      "measured_at": 1789653448.137,
+      "run": "20260917_165238",
+      "run_id": "M-451_10cam_e2333027"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 20.01,
+      "fps_total": 240.16,
+      "drop_pct": -0.67,
+      "measured_at": 1789653521.128,
+      "run": "20260917_165238",
+      "run_id": "M-451_12cam_dfdba9de"
+    },
+    "14": {
+      "cameras": 14,
+      "fps_per_camera": 19.99,
+      "fps_total": 279.89,
+      "drop_pct": -0.39,
+      "measured_at": 1789653594.515,
+      "run": "20260917_165238",
+      "run_id": "M-451_14cam_cfa6c8f6"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.97,
+      "fps_total": 319.55,
+      "drop_pct": -0.48,
+      "measured_at": 1789653667.444,
+      "run": "20260917_165238",
+      "run_id": "M-451_16cam_d42c3405"
+    },
+    "18": {
+      "cameras": 18,
+      "fps_per_camera": 19.95,
+      "fps_total": 359.19,
+      "drop_pct": 0.3,
+      "measured_at": 1789653853.001,
+      "run": "20260917_165238",
+      "run_id": "M-451_18cam_8643b180"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 19.72,
+      "fps_total": 473.29,
+      "drop_pct": 0.17,
+      "measured_at": 1789654412.33,
+      "run": "20260917_165238",
+      "run_id": "M-451_24cam_fa94ec0d"
+    },
+    "26": {
+      "cameras": 26,
+      "fps_per_camera": 17.05,
+      "fps_total": 443.17,
+      "drop_pct": 0.3,
+      "measured_at": 1789654604.834,
+      "run": "20260917_165238",
+      "run_id": "M-451_26cam_ed7e9e83"
+    },
+    "28": {
+      "cameras": 28,
+      "fps_per_camera": 17.94,
+      "fps_total": 502.37,
+      "drop_pct": 1.37,
+      "measured_at": 1789654796.076,
+      "run": "20260917_165238",
+      "run_id": "M-451_28cam_01939122"
+    },
+    "30": {
+      "cameras": 30,
+      "fps_per_camera": 16.15,
+      "fps_total": 484.57,
+      "drop_pct": -0.08,
+      "measured_at": 1789655044.83,
+      "run": "20260917_165238",
+      "run_id": "M-451_30cam_5d6a694c"
+    }
+  }
+}
