@@ -21,13 +21,10 @@
     },
     camerasValue: function (n) { return n + (n === 1 ? " camera" : " cameras"); },
     filters: "Filters",
-    search: "Search…",
-    selectedCount: function (n) { return n + " selected"; },
-    allShown: "all shown",
-    clear: "clear",
-    noMatchInList: "No match.",
+    searchModels: "Search models…",
     device: "Device",
     model: "Model",
+    all: "All",
     showAll: "Show All",
     targetFps: "Target FPS per camera",
     targetHint: "Sets PASS / FAIL below and the Max cameras column above.",
@@ -69,10 +66,10 @@
     sourceLimited: "Source-limited",
     sourceLimitedTip: function (fps) {
       return "The cameras themselves stream at " + fps + " FPS, and this configuration " +
-        "was still delivering that at the largest camera count tested — so its own limit " +
-        "was never reached. The figure is a floor, not a ceiling.";
+        "was still delivering close to that at the largest camera count shown — so its own " +
+        "limit was not reached. The figure is a floor, not a ceiling.";
     },
-    saturatedTip: "The device's own limit was reached: per-camera frame rate fell below the source rate.",
+    saturatedTip: "The device's own limit was reached: per-camera frame rate fell clearly below the rate the cameras stream at.",
 
     previewTitle: "What this stream looks like",
     previewSub: function (cameras, fps) {
@@ -95,6 +92,24 @@
     runs: "Runs:",
     measuredFor: function (s) { return "Measured for " + s + " s per camera count."; },
     hardware: "Hardware:",
+
+    /* Tooltips */
+    tip: {
+      model: "<strong>Model</strong><p>The detection model being run, with the numeric precision its engine was built at (INT8, FP16…) beside the name where it was recorded.</p><p>A row is a complete deployment configuration, not a model, so the same model appears once for every device it was measured on.</p>",
+      input: "<strong>Input Resolution</strong><p>The size, in pixels, every frame is scaled to before the model sees it — width × height.</p><p>This is the model’s own input, not the camera’s: the cameras stream 1080p. A larger input costs more computation per frame.</p>",
+      device: "<strong>Device</strong><p>The hardware the pipeline ran on — a Jetson module, a GB10-based DGX Spark, or a GeForce desktop GPU.</p><p>The hardware and software details are in the expanded row.</p>",
+      atCameras: "<strong>Cameras</strong><p>The number of simultaneous camera streams this row’s numbers were measured at.</p><p>Each row reports the heaviest load it was measured under at or below the camera limit in the filter panel, so rows can differ here. Read the frame rates together with the count beside them.</p>",
+      perCam: "<strong>FPS / camera</strong><p>How many frames per second are processed for <em>each</em> camera, at that camera count. This is the number to read for “will this keep up with my cameras”.</p><p>The cameras themselves stream at 20 FPS, so 20 is the ceiling. Green meets your target FPS, red does not.</p><p><em>Higher is better.</em></p>",
+      total: "<strong>Total FPS</strong><p>Frames per second processed across all cameras together — roughly FPS per camera × cameras.</p><p>The pipeline’s total throughput. Where it stops growing as cameras are added, the device has reached its limit.</p>",
+      drop: "<strong>Drop %</strong><p>Frames that entered the pipeline but did not come out, as a share of the input, at that camera count.</p><p>Small negative values mean slightly more frames were counted out than in during the sampling window; read them as zero. Drop % does not affect PASS / FAIL or Max cameras.</p><p><em>Near zero is healthy.</em></p>",
+      maxCams: "<strong>Max cameras</strong><p>The highest <em>measured</em> camera count at which this configuration still holds your target FPS per camera, up to the camera limit in the filter panel.</p><p>Taken from the measured points only — nothing is extrapolated — and it reads 0 if none of them meets the target. It moves when you change the target.</p><p>A ≥ means the device was still delivering the cameras’ own frame rate, within 10%, at the largest count shown — its real limit was not reached, so the figure is a floor.</p>",
+
+      fCameras: "<strong>Camera limit</strong><p>An upper bound on the camera count, not a selection. Everything measured above it is hidden.</p><p>Each row then reports the heaviest load it was measured at up to this number, and the sweep, chart and preview follow. A configuration with nothing measured that low drops out of the table until the limit is raised.</p>",
+      fDevice: "<strong>Device filter</strong><p>The hardware a configuration ran on.</p><p>Pick several to compare devices directly.</p>",
+      fModel: "<strong>Model filter</strong><p>The detection model being run.</p><p>Pick several to compare them side by side.</p>",
+      target: "<strong>Target FPS per Camera</strong><p>The frame rate per camera you consider acceptable.</p><p>It decides PASS / FAIL in the sweep, the green and red colouring of FPS / camera, and the Max cameras column. Raising it makes the requirement stricter and can lower Max cameras.</p><p>The cameras stream at 20 FPS, so a target above 20 cannot be met in these measurements.</p>",
+      reset: "<strong>Reset All Filters</strong><p>Clears every filter, returns the camera limit to its maximum and the target FPS to its default.</p>",
+    },
   };
 
   /* ══════════════════════════════════════════════════════════════════════
@@ -110,8 +125,10 @@
        Every row then reports its own highest measurement at or below it, so
        configurations measured at different camera counts stay comparable. */
     camerasMax: null,
-    devices: {},            // empty object = all
-    models: {},
+    devices: [],            // empty = all
+    models: {},             // model -> ticked; every model starts ticked
+    sortCol: "model",
+    sortDir: "asc",
     targetFps: null,
     expanded: {},
     previewAt: {},           // entry id -> camera count driving its preview
@@ -129,8 +146,11 @@
     return isNaN(n) ? "—" : n.toFixed(digits === undefined ? 1 : digits);
   }
 
-  function activeKeys(map) {
-    return Object.keys(map).filter(function (k) { return map[k]; });
+  /* An info affordance carrying its own tooltip copy. The copy comes from S,
+     never from data, so it is safe to store as markup. */
+  function tip(html) {
+    return '<button type="button" class="bt-tip" aria-label="info" data-tip="' +
+      escapeHTML(html) + '">i</button>';
   }
 
   /* ── Data helpers ── */
@@ -194,10 +214,11 @@
   }
 
   function visibleEntries() {
-    var devices = activeKeys(state.devices), models = activeKeys(state.models);
     return data.benchmarks.filter(function (b) {
-      if (devices.length && devices.indexOf(b.device) === -1) return false;
-      if (models.length && models.indexOf(b.model) === -1) return false;
+      if (state.devices.length && state.devices.indexOf(b.device) === -1) return false;
+      /* Unticking "All" empties the selection, which must show an empty
+         table rather than every row - the same rule as the LLM widget. */
+      if (!state.models[b.model]) return false;
       /* Nothing measured within the limit means the row has nothing to say at
          this load; it comes back when the limit is raised. */
       return pointsWithin(b).length > 0;
@@ -223,21 +244,25 @@
 
     html += '<aside class="cvbt-side"><div class="cvbt-side-inner">';
     html += '<div class="cvbt-side-title">' + escapeHTML(S.filters) + "</div>";
-    html += '<div class="cvbt-side-group"><label class="bt-filter-label" for="cvbt-cameras">' +
-      escapeHTML(S.cameras) + "</label>" +
+    html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
+      escapeHTML(S.cameras) + tip(S.tip.fCameras) + "</span>" +
       '<div class="bt-slider-group cvbt-slider">' +
       '<input type="range" id="cvbt-cameras" min="' + cameras[0] + '" max="' + maxCams +
-      '" step="1" value="' + state.camerasMax + '">' +
+      '" step="1" value="' + state.camerasMax + '" aria-label="' + escapeHTML(S.cameras) + '">' +
       '<span class="bt-slider-value" id="cvbt-cameras-value">' +
       escapeHTML(S.camerasValue(state.camerasMax)) + "</span></div>" +
       '<p class="cvbt-side-hint">' + escapeHTML(S.camerasHint(maxCams)) + "</p></div>";
     html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.device) + "</span>" + checkboxes("device", uniq("device")) + "</div>";
+      escapeHTML(S.device) + tip(S.tip.fDevice) + "</span>" + deviceButtons() + "</div>";
     html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.model) + "</span>" + checkboxes("model", uniq("model")) + "</div>";
-    html += '<button type="button" class="bt-btn cvbt-reset" id="cvbt-reset">' +
-      escapeHTML(S.resetFilters) + "</button>";
+      escapeHTML(S.model) + tip(S.tip.fModel) + "</span>" + modelList() + "</div>";
+    html += '<div class="cvbt-reset-row">' +
+      '<button type="button" class="bt-btn cvbt-reset" id="cvbt-reset">' +
+      escapeHTML(S.resetFilters) + "</button>" + tip(S.tip.reset) + "</div>";
     html += "</div></aside></div>";
+    /* Outside the table and the panel, both of which are redrawn: the bubble
+       is position:fixed and follows whichever icon opened it. */
+    html += '<div class="bt-tooltip" id="cvbt-tooltip" role="tooltip" hidden></div>';
     /* The clip lives here, not inside a row: the table is re-rendered on every
        click and slider step, and a video element inside it would restart from
        the first frame each time. Off-screen rather than display:none, which
@@ -259,62 +284,105 @@
       if (started && started.catch) started.catch(function () { /* fallback scene stays */ });
     }
 
-    wire(container);
+    /* Delegated listeners live on the container, which survives a reset -
+       only its contents are rebuilt - so they are attached once. Attaching
+       them again on every build made each click toggle a row twice. */
+    if (!container.cvbtWired) {
+      wire(container);
+      wireTooltips(container);
+      container.cvbtWired = true;
+    }
+    wireCameras(container);
     renderTable(container);
   }
 
-  /* Checkboxes rather than a row of buttons: both lists grow with every device
-     and model added, and a button row reflows the whole panel as it does. A
-     list keeps its height, scrolls, and shows what is selected without the
-     reader having to decode which buttons are the active ones. The search box
-     appears only once a list is long enough to need it. */
-  var SEARCHABLE_FROM = 8;
-
-  function checkboxes(group, values) {
-    var map = group === "device" ? state.devices : state.models;
-    var selected = activeKeys(map).length;
-
-    var html = '<div class="cvbt-list-head">' +
-      '<span class="cvbt-list-count">' +
-      escapeHTML(selected ? S.selectedCount(selected) : S.allShown) + "</span>" +
-      (selected ? '<button type="button" class="cvbt-clear" data-clear="' + group + '">' +
-        escapeHTML(S.clear) + "</button>" : "") + "</div>";
-
-    if (values.length >= SEARCHABLE_FROM) {
-      html += '<input type="search" class="bt-model-search cvbt-search" data-search="' + group +
-        '" placeholder="' + escapeHTML(S.search) + '" aria-label="' + escapeHTML(S.search) + '">';
-    }
-
-    html += '<div class="bt-model-list" data-group="' + group + '">';
-    values.forEach(function (v) {
-      html += '<label class="bt-model-option"><input type="checkbox" value="' + escapeHTML(v) +
-        '"' + (map[v] ? " checked" : "") + "> " + escapeHTML(v) + "</label>";
+  /* The same controls as the LLM widget: pill buttons for devices, which
+     stay a short list, and a searchable checklist with an "All" toggle for
+     models, which grow with every run published. */
+  function deviceButtons() {
+    var html = '<div class="bt-filter-buttons" id="cvbt-devices">';
+    html += '<button type="button" class="bt-btn' + (state.devices.length ? "" : " bt-active") +
+      '" data-device="__all">' + escapeHTML(S.showAll) + "</button>";
+    uniq("device").forEach(function (d) {
+      html += '<button type="button" class="bt-btn' +
+        (state.devices.indexOf(d) > -1 ? " bt-active" : "") + '" data-device="' +
+        escapeHTML(d) + '">' + escapeHTML(d) + "</button>";
     });
     return html + "</div>";
   }
 
+  function paintDevices(container) {
+    Array.prototype.forEach.call(container.querySelectorAll("[data-device]"), function (b) {
+      var v = b.getAttribute("data-device");
+      b.classList.toggle("bt-active",
+        v === "__all" ? !state.devices.length : state.devices.indexOf(v) > -1);
+    });
+  }
+
+  function allModelsTicked() {
+    return uniq("model").every(function (m) { return state.models[m]; });
+  }
+
+  function tickAllModels(on) {
+    state.models = {};
+    if (on) uniq("model").forEach(function (m) { state.models[m] = true; });
+  }
+
+  function modelList() {
+    var html = '<div class="bt-model-filter">';
+    html += '<input type="text" class="bt-model-search cvbt-search" id="cvbt-model-search" placeholder="' +
+      escapeHTML(S.searchModels) + '" aria-label="' + escapeHTML(S.searchModels) + '">';
+    html += '<div class="bt-model-list" id="cvbt-model-list">';
+    html += '<label class="bt-model-option"><input type="checkbox" id="cvbt-model-all"' +
+      (allModelsTicked() ? " checked" : "") + "> " + escapeHTML(S.all) + "</label>";
+    uniq("model").forEach(function (m) {
+      html += '<label class="bt-model-option"><input type="checkbox" class="cvbt-model-cb" value="' +
+        escapeHTML(m) + '"' + (state.models[m] ? " checked" : "") + "> " + escapeHTML(m) + "</label>";
+    });
+    return html + "</div></div>";
+  }
+
   function wire(container) {
     container.addEventListener("click", function (e) {
-      var btn = e.target.closest ? e.target.closest(".bt-btn") : null;
+      if (!e.target.closest) return;
+      /* The info icons sit inside the headers and the filter labels; opening
+         one must not also sort the column or toggle anything. */
+      if (e.target.closest(".bt-tip")) return;
+
+      var btn = e.target.closest(".bt-btn");
       if (btn && btn.id === "cvbt-reset") { reset(container); return; }
 
-      var clear = e.target.closest ? e.target.closest(".cvbt-clear") : null;
-      if (clear) {
-        var map = clear.dataset.clear === "device" ? state.devices : state.models;
-        Object.keys(map).forEach(function (k) { delete map[k]; });
-        refreshFilters(container);
+      var dev = e.target.closest("[data-device]");
+      if (dev) {
+        var v = dev.getAttribute("data-device");
+        if (v === "__all") {
+          state.devices = [];
+        } else {
+          var at = state.devices.indexOf(v);
+          if (at > -1) state.devices.splice(at, 1); else state.devices.push(v);
+        }
+        paintDevices(container);
         renderTable(container);
         return;
       }
 
-      var dp = e.target.closest ? e.target.closest(".bt-dp-row") : null;
+      var th = e.target.closest("th[data-col]");
+      if (th) {
+        var col = th.getAttribute("data-col");
+        if (state.sortCol === col) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+        else { state.sortCol = col; state.sortDir = "asc"; }
+        renderTable(container);
+        return;
+      }
+
+      var dp = e.target.closest(".bt-dp-row");
       if (dp) {
         state.previewAt[dp.dataset.entry] = Number(dp.dataset.cameras);
         renderTable(container);
         return;
       }
 
-      var row = e.target.closest ? e.target.closest(".bt-row") : null;
+      var row = e.target.closest(".bt-row");
       if (row) {
         state.expanded[row.dataset.id] = !state.expanded[row.dataset.id];
         renderTable(container);
@@ -334,16 +402,6 @@
        would tear the element out from under the drag, so the value follows the
        thumb live and the table catches up on `change` - i.e. when the drag ends
        or an arrow key is pressed. */
-    /* This slider is outside the table, so re-rendering on every step cannot
-       interrupt the drag - unlike the target slider inside a row. */
-    var camerasEl = container.querySelector("#cvbt-cameras");
-    camerasEl.addEventListener("input", function () {
-      state.camerasMax = Number(camerasEl.value);
-      container.querySelector("#cvbt-cameras-value").textContent =
-        S.camerasValue(state.camerasMax);
-      renderTable(container);
-    });
-
     container.addEventListener("input", function (e) {
       var el = e.target;
       if (!el.classList || !el.classList.contains("cvbt-target")) return;
@@ -352,62 +410,140 @@
       if (label) label.textContent = state.targetFps + " FPS";
     });
     container.addEventListener("change", function (e) {
-      if (e.target.classList && e.target.classList.contains("cvbt-target")) {
+      var el = e.target;
+      if (el.classList && el.classList.contains("cvbt-target")) {
         renderTable(container);
         return;
       }
-      var box = e.target;
-      if (box.type !== "checkbox" || !box.parentNode.parentNode.dataset.group) return;
-      var group = box.parentNode.parentNode.dataset.group;
-      var map = group === "device" ? state.devices : state.models;
-      if (box.checked) map[box.value] = true; else delete map[box.value];
-      /* Only the counter and the clear link change; the checkboxes are left
-         alone so the one just clicked keeps focus. */
-      refreshFilters(container);
-      renderTable(container);
+      /* "All" is a select-all / clear-all toggle. Unticking it empties the
+         selection so the reader can then tick just the models they want. */
+      if (el.id === "cvbt-model-all") {
+        tickAllModels(el.checked);
+        Array.prototype.forEach.call(container.querySelectorAll(".cvbt-model-cb"), function (cb) {
+          cb.checked = el.checked;
+        });
+        renderTable(container);
+        return;
+      }
+      if (el.classList && el.classList.contains("cvbt-model-cb")) {
+        if (el.checked) state.models[el.value] = true; else delete state.models[el.value];
+        container.querySelector("#cvbt-model-all").checked = allModelsTicked();
+        renderTable(container);
+      }
     });
 
-    /* Typing filters the list in place - the checked boxes stay checked even
-       while hidden, so a search cannot silently drop a selection. */
+    /* Typing filters the list in place - the ticked boxes stay ticked even
+       while hidden, so a search cannot silently drop a selection. "All"
+       always stays visible. */
     container.addEventListener("input", function (e) {
-      var field = e.target;
-      if (!field.classList || !field.classList.contains("cvbt-search")) return;
-      var needle = field.value.trim().toLowerCase();
-      var list = container.querySelector('.bt-model-list[data-group="' +
-        field.dataset.search + '"]');
-      var shown = 0;
-      Array.prototype.forEach.call(list.querySelectorAll(".bt-model-option"), function (opt) {
-        var hit = opt.textContent.trim().toLowerCase().indexOf(needle) !== -1;
-        opt.hidden = !hit;
-        if (hit) shown++;
-      });
-      var empty = list.querySelector(".cvbt-list-empty");
-      if (!shown && !empty) {
-        list.insertAdjacentHTML("beforeend",
-          '<p class="cvbt-list-empty">' + escapeHTML(S.noMatchInList) + "</p>");
-      } else if (shown && empty) {
-        empty.remove();
-      }
+      if (e.target.id !== "cvbt-model-search") return;
+      var term = e.target.value.trim().toLowerCase();
+      Array.prototype.forEach.call(
+        container.querySelectorAll("#cvbt-model-list .bt-model-option"), function (label) {
+          if (label.querySelector("#cvbt-model-all")) return;
+          label.style.display =
+            !term || label.textContent.toLowerCase().indexOf(term) > -1 ? "" : "none";
+        });
     });
   }
 
-  /* The counter and the clear link, redrawn without touching the inputs. */
-  function refreshFilters(container) {
-    ["device", "model"].forEach(function (group) {
-      var head = container.querySelector('.bt-model-list[data-group="' + group + '"]')
-        .parentNode.querySelector(".cvbt-list-head");
-      var map = group === "device" ? state.devices : state.models;
-      var selected = activeKeys(map).length;
-      head.innerHTML = '<span class="cvbt-list-count">' +
-        escapeHTML(selected ? S.selectedCount(selected) : S.allShown) + "</span>" +
-        (selected ? '<button type="button" class="cvbt-clear" data-clear="' + group + '">' +
-          escapeHTML(S.clear) + "</button>" : "");
+  /* This slider is outside the table, so re-rendering on every step cannot
+     interrupt the drag - unlike the target slider inside a row. It is rebuilt
+     with the panel, so it is wired on every build. */
+  function wireCameras(container) {
+    var camerasEl = container.querySelector("#cvbt-cameras");
+    camerasEl.addEventListener("input", function () {
+      state.camerasMax = Number(camerasEl.value);
+      container.querySelector("#cvbt-cameras-value").textContent =
+        S.camerasValue(state.camerasMax);
+      renderTable(container);
+    });
+  }
+
+  function wireTooltips(container) {
+    var tipEl = function () { return container.querySelector("#cvbt-tooltip"); };
+    var openBtn = null;
+    /* Touch browsers send a synthetic mouseover before the click, so by the
+       time the click lands the bubble is already open and a plain toggle would
+       close what the tap was meant to open. Only a second tap should close. */
+    var openedByTap = false;
+
+    function show(btn) {
+      var el = tipEl();
+      el.innerHTML = btn.getAttribute("data-tip");
+      el.hidden = false;
+      /* Positioned against the viewport: the bubble is position:fixed. */
+      var r = btn.getBoundingClientRect();
+      var w = el.offsetWidth, h = el.offsetHeight;
+      var left = Math.min(Math.max(8, r.left), window.innerWidth - w - 8);
+      var top = r.bottom + 8;
+      /* flip above the icon when there is no room below */
+      if (top + h > window.innerHeight - 8 && r.top - h - 8 > 0) top = r.top - h - 8;
+      el.style.left = left + "px";
+      el.style.top = top + "px";
+      openBtn = btn;
+    }
+
+    function hide() {
+      var el = tipEl();
+      if (el) el.hidden = true;
+      openBtn = null;
+      openedByTap = false;
+    }
+
+    /* A tooltip held open by keyboard focus or a tap would sit still while its
+       icon scrolled away, so re-anchor it - and drop it once the icon leaves
+       the viewport or the table redraw has removed it. */
+    var reanchorQueued = false;
+    function reanchor() {
+      if (!openBtn || reanchorQueued) return;
+      reanchorQueued = true;
+      requestAnimationFrame(function () {
+        reanchorQueued = false;
+        if (!openBtn) return;
+        if (!document.contains(openBtn)) { hide(); return; }
+        var r = openBtn.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) { hide(); return; }
+        show(openBtn);
+      });
+    }
+    /* capture, so a scroll inside the table wrapper or the panel counts too */
+    window.addEventListener("scroll", reanchor, { capture: true, passive: true });
+    window.addEventListener("resize", reanchor);
+
+    /* Tap toggles on touch devices; hover and keyboard focus cover the rest. */
+    container.addEventListener("click", function (e) {
+      var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
+      if (btn) {
+        e.preventDefault();
+        if (openBtn === btn && openedByTap) hide();
+        else { show(btn); openedByTap = true; }
+        return;
+      }
+      if (!e.target.closest || !e.target.closest("#cvbt-tooltip")) hide();
+    });
+    container.addEventListener("mouseover", function (e) {
+      var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
+      if (btn && openBtn !== btn) { show(btn); openedByTap = false; }
+    });
+    container.addEventListener("mouseout", function (e) {
+      var btn = e.target.closest ? e.target.closest(".bt-tip") : null;
+      if (btn && openBtn === btn) hide();
+    });
+    container.addEventListener("focusin", function (e) {
+      if (e.target.classList && e.target.classList.contains("bt-tip")) show(e.target);
+    });
+    container.addEventListener("focusout", function (e) {
+      if (e.target.classList && e.target.classList.contains("bt-tip")) hide();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") hide();
     });
   }
 
   function reset(container) {
-    state.devices = {};
-    state.models = {};
+    state.devices = [];
+    tickAllModels(true);
     state.targetFps = Number(data.config.target_fps) || 15;
     state.expanded = {};
     state.previewAt = {};
@@ -416,20 +552,58 @@
     buildUI(container);
   }
 
+  /* `left` marks the columns whose values are names, not numbers. */
   var COLUMNS = [
-    { label: function () { return S.colModel; }, left: true },
-    { label: function () { return S.colInput; } },
-    { label: function () { return S.colDevice; }, left: true },
-    { label: function () { return S.colAtCameras; } },
-    { label: function () { return S.colPerCam; } },
-    { label: function () { return S.colTotal; } },
-    { label: function () { return S.colDrop; } },
-    { label: function () { return S.colMaxCams + " (≥ " + state.targetFps + " FPS)"; } },
-    { label: function () { return ""; } },
+    { key: "model",   label: function () { return S.colModel; },     t: "model",     left: true },
+    { key: "input",   label: function () { return S.colInput; },     t: "input" },
+    { key: "device",  label: function () { return S.colDevice; },    t: "device",    left: true },
+    { key: "cameras", label: function () { return S.colAtCameras; }, t: "atCameras" },
+    { key: "percam",  label: function () { return S.colPerCam; },    t: "perCam" },
+    { key: "total",   label: function () { return S.colTotal; },     t: "total" },
+    { key: "drop",    label: function () { return S.colDrop; },      t: "drop" },
+    { key: "maxcams", label: function () { return S.colMaxCams + " (≥ " + state.targetFps + " FPS)"; },
+      t: "maxCams" },
+    { key: "expand",  label: function () { return ""; } },
   ];
 
+  function pixels(res) {
+    var m = /^(\d+)\s*x\s*(\d+)$/i.exec(res || "");
+    return m ? Number(m[1]) * Number(m[2]) : null;
+  }
+
+  /* The value a column sorts on. Null means the row has nothing there. */
+  function sortValue(entry, col) {
+    var p = shownPoint(entry);
+    switch (col) {
+      case "model":   return entry.model + " " + entry.precision;
+      case "device":  return entry.device;
+      case "input":   return pixels(entry.input_resolution);
+      case "cameras": return p ? p.cameras : null;
+      case "percam":  return p ? p.fps_per_camera : null;
+      case "total":   return p ? p.fps_total : null;
+      case "drop":    return p ? p.drop_pct : null;
+      case "maxcams": return maxCameras(entry);
+    }
+    return null;
+  }
+
+  /* Rows with nothing to sort on sink to the bottom in both directions, so
+     flipping the sort never parks the blanks at the top. Ties keep the load
+     order - model, then device - because Array.prototype.sort is stable. */
+  function sortEntries(entries) {
+    var col = state.sortCol, dir = state.sortDir === "asc" ? 1 : -1;
+    return entries.slice().sort(function (a, b) {
+      var va = sortValue(a, col), vb = sortValue(b, col);
+      if (va == null && vb == null) return 0;
+      if (va == null) return 1;
+      if (vb == null) return -1;
+      if (typeof va === "string") return dir * va.localeCompare(vb);
+      return dir * (va - vb);
+    });
+  }
+
   function renderTable(container) {
-    var entries = visibleEntries();
+    var entries = sortEntries(visibleEntries());
     container.querySelector("#cvbt-count").innerHTML =
       '<span class="bt-count-label">' + escapeHTML(S.matching) + "</span> " +
       S.matchingCount(entries.length, data.benchmarks.length);
@@ -443,8 +617,19 @@
 
     var html = '<table class="bt-table"><thead><tr>';
     COLUMNS.forEach(function (col) {
-      html += '<th class="bt-no-sort' + (col.left ? " bt-th-left" : "") + '">' +
-        escapeHTML(col.label()) + "</th>";
+      var classes = [];
+      if (col.t) {
+        classes.push("bt-sortable");
+        if (state.sortCol === col.key) {
+          classes.push(state.sortDir === "asc" ? "bt-sorted-asc" : "bt-sorted-desc");
+        }
+      } else {
+        classes.push("bt-no-sort");
+      }
+      if (col.left) classes.push("bt-th-left");
+      html += '<th class="' + classes.join(" ") + '"' +
+        (col.t ? ' data-col="' + col.key + '"' : "") + ">" +
+        escapeHTML(col.label()) + (col.t ? tip(S.tip[col.t]) : "") + "</th>";
     });
     html += "</tr></thead><tbody>";
 
@@ -505,7 +690,7 @@
 
     var shown = previewPoint(entry);
     html += '<div class="cvbt-target-row">' +
-      '<span class="bt-filter-label">' + escapeHTML(S.targetFps) + "</span>" +
+      '<span class="bt-filter-label">' + escapeHTML(S.targetFps) + tip(S.tip.target) + "</span>" +
       '<div class="bt-slider-group">' +
       '<input type="range" class="cvbt-target" min="1" max="30" step="1" value="' +
       state.targetFps + '" aria-label="' + escapeHTML(S.targetFps) + '">' +
@@ -968,6 +1153,7 @@
         data = payload;
         data.benchmarks = data.benchmarks || [];
         state.targetFps = Number((data.config || {}).target_fps) || 15;
+        tickAllModels(true);
         var cams = allCameraCounts();
         /* Opens showing everything measured; the slider only ever narrows. */
         state.camerasMax = cams.length ? cams[cams.length - 1] : 1;
