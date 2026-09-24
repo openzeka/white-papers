@@ -202,8 +202,14 @@
 
 /* ── Table ── */
 
+/* Bounded height, scrolling on both axes: whenever the table is on screen its
+   horizontal scrollbar is on screen too, instead of only at the table's far
+   end — several rows down once sweeps are expanded. It is also what makes the
+   sticky header work: sticky needs a scrolling ancestor to stick to, and a
+   box that only scrolled sideways gave it nothing. Shared by both explorers. */
 .bt-table-wrap {
-  overflow-x: auto;
+  overflow: auto;
+  max-height: calc(100vh - 120px);
   border: 1px solid var(--bt-border);
   border-radius: var(--bt-radius);
 }
@@ -338,6 +344,14 @@
   text-align: center;
   white-space: nowrap;
   border-bottom: 1px solid #eee;
+}
+
+/* The sweep table sits inside .bt-table, so `.bt-table thead th` reaches it
+   and made its header sticky too. Harmless while the wrap only scrolled
+   sideways; with the wrap scrolling vertically, every expanded sweep's header
+   would pin itself over the main one. */
+.bt-table .bt-detail-table thead th {
+  position: static;
 }
 
 .bt-detail-table th {
