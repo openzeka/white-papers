@@ -39,11 +39,20 @@
 
     /* Performance targets / assumptions */
     targetsHeading: "Performance Targets and Capacity Assumptions",
-    targetsIntro: "These four values decide what counts as acceptable performance. Every row's Max C, Chat Capacity and Agentic Capacity is recalculated from them, and the green and red colouring of the TPS and TTFT columns follows them too. Nothing here filters rows out — it changes what the numbers mean.",
+    targetsIntro: "These values decide what counts as acceptable performance and how capacity is estimated. Every row's Max C, Chat Capacity and Agentic Capacity is recalculated from them, and the green and red colouring of the TPS and TTFT columns follows the two speed targets. Nothing here filters rows out — it changes what the numbers mean.",
     ttftThreshold: "Maximum TTFT Target (ms)",
     tpsThreshold: "Minimum TPS Target (tok/s)",
     chatMultiplier: "Chat Usage Multiplier",
     agenticMultiplier: "Agentic Usage Multiplier",
+    groupSpeed: "Speed limit",
+    groupSpeedIntro: "How fast each request has to be. Max C is the highest measured concurrency that meets both targets, and the multipliers turn it into people.",
+    groupMemory: "KV cache memory limit",
+    groupMemoryIntro: "How many users' sessions fit in the KV cache left beside the model weights. Each user is given one session of the context length below; there is no multiplier on this side.",
+    chatContext: "Chat Context Length (tokens)",
+    agenticContext: "Agentic Context Length (tokens)",
+    engineMemDiscrete: "Engine Memory Allocation — Discrete GPU (%)",
+    engineMemUnified: "Engine Memory Allocation — Unified Memory (%)",
+    weightsKvShare: "Weights and KV Cache Share (%)",
 
     /* Table */
     colModel: "Model",
@@ -70,6 +79,37 @@
     targetMet: "Target Met — this value meets your current performance target.",
     targetNotMet: "Target Not Met — this value does not meet your current performance target.",
     viewDetails: "View Details — shows the complete concurrency sweep, chart and additional information for this configuration.",
+
+    /* Capacity: which of the two limits set the number */
+    legendLead: "Capacity set by:",
+    legendPerf: "speed targets",
+    legendMem: "KV cache memory",
+    legendShortCtx: "session longer than the model's context window",
+    capPerf: function (mem, ctx) { return "Set by the speed targets. KV cache memory would fit " + mem + " sessions of " + ctx + " tokens."; },
+    capMem: function (perf, ctx) { return "Set by KV cache memory: this many " + ctx + "-token sessions fit. The speed targets would allow " + perf + "."; },
+    capTie: function (ctx) { return "The speed targets and KV cache memory (" + ctx + "-token sessions) allow the same number."; },
+    capUnchecked: function (why) { return "Set by the speed targets. " + why; },
+    whyUnsupported: "The KV cache memory limit is not calculated for this model yet, because its cache layout is not modelled, so this figure rests on the speed measurements alone.",
+    whyWeights: "The KV cache memory limit cannot be calculated for this run: the model weights alone are larger than the memory assumed to be available, which usually means the run moved part of the model or its KV cache out to CPU memory or disk. This figure therefore rests on the speed measurements alone.",
+    whyUnknown: "The KV cache memory limit cannot be calculated, because the hardware or the weight precision is missing from the memory table, so this figure rests on the speed measurements alone.",
+    capShortCtx: function (len, ctx) { return "A " + ctx + "-token session is longer than this model's " + len + "-token context window — the most it can hold — so it cannot serve sessions that long. Choose a shorter context length to see a figure."; },
+    capCeiling: function (c) { return " The speed figure is a lower bound: the run still met your targets at C=" + c + ", the highest level tested."; },
+    capHeading: "Capacity",
+    capChatRow: function (ctx) { return "Chat · " + ctx + "-token sessions"; },
+    capAgenticRow: function (ctx) { return "Agentic · " + ctx + "-token sessions"; },
+    capUsers: function (n) { return n + (n === 1 ? " user" : " users"); },
+    capByPerf: "set by the speed targets",
+    capByMem: "set by KV cache memory",
+    capByTie: "speed targets and KV cache memory agree",
+    capByContext: "longer than the model's context window",
+    capSpeedAllows: function (n, atLeast) { return "Speed targets allow " + (atLeast ? "at least " : "") + n; },
+    capMemFits: function (n) { return "KV cache memory fits " + n; },
+    capMemNa: "KV cache memory not calculated",
+    capKvSummary: function (kv, w, unit) { return "Once the model weights are loaded (" + w + " GB per " + unit + "), about " + kv + " GB per " + unit + " is left for the KV cache."; },
+    capShortCtxLine: function (len) { return "This model's context window is " + len + " tokens, so it cannot hold a session as long as the one set in the assumptions."; },
+    unitGpu: "GPU",
+    unitNode: "node",
+    unitModule: "module",
 
     /* Expanded row */
     detailC: "C", detailTtft: "TTFT (ms)", detailTps: "TPS (tok/s)", detailStatus: "Status",
@@ -106,8 +146,8 @@
       tps: "<strong>TPS — Tokens per Second</strong><p>How fast text is produced for a <em>single</em> request, in tokens per second. A token is roughly three quarters of a word.</p><p>Per-request speed, not total throughput — the aggregate curve is in the expanded row. Mean of ten rounds at the selected concurrency, measured with a 128-token input and 128-token output.</p><p><em>Higher is better.</em></p>",
       ttft: "<strong>TTFT — Time to First Token</strong><p>How long a user waits between sending a request and the first word appearing, in milliseconds.</p><p>Mean of ten rounds at the selected concurrency, measured with a 128-token input. Because prefill work grows with the prompt, expect TTFT to rise roughly in proportion at longer input lengths.</p><p><em>Lower is better.</em></p>",
       maxc: "<strong>Max C — Maximum Supported Concurrency</strong><p>The highest <em>measured</em> concurrency at which this configuration meets both of your performance targets at once.</p><p>Taken from the measured points only; if none of them satisfies both targets it reads 0. Counts simultaneous requests, not people.</p><p>Not a fixed property of the configuration — it moves whenever you change a target, so the same row can reach 16 at one requirement and 8 at a stricter one.</p>",
-      chat: "<strong>Chat Capacity</strong><p>Roughly how many people can use this configuration for interactive chat at once — <code>floor(Max C × Chat Usage Multiplier)</code>.</p><p>Higher than Max C because chat users spend most of their time reading, thinking and typing, holding no request slot while they do, so several share one.</p><p>An estimate derived from a measured Max C. Nobody connected this many users to the system.</p>",
-      agentic: "<strong>Agentic Capacity</strong><p>Roughly how many people this configuration supports for agentic use, where the model works through multi-step tasks and tool calls on their behalf — <code>floor(Max C × Agentic Usage Multiplier)</code>.</p><p>Lower than the chat figure because an agent may make consecutive calls while planning, running tools and evaluating results, holding a slot far longer.</p><p>An estimate derived from a measured Max C, not a measurement of that many users.</p>",
+      chat: "<strong>Chat Capacity</strong><p>Roughly how many people can use this configuration for interactive chat at once. It is the smaller of two estimates.</p><p><strong>Speed:</strong> <code>floor(Max C × Chat Usage Multiplier)</code> — chat users spend most of their time reading, thinking and typing, holding no request slot while they do, so several share one.</p><p><strong>KV cache memory:</strong> how many sessions of the Chat Context Length fit in the KV cache left beside the model weights.</p><p>The icon beside the number shows which of the two set it; open the row for the working. An estimate, not a measurement — nobody connected this many users to the system.</p>",
+      agentic: "<strong>Agentic Capacity</strong><p>Roughly how many people this configuration supports for agentic use, where the model works through multi-step tasks and tool calls on their behalf. It is the smaller of two estimates.</p><p><strong>Speed:</strong> <code>floor(Max C × Agentic Usage Multiplier)</code> — lower than chat, because an agent may make consecutive calls while planning, running tools and evaluating results, holding a slot far longer.</p><p><strong>KV cache memory:</strong> how many sessions of the Agentic Context Length fit in the KV cache. Agentic sessions are longer, so fewer fit than for chat.</p><p>The icon beside the number shows which of the two set it; open the row for the working. An estimate, not a measurement of that many users.</p>",
       par: "<strong>Parallelism — TP / DP / PP</strong><p>How one model is split across several GPUs or machines so it can run at all, or run faster.</p><p><strong>TP — Tensor Parallelism:</strong> one layer\u2019s maths is divided across GPUs, which all work on the same request.</p><p><strong>DP — Data Parallelism:</strong> several complete copies of the model each handle different requests.</p><p><strong>PP — Pipeline Parallelism:</strong> different layers live on different devices and requests pass through them in turn.</p><p>— means the method was not used.</p>",
       engine: "<strong>Inference Engine</strong><p>The server software that loads the model and answers requests. It handles batching, memory and scheduling, so it affects speed as much as the hardware does.</p><p>vLLM and SGLang are two such servers; the same model on the same hardware can differ measurably between them.</p>",
       mtp: "<strong>Speculative Decoding</strong><p>The model guesses several tokens ahead in one step and then verifies them in a single pass. Correct guesses are kept, so the same output arrives faster.</p><p>Yes means the run used it in some form. Which mechanism and how many tokens it guessed ahead — multi-token prediction (MTP) with a depth <em>k</em>, a draft model, or a vendor implementation such as DSpark — is named in the row's notes.</p><p>Compare rows with it on and off to see what it bought on that configuration.</p>",
@@ -127,7 +167,12 @@
       aTtft: "<strong>Maximum TTFT Target</strong><p>The longest first-token wait you consider acceptable, in milliseconds.</p><p>Lowering it makes the requirement stricter and can lower Max C.</p>",
       aChat: "<strong>Chat Usage Multiplier</strong><p>How busy you assume a chat user is: how many of them can share one simultaneous request slot, given that they spend most of their time reading and typing rather than waiting on the model.</p><p>Raise it for lighter usage, lower it for constant activity.</p>",
       aAgentic: "<strong>Agentic Usage Multiplier</strong><p>How busy you assume an agentic user is: how many of them can share one simultaneous request slot.</p><p>Usually below the chat value, because agentic work keeps a slot occupied for longer. Lower it for agents that run almost continuously; raise it for intermittent use.</p>",
-      reset: "<strong>Reset All Filters</strong><p>Clears every filter and returns the performance targets and capacity multipliers to their defaults.</p>"
+      aChatCtx: "<strong>Chat Context Length</strong><p>Every token a chat session keeps in memory — the conversation history, anything pasted in, and the replies — budgeted per chat user.</p><p>The memory limit reserves one session of this length for each user, so doubling it roughly halves how many chat users fit.</p>",
+      aAgenticCtx: "<strong>Agentic Context Length</strong><p>The same budget for an agentic user, whose session also holds tool calls, tool results and intermediate steps, so it is usually several times the chat value.</p><p>One session of this length is reserved for each agentic user.</p>",
+      aEngineDiscrete: "<strong>Engine Memory Allocation — Discrete GPU</strong><p>The share of each GPU's own memory handed to the inference engine — what vLLM calls <code>gpu_memory_utilization</code>. The rest is left to the driver and other processes.</p><p>Applies to DGX B300 and RTX PRO 6000.</p>",
+      aEngineUnified: "<strong>Engine Memory Allocation — Unified Memory</strong><p>The same share on systems where the CPU and GPU draw on one memory pool. The operating system and every other process live in that pool too, so the default is lower.</p><p>Applies to DGX Spark and Jetson Thor.</p>",
+      aShare: "<strong>Weights and KV Cache Share</strong><p>The part of the engine's allocation that holds the model weights and the KV cache. The remainder is working memory for activations and other runtime state.</p><p>The KV cache gets what is left once the weights are in: memory × allocation × this share − weights.</p>",
+      reset: "<strong>Reset All Filters</strong><p>Clears every filter and returns the performance targets and capacity assumptions to their defaults.</p>"
     }
   };
 
@@ -139,7 +184,12 @@
     ttft_threshold_ms: 1000,
     tps_threshold: 15,
     chat_multiplier: 4,
-    agentic_multiplier: 1.5
+    agentic_multiplier: 1.5,
+    chat_context_tokens: 32768,
+    agentic_context_tokens: 131072,
+    engine_memory_discrete: 0.95,
+    engine_memory_unified: 0.8,
+    weights_kv_share: 0.8
   };
 
   var rawData = null;
@@ -347,13 +397,211 @@
     return maxC;
   }
 
+  function highestTestedC(entry) {
+    var c = 0;
+    for (var i = 0; i < entry.data_points.length; i++) {
+      if (entry.data_points[i].c > c) c = entry.data_points[i].c;
+    }
+    return c;
+  }
+
+  /* ── Capacity: the smaller of two independent estimates ──
+
+     Speed side, unchanged: floor(Max C × usage multiplier).
+     Memory side: how many full-length sessions fit in the KV cache. It carries
+     no multiplier — chat and agentic differ only in their context length.
+
+     One GPU (or Spark node) stands for all of them, because the weights and
+     the cache are split evenly across the run's tp × pp devices. The memory
+     tables come from benchmarks.json; the per-model KV sizes are the entry's
+     kv_* fields, worked out from the model's config.json when the run was
+     added. */
+
+  function deviceBase(device) {
+    return String(device).replace(/^\d+×\s*/, "");
+  }
+
+  /* Everything the memory side needs that does not depend on context length:
+     the KV budget on one device, or the reason there is none. */
+  function memoryBudget(entry) {
+    var mem = rawData.memory;
+    if (!mem || entry.kv_bytes_per_token == null) return { status: "unsupported" };
+    var base = deviceBase(entry.device);
+    var gb = mem.memory_gb ? mem.memory_gb[base] : null;
+    var bpp = mem.weight_bytes_per_param ? mem.weight_bytes_per_param[entry.quantization] : null;
+    var params = parseParams(entry.params);
+    if (!gb || !bpp || params === null) return { status: "unknown" };
+    var tp = entry.tp || 1, pp = entry.pp || 1, dp = entry.dp || 1;
+    var unified = (mem.unified_memory || []).indexOf(base) > -1;
+    var alloc = unified ? config.engine_memory_unified : config.engine_memory_discrete;
+    /* Both reserves come off the physical memory before the weights do. */
+    var budget = gb * 1e9 * alloc * config.weights_kv_share;
+    var weights = params * bpp / (tp * pp);
+    return {
+      status: budget - weights > 0 ? "ok" : "weights",
+      base: base, gb: gb, alloc: alloc, weights: weights, kv: budget - weights,
+      tp: tp, pp: pp, dp: dp,
+      /* GQA heads divide across TP down to one head per GPU; a cache with no
+         kv_heads (MLA and other compressed layouts) is copied to every GPU. */
+      split: entry.kv_heads ? Math.min(tp, entry.kv_heads) : 1
+    };
+  }
+
+  function sessionBytes(entry, b, ctx) {
+    return (entry.kv_bytes_per_token * ctx + entry.kv_window_bytes) / b.split / b.pp;
+  }
+
+  /* The single source for every capacity figure on screen: the cell, its
+     title, the sort, the minimum-capacity filters and the row breakdown. */
+  function capacity(entry, kind) {
+    var maxC = getMaxC(entry);
+    var ctx = config[kind + "_context_tokens"];
+    var b = memoryBudget(entry);
+    var r = {
+      kind: kind, maxC: maxC, ctx: ctx, budget: b, window: entry.model_context_length,
+      perf: Math.floor(maxC * config[kind + "_multiplier"]),
+      mem: null, session: null, limit: "perf",
+      ceiling: maxC > 0 && maxC === highestTestedC(entry),
+      /* A session longer than the model's own context window cannot be
+         served at all, whatever the hardware. */
+      tooLong: entry.model_context_length != null && ctx > entry.model_context_length
+    };
+    if (b.status === "ok") {
+      r.session = sessionBytes(entry, b, ctx);
+      r.mem = Math.floor(b.kv / r.session) * b.dp;
+    }
+    if (r.tooLong) {
+      r.shown = 0;
+      r.limit = "context";
+    } else if (r.mem === null) {
+      /* No memory figure: the speed estimate stands on its own, and the
+         title and breakdown say why. */
+      r.shown = r.perf;
+    } else {
+      r.shown = Math.min(r.perf, r.mem);
+      r.limit = r.perf < r.mem ? "perf" : r.mem < r.perf ? "mem" : "tie";
+    }
+    return r;
+  }
+
   function getChatUsers(entry) {
-    return Math.floor(getMaxC(entry) * config.chat_multiplier);
+    return capacity(entry, "chat").shown;
   }
 
   function getAgenticUsers(entry) {
-    return Math.floor(getMaxC(entry) * config.agentic_multiplier);
+    return capacity(entry, "agentic").shown;
   }
+
+  /* 32768 -> "32K", 1048576 -> "1M": the power-of-two convention context
+     lengths are quoted in. */
+  function fmtTokens(n) {
+    if (n >= 1048576 && n % 1048576 === 0) return n / 1048576 + "M";
+    if (n >= 1024 && n % 1024 === 0) return n / 1024 + "K";
+    return String(n);
+  }
+
+  /* Digit groups separated by a thin space, which reads the same in English
+     and Turkish — a comma or a dot would each mean a decimal in one of them. */
+  function fmtInt(n) {
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+  }
+
+  function fmtGB(bytes) {
+    var g = bytes / 1e9;
+    return g >= 100 ? g.toFixed(0) : g >= 10 ? g.toFixed(1) : g.toFixed(2);
+  }
+
+  function limitWhy(r) {
+    return r.budget.status === "weights" ? S.whyWeights :
+      r.budget.status === "unknown" ? S.whyUnknown : S.whyUnsupported;
+  }
+
+  var CAP_ICON = {
+    perf: '<path d="M9.5 1 3 9h4.2L6.5 15 13 7H8.8z" fill="currentColor"/>',
+    mem: '<rect x="2" y="4.5" width="12" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+      '<path d="M5 11.5V14M8 11.5V14M11 11.5V14M5 2v2.5M8 2v2.5M11 2v2.5" stroke="currentColor" stroke-width="1.4"/>',
+    shortctx: '<path d="M8 1.8 15 14.2H1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>' +
+      '<path d="M8 6.2v3.9M8 11.5v1.1" stroke="currentColor" stroke-width="1.6"/>'
+  };
+
+  function capIcon(name, label) {
+    return '<svg class="bt-cap-icon bt-cap-' + name + '" viewBox="0 0 16 16" width="16" height="16" role="img" aria-label="' +
+      escapeHTML(label) + '">' + CAP_ICON[name] + "</svg>";
+  }
+
+  function capIcons(r) {
+    var h = "";
+    if (r.limit === "perf" || r.limit === "tie") h += capIcon("perf", S.legendPerf);
+    if (r.limit === "mem" || r.limit === "tie") h += capIcon("mem", S.legendMem);
+    if (r.limit === "context") h += capIcon("shortctx", S.legendShortCtx);
+    return h;
+  }
+
+  function capTitle(r) {
+    var ctx = fmtTokens(r.ctx);
+    if (r.limit === "context") return S.capShortCtx(fmtTokens(r.window), ctx);
+    var t = r.mem === null ? S.capUnchecked(limitWhy(r)) :
+      r.limit === "perf" ? S.capPerf(r.mem, ctx) :
+      r.limit === "mem" ? S.capMem(r.perf, ctx) : S.capTie(ctx);
+    if (r.ceiling && r.limit !== "mem") t += S.capCeiling(r.maxC);
+    return t;
+  }
+
+  function capCell(entry, kind) {
+    var r = capacity(entry, kind);
+    var shown = r.limit === "context" ? '<span class="bt-muted">—</span>' : r.shown;
+    return '<td class="bt-num bt-cap" title="' + escapeHTML(capTitle(r)) + '">' + shown + capIcons(r) + "</td>";
+  }
+
+  /* The context-window marker only appears once a context length long enough
+     to trigger it is chosen, so its legend entry only appears then too. */
+  function capLegend(entries) {
+    var tooLong = entries.some(function (e) {
+      return capacity(e, "chat").tooLong || capacity(e, "agentic").tooLong;
+    });
+    return '<span class="bt-cap-legend"><span class="bt-cap-legend-lead">' + escapeHTML(S.legendLead) + "</span>" +
+      '<span class="bt-cap-legend-item">' + capIcon("perf", S.legendPerf) + escapeHTML(S.legendPerf) + "</span>" +
+      '<span class="bt-cap-legend-item">' + capIcon("mem", S.legendMem) + escapeHTML(S.legendMem) + "</span>" +
+      (tooLong ? '<span class="bt-cap-legend-item">' + capIcon("shortctx", S.legendShortCtx) +
+        escapeHTML(S.legendShortCtx) + "</span>" : "") +
+      "</span>";
+  }
+
+  /* A short, plain summary of both capacity cells for the expanded row: the
+     figure, which limit set it, what each limit allows, and one sentence of
+     context. The method itself is explained on the page, not here. */
+  function capBreakdown(entry) {
+    var rows = [capacity(entry, "chat"), capacity(entry, "agentic")];
+    var b = rows[0].budget;
+    var html = '<div class="bt-capacity"><div class="bt-capacity-title">' + escapeHTML(S.capHeading) + "</div>";
+    html += '<div class="bt-capacity-grid">';
+    rows.forEach(function (r) {
+      var label = r.kind === "chat" ? S.capChatRow(fmtTokens(r.ctx)) : S.capAgenticRow(fmtTokens(r.ctx));
+      var by = r.limit === "context" ? S.capByContext :
+        r.limit === "mem" ? S.capByMem : r.limit === "tie" ? S.capByTie : S.capByPerf;
+      var detail = S.capSpeedAllows(r.perf, r.ceiling) + " · " +
+        (r.mem === null ? S.capMemNa : S.capMemFits(r.mem));
+      html += '<span class="bt-cap-label">' + escapeHTML(label) + "</span>";
+      html += '<span class="bt-cap-result" title="' + escapeHTML(capTitle(r)) + '">' +
+        "<strong>" + (r.limit === "context" ? "—" : escapeHTML(S.capUsers(r.shown))) + "</strong>" +
+        capIcons(r) + ' <span class="bt-cap-by">' + escapeHTML(by) + "</span>" +
+        '<span class="bt-cap-detail">' + escapeHTML(detail) + "</span></span>";
+    });
+    html += "</div>";
+
+    var notes = [];
+    if (b.status === "ok") {
+      var unit = b.base === "DGX Spark" ? S.unitNode : b.base === "Thor" ? S.unitModule : S.unitGpu;
+      notes.push(S.capKvSummary(fmtGB(b.kv), fmtGB(b.weights), unit));
+    } else {
+      notes.push(limitWhy(rows[0]));
+    }
+    if (rows[0].tooLong || rows[1].tooLong) notes.push(S.capShortCtxLine(fmtTokens(entry.model_context_length)));
+    html += notes.map(function (l) { return '<p class="bt-capacity-note">' + escapeHTML(l) + "</p>"; }).join("");
+    html += "</div>";
+    return html;
+  }
+
 
   function deriveFilterOptions() {
     var dSet = {}, mSet = {}, qSet = {}, cSet = {};
@@ -385,7 +633,7 @@
     html += buildTargets();
     html += buildFilters();
     html += "</div>";
-    html += '<div class="bt-results-count" id="bt-results-count"></div>';
+    html += '<div class="bt-results-count bt-results-split" id="bt-results-count"></div>';
     html += '<div class="bt-table-wrap" id="bt-table-wrap"></div>';
     html += '<div class="bt-tooltip" id="bt-tooltip" role="tooltip" hidden></div>';
 
@@ -497,18 +745,32 @@
       '<span class="bt-arrow">&#9654;</span> ' + escapeHTML(S.targetsHeading) + "</button>";
     html += '<div class="bt-targets-body" id="bt-targets-body" hidden>';
     html += '<p class="bt-targets-intro">' + escapeHTML(S.targetsIntro) + "</p>";
+    html += '<div class="bt-targets-group"><div class="bt-targets-group-title">' + escapeHTML(S.groupSpeed) + "</div>";
+    html += '<p class="bt-targets-group-intro">' + escapeHTML(S.groupSpeedIntro) + "</p>";
     html += '<div class="bt-targets-grid">';
     html += targetItem(S.ttftThreshold, "ttft_threshold_ms", S.tip.aTtft, "");
     html += targetItem(S.tpsThreshold, "tps_threshold", S.tip.aTps, "");
     html += targetItem(S.chatMultiplier, "chat_multiplier", S.tip.aChat, "");
     html += targetItem(S.agenticMultiplier, "agentic_multiplier", S.tip.aAgentic, "");
     html += "</div>";
+    /* The preview streams at the TPS target, so it belongs with the speed
+       settings rather than after the memory ones. */
     html += '<div class="bt-tps-preview">';
     html += '<div class="bt-tps-preview-head"><span class="bt-tps-preview-title">' + escapeHTML(S.previewHeading) +
       '</span><span class="bt-preview-sub" id="bt-preview-sub"></span></div>';
     html += '<div class="bt-preview-text" id="bt-preview-text"></div>';
     html += '<p class="bt-preview-note">' + escapeHTML(S.previewDisclaimer) + "</p>";
     html += "</div>";
+    html += "</div>";
+    html += '<div class="bt-targets-group"><div class="bt-targets-group-title">' + escapeHTML(S.groupMemory) + "</div>";
+    html += '<p class="bt-targets-group-intro">' + escapeHTML(S.groupMemoryIntro) + "</p>";
+    html += '<div class="bt-targets-grid">';
+    html += contextItem(S.chatContext, "chat_context_tokens", S.tip.aChatCtx);
+    html += contextItem(S.agenticContext, "agentic_context_tokens", S.tip.aAgenticCtx);
+    html += targetItem(S.engineMemDiscrete, "engine_memory_discrete", S.tip.aEngineDiscrete, "");
+    html += targetItem(S.engineMemUnified, "engine_memory_unified", S.tip.aEngineUnified, "");
+    html += targetItem(S.weightsKvShare, "weights_kv_share", S.tip.aShare, "");
+    html += "</div></div>";
     html += "</div>";
     html += "</div>";
     return html;
@@ -518,14 +780,45 @@
      counts; the multipliers are genuinely fractional (1.5 by default). */
   var WHOLE_NUMBER_TARGETS = { ttft_threshold_ms: true, tps_threshold: true };
 
+  /* Stored as fractions (0.95) because that is how an engine takes them, and
+     shown as percentages (95) because that is how a person reads them. */
+  var PERCENT_TARGETS = { engine_memory_discrete: true, engine_memory_unified: true, weights_kv_share: true };
+
+  var NUMBER_TARGETS = ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier",
+    "engine_memory_discrete", "engine_memory_unified", "weights_kv_share"];
+  var CONTEXT_TARGETS = ["chat_context_tokens", "agentic_context_tokens"];
+
+  /* Powers of two, the sizes context lengths are actually configured in. A
+     free number would invite values no deployment uses. */
+  var CONTEXT_CHOICES = [4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576];
+
+  function shownTarget(key) {
+    return PERCENT_TARGETS[key] ? String(Math.round(config[key] * 1000) / 10) : String(config[key]);
+  }
+
   function targetItem(label, key, tipHtml, extra) {
-    var whole = WHOLE_NUMBER_TARGETS[key];
+    var whole = WHOLE_NUMBER_TARGETS[key] || PERCENT_TARGETS[key];
     return '<div class="bt-target-item">' +
       '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
-      '<input type="number" id="bt-assump-' + key + '" value="' + config[key] +
+      '<input type="number" id="bt-assump-' + key + '" value="' + shownTarget(key) +
       '" step="' + (whole ? "1" : "0.1") + '" min="' + (whole ? "1" : "0") + '"' +
+      (PERCENT_TARGETS[key] ? ' max="100"' : "") +
       (whole ? ' inputmode="numeric"' : "") + ">" +
       extra + "</div>";
+  }
+
+  function contextItem(label, key, tipHtml) {
+    var choices = CONTEXT_CHOICES.slice();
+    if (choices.indexOf(config[key]) === -1) choices.push(config[key]);
+    choices.sort(function (a, b) { return a - b; });
+    var html = '<div class="bt-target-item">' +
+      '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
+      '<select id="bt-assump-' + key + '">';
+    choices.forEach(function (n) {
+      html += '<option value="' + n + '"' + (n === config[key] ? " selected" : "") + ">" +
+        fmtTokens(n) + " (" + fmtInt(n) + ")</option>";
+    });
+    return html + "</select></div>";
   }
 
   /* ── Wiring ── */
@@ -542,12 +835,15 @@
       if (open) startPreview(container); else stopPreview();
     });
 
-    ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"].forEach(function (key) {
+    NUMBER_TARGETS.forEach(function (key) {
       var input = container.querySelector("#bt-assump-" + key);
       input.addEventListener("input", function () {
         var v = parseFloat(input.value);
         if (isNaN(v)) return;
-        if (WHOLE_NUMBER_TARGETS[key]) {
+        if (PERCENT_TARGETS[key]) {
+          if (v <= 0 || v > 100) return;
+          v = v / 100;
+        } else if (WHOLE_NUMBER_TARGETS[key]) {
           if (v < 1 || v !== Math.floor(v)) return;
         } else if (v < 0) {
           return;
@@ -558,7 +854,15 @@
       /* Snap the field back once the reader leaves it, so it can never sit
          there showing a number the table is not actually using. */
       input.addEventListener("change", function () {
-        if (input.value !== String(config[key])) input.value = config[key];
+        if (input.value !== shownTarget(key)) input.value = shownTarget(key);
+      });
+    });
+
+    CONTEXT_TARGETS.forEach(function (key) {
+      var select = container.querySelector("#bt-assump-" + key);
+      select.addEventListener("change", function () {
+        config[key] = parseInt(select.value, 10);
+        renderTable(container);
       });
     });
   }
@@ -715,8 +1019,11 @@
     container.querySelector("#bt-min-params").value = 0;
 
     resetConfig();
-    ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"].forEach(function (k) {
-      container.querySelector("#bt-assump-" + k).value = config[k];
+    NUMBER_TARGETS.forEach(function (k) {
+      container.querySelector("#bt-assump-" + k).value = shownTarget(k);
+    });
+    CONTEXT_TARGETS.forEach(function (k) {
+      container.querySelector("#bt-assump-" + k).value = String(config[k]);
     });
 
     /* The preview is driven by the TPS input, not by config, so it has to be
@@ -1051,8 +1358,8 @@
 
     var countEl = container.querySelector("#bt-results-count");
     if (countEl) {
-      countEl.innerHTML = '<span class="bt-count-label">' + escapeHTML(S.matching) + "</span> " +
-        S.matchingCount(entries.length, rawData.benchmarks.length);
+      countEl.innerHTML = '<span class="bt-count"><span class="bt-count-label">' + escapeHTML(S.matching) + "</span> " +
+        S.matchingCount(entries.length, rawData.benchmarks.length) + "</span>" + capLegend(entries);
     }
 
     var wrap = container.querySelector("#bt-table-wrap");
@@ -1134,8 +1441,8 @@
       html += '<td class="' + ttftCls + '"' + ttftTitle + ">" + (ttft !== null ? fmt(ttft, 0) : "—") + "</td>";
 
       html += '<td class="bt-num">' + (maxC > 0 ? maxC : '<span class="bt-muted">0</span>') + "</td>";
-      html += '<td class="bt-num">' + getChatUsers(entry) + "</td>";
-      html += '<td class="bt-num">' + getAgenticUsers(entry) + "</td>";
+      html += capCell(entry, "chat");
+      html += capCell(entry, "agentic");
       html += '<td class="bt-num">' + (entry.tp != null && entry.tp !== 1 ? entry.tp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-num">' + (entry.dp != null && entry.dp !== 1 ? entry.dp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-num">' + (entry.pp != null && entry.pp !== 1 ? entry.pp : '<span class="bt-muted">—</span>') + "</td>";
@@ -1190,6 +1497,8 @@
         html += '<p class="bt-preview-note">' + escapeHTML(S.previewPick) + "</p>";
         html += "</div>";
         html += "</div>";
+
+        html += capBreakdown(entry);
 
         var deviceStr = escapeHTML(entry.device);
         if (entry.tp != null && entry.tp !== 1) {

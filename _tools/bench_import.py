@@ -21,7 +21,8 @@ DATA = os.path.join(ROOT, "assets/data/benchmarks.json")
 # entry produces a needlessly large diff and hides the real change.
 FIELDS = ["id", "model", "params", "intelligence_index", "agentic_index",
           "device", "quantization", "engine", "mtp", "mtp_k", "tp",
-          "notes", "sources", "data_points", "dp", "pp"]
+          "notes", "sources", "data_points", "dp", "pp",
+          "kv_bytes_per_token", "kv_window_bytes", "kv_heads", "model_context_length"]
 
 # Only these three CSV columns reach the table. The tool also emits p50/p90 for
 # TTFT, ITL, TPS and Latency plus Throughput (RPS); the table has no field for
@@ -186,8 +187,12 @@ def cmd_inspect(a):
         print(f"  params             {e['params']}")
         print(f"  intelligence_index {e['intelligence_index']}")
         print(f"  agentic_index      {e['agentic_index']}")
-        print("  -> Reuse all three verbatim. Both indexes are properties of the")
-        print("     model, not the run, so do NOT ask the user and do NOT re-fetch.")
+        print(f"  kv_bytes_per_token {e.get('kv_bytes_per_token')}")
+        print(f"  kv_window_bytes    {e.get('kv_window_bytes')}")
+        print(f"  kv_heads           {e.get('kv_heads')}")
+        print(f"  model_context_length {e.get('model_context_length')}")
+        print("  -> Reuse all seven verbatim. They are properties of the model, not")
+        print("     the run, so do NOT ask the user and do NOT re-fetch or recompute.")
     elif len(names) > 1:
         print(f"AMBIGUOUS: {stem!r} matches more than one model: {names}")
         print("  -> Ask the user which one. Do not pick.")
@@ -199,6 +204,8 @@ def cmd_inspect(a):
         if near:
             print(f"  similar existing names, NOT assumed to be the same model: {near}")
         print("  -> params, intelligence_index and agentic_index must come from the user.")
+        print("  -> kv_bytes_per_token, kv_window_bytes, kv_heads and model_context_length")
+        print("     come from the model's config.json — see step 4 of the add-benchmark skill.")
 
     print("\nStill to be confirmed by the user (none of it is in the folder):")
     print(f"  device        required, exactly one of: {', '.join(DEVICE_SLUG)}")
@@ -209,7 +216,7 @@ def cmd_inspect(a):
     # names because benchmarks.json is consumed cross-origin by another site.
     print(f"  mtp / mtp_k   speculative decoding — name "
           f"{'suggests MTP' if mtp_hint else 'does not mention a mechanism'}")
-    print("  tp / dp / pp  parallelism actually used")
+    print("  tp / dp / pp  parallelism actually used — tp is 1, not null, on a single GPU")
     if len(names) != 1:
         print("  params, intelligence_index, agentic_index  (model not resolved above)")
     print("  notes         optional; unverified sibling results belong here")
@@ -226,7 +233,7 @@ def cmd_add(a):
         sys.exit(f"unknown field(s) {unknown} — the table has no column for them.\n"
                  f"  Allowed: {FIELDS}")
     if missing:
-        sys.exit(f"missing field(s) {missing} — every entry carries all 16 keys "
+        sys.exit(f"missing field(s) {missing} — every entry carries all {len(FIELDS)} keys "
                  f"(use null where a value does not apply)")
 
     doc = load_data()

@@ -29,7 +29,13 @@ KNOWN_DEVICES = {
 }
 
 REQUIRED = ["id", "model", "device", "quantization", "engine",
-            "mtp", "tp", "dp", "pp", "data_points"]
+            "mtp", "tp", "dp", "pp", "data_points",
+            "kv_bytes_per_token", "kv_window_bytes", "kv_heads", "model_context_length"]
+
+# Properties of the model, not the run: every row for one model must carry the
+# same values, exactly like params and the two AA indexes.
+KV_FIELDS = ["kv_bytes_per_token", "kv_window_bytes", "kv_heads"]
+MODEL_FIELDS = KV_FIELDS + ["model_context_length"]
 
 # The two Artificial Analysis columns. Required so a new entry cannot ship with
 # the cells simply absent — `null` is the way to say "AA publishes no score",
@@ -65,9 +71,26 @@ def main():
         print("error: no benchmarks found")
         return 1
 
-    for key in ("ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"):
+    for key in ("ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier",
+                "chat_context_tokens", "agentic_context_tokens", "engine_memory_discrete",
+                "engine_memory_unified", "weights_kv_share"):
         if key not in cfg:
             warn(f"config is missing '{key}' — the widget will fall back to its built-in default")
+
+    mem = data.get("memory") or {}
+    mem_gb = mem.get("memory_gb") or {}
+    wbytes = mem.get("weight_bytes_per_param") or {}
+    unified = mem.get("unified_memory") or []
+    if not mem_gb or not wbytes:
+        err("the 'memory' block (memory_gb, weight_bytes_per_param) is missing — "
+            "no row's memory limit could be calculated")
+
+    def device_base(device):
+        return re.sub(r"^\d+×\s*", "", device or "")
+
+    def params_count(v):
+        m = re.fullmatch(r"(\d+(?:\.\d+)?)([BT])", v or "")
+        return float(m.group(1)) * (1e12 if m.group(2) == "T" else 1e9) if m else None
 
     ttft_max = cfg.get("ttft_threshold_ms", 1000)
     tps_min = cfg.get("tps_threshold", 15)
@@ -99,6 +122,38 @@ def main():
             elif not isinstance(e[field], (int, float, type(None))) \
                     or isinstance(e[field], bool):
                 err(f"{eid}: {field} is {e[field]!r} — must be a number or null")
+
+        if e.get("tp") is None:
+            err(f"{eid}: tp is null — record 1 for a single GPU or node. The memory "
+                f"limit reads tp as the number of devices the run used, so null "
+                f"would silently mean one")
+
+        base = device_base(e.get("device"))
+        if mem_gb and base not in mem_gb:
+            err(f"{eid}: device {base!r} has no entry in memory.memory_gb")
+        if wbytes and e.get("quantization") not in wbytes:
+            err(f"{eid}: quantization {e.get('quantization')!r} has no entry in "
+                f"memory.weight_bytes_per_param — its memory limit cannot be computed")
+
+        bpt, win, heads = (e.get(k) for k in KV_FIELDS)
+        if bpt is None:
+            if win is not None or heads is not None:
+                err(f"{eid}: kv_bytes_per_token is null but kv_window_bytes/kv_heads "
+                    f"are set — null all three for a model whose cache is not modelled")
+        else:
+            if not isinstance(bpt, (int, float)) or isinstance(bpt, bool) or bpt <= 0:
+                err(f"{eid}: kv_bytes_per_token is {bpt!r} — must be a positive number")
+            if not isinstance(win, int) or isinstance(win, bool) or win < 0:
+                err(f"{eid}: kv_window_bytes is {win!r} — must be a whole number ≥ 0 "
+                    f"(0 when the model has no sliding-window layers)")
+            if heads is not None and (not isinstance(heads, int) or isinstance(heads, bool)
+                                      or heads < 1):
+                err(f"{eid}: kv_heads is {heads!r} — a positive whole number, or null "
+                    f"for a cache copied to every GPU (MLA and other compressed caches)")
+        mcl = e.get("model_context_length")
+        if mcl is not None and (not isinstance(mcl, int) or isinstance(mcl, bool) or mcl < 1):
+            err(f"{eid}: model_context_length is {mcl!r} — a whole number of tokens "
+                f"(max_position_embeddings from the model's config.json), or null")
 
         q = e.get("quantization", "")
         if q and q != q.upper():
@@ -143,6 +198,53 @@ def main():
             product = (e.get("tp") or 1) * (e.get("dp") or 1) * (e.get("pp") or 1)
             if product != nodes:
                 warn(f"{eid}: tp×dp×pp = {product} but device says {nodes} nodes")
+
+    # ---- model-level KV fields agree across rows ---------------------------
+    by_model = defaultdict(set)
+    for e in entries:
+        by_model[e.get("model")].add(tuple(e.get(k) for k in MODEL_FIELDS))
+    for model, vals in by_model.items():
+        if len(vals) > 1:
+            err(f"{model!r} rows disagree on {'/'.join(MODEL_FIELDS)}: {sorted(vals, key=str)} — "
+                f"these describe the model and must match on every row")
+
+    unmodelled = sorted(m for m, vals in by_model.items() if any(v[:3] == (None, None, None) for v in vals))
+    if unmodelled:
+        warn(f"{len(unmodelled)} model(s) have no KV-cache size, so their capacity rests "
+             f"on the speed estimate alone: {', '.join(unmodelled)}")
+
+    # ---- memory side of the capacity estimate ------------------------------
+    # Must stay identical to memoryBudget() and capacity() in
+    # assets/js/benchmark-table.js: both reserves come off the physical memory
+    # before the weights do, and the weights split evenly over tp × pp.
+    ctx_agentic = cfg.get("agentic_context_tokens", 131072)
+    conflicts, short = [], []
+    for e in entries:
+        base = device_base(e.get("device"))
+        gb, bpp = mem_gb.get(base), wbytes.get(e.get("quantization"))
+        n = params_count(e.get("params"))
+        if e.get("kv_bytes_per_token") is None or not gb or not bpp or n is None:
+            continue
+        tp, pp = e.get("tp") or 1, e.get("pp") or 1
+        alloc = cfg.get("engine_memory_unified", 0.8) if base in unified \
+            else cfg.get("engine_memory_discrete", 0.95)
+        budget = gb * 1e9 * alloc * cfg.get("weights_kv_share", 0.8)
+        weights = n * bpp / (tp * pp)
+        if weights >= budget:
+            conflicts.append(f"{e['id']} ({weights / 1e9:.0f} GB of weights per device "
+                             f"against {budget / 1e9:.0f} GB)")
+        mcl = e.get("model_context_length")
+        if mcl is not None and mcl < ctx_agentic:
+            short.append(f"{e['id']} (context window {mcl} tokens)")
+    if conflicts:
+        warn(f"{len(conflicts)} rows' weights exceed the assumed memory budget, so their "
+             f"capacity rests on the speed estimate alone — usually offloading, or a "
+             f"params or quantization label that does not match what actually ran: "
+             f"{'; '.join(conflicts)}")
+    if short:
+        warn(f"{len(short)} rows' models have a context window shorter than the default "
+             f"agentic context ({ctx_agentic}), so their agentic capacity shows a dash: "
+             f"{'; '.join(short)}")
 
     # ---- duplicate ids ----------------------------------------------------
     for eid, n in Counter(e.get("id") for e in entries).items():

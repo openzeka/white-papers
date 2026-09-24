@@ -28,7 +28,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [DeepSeek-V4.1-Flash 4× DGX Spark Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/) | 763B MoE model with TP4: vLLM build chain, SM121 patches, Engram-on-disk, DSpark speculative decoding | 4× NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 8× DGX Spark TP8 Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-8spark-deployment/) | 763B MoE model with TP8: 300K Engram-in-memory vs 1M Engram-on-disk, NCCL optimization, TP4 comparison | 8× NVIDIA DGX Spark (GB10) |
 | [Kimi K3 Inference Benchmark on DGX-B300](https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/) | vLLM vs SGLang and direct vs speculative decoding | NVIDIA DGX-B300, 8× Blackwell Ultra, TP=8 |
-| [LLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/llm-inference-benchmarks/) | Interactive table of every LLM configuration we have measured: filter, set your own latency and speed targets, read the supported concurrency | DGX Spark (1–8 nodes), DGX B300, RTX PRO 6000, Jetson Thor |
+| [LLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/llm-inference-benchmarks/) | Interactive table of every LLM configuration we have measured: filter, set your own latency and speed targets, read the supported concurrency and estimated user capacity | DGX Spark (1–8 nodes), DGX B300, RTX PRO 6000, Jetson Thor |
 | [CV Inference Benchmark Explorer](https://whitepapers.openzeka.com/cv-inference-benchmarks/) | Interactive computer-vision benchmark: sustained FPS per device and model, and how many cameras it carries at your target FPS | DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060, RTX 3090 |
 
 ---
@@ -73,9 +73,11 @@ You set the targets, and the table answers:
   Every row is re-evaluated against them.
 - **Max C** — the highest measured concurrency at which the configuration still
   meets both targets.
-- **Estimated chat and agentic capacity** — how many *people* that concurrency
-  might serve, from a usage multiplier you can change. This is an estimate, not
-  a measured user count.
+- **Estimated chat and agentic capacity** — how many *people* a configuration
+  might serve: the smaller of a **speed limit** (Max C × a usage multiplier you
+  can change) and a **KV cache memory limit** (how many sessions of your chosen
+  context length fit in the memory left after the model weights). An icon shows
+  which limit applies. This is an estimate, not a measured user count.
 - **Full sweep per row** — TTFT, per-request TPS and aggregate throughput at
   every concurrency level, with pass/fail against your targets.
 - **Model capability context** — Intelligence and Agentic Index scores from

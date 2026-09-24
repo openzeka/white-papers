@@ -10,7 +10,7 @@ description: >-
   RTX PRO 6000 Blackwell and Jetson Thor. Filter by model, parameter count,
   device, quantization and concurrency, and set your own performance targets.
 permalink: /llm-inference-benchmarks/
-last_modified_date: 2026-09-02
+last_modified_date: 2026-09-24
 toc: false
 ---
 
@@ -126,6 +126,15 @@ parallelism divides the maths inside a layer; data parallelism runs complete
 copies side by side; pipeline parallelism puts different layers on different
 devices.
 
+**KV cache** — the memory an engine keeps for every token of a session, so it
+does not have to reprocess the whole conversation for each new word. It grows
+with the length of the session, and after the model weights it is the largest
+user of memory.
+
+**Context length** — every token a session holds: its history, anything pasted
+in, tool results and the replies. Quoted in powers of two; 32K is 32,768
+tokens. A model's **context window** is the most it can hold.
+
 ### Two distinctions worth fixing first
 
 **Filters decide which rows appear. Targets change what the numbers mean.**
@@ -194,12 +203,22 @@ Max C and the selected concurrency answer different questions. The selected C
 chooses which measurement is on screen. Max C looks across the whole sweep and
 reports the highest level that clears your targets.
 
-The capacity columns convert Max C into people:
+The capacity columns turn this into people. Each shows **the smaller of two
+independent limits**, because a configuration can run out of either of two
+things first: speed, or memory for the KV cache.
 
-- Chat Capacity = `floor(Max C × Chat Usage Multiplier)`
-- Agentic Capacity = `floor(Max C × Agentic Usage Multiplier)`
+**Why two limits.** Max C comes from short 128-token requests, so it tells you
+how many requests the machine answers fast enough — and nothing about memory.
+A real user's conversation, however, stays in the KV cache for as long as the
+session lasts, and a 32K- or 128K-token session takes far more room than a
+benchmark request. A configuration can meet its speed targets comfortably and
+still have room for only a handful of long sessions. The table checks both and
+shows whichever runs out first.
 
-The multipliers stand for **how busy each kind of user is**. The chat default is
+**1. Speed limit** — `floor(Max C × Usage Multiplier)`.
+
+The multipliers stand for **how busy each kind of user is**: how many of them
+share one request slot. The chat default is
 higher (4) because interactive users spend much of their time reading a reply,
 thinking and typing the next prompt, and hold no request slot while they do —
 so several of them share one. Agentic work is busier: an agent may make
@@ -208,15 +227,65 @@ a slot occupied far longer, which is why its default is lower (1.5). Lower the
 agentic multiplier for agents that run almost continuously; raise it for
 intermittent use.
 
+**2. KV cache memory limit** — how many users' sessions fit in the memory left
+once the model is loaded. It is worked out per GPU (per node for DGX Spark) in
+four steps, using the assumptions under **Performance Targets and Capacity
+Assumptions**:
+
+1. **Memory the engine may use** — the device's memory × **Engine Memory
+   Allocation**: 95% on a discrete GPU (DGX B300, RTX PRO 6000), 80% on unified
+   memory (DGX Spark, Jetson Thor), where the operating system shares the same
+   pool.
+2. **Room for weights and cache** — 80% of that, the **Weights and KV Cache
+   Share**. The other 20% is working memory for activations and other runtime
+   state.
+3. **Minus the model weights** — parameter count × bytes per parameter for its
+   quantization (2 for BF16, 1 for FP8, 0.5 for the 4-bit formats), divided
+   across the GPUs the model is split over.
+4. **Divided by one session** — what is left, divided by the KV cache one
+   user's session needs: the **Chat Context Length** (default 32K tokens) or
+   **Agentic Context Length** (default 128K) × the model's cache size per token.
+
+The cache size per token depends on the model. For a standard transformer it is
+`2 × layers × KV heads × head size` bytes at FP8, the format the cache is
+assumed to be stored in. Models with sliding-window, linear-attention or
+compressed (MLA) layers store much less, so each row uses its own model's
+figure. With several GPUs the weights, and for most models the cache, are split
+between them, and data-parallel copies each serve their own users.
+
+There is **no multiplier on this side**. Every user counted by the speed limit
+keeps a session open, even while reading or typing, so each needs their own
+space in the cache. Chat and agentic users differ here only in how long their
+sessions are: agentic sessions also carry tool calls and their results, which
+is why the default is four times longer.
+
+**Which limit applies.** The icon beside each figure shows it — a lightning
+bolt when the speed targets set it, a memory chip when KV cache memory does.
+Hover over a figure for a one-line reason, or open the row for a short summary.
+
+**Two exceptions.** For a few runs the model weights alone are larger than the
+memory assumed to be available. They evidently ran, which usually means part
+of the model or its KV cache was moved out to CPU memory or disk — something
+this estimate does not model — so their capacity rests on the speed limit
+alone, and the row says so. And every model has a **context window**, the
+longest session it can hold at all: choose a context length longer than a
+model's window and that model cannot serve such sessions on any hardware, so
+its capacity shows a dash with a warning triangle.
+
 <div class="bt-howto-example" markdown="1">
 **Example.** With targets of 1000 ms TTFT and 15 tok/s, a configuration meets
 both up to C=8 but drops below 15 tok/s at C=16, so Max C is 8. At the default
-multipliers that row reads 32 chat users or 12 agentic users. Tighten TTFT to
-500 ms and the same row may stop at C=4, halving both.
+multipliers the speed limit is 32 chat users or 12 agentic users. Suppose the
+KV cache left beside the weights holds 625,000 tokens: 19 chat sessions of 32K
+fit, or 4 agentic sessions of 128K. The row shows 19 and 4, both set by KV
+cache memory. Tighten TTFT to 500 ms and the same row may stop at C=4, halving
+the speed limit to 16 and 6 — chat is now set by speed, agentic still by KV
+cache memory.
 </div>
 
-**These capacity figures are estimates derived from a measured Max C.** They
-were not obtained by connecting 32 chat users or 12 agentic users to the system.
+**These capacity figures are estimates.** The speed limit is derived from a
+measured Max C, the KV cache memory limit from the model's architecture and the
+device's memory. Neither was obtained by connecting that many users to the system.
 
 ### 5. Open a row for the detail
 
@@ -224,7 +293,8 @@ The whole row is clickable. Opening one shows the complete concurrency sweep,
 with the status and cell colours marking whether your targets are met at every
 level — the behaviour a single headline figure hides. Selecting any measured
 level plays the speed actually recorded there, so C=1, C=8 and C=32 can be
-compared by ear as well as by number.
+compared by ear as well as by number. Below them, a short capacity summary
+shows what each limit allows for chat and agentic use, and which one applies.
 
 The chart carries two curves:
 
@@ -271,19 +341,26 @@ most suitable one.
 
 ### What this does not tell you
 
-The table deliberately uses one comparable fixed workload, mean values and
-simple capacity multipliers, so that a first comparison is possible without
-first defining a full production traffic model. It is **not a substitute for a
-production load test**. Tail latency, variable prompt and output lengths,
-request-arrival patterns, agent call chains, batching, prefix reuse, context
-length and KV-cache pressure can all change usable capacity.
+The table deliberately uses one comparable fixed workload, mean values, simple
+capacity multipliers and one standard memory formula, so that a first
+comparison is possible without first defining a full production traffic model.
+It is **not a substitute for a production load test**. Tail latency, variable
+prompt and output lengths, request-arrival patterns, agent call chains,
+batching and prefix reuse can all change usable capacity.
+
+The KV cache memory limit is an estimate from that formula, not a reading of what the
+engine actually allocated: its real reserves, the cache precision, prefix
+sharing and offloading all move it. And the speed limit still comes from
+128-token prompts. A session holding 32K or 128K tokens of context will usually
+see a longer TTFT and a somewhat lower TPS than the table shows — the KV cache
+memory limit checks that the sessions fit, not how fast they run.
 
 Capacity estimates are also most informative where a configuration has a
 meaningful concurrency sweep behind it, rather than an isolated C=1 result.
 
-Planned refinements include workload and context-length filters, KV-cache-aware
-concurrency limits, and timing-based capacity modes using measured service
-latency, user think time and Little's Law.
+Planned refinements include workload filters, speed measured at longer
+contexts, and timing-based capacity modes using measured service latency, user
+think time and Little's Law.
 
 </div>
 </details>

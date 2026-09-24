@@ -200,6 +200,50 @@
   color: var(--bt-text);
 }
 
+/* The capacity legend shares the count's line and drops below it when the
+   line is too narrow for both. A separate class, because the CV explorer
+   loads this stylesheet too and its count line is plain inline text. */
+.bt-results-split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+}
+
+.bt-cap-legend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-left: auto;
+  font-size: 12px;
+}
+
+.bt-cap-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bt-cap-legend .bt-cap-icon { margin-left: 0; }
+
+/* ── Capacity: which estimate set the number ── */
+
+.bt-cap-icon {
+  display: inline-block;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  vertical-align: -3px;
+}
+
+.bt-cap-perf { color: #b07800; }
+.bt-cap-mem { color: #2f6db5; }
+.bt-cap-shortctx { color: #c0392b; }
+
+.bt-table tbody td.bt-cap { cursor: help; }
+
 /* ── Table ── */
 
 /* Bounded height, scrolling on both axes: whenever the table is on screen its
@@ -656,6 +700,27 @@
   color: var(--bt-text-muted);
 }
 
+.bt-targets-group + .bt-targets-group {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--bt-border);
+}
+
+.bt-targets-group-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bt-text);
+  margin-bottom: 2px;
+}
+
+.bt-targets-group-intro {
+  margin: 0 0 10px;
+  max-width: 78ch;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--bt-text-muted);
+}
+
 .bt-targets-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -665,6 +730,9 @@
 .bt-target-item {
   display: flex;
   flex-direction: column;
+  /* bottom-aligned, so a label that wraps to two lines does not push its
+     input below the others in the row */
+  justify-content: flex-end;
   gap: 5px;
 }
 
@@ -677,6 +745,7 @@
   gap: 4px;
 }
 
+.bt-target-item select,
 .bt-target-item input[type="number"] {
   width: 100%;
   padding: 6px 8px;
@@ -686,8 +755,12 @@
   background: var(--bt-bg);
   border: 1px solid var(--bt-border);
   border-radius: 4px;
+  /* one height for both, so the two groups line up row by row */
+  box-sizing: border-box;
+  height: 32px;
 }
 
+.bt-target-item select:focus,
 .bt-target-item input[type="number"]:focus {
   outline: none;
   border-color: var(--bt-green);
@@ -1037,5 +1110,58 @@ details.bt-howto > summary:focus-visible {
   margin: 10px 0 0;
   font-size: 0.82rem;
   line-height: 1.5;
+  color: var(--bt-text-muted);
+}
+
+/* ── Expanded row: capacity breakdown ──
+   A grid, not a table: a nested table would inherit the outer table's dark
+   header, centring and zeroed cell padding. .bt-table's nowrap and centring
+   are inherited by everything inside it, so both are reset here. */
+
+.bt-capacity {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-radius: var(--bt-radius);
+  text-align: left;
+  white-space: normal;
+  cursor: auto;
+}
+
+.bt-capacity-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.bt-capacity-grid {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 10px 28px;
+  align-items: baseline;
+  font-size: 13px;
+}
+
+.bt-capacity-grid .bt-cap-label { font-weight: 600; }
+
+.bt-cap-result strong { font-size: 15px; }
+
+.bt-cap-result { cursor: help; }
+
+.bt-cap-by { color: var(--bt-text-muted); }
+
+.bt-cap-detail {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--bt-text-muted);
+}
+
+.bt-capacity-note {
+  margin: 12px 0 0;
+  max-width: 100ch;
+  font-size: 12.5px;
+  line-height: 1.55;
   color: var(--bt-text-muted);
 }

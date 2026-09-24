@@ -39,11 +39,20 @@
 
     /* Performance targets / assumptions */
     targetsHeading: "Performans Hedefleri ve Kapasite Varsayımları",
-    targetsIntro: "Bu dört değer, hangi performansın kabul edilebilir sayılacağını belirler. Her satırın Maks C, Chat Kapasitesi ve Agentic Kapasitesi değerleri bunlara göre yeniden hesaplanır; TPS ve TTFT sütunlarındaki yeşil ve kırmızı renklendirme de bunları izler. Buradaki değerler satırları filtrelemez — sayıların anlamını değiştirir.",
+    targetsIntro: "Bu değerler, hangi performansın kabul edilebilir sayılacağını ve kapasitenin nasıl tahmin edileceğini belirler. Her satırın Maks C, Chat Kapasitesi ve Agentic Kapasitesi değerleri bunlara göre yeniden hesaplanır; TPS ve TTFT sütunlarındaki yeşil ve kırmızı renklendirme iki hız hedefini izler. Buradaki değerler satırları filtrelemez — sayıların anlamını değiştirir.",
     ttftThreshold: "Maksimum TTFT Hedefi (ms)",
     tpsThreshold: "Minimum TPS Hedefi (tok/s)",
     chatMultiplier: "Chat Kullanım Çarpanı",
     agenticMultiplier: "Agentic Kullanım Çarpanı",
+    groupSpeed: "Hız sınırı",
+    groupSpeedIntro: "Her isteğin ne kadar hızlı olması gerektiği. Maks C, iki hedefi birden karşılayan en yüksek ölçülmüş eşzamanlılıktır; çarpanlar onu kişi sayısına çevirir.",
+    groupMemory: "KV cache bellek sınırı",
+    groupMemoryIntro: "Model ağırlıklarının yanında kalan KV cache'e kaç kullanıcının oturumunun sığdığı. Her kullanıcıya aşağıdaki bağlam uzunluğunda bir oturum ayrılır; bu tarafta çarpan yoktur.",
+    chatContext: "Chat Bağlam Uzunluğu (token)",
+    agenticContext: "Agentic Bağlam Uzunluğu (token)",
+    engineMemDiscrete: "Engine Bellek Tahsisi — Ayrık GPU (%)",
+    engineMemUnified: "Engine Bellek Tahsisi — Birleşik Bellek (%)",
+    weightsKvShare: "Ağırlık ve KV Cache Payı (%)",
 
     /* Table */
     colModel: "Model",
@@ -70,6 +79,37 @@
     targetMet: "Hedef karşılanıyor — bu değer mevcut performans hedefinizi karşılıyor.",
     targetNotMet: "Hedef karşılanmıyor — bu değer mevcut performans hedefinizi karşılamıyor.",
     viewDetails: "Ayrıntıları Göster — bu yapılandırmanın tüm eşzamanlılık taramasını, grafiğini ve ek bilgilerini gösterir.",
+
+    /* Capacity: which of the two limits set the number */
+    legendLead: "Kapasiteyi belirleyen:",
+    legendPerf: "hız hedefleri",
+    legendMem: "KV cache belleği",
+    legendShortCtx: "oturum, modelin bağlam penceresinden uzun",
+    capPerf: function (mem, ctx) { return "Hız hedefleri belirliyor. KV cache belleği " + ctx + " tokenlık " + mem + " oturum alırdı."; },
+    capMem: function (perf, ctx) { return "KV cache belleği belirliyor: bu kadar " + ctx + " tokenlık oturum sığıyor. Hız hedefleri " + perf + " kişiye izin verirdi."; },
+    capTie: function (ctx) { return "Hız hedefleri ve KV cache belleği (" + ctx + " tokenlık oturumlar) aynı sayıya izin veriyor."; },
+    capUnchecked: function (why) { return "Hız hedefleri belirliyor. " + why; },
+    whyUnsupported: "Bu modelin cache düzeni henüz modellenmediği için KV cache bellek sınırı hesaplanmıyor; bu değer yalnızca hız ölçümlerine dayanır.",
+    whyWeights: "Bu çalıştırma için KV cache bellek sınırı hesaplanamıyor: model ağırlıkları tek başına kullanılabilir varsayılan bellekten büyük. Bu genellikle çalıştırmanın modelin ya da KV cache'in bir kısmını CPU belleğine veya diske taşıdığı anlamına gelir. Bu yüzden değer yalnızca hız ölçümlerine dayanır.",
+    whyUnknown: "Donanım ya da ağırlık hassasiyeti bellek tablosunda olmadığı için KV cache bellek sınırı hesaplanamıyor; bu değer yalnızca hız ölçümlerine dayanır.",
+    capShortCtx: function (len, ctx) { return ctx + " tokenlık bir oturum, bu modelin " + len + " tokenlık bağlam penceresinden — tutabileceği en fazla tokendan — uzun; model bu uzunlukta oturumlara hizmet veremez. Bir değer görmek için daha kısa bir bağlam uzunluğu seçin."; },
+    capCeiling: function (c) { return " Hız değeri bir alt sınırdır: çalıştırma, test edilen en yüksek seviye olan C=" + c + " noktasında da hedeflerinizi karşıladı."; },
+    capHeading: "Kapasite",
+    capChatRow: function (ctx) { return "Chat · " + ctx + " tokenlık oturumlar"; },
+    capAgenticRow: function (ctx) { return "Agentic · " + ctx + " tokenlık oturumlar"; },
+    capUsers: function (n) { return n + " kişi"; },
+    capByPerf: "hız hedefleri belirliyor",
+    capByMem: "KV cache belleği belirliyor",
+    capByTie: "hız hedefleri ve KV cache belleği aynı",
+    capByContext: "modelin bağlam penceresinden uzun",
+    capSpeedAllows: function (n, atLeast) { return "Hız hedefleri " + (atLeast ? "en az " : "") + n + " kişiye izin veriyor"; },
+    capMemFits: function (n) { return "KV cache belleğine " + n + " oturum sığıyor"; },
+    capMemNa: "KV cache belleği hesaplanmadı",
+    capKvSummary: function (kv, w, unit) { return "Model ağırlıkları yüklendikten sonra (" + unit + " başına " + w + " GB), KV cache için " + unit + " başına yaklaşık " + kv + " GB kalıyor."; },
+    capShortCtxLine: function (len) { return "Bu modelin bağlam penceresi " + len + " token; varsayımlarda ayarlanan uzunlukta bir oturumu tutamaz."; },
+    unitGpu: "GPU",
+    unitNode: "düğüm",
+    unitModule: "modül",
 
     /* Expanded row */
     detailC: "C", detailTtft: "TTFT (ms)", detailTps: "TPS (tok/s)", detailStatus: "Durum",
@@ -106,8 +146,8 @@
       tps: "<strong>TPS — Tokens per Second</strong><p>Modelin <em>tek</em> bir istek için saniyede ürettiği token sayısı. Bir token kabaca bir kelimenin dörtte üçü kadardır.</p><p>İstek başına hızdır, toplam üretim değil — toplam eğri satırı açtığınızda görünür. Seçili eşzamanlılıkta, 128 token girdi ve 128 token çıktı ile yapılan on turun ortalamasıdır.</p><p><em>Yüksek olması iyidir.</em></p>",
       ttft: "<strong>TTFT — Time to First Token</strong><p>Kullanıcının isteği gönderdikten sonra ilk kelimenin belirmesine kadar beklediği süre, milisaniye cinsinden.</p><p>Seçili eşzamanlılıkta, 128 token'lık girdiyle yapılan on turun ortalamasıdır. Prefill işi istemle birlikte büyüdüğü için, daha uzun girdilerde TTFT'nin kabaca oranlı biçimde artmasını bekleyin.</p><p><em>Düşük olması iyidir.</em></p>",
       maxc: "<strong>Maks C — Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın performans hedeflerinizin ikisini birden karşıladığı en yüksek <em>ölçülmüş</em> eşzamanlılık.</p><p>Yalnızca ölçülmüş noktalardan alınır; hiçbiri iki hedefi birden sağlamıyorsa 0 görünür. Kişi değil, eşzamanlı istek sayar.</p><p>Yapılandırmanın sabit bir özelliği değildir — bir hedefi değiştirdiğinizde oynar; aynı satır bir şartta 16'ya çıkarken daha katı bir şartta 8'e inebilir.</p>",
-      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç kişinin kullanabileceği — <code>floor(Maks C × Chat Kullanım Çarpanı)</code>.</p><p>Maks C'den yüksektir: chat kullanıcıları zamanının çoğunda okur, düşünür ve yazar; bu sürede istek yuvası tutmadıkları için birkaç kişi tek yuvayı paylaşır.</p><p>Ölçülmüş bir Maks C'den türetilmiş tahmindir. Sisteme bu kadar kullanıcı bağlanmadı.</p>",
-      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç kişiyi desteklediği — <code>floor(Maks C × Agentic Kullanım Çarpanı)</code>.</p><p>Chat değerinden düşüktür: bir ajan planlarken, araç çağırırken ve sonuçları değerlendirirken art arda çağrı yapabilir ve yuvayı çok daha uzun tutar.</p><p>Ölçülmüş bir Maks C'den türetilmiş tahmindir; o kadar kullanıcıyla yapılmış bir ölçüm değildir.</p>",
+      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç kişinin kullanabileceği. İki tahminden küçük olanıdır.</p><p><strong>Hız:</strong> <code>floor(Maks C × Chat Kullanım Çarpanı)</code> — chat kullanıcıları zamanının çoğunda okur, düşünür ve yazar; bu sürede istek yuvası tutmadıkları için birkaç kişi tek yuvayı paylaşır.</p><p><strong>KV cache belleği:</strong> model ağırlıklarının yanında kalan KV cache'e Chat Bağlam Uzunluğunda kaç oturum sığdığı.</p><p>Sayının yanındaki simge, ikisinden hangisinin belirlediğini gösterir; hesabı görmek için satırı açın. Ölçüm değil tahmindir — sisteme bu kadar kullanıcı bağlanmadı.</p>",
+      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç kişiyi desteklediği. İki tahminden küçük olanıdır.</p><p><strong>Hız:</strong> <code>floor(Maks C × Agentic Kullanım Çarpanı)</code> — chat değerinden düşüktür, çünkü bir ajan planlarken, araç çağırırken ve sonuçları değerlendirirken art arda çağrı yapabilir ve yuvayı çok daha uzun tutar.</p><p><strong>KV cache belleği:</strong> KV cache'e Agentic Bağlam Uzunluğunda kaç oturum sığdığı. Agentic oturumlar daha uzun olduğundan chat'e göre daha azı sığar.</p><p>Sayının yanındaki simge, ikisinden hangisinin belirlediğini gösterir; hesabı görmek için satırı açın. O kadar kullanıcıyla yapılmış bir ölçüm değil, tahmindir.</p>",
       par: "<strong>Paralellik — TP / DP / PP</strong><p>Tek bir modelin, çalışabilmesi ya da daha hızlı çalışması için birden fazla GPU veya makineye nasıl bölündüğü.</p><p><strong>TP — Tensor Parallelism:</strong> tek bir katmanın hesabı GPU\u2019lara bölünür; hepsi aynı istek üzerinde çalışır.</p><p><strong>DP — Data Parallelism:</strong> modelin birden fazla tam kopyası farklı istekleri işler.</p><p><strong>PP — Pipeline Parallelism:</strong> farklı katmanlar farklı cihazlarda durur, istekler sırayla bunlardan geçer.</p><p>— yöntemin kullanılmadığını gösterir.</p>",
       engine: "<strong>Inference Engine</strong><p>Modeli belleğe yükleyip istekleri yanıtlayan sunucu yazılımı. Toplu işleme, bellek ve zamanlamayı o yönettiği için hıza donanım kadar etki eder.</p><p>vLLM ve SGLang bu sunuculardan ikisidir; aynı model aynı donanımda ikisi arasında ölçülebilir biçimde farklılaşabilir.</p>",
       mtp: "<strong>Spekülatif Kod Çözme</strong><p>Model tek adımda birkaç token ilerisini tahmin eder ve bunları tek geçişte doğrular. Doğru tahminler korunduğu için aynı çıktı daha hızlı gelir.</p><p>\"Evet\", koşunun bunu bir biçimde kullandığı anlamına gelir. Hangi mekanizmanın kullanıldığı ve kaç token ileri tahmin edildiği — <em>k</em> derinliğinde çoklu token tahmini (MTP), bir taslak (draft) model ya da DSpark gibi bir üretici uygulaması — satırın notlarında belirtilir.</p><p>Açık ve kapalı satırları karşılaştırarak o yapılandırmada ne kazandırdığını görebilirsiniz.</p>",
@@ -127,7 +167,12 @@
       aTtft: "<strong>Maksimum TTFT Hedefi</strong><p>Kabul edilebilir gördüğünüz en uzun ilk token bekleme süresi, milisaniye cinsinden.</p><p>Düşürmek kriteri sıkılaştırır ve Maks C\u2019yi düşürebilir.</p>",
       aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Bir chat kullanıcısını ne kadar yoğun saydığınız: zamanının çoğunu modeli beklemek yerine okuyup yazarak geçirdiği düşünüldüğünde, tek bir eşzamanlı istek yuvasını kaç kullanıcının paylaşabileceği.</p><p>Hafif kullanım için yükseltin, sürekli etkinlik için düşürün.</p>",
       aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Bir agentic kullanıcıyı ne kadar yoğun saydığınız: tek bir eşzamanlı istek yuvasını kaç kullanıcının paylaşabileceği.</p><p>Agentic çalışma yuvayı daha uzun tuttuğu için genellikle chat değerinin altındadır. Neredeyse kesintisiz çalışan ajanlar için düşürün; aralıklı kullanım için yükseltin.</p>",
-      reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; performans hedeflerini ve kapasite çarpanlarını varsayılana döndürür.</p>"
+      aChatCtx: "<strong>Chat Bağlam Uzunluğu</strong><p>Bir chat oturumunun bellekte tuttuğu tüm tokenlar — konuşma geçmişi, yapıştırılan her şey ve yanıtlar — chat kullanıcısı başına ayrılan bütçe.</p><p>Bellek sınırı her kullanıcıya bu uzunlukta bir oturum ayırır; değeri iki katına çıkarmak sığan chat kullanıcısı sayısını kabaca yarıya indirir.</p>",
+      aAgenticCtx: "<strong>Agentic Bağlam Uzunluğu</strong><p>Aynı bütçe, agentic kullanıcı için. Bu oturum araç çağrılarını, araç sonuçlarını ve ara adımları da tuttuğundan genellikle chat değerinin birkaç katıdır.</p><p>Her agentic kullanıcıya bu uzunlukta bir oturum ayrılır.</p>",
+      aEngineDiscrete: "<strong>Engine Bellek Tahsisi — Ayrık GPU</strong><p>Her GPU'nun kendi belleğinden inference engine'e verilen pay — vLLM'deki <code>gpu_memory_utilization</code>. Kalanı sürücüye ve diğer süreçlere bırakılır.</p><p>DGX B300 ve RTX PRO 6000 için geçerlidir.</p>",
+      aEngineUnified: "<strong>Engine Bellek Tahsisi — Birleşik Bellek</strong><p>CPU ile GPU'nun tek bir bellek havuzunu paylaştığı sistemlerde aynı pay. İşletim sistemi ve diğer bütün süreçler de bu havuzda yaşadığından varsayılan daha düşüktür.</p><p>DGX Spark ve Jetson Thor için geçerlidir.</p>",
+      aShare: "<strong>Ağırlık ve KV Cache Payı</strong><p>Engine'e ayrılan belleğin model ağırlıklarını ve KV cache'i tutan kısmı. Kalanı aktivasyonlar ve diğer çalışma zamanı durumu için çalışma belleğidir.</p><p>KV cache, ağırlıklar yerleştikten sonra kalanı alır: bellek × tahsis × bu pay − ağırlıklar.</p>",
+      reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; performans hedeflerini ve kapasite varsayımlarını varsayılana döndürür.</p>"
     }
   };
 
@@ -137,9 +182,14 @@
 
   var DEFAULT_CONFIG = {
     ttft_threshold_ms: 1000,
-    tps_threshold: 20,
+    tps_threshold: 15,
     chat_multiplier: 4,
-    agentic_multiplier: 1.5
+    agentic_multiplier: 1.5,
+    chat_context_tokens: 32768,
+    agentic_context_tokens: 131072,
+    engine_memory_discrete: 0.95,
+    engine_memory_unified: 0.8,
+    weights_kv_share: 0.8
   };
 
   var rawData = null;
@@ -322,8 +372,8 @@
   }
 
   /* One definition of "meets the target" per metric, driving every coloured
-     cell in both tables as well as Max C. A minimum of 20 tok/s is met by
-     exactly 20, and a maximum of 1000 ms is met by exactly 1000, so both
+     cell in both tables as well as Max C. A minimum of 15 tok/s is met by
+     exactly 15, and a maximum of 1000 ms is met by exactly 1000, so both
      bounds are inclusive. They used to disagree: a cell could be green while
      its own sweep row read FAIL. */
   function ttftMeets(ttft) {
@@ -347,13 +397,211 @@
     return maxC;
   }
 
+  function highestTestedC(entry) {
+    var c = 0;
+    for (var i = 0; i < entry.data_points.length; i++) {
+      if (entry.data_points[i].c > c) c = entry.data_points[i].c;
+    }
+    return c;
+  }
+
+  /* ── Capacity: the smaller of two independent estimates ──
+
+     Speed side, unchanged: floor(Max C × usage multiplier).
+     Memory side: how many full-length sessions fit in the KV cache. It carries
+     no multiplier — chat and agentic differ only in their context length.
+
+     One GPU (or Spark node) stands for all of them, because the weights and
+     the cache are split evenly across the run's tp × pp devices. The memory
+     tables come from benchmarks.json; the per-model KV sizes are the entry's
+     kv_* fields, worked out from the model's config.json when the run was
+     added. */
+
+  function deviceBase(device) {
+    return String(device).replace(/^\d+×\s*/, "");
+  }
+
+  /* Everything the memory side needs that does not depend on context length:
+     the KV budget on one device, or the reason there is none. */
+  function memoryBudget(entry) {
+    var mem = rawData.memory;
+    if (!mem || entry.kv_bytes_per_token == null) return { status: "unsupported" };
+    var base = deviceBase(entry.device);
+    var gb = mem.memory_gb ? mem.memory_gb[base] : null;
+    var bpp = mem.weight_bytes_per_param ? mem.weight_bytes_per_param[entry.quantization] : null;
+    var params = parseParams(entry.params);
+    if (!gb || !bpp || params === null) return { status: "unknown" };
+    var tp = entry.tp || 1, pp = entry.pp || 1, dp = entry.dp || 1;
+    var unified = (mem.unified_memory || []).indexOf(base) > -1;
+    var alloc = unified ? config.engine_memory_unified : config.engine_memory_discrete;
+    /* Both reserves come off the physical memory before the weights do. */
+    var budget = gb * 1e9 * alloc * config.weights_kv_share;
+    var weights = params * bpp / (tp * pp);
+    return {
+      status: budget - weights > 0 ? "ok" : "weights",
+      base: base, gb: gb, alloc: alloc, weights: weights, kv: budget - weights,
+      tp: tp, pp: pp, dp: dp,
+      /* GQA heads divide across TP down to one head per GPU; a cache with no
+         kv_heads (MLA and other compressed layouts) is copied to every GPU. */
+      split: entry.kv_heads ? Math.min(tp, entry.kv_heads) : 1
+    };
+  }
+
+  function sessionBytes(entry, b, ctx) {
+    return (entry.kv_bytes_per_token * ctx + entry.kv_window_bytes) / b.split / b.pp;
+  }
+
+  /* The single source for every capacity figure on screen: the cell, its
+     title, the sort, the minimum-capacity filters and the row breakdown. */
+  function capacity(entry, kind) {
+    var maxC = getMaxC(entry);
+    var ctx = config[kind + "_context_tokens"];
+    var b = memoryBudget(entry);
+    var r = {
+      kind: kind, maxC: maxC, ctx: ctx, budget: b, window: entry.model_context_length,
+      perf: Math.floor(maxC * config[kind + "_multiplier"]),
+      mem: null, session: null, limit: "perf",
+      ceiling: maxC > 0 && maxC === highestTestedC(entry),
+      /* A session longer than the model's own context window cannot be
+         served at all, whatever the hardware. */
+      tooLong: entry.model_context_length != null && ctx > entry.model_context_length
+    };
+    if (b.status === "ok") {
+      r.session = sessionBytes(entry, b, ctx);
+      r.mem = Math.floor(b.kv / r.session) * b.dp;
+    }
+    if (r.tooLong) {
+      r.shown = 0;
+      r.limit = "context";
+    } else if (r.mem === null) {
+      /* No memory figure: the speed estimate stands on its own, and the
+         title and breakdown say why. */
+      r.shown = r.perf;
+    } else {
+      r.shown = Math.min(r.perf, r.mem);
+      r.limit = r.perf < r.mem ? "perf" : r.mem < r.perf ? "mem" : "tie";
+    }
+    return r;
+  }
+
   function getChatUsers(entry) {
-    return Math.floor(getMaxC(entry) * config.chat_multiplier);
+    return capacity(entry, "chat").shown;
   }
 
   function getAgenticUsers(entry) {
-    return Math.floor(getMaxC(entry) * config.agentic_multiplier);
+    return capacity(entry, "agentic").shown;
   }
+
+  /* 32768 -> "32K", 1048576 -> "1M": the power-of-two convention context
+     lengths are quoted in. */
+  function fmtTokens(n) {
+    if (n >= 1048576 && n % 1048576 === 0) return n / 1048576 + "M";
+    if (n >= 1024 && n % 1024 === 0) return n / 1024 + "K";
+    return String(n);
+  }
+
+  /* Digit groups separated by a thin space, which reads the same in English
+     and Turkish — a comma or a dot would each mean a decimal in one of them. */
+  function fmtInt(n) {
+    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+  }
+
+  function fmtGB(bytes) {
+    var g = bytes / 1e9;
+    return g >= 100 ? g.toFixed(0) : g >= 10 ? g.toFixed(1) : g.toFixed(2);
+  }
+
+  function limitWhy(r) {
+    return r.budget.status === "weights" ? S.whyWeights :
+      r.budget.status === "unknown" ? S.whyUnknown : S.whyUnsupported;
+  }
+
+  var CAP_ICON = {
+    perf: '<path d="M9.5 1 3 9h4.2L6.5 15 13 7H8.8z" fill="currentColor"/>',
+    mem: '<rect x="2" y="4.5" width="12" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>' +
+      '<path d="M5 11.5V14M8 11.5V14M11 11.5V14M5 2v2.5M8 2v2.5M11 2v2.5" stroke="currentColor" stroke-width="1.4"/>',
+    shortctx: '<path d="M8 1.8 15 14.2H1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>' +
+      '<path d="M8 6.2v3.9M8 11.5v1.1" stroke="currentColor" stroke-width="1.6"/>'
+  };
+
+  function capIcon(name, label) {
+    return '<svg class="bt-cap-icon bt-cap-' + name + '" viewBox="0 0 16 16" width="16" height="16" role="img" aria-label="' +
+      escapeHTML(label) + '">' + CAP_ICON[name] + "</svg>";
+  }
+
+  function capIcons(r) {
+    var h = "";
+    if (r.limit === "perf" || r.limit === "tie") h += capIcon("perf", S.legendPerf);
+    if (r.limit === "mem" || r.limit === "tie") h += capIcon("mem", S.legendMem);
+    if (r.limit === "context") h += capIcon("shortctx", S.legendShortCtx);
+    return h;
+  }
+
+  function capTitle(r) {
+    var ctx = fmtTokens(r.ctx);
+    if (r.limit === "context") return S.capShortCtx(fmtTokens(r.window), ctx);
+    var t = r.mem === null ? S.capUnchecked(limitWhy(r)) :
+      r.limit === "perf" ? S.capPerf(r.mem, ctx) :
+      r.limit === "mem" ? S.capMem(r.perf, ctx) : S.capTie(ctx);
+    if (r.ceiling && r.limit !== "mem") t += S.capCeiling(r.maxC);
+    return t;
+  }
+
+  function capCell(entry, kind) {
+    var r = capacity(entry, kind);
+    var shown = r.limit === "context" ? '<span class="bt-muted">—</span>' : r.shown;
+    return '<td class="bt-num bt-cap" title="' + escapeHTML(capTitle(r)) + '">' + shown + capIcons(r) + "</td>";
+  }
+
+  /* The context-window marker only appears once a context length long enough
+     to trigger it is chosen, so its legend entry only appears then too. */
+  function capLegend(entries) {
+    var tooLong = entries.some(function (e) {
+      return capacity(e, "chat").tooLong || capacity(e, "agentic").tooLong;
+    });
+    return '<span class="bt-cap-legend"><span class="bt-cap-legend-lead">' + escapeHTML(S.legendLead) + "</span>" +
+      '<span class="bt-cap-legend-item">' + capIcon("perf", S.legendPerf) + escapeHTML(S.legendPerf) + "</span>" +
+      '<span class="bt-cap-legend-item">' + capIcon("mem", S.legendMem) + escapeHTML(S.legendMem) + "</span>" +
+      (tooLong ? '<span class="bt-cap-legend-item">' + capIcon("shortctx", S.legendShortCtx) +
+        escapeHTML(S.legendShortCtx) + "</span>" : "") +
+      "</span>";
+  }
+
+  /* A short, plain summary of both capacity cells for the expanded row: the
+     figure, which limit set it, what each limit allows, and one sentence of
+     context. The method itself is explained on the page, not here. */
+  function capBreakdown(entry) {
+    var rows = [capacity(entry, "chat"), capacity(entry, "agentic")];
+    var b = rows[0].budget;
+    var html = '<div class="bt-capacity"><div class="bt-capacity-title">' + escapeHTML(S.capHeading) + "</div>";
+    html += '<div class="bt-capacity-grid">';
+    rows.forEach(function (r) {
+      var label = r.kind === "chat" ? S.capChatRow(fmtTokens(r.ctx)) : S.capAgenticRow(fmtTokens(r.ctx));
+      var by = r.limit === "context" ? S.capByContext :
+        r.limit === "mem" ? S.capByMem : r.limit === "tie" ? S.capByTie : S.capByPerf;
+      var detail = S.capSpeedAllows(r.perf, r.ceiling) + " · " +
+        (r.mem === null ? S.capMemNa : S.capMemFits(r.mem));
+      html += '<span class="bt-cap-label">' + escapeHTML(label) + "</span>";
+      html += '<span class="bt-cap-result" title="' + escapeHTML(capTitle(r)) + '">' +
+        "<strong>" + (r.limit === "context" ? "—" : escapeHTML(S.capUsers(r.shown))) + "</strong>" +
+        capIcons(r) + ' <span class="bt-cap-by">' + escapeHTML(by) + "</span>" +
+        '<span class="bt-cap-detail">' + escapeHTML(detail) + "</span></span>";
+    });
+    html += "</div>";
+
+    var notes = [];
+    if (b.status === "ok") {
+      var unit = b.base === "DGX Spark" ? S.unitNode : b.base === "Thor" ? S.unitModule : S.unitGpu;
+      notes.push(S.capKvSummary(fmtGB(b.kv), fmtGB(b.weights), unit));
+    } else {
+      notes.push(limitWhy(rows[0]));
+    }
+    if (rows[0].tooLong || rows[1].tooLong) notes.push(S.capShortCtxLine(fmtTokens(entry.model_context_length)));
+    html += notes.map(function (l) { return '<p class="bt-capacity-note">' + escapeHTML(l) + "</p>"; }).join("");
+    html += "</div>";
+    return html;
+  }
+
 
   function deriveFilterOptions() {
     var dSet = {}, mSet = {}, qSet = {}, cSet = {};
@@ -385,7 +633,7 @@
     html += buildTargets();
     html += buildFilters();
     html += "</div>";
-    html += '<div class="bt-results-count" id="bt-results-count"></div>';
+    html += '<div class="bt-results-count bt-results-split" id="bt-results-count"></div>';
     html += '<div class="bt-table-wrap" id="bt-table-wrap"></div>';
     html += '<div class="bt-tooltip" id="bt-tooltip" role="tooltip" hidden></div>';
 
@@ -497,18 +745,32 @@
       '<span class="bt-arrow">&#9654;</span> ' + escapeHTML(S.targetsHeading) + "</button>";
     html += '<div class="bt-targets-body" id="bt-targets-body" hidden>';
     html += '<p class="bt-targets-intro">' + escapeHTML(S.targetsIntro) + "</p>";
+    html += '<div class="bt-targets-group"><div class="bt-targets-group-title">' + escapeHTML(S.groupSpeed) + "</div>";
+    html += '<p class="bt-targets-group-intro">' + escapeHTML(S.groupSpeedIntro) + "</p>";
     html += '<div class="bt-targets-grid">';
     html += targetItem(S.ttftThreshold, "ttft_threshold_ms", S.tip.aTtft, "");
     html += targetItem(S.tpsThreshold, "tps_threshold", S.tip.aTps, "");
     html += targetItem(S.chatMultiplier, "chat_multiplier", S.tip.aChat, "");
     html += targetItem(S.agenticMultiplier, "agentic_multiplier", S.tip.aAgentic, "");
     html += "</div>";
+    /* The preview streams at the TPS target, so it belongs with the speed
+       settings rather than after the memory ones. */
     html += '<div class="bt-tps-preview">';
     html += '<div class="bt-tps-preview-head"><span class="bt-tps-preview-title">' + escapeHTML(S.previewHeading) +
       '</span><span class="bt-preview-sub" id="bt-preview-sub"></span></div>';
     html += '<div class="bt-preview-text" id="bt-preview-text"></div>';
     html += '<p class="bt-preview-note">' + escapeHTML(S.previewDisclaimer) + "</p>";
     html += "</div>";
+    html += "</div>";
+    html += '<div class="bt-targets-group"><div class="bt-targets-group-title">' + escapeHTML(S.groupMemory) + "</div>";
+    html += '<p class="bt-targets-group-intro">' + escapeHTML(S.groupMemoryIntro) + "</p>";
+    html += '<div class="bt-targets-grid">';
+    html += contextItem(S.chatContext, "chat_context_tokens", S.tip.aChatCtx);
+    html += contextItem(S.agenticContext, "agentic_context_tokens", S.tip.aAgenticCtx);
+    html += targetItem(S.engineMemDiscrete, "engine_memory_discrete", S.tip.aEngineDiscrete, "");
+    html += targetItem(S.engineMemUnified, "engine_memory_unified", S.tip.aEngineUnified, "");
+    html += targetItem(S.weightsKvShare, "weights_kv_share", S.tip.aShare, "");
+    html += "</div></div>";
     html += "</div>";
     html += "</div>";
     return html;
@@ -518,14 +780,45 @@
      counts; the multipliers are genuinely fractional (1.5 by default). */
   var WHOLE_NUMBER_TARGETS = { ttft_threshold_ms: true, tps_threshold: true };
 
+  /* Stored as fractions (0.95) because that is how an engine takes them, and
+     shown as percentages (95) because that is how a person reads them. */
+  var PERCENT_TARGETS = { engine_memory_discrete: true, engine_memory_unified: true, weights_kv_share: true };
+
+  var NUMBER_TARGETS = ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier",
+    "engine_memory_discrete", "engine_memory_unified", "weights_kv_share"];
+  var CONTEXT_TARGETS = ["chat_context_tokens", "agentic_context_tokens"];
+
+  /* Powers of two, the sizes context lengths are actually configured in. A
+     free number would invite values no deployment uses. */
+  var CONTEXT_CHOICES = [4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576];
+
+  function shownTarget(key) {
+    return PERCENT_TARGETS[key] ? String(Math.round(config[key] * 1000) / 10) : String(config[key]);
+  }
+
   function targetItem(label, key, tipHtml, extra) {
-    var whole = WHOLE_NUMBER_TARGETS[key];
+    var whole = WHOLE_NUMBER_TARGETS[key] || PERCENT_TARGETS[key];
     return '<div class="bt-target-item">' +
       '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
-      '<input type="number" id="bt-assump-' + key + '" value="' + config[key] +
+      '<input type="number" id="bt-assump-' + key + '" value="' + shownTarget(key) +
       '" step="' + (whole ? "1" : "0.1") + '" min="' + (whole ? "1" : "0") + '"' +
+      (PERCENT_TARGETS[key] ? ' max="100"' : "") +
       (whole ? ' inputmode="numeric"' : "") + ">" +
       extra + "</div>";
+  }
+
+  function contextItem(label, key, tipHtml) {
+    var choices = CONTEXT_CHOICES.slice();
+    if (choices.indexOf(config[key]) === -1) choices.push(config[key]);
+    choices.sort(function (a, b) { return a - b; });
+    var html = '<div class="bt-target-item">' +
+      '<label for="bt-assump-' + key + '">' + escapeHTML(label) + tip(tipHtml) + "</label>" +
+      '<select id="bt-assump-' + key + '">';
+    choices.forEach(function (n) {
+      html += '<option value="' + n + '"' + (n === config[key] ? " selected" : "") + ">" +
+        fmtTokens(n) + " (" + fmtInt(n) + ")</option>";
+    });
+    return html + "</select></div>";
   }
 
   /* ── Wiring ── */
@@ -542,12 +835,15 @@
       if (open) startPreview(container); else stopPreview();
     });
 
-    ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"].forEach(function (key) {
+    NUMBER_TARGETS.forEach(function (key) {
       var input = container.querySelector("#bt-assump-" + key);
       input.addEventListener("input", function () {
         var v = parseFloat(input.value);
         if (isNaN(v)) return;
-        if (WHOLE_NUMBER_TARGETS[key]) {
+        if (PERCENT_TARGETS[key]) {
+          if (v <= 0 || v > 100) return;
+          v = v / 100;
+        } else if (WHOLE_NUMBER_TARGETS[key]) {
           if (v < 1 || v !== Math.floor(v)) return;
         } else if (v < 0) {
           return;
@@ -558,7 +854,15 @@
       /* Snap the field back once the reader leaves it, so it can never sit
          there showing a number the table is not actually using. */
       input.addEventListener("change", function () {
-        if (input.value !== String(config[key])) input.value = config[key];
+        if (input.value !== shownTarget(key)) input.value = shownTarget(key);
+      });
+    });
+
+    CONTEXT_TARGETS.forEach(function (key) {
+      var select = container.querySelector("#bt-assump-" + key);
+      select.addEventListener("change", function () {
+        config[key] = parseInt(select.value, 10);
+        renderTable(container);
       });
     });
   }
@@ -715,8 +1019,11 @@
     container.querySelector("#bt-min-params").value = 0;
 
     resetConfig();
-    ["ttft_threshold_ms", "tps_threshold", "chat_multiplier", "agentic_multiplier"].forEach(function (k) {
-      container.querySelector("#bt-assump-" + k).value = config[k];
+    NUMBER_TARGETS.forEach(function (k) {
+      container.querySelector("#bt-assump-" + k).value = shownTarget(k);
+    });
+    CONTEXT_TARGETS.forEach(function (k) {
+      container.querySelector("#bt-assump-" + k).value = String(config[k]);
     });
 
     /* The preview is driven by the TPS input, not by config, so it has to be
@@ -1051,8 +1358,8 @@
 
     var countEl = container.querySelector("#bt-results-count");
     if (countEl) {
-      countEl.innerHTML = '<span class="bt-count-label">' + escapeHTML(S.matching) + "</span> " +
-        S.matchingCount(entries.length, rawData.benchmarks.length);
+      countEl.innerHTML = '<span class="bt-count"><span class="bt-count-label">' + escapeHTML(S.matching) + "</span> " +
+        S.matchingCount(entries.length, rawData.benchmarks.length) + "</span>" + capLegend(entries);
     }
 
     var wrap = container.querySelector("#bt-table-wrap");
@@ -1134,8 +1441,8 @@
       html += '<td class="' + ttftCls + '"' + ttftTitle + ">" + (ttft !== null ? fmt(ttft, 0) : "—") + "</td>";
 
       html += '<td class="bt-num">' + (maxC > 0 ? maxC : '<span class="bt-muted">0</span>') + "</td>";
-      html += '<td class="bt-num">' + getChatUsers(entry) + "</td>";
-      html += '<td class="bt-num">' + getAgenticUsers(entry) + "</td>";
+      html += capCell(entry, "chat");
+      html += capCell(entry, "agentic");
       html += '<td class="bt-num">' + (entry.tp != null && entry.tp !== 1 ? entry.tp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-num">' + (entry.dp != null && entry.dp !== 1 ? entry.dp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-num">' + (entry.pp != null && entry.pp !== 1 ? entry.pp : '<span class="bt-muted">—</span>') + "</td>";
@@ -1190,6 +1497,8 @@
         html += '<p class="bt-preview-note">' + escapeHTML(S.previewPick) + "</p>";
         html += "</div>";
         html += "</div>";
+
+        html += capBreakdown(entry);
 
         var deviceStr = escapeHTML(entry.device);
         if (entry.tp != null && entry.tp !== 1) {
