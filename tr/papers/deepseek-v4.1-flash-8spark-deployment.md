@@ -1,12 +1,11 @@
 ---
 title: DeepSeek-V4.1-Flash 8× DGX Spark TP8 Dağıtımı
 parent: White Papers
-nav_order: 11
+nav_order: 10
 lang: tr
 page_id: deepseek-v4.1-flash-8spark-deployment
-card_order: 11
+date: 2026-09-17 08:34:11 +0300
 card_tag: "LLM Dağıtımı"
-card_date: "Eylül 2026"
 description: >-
   DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) modelinin 8× NVIDIA DGX Spark
   (GB10) üzerinde TP8 dağıtımı: iki yapılandırma (300K Engram-bellekte, 1M

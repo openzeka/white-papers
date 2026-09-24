@@ -1,12 +1,11 @@
 ---
 title: Qwen3.6-27B DGX Spark Cluster Scaling
 parent: White Papers
-nav_order: 3
+nav_order: 8
 lang: en
 page_id: qwen3.6-27b-dgx-spark-scaling
-card_order: 3
+date: 2026-07-06 08:53:32 +0300
 card_tag: "LLM Scaling"
-card_date: "July 2026"
 description: >-
   Multi-node scaling study of Qwen3.6-27B-NVFP4 on 1x, 2x, and 4x NVIDIA DGX Spark
   (GB10): tensor parallelism over 200GbE, SLO-driven capacity planning, and

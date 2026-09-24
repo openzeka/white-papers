@@ -3,9 +3,8 @@ title: CV Inference Benchmark Explorer
 nav_order: 5
 lang: en
 page_id: cv-inference-benchmarks
-card_order: 11
+date: 2026-09-16 16:07:02 +0300
 card_tag: "CV Benchmark"
-card_date: "September 2026"
 description: >-
   Explore OpenZeka's computer-vision inference benchmarks on NVIDIA GPUs and
   Jetson devices. Pick a GPU and a detection model to see the frame rate it

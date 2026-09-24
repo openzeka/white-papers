@@ -13,21 +13,19 @@ site published via GitHub Pages with a custom domain. For the published site, se
 
 ## Adding a New White Paper
 
-1. Create a new `.md` file under `papers/` (e.g. `papers/new-topic.md`).
-2. Add front matter:
+Follow [`skills/add-white-paper/SKILL.md`](skills/add-white-paper/SKILL.md) —
+step by step, readable by a person or by any coding agent. In short: every paper
+is two files, `papers/<slug>.md` and `tr/papers/<slug>.md`; its `date` puts it
+on both home pages automatically, newest first; you choose its topic position
+in the sidebar (`nav_order`) and add its row, at that position, to both
+`papers/index.md` tables and the `README.md` library table. Then:
 
-   ```yaml
-   ---
-   title: New Topic Title
-   parent: White Papers
-   nav_order: 5
-   description: Short description.
-   last_modified_date: 2026-07-03
-   ---
-   ```
+```bash
+python3 _tools/check_papers.py      # exit 0 = consistent
+```
 
-3. Add a card / row to the paper list in `index.md` and `papers/index.md`.
-4. `git add`, `git commit`, `git push`. GitHub Actions builds and deploys automatically.
+Benchmark runs for the LLM Inference Benchmark Explorer have their own
+procedure: [`skills/add-benchmark/SKILL.md`](skills/add-benchmark/SKILL.md).
 
 ## Local Development
 

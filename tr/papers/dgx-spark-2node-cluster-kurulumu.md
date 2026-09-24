@@ -1,12 +1,11 @@
 ---
 title: DGX Spark 2-Node AI Cluster Kurulum Rehberi
 parent: White Papers
-nav_order: 3.5
+nav_order: 3
 lang: tr
 page_id: dgx-spark-2node-cluster-kurulumu
-card_order: 4
+date: 2026-07-30 08:21:43 +0300
 card_tag: "Cluster Kurulumu"
-card_date: "Ağustos 2026"
 description: >-
   2 NVIDIA DGX Spark node'undan oluşan point-to-point topolojisine sahip AI cluster
   kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun yapılandırması.

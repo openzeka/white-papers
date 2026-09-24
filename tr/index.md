@@ -37,7 +37,7 @@ permalink: /
 
 </div>
 
-## Yayınlanan White Paper'lar
+## Son White Paper'lar
 
 {% include paper-grid.html %}
 

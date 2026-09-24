@@ -1,12 +1,11 @@
 ---
 title: DGX Spark 3-Node AI Cluster Setup Guide
 parent: White Papers
-nav_order: 5
+nav_order: 4
 lang: en
 page_id: dgx-spark-3node-cluster-kurulumu
-card_order: 5
+date: 2026-07-30 08:21:44 +0300
 card_tag: "Cluster Setup"
-card_date: "July 2026"
 description: >-
   Ring (mesh) topology AI cluster setup with 3 NVIDIA DGX Spark nodes:
   management and compute networks, RoCEv2/RDMA, sparkrun configuration.

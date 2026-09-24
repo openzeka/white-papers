@@ -18,13 +18,18 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | Title | Topic | Platform |
 |---|---|---|
 | [Local LLM Usage Guide](https://whitepapers.openzeka.com/papers/yerel-llm-rehberi/) | Hardware → model → software decision guide | Jetson, RTX PRO, DGX Spark, DGX/HGX |
-| [Qwen3.6-27B DGX Spark Benchmark](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/) | LLM quantization comparison: FP8, AWQ, NVFP4 and MTP | NVIDIA DGX Spark (GB10) |
-| [Qwen3.6-27B DGX Spark Cluster Scaling](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-scaling/) | Multi-node scaling (TP1/TP2/TP4) and SLO-driven capacity planning | 1× / 2× / 4× NVIDIA DGX Spark (GB10) |
+| [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](https://whitepapers.openzeka.com/papers/b300-gb300-cluster-mimarisi/) | Blackwell Ultra architecture comparison and workload-based platform selection | NVIDIA DGX B300 and GB300 NVL72 |
 | [DGX Spark 2-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-kurulumu/) | Point-to-point topology, RoCEv2/RDMA and sparkrun | 2× NVIDIA DGX Spark (GB10) |
 | [DGX Spark 3-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-3node-cluster-kurulumu/) | Ring/mesh topology, RoCEv2/RDMA and sparkrun | 3× NVIDIA DGX Spark (GB10) |
 | [DGX Spark 4-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-kurulumu/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 4× NVIDIA DGX Spark (GB10) |
+| [DGX Spark 8-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-kurulumu/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 8× NVIDIA DGX Spark (GB10) |
+| [Qwen3.6-27B DGX Spark Benchmark](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/) | LLM quantization comparison: FP8, AWQ, NVFP4 and MTP | NVIDIA DGX Spark (GB10) |
+| [Qwen3.6-27B DGX Spark Cluster Scaling](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-scaling/) | Multi-node scaling (TP1/TP2/TP4) and SLO-driven capacity planning | 1× / 2× / 4× NVIDIA DGX Spark (GB10) |
+| [DeepSeek-V4.1-Flash 4× DGX Spark Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/) | 763B MoE model with TP4: vLLM build chain, SM121 patches, Engram-on-disk, DSpark speculative decoding | 4× NVIDIA DGX Spark (GB10) |
+| [DeepSeek-V4.1-Flash 8× DGX Spark TP8 Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-8spark-deployment/) | 763B MoE model with TP8: 300K Engram-in-memory vs 1M Engram-on-disk, NCCL optimization, TP4 comparison | 8× NVIDIA DGX Spark (GB10) |
 | [Kimi K3 Inference Benchmark on DGX-B300](https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/) | vLLM vs SGLang and direct vs speculative decoding | NVIDIA DGX-B300, 8× Blackwell Ultra, TP=8 |
-| [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](https://whitepapers.openzeka.com/papers/b300-gb300-cluster-mimarisi/) | Blackwell Ultra architecture comparison and workload-based platform selection | NVIDIA DGX B300 and GB300 NVL72 |
+| [LLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/llm-inference-benchmarks/) | Interactive table of every LLM configuration we have measured: filter, set your own latency and speed targets, read the supported concurrency | DGX Spark (1–8 nodes), DGX B300, RTX PRO 6000, Jetson Thor |
+| [CV Inference Benchmark Explorer](https://whitepapers.openzeka.com/cv-inference-benchmarks/) | Interactive computer-vision benchmark: sustained FPS per device and model, and how many cameras it carries at your target FPS | DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060, RTX 3090 |
 
 ---
 
@@ -45,6 +50,61 @@ Our work focuses on questions such as:
 - How should small multi-node AI clusters actually be connected, configured, validated, and operated?
 
 Where applicable, the repository includes benchmark data, charts, configuration details, test methodology, and implementation screenshots.
+
+---
+
+# Interactive Benchmark Explorers
+
+## LLM Inference Benchmark Explorer
+
+**Every LLM configuration we have measured, in one filterable table.**
+
+The Explorer collects OpenZeka's LLM serving measurements across NVIDIA DGX B300,
+one- to eight-node DGX Spark clusters, RTX PRO 6000 Blackwell and Jetson AGX Thor,
+and grows as new models, engines and hardware are tested.
+
+A row is a **complete deployment configuration**, not a model: hardware,
+quantization, inference engine (vLLM or SGLang), TP/DP/PP topology and
+speculative decoding are all part of what was tested.
+
+You set the targets, and the table answers:
+
+- **Your own service targets** — a maximum TTFT and a minimum per-request TPS.
+  Every row is re-evaluated against them.
+- **Max C** — the highest measured concurrency at which the configuration still
+  meets both targets.
+- **Estimated chat and agentic capacity** — how many *people* that concurrency
+  might serve, from a usage multiplier you can change. This is an estimate, not
+  a measured user count.
+- **Full sweep per row** — TTFT, per-request TPS and aggregate throughput at
+  every concurrency level, with pass/fail against your targets.
+- **Model capability context** — Intelligence and Agentic Index scores from
+  [Artificial Analysis](https://artificialanalysis.ai), next to the measured
+  speed.
+
+Measurement protocol: [CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark),
+128 input and 128 output tokens, ten rounds per level across different prompt
+topics, concurrency `1, 2, 4, 8, 16, 32, 64`, mean values. The page explains how
+to read the figures at other prompt lengths — and what the table does not
+replace: a production load test on your own workload.
+
+The same data also powers the benchmark table on [openzeka.com](https://openzeka.com/en).
+
+**[Open the LLM Inference Benchmark Explorer →](https://whitepapers.openzeka.com/llm-inference-benchmarks/)**
+
+---
+
+## CV Inference Benchmark Explorer
+
+**How many cameras can this device run this model on, and at what frame rate?**
+
+Pick a device and a detection model, set the frame rate you consider acceptable,
+and the table shows the sustained FPS for every measured configuration, how it
+falls as cameras are added, and how many cameras the device carries at your
+target. Measured with the Cordatus Inference Engine on DeepStream, across
+DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060 and RTX 3090.
+
+**[Open the CV Inference Benchmark Explorer →](https://whitepapers.openzeka.com/cv-inference-benchmarks/)**
 
 ---
 
@@ -150,9 +210,26 @@ papers/qwen3.6-27b-dgx-spark-benchmark/
 
 ---
 
+## DeepSeek-V4.1-Flash on 4× and 8× DGX Spark
+
+**763B-parameter MoE · Tensor Parallelism TP4 / TP8 · Engram-on-disk · DSpark speculative decoding**
+
+A data-center-class model, normally served on DGX B300-class hardware, deployed
+on small DGX Spark clusters. Two companion reports:
+
+| Report | What it covers |
+|---|---|
+| 4× DGX Spark, TP4 | The full build: vLLM build chain, 7 SM 12.1a (GB10) patches, Engram-on-disk, DSpark k=5, benchmark results |
+| 8× DGX Spark, TP8 | Two configurations — 300K context with Engram in memory vs 1M context with Engram-on-disk — NCCL tuning, memory analysis, and comparison with TP4 and B300 |
+
+**[Read the 4× DGX Spark deployment →](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/)**  
+**[Read the 8× DGX Spark TP8 deployment →](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-8spark-deployment/)**
+
+---
+
 # From Benchmarks to Real Infrastructure
 
-## 2-, 3- and 4-Node NVIDIA DGX Spark Clusters
+## 2-, 3-, 4- and 8-Node NVIDIA DGX Spark Clusters
 
 The repository also contains practical implementation guides for building multi-node DGX Spark environments.
 
@@ -163,6 +240,7 @@ The guides cover progressively different network topologies:
 | 2 nodes | Point-to-point | ConnectX-7, RoCEv2/RDMA, SSH, sparkrun |
 | 3 nodes | Ring / mesh | Multi-node networking, RoCEv2/RDMA, distributed execution |
 | 4 nodes | Switch-based | 200GbE fabric, DCB/PFC, RDMA, NAS, NCCL validation |
+| 8 nodes | Switch-based | 200GbE fabric, RoCEv2/RDMA, sparkrun, NAS |
 
 ### 4-Node Cluster
 
@@ -192,7 +270,8 @@ The guide contains actual configuration steps and screenshots from deployment, m
 
 **[2-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-kurulumu/)**  
 **[3-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-3node-cluster-kurulumu/)**  
-**[4-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-kurulumu/)**
+**[4-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-kurulumu/)**  
+**[8-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-kurulumu/)**
 
 ---
 
@@ -403,6 +482,7 @@ white-papers/
 ├── _layouts/              # Site layouts
 ├── _sass/                 # Site styling
 ├── _tools/                # Maintenance scripts, kept out of the build
+├── skills/                # Step-by-step procedures for adding a benchmark run or a paper
 ├── docker-compose.yml     # Local development server
 ├── index.md
 └── README.md

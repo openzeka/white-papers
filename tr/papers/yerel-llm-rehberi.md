@@ -1,12 +1,11 @@
 ---
 title: Yerel LLM Kullanım Rehberi
 parent: White Papers
-nav_order: 2
+nav_order: 1
 lang: tr
 page_id: yerel-llm-rehberi
-card_order: 1
+date: 2026-06-30 12:00:00 +0300
 card_tag: "Karar Rehberi"
-card_date: "Haziran 2026"
 description: >-
   Yerel (local) LLM kullanımı için uçtan uca karar rehberi: donanım (NVIDIA Jetson,
   RTX PRO, DGX Spark, DGX/HGX), model seçimi, yazılım stack ve senaryo eşlemesi.

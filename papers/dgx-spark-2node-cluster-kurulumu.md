@@ -1,12 +1,11 @@
 ---
 title: DGX Spark 2-Node AI Cluster Setup Guide
 parent: White Papers
-nav_order: 3.5
+nav_order: 3
 lang: en
 page_id: dgx-spark-2node-cluster-kurulumu
-card_order: 4
+date: 2026-07-30 08:21:43 +0300
 card_tag: "Cluster Setup"
-card_date: "August 2026"
 description: >-
   Point-to-point topology AI cluster setup with 2 NVIDIA DGX Spark nodes:
   management and compute networks, RoCEv2/RDMA, sparkrun configuration.
