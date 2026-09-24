@@ -212,33 +212,8 @@
 }
 
 /* ── Filter lists ──
-   Checkboxes, because both lists grow with every device and model added. The
-   list keeps its height and scrolls instead of reflowing the panel, and what
-   is selected is readable without decoding which buttons look active. */
-.cvbt-list-head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-.cvbt-list-count {
-  font-size: 11px;
-  color: var(--bt-text-muted);
-}
-
-.cvbt-clear {
-  border: 0;
-  background: none;
-  padding: 0;
-  font: inherit;
-  font-size: 11px;
-  color: var(--bt-green-dark, #5a8c00);
-  text-decoration: underline;
-  cursor: pointer;
-}
-
+   The same controls as the LLM widget - pill buttons for devices, a
+   searchable checklist for models - fitted to the 248px panel. */
 .cvbt-side .bt-model-list {
   max-height: 168px;
 }
@@ -246,12 +221,15 @@
 .cvbt-side .cvbt-search {
   width: 100%;
   min-width: 0;
-  margin-bottom: 6px;
 }
 
-.cvbt-list-empty {
-  margin: 0;
-  padding: 6px 10px;
-  font-size: 12px;
-  color: var(--bt-text-muted);
+/* The reset button keeps the full panel width; its info icon sits beside it. */
+.cvbt-reset-row {
+  display: flex;
+  align-items: center;
+}
+
+.cvbt-reset-row .cvbt-reset {
+  flex: 1 1 auto;
+  width: auto;
 }
