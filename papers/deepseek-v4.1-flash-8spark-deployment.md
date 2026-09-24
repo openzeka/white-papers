@@ -1,12 +1,11 @@
 ---
 title: DeepSeek-V4.1-Flash 8× DGX Spark TP8 Deployment
 parent: White Papers
-nav_order: 11
+nav_order: 10
 lang: en
 page_id: deepseek-v4.1-flash-8spark-deployment
-card_order: 11
+date: 2026-09-17 08:34:11 +0300
 card_tag: "LLM Deployment"
-card_date: "September 2026"
 description: >-
   Deployment of DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) on 8× NVIDIA DGX
   Spark (GB10) with TP8: two configurations (300K Engram-in-memory, 1M

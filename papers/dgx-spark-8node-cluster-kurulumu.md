@@ -1,12 +1,11 @@
 ---
 title: DGX Spark 8-Node AI Cluster Setup Guide
 parent: White Papers
-nav_order: 8
+nav_order: 6
 lang: en
 page_id: dgx-spark-8node-cluster-kurulumu
-card_order: 7
+date: 2026-07-24 14:01:17 +0300
 card_tag: "Cluster Setup"
-card_date: "July 2026"
 description: >-
   Switch-based AI cluster setup with 8 NVIDIA DGX Spark nodes over a MikroTik
   CRS804 with 200G breakout: management and compute networks, RoCEv2/RDMA,

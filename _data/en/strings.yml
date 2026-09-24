@@ -13,3 +13,6 @@ consent_accept: "Accept"
 consent_reject: "Reject"
 consent_learn_more: "Privacy Policy"
 consent_privacy_url: "https://openzeka.com/gizlilik-kisisel-veri-politikasi/"
+
+# Home page card dates (from each page's `date`)
+months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]

@@ -3,9 +3,8 @@ title: CV Çıkarım Benchmark Gezgini
 nav_order: 5
 lang: tr
 page_id: cv-inference-benchmarks
-card_order: 11
+date: 2026-09-16 16:07:02 +0300
 card_tag: "CV Benchmark"
-card_date: "Eylül 2026"
 description: >-
   OpenZeka'nın NVIDIA GPU'lar ve Jetson cihazlar üzerindeki görüntü işleme
   çıkarım benchmark'larını keşfedin. Bir GPU ve bir tespit modeli seçin; o

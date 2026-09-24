@@ -3,9 +3,8 @@ title: LLM Çıkarım Benchmark Gezgini
 nav_order: 4
 lang: tr
 page_id: llm-inference-benchmarks
-card_order: 10
+date: 2026-08-31 11:23:22 +0300
 card_tag: "LLM Benchmark"
-card_date: "Ağustos 2026"
 description: >-
   OpenZeka'nın NVIDIA DGX Spark, DGX B300, RTX PRO 6000 Blackwell ve Jetson Thor
   üzerindeki LLM çıkarım benchmark'larını keşfedin. Modele, parametre sayısına,

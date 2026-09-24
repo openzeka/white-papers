@@ -1,12 +1,11 @@
 ---
 title: NVIDIA DGX B300 ve GB300 NVL72 Cluster Mimarisi Karşılaştırması
 parent: White Papers
-nav_order: 7
+nav_order: 2
 lang: tr
 page_id: b300-gb300-cluster-mimarisi
-card_order: 9
+date: 2026-08-03 09:01:15 +0300
 card_tag: "Mimari Karşılaştırma"
-card_date: "Temmuz 2026"
 description: >-
   NVIDIA Blackwell Ultra tabanlı iki mimarinin karşılaştırması, DGX B300 ve GB300
   NVL72: sistem tasarımı, ölçekleme yaklaşımı, ağ mimarisi, güç ve soğutma, hangi

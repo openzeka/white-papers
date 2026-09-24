@@ -3,9 +3,8 @@ title: LLM Inference Benchmark Explorer
 nav_order: 4
 lang: en
 page_id: llm-inference-benchmarks
-card_order: 10
+date: 2026-08-31 11:23:22 +0300
 card_tag: "LLM Benchmark"
-card_date: "August 2026"
 description: >-
   Explore OpenZeka's LLM inference benchmarks on NVIDIA DGX Spark, DGX B300,
   RTX PRO 6000 Blackwell and Jetson Thor. Filter by model, parameter count,

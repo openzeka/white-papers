@@ -1,12 +1,11 @@
 ---
 title: Qwen3.6-27B DGX Spark Benchmark
 parent: White Papers
-nav_order: 1
+nav_order: 7
 lang: tr
 page_id: qwen3.6-27b-dgx-spark-benchmark
-card_order: 2
+date: 2026-07-03 14:10:23 +0300
 card_tag: "LLM Benchmark"
-card_date: "Temmuz 2026"
 description: >-
   Qwen3.6-27B modelinin NVIDIA DGX Spark (GB10) platformunda FP8, FP8-MTP,
   AWQ-MTP, NVFP4 ve NVFP4-MTP quantization varyantları ile performans değerlendirmesi.

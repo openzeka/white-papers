@@ -1,12 +1,11 @@
 ---
 title: DGX Spark 8-Node AI Cluster Kurulum Rehberi
 parent: White Papers
-nav_order: 8
+nav_order: 6
 lang: tr
 page_id: dgx-spark-8node-cluster-kurulumu
-card_order: 7
+date: 2026-07-24 14:01:17 +0300
 card_tag: "Cluster Kurulumu"
-card_date: "Temmuz 2026"
 description: >-
   200G breakout'lu MikroTik CRS804 üzerinden 8 NVIDIA DGX Spark node'u ile switch
   tabanlı AI cluster kurulumu: management ve compute ağları, RoCEv2/RDMA,

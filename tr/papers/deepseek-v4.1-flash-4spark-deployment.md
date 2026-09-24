@@ -1,12 +1,11 @@
 ---
 title: DeepSeek-V4.1-Flash 4× DGX Spark Dağıtımı
 parent: White Papers
-nav_order: 10
+nav_order: 9
 lang: tr
 page_id: deepseek-v4.1-flash-4spark-deployment
-card_order: 10
+date: 2026-09-16 11:17:32 +0300
 card_tag: "LLM Dağıtımı"
-card_date: "Eylül 2026"
 description: >-
   DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) modelinin 4× NVIDIA DGX Spark
   (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM 12.1a patch'i,
