@@ -13,7 +13,9 @@ lang: en
 languages: ["en", "tr"]
 default_lang: "en"
 exclude_from_localization: ["javascript", "images", "css", "assets", "_sass", "CNAME"]
-parallel_localization: true
+# false: paralel derlemede iki dil aynı nav önbelleğini paylaşıyor ve yaklaşık her
+# 10 derlemeden birinde tüm sayfalara tek dilin menüsü düşüyordu.
+parallel_localization: false
 sass:
   sourcemap: never
 
