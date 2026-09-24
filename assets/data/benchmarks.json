@@ -120,7 +120,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "4K context",
       "sources": [],
       "data_points": [
@@ -655,7 +655,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -709,7 +709,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -920,7 +920,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -974,7 +974,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -1126,7 +1126,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -1180,7 +1180,7 @@
       "engine": "vLLM",
       "mtp": true,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -1519,7 +1519,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -1573,7 +1573,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "Model: nvidia/GLM-5.2-NVFP4",
       "sources": [],
       "data_points": [
@@ -1940,7 +1940,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -2299,7 +2299,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -2353,7 +2353,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 8,
       "notes": "2.8T MoE, 104B active, 896 experts, 1M context. GMU 0.95",
       "sources": [
         "https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/"
@@ -2409,7 +2409,7 @@
       "engine": "vLLM",
       "mtp": true,
       "mtp_k": null,
-      "tp": null,
+      "tp": 8,
       "notes": "DSpark speculative. Draft model: Inferact/Kimi-K3-DSpark. 1.86x speedup at C1.",
       "sources": [
         "https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/"
@@ -2465,7 +2465,7 @@
       "engine": "SGLang",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 8,
       "notes": "GMU 0.85",
       "sources": [
         "https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/"
@@ -2791,7 +2791,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -2845,7 +2845,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -2894,7 +2894,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "Jetson Thor. max_model_len 262144",
       "sources": [],
       "data_points": [
@@ -3026,7 +3026,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 2,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3075,7 +3075,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3183,7 +3183,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3237,7 +3237,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 1,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3286,7 +3286,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3335,7 +3335,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "4 GPU",
       "sources": [],
       "data_points": [
@@ -3384,7 +3384,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 2,
       "notes": "2 GPU",
       "sources": [],
       "data_points": [
@@ -3482,7 +3482,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3531,7 +3531,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3585,7 +3585,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3639,7 +3639,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3688,7 +3688,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3737,7 +3737,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 8,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3786,7 +3786,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 2,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3835,7 +3835,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 2,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3884,7 +3884,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 2,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3933,7 +3933,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 8,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -3987,7 +3987,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -4036,7 +4036,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 2,
       "notes": "",
       "sources": [],
       "data_points": [
@@ -4085,7 +4085,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 8,
       "notes": "Model: Inferact/Qwen3.8-2.4T-A95B-NVFP4, 262K context",
       "sources": [],
       "data_points": [
@@ -4139,7 +4139,7 @@
       "engine": "vLLM",
       "mtp": false,
       "mtp_k": null,
-      "tp": null,
+      "tp": 4,
       "notes": "",
       "sources": [],
       "data_points": [
