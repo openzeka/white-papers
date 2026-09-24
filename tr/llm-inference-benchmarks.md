@@ -11,7 +11,7 @@ description: >-
   cihaza, kuantizasyona ve eşzamanlılığa göre filtreleyin, kendi performans
   hedeflerinizi girin.
 permalink: /llm-inference-benchmarks/
-last_modified_date: 2026-09-02
+last_modified_date: 2026-09-24
 toc: false
 ---
 
@@ -130,6 +130,15 @@ paralelliği bir katmanın içindeki hesabı böler; data paralelliği tam kopya
 yan yana çalıştırır; pipeline paralelliği farklı katmanları farklı cihazlara
 yerleştirir.
 
+**KV cache** — engine'in bir oturumun her tokenı için tuttuğu bellek; böylece
+her yeni kelimede konuşmanın tamamını yeniden işlemesi gerekmez. Oturum
+uzadıkça büyür ve model ağırlıklarından sonra belleği en çok kullanan şeydir.
+
+**Bağlam uzunluğu** — bir oturumun tuttuğu tüm tokenlar: geçmişi, yapıştırılan
+her şey, araç sonuçları ve yanıtlar. İkinin kuvvetleriyle ifade edilir; 32K,
+32.768 token demektir. Bir modelin **bağlam penceresi**, tutabileceği en fazla
+tokendır.
+
 ### Önce iki ayrımı netleştirin {#once-iki-ayrimi-netlestirin}
 
 **Filtreler hangi satırların görüneceğini belirler. Hedefler ise sayıların ne
@@ -200,12 +209,22 @@ Maks C ile seçtiğiniz eşzamanlılık farklı soruları yanıtlar. Seçtiğini
 ölçümün ekranda olduğunu belirler. Maks C ise taramanın tamamına bakıp
 hedeflerinizi geçen en yüksek seviyeyi bildirir.
 
-Kapasite sütunları Maks C'yi kişi sayısına çevirir:
+Kapasite sütunları bunu kişi sayısına çevirir. Her biri **birbirinden bağımsız
+iki sınırdan küçük olanını** gösterir, çünkü bir yapılandırmanın önce iki
+şeyden biri tükenebilir: hız ya da KV cache için bellek.
 
-- Chat Kapasitesi = `floor(Maks C × Chat Kullanım Çarpanı)`
-- Agentic Kapasitesi = `floor(Maks C × Agentic Kullanım Çarpanı)`
+**Neden iki sınır.** Maks C kısa, 128 tokenlık isteklerden gelir; makinenin kaç
+isteğe yeterince hızlı yanıt verdiğini söyler, bellek hakkında ise hiçbir şey
+söylemez. Oysa gerçek bir kullanıcının konuşması, oturum sürdüğü sürece KV
+cache'te kalır ve 32K ya da 128K tokenlık bir oturum, bir benchmark isteğinden
+çok daha fazla yer kaplar. Bir yapılandırma hız hedeflerini rahatça karşılayıp
+yine de yalnızca birkaç uzun oturuma yer bulabilir. Tablo ikisini de kontrol
+eder ve önce tükeneni gösterir.
 
-Çarpanlar **her kullanım türünün ne kadar yoğun olduğunu** temsil eder. Chat
+**1. Hız sınırı** — `floor(Maks C × Kullanım Çarpanı)`.
+
+Çarpanlar **her kullanım türünün ne kadar yoğun olduğunu**, yani tek bir istek
+yuvasını kaç kullanıcının paylaştığını temsil eder. Chat
 varsayılanı daha yüksektir (4), çünkü etkileşimli kullanıcılar zamanlarının
 büyük bölümünü yanıtı okuyarak, düşünerek ve sonraki istemi yazarak geçirir ve
 bu sürede bir istek yuvası tutmazlar — böylece birkaç kullanıcı aynı yuvayı
@@ -214,17 +233,68 @@ sonuçları değerlendirirken art arda çağrı yapabilir ve yuvayı çok daha u
 meşgul eder; varsayılanı bu yüzden düşüktür (1,5). Neredeyse kesintisiz çalışan
 ajanlar için agentic çarpanını düşürün; aralıklı kullanım için yükseltin.
 
+**2. KV cache bellek sınırı** — model yüklendikten sonra kalan belleğe kaç
+kullanıcının oturumunun sığdığı. **Performans Hedefleri ve Kapasite
+Varsayımları** altındaki varsayımlarla, GPU başına (DGX Spark'ta düğüm başına)
+dört adımda hesaplanır:
+
+1. **Engine'in kullanabileceği bellek** — cihazın belleği × **Engine Bellek
+   Tahsisi**: ayrık GPU'da (DGX B300, RTX PRO 6000) %95, işletim sisteminin de
+   aynı havuzu paylaştığı birleşik bellekte (DGX Spark, Jetson Thor) %80.
+2. **Ağırlıklar ve cache için yer** — bunun %80'i, yani **Ağırlık ve KV Cache
+   Payı**. Kalan %20, aktivasyonlar ve diğer çalışma zamanı durumu için çalışma
+   belleğidir.
+3. **Eksi model ağırlıkları** — parametre sayısı × kuantizasyonun parametre
+   başına bayt sayısı (BF16 için 2, FP8 için 1, 4 bitlik biçimler için 0,5);
+   modelin bölündüğü GPU'lara paylaştırılır.
+4. **Bir oturuma bölünür** — kalan bellek, bir kullanıcının oturumunun
+   gerektirdiği KV cache'e bölünür: **Chat Bağlam Uzunluğu** (varsayılan 32K
+   token) ya da **Agentic Bağlam Uzunluğu** (varsayılan 128K) × modelin token
+   başına cache boyutu.
+
+Token başına cache boyutu modele bağlıdır. Standart bir transformer için,
+cache'in saklandığı varsayılan biçim olan FP8'de `2 × katman × KV başlığı ×
+başlık boyutu` bayttır. Kayan pencere, doğrusal dikkat (linear attention) ya da
+sıkıştırılmış (MLA) katmanları olan modeller çok daha azını saklar; bu yüzden
+her satır kendi modelinin değerini kullanır. Birden fazla GPU'da ağırlıklar ve
+çoğu modelde cache bunlar arasında bölünür; data paralel kopyaların her biri
+kendi kullanıcılarına hizmet eder.
+
+**Bu tarafta çarpan yoktur.** Hız sınırının saydığı her kullanıcı, okurken ya
+da yazarken bile oturumunu açık tutar; bu yüzden her birinin cache'te kendi
+yerine ihtiyacı vardır. Chat ve agentic kullanıcılar burada yalnızca
+oturumlarının uzunluğuyla ayrılır: agentic oturumlar araç çağrılarını ve
+sonuçlarını da taşır, varsayılanın dört kat uzun olması bundandır.
+
+**Hangi sınırın geçerli olduğu.** Her değerin yanındaki simge bunu gösterir —
+hız hedefleri belirlediğinde şimşek, KV cache belleği belirlediğinde bellek
+yongası. Tek satırlık gerekçe için değerin üzerine gelin, kısa bir özet için
+satırı açın.
+
+**İki istisna.** Birkaç çalıştırmada model ağırlıkları tek başına kullanılabilir
+varsayılan bellekten büyüktür. Bu çalıştırmalar yine de çalıştığına göre,
+genellikle modelin ya da KV cache'in bir kısmı CPU belleğine veya diske
+taşınmıştır — bu tahminin modellemediği bir durum — bu yüzden kapasiteleri
+yalnızca hız sınırına dayanır ve satır bunu belirtir. Ayrıca her modelin bir
+**bağlam penceresi**, yani tutabileceği en uzun oturum vardır: bir modelin
+penceresinden uzun bir bağlam uzunluğu seçerseniz o model hiçbir donanımda bu
+uzunlukta oturumlara hizmet veremez; kapasitesi bir tire ve uyarı üçgeniyle
+gösterilir.
+
 <div class="bt-howto-example" markdown="1">
 **Örnek.** Hedefleriniz 1000 ms TTFT ve 15 tok/s olsun. Bir yapılandırma C=8'e
 kadar bu ikisini karşılıyor, C=16'da TPS 15'in altına düşüyorsa Maks C 8 olur.
-Varsayılan çarpanlarla bu satır 32 chat kullanıcısı ya da 12 agentic kullanıcı
-gösterir. TTFT hedefini 500 ms'ye çekerseniz aynı satır C=4'te kalabilir ve
-kapasite yarıya iner.
+Varsayılan çarpanlarla hız sınırı 32 chat kullanıcısı ya da 12 agentic
+kullanıcıdır. Ağırlıkların yanında kalan KV cache'in 625.000 token aldığını
+varsayalım: 32K'lık 19 chat oturumu ya da 128K'lık 4 agentic oturumu sığar.
+Satır 19 ve 4 gösterir; ikisini de KV cache belleği belirler. TTFT hedefini
+500 ms'ye çekerseniz aynı satır C=4'te kalabilir ve hız sınırı 16 ile 6'ya
+iner — artık chat'i hız, agentic'i hâlâ KV cache belleği belirler.
 </div>
 
-**Bu kapasite değerleri, ölçülmüş bir Maks C'den türetilmiş tahminlerdir.**
-Sisteme 32 chat kullanıcısı ya da 12 agentic kullanıcı bağlanarak elde
-edilmemiştir.
+**Bu kapasite değerleri tahmindir.** Hız sınırı ölçülmüş bir Maks C'den, KV
+cache bellek sınırı modelin mimarisinden ve cihazın belleğinden türetilir.
+İkisi de sisteme o kadar kullanıcı bağlanarak elde edilmemiştir.
 
 ### 5. Satırı açıp ayrıntıya inin {#satiri-acip-ayrintiya-inin}
 
@@ -233,7 +303,9 @@ görürsünüz; durum ve hücre renkleri her seviyede hedeflerinizin karşılan�
 karşılanmadığını işaretler — tek bir başlık değerinin sakladığı davranış budur.
 Ölçülmüş herhangi bir seviyeyi seçtiğinizde orada gerçekten kaydedilmiş hız
 oynatılır; böylece C=1, C=8 ve C=32 sayıyla olduğu kadar kulakla da
-karşılaştırılabilir.
+karşılaştırılabilir. Bunların altındaki kısa kapasite özeti, chat ve agentic
+kullanım için her sınırın neye izin verdiğini ve hangisinin geçerli olduğunu
+gösterir.
 
 Grafik iki eğri taşır:
 
@@ -280,20 +352,26 @@ boyutlandırmasından ayrı tutar.
 ### Bu tablo neyi söylemez {#bu-tablo-neyi-soylemez}
 
 Tablo bilinçli olarak tek bir karşılaştırılabilir sabit iş yükü, ortalama
-değerler ve basit kapasite çarpanları kullanır; amaç, önce eksiksiz bir üretim
-trafiği modeli tanımlamak zorunda kalmadan ilk karşılaştırmayı yapabilmenizdir.
-**Üretim yük testinin yerine geçmez.** Kuyruk gecikmesi (tail latency), değişken
-istem ve çıktı uzunlukları, istek varış desenleri, ajan çağrı zincirleri, toplu
-işleme, önek yeniden kullanımı, bağlam uzunluğu ve KV-cache baskısı kullanılabilir
-kapasiteyi değiştirebilir.
+değerler, basit kapasite çarpanları ve tek bir standart bellek formülü
+kullanır; amaç, önce eksiksiz bir üretim trafiği modeli tanımlamak zorunda
+kalmadan ilk karşılaştırmayı yapabilmenizdir. **Üretim yük testinin yerine
+geçmez.** Kuyruk gecikmesi (tail latency), değişken istem ve çıktı uzunlukları,
+istek varış desenleri, ajan çağrı zincirleri, toplu işleme ve önek yeniden
+kullanımı kullanılabilir kapasiteyi değiştirebilir.
+
+KV cache bellek sınırı da bu formülden gelen bir tahmindir; engine'in gerçekte ayırdığı
+belleğin okunması değildir: gerçek rezervler, cache hassasiyeti, önek paylaşımı
+ve offloading onu değiştirir. Hız sınırı da hâlâ 128 tokenlık istemlerden
+gelir. 32K ya da 128K token bağlam tutan bir oturum genellikle tablodakinden
+daha uzun bir TTFT ve biraz daha düşük bir TPS görür — KV cache bellek sınırı oturumların
+sığıp sığmadığını kontrol eder, ne kadar hızlı çalıştıklarını değil.
 
 Kapasite tahminleri, tek başına bir C=1 sonucu yerine arkasında anlamlı bir
 eşzamanlılık taraması bulunan yapılandırmalarda daha bilgilendiricidir.
 
-Planlanan iyileştirmeler arasında iş yükü ve bağlam uzunluğu filtreleri,
-KV-cache farkındalıklı eşzamanlılık sınırları ve ölçülmüş servis gecikmesi,
-kullanıcı düşünme süresi ile Little Yasası'nı kullanan zamanlama temelli
-kapasite modları var.
+Planlanan iyileştirmeler arasında iş yükü filtreleri, daha uzun bağlamlarda
+ölçülmüş hız ve ölçülmüş servis gecikmesi, kullanıcı düşünme süresi ile Little
+Yasası'nı kullanan zamanlama temelli kapasite modları var.
 
 </div>
 </details>

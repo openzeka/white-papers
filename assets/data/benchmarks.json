@@ -8,7 +8,36 @@
     "ttft_threshold_ms": 1000,
     "tps_threshold": 15,
     "chat_multiplier": 4,
-    "agentic_multiplier": 1.5
+    "agentic_multiplier": 1.5,
+    "chat_context_tokens": 32768,
+    "agentic_context_tokens": 131072,
+    "engine_memory_discrete": 0.95,
+    "engine_memory_unified": 0.8,
+    "weights_kv_share": 0.8
+  },
+  "memory": {
+    "note": "Inputs to the memory side of the capacity estimate. memory_gb is per GPU for DGX B300 and RTX PRO 6000, per node for DGX Spark and per module for Thor; a run uses tp x dp x pp of them. Weights are parameters x weight_bytes_per_param. Each entry's kv_* fields are KV-cache sizes at FP8 (one byte per stored value), and model_context_length is the model's own context window from its config.json; all four describe the model, not the run.",
+    "memory_gb": {
+      "DGX B300": 288,
+      "DGX Spark": 128,
+      "RTX PRO 6000": 96,
+      "Thor": 128
+    },
+    "unified_memory": [
+      "DGX Spark",
+      "Thor"
+    ],
+    "weight_bytes_per_param": {
+      "BF16": 2,
+      "FP16": 2,
+      "FP8": 1,
+      "MXFP8": 1,
+      "NVFP4": 0.5,
+      "MXFP4": 0.5,
+      "FP4": 0.5,
+      "INT4": 0.5,
+      "AWQ": 0.5
+    }
   },
   "benchmarks": [
     {
@@ -58,7 +87,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 18432,
+      "kv_window_bytes": 2359296,
+      "kv_heads": 8,
+      "model_context_length": 131072
     },
     {
       "id": "gpt-oss-120b_2spark_mxfp4_vllm",
@@ -107,7 +140,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 18432,
+      "kv_window_bytes": 2359296,
+      "kv_heads": 8,
+      "model_context_length": 131072
     },
     {
       "id": "gpt-oss-120b_rtxpro6000_mxfp4_vllm",
@@ -161,7 +198,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 18432,
+      "kv_window_bytes": 2359296,
+      "kv_heads": 8,
+      "model_context_length": 131072
     },
     {
       "id": "qwen3-4b_1spark_nvfp4_vllm",
@@ -210,7 +251,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 73728,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3-coder-30b_1spark_fp16_vllm",
@@ -259,7 +304,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 49152,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3-coder-30b_1spark_nvfp4_vllm",
@@ -308,7 +357,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 49152,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-27b_1spark_fp8_vllm",
@@ -354,7 +407,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-27b_1spark_fp8_vllm_mtp",
@@ -400,7 +457,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-27b_1spark_awq_vllm_mtp",
@@ -444,7 +505,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-27b_1spark_nvfp4_vllm",
@@ -490,7 +555,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-27b_1spark_nvfp4_vllm_mtp",
@@ -534,7 +603,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-27b_2spark_nvfp4_vllm",
@@ -588,7 +661,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-27b_4spark_nvfp4_vllm",
@@ -642,7 +719,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.5-27b_rtxpro6000_fp8_vllm",
@@ -696,7 +777,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-27b_b300_default_vllm",
@@ -750,7 +835,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-35b-a3b_1spark_fp8_vllm",
@@ -799,7 +888,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 10240,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-35b-a3b_1spark_fp8_vllm_mtp",
@@ -853,7 +946,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 10240,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-35b-a3b_4spark_nvfp4_vllm",
@@ -907,7 +1004,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 10240,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.6-35b-a3b_b300_default_vllm",
@@ -961,7 +1062,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 10240,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.5-35b-a3b_rtxpro6000_fp8_vllm",
@@ -1015,7 +1120,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 10240,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_1spark_nvfp4_sglang_dflash2_ult",
@@ -1064,7 +1173,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_4spark_nvfp4_sglang_dflash2_tp4",
@@ -1113,7 +1226,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_b300_default_vllm",
@@ -1167,7 +1284,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_b300_default_vllm_mtp",
@@ -1221,7 +1342,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-flash-next_2spark_nvfp4_sglang",
@@ -1260,7 +1385,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 12672,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-flash-next_b300_default_sglang",
@@ -1314,7 +1443,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 12672,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.5-397b-a17b_3spark_int4_vllm",
@@ -1353,7 +1486,11 @@
         }
       ],
       "dp": null,
-      "pp": 3
+      "pp": 3,
+      "kv_bytes_per_token": 15360,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.5-397b-a17b_4spark_int4_vllm",
@@ -1392,7 +1529,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 15360,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "glm-5.2_4spark_int4int8mix_vllm_mtp4",
@@ -1433,7 +1574,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.2_8spark_nvfp4_vllm_mtp5_256k",
@@ -1467,7 +1612,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.2_8spark_nvfp4_vllm_128k",
@@ -1506,7 +1655,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.2_b300_fp8_vllm",
@@ -1560,7 +1713,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.2_b300_nvfp4_vllm",
@@ -1614,7 +1771,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.3-flash_2spark_nvfp4_vllm",
@@ -1658,7 +1819,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 5984,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.3-flash_4spark_fp8_vllm",
@@ -1692,7 +1857,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 5984,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.3-flash_b300_default_sglang_tp2",
@@ -1746,7 +1915,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 5984,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.3-flash_b300_default_sglang_tp4",
@@ -1800,7 +1973,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 5984,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.3_b300_default_sglang_tp4",
@@ -1854,7 +2031,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "glm-5.3_8spark_nvfp4_vllm_mtp4",
@@ -1888,7 +2069,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "inkling_8spark_nvfp4_vllm_mtp1",
@@ -1927,7 +2112,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 22528,
+      "kv_window_bytes": 115343360,
+      "kv_heads": 8,
+      "model_context_length": 1048576
     },
     {
       "id": "inkling_b300_nvfp4_vllm",
@@ -1981,7 +2170,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 22528,
+      "kv_window_bytes": 115343360,
+      "kv_heads": 8,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4-flash_2spark_nvfp4_vllm_mtp5",
@@ -2020,7 +2213,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 3440,
+      "kv_window_bytes": 2818048,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4-flash_8spark_nvfp4_vllm",
@@ -2074,7 +2271,11 @@
         }
       ],
       "dp": 4,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 3440,
+      "kv_window_bytes": 2818048,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "minimax-m2.7_2spark_nvfp4_vllm_tp2",
@@ -2115,7 +2316,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 126976,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 204800
     },
     {
       "id": "minimax-m2.7_2spark_nvfp4_vllm_pp2",
@@ -2154,7 +2359,11 @@
         }
       ],
       "dp": null,
-      "pp": 2
+      "pp": 2,
+      "kv_bytes_per_token": 126976,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 204800
     },
     {
       "id": "minimax-m2.7_3spark_nvfp4_vllm_pp3",
@@ -2193,7 +2402,11 @@
         }
       ],
       "dp": null,
-      "pp": 3
+      "pp": 3,
+      "kv_bytes_per_token": 126976,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 204800
     },
     {
       "id": "minimax-m2.7_4spark_nvfp4_vllm_tp4",
@@ -2247,7 +2460,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 126976,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 204800
     },
     {
       "id": "minimax-m3_4spark_nvfp4_vllm_mtp8",
@@ -2286,7 +2503,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 61440,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 1048576
     },
     {
       "id": "minimax-m3_b300_mxfp8_vllm",
@@ -2340,7 +2561,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 61440,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 1048576
     },
     {
       "id": "kimi-k3_b300_mxfp4_vllm",
@@ -2396,7 +2621,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 13824,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "kimi-k3_b300_mxfp4_vllm_dspark",
@@ -2452,7 +2681,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 13824,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "kimi-k3_b300_mxfp4_sglang",
@@ -2508,7 +2741,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 13824,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "gemma-4-26b_1spark_fp16_vllm",
@@ -2562,7 +2799,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 10240,
+      "kv_window_bytes": 104857600,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "gemma-4-26b_1spark_fp16_vllm_mtp",
@@ -2616,7 +2857,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 10240,
+      "kv_window_bytes": 104857600,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "gemma-4-31b_1spark_nvfp4_vllm",
@@ -2670,7 +2915,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 40960,
+      "kv_window_bytes": 419430400,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "gemma-4-31b_2spark_nvfp4_vllm",
@@ -2724,7 +2973,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 40960,
+      "kv_window_bytes": 419430400,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "gemma-4-31b_4spark_nvfp4_vllm",
@@ -2778,7 +3031,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 40960,
+      "kv_window_bytes": 419430400,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "gemma-4-31b_b300_default_vllm",
@@ -2832,7 +3089,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 40960,
+      "kv_window_bytes": 419430400,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "gemma-4-31b_rtxpro6000_nvfp4_vllm",
@@ -2881,7 +3142,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 40960,
+      "kv_window_bytes": 419430400,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "laguna-s-2.1_thor_nvfp4",
@@ -2920,7 +3185,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 24576,
+      "kv_window_bytes": 37748736,
+      "kv_heads": 8,
+      "model_context_length": 1048576
     },
     {
       "id": "muse-glimmer-30b_1spark_sglang",
@@ -2959,7 +3228,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 6656,
+      "kv_window_bytes": 40894464,
+      "kv_heads": 2,
+      "model_context_length": 131072
     },
     {
       "id": "muse-glimmer-30b_rtxpro6000_bf16_vllm_mtp",
@@ -3013,7 +3286,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 6656,
+      "kv_window_bytes": 40894464,
+      "kv_heads": 2,
+      "model_context_length": 131072
     },
     {
       "id": "deepseek-v3.1_b300_nvfp4_vllm",
@@ -3062,7 +3339,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 35136,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 163840
     },
     {
       "id": "deepseek-v4-pro_b300_default_vllm",
@@ -3116,7 +3397,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 4924,
+      "kv_window_bytes": 3997696,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4-pro-0813_b300_default_vllm_tp4",
@@ -3170,7 +3455,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 4924,
+      "kv_window_bytes": 3997696,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "gemma-4-26b-a4b_b300_default_vllm",
@@ -3224,7 +3513,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 10240,
+      "kv_window_bytes": 104857600,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "glm-4.5-air_b300_default_vllm",
@@ -3273,7 +3566,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 94208,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 131072
     },
     {
       "id": "glm-4.6_b300_default_vllm",
@@ -3322,7 +3619,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 188416,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 202752
     },
     {
       "id": "glm-4.7_b300_default_vllm_4gpu",
@@ -3371,7 +3672,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 188416,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 202752
     },
     {
       "id": "glm-4.7_b300_fp8_vllm_2gpu",
@@ -3420,7 +3725,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 188416,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 202752
     },
     {
       "id": "glm-4.7_1spark_nvfp4_vllm",
@@ -3469,7 +3778,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 188416,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 202752
     },
     {
       "id": "glm-5_b300_fp8_vllm",
@@ -3518,7 +3831,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 202752
     },
     {
       "id": "glm-5.1_b300_fp8_vllm",
@@ -3572,7 +3889,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 202752
     },
     {
       "id": "kimi-k2.5_b300_nvfp4_vllm",
@@ -3626,7 +3947,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 35136,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 262144
     },
     {
       "id": "kimi-k2.6_b300_default_vllm",
@@ -3675,7 +4000,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 35136,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 262144
     },
     {
       "id": "kimi-k2-thinking_b300_nvfp4_vllm",
@@ -3724,7 +4053,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 35136,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 262144
     },
     {
       "id": "mimo-v2.5-pro_b300_default_vllm",
@@ -3773,7 +4106,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 25600,
+      "kv_window_bytes": 19660800,
+      "kv_heads": 8,
+      "model_context_length": 1048576
     },
     {
       "id": "minimax-m2_b300_default_vllm",
@@ -3822,7 +4159,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 126976,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 196608
     },
     {
       "id": "minimax-m2.5_b300_default_vllm",
@@ -3871,7 +4212,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 126976,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 196608
     },
     {
       "id": "minimax-m2.7_b300_default_vllm",
@@ -3920,7 +4265,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 126976,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 204800
     },
     {
       "id": "nemotron-3-ultra_b300_default_vllm",
@@ -3974,7 +4323,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 6144,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3-235b-a22b_b300_default_vllm",
@@ -4023,7 +4376,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 96256,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.5-397b-a17b_b300_fp8_vllm",
@@ -4072,7 +4429,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 15360,
+      "kv_window_bytes": 0,
+      "kv_heads": 2,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-2.4t-a95b_b300_nvfp4_vllm",
@@ -4126,7 +4487,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 47104,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "tencent-hy3_b300_default_vllm",
@@ -4180,7 +4545,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 163840,
+      "kv_window_bytes": 0,
+      "kv_heads": 8,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_1spark_bf16_vllm_c1",
@@ -4204,7 +4573,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_1spark_bf16_vllm_mtp_c1",
@@ -4228,7 +4601,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_1spark_fp8_vllm_c1",
@@ -4252,7 +4629,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_1spark_fp8_vllm_mtp_eugr_c1",
@@ -4276,7 +4657,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_1spark_nvfp4_vllm_c1",
@@ -4300,7 +4685,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "qwen3.8-27b_1spark_nvfp4_vllm_mtp_eugr_c1",
@@ -4324,7 +4713,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 32768,
+      "kv_window_bytes": 0,
+      "kv_heads": 4,
+      "model_context_length": 262144
     },
     {
       "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp2dp2_c1",
@@ -4348,7 +4741,11 @@
         }
       ],
       "dp": 2,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 3440,
+      "kv_window_bytes": 2818048,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp4_c1",
@@ -4372,7 +4769,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 3440,
+      "kv_window_bytes": 2818048,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4-flash_8spark_nvfp4_sglang_c1",
@@ -4396,7 +4797,11 @@
         }
       ],
       "dp": 2,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 3440,
+      "kv_window_bytes": 2818048,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4.1-flash_b300_fp8_vllm_tp4",
@@ -4450,7 +4855,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 1600,
+      "kv_window_bytes": 2621440,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4.1-flash_4spark_fp8_vllm_tp4",
@@ -4489,7 +4898,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 1600,
+      "kv_window_bytes": 2621440,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4.1-flash_8spark_fp8_vllm_tp8",
@@ -4528,7 +4941,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 1600,
+      "kv_window_bytes": 2621440,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4.1-flash_8spark_fp8_vllm_tp8_1m",
@@ -4567,7 +4984,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 1600,
+      "kv_window_bytes": 2621440,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "tencent-hy4-preview_b300_bf16_vllm_tp8",
@@ -4621,7 +5042,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 54912,
+      "kv_window_bytes": 0,
+      "kv_heads": null,
+      "model_context_length": 1048576
     },
     {
       "id": "deepseek-v4-flash-vision-exp_2spark_fp8_vllm_tp2",
@@ -4660,7 +5085,11 @@
         }
       ],
       "dp": null,
-      "pp": null
+      "pp": null,
+      "kv_bytes_per_token": 3440,
+      "kv_window_bytes": 2818048,
+      "kv_heads": null,
+      "model_context_length": 1048576
     }
   ]
 }
