@@ -1,0 +1,23 @@
+{
+  "model": "Qwen3.5-35B-A3B",
+  "repo": "Qwen/Qwen3.5-35B-A3B",
+  "revision": "59d61f3ce65a6d9863b86d2e96597125219dc754",
+  "config_sha256": "5e4d7f74fec2f360eb9cfbfcd6ec0c4c76e684d3a11caaed259d9fd9bfbc7944",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-02-24T09:39:25.000Z",
+    "last_modified": "2026-04-24T02:38:38.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3.5-35B-A3B-Base"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 35951822704,
+    "parameters_by_dtype": {
+      "BF16": 35951817904,
+      "F32": 4800
+    }
+  }
+}

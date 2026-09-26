@@ -1,0 +1,30 @@
+{
+  "repo": "RedHatAI/gemma-4-31B-it-NVFP4",
+  "revision": "5df75ccad9b74546f5be758a2a68acc2e16bbc9b",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 23265401144,
+  "quantization": {
+    "method": "compressed-tensors",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-04-03T16:59:13.000Z",
+    "last_modified": "2026-08-13T13:07:26.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": "google/gemma-4-31B-it",
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 32682375020,
+    "parameters_by_dtype": {
+      "BF16": 3395647340,
+      "U8": 29286727680
+    }
+  },
+  "files": [
+    {
+      "path": "model.safetensors",
+      "size": 23265401144
+    }
+  ]
+}

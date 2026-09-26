@@ -1,0 +1,30 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "Qwen/Qwen3.8-Flash-Next",
+      "object": "model",
+      "created": 1787826879,
+      "owned_by": "vllm",
+      "root": "Qwen/Qwen3.8-Flash-Next",
+      "parent": null,
+      "max_model_len": 262144,
+      "permission": [
+        {
+          "id": "modelperm-9220e1edd0c5b0fa",
+          "object": "model_permission",
+          "created": 1787826879,
+          "allow_create_engine": false,
+          "allow_sampling": true,
+          "allow_logprobs": true,
+          "allow_search_indices": false,
+          "allow_view": true,
+          "allow_fine_tuning": false,
+          "organization": "*",
+          "group": null,
+          "is_blocking": false
+        }
+      ]
+    }
+  ]
+}

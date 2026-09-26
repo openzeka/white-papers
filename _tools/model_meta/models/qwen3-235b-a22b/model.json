@@ -1,0 +1,20 @@
+{
+  "model": "Qwen3-235B-A22B",
+  "repo": "Qwen/Qwen3-235B-A22B-Instruct-2507",
+  "revision": "ac9c66cc9b46af7306746a9250f23d47083d689e",
+  "config_sha256": "ad59a339665ee1c68cbff06ac72c9e59f5183ebfaf3698c98737e003a870e9e2",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2025-07-21T06:46:56.000Z",
+    "last_modified": "2025-09-17T06:52:55.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 235093634560,
+    "parameters_by_dtype": {
+      "BF16": 235093634560
+    }
+  }
+}

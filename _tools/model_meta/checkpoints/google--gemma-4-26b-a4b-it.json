@@ -1,0 +1,35 @@
+{
+  "repo": "google/gemma-4-26b-a4b-it",
+  "revision": "4d7ae4984b7db7de8f8457170b3f1a419ee76d52",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 51612009916,
+  "quantization": {
+    "method": null,
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-03-11T21:25:57.000Z",
+    "last_modified": "2026-07-20T16:42:12.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "google/gemma-4-26B-A4B"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 25805936206,
+    "parameters_by_dtype": {
+      "BF16": 25805936206
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00002.safetensors",
+      "size": 49907246508
+    },
+    {
+      "path": "model-00002-of-00002.safetensors",
+      "size": 1704763408
+    }
+  ]
+}

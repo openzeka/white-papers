@@ -1,0 +1,14 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "zai-org/GLM-5.3-Flash",
+      "object": "model",
+      "created": 1787837086,
+      "owned_by": "sglang",
+      "root": "zai-org/GLM-5.3-Flash",
+      "parent": null,
+      "max_model_len": 1048576
+    }
+  ]
+}

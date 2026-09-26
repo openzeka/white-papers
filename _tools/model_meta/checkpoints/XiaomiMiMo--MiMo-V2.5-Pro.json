@@ -1,0 +1,163 @@
+{
+  "repo": "XiaomiMiMo/MiMo-V2.5-Pro",
+  "revision": "21d1ecfecd7bd70f31be25ca49d7edd21f003659",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 1033389872152,
+  "quantization": {
+    "method": "fp8",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-04-27T12:52:53.000Z",
+    "last_modified": "2026-07-09T04:20:08.000Z",
+    "gated": false,
+    "license": "mit",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 1023182841600,
+    "parameters_by_dtype": {
+      "F32": 162817920,
+      "BF16": 9450733440,
+      "F8_E4M3": 1013569290240
+    }
+  },
+  "files": [
+    {
+      "path": "model_mtp.safetensors",
+      "size": 2463641280
+    },
+    {
+      "path": "model_pp0_ep0_shard0.safetensors",
+      "size": 34554911640
+    },
+    {
+      "path": "model_pp0_ep0_shard1.safetensors",
+      "size": 27180576088
+    },
+    {
+      "path": "model_pp0_ep10_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep11_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep12_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep13_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep14_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep15_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep16_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep17_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep18_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep19_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep1_shard0.safetensors",
+      "size": 31264213728
+    },
+    {
+      "path": "model_pp0_ep20_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep21_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep22_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep23_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep24_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep25_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep26_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep27_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep28_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep29_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep2_shard0.safetensors",
+      "size": 31264213728
+    },
+    {
+      "path": "model_pp0_ep30_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep31_shard0.safetensors",
+      "size": 31264218696
+    },
+    {
+      "path": "model_pp0_ep3_shard0.safetensors",
+      "size": 31264213728
+    },
+    {
+      "path": "model_pp0_ep4_shard0.safetensors",
+      "size": 31264213728
+    },
+    {
+      "path": "model_pp0_ep5_shard0.safetensors",
+      "size": 31264213728
+    },
+    {
+      "path": "model_pp0_ep6_shard0.safetensors",
+      "size": 31264213728
+    },
+    {
+      "path": "model_pp0_ep7_shard0.safetensors",
+      "size": 31264213728
+    },
+    {
+      "path": "model_pp0_ep8_shard0.safetensors",
+      "size": 31264217040
+    },
+    {
+      "path": "model_pp0_ep9_shard0.safetensors",
+      "size": 31264218696
+    }
+  ]
+}

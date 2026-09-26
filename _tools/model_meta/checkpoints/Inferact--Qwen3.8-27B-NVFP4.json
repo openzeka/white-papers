@@ -1,0 +1,56 @@
+{
+  "repo": "Inferact/Qwen3.8-27B-NVFP4",
+  "revision": "6128240ebaf4eaa7bad2b3d1c72c37d677c5f462",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 26381249312,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-08-13T16:25:38.000Z",
+    "last_modified": "2026-08-14T14:29:49.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3.8-27B"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 17631212272,
+    "parameters_by_dtype": {
+      "BF16": 7480996592,
+      "U8": 10150215680
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00006.safetensors",
+      "size": 4013662656
+    },
+    {
+      "path": "model-00002-of-00006.safetensors",
+      "size": 4104675536
+    },
+    {
+      "path": "model-00003-of-00006.safetensors",
+      "size": 4028901296
+    },
+    {
+      "path": "model-00004-of-00006.safetensors",
+      "size": 4003421984
+    },
+    {
+      "path": "model-00005-of-00006.safetensors",
+      "size": 4000515080
+    },
+    {
+      "path": "model-00006-of-00006.safetensors",
+      "size": 5380672368
+    },
+    {
+      "path": "nvfp4_experts_mtp.safetensors",
+      "size": 849400392
+    }
+  ]
+}

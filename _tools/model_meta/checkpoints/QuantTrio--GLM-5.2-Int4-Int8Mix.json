@@ -1,0 +1,542 @@
+{
+  "repo": "QuantTrio/GLM-5.2-Int4-Int8Mix",
+  "revision": "1d3bcfe5ec549ecd000fd80b37f191183842e983",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 405481014016,
+  "quantization": {
+    "method": "compressed-tensors",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-06-22T00:48:28.000Z",
+    "last_modified": "2026-06-22T15:01:25.000Z",
+    "gated": false,
+    "license": "mit",
+    "base_model": [
+      "zai-org/GLM-5.2"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 784977079072,
+    "parameters_by_dtype": {
+      "BF16": 8367477312,
+      "I64": 117984,
+      "I32": 776489926656,
+      "F32": 119557120
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00124.safetensors",
+      "size": 1903165568
+    },
+    {
+      "path": "model-00002-of-00124.safetensors",
+      "size": 3218711224
+    },
+    {
+      "path": "model-00003-of-00124.safetensors",
+      "size": 3218272088
+    },
+    {
+      "path": "model-00004-of-00124.safetensors",
+      "size": 3215694056
+    },
+    {
+      "path": "model-00005-of-00124.safetensors",
+      "size": 3218271560
+    },
+    {
+      "path": "model-00006-of-00124.safetensors",
+      "size": 3216415536
+    },
+    {
+      "path": "model-00007-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00008-of-00124.safetensors",
+      "size": 3218271904
+    },
+    {
+      "path": "model-00009-of-00124.safetensors",
+      "size": 3216415160
+    },
+    {
+      "path": "model-00010-of-00124.safetensors",
+      "size": 3212975680
+    },
+    {
+      "path": "model-00011-of-00124.safetensors",
+      "size": 3220990504
+    },
+    {
+      "path": "model-00012-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00013-of-00124.safetensors",
+      "size": 3218271688
+    },
+    {
+      "path": "model-00014-of-00124.safetensors",
+      "size": 3216415408
+    },
+    {
+      "path": "model-00015-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00016-of-00124.safetensors",
+      "size": 3218272024
+    },
+    {
+      "path": "model-00017-of-00124.safetensors",
+      "size": 3215694112
+    },
+    {
+      "path": "model-00018-of-00124.safetensors",
+      "size": 3218271464
+    },
+    {
+      "path": "model-00019-of-00124.safetensors",
+      "size": 3217561712
+    },
+    {
+      "path": "model-00020-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00021-of-00124.safetensors",
+      "size": 3218271992
+    },
+    {
+      "path": "model-00022-of-00124.safetensors",
+      "size": 3216415072
+    },
+    {
+      "path": "model-00023-of-00124.safetensors",
+      "size": 3218271424
+    },
+    {
+      "path": "model-00024-of-00124.safetensors",
+      "size": 3215694744
+    },
+    {
+      "path": "model-00025-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00026-of-00124.safetensors",
+      "size": 3218271776
+    },
+    {
+      "path": "model-00027-of-00124.safetensors",
+      "size": 3216415312
+    },
+    {
+      "path": "model-00028-of-00124.safetensors",
+      "size": 3216414968
+    },
+    {
+      "path": "model-00029-of-00124.safetensors",
+      "size": 3218272088
+    },
+    {
+      "path": "model-00030-of-00124.safetensors",
+      "size": 3215694040
+    },
+    {
+      "path": "model-00031-of-00124.safetensors",
+      "size": 3218271560
+    },
+    {
+      "path": "model-00032-of-00124.safetensors",
+      "size": 3216415552
+    },
+    {
+      "path": "model-00033-of-00124.safetensors",
+      "size": 3216414976
+    },
+    {
+      "path": "model-00034-of-00124.safetensors",
+      "size": 3218271896
+    },
+    {
+      "path": "model-00035-of-00124.safetensors",
+      "size": 3216414320
+    },
+    {
+      "path": "model-00036-of-00124.safetensors",
+      "size": 3203558912
+    },
+    {
+      "path": "model-00037-of-00124.safetensors",
+      "size": 3218149824
+    },
+    {
+      "path": "model-00038-of-00124.safetensors",
+      "size": 3215694048
+    },
+    {
+      "path": "model-00039-of-00124.safetensors",
+      "size": 3218271680
+    },
+    {
+      "path": "model-00040-of-00124.safetensors",
+      "size": 3216415424
+    },
+    {
+      "path": "model-00041-of-00124.safetensors",
+      "size": 3216414976
+    },
+    {
+      "path": "model-00042-of-00124.safetensors",
+      "size": 3218272024
+    },
+    {
+      "path": "model-00043-of-00124.safetensors",
+      "size": 3216415048
+    },
+    {
+      "path": "model-00044-of-00124.safetensors",
+      "size": 3218271440
+    },
+    {
+      "path": "model-00045-of-00124.safetensors",
+      "size": 3215694720
+    },
+    {
+      "path": "model-00046-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00047-of-00124.safetensors",
+      "size": 3218271792
+    },
+    {
+      "path": "model-00048-of-00124.safetensors",
+      "size": 3216415280
+    },
+    {
+      "path": "model-00049-of-00124.safetensors",
+      "size": 3216414968
+    },
+    {
+      "path": "model-00050-of-00124.safetensors",
+      "size": 3218272080
+    },
+    {
+      "path": "model-00051-of-00124.safetensors",
+      "size": 3215694056
+    },
+    {
+      "path": "model-00052-of-00124.safetensors",
+      "size": 3218271576
+    },
+    {
+      "path": "model-00053-of-00124.safetensors",
+      "size": 3216414344
+    },
+    {
+      "path": "model-00054-of-00124.safetensors",
+      "size": 3216413824
+    },
+    {
+      "path": "model-00055-of-00124.safetensors",
+      "size": 3218271920
+    },
+    {
+      "path": "model-00056-of-00124.safetensors",
+      "size": 3216415144
+    },
+    {
+      "path": "model-00057-of-00124.safetensors",
+      "size": 3211390168
+    },
+    {
+      "path": "model-00058-of-00124.safetensors",
+      "size": 3216808504
+    },
+    {
+      "path": "model-00059-of-00124.safetensors",
+      "size": 3215694048
+    },
+    {
+      "path": "model-00060-of-00124.safetensors",
+      "size": 3218271696
+    },
+    {
+      "path": "model-00061-of-00124.safetensors",
+      "size": 3216415400
+    },
+    {
+      "path": "model-00062-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00063-of-00124.safetensors",
+      "size": 3218272040
+    },
+    {
+      "path": "model-00064-of-00124.safetensors",
+      "size": 3216415040
+    },
+    {
+      "path": "model-00065-of-00124.safetensors",
+      "size": 3218271472
+    },
+    {
+      "path": "model-00066-of-00124.safetensors",
+      "size": 3215694688
+    },
+    {
+      "path": "model-00067-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00068-of-00124.safetensors",
+      "size": 3218271824
+    },
+    {
+      "path": "model-00069-of-00124.safetensors",
+      "size": 3216415248
+    },
+    {
+      "path": "model-00070-of-00124.safetensors",
+      "size": 3216414976
+    },
+    {
+      "path": "model-00071-of-00124.safetensors",
+      "size": 3218270584
+    },
+    {
+      "path": "model-00072-of-00124.safetensors",
+      "size": 3216414144
+    },
+    {
+      "path": "model-00073-of-00124.safetensors",
+      "size": 3218271592
+    },
+    {
+      "path": "model-00074-of-00124.safetensors",
+      "size": 3215694576
+    },
+    {
+      "path": "model-00075-of-00124.safetensors",
+      "size": 3216414976
+    },
+    {
+      "path": "model-00076-of-00124.safetensors",
+      "size": 3218271944
+    },
+    {
+      "path": "model-00077-of-00124.safetensors",
+      "size": 3216415136
+    },
+    {
+      "path": "model-00078-of-00124.safetensors",
+      "size": 3218271360
+    },
+    {
+      "path": "model-00079-of-00124.safetensors",
+      "size": 3216415744
+    },
+    {
+      "path": "model-00080-of-00124.safetensors",
+      "size": 3215694048
+    },
+    {
+      "path": "model-00081-of-00124.safetensors",
+      "size": 3218271712
+    },
+    {
+      "path": "model-00082-of-00124.safetensors",
+      "size": 3216415384
+    },
+    {
+      "path": "model-00083-of-00124.safetensors",
+      "size": 3216414992
+    },
+    {
+      "path": "model-00084-of-00124.safetensors",
+      "size": 3218272056
+    },
+    {
+      "path": "model-00085-of-00124.safetensors",
+      "size": 3216415008
+    },
+    {
+      "path": "model-00086-of-00124.safetensors",
+      "size": 3218271488
+    },
+    {
+      "path": "model-00087-of-00124.safetensors",
+      "size": 3215694672
+    },
+    {
+      "path": "model-00088-of-00124.safetensors",
+      "size": 3216414648
+    },
+    {
+      "path": "model-00089-of-00124.safetensors",
+      "size": 3218270352
+    },
+    {
+      "path": "model-00090-of-00124.safetensors",
+      "size": 3215693784
+    },
+    {
+      "path": "model-00091-of-00124.safetensors",
+      "size": 3214765776
+    },
+    {
+      "path": "model-00092-of-00124.safetensors",
+      "size": 3219921296
+    },
+    {
+      "path": "model-00093-of-00124.safetensors",
+      "size": 3216414976
+    },
+    {
+      "path": "model-00094-of-00124.safetensors",
+      "size": 3218271616
+    },
+    {
+      "path": "model-00095-of-00124.safetensors",
+      "size": 3215694552
+    },
+    {
+      "path": "model-00096-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00097-of-00124.safetensors",
+      "size": 3218271968
+    },
+    {
+      "path": "model-00098-of-00124.safetensors",
+      "size": 3216415104
+    },
+    {
+      "path": "model-00099-of-00124.safetensors",
+      "size": 3218271392
+    },
+    {
+      "path": "model-00100-of-00124.safetensors",
+      "size": 3216415712
+    },
+    {
+      "path": "model-00101-of-00124.safetensors",
+      "size": 3215694048
+    },
+    {
+      "path": "model-00102-of-00124.safetensors",
+      "size": 3218271736
+    },
+    {
+      "path": "model-00103-of-00124.safetensors",
+      "size": 3216415376
+    },
+    {
+      "path": "model-00104-of-00124.safetensors",
+      "size": 3216414968
+    },
+    {
+      "path": "model-00105-of-00124.safetensors",
+      "size": 3218272080
+    },
+    {
+      "path": "model-00106-of-00124.safetensors",
+      "size": 3216414320
+    },
+    {
+      "path": "model-00107-of-00124.safetensors",
+      "size": 3218270024
+    },
+    {
+      "path": "model-00108-of-00124.safetensors",
+      "size": 3216415392
+    },
+    {
+      "path": "model-00109-of-00124.safetensors",
+      "size": 3215694056
+    },
+    {
+      "path": "model-00110-of-00124.safetensors",
+      "size": 3218271864
+    },
+    {
+      "path": "model-00111-of-00124.safetensors",
+      "size": 3216415200
+    },
+    {
+      "path": "model-00112-of-00124.safetensors",
+      "size": 3138675856
+    },
+    {
+      "path": "model-00113-of-00124.safetensors",
+      "size": 3218149832
+    },
+    {
+      "path": "model-00114-of-00124.safetensors",
+      "size": 3216414984
+    },
+    {
+      "path": "model-00115-of-00124.safetensors",
+      "size": 3218271672
+    },
+    {
+      "path": "model-00116-of-00124.safetensors",
+      "size": 3215694496
+    },
+    {
+      "path": "model-00117-of-00124.safetensors",
+      "size": 3216414976
+    },
+    {
+      "path": "model-00118-of-00124.safetensors",
+      "size": 3218272024
+    },
+    {
+      "path": "model-00119-of-00124.safetensors",
+      "size": 3216415048
+    },
+    {
+      "path": "model-00120-of-00124.safetensors",
+      "size": 3218271440
+    },
+    {
+      "path": "model-00121-of-00124.safetensors",
+      "size": 3216414360
+    },
+    {
+      "path": "model-00122-of-00124.safetensors",
+      "size": 3216413568
+    },
+    {
+      "path": "model-00123-of-00124.safetensors",
+      "size": 3218270296
+    },
+    {
+      "path": "model-00124-of-00124.safetensors",
+      "size": 1146598432
+    },
+    {
+      "path": "mtp-00001-of-00004.safetensors",
+      "size": 3210432792
+    },
+    {
+      "path": "mtp-00002-of-00004.safetensors",
+      "size": 3210482112
+    },
+    {
+      "path": "mtp-00003-of-00004.safetensors",
+      "size": 3210481440
+    },
+    {
+      "path": "mtp-00004-of-00004.safetensors",
+      "size": 416818584
+    }
+  ]
+}

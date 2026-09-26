@@ -76,8 +76,10 @@ You set the targets, and the table answers:
 - **Estimated chat and agentic capacity** — how many *people* a configuration
   might serve: the smaller of a **speed limit** (Max C × a usage multiplier you
   can change) and a **KV cache memory limit** (how many sessions of your chosen
-  context length fit in the memory left after the model weights). An icon shows
-  which limit applies. This is an estimate, not a measured user count.
+  context length fit in the memory left after the model weights). The cache size
+  per token and the weight size come from each model's published configuration
+  and the checkpoint the run served, both pinned in `_tools/model_meta/`. An icon
+  shows which limit applies. This is an estimate, not a measured user count.
 - **Full sweep per row** — TTFT, per-request TPS and aggregate throughput at
   every concurrency level, with pass/fail against your targets.
 - **Model capability context** — Intelligence and Agentic Index scores from
@@ -456,6 +458,8 @@ papers/
 
 The intent is to make it possible to inspect the measurements behind the conclusions rather than relying only on summarized benchmark claims.
 
+The Explorer's capacity estimates are traceable the same way: `_tools/model_meta/` keeps every model's `config.json` and every served checkpoint's file list exactly as published on Hugging Face, pinned to a commit, and `_tools/kv_geometry.py` derives the table's memory inputs from them.
+
 ---
 
 # Benchmark Tooling
@@ -484,6 +488,7 @@ white-papers/
 ├── _layouts/              # Site layouts
 ├── _sass/                 # Site styling
 ├── _tools/                # Maintenance scripts, kept out of the build
+│   └── model_meta/        # Pinned Hugging Face configs and checkpoint sizes behind the capacity columns
 ├── skills/                # Step-by-step procedures for adding a benchmark run or a paper
 ├── docker-compose.yml     # Local development server
 ├── index.md

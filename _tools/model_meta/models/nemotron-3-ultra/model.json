@@ -1,0 +1,21 @@
+{
+  "model": "Nemotron-3-Ultra",
+  "repo": "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+  "revision": "77df655d5e9f8362164ed14dd8b48f8bce657498",
+  "config_sha256": "8f92735a43afae0d94b73fb9e658910ed548818a188eb2fc51513e88c9e689cd",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-06-03T14:50:04.000Z",
+    "last_modified": "2026-08-24T23:47:18.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 560524578816,
+    "parameters_by_dtype": {
+      "BF16": 560524578816,
+      "F32": 25088
+    }
+  }
+}

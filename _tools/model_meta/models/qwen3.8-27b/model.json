@@ -1,0 +1,20 @@
+{
+  "model": "Qwen3.8-27B",
+  "repo": "Qwen/Qwen3.8-27B",
+  "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "config_sha256": "191e0af232104ed8b65258cf3fb2b842e288008baca7633c11b82a1ac7203aab",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-08-05T08:22:59.000Z",
+    "last_modified": "2026-08-14T15:00:01.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 27781427952,
+    "parameters_by_dtype": {
+      "BF16": 27781427952
+    }
+  }
+}

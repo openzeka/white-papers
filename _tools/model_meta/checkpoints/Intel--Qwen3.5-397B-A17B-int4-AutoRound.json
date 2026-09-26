@@ -1,0 +1,189 @@
+{
+  "repo": "Intel/Qwen3.5-397B-A17B-int4-AutoRound",
+  "revision": "5d1728a2094d11a9b535befdad70dbc360797c9a",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 226326683096,
+  "quantization": {
+    "method": "auto-round",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-02-27T11:02:38.000Z",
+    "last_modified": "2026-03-14T15:47:09.000Z",
+    "gated": false,
+    "license": null,
+    "base_model": [
+      "Qwen/Qwen3.5-397B-A17B"
+    ],
+    "library": null,
+    "pipeline_tag": null,
+    "safetensors_parameters": null,
+    "parameters_by_dtype": null
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00040.safetensors",
+      "size": 5368689616
+    },
+    {
+      "path": "model-00002-of-00040.safetensors",
+      "size": 5368345680
+    },
+    {
+      "path": "model-00003-of-00040.safetensors",
+      "size": 5369480416
+    },
+    {
+      "path": "model-00004-of-00040.safetensors",
+      "size": 5368714408
+    },
+    {
+      "path": "model-00005-of-00040.safetensors",
+      "size": 5369111696
+    },
+    {
+      "path": "model-00006-of-00040.safetensors",
+      "size": 5368714496
+    },
+    {
+      "path": "model-00007-of-00040.safetensors",
+      "size": 5369485360
+    },
+    {
+      "path": "model-00008-of-00040.safetensors",
+      "size": 5368352440
+    },
+    {
+      "path": "model-00009-of-00040.safetensors",
+      "size": 5368722336
+    },
+    {
+      "path": "model-00010-of-00040.safetensors",
+      "size": 5369118256
+    },
+    {
+      "path": "model-00011-of-00040.safetensors",
+      "size": 5368721744
+    },
+    {
+      "path": "model-00012-of-00040.safetensors",
+      "size": 5369487992
+    },
+    {
+      "path": "model-00013-of-00040.safetensors",
+      "size": 5368352448
+    },
+    {
+      "path": "model-00014-of-00040.safetensors",
+      "size": 5369488144
+    },
+    {
+      "path": "model-00015-of-00040.safetensors",
+      "size": 5368352536
+    },
+    {
+      "path": "model-00016-of-00040.safetensors",
+      "size": 5369488144
+    },
+    {
+      "path": "model-00017-of-00040.safetensors",
+      "size": 5368721768
+    },
+    {
+      "path": "model-00018-of-00040.safetensors",
+      "size": 5368352904
+    },
+    {
+      "path": "model-00019-of-00040.safetensors",
+      "size": 5369487688
+    },
+    {
+      "path": "model-00020-of-00040.safetensors",
+      "size": 5368352440
+    },
+    {
+      "path": "model-00021-of-00040.safetensors",
+      "size": 5369488144
+    },
+    {
+      "path": "model-00022-of-00040.safetensors",
+      "size": 5368721688
+    },
+    {
+      "path": "model-00023-of-00040.safetensors",
+      "size": 5369118992
+    },
+    {
+      "path": "model-00024-of-00040.safetensors",
+      "size": 5368721680
+    },
+    {
+      "path": "model-00025-of-00040.safetensors",
+      "size": 5368353208
+    },
+    {
+      "path": "model-00026-of-00040.safetensors",
+      "size": 5369487376
+    },
+    {
+      "path": "model-00027-of-00040.safetensors",
+      "size": 5368721768
+    },
+    {
+      "path": "model-00028-of-00040.safetensors",
+      "size": 5369118824
+    },
+    {
+      "path": "model-00029-of-00040.safetensors",
+      "size": 5368721680
+    },
+    {
+      "path": "model-00030-of-00040.safetensors",
+      "size": 5369488144
+    },
+    {
+      "path": "model-00031-of-00040.safetensors",
+      "size": 5368352448
+    },
+    {
+      "path": "model-00032-of-00040.safetensors",
+      "size": 5369488144
+    },
+    {
+      "path": "model-00033-of-00040.safetensors",
+      "size": 5368352632
+    },
+    {
+      "path": "model-00034-of-00040.safetensors",
+      "size": 5368722080
+    },
+    {
+      "path": "model-00035-of-00040.safetensors",
+      "size": 5369487656
+    },
+    {
+      "path": "model-00036-of-00040.safetensors",
+      "size": 5368352448
+    },
+    {
+      "path": "model-00037-of-00040.safetensors",
+      "size": 5369488144
+    },
+    {
+      "path": "model-00038-of-00040.safetensors",
+      "size": 5368352536
+    },
+    {
+      "path": "model-00039-of-00040.safetensors",
+      "size": 5132367352
+    },
+    {
+      "path": "model-00040-of-00040.safetensors",
+      "size": 3984909880
+    },
+    {
+      "path": "model_extra_tensors.safetensors",
+      "size": 13191327760
+    }
+  ]
+}

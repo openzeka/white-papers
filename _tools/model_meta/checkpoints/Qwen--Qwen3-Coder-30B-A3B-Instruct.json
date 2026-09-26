@@ -1,0 +1,89 @@
+{
+  "repo": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+  "revision": "b2cff646eb4bb1d68355c01b18ae02e7cf42d120",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 61066575656,
+  "quantization": {
+    "method": null,
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2025-07-31T07:04:55.000Z",
+    "last_modified": "2025-12-03T08:05:17.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 30532122624,
+    "parameters_by_dtype": {
+      "BF16": 30532122624
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00016.safetensors",
+      "size": 3998893112
+    },
+    {
+      "path": "model-00002-of-00016.safetensors",
+      "size": 3999974192
+    },
+    {
+      "path": "model-00003-of-00016.safetensors",
+      "size": 3997360832
+    },
+    {
+      "path": "model-00004-of-00016.safetensors",
+      "size": 3999975056
+    },
+    {
+      "path": "model-00005-of-00016.safetensors",
+      "size": 3999975400
+    },
+    {
+      "path": "model-00006-of-00016.safetensors",
+      "size": 3999975400
+    },
+    {
+      "path": "model-00007-of-00016.safetensors",
+      "size": 3999975472
+    },
+    {
+      "path": "model-00008-of-00016.safetensors",
+      "size": 3997362064
+    },
+    {
+      "path": "model-00009-of-00016.safetensors",
+      "size": 3999975408
+    },
+    {
+      "path": "model-00010-of-00016.safetensors",
+      "size": 3999975400
+    },
+    {
+      "path": "model-00011-of-00016.safetensors",
+      "size": 3999975408
+    },
+    {
+      "path": "model-00012-of-00016.safetensors",
+      "size": 3987924896
+    },
+    {
+      "path": "model-00013-of-00016.safetensors",
+      "size": 3999975088
+    },
+    {
+      "path": "model-00014-of-00016.safetensors",
+      "size": 3999975400
+    },
+    {
+      "path": "model-00015-of-00016.safetensors",
+      "size": 3999975400
+    },
+    {
+      "path": "model-00016-of-00016.safetensors",
+      "size": 1085307128
+    }
+  ]
+}

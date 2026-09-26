@@ -1,0 +1,86 @@
+{
+  "repo": "openai/gpt-oss-120b",
+  "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 65248893184,
+  "quantization": {
+    "method": "mxfp4",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2025-08-04T22:33:06.000Z",
+    "last_modified": "2025-08-26T17:25:03.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 116829156672,
+    "parameters_by_dtype": {
+      "BF16": 2167371072,
+      "U8": 114661785600
+    }
+  },
+  "files": [
+    {
+      "path": "model-00000-of-00014.safetensors",
+      "size": 4625017896
+    },
+    {
+      "path": "model-00001-of-00014.safetensors",
+      "size": 4115586736
+    },
+    {
+      "path": "model-00002-of-00014.safetensors",
+      "size": 4625017888
+    },
+    {
+      "path": "model-00003-of-00014.safetensors",
+      "size": 4115586752
+    },
+    {
+      "path": "model-00004-of-00014.safetensors",
+      "size": 4625017896
+    },
+    {
+      "path": "model-00005-of-00014.safetensors",
+      "size": 4115586696
+    },
+    {
+      "path": "model-00006-of-00014.safetensors",
+      "size": 4625017856
+    },
+    {
+      "path": "model-00007-of-00014.safetensors",
+      "size": 4060267176
+    },
+    {
+      "path": "model-00008-of-00014.safetensors",
+      "size": 4625017896
+    },
+    {
+      "path": "model-00009-of-00014.safetensors",
+      "size": 4170906304
+    },
+    {
+      "path": "model-00010-of-00014.safetensors",
+      "size": 4625017896
+    },
+    {
+      "path": "model-00011-of-00014.safetensors",
+      "size": 4115586752
+    },
+    {
+      "path": "model-00012-of-00014.safetensors",
+      "size": 4064660808
+    },
+    {
+      "path": "model-00013-of-00014.safetensors",
+      "size": 4625017896
+    },
+    {
+      "path": "model-00014-of-00014.safetensors",
+      "size": 4115586736
+    }
+  ]
+}

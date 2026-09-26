@@ -1,0 +1,21 @@
+{
+  "model": "GPT-OSS 120B",
+  "repo": "openai/gpt-oss-120b",
+  "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
+  "config_sha256": "933aeb666a3fd851133ddd7686414f369bc564c4185fb5704416550879f10566",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2025-08-04T22:33:06.000Z",
+    "last_modified": "2025-08-26T17:25:03.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 116829156672,
+    "parameters_by_dtype": {
+      "BF16": 2167371072,
+      "U8": 114661785600
+    }
+  }
+}

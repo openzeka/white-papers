@@ -11,7 +11,7 @@ description: >-
   (GB10) üzerinde TP8 dağıtımı: iki yapılandırma (300K Engram-bellekte, 1M
   Engram-diskte), NCCL optimizasyonu, benchmark sonuçları ve TP4 karşılaştırması.
 permalink: /papers/deepseek-v4.1-flash-8spark-deployment/
-last_modified_date: 2026-09-17
+last_modified_date: 2026-09-26
 toc: true
 ---
 
@@ -275,7 +275,7 @@ Engram-on-disk yapılandırması, KV önbellek için önemli ölçüde daha fazl
 
 - **TP8-300K, her concurrency seviyesinde TP8-1M'den daha hızlıdır** (C=1'de 35.98 vs 33.28). 1M yapılandırmasında Engram diskte olmasına rağmen CUDA graph avantajı, 1M bağlam overhead'i ve AutoTuner profiling maliyeti tarafından aşılır.
 - **C=1'de TTFT**, 1M yapılandırmasında daha düşüktür (199 ms vs 213 ms) — Engram-on-disk yolu, prefill sırasında host round-trip'ini önler.
-- **Max C = 4** (her iki yapılandırma için, Benchmark Gezgini'nin varsayılan hedeflerinde: TTFT≤1000ms, TPS≥15) — TP4 kapasitesinin (Max C=2) iki katı.
+- **Max C = 4** TP8-300K için, **2** TP8-1M için (Benchmark Gezgini'nin varsayılan hedeflerinde: TTFT≤1000ms, TPS≥20). TP8-300K, TP4 kapasitesinin (Max C=2) iki katıdır; TP8-1M C=4'te 17.07 tok/s ile TPS hedefinin hemen altında kalır.
 - **TPS düşüşü** C=1'den C=8'e: %62 (300K), %65 (1M) — küme doygunluğa yaklaşırken bellek bant genişliği çekişmesi.
 
 ---
@@ -310,14 +310,14 @@ TP8, tüm concurrency seviyelerinde TTFT'yi %21-39 oranında düşürür — pre
 
 ## 9. SLO ve Kapasite
 
-Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥15 tok/s), her iki TP8 yapılandırması **Max C = 4** verir — TP4 kapasitesinin (Max C=2) iki katı:
+Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), TP8-300K **Max C = 4** verir — TP4 kapasitesinin (Max C=2) iki katı — TP8-1M ise **Max C = 2**:
 
 | SLO | Eşik | TP8-300K C=4 | TP8-1M C=4 |
 |---|---|---|---|
 | TTFT | ≤ 1000 ms | 370 ms ✓ | 401 ms ✓ |
-| TPS | ≥ 15 tok/s | 20.10 ✓ | 17.07 ✓ |
+| TPS | ≥ 20 tok/s | 20.10 ✓ | 17.07 ✗ |
 
-> **Uyarı:** C=8'de TPS, her iki yapılandırma için de 15 tok/s eşiğinin altına düşer (13.63 ve 11.74). İnteraktif sohbet servisleri için **4 eşzamanlı kullanıcı** önerilir; daha yüksek yük için veri merkezi donanımı (B300/GB300) tercih edilmelidir.
+> **Uyarı:** C=8'de TPS, her iki yapılandırma için de 20 tok/s eşiğinin altına düşer (13.63 ve 11.74); TP8-1M ise eşiği C=4'te zaten kaçırır. İnteraktif sohbet servisleri için **4 eşzamanlı kullanıcı** (TP8-300K) ya da **2** (TP8-1M) önerilir; daha yüksek yük için veri merkezi donanımı (B300/GB300) tercih edilmelidir.
 
 ---
 

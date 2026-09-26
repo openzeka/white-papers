@@ -1,0 +1,24 @@
+{
+  "model": "DeepSeek-V4-Pro",
+  "repo": "deepseek-ai/DeepSeek-V4-Pro",
+  "revision": "b5968e9190ef611bbf34a7229255be88a0e937c1",
+  "config_sha256": "5fe4568daee51c208cb8a79538eaeda090ae011ade1dee2c386aa95f569c810e",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-04-22T06:04:45.000Z",
+    "last_modified": "2026-06-22T12:12:50.000Z",
+    "gated": false,
+    "license": "mit",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 1598839674782,
+    "parameters_by_dtype": {
+      "BF16": 2816899328,
+      "I64": 2327040,
+      "F32": 87776414,
+      "F8_E4M3": 23169335296,
+      "I8": 1572763336704
+    }
+  }
+}

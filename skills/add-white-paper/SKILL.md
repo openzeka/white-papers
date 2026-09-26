@@ -16,16 +16,28 @@ pick the new one up correctly:
 | Table on `/papers/` | same order as the sidebar | No — you add the row, in both languages |
 | `README.md` "Research & Engineering Library" table (the GitHub front page) | same order as the sidebar | No — you add the row |
 
-## 1. Get what you need from the user
+## 1. Confirm the details with the user — before writing any file
 
-Ask for anything you do not have. Do not invent it.
+**Do not create or edit anything until the user has answered.** Read the draft,
+then send the user one message proposing a value for each item below and wait
+for their reply. Propose, never pick silently — even where the default seems
+obvious, the user confirms it:
 
-- The paper's content in **both** languages (or which one to translate from).
-- The **slug** — lowercase, hyphenated, e.g. `qwen3.6-27b-dgx-spark-benchmark`.
-  It becomes the URL `/papers/<slug>/` and cannot change later without breaking
-  links.
-- The **publication date** — today, unless the user says otherwise.
-- The images, if any.
+- **Content in both languages.** If only one language was provided, ask whether
+  you should translate it or whether a translation exists. A translation you
+  write must be flagged in your report as needing review by a fluent reader.
+- **The slug** — propose one: lowercase, hyphenated, e.g.
+  `qwen3.6-27b-dgx-spark-benchmark`. It becomes the URL `/papers/<slug>/` and
+  cannot change later without breaking links.
+- **The publication date** — propose today's date.
+- **The title and one-sentence description** in each language (step 2).
+- **The `card_tag`** — propose one from the existing list (step 2).
+- **Where it sits in the sidebar** — propose the paper it follows, with the
+  reason (step 3), and name any papers that would be renumbered.
+- **The images**, if the draft refers to any.
+
+If the draft looks like a test, a placeholder or unfinished work (placeholder
+numbers, "draft", "TBD"), say so and ask whether it should be added at all.
 
 ## 2. Create both pages
 
@@ -156,7 +168,10 @@ Then look at it in a browser, both languages:
 
 Tell the user the slug, where it landed in the sidebar and tables (which paper
 it follows), which other papers were renumbered, what was added to the README
-beyond the table row, and the URLs to look at.
+beyond the table row, and the URLs to look at on the local preview. Say plainly
+that the change is **local only**: nothing is published until it is committed,
+reviewed and merged, and external publication needs the author's approval.
+Never describe the paper as "published".
 
 ## Keeping this skill true
 

@@ -1,0 +1,381 @@
+{
+  "repo": "Inferact/GLM-5.3-NVFP4",
+  "revision": "ce67b36f3669192b5bb233819f0fda6c8a9837f8",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 464822832448,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-08-28T04:42:07.000Z",
+    "last_modified": "2026-08-28T15:00:18.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": [
+      "zai-org/GLM-5.3-BF16"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 390942074880,
+    "parameters_by_dtype": {
+      "BF16": 28554209024,
+      "U8": 362387865600,
+      "F32": 256
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00008.safetensors",
+      "size": 4910133288
+    },
+    {
+      "path": "model-00002-of-00008.safetensors",
+      "size": 4950406152
+    },
+    {
+      "path": "model-00003-of-00008.safetensors",
+      "size": 4960806064
+    },
+    {
+      "path": "model-00004-of-00008.safetensors",
+      "size": 4960806064
+    },
+    {
+      "path": "model-00005-of-00008.safetensors",
+      "size": 4960806064
+    },
+    {
+      "path": "model-00006-of-00008.safetensors",
+      "size": 4960806064
+    },
+    {
+      "path": "model-00007-of-00008.safetensors",
+      "size": 4960806064
+    },
+    {
+      "path": "model-00008-of-00008.safetensors",
+      "size": 2538152152
+    },
+    {
+      "path": "mtp_bf16-00001-of-00005.safetensors",
+      "size": 4479575624
+    },
+    {
+      "path": "mtp_bf16-00002-of-00005.safetensors",
+      "size": 4479539088
+    },
+    {
+      "path": "mtp_bf16-00003-of-00005.safetensors",
+      "size": 4479539088
+    },
+    {
+      "path": "mtp_bf16-00004-of-00005.safetensors",
+      "size": 4479538912
+    },
+    {
+      "path": "mtp_bf16-00005-of-00005.safetensors",
+      "size": 1987748128
+    },
+    {
+      "path": "nvfp4_experts-00001-of-00075.safetensors",
+      "size": 5436186144
+    },
+    {
+      "path": "nvfp4_experts-00002-of-00075.safetensors",
+      "size": 5436186144
+    },
+    {
+      "path": "nvfp4_experts-00003-of-00075.safetensors",
+      "size": 5436186144
+    },
+    {
+      "path": "nvfp4_experts-00004-of-00075.safetensors",
+      "size": 5436186144
+    },
+    {
+      "path": "nvfp4_experts-00005-of-00075.safetensors",
+      "size": 5436186144
+    },
+    {
+      "path": "nvfp4_experts-00006-of-00075.safetensors",
+      "size": 5436186144
+    },
+    {
+      "path": "nvfp4_experts-00007-of-00075.safetensors",
+      "size": 5436186144
+    },
+    {
+      "path": "nvfp4_experts-00008-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00009-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00010-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00011-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00012-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00013-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00014-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00015-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00016-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00017-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00018-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00019-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00020-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00021-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00022-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00023-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00024-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00025-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00026-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00027-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00028-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00029-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00030-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00031-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00032-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00033-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00034-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00035-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00036-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00037-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00038-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00039-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00040-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00041-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00042-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00043-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00044-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00045-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00046-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00047-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00048-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00049-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00050-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00051-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00052-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00053-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00054-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00055-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00056-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00057-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00058-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00059-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00060-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00061-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00062-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00063-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00064-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00065-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00066-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00067-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00068-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00069-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00070-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00071-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00072-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00073-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00074-of-00075.safetensors",
+      "size": 5436189216
+    },
+    {
+      "path": "nvfp4_experts-00075-of-00075.safetensors",
+      "size": 5436189216
+    }
+  ]
+}

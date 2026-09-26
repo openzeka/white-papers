@@ -1,0 +1,21 @@
+{
+  "model": "Qwen3.8-Flash-Next",
+  "repo": "Qwen/Qwen3.8-Flash-Next",
+  "revision": "de4b8e4d43b917e7706784d8bb445c9af86a3540",
+  "config_sha256": "889658f2508e8c61d409b02e70e0d78d8d4452ec65aaafbe129805d213d2e74b",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-08-24T08:24:59.000Z",
+    "last_modified": "2026-08-27T05:03:36.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 179999981459,
+    "parameters_by_dtype": {
+      "BF16": 179999981424,
+      "I64": 35
+    }
+  }
+}

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Import a benchmark-tool result folder into assets/data/benchmarks.json.
 
-    python3 _tools/bench_import.py inspect <folder>      # what the folder tells us
-    python3 _tools/bench_import.py add <entry.json>      # insert a finished entry
+    python3 _tools/bench_import.py inspect <folder>                  # what the folder tells us
+    python3 _tools/bench_import.py add <entry.json> --folder <folder>  # insert a finished entry
 
 Driven by skills/add-benchmark/SKILL.md. `inspect` reads only what the
 tool actually recorded and lists what a human still has to supply; it never
@@ -12,6 +12,8 @@ file's exact formatting, so the diff is only the new entry.
 Nothing here judges the data — run `python3 _tools/validate.py` afterwards.
 """
 import argparse, csv, glob, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kv_geometry
 from collections import OrderedDict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +24,8 @@ DATA = os.path.join(ROOT, "assets/data/benchmarks.json")
 FIELDS = ["id", "model", "params", "intelligence_index", "agentic_index",
           "device", "quantization", "engine", "mtp", "mtp_k", "tp",
           "notes", "sources", "data_points", "dp", "pp",
-          "kv_bytes_per_token", "kv_window_bytes", "kv_heads", "model_context_length"]
+          "kv_bytes_per_token", "kv_window_bytes", "kv_heads", "model_context_length",
+          "kv_replicated_bytes_per_token", "kv_state_bytes", "served_repo", "weights_gb"]
 
 # Only these three CSV columns reach the table. The tool also emits p50/p90 for
 # TTFT, ITL, TPS and Latency plus Throughput (RPS); the table has no field for
@@ -163,7 +166,7 @@ def cmd_inspect(a):
         print(f"\n  columns present but NOT stored (no field in the table): {', '.join(dropped)}")
 
     # What Max C would be at the file's own default targets.
-    tt, tp = cfg.get("ttft_threshold_ms", 1000), cfg.get("tps_threshold", 15)
+    tt, tp = cfg.get("ttft_threshold_ms", 1000), cfg.get("tps_threshold", 20)
     ok = [p["c"] for p in pts
           if p["ttft_ms"] is not None and p["ttft_ms"] <= tt and (p["tps"] or 0) >= tp]
     print(f"\nAt the file's default targets (TTFT<={tt}ms, TPS>={tp}): "
@@ -187,12 +190,9 @@ def cmd_inspect(a):
         print(f"  params             {e['params']}")
         print(f"  intelligence_index {e['intelligence_index']}")
         print(f"  agentic_index      {e['agentic_index']}")
-        print(f"  kv_bytes_per_token {e.get('kv_bytes_per_token')}")
-        print(f"  kv_window_bytes    {e.get('kv_window_bytes')}")
-        print(f"  kv_heads           {e.get('kv_heads')}")
-        print(f"  model_context_length {e.get('model_context_length')}")
-        print("  -> Reuse all seven verbatim. They are properties of the model, not")
-        print("     the run, so do NOT ask the user and do NOT re-fetch or recompute.")
+        print("  -> Reuse these three verbatim. They are properties of the model, not")
+        print("     the run, so do NOT ask the user. The KV-cache fields are generated")
+        print("     by `python3 _tools/kv_geometry.py apply` — never type them.")
     elif len(names) > 1:
         print(f"AMBIGUOUS: {stem!r} matches more than one model: {names}")
         print("  -> Ask the user which one. Do not pick.")
@@ -204,8 +204,25 @@ def cmd_inspect(a):
         if near:
             print(f"  similar existing names, NOT assumed to be the same model: {near}")
         print("  -> params, intelligence_index and agentic_index must come from the user.")
-        print("  -> kv_bytes_per_token, kv_window_bytes, kv_heads and model_context_length")
-        print("     come from the model's config.json — see step 4 of the add-benchmark skill.")
+        print("  -> store the model's Hugging Face data (skill step 4b):")
+        base = None
+        if repo:
+            try:
+                info = kv_geometry._api(repo)
+                base = (info.get("cardData") or {}).get("base_model")
+                base = base[0] if isinstance(base, list) and base else base
+            except SystemExit as exc:
+                print(f"     (could not read {repo} on Hugging Face: {exc})")
+        if base:
+            print(f"     {repo} declares base_model {base!r} — the publisher's repo, if the user agrees:")
+        print(f'     python3 _tools/kv_geometry.py fetch-model "<model name>" {base or "<publisher/repo>"}')
+
+    if repo:
+        sized = repo in kv_geometry.load_checkpoints()
+        print(f"\nserved_repo   {repo}  (from models.json — confirm with the user)")
+        print(f"  checkpoint  {'already recorded' if sized else 'NOT recorded — run: python3 _tools/kv_geometry.py fetch-checkpoint ' + repo}")
+    else:
+        print("\nserved_repo   no models.json — ask the user which Hugging Face repo the run loaded")
 
     print("\nStill to be confirmed by the user (none of it is in the folder):")
     print(f"  device        required, exactly one of: {', '.join(DEVICE_SLUG)}")
@@ -241,6 +258,22 @@ def cmd_add(a):
     if any(e["id"] == entry["id"] for e in entries):
         sys.exit(f"id {entry['id']!r} already exists — deep links (#id) must be unique")
 
+    # The Hugging Face data the generated fields come from must be in the repo
+    # before the row is: nothing about the model is typed into the entry.
+    if kv_geometry.load_meta(entry["model"]) is None:
+        sys.exit(f"no stored Hugging Face data for model {entry['model']!r} — run:\n"
+                 f"  python3 _tools/kv_geometry.py fetch-model \"{entry['model']}\" <publisher/repo>")
+    served = entry.get("served_repo")
+    if served and served not in kv_geometry.load_checkpoints():
+        sys.exit(f"served checkpoint {served!r} is not recorded — run:\n"
+                 f"  python3 _tools/kv_geometry.py fetch-checkpoint {served}")
+    if a.folder:
+        _, mj = read_models_json(a.folder)
+        if mj.get("repo") and mj["repo"] != served:
+            sys.exit(f"served_repo is {served!r} but {a.folder}/models.json says {mj['repo']!r}")
+    elif served:
+        print("  note: no --folder given, so the run's models.json is not kept")
+
     ordered = OrderedDict((k, entry[k]) for k in FIELDS)
     ordered["data_points"] = [OrderedDict(c=int(p["c"]), ttft_ms=p.get("ttft_ms"),
                                           tps=p.get("tps"))
@@ -259,6 +292,11 @@ def cmd_add(a):
 
     write_data(doc)
     print(f"added {ordered['id']}\n  {where}\n  {len(entries)} entries total")
+    if a.folder and os.path.exists(os.path.join(a.folder, "models.json")):
+        kv_geometry.cmd_record_run(argparse.Namespace(id=ordered["id"], folder=a.folder))
+    kv_geometry.cmd_apply(argparse.Namespace())          # fill the generated fields
+    print("\nThe model's generated fields:")
+    kv_geometry._show(ordered["model"])
     print("\nNow run:  python3 _tools/validate.py")
     return 0
 
@@ -272,6 +310,7 @@ def main():
     i.set_defaults(fn=cmd_inspect)
     d = sub.add_parser("add", help="insert a finished entry JSON")
     d.add_argument("entry")
+    d.add_argument("--folder", help="the result folder, so its models.json is kept with the row")
     d.set_defaults(fn=cmd_add)
     a = ap.parse_args()
     return a.fn(a)

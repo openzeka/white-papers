@@ -1,0 +1,22 @@
+{
+  "model": "Kimi-K2.5",
+  "repo": "moonshotai/Kimi-K2.5",
+  "revision": "4d01dfe0332d63057c186e0b262165819efb6611",
+  "config_sha256": "acd5bb01a16f64b309599cd6ed196be056f613c99d6bc9300692b82cd10882f6",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-01-01T06:06:03.000Z",
+    "last_modified": "2026-04-30T03:56:40.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 1026879376368,
+    "parameters_by_dtype": {
+      "F32": 23040,
+      "I32": 1014686023680,
+      "BF16": 12193329648
+    }
+  }
+}

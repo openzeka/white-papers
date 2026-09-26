@@ -1,0 +1,926 @@
+{
+  "repo": "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+  "revision": "77df655d5e9f8362164ed14dd8b48f8bce657498",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 1121055890600,
+  "quantization": {
+    "method": null,
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-06-03T14:50:04.000Z",
+    "last_modified": "2026-08-24T23:47:18.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 560524578816,
+    "parameters_by_dtype": {
+      "BF16": 560524578816,
+      "F32": 25088
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00225.safetensors",
+      "size": 4983097968
+    },
+    {
+      "path": "model-00002-of-00225.safetensors",
+      "size": 4991252496
+    },
+    {
+      "path": "model-00003-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00004-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00005-of-00225.safetensors",
+      "size": 4920152112
+    },
+    {
+      "path": "model-00006-of-00225.safetensors",
+      "size": 4995491168
+    },
+    {
+      "path": "model-00007-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00008-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00009-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00010-of-00225.safetensors",
+      "size": 4987305680
+    },
+    {
+      "path": "model-00011-of-00225.safetensors",
+      "size": 4991252464
+    },
+    {
+      "path": "model-00012-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00013-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00014-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00015-of-00225.safetensors",
+      "size": 4991515208
+    },
+    {
+      "path": "model-00016-of-00225.safetensors",
+      "size": 4991252560
+    },
+    {
+      "path": "model-00017-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00018-of-00225.safetensors",
+      "size": 4991252600
+    },
+    {
+      "path": "model-00019-of-00225.safetensors",
+      "size": 4987305744
+    },
+    {
+      "path": "model-00020-of-00225.safetensors",
+      "size": 4991252664
+    },
+    {
+      "path": "model-00021-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00022-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00023-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00024-of-00225.safetensors",
+      "size": 4987305808
+    },
+    {
+      "path": "model-00025-of-00225.safetensors",
+      "size": 4991252776
+    },
+    {
+      "path": "model-00026-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00027-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00028-of-00225.safetensors",
+      "size": 4966334304
+    },
+    {
+      "path": "model-00029-of-00225.safetensors",
+      "size": 4995462192
+    },
+    {
+      "path": "model-00030-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00031-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00032-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00033-of-00225.safetensors",
+      "size": 4987305848
+    },
+    {
+      "path": "model-00034-of-00225.safetensors",
+      "size": 4991252736
+    },
+    {
+      "path": "model-00035-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00036-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00037-of-00225.safetensors",
+      "size": 4962095640
+    },
+    {
+      "path": "model-00038-of-00225.safetensors",
+      "size": 4995491376
+    },
+    {
+      "path": "model-00039-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00040-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00041-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00042-of-00225.safetensors",
+      "size": 4987305872
+    },
+    {
+      "path": "model-00043-of-00225.safetensors",
+      "size": 4991252704
+    },
+    {
+      "path": "model-00044-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00045-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00046-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00047-of-00225.safetensors",
+      "size": 4991515392
+    },
+    {
+      "path": "model-00048-of-00225.safetensors",
+      "size": 4991252800
+    },
+    {
+      "path": "model-00049-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00050-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00051-of-00225.safetensors",
+      "size": 4987305912
+    },
+    {
+      "path": "model-00052-of-00225.safetensors",
+      "size": 4991252664
+    },
+    {
+      "path": "model-00053-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00054-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00055-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00056-of-00225.safetensors",
+      "size": 4987305808
+    },
+    {
+      "path": "model-00057-of-00225.safetensors",
+      "size": 4991252776
+    },
+    {
+      "path": "model-00058-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00059-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00060-of-00225.safetensors",
+      "size": 4987305952
+    },
+    {
+      "path": "model-00061-of-00225.safetensors",
+      "size": 4991252624
+    },
+    {
+      "path": "model-00062-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00063-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00064-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00065-of-00225.safetensors",
+      "size": 4991515400
+    },
+    {
+      "path": "model-00066-of-00225.safetensors",
+      "size": 4991252736
+    },
+    {
+      "path": "model-00067-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00068-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00069-of-00225.safetensors",
+      "size": 4941123984
+    },
+    {
+      "path": "model-00070-of-00225.safetensors",
+      "size": 4995491376
+    },
+    {
+      "path": "model-00071-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00072-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00073-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00074-of-00225.safetensors",
+      "size": 4987305872
+    },
+    {
+      "path": "model-00075-of-00225.safetensors",
+      "size": 4991252704
+    },
+    {
+      "path": "model-00076-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00077-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00078-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00079-of-00225.safetensors",
+      "size": 4991515392
+    },
+    {
+      "path": "model-00080-of-00225.safetensors",
+      "size": 4991252800
+    },
+    {
+      "path": "model-00081-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00082-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00083-of-00225.safetensors",
+      "size": 4987305912
+    },
+    {
+      "path": "model-00084-of-00225.safetensors",
+      "size": 4991252664
+    },
+    {
+      "path": "model-00085-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00086-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00087-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00088-of-00225.safetensors",
+      "size": 4987305808
+    },
+    {
+      "path": "model-00089-of-00225.safetensors",
+      "size": 4991252776
+    },
+    {
+      "path": "model-00090-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00091-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00092-of-00225.safetensors",
+      "size": 4987305952
+    },
+    {
+      "path": "model-00093-of-00225.safetensors",
+      "size": 4991252624
+    },
+    {
+      "path": "model-00094-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00095-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00096-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00097-of-00225.safetensors",
+      "size": 4991515400
+    },
+    {
+      "path": "model-00098-of-00225.safetensors",
+      "size": 4991252736
+    },
+    {
+      "path": "model-00099-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00100-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00101-of-00225.safetensors",
+      "size": 4941123984
+    },
+    {
+      "path": "model-00102-of-00225.safetensors",
+      "size": 4995491376
+    },
+    {
+      "path": "model-00103-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00104-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00105-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00106-of-00225.safetensors",
+      "size": 4987305872
+    },
+    {
+      "path": "model-00107-of-00225.safetensors",
+      "size": 4991252704
+    },
+    {
+      "path": "model-00108-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00109-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00110-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00111-of-00225.safetensors",
+      "size": 4987305824
+    },
+    {
+      "path": "model-00112-of-00225.safetensors",
+      "size": 4991252808
+    },
+    {
+      "path": "model-00113-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00114-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00115-of-00225.safetensors",
+      "size": 4991515464
+    },
+    {
+      "path": "model-00116-of-00225.safetensors",
+      "size": 4991252664
+    },
+    {
+      "path": "model-00117-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00118-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00119-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00120-of-00225.safetensors",
+      "size": 4987305808
+    },
+    {
+      "path": "model-00121-of-00225.safetensors",
+      "size": 4991252776
+    },
+    {
+      "path": "model-00122-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00123-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00124-of-00225.safetensors",
+      "size": 4987305952
+    },
+    {
+      "path": "model-00125-of-00225.safetensors",
+      "size": 4991252624
+    },
+    {
+      "path": "model-00126-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00127-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00128-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00129-of-00225.safetensors",
+      "size": 4991515400
+    },
+    {
+      "path": "model-00130-of-00225.safetensors",
+      "size": 4991252736
+    },
+    {
+      "path": "model-00131-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00132-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00133-of-00225.safetensors",
+      "size": 4941123984
+    },
+    {
+      "path": "model-00134-of-00225.safetensors",
+      "size": 4995491376
+    },
+    {
+      "path": "model-00135-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00136-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00137-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00138-of-00225.safetensors",
+      "size": 4987305872
+    },
+    {
+      "path": "model-00139-of-00225.safetensors",
+      "size": 4991252704
+    },
+    {
+      "path": "model-00140-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00141-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00142-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00143-of-00225.safetensors",
+      "size": 4987305824
+    },
+    {
+      "path": "model-00144-of-00225.safetensors",
+      "size": 4991252808
+    },
+    {
+      "path": "model-00145-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00146-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00147-of-00225.safetensors",
+      "size": 4991515464
+    },
+    {
+      "path": "model-00148-of-00225.safetensors",
+      "size": 4991252664
+    },
+    {
+      "path": "model-00149-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00150-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00151-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00152-of-00225.safetensors",
+      "size": 4987305808
+    },
+    {
+      "path": "model-00153-of-00225.safetensors",
+      "size": 4991252776
+    },
+    {
+      "path": "model-00154-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00155-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00156-of-00225.safetensors",
+      "size": 4987305952
+    },
+    {
+      "path": "model-00157-of-00225.safetensors",
+      "size": 4991252624
+    },
+    {
+      "path": "model-00158-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00159-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00160-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00161-of-00225.safetensors",
+      "size": 4987305832
+    },
+    {
+      "path": "model-00162-of-00225.safetensors",
+      "size": 4991252744
+    },
+    {
+      "path": "model-00163-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00164-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00165-of-00225.safetensors",
+      "size": 4668492520
+    },
+    {
+      "path": "model-00166-of-00225.safetensors",
+      "size": 4999700952
+    },
+    {
+      "path": "model-00167-of-00225.safetensors",
+      "size": 4991252824
+    },
+    {
+      "path": "model-00168-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00169-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00170-of-00225.safetensors",
+      "size": 4987305888
+    },
+    {
+      "path": "model-00171-of-00225.safetensors",
+      "size": 4991252696
+    },
+    {
+      "path": "model-00172-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00173-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00174-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00175-of-00225.safetensors",
+      "size": 4987305816
+    },
+    {
+      "path": "model-00176-of-00225.safetensors",
+      "size": 4991252800
+    },
+    {
+      "path": "model-00177-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00178-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00179-of-00225.safetensors",
+      "size": 4991515488
+    },
+    {
+      "path": "model-00180-of-00225.safetensors",
+      "size": 4991252648
+    },
+    {
+      "path": "model-00181-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00182-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00183-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00184-of-00225.safetensors",
+      "size": 4987305816
+    },
+    {
+      "path": "model-00185-of-00225.safetensors",
+      "size": 4991252760
+    },
+    {
+      "path": "model-00186-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00187-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00188-of-00225.safetensors",
+      "size": 4970513704
+    },
+    {
+      "path": "model-00189-of-00225.safetensors",
+      "size": 4987073248
+    },
+    {
+      "path": "model-00190-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00191-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00192-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00193-of-00225.safetensors",
+      "size": 4987305848
+    },
+    {
+      "path": "model-00194-of-00225.safetensors",
+      "size": 4991252736
+    },
+    {
+      "path": "model-00195-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00196-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00197-of-00225.safetensors",
+      "size": 4962095640
+    },
+    {
+      "path": "model-00198-of-00225.safetensors",
+      "size": 4999700952
+    },
+    {
+      "path": "model-00199-of-00225.safetensors",
+      "size": 4991252824
+    },
+    {
+      "path": "model-00200-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00201-of-00225.safetensors",
+      "size": 4991252840
+    },
+    {
+      "path": "model-00202-of-00225.safetensors",
+      "size": 4987305976
+    },
+    {
+      "path": "model-00203-of-00225.safetensors",
+      "size": 4991252928
+    },
+    {
+      "path": "model-00204-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00205-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00206-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00207-of-00225.safetensors",
+      "size": 4987306008
+    },
+    {
+      "path": "model-00208-of-00225.safetensors",
+      "size": 4991253040
+    },
+    {
+      "path": "model-00209-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00210-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00211-of-00225.safetensors",
+      "size": 4987306104
+    },
+    {
+      "path": "model-00212-of-00225.safetensors",
+      "size": 4991252904
+    },
+    {
+      "path": "model-00213-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00214-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00215-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00216-of-00225.safetensors",
+      "size": 4987306000
+    },
+    {
+      "path": "model-00217-of-00225.safetensors",
+      "size": 4991253008
+    },
+    {
+      "path": "model-00218-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00219-of-00225.safetensors",
+      "size": 4991253080
+    },
+    {
+      "path": "model-00220-of-00225.safetensors",
+      "size": 4123043384
+    },
+    {
+      "path": "model-00221-of-00225.safetensors",
+      "size": 4999690568
+    },
+    {
+      "path": "model-00222-of-00225.safetensors",
+      "size": 4991251320
+    },
+    {
+      "path": "model-00223-of-00225.safetensors",
+      "size": 4991251408
+    },
+    {
+      "path": "model-00224-of-00225.safetensors",
+      "size": 4991251408
+    },
+    {
+      "path": "model-00225-of-00225.safetensors",
+      "size": 4605389936
+    }
+  ]
+}

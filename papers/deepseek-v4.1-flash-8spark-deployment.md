@@ -11,7 +11,7 @@ description: >-
   Spark (GB10) with TP8: two configurations (300K Engram-in-memory, 1M
   Engram-on-disk), NCCL optimization, benchmark results and TP4 comparison.
 permalink: /papers/deepseek-v4.1-flash-8spark-deployment/
-last_modified_date: 2026-09-17
+last_modified_date: 2026-09-26
 toc: true
 ---
 
@@ -275,7 +275,7 @@ Measurements were taken with [CordatusAI/llm-benchmark](https://github.com/Corda
 
 - **TP8-300K is faster than TP8-1M at every concurrency level** for TPS (35.98 vs 33.28 at C=1), despite the 1M configuration having Engram on disk (which should enable CUDA graphs). The 1M context overhead and AutoTuner profiling cost outweigh the CUDA graph benefit at these concurrency levels.
 - **TTFT at C=1** is lower for the 1M configuration (199 ms vs 213 ms) — the Engram-on-disk path avoids the host round-trip during prefill.
-- **Max C = 4** for both configurations at the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥15 tok/s) — double the TP4 capacity (Max C=2).
+- **Max C = 4** for TP8-300K and **2** for TP8-1M at the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s). TP8-300K doubles the TP4 capacity (Max C=2); TP8-1M reaches 17.07 tok/s at C=4, just under the TPS target.
 - **TPS decline** from C=1 to C=8: 62% drop (300K), 65% drop (1M) — memory bandwidth contention as the cluster approaches saturation.
 
 ---
@@ -310,14 +310,14 @@ TP8 reduces TTFT by 21-39% compared to TP4 at all concurrency levels — prefill
 
 ## 9. SLO and Capacity
 
-At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥15 tok/s), both TP8 configurations yield **Max C = 4** — double the TP4 capacity (Max C = 2):
+At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s), TP8-300K yields **Max C = 4** — double the TP4 capacity (Max C = 2) — and TP8-1M yields **Max C = 2**:
 
 | SLO | Threshold | TP8-300K C=4 | TP8-1M C=4 |
 |---|---|---|---|
 | TTFT | ≤ 1000 ms | 370 ms ✓ | 401 ms ✓ |
-| TPS | ≥ 15 tok/s | 20.10 ✓ | 17.07 ✓ |
+| TPS | ≥ 20 tok/s | 20.10 ✓ | 17.07 ✗ |
 
-> **Warning:** At C=8, TPS drops below the 15 tok/s threshold for both configurations (13.63 and 11.74). For interactive chat services, **4 concurrent users** are recommended; for higher loads, data center hardware (B300/GB300) should be preferred.
+> **Warning:** At C=8, TPS drops below the 20 tok/s threshold for both configurations (13.63 and 11.74), and TP8-1M already misses it at C=4. For interactive chat services, **4 concurrent users** (TP8-300K) or **2** (TP8-1M) are recommended; for higher loads, data center hardware (B300/GB300) should be preferred.
 
 ---
 

@@ -39,7 +39,7 @@
 
     /* Performance targets / assumptions */
     targetsHeading: "Performans Hedefleri ve Kapasite Varsayımları",
-    targetsIntro: "Bu değerler, hangi performansın kabul edilebilir sayılacağını ve kapasitenin nasıl tahmin edileceğini belirler. Her satırın Maks C, Chat Kapasitesi ve Agentic Kapasitesi değerleri bunlara göre yeniden hesaplanır; TPS ve TTFT sütunlarındaki yeşil ve kırmızı renklendirme iki hız hedefini izler. Buradaki değerler satırları filtrelemez — sayıların anlamını değiştirir.",
+    targetsIntro: "Bu değerler kabul edilebilir performansı ve kapasitenin nasıl tahmin edileceğini belirler. Satır gizlemezler; her satırın Maks C ve kapasite değerlerini, TPS ve TTFT sütunlarının yeşil ve kırmızı renklendirmesini yeniden hesaplarlar.",
     ttftThreshold: "Maksimum TTFT Hedefi (ms)",
     tpsThreshold: "Minimum TPS Hedefi (tok/s)",
     chatMultiplier: "Chat Kullanım Çarpanı",
@@ -47,7 +47,7 @@
     groupSpeed: "Hız sınırı",
     groupSpeedIntro: "Her isteğin ne kadar hızlı olması gerektiği. Maks C, iki hedefi birden karşılayan en yüksek ölçülmüş eşzamanlılıktır; çarpanlar onu kişi sayısına çevirir.",
     groupMemory: "KV cache bellek sınırı",
-    groupMemoryIntro: "Model ağırlıklarının yanında kalan KV cache'e kaç kullanıcının oturumunun sığdığı. Her kullanıcıya aşağıdaki bağlam uzunluğunda bir oturum ayrılır; bu tarafta çarpan yoktur.",
+    groupMemoryIntro: "Model ağırlıklarının yanında kalan KV cache'e, aşağıdaki uzunlukta kaç kullanıcı oturumunun sığdığı.",
     chatContext: "Chat Bağlam Uzunluğu (token)",
     agenticContext: "Agentic Bağlam Uzunluğu (token)",
     engineMemDiscrete: "Engine Bellek Tahsisi — Ayrık GPU (%)",
@@ -90,7 +90,7 @@
     capTie: function (ctx) { return "Hız hedefleri ve KV cache belleği (" + ctx + " tokenlık oturumlar) aynı sayıya izin veriyor."; },
     capUnchecked: function (why) { return "Hız hedefleri belirliyor. " + why; },
     whyUnsupported: "Bu modelin cache düzeni henüz modellenmediği için KV cache bellek sınırı hesaplanmıyor; bu değer yalnızca hız ölçümlerine dayanır.",
-    whyWeights: "Bu çalıştırma için KV cache bellek sınırı hesaplanamıyor: model ağırlıkları tek başına kullanılabilir varsayılan bellekten büyük. Bu genellikle çalıştırmanın modelin ya da KV cache'in bir kısmını CPU belleğine veya diske taşıdığı anlamına gelir. Bu yüzden değer yalnızca hız ölçümlerine dayanır.",
+    whyWeights: "Bu çalıştırma için KV cache bellek sınırı hesaplanamıyor: model ağırlıkları tek başına bu tahminin kullanılabilir varsaydığı bellekten büyük. Çalıştırma yine de sığdığına göre, genellikle engine'e bu standart tahsisten daha fazla bellek verilmiş ya da modelin veya KV cache'in bir kısmı CPU belleğinde ya da diskte tutulmuştur. Bu yüzden değer yalnızca hız ölçümlerine dayanır.",
     whyUnknown: "Donanım ya da ağırlık hassasiyeti bellek tablosunda olmadığı için KV cache bellek sınırı hesaplanamıyor; bu değer yalnızca hız ölçümlerine dayanır.",
     capShortCtx: function (len, ctx) { return ctx + " tokenlık bir oturum, bu modelin " + len + " tokenlık bağlam penceresinden — tutabileceği en fazla tokendan — uzun; model bu uzunlukta oturumlara hizmet veremez. Bir değer görmek için daha kısa bir bağlam uzunluğu seçin."; },
     capCeiling: function (c) { return " Hız değeri bir alt sınırdır: çalıştırma, test edilen en yüksek seviye olan C=" + c + " noktasında da hedeflerinizi karşıladı."; },
@@ -105,7 +105,8 @@
     capSpeedAllows: function (n, atLeast) { return "Hız hedefleri " + (atLeast ? "en az " : "") + n + " kişiye izin veriyor"; },
     capMemFits: function (n) { return "KV cache belleğine " + n + " oturum sığıyor"; },
     capMemNa: "KV cache belleği hesaplanmadı",
-    capKvSummary: function (kv, w, unit) { return "Model ağırlıkları yüklendikten sonra (" + unit + " başına " + w + " GB), KV cache için " + unit + " başına yaklaşık " + kv + " GB kalıyor."; },
+    capKvSummary: function (kv, w, unit, prec) { return "Model ağırlıkları yüklendikten sonra (" + unit + " başına " + w + " GB), KV cache için " + unit + " başına yaklaşık " + kv + " GB kalıyor; KV cache'in " + prec + " olarak saklandığı varsayılır."; },
+    capWeightsEstimated: "Bu çalıştırmanın yüklediği checkpoint kayıtlı değil; ağırlık boyutu parametre sayısından tahmin edildi.",
     capShortCtxLine: function (len) { return "Bu modelin bağlam penceresi " + len + " token; varsayımlarda ayarlanan uzunlukta bir oturumu tutamaz."; },
     unitGpu: "GPU",
     unitNode: "düğüm",
@@ -137,42 +138,42 @@
 
     /* Tooltips */
     tip: {
-      model: "<strong>Model</strong><p>Sunulan büyük dil modeli — kimliği, boyutu ve üreticisi.</p><p>Bir satır bir modeli değil eksiksiz bir kurulum yapılandırmasını anlatır; bu yüzden aynı model farklı donanım, kuantizasyon, engine, paralellik veya spekülatif kod çözme ayarıyla birkaç satırda görünür.</p>",
-      params: "<strong>Parametre Sayısı</strong><p>Modelin yayımlanan ağırlıklarındaki toplam parametre sayısı; yayımlanan kontrol noktasından sayılmıştır.</p><p>Uzman karışımı (MoE) modellerde bu değer toplamı gösterir, tek bir token için etkin olan daha küçük sayıyı değil. Yani token başına yapılan işi değil, modelin kapladığı belleği yansıtır.</p>",
-      intel: "<strong>Zekâ Endeksi</strong><p>Artificial Analysis’in bu modelin ne kadar yetenekli olduğunu gösteren bileşik puanı; yüksek olan iyidir. Akıl yürütme, kodlama, bilim ve uzun bağlam çalışmasını kapsayan dokuz bağımsız değerlendirmeyi birleştirir.</p><p>Bu, modelin bir özelliği — bu benchmark koşusunun değil. Aynı modelin her satırı, donanım veya kuantizasyon ne olursa olsun aynı değeri taşır. Hız hakkında hiçbir şey söylemez.</p><p>AA bir modelin birden çok akıl yürütme seviyesini puanladığında, en yüksek puanlı olan gösterilir. Tire, AA’in puan yayımlamadığı anlamına gelir.</p><p>Kaynak: Artificial Analysis.</p>",
-      agenticIdx: "<strong>Agentic Endeksi</strong><p>Artificial Analysis’in agentic çalışma için ayrı puanı — çok adımlı görevleri izlemek, araç çağırmak ve gözetim olmadan yolda kalmak. Yüksek olan iyidir.</p><p>Zekâ Endeksi’nin yeniden ölçeklenmiş hâli değildir: bir model birinde iyi, diğerinde kötü sıralanabilir.</p><p>Satırın devamındaki <em>Agentic Kapasitesi</em> ile karıştırmayın; o, bu donanımın kaç kişiye hizmet edebileceğini sayar. Bu sütun modelin yeteneğiyle, o ise makinenizin kapasitesiyle ilgilidir.</p><p>AA bunu izlediği modellerin azınlığı için yayımlar, bu yüzden burada tire sık görülür.</p><p>Kaynak: Artificial Analysis.</p>",
-      device: "<strong>Cihaz</strong><p>Modelin üzerinde çalıştığı donanım ve kaç adedinin birlikte kullanıldığı.</p><p>4× DGX Spark, dört makinenin tek bir sistem olarak tek modeli sunması demektir; dört ayrı çalışma değil.</p>",
-      quant: "<strong>Kuantizasyon</strong><p>Model ağırlıklarının saklandığı sayı biçimi. Düşük hassasiyet, ağırlık başına daha az bit kullanır; model daha az bellek kaplar ve genellikle daha hızlı çalışır, çıktı kalitesinde bir miktar risk vardır.</p><p>BF16 tam hassasiyet referansıdır; FP8, NVFP4, MXFP4 ve INT4 giderek daha sıkıştırılmıştır.</p>",
-      tps: "<strong>TPS — Tokens per Second</strong><p>Modelin <em>tek</em> bir istek için saniyede ürettiği token sayısı. Bir token kabaca bir kelimenin dörtte üçü kadardır.</p><p>İstek başına hızdır, toplam üretim değil — toplam eğri satırı açtığınızda görünür. Seçili eşzamanlılıkta, 128 token girdi ve 128 token çıktı ile yapılan on turun ortalamasıdır.</p><p><em>Yüksek olması iyidir.</em></p>",
-      ttft: "<strong>TTFT — Time to First Token</strong><p>Kullanıcının isteği gönderdikten sonra ilk kelimenin belirmesine kadar beklediği süre, milisaniye cinsinden.</p><p>Seçili eşzamanlılıkta, 128 token'lık girdiyle yapılan on turun ortalamasıdır. Prefill işi istemle birlikte büyüdüğü için, daha uzun girdilerde TTFT'nin kabaca oranlı biçimde artmasını bekleyin.</p><p><em>Düşük olması iyidir.</em></p>",
-      maxc: "<strong>Maks C — Maksimum Desteklenen Eşzamanlılık</strong><p>Bu yapılandırmanın performans hedeflerinizin ikisini birden karşıladığı en yüksek <em>ölçülmüş</em> eşzamanlılık.</p><p>Yalnızca ölçülmüş noktalardan alınır; hiçbiri iki hedefi birden sağlamıyorsa 0 görünür. Kişi değil, eşzamanlı istek sayar.</p><p>Yapılandırmanın sabit bir özelliği değildir — bir hedefi değiştirdiğinizde oynar; aynı satır bir şartta 16'ya çıkarken daha katı bir şartta 8'e inebilir.</p>",
-      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı etkileşimli sohbet için aynı anda yaklaşık kaç kişinin kullanabileceği. İki tahminden küçük olanıdır.</p><p><strong>Hız:</strong> <code>floor(Maks C × Chat Kullanım Çarpanı)</code> — chat kullanıcıları zamanının çoğunda okur, düşünür ve yazar; bu sürede istek yuvası tutmadıkları için birkaç kişi tek yuvayı paylaşır.</p><p><strong>KV cache belleği:</strong> model ağırlıklarının yanında kalan KV cache'e Chat Bağlam Uzunluğunda kaç oturum sığdığı.</p><p>Sayının yanındaki simge, ikisinden hangisinin belirlediğini gösterir; hesabı görmek için satırı açın. Ölçüm değil tahmindir — sisteme bu kadar kullanıcı bağlanmadı.</p>",
-      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını kullanıcı adına yürüttüğü agentic kullanımda, bu yapılandırmanın yaklaşık kaç kişiyi desteklediği. İki tahminden küçük olanıdır.</p><p><strong>Hız:</strong> <code>floor(Maks C × Agentic Kullanım Çarpanı)</code> — chat değerinden düşüktür, çünkü bir ajan planlarken, araç çağırırken ve sonuçları değerlendirirken art arda çağrı yapabilir ve yuvayı çok daha uzun tutar.</p><p><strong>KV cache belleği:</strong> KV cache'e Agentic Bağlam Uzunluğunda kaç oturum sığdığı. Agentic oturumlar daha uzun olduğundan chat'e göre daha azı sığar.</p><p>Sayının yanındaki simge, ikisinden hangisinin belirlediğini gösterir; hesabı görmek için satırı açın. O kadar kullanıcıyla yapılmış bir ölçüm değil, tahmindir.</p>",
-      par: "<strong>Paralellik — TP / DP / PP</strong><p>Tek bir modelin, çalışabilmesi ya da daha hızlı çalışması için birden fazla GPU veya makineye nasıl bölündüğü.</p><p><strong>TP — Tensor Parallelism:</strong> tek bir katmanın hesabı GPU\u2019lara bölünür; hepsi aynı istek üzerinde çalışır.</p><p><strong>DP — Data Parallelism:</strong> modelin birden fazla tam kopyası farklı istekleri işler.</p><p><strong>PP — Pipeline Parallelism:</strong> farklı katmanlar farklı cihazlarda durur, istekler sırayla bunlardan geçer.</p><p>— yöntemin kullanılmadığını gösterir.</p>",
-      engine: "<strong>Inference Engine</strong><p>Modeli belleğe yükleyip istekleri yanıtlayan sunucu yazılımı. Toplu işleme, bellek ve zamanlamayı o yönettiği için hıza donanım kadar etki eder.</p><p>vLLM ve SGLang bu sunuculardan ikisidir; aynı model aynı donanımda ikisi arasında ölçülebilir biçimde farklılaşabilir.</p>",
-      mtp: "<strong>Spekülatif Kod Çözme</strong><p>Model tek adımda birkaç token ilerisini tahmin eder ve bunları tek geçişte doğrular. Doğru tahminler korunduğu için aynı çıktı daha hızlı gelir.</p><p>\"Evet\", koşunun bunu bir biçimde kullandığı anlamına gelir. Hangi mekanizmanın kullanıldığı ve kaç token ileri tahmin edildiği — <em>k</em> derinliğinde çoklu token tahmini (MTP), bir taslak (draft) model ya da DSpark gibi bir üretici uygulaması — satırın notlarında belirtilir.</p><p>Açık ve kapalı satırları karşılaştırarak o yapılandırmada ne kazandırdığını görebilirsiniz.</p>",
+      model: "<strong>Model</strong><p>Sunulan büyük dil modeli.</p><p>Bir satır kurulumun tamamını anlatır; bu yüzden aynı model farklı donanım, biçim, engine ya da paralellikle birkaç satırda görünür.</p>",
+      params: "<strong>Parametre Sayısı</strong><p>Modelin yayımlanan toplam ağırlık sayısı.</p><p>Uzman karışımı (MoE) modellerde, her token için etkin olan kısım değil toplam gösterilir; çünkü tamamı bellekte tutulur.</p>",
+      intel: "<strong>Zekâ Endeksi</strong><p>Artificial Analysis’in akıl yürütme, kodlama, bilim ve uzun bağlam değerlendirmelerini birleştiren yetenek puanı. Yüksek olan iyidir.</p><p>Bu çalıştırmayı değil modeli tanımlar; bu yüzden modelin her satırı aynı değeri gösterir. Birden fazla akıl yürütme seviyesi puanlanmışsa en yüksek olanı gösterilir; tire, puan yayımlanmadığı anlamına gelir.</p><p>Kaynak: Artificial Analysis.</p>",
+      agenticIdx: "<strong>Agentic Endeksi</strong><p>Artificial Analysis’in agentic çalışma puanı: çok adımlı görevler, araç çağrıları ve gözetim olmadan yolda kalma. Yüksek olan iyidir.</p><p>Modelin ne yapabildiğini ölçer; satırın devamındaki Agentic Kapasitesi ise donanımın kaç kişiye hizmet edebileceğini tahmin eder. Tire, puan yayımlanmadığı anlamına gelir ve burada sık görülür.</p><p>Kaynak: Artificial Analysis.</p>",
+      device: "<strong>Cihaz</strong><p>Çalıştırmanın kullandığı donanım ve modeli birlikte sunan birim sayısı.</p><p>4× DGX Spark, tek bir modeli tek sistem olarak sunan dört makine demektir.</p>",
+      quant: "<strong>Kuantizasyon</strong><p>Ağırlıkların saklandığı sayı biçimi.</p><p>Ağırlık başına daha az bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar risk taşır. BF16 ve FP16 tam hassasiyettir, FP8 ve MXFP8 8 bit, NVFP4, MXFP4, FP4, INT4 ve AWQ 4 bit kullanır.</p>",
+      tps: "<strong>TPS — saniyedeki token</strong><p>Seçili eşzamanlılıkta tek bir isteğin yanıtının üretilme hızı. Bir token kabaca bir kelimenin dörtte üçüdür.</p><p>Toplam değil, istek başınadır: C=8'de sekiz isteğin her biri bu hızı alır. 128 tokenlık istem ve yanıtlarla on turun ortalamasıdır. Yüksek olması iyidir.</p>",
+      ttft: "<strong>TTFT — ilk token süresi</strong><p>Seçili eşzamanlılıkta bir isteğin ilk token'ı için beklediği süre, milisaniye cinsinden.</p><p>128 tokenlık istemlerle on turun ortalamasıdır; daha uzun istemler kabaca orantılı olarak daha uzun sürer. Düşük olması iyidir.</p>",
+      maxc: "<strong>Maks C — desteklenen en yüksek eşzamanlılık</strong><p>TTFT ve TPS hedeflerinizin ikisinin birden karşılandığı en yüksek ölçülmüş eşzamanlılık. Kişileri değil, aynı anda çalışan istekleri sayar.</p><p>Hedeflerinizi izler: birini sıkılaştırırsanız Maks C düşebilir. 0, hiçbir ölçülmüş seviyenin geçmediği anlamına gelir.</p>",
+      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı sohbet için aynı anda kabaca kaç kişinin kullanabileceği — iki tahminden küçük olanı:</p><p><strong>Hız:</strong> Maks C × Chat Kullanım Çarpanı; chat kullanıcıları zamanlarının çoğunu okuyup yazarak geçirir.<br><strong>Bellek:</strong> KV cache'e Chat Bağlam Uzunluğunda kaç oturumun sığdığı.</p><p>Simge, değeri hangisinin belirlediğini gösterir. Ölçülmüş bir kullanıcı sayısı değil, tahmindir.</p>",
+      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını yürüttüğü agentic iş için bu yapılandırmayı aynı anda kabaca kaç kişinin kullanabileceği — iki tahminden küçük olanı:</p><p><strong>Hız:</strong> Maks C × Agentic Kullanım Çarpanı; bir ajan çalışırken istek göndermeyi sürdürdüğü için chat'tekinden düşüktür.<br><strong>Bellek:</strong> KV cache'e Agentic Bağlam Uzunluğunda kaç oturumun sığdığı.</p><p>Simge, değeri hangisinin belirlediğini gösterir. Ölçülmüş bir kullanıcı sayısı değil, tahmindir.</p>",
+      par: "<strong>Paralellik — TP / DP / PP</strong><p>Modelin GPU'lara ya da makinelere nasıl bölündüğü.</p><p><strong>TP</strong> her katmanın içindeki işi böler, <strong>PP</strong> farklı katmanları farklı cihazlara yerleştirir, <strong>DP</strong> ise her biri kendi isteklerine hizmet eden tam kopyalar çalıştırır. — kullanılmadığı anlamına gelir.</p>",
+      engine: "<strong>Inference Engine</strong><p>Modeli yükleyip istekleri zamanlayan sunucu yazılımı; örneğin vLLM ya da SGLang.</p><p>Hıza donanım kadar etki eder: aynı model aynı donanımda engine'ler arasında ölçülebilir biçimde farklılaşabilir.</p>",
+      mtp: "<strong>Spekülatif Kod Çözme</strong><p>Model birkaç token ilerisini taslak olarak üretip tek geçişte doğrular; kabul edilen token'lar korunur, böylece aynı çıktı daha erken gelir.</p><p>Evet, çalıştırmanın bunu kullandığı anlamına gelir. Mekanizma — MTP, bir taslak model ya da DSpark — ve kaç token ileri gidildiği satırın notlarında yazar.</p>",
 
-      fConcurrency: "<strong>Eşzamanlılık</strong><p>Aynı anda işlenmekte olan istek sayısı — kişi sayısı değil, bir yük seviyesi. C=8\u2019de makine aynı anda sekiz üretim üzerinde çalışıyordur.</p><p>TPS ve TTFT sütunlarının hangi ölçümü göstereceğini seçer. Yük altındaki davranışı görmek için yükseltin.</p>",
-      fModel: "<strong>Model filtresi</strong><p>Sunulan büyük dil modeli.</p><p>Birkaçını seçerek yan yana karşılaştırabilirsiniz.</p>",
-      fMinParams: "<strong>Minimum Parametre Sayısı</strong><p>Modelin parametre cinsinden toplam boyutu.</p><p>Bundan küçük modelleri gizler; böylece yalnızca büyük modellere ya da yalnızca mütevazı donanıma sığanlara bakabilirsiniz. Buradaki modeller 4B ile 2,8T arasında değiştiği için ölçek logaritmiktir.</p>",
-      fDevice: "<strong>Cihaz filtresi</strong><p>Yapılandırmanın üzerinde çalıştığı donanım ve kaç adedinin birlikte kullanıldığı.</p><p>Birkaçını seçerek donanımları doğrudan karşılaştırabilirsiniz.</p>",
-      fQuant: "<strong>Kuantizasyon filtresi</strong><p>Model ağırlıklarının saklandığı sayı biçimi — düşük hassasiyet daha az bellek, genellikle daha çok hız demektir.</p><p>FP8 ve NVFP4\u2019ü birlikte seçerek iki biçimi karşılaştırabilirsiniz.</p>",
-      fMtp: "<strong>Spekülatif Kod Çözme filtresi</strong><p>Koşunun her adımda birkaç token ilerisini tahmin edip doğrulayıp doğrulamadığı; bu, çıktıyı değiştirmeden üretimi hızlandırır.</p><p>Her iki seçeneği birlikte seçerek açık ve kapalı hâlleri karşılaştırabilirsiniz.</p>",
-      fMinTps: "<strong>Minimum TPS</strong><p>TPS, tek bir istek için saniyede üretilen token sayısıdır.</p><p>Seçili eşzamanlılıkta bundan yavaş olan yapılandırmaları gizler.</p>",
-      fMaxTtft: "<strong>Maksimum TTFT</strong><p>TTFT, kullanıcının ilk kelime belirene kadar beklediği süredir.</p><p>Seçili eşzamanlılıkta bundan uzun süren yapılandırmaları gizler.</p>",
-      fMinChat: "<strong>Minimum Chat Kapasitesi</strong><p>Bir yapılandırmanın hizmet verebileceği tahmini etkileşimli sohbet kullanıcısı sayısı.</p><p>Bunun altındakileri gizler. Eşzamanlı istekle değil, kişiyle ölçülür.</p>",
-      fMinAgentic: "<strong>Minimum Agentic Kapasitesi</strong><p>Her kullanıcının çok adımlı model işi yürüttüğü agentic kullanımda hizmet verilebilecek tahmini kişi sayısı.</p><p>Bunun altındakileri gizler. Eşzamanlı istekle değil, kişiyle ölçülür.</p>",
+      fConcurrency: "<strong>Eşzamanlılık</strong><p>Aynı anda işlenen istek sayısı — kişi sayısı değil, bir yük seviyesi.</p><p>TPS ve TTFT sütunlarının hangi ölçümü göstereceğini seçer. Bu seviyede ölçülmemiş satırlar gizlenir.</p>",
+      fModel: "<strong>Model filtresi</strong><p>Yalnızca seçilen modelleri gösterir. Yan yana karşılaştırmak için birkaçını seçin.</p>",
+      fMinParams: "<strong>Minimum Parametre</strong><p>Toplam parametre sayısı bundan küçük olan modelleri gizler.</p><p>Buradaki modeller 4B ile 2,8T arasında değiştiği için ölçek logaritmiktir.</p>",
+      fDevice: "<strong>Cihaz filtresi</strong><p>Yalnızca seçilen donanımdaki çalıştırmaları gösterir. Cihazları doğrudan karşılaştırmak için birkaçını seçin.</p>",
+      fQuant: "<strong>Kuantizasyon filtresi</strong><p>Yalnızca seçilen ağırlık biçimlerini gösterir. İkisini karşılaştırmak için FP8 ile NVFP4'ü birlikte seçin.</p>",
+      fMtp: "<strong>Spekülatif Kod Çözme filtresi</strong><p>Spekülatif kod çözmenin açık, kapalı ya da her iki hâlini gösterir. Ne kazandırdığını görmek için ikisini birden seçin.</p>",
+      fMinTps: "<strong>Minimum TPS</strong><p>Seçili eşzamanlılıkta istek başına hızı bundan düşük olan yapılandırmaları gizler.</p>",
+      fMaxTtft: "<strong>Maksimum TTFT</strong><p>Seçili eşzamanlılıkta ilk token'ı bundan uzun süren yapılandırmaları gizler.</p>",
+      fMinChat: "<strong>Minimum Chat Kapasitesi</strong><p>Tahmini chat kullanıcısı sayısı bundan az olan yapılandırmaları gizler. Kişi olarak sayılır.</p>",
+      fMinAgentic: "<strong>Minimum Agentic Kapasitesi</strong><p>Tahmini agentic kullanıcı sayısı bundan az olan yapılandırmaları gizler. Kişi olarak sayılır.</p>",
 
-      aTps: "<strong>Minimum TPS Hedefi</strong><p>Tek bir istek için kabul edilebilir gördüğünüz üretim hızı, saniyede token cinsinden.</p><p>Yükseltmek kriteri sıkılaştırır ve Maks C\u2019yi düşürebilir.</p>",
-      aTtft: "<strong>Maksimum TTFT Hedefi</strong><p>Kabul edilebilir gördüğünüz en uzun ilk token bekleme süresi, milisaniye cinsinden.</p><p>Düşürmek kriteri sıkılaştırır ve Maks C\u2019yi düşürebilir.</p>",
-      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Bir chat kullanıcısını ne kadar yoğun saydığınız: zamanının çoğunu modeli beklemek yerine okuyup yazarak geçirdiği düşünüldüğünde, tek bir eşzamanlı istek yuvasını kaç kullanıcının paylaşabileceği.</p><p>Hafif kullanım için yükseltin, sürekli etkinlik için düşürün.</p>",
-      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Bir agentic kullanıcıyı ne kadar yoğun saydığınız: tek bir eşzamanlı istek yuvasını kaç kullanıcının paylaşabileceği.</p><p>Agentic çalışma yuvayı daha uzun tuttuğu için genellikle chat değerinin altındadır. Neredeyse kesintisiz çalışan ajanlar için düşürün; aralıklı kullanım için yükseltin.</p>",
-      aChatCtx: "<strong>Chat Bağlam Uzunluğu</strong><p>Bir chat oturumunun bellekte tuttuğu tüm tokenlar — konuşma geçmişi, yapıştırılan her şey ve yanıtlar — chat kullanıcısı başına ayrılan bütçe.</p><p>Bellek sınırı her kullanıcıya bu uzunlukta bir oturum ayırır; değeri iki katına çıkarmak sığan chat kullanıcısı sayısını kabaca yarıya indirir.</p>",
-      aAgenticCtx: "<strong>Agentic Bağlam Uzunluğu</strong><p>Aynı bütçe, agentic kullanıcı için. Bu oturum araç çağrılarını, araç sonuçlarını ve ara adımları da tuttuğundan genellikle chat değerinin birkaç katıdır.</p><p>Her agentic kullanıcıya bu uzunlukta bir oturum ayrılır.</p>",
-      aEngineDiscrete: "<strong>Engine Bellek Tahsisi — Ayrık GPU</strong><p>Her GPU'nun kendi belleğinden inference engine'e verilen pay — vLLM'deki <code>gpu_memory_utilization</code>. Kalanı sürücüye ve diğer süreçlere bırakılır.</p><p>DGX B300 ve RTX PRO 6000 için geçerlidir.</p>",
-      aEngineUnified: "<strong>Engine Bellek Tahsisi — Birleşik Bellek</strong><p>CPU ile GPU'nun tek bir bellek havuzunu paylaştığı sistemlerde aynı pay. İşletim sistemi ve diğer bütün süreçler de bu havuzda yaşadığından varsayılan daha düşüktür.</p><p>DGX Spark ve Jetson Thor için geçerlidir.</p>",
-      aShare: "<strong>Ağırlık ve KV Cache Payı</strong><p>Engine'e ayrılan belleğin model ağırlıklarını ve KV cache'i tutan kısmı. Kalanı aktivasyonlar ve diğer çalışma zamanı durumu için çalışma belleğidir.</p><p>KV cache, ağırlıklar yerleştikten sonra kalanı alır: bellek × tahsis × bu pay − ağırlıklar.</p>",
-      reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; performans hedeflerini ve kapasite varsayımlarını varsayılana döndürür.</p>"
+      aTps: "<strong>Minimum TPS Hedefi</strong><p>Kabul ettiğiniz en düşük istek başına hız, saniyede token cinsinden.</p><p>Yükseltmek Maks C'yi ve kapasite değerlerini düşürebilir.</p>",
+      aTtft: "<strong>Maksimum TTFT Hedefi</strong><p>İlk token için kabul ettiğiniz en uzun bekleme, milisaniye cinsinden.</p><p>Düşürmek Maks C'yi ve kapasite değerlerini düşürebilir.</p>",
+      aChat: "<strong>Chat Kullanım Çarpanı</strong><p>Her biri zamanının çoğunu okuyup yazarak geçirdiği için bir istek yuvasını ortalama kaç chat kullanıcısının paylaştığı. Varsayılan 4, bir kullanıcının isteğinin zamanın yaklaşık dörtte birinde çalıştığı anlamına gelir.</p><p>Hafif kullanım için yükseltin, yoğun kullanım için düşürün.</p>",
+      aAgentic: "<strong>Agentic Kullanım Çarpanı</strong><p>Aynı değer, agentic kullanıcılar için. Varsayılan 1,5, ajan çağrılarını art arda yaptığı için isteğinin zamanın yaklaşık üçte ikisinde çalıştığı anlamına gelir.</p><p>Neredeyse kesintisiz çalışan ajanlar için düşürün.</p>",
+      aChatCtx: "<strong>Chat Bağlam Uzunluğu</strong><p>Bir chat oturumunun tuttuğu token sayısı: geçmişi, yapıştırılan metin ve yanıtlar.</p><p>Bellek sınırı, bu uzunlukta kaç oturumun KV cache'e sığdığını sayar; değeri iki katına çıkarmak bu sayıyı kabaca yarıya indirir.</p>",
+      aAgenticCtx: "<strong>Agentic Bağlam Uzunluğu</strong><p>Aynı değer, agentic bir oturum için. Bu oturum araç çağrılarını ve sonuçlarını da tuttuğundan genellikle birkaç kat daha uzundur.</p>",
+      aEngineDiscrete: "<strong>Engine Bellek Tahsisi — Ayrık GPU</strong><p>Her GPU'nun belleğinden inference engine'e verilen pay; vLLM'deki <code>gpu_memory_utilization</code>.</p><p>DGX B300 ve RTX PRO 6000 için geçerlidir.</p>",
+      aEngineUnified: "<strong>Engine Bellek Tahsisi — Birleşik Bellek</strong><p>CPU ile GPU'nun tek bir bellek havuzunu paylaştığı sistemlerde aynı pay. İşletim sistemi de bu havuzda çalıştığı için varsayılan daha düşüktür.</p><p>DGX Spark ve Jetson Thor için geçerlidir.</p>",
+      aShare: "<strong>Ağırlık ve KV Cache Payı</strong><p>Engine belleğinin ağırlıkları ve KV cache'i tutan kısmı; kalanı aktivasyonlar için çalışma belleğidir.</p><p>KV cache = bellek × tahsis × bu pay − ağırlıklar.</p>",
+      reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; hedefleri ve varsayımları varsayılana döndürür.</p>"
     }
   };
 
@@ -182,7 +183,7 @@
 
   var DEFAULT_CONFIG = {
     ttft_threshold_ms: 1000,
-    tps_threshold: 15,
+    tps_threshold: 20,
     chat_multiplier: 4,
     agentic_multiplier: 1.5,
     chat_context_tokens: 32768,
@@ -372,8 +373,8 @@
   }
 
   /* One definition of "meets the target" per metric, driving every coloured
-     cell in both tables as well as Max C. A minimum of 15 tok/s is met by
-     exactly 15, and a maximum of 1000 ms is met by exactly 1000, so both
+     cell in both tables as well as Max C. A minimum of 20 tok/s is met by
+     exactly 20, and a maximum of 1000 ms is met by exactly 1000, so both
      bounds are inclusive. They used to disagree: a cell could be green while
      its own sweep row read FAIL. */
   function ttftMeets(ttft) {
@@ -412,10 +413,12 @@
      no multiplier — chat and agentic differ only in their context length.
 
      One GPU (or Spark node) stands for all of them, because the weights and
-     the cache are split evenly across the run's tp × pp devices. The memory
-     tables come from benchmarks.json; the per-model KV sizes are the entry's
-     kv_* fields, worked out from the model's config.json when the run was
-     added. */
+     the cache are split evenly across the run's tp × pp devices; each of the
+     dp copies serves its own users, so the result is multiplied by dp. The
+     memory tables come from benchmarks.json; the per-model KV sizes are the
+     entry's kv_* fields, generated by _tools/kv_geometry.py from the model's
+     config.json. The weights are the served checkpoint's size (weights_gb)
+     when the row records it, else parameters × bytes per parameter. */
 
   function deviceBase(device) {
     return String(device).replace(/^\d+×\s*/, "");
@@ -430,25 +433,36 @@
     var gb = mem.memory_gb ? mem.memory_gb[base] : null;
     var bpp = mem.weight_bytes_per_param ? mem.weight_bytes_per_param[entry.quantization] : null;
     var params = parseParams(entry.params);
-    if (!gb || !bpp || params === null) return { status: "unknown" };
+    var measured = entry.weights_gb != null;
+    var total = measured ? entry.weights_gb * 1e9 : bpp && params !== null ? params * bpp : null;
+    if (!gb || total === null) return { status: "unknown" };
     var tp = entry.tp || 1, pp = entry.pp || 1, dp = entry.dp || 1;
+    /* Bytes per stored KV value: 1 = FP8, assumed for every row. An FP8 cache
+       is an engine setting, available whatever precision the weights use. */
+    var perValue = mem.kv_cache_bytes_per_value || 1;
     var unified = (mem.unified_memory || []).indexOf(base) > -1;
     var alloc = unified ? config.engine_memory_unified : config.engine_memory_discrete;
     /* Both reserves come off the physical memory before the weights do. */
     var budget = gb * 1e9 * alloc * config.weights_kv_share;
-    var weights = params * bpp / (tp * pp);
+    var weights = total / (tp * pp);
     return {
       status: budget - weights > 0 ? "ok" : "weights",
       base: base, gb: gb, alloc: alloc, weights: weights, kv: budget - weights,
-      tp: tp, pp: pp, dp: dp,
+      tp: tp, pp: pp, dp: dp, perValue: perValue, measured: measured,
       /* GQA heads divide across TP down to one head per GPU; a cache with no
          kv_heads (MLA and other compressed layouts) is copied to every GPU. */
       split: entry.kv_heads ? Math.min(tp, entry.kv_heads) : 1
     };
   }
 
+  /* One session on one device. The KV cache splits over min(tp, kv_heads);
+     single-head index keys cannot split and sit on every GPU; the fixed
+     recurrent state of linear-attention layers splits over all tp GPUs and is
+     already in the precision the engine keeps it in. */
   function sessionBytes(entry, b, ctx) {
-    return (entry.kv_bytes_per_token * ctx + entry.kv_window_bytes) / b.split / b.pp;
+    var kv = (entry.kv_bytes_per_token * ctx + entry.kv_window_bytes) * b.perValue / b.split;
+    var copied = (entry.kv_replicated_bytes_per_token || 0) * ctx * b.perValue;
+    return (kv + copied) / b.pp + (entry.kv_state_bytes || 0) / (b.tp * b.pp);
   }
 
   /* The single source for every capacity figure on screen: the cell, its
@@ -592,9 +606,11 @@
     var notes = [];
     if (b.status === "ok") {
       var unit = b.base === "DGX Spark" ? S.unitNode : b.base === "Thor" ? S.unitModule : S.unitGpu;
-      notes.push(S.capKvSummary(fmtGB(b.kv), fmtGB(b.weights), unit));
+      notes.push(S.capKvSummary(fmtGB(b.kv), fmtGB(b.weights), unit, b.perValue === 2 ? "BF16" : "FP8"));
+      if (!b.measured) notes.push(S.capWeightsEstimated);
     } else {
       notes.push(limitWhy(rows[0]));
+      if (b.status === "weights" && !b.measured) notes.push(S.capWeightsEstimated);
     }
     if (rows[0].tooLong || rows[1].tooLong) notes.push(S.capShortCtxLine(fmtTokens(entry.model_context_length)));
     html += notes.map(function (l) { return '<p class="bt-capacity-note">' + escapeHTML(l) + "</p>"; }).join("");

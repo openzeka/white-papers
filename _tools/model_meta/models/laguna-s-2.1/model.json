@@ -1,0 +1,20 @@
+{
+  "model": "Laguna-S-2.1",
+  "repo": "poolside/Laguna-S-2.1",
+  "revision": "0f573140834b11cfac0c2af97a101a7a69a13e22",
+  "config_sha256": "8309d2ab0da8ac0981b8803b1a4637d843c10fdf7851ddd202ca918fb682392c",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-07-13T13:58:35.000Z",
+    "last_modified": "2026-08-19T15:40:11.000Z",
+    "gated": false,
+    "license": "openmdw-1.1",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 117561977600,
+    "parameters_by_dtype": {
+      "BF16": 117561977600
+    }
+  }
+}

@@ -11,7 +11,7 @@ description: >-
   cihaza, kuantizasyona ve eşzamanlılığa göre filtreleyin, kendi performans
   hedeflerinizi girin.
 permalink: /llm-inference-benchmarks/
-last_modified_date: 2026-09-24
+last_modified_date: 2026-09-26
 toc: false
 ---
 
@@ -29,349 +29,313 @@ ayrıntılı sonuçlarını görmek için ilgili satırı açabilirsiniz.
 
 ### Bir satır ne anlatır {#bir-satir-ne-anlatir}
 
-Bir satır bir modeli değil, **eksiksiz bir kurulum yapılandırmasını** anlatır.
-Donanım, kuantizasyon biçimi, inference engine, TP/DP/PP topolojisi ve
-spekülatif kod çözme ayarı test edilenin parçasıdır; bu yüzden aynı model, bu sütunlarda farklı
-değerlerle birkaç kez görünür. İki satırı karşılaştırmak, ancak aralarında hangi
-sütunların farklı olduğunu bildiğinizde anlam taşır.
+Bir satır tek bir **kurulum yapılandırmasıdır**: belirli bir donanımda, belirli
+bir sayı biçiminde, belirli bir engine ile ve belirli bir paralellik ve
+spekülatif kod çözme ayarıyla sunulan bir model — baştan sona ölçülmüş hâliyle.
+Bu yüzden aynı model birkaç satırda görünür; iki satırı doğrudan
+karşılaştırabilmek için aralarında hangi ayarların farklı olduğunu bilmek
+gerekir.
 
-### Sayılar nasıl ölçüldü {#sayilar-nasil-olculdu}
+### Filtreler ve hedefler farklı işler görür {#filtreler-ve-hedefler}
 
-Tablodaki her TPS ve TTFT değeri OpenZeka ölçümüdür; açık kaynaklı
-[CordatusAI LLM Benchmark
-Tool](https://github.com/CordatusAI/llm-benchmark) ile NVIDIA DGX B300, bir ile
-sekiz node arası DGX Spark, RTX PRO 6000 Blackwell ve Jetson AGX Thor
-üzerinde üretilmiştir. Yeni modeller, donanımlar, inference engine'ler,
-kuantizasyon biçimleri, paralellik stratejileri ve spekülatif kod çözme
-yapılandırmaları test
-edildikçe havuz büyümeye devam ediyor.
+**Filtreler hangi satırları gördüğünüzü belirler.** Model, parametre sayısı,
+cihaz, kuantizasyon ve spekülatif kod çözme filtreleri ile TPS, TTFT ve kapasite
+kaydırıcıları yalnızca satırları gösterir ya da gizler.
 
-Her yapılandırma **128 girdi ve 128 çıktı token'ı** ile, her eşzamanlılık
-seviyesinde farklı konuları kapsayan istemlerle on tur çalıştırılır. Tarama
-`C = 1, 2, 4, 8, 16, 32, 64` şeklindedir ve tablo her seviyedeki **ortalama**
-TPS ve TTFT değerini gösterir.
-
-**TPS sütunu istek başınadır, toplam üretim değildir.** Seçtiğiniz
-eşzamanlılıkta tek bir aktif isteğin gördüğü hızdır. Toplam çıktı ayrı bir
-eğridir ve satırı açtığınızda görünür.
-
-<div class="bt-howto-example" markdown="1">
-**Bu değerleri başka istem uzunluklarında okumak.** Ölçümler 128 token'lık bir
-girdiyle yapılmıştır; TTFT sınırı da doğrudan bu uzunluk için geçerlidir. Yine
-de daha uzun prefill'ler için makul bir temel verir: benzer koşullarda TTFT'nin
-girdi uzunluğuyla kabaca oranlı biçimde artması beklenir, çünkü prefill işi
-istemle birlikte büyür. TPS bu değişime daha az duyarlıdır ve genellikle yalnızca
-bir miktar düşer; zira autoregressive kod çözmenin baskın ağırlık-matrisi
-çarpımları üretilen her token için bir kez yapılır ve istem uzunluğuyla
-ölçeklenmez — buna karşılık attention ve KV-cache maliyetleri bağlam uzadıkça
-artar. Gösterilen TPS'yi 128 token'lık girdiyle ölçülmüş bir değer olarak okuyun.
-</div>
-
-### Parametreler ne anlama geliyor {#parametreler-ne-anlama-geliyor}
-
-**Token** — modelin okuyup yazdığı birim, kabaca bir kelimenin dörtte üçü.
-
-**TPS (saniyedeki token)** — tek bir istek için metnin üretilme hızı. Yüksek
-olması iyidir.
-
-**TTFT (ilk token süresi)** — ilk kelime belirene kadarki bekleme. Düşük olması
-iyidir.
-
-**Eşzamanlılık (C)** — sistemin aynı anda üzerinde çalıştığı istek sayısı. Kişi
-sayısı değil, bir yük seviyesidir.
-
-**Parametre sayısı** — modelin yayımlanan hâlindeki toplam ağırlık sayısı.
-Uzman karışımı (MoE) modellerde bu değer toplamı gösterir, tek bir token için
-etkin olan daha küçük sayıyı değil; yani token başına yapılan işi değil, modelin
-kapladığı belleği yansıtır.
-
-**Zekâ Endeksi** ve **Agentic Endeksi** —
-[Artificial Analysis](https://artificialanalysis.ai) tarafından yayımlanan iki
-yetenek puanı; her ikisinde de yüksek olan iyidir. İlki akıl yürütme, kodlama,
-bilim ve uzun bağlam çalışmasını kapsayan değerlendirmelerin bileşimidir;
-ikincisi agentic çalışma için ayrı bir ölçüdür — çok adımlı görevler, araç
-çağrıları, gözetim olmadan yolda kalmak. Bir model birinde iyi, diğerinde kötü
-sıralanabilir.
-
-İkisi de **modeli** tanımlar; bu yüzden aynı modelin her satırı, donanım veya
-kuantizasyon ne olursa olsun aynı iki sayıyı taşır. Hiçbiri hız, eşzamanlılık ya
-da donanım kapasitesi hakkında bir şey söylemez. Artificial Analysis bir modelin
-birden çok akıl yürütme seviyesini puanladığında, en yüksek puanlı olan
-gösterilir. Tire, puan yayımlanmadığı anlamına gelir — Artificial Analysis bunu
-izlediği modellerin azınlığı için doldurduğundan, Agentic sütununda sık görülür.
-
-**Agentic Endeksi ile Agentic Kapasitesi aynı şeyin iki ölçeği değildir.**
-Endeks modelin ne yapabildiğini ölçer. Kapasite sütunu ise belirli bir donanım
-ve sunum yapılandırmasının, sizin girdiğiniz hedefler ve yoğunluk varsayımı
-altında kaç kişiyi taşıyabileceğini tahmin eder.
-
-**Kuantizasyon** — ağırlıkların saklandığı sayı biçimi. Ağırlık başına daha az
-bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar
-risk taşır. BF16 tam hassasiyet referansıdır; FP8, NVFP4, MXFP4, FP4 ve INT4
-giderek daha sıkıştırılmıştır. MXFP8 alternatif bir 8 bit biçimi, AWQ yalnızca
-ağırlıkları 4 bite indiren bir yöntem, FP16 ise ikinci bir tam hassasiyet
-referansıdır.
-
-**Spekülatif kod çözme** — model tek adımda birkaç token ilerisini tahmin edip
-bunları tek geçişte doğrular. Doğru tahminler korunduğu için aynı çıktı daha
-hızlı gelir. Sütun yalnızca bir koşunun bunu kullanıp kullanmadığını söyler;
-hangi mekanizmanın kullanıldığı ve ne kadar ileri tahmin edildiği satırın
-notlarındadır. Yaygın biçimlerinden biri **çoklu token tahmini (MTP)**'dir:
-modelin kendisi sonraki birkaç token'ı *k* derinliğinde tahmin eder. Diğerleri
-ayrı bir taslak (draft) model ya da DSpark gibi bir üretici uygulaması
-kullanır.
-
-**Inference engine** — modeli belleğe yükleyip istekleri yanıtlayan sunucu
-yazılımı. Toplu işleme, bellek ve zamanlamayı yönettiği için hıza donanım kadar
-etki eder. vLLM ve SGLang bunlardan ikisidir.
-
-**TP / DP / PP** — tek modeli birden fazla GPU'ya bölmenin üç yolu. Tensor
-paralelliği bir katmanın içindeki hesabı böler; data paralelliği tam kopyaları
-yan yana çalıştırır; pipeline paralelliği farklı katmanları farklı cihazlara
-yerleştirir.
-
-**KV cache** — engine'in bir oturumun her tokenı için tuttuğu bellek; böylece
-her yeni kelimede konuşmanın tamamını yeniden işlemesi gerekmez. Oturum
-uzadıkça büyür ve model ağırlıklarından sonra belleği en çok kullanan şeydir.
-
-**Bağlam uzunluğu** — bir oturumun tuttuğu tüm tokenlar: geçmişi, yapıştırılan
-her şey, araç sonuçları ve yanıtlar. İkinin kuvvetleriyle ifade edilir; 32K,
-32.768 token demektir. Bir modelin **bağlam penceresi**, tutabileceği en fazla
-tokendır.
-
-### Önce iki ayrımı netleştirin {#once-iki-ayrimi-netlestirin}
-
-**Filtreler hangi satırların görüneceğini belirler. Hedefler ise sayıların ne
-anlama geldiğini değiştirir.** Bir cihazı filtrelediğinizde tablo kısalır;
-TTFT hedefini düşürdüğünüzde satır sayısı aynı kalır ama Maks C ve kapasite
-sütunları yeniden hesaplanır.
-
-**Eşzamanlılık aktif istek sayar, kapasite kişi sayar.** C=8, o anda sekiz
-isteğin işlendiği anlamına gelir. Sekiz kişi genellikle sekizden az eşzamanlı
-istek üretir, çünkü hepsi aynı anda modeli beklemiyordur. İkisi farklı
-birimlerdir; kapasite sütunları da tam bu çevrimi yapmak için vardır.
+**Hedefler ve varsayımlar sayıların ne söylediğini belirler.** Bunlar
+*Performans Hedefleri ve Kapasite Varsayımları* altındadır. Birini
+değiştirdiğinizde satırlar yerinde kalır, ama Maks C, iki kapasite sütunu ve
+her satırın yeşil ve kırmızı renklendirmesi yeniden hesaplanır.
 
 ### 1. Eşzamanlılık seviyesini seçin {#eszamanlilik-seviyesini-secin}
 
-Seçtiğiniz C değeri, TPS ve TTFT sütunlarının hangi ölçüm noktasını
-göstereceğini belirler. C=1 tek bir isteğin gördüğü en iyi durumdur. Yüksek C
-değerleri sistem yük altındayken ne olduğunu gösterir.
+Eşzamanlılık (C), sistemin aynı anda üzerinde çalıştığı istek sayısıdır. Seçici,
+TPS ve TTFT sütunlarının hangi ölçümü göstereceğini belirler: C=1 tek bir
+isteğin gördüğü en iyi durumdur, daha yüksek değerler sistemi yük altında
+gösterir. Seçili seviyede ölçülmemiş satırlar gizlenir; bu yüzden C yükseldikçe
+liste kısalır.
 
-Bir satır yalnızca o seviyede ölçülmüşse görünür; bu yüzden C yükseldikçe
-listedeki satır sayısı azalır.
+### 2. Daraltın ve sıralayın {#daraltin-ve-siralayin}
 
-### 2. Yapılandırmaları daraltın {#yapilandirmalari-daraltin}
-
-Model, parametre sayısı, cihaz, kuantizasyon ve spekülatif kod çözme filtreleri
-birlikte
-çalışır; ayrıca her veri sütunu sıralanabilir — tabloya model yeteneği, model
-boyutu, donanım, hız, gecikme, paralellik veya tahmini kapasite üzerinden
-girebilirsiniz. En öğretici karşılaştırmalar tek değişkeni değiştirdiğinizde
-çıkar: aynı modelin FP8 ve NVFP4 sürümleri, ya da aynı yapılandırmanın
-spekülatif kod çözmeli ve çözmesiz hâlleri.
+Filtreler birlikte çalışır ve her sütun sıralanabilir. En öğretici
+karşılaştırmalar tek bir ayarı değiştirenlerdir: aynı modelin FP8 ve NVFP4
+sürümleri, aynı yapılandırmanın spekülatif kod çözmeli ve çözmesiz hâlleri ya da
+aynı donanımda vLLM ile SGLang.
 
 ### 3. Hedeflerinizi girin {#hedeflerinizi-girin}
 
-Neyin kabul edilebilir olduğuna iki değer karar verir. Varsayılanlarda bir
-eşzamanlılık seviyesi, **ikisi birden** sağlandığında desteklenmiş sayılır:
+Kabul edilebilir hızı iki hedef tanımlar: en fazla TTFT (varsayılan 1000 ms) ve
+istek başına en az TPS (varsayılan 20 tok/s). Ölçülmüş bir seviye ancak
+**ikisini birden** karşılıyorsa desteklenmiş sayılır; tam hedef değerindeki bir
+ölçüm de geçer.
 
-- ortalama TTFT ≤ `1000 ms`
-- ortalama TPS ≥ `15 tok/s`
-
-**İki sınır da dahildir** — tam 1000 ms ya da tam 15 tok/s hâlâ geçer.
-Varsayılanlar bir öneri değil, pratik bir başlangıç noktasıdır; ilk
-karşılaştırma için oldukları gibi bırakabilir ya da kendi iş yükünüze göre
-değiştirebilirsiniz.
-
-Hedeflerden birini değiştirmek her yapılandırmayı anında yeniden değerlendirir.
-Gösterilen TPS ve TTFT değerlerinin hedefi karşılayıp karşılamadığı, açılmış
-taramadaki her noktanın PASS/FAIL sonucu, Maks C ve iki kapasite sütunu birlikte
-güncellenir. Bir kapasite filtresi etkinse, yeniden hesaplanan kapasiteler
-sınırınızın altına inip üstüne çıktıkça satırlar da görünür ya da kaybolur.
-
-İki metrik farklı şeyleri korur. Sohbet arayüzünde önce TTFT gelir — geç
-başlayan hızlı bir yanıt yine de bozuk hissettirir. Uzun metin üreten işlerde
-ise TPS belirleyicidir, çünkü bekleme yanıtın tamamına yayılır. Bir TPS
-değerinin nasıl hissedildiğinden emin değilseniz **Performans Hedefleri ve
-Kapasite Varsayımları** bölümündeki önizleme örnek metni tam o hızda akıtır.
+TTFT, birinin yanıtın başlamasını beklediği yerde — sohbette olduğu gibi — en çok
+önem taşır. TPS ise beklemenin bütün yanıta yayıldığı uzun yanıtlarda öne çıkar.
+Bir TPS değerinin nasıl hissettirdiğini görmek isterseniz, hedeflerin altındaki
+önizleme örnek metni tam o hızda akıtır.
 
 ### 4. Maks C ve kapasite sütunlarını okuyun {#maks-c-ve-kapasite-sutunlarini-okuyun}
 
-**Maks C**, yapılandırmanın iki hedefi birden karşıladığı en yüksek *ölçülmüş*
-eşzamanlılıktır. Yalnızca ölçülmüş noktalardan alınır; hiçbir ölçülmüş nokta
-ikisini birden sağlamıyorsa Maks C 0 olur.
+**Maks C**, iki hedefi birden karşılayan en yüksek ölçülmüş eşzamanlılıktır.
+Aynı anda çalışan istekleri sayar.
 
-Hedefleri siz girdiğiniz için Maks C bir yapılandırmanın sabit özelliği
-değildir. Aynı satır 15 tok/s isteğinde Maks C 16'ya çıkarken, 25 tok/s'de Maks
-C 8'e inebilir.
+**Chat Kapasitesi** ve **Agentic Kapasitesi** bunu kişi sayısına çevirir ve
+belleğe karşı sınar. Her biri iki tahminden küçük olanını gösterir; değerin
+yanındaki simge hangisinin belirlediğini söyler:
 
-Maks C ile seçtiğiniz eşzamanlılık farklı soruları yanıtlar. Seçtiğiniz C hangi
-ölçümün ekranda olduğunu belirler. Maks C ise taramanın tamamına bakıp
-hedeflerinizi geçen en yüksek seviyeyi bildirir.
+- şimşek — hız hedefleri;
+- bellek yongası — KV cache belleği;
+- uyarı üçgeni — seçilen bağlam uzunluğu, modelin tutabileceğinden uzun.
 
-Kapasite sütunları bunu kişi sayısına çevirir. Her biri **birbirinden bağımsız
-iki sınırdan küçük olanını** gösterir, çünkü bir yapılandırmanın önce iki
-şeyden biri tükenebilir: hız ya da KV cache için bellek.
+Tek satırlık gerekçe için değerin üzerine gelin. İki tahmin de aşağıdaki
+*Sayılar ne anlama geliyor, nasıl hesaplanıyor?* bölümünde ayrıntısıyla
+anlatılıyor.
 
-**Neden iki sınır.** Maks C kısa, 128 tokenlık isteklerden gelir; makinenin kaç
-isteğe yeterince hızlı yanıt verdiğini söyler, bellek hakkında ise hiçbir şey
-söylemez. Oysa gerçek bir kullanıcının konuşması, oturum sürdüğü sürece KV
-cache'te kalır ve 32K ya da 128K tokenlık bir oturum, bir benchmark isteğinden
-çok daha fazla yer kaplar. Bir yapılandırma hız hedeflerini rahatça karşılayıp
-yine de yalnızca birkaç uzun oturuma yer bulabilir. Tablo ikisini de kontrol
-eder ve önce tükeneni gösterir.
+### 5. Bir satırı açın {#bir-satiri-acin}
 
-**1. Hız sınırı** — `floor(Maks C × Kullanım Çarpanı)`.
+Bir satıra tıkladığınızda şunları görürsünüz:
 
-Çarpanlar **her kullanım türünün ne kadar yoğun olduğunu**, yani tek bir istek
-yuvasını kaç kullanıcının paylaştığını temsil eder. Chat
-varsayılanı daha yüksektir (4), çünkü etkileşimli kullanıcılar zamanlarının
-büyük bölümünü yanıtı okuyarak, düşünerek ve sonraki istemi yazarak geçirir ve
-bu sürede bir istek yuvası tutmazlar — böylece birkaç kullanıcı aynı yuvayı
-paylaşır. Agentic çalışma daha yoğundur: bir ajan planlarken, araç çağırırken ve
-sonuçları değerlendirirken art arda çağrı yapabilir ve yuvayı çok daha uzun süre
-meşgul eder; varsayılanı bu yüzden düşüktür (1,5). Neredeyse kesintisiz çalışan
-ajanlar için agentic çarpanını düşürün; aralıklı kullanım için yükseltin.
+- her seviyede hedeflerinize göre BAŞARILI ya da BAŞARISIZ olarak işaretlenmiş tüm eşzamanlılık taraması;
+- ölçülmüş herhangi bir seviyedeki hızın önizlemesi; böylece C=1 ile C=32'yi gözle karşılaştırabilirsiniz;
+- istek başına TPS'yi (her kullanıcının gördüğü hız) toplam TPS ile (sistemin
+  toplamda ürettiği) karşılaştıran bir grafik — kapasite planlaması bu ikisi
+  arasındaki dengedir;
+- kısa bir kapasite özeti: her sınırın neye izin verdiği ve KV cache için ne
+  kadar bellek kaldığı;
+- çalıştırmanın notları: cache hassasiyeti, kernel'lar, bellek ayarları,
+  spekülasyon derinliği.
 
-**2. KV cache bellek sınırı** — model yüklendikten sonra kalan belleğe kaç
-kullanıcının oturumunun sığdığı. **Performans Hedefleri ve Kapasite
-Varsayımları** altındaki varsayımlarla, GPU başına (DGX Spark'ta düğüm başına)
-dört adımda hesaplanır:
-
-1. **Engine'in kullanabileceği bellek** — cihazın belleği × **Engine Bellek
-   Tahsisi**: ayrık GPU'da (DGX B300, RTX PRO 6000) %95, işletim sisteminin de
-   aynı havuzu paylaştığı birleşik bellekte (DGX Spark, Jetson Thor) %80.
-2. **Ağırlıklar ve cache için yer** — bunun %80'i, yani **Ağırlık ve KV Cache
-   Payı**. Kalan %20, aktivasyonlar ve diğer çalışma zamanı durumu için çalışma
-   belleğidir.
-3. **Eksi model ağırlıkları** — parametre sayısı × kuantizasyonun parametre
-   başına bayt sayısı (BF16 için 2, FP8 için 1, 4 bitlik biçimler için 0,5);
-   modelin bölündüğü GPU'lara paylaştırılır.
-4. **Bir oturuma bölünür** — kalan bellek, bir kullanıcının oturumunun
-   gerektirdiği KV cache'e bölünür: **Chat Bağlam Uzunluğu** (varsayılan 32K
-   token) ya da **Agentic Bağlam Uzunluğu** (varsayılan 128K) × modelin token
-   başına cache boyutu.
-
-Token başına cache boyutu modele bağlıdır. Standart bir transformer için,
-cache'in saklandığı varsayılan biçim olan FP8'de `2 × katman × KV başlığı ×
-başlık boyutu` bayttır. Kayan pencere, doğrusal dikkat (linear attention) ya da
-sıkıştırılmış (MLA) katmanları olan modeller çok daha azını saklar; bu yüzden
-her satır kendi modelinin değerini kullanır. Birden fazla GPU'da ağırlıklar ve
-çoğu modelde cache bunlar arasında bölünür; data paralel kopyaların her biri
-kendi kullanıcılarına hizmet eder.
-
-**Bu tarafta çarpan yoktur.** Hız sınırının saydığı her kullanıcı, okurken ya
-da yazarken bile oturumunu açık tutar; bu yüzden her birinin cache'te kendi
-yerine ihtiyacı vardır. Chat ve agentic kullanıcılar burada yalnızca
-oturumlarının uzunluğuyla ayrılır: agentic oturumlar araç çağrılarını ve
-sonuçlarını da taşır, varsayılanın dört kat uzun olması bundandır.
-
-**Hangi sınırın geçerli olduğu.** Her değerin yanındaki simge bunu gösterir —
-hız hedefleri belirlediğinde şimşek, KV cache belleği belirlediğinde bellek
-yongası. Tek satırlık gerekçe için değerin üzerine gelin, kısa bir özet için
-satırı açın.
-
-**İki istisna.** Birkaç çalıştırmada model ağırlıkları tek başına kullanılabilir
-varsayılan bellekten büyüktür. Bu çalıştırmalar yine de çalıştığına göre,
-genellikle modelin ya da KV cache'in bir kısmı CPU belleğine veya diske
-taşınmıştır — bu tahminin modellemediği bir durum — bu yüzden kapasiteleri
-yalnızca hız sınırına dayanır ve satır bunu belirtir. Ayrıca her modelin bir
-**bağlam penceresi**, yani tutabileceği en uzun oturum vardır: bir modelin
-penceresinden uzun bir bağlam uzunluğu seçerseniz o model hiçbir donanımda bu
-uzunlukta oturumlara hizmet veremez; kapasitesi bir tire ve uyarı üçgeniyle
-gösterilir.
-
-<div class="bt-howto-example" markdown="1">
-**Örnek.** Hedefleriniz 1000 ms TTFT ve 15 tok/s olsun. Bir yapılandırma C=8'e
-kadar bu ikisini karşılıyor, C=16'da TPS 15'in altına düşüyorsa Maks C 8 olur.
-Varsayılan çarpanlarla hız sınırı 32 chat kullanıcısı ya da 12 agentic
-kullanıcıdır. Ağırlıkların yanında kalan KV cache'in 625.000 token aldığını
-varsayalım: 32K'lık 19 chat oturumu ya da 128K'lık 4 agentic oturumu sığar.
-Satır 19 ve 4 gösterir; ikisini de KV cache belleği belirler. TTFT hedefini
-500 ms'ye çekerseniz aynı satır C=4'te kalabilir ve hız sınırı 16 ile 6'ya
-iner — artık chat'i hız, agentic'i hâlâ KV cache belleği belirler.
-</div>
-
-**Bu kapasite değerleri tahmindir.** Hız sınırı ölçülmüş bir Maks C'den, KV
-cache bellek sınırı modelin mimarisinden ve cihazın belleğinden türetilir.
-İkisi de sisteme o kadar kullanıcı bağlanarak elde edilmemiştir.
-
-### 5. Satırı açıp ayrıntıya inin {#satiri-acip-ayrintiya-inin}
-
-Satırın tamamı tıklanabilir. Açtığınızda eşzamanlılık taramasının tamamını
-görürsünüz; durum ve hücre renkleri her seviyede hedeflerinizin karşılanıp
-karşılanmadığını işaretler — tek bir başlık değerinin sakladığı davranış budur.
-Ölçülmüş herhangi bir seviyeyi seçtiğinizde orada gerçekten kaydedilmiş hız
-oynatılır; böylece C=1, C=8 ve C=32 sayıyla olduğu kadar kulakla da
-karşılaştırılabilir. Bunların altındaki kısa kapasite özeti, chat ve agentic
-kullanım için her sınırın neye izin verdiğini ve hangisinin geçerli olduğunu
-gösterir.
-
-Grafik iki eğri taşır:
-
-- **İstek başına TPS** — her aktif isteğin gördüğü hız; eşzamanlılık arttıkça
-  genellikle düşer.
-- **Toplam TPS** — eşzamanlılık × istek başına TPS; genellikle yükselmeye devam
-  eder.
-
-Görülmesi gereken ödünleşme budur: bireysel yanıt hızı düşerken makinenin
-bütünü daha fazla üretir. Kapasite planlaması bu iki eğrinin arasında yaşar.
-Yapılandırma notları grafiğin altındadır — KV-cache hassasiyeti, kernel seçimi,
-GPU bellek kullanımı, spekülasyon derinliği — ve grafik, rapor ve sunumlar için
-PNG
-olarak indirilebilir.
+Grafik, rapor ve sunumlarda kullanmak için PNG olarak indirilebilir.
 
 ### Nereden başlamalı {#nereden-baslamali}
 
 **"Bu modeli 20 kişinin kullandığı bir agentic iş yükü için çalıştırmak
 istiyoruz."** Modeli seçin ve minimum Agentic Kapasitesi'ni 20 yapın. İlk tahmin
-için hedefleri ve agentic çarpanını varsayılanda bırakın ya da uygulamanıza göre
-ayarlayın. Geriye kalanlar aday donanım ve sunum yapılandırmalarıdır.
+için varsayılan hedefleri koruyun ya da uygulamanıza göre ayarlayın. Geriye
+kalanlar aday donanım ve sunum yapılandırmalarıdır.
 
 **"Bu model DGX B300'de DGX Spark'a kıyasla nasıl?"** Modeli ve iki cihaz
-ailesini seçin, ardından kuantizasyon, engine, spekülatif kod çözme ve
-paralelliği eşleşen
-satırları karşılaştırın. Seçtiğiniz eşzamanlılığı değiştirmek, farkın yük
-altında nasıl geliştiğini gösterir.
+ailesini seçin, ardından kuantizasyonu, engine'i, spekülatif kod çözmesi ve
+paralelliği eşleşen satırları karşılaştırın. Eşzamanlılığı değiştirmek, farkın
+yük altında nasıl açıldığını gösterir.
 
 **"Kuantizasyon, spekülatif kod çözme ya da engine gerçekte neyi değiştiriyor?"**
-Modeli ve donanımı sabit tutup ilgili satırları karşılaştırın — FP8'e karşı
-NVFP4, spekülatif kod çözme açık-kapalı, vLLM'e karşı SGLang — böylece etki bir
-donanım değişikliğiyle karışmaz.
+Modeli ve donanımı sabit tutup yalnızca o ayarda farklılaşan satırları
+karşılaştırın; böylece etki bir donanım değişikliğiyle karışmaz.
 
 **"Bu donanım elimizde; üzerinde ne çalıştırabiliriz?"** Cihaz filtresiyle
-başlayın, kalan modelleri yetenek ya da parametre sayısına göre sıralayın ve
-ihtiyacınız olan TPS, TTFT veya kapasite şartlarıyla daraltın.
+başlayın, kalan modelleri yeteneğe ya da boyuta göre sıralayın ve ihtiyacınız
+olan TPS, TTFT veya kapasiteyle daraltın.
 
 **"Sınırlarımızı aşmadan hangi model yeterince yetenekli?"** Zekâ Endeksi,
 Agentic Endeksi veya parametre sayısına göre sıralayıp aday modelleri belirleyin,
-sonra cihaz ve performans şartlarını uygulayın. Bu, en hızlı modelin
-kendiliğinden en uygun model olduğunu varsaymak yerine model seçimini altyapı
-boyutlandırmasından ayrı tutar.
+sonra cihaz ve performans şartlarınızı uygulayın. Böylece en hızlı modelin en
+uygun model olduğunu varsaymak yerine model seçimini altyapı
+boyutlandırmasından ayrı tutarsınız.
 
-### Bu tablo neyi söylemez {#bu-tablo-neyi-soylemez}
+</div>
+</details>
 
-Tablo bilinçli olarak tek bir karşılaştırılabilir sabit iş yükü, ortalama
-değerler, basit kapasite çarpanları ve tek bir standart bellek formülü
-kullanır; amaç, önce eksiksiz bir üretim trafiği modeli tanımlamak zorunda
-kalmadan ilk karşılaştırmayı yapabilmenizdir. **Üretim yük testinin yerine
-geçmez.** Kuyruk gecikmesi (tail latency), değişken istem ve çıktı uzunlukları,
-istek varış desenleri, ajan çağrı zincirleri, toplu işleme ve önek yeniden
-kullanımı kullanılabilir kapasiteyi değiştirebilir.
+<details class="bt-howto">
+<summary>Sayılar ne anlama geliyor, nasıl hesaplanıyor?</summary>
+<div class="bt-howto-body" markdown="1">
 
-KV cache bellek sınırı da bu formülden gelen bir tahmindir; engine'in gerçekte ayırdığı
-belleğin okunması değildir: gerçek rezervler, cache hassasiyeti, önek paylaşımı
-ve offloading onu değiştirir. Hız sınırı da hâlâ 128 tokenlık istemlerden
-gelir. 32K ya da 128K token bağlam tutan bir oturum genellikle tablodakinden
-daha uzun bir TTFT ve biraz daha düşük bir TPS görür — KV cache bellek sınırı oturumların
-sığıp sığmadığını kontrol eder, ne kadar hızlı çalıştıklarını değil.
+### Sayılar nasıl ölçüldü {#sayilar-nasil-olculdu}
 
-Kapasite tahminleri, tek başına bir C=1 sonucu yerine arkasında anlamlı bir
-eşzamanlılık taraması bulunan yapılandırmalarda daha bilgilendiricidir.
+Tablodaki her TPS ve TTFT değeri, açık kaynaklı
+[CordatusAI LLM Benchmark Tool](https://github.com/CordatusAI/llm-benchmark) ile
+NVIDIA DGX B300, bir ile sekiz node arası DGX Spark, RTX PRO 6000 Blackwell ve
+Jetson AGX Thor üzerinde yapılmış bir OpenZeka ölçümüdür.
+
+Her yapılandırma **128 girdi ve 128 çıktı token'ı** ile, farklı konulardaki
+istemlerle ve her eşzamanlılık seviyesinde on tur olarak çalıştırılır:
+`C = 1, 2, 4, 8, 16, 32, 64`. Tablo on turun **ortalamasını** gösterir.
+**Token**, modelin okuyup yazdığı birimdir; kabaca bir İngilizce kelimenin
+dörtte üçü kadardır.
+
+### Ölçülen sütunlar {#olculen-sutunlar}
+
+**TPS (saniyedeki token)** — seçili eşzamanlılıkta tek bir isteğin yanıtının
+üretilme hızı. İstek başına bir değerdir: C=8'de sekiz isteğin her biri bu hızı
+alır. Sistemin toplam çıktısı **toplam TPS = C × TPS**'dir ve satır açıldığında
+görünür. Yüksek olması iyidir.
+
+**TTFT (ilk token süresi)** — bir isteğin ilk token'ı gelene kadar beklediği
+süre. Kuyrukta geçen süreyi ve prefill'i, yani modelin istemin tamamını okuduğu
+geçişi kapsar. Düşük olması iyidir.
+
+### Kurulumu tanımlayan sütunlar {#kurulumu-tanimlayan-sutunlar}
+
+**Parametre** — modeldeki toplam ağırlık sayısı. Uzman karışımı (MoE)
+modellerde, her token için etkin olan kısım değil toplam gösterilir, çünkü
+tamamının bellekte tutulması gerekir.
+
+**Zekâ Endeksi** ve **Agentic Endeksi** —
+[Artificial Analysis](https://artificialanalysis.ai) tarafından yayımlanan
+yetenek puanları; yüksek olan iyidir. İlki akıl yürütme, kodlama, bilim ve uzun
+bağlam değerlendirmelerini birleştirir; ikincisi araç çağrılı, çok adımlı işleri
+ölçer. İkisi de modeli tanımlar; bu yüzden bir modelin her satırı, donanım ne
+olursa olsun aynı iki değeri taşır. Birden fazla akıl yürütme seviyesi
+puanlanmışsa en yüksek olanı gösterilir; tire, puan yayımlanmadığı anlamına
+gelir. Agentic Endeksi modelin ne yapabildiğini ölçer; satırın devamındaki
+Agentic Kapasitesi ise donanımın kaç kişiye hizmet edebileceğini tahmin eder.
+
+**Kuantizasyon** — ağırlıkların saklandığı sayı biçimi. Ağırlık başına daha az
+bit, daha az bellek ve genellikle daha çok hız demektir; çıktı kalitesinde bir
+miktar risk taşır. BF16 ve FP16 tam hassasiyettir; FP8 ve MXFP8 ağırlık başına
+8 bit, NVFP4, MXFP4, FP4, INT4 ve AWQ ise 4 bit kullanır.
+
+**Inference engine** — modeli yükleyip istekleri zamanlayan sunucu yazılımı;
+örneğin vLLM ya da SGLang. Aynı model aynı donanımda iki engine arasında
+ölçülebilir biçimde farklı performans gösterebilir.
+
+**Spekülatif kod çözme** — model birkaç token ilerisini taslak olarak üretir ve
+bunları tek geçişte doğrular; kabul edilen token'lar korunur, böylece aynı çıktı
+daha erken gelir. Sütun, çalıştırmanın bunu kullanıp kullanmadığını gösterir;
+mekanizma ve kaç token ileri gidildiği satırın notlarında yazar.
+
+**TP / DP / PP** — modelin GPU'lara ya da makinelere nasıl bölündüğü. Tensor
+paralelliği (TP) her katmanın içindeki işi böler, pipeline paralelliği (PP)
+farklı katmanları farklı cihazlara yerleştirir, data paralelliği (DP) ise her
+biri kendi isteklerine hizmet eden birkaç tam kopya çalıştırır.
+
+### Maks C {#maks-c}
+
+Maks C, ortalama TTFT'nin ve ortalama TPS'nin hedeflerinizi birlikte
+karşıladığı en yüksek **ölçülmüş** eşzamanlılıktır. Yalnızca ölçülmüş seviyeler
+sayılır, ara değer türetilmez; hiçbir seviye geçmiyorsa Maks C 0'dır.
+Hedeflerinize bağlıdır ve onlarla birlikte değişir: aynı satır 20 tok/s'de
+C=16'ya ulaşırken 30 tok/s'de ancak C=8'de kalabilir.
+
+### İsteklerden kişilere: kapasite sütunları {#isteklerden-kisilere}
+
+Maks C aynı anda çalışan istekleri sayar. Kapasite sütunları ise bir
+yapılandırmanın kaç **kişiye** hizmet edebileceğini tahmin eder. Bir sistemin
+önce hızı da belleği de tükenebilir; bu yüzden her sütun iki sınırın küçüğünü
+alır:
+
+**kapasite = min(hız sınırı, KV cache bellek sınırı)**
+
+### Hız sınırı {#hiz-siniri}
+
+**hız sınırı = floor(Maks C × kullanım çarpanı)**
+
+Bir kişinin isteği her an çalışmaz. Bir chat kullanıcısı mesajını gönderir,
+yanıtı bekler, sonra bir süre okuyup yazar ve bu arada kapasite kullanmaz.
+Kullanım çarpanı, bir istek yuvasını ortalama kaç kişinin paylaştığıdır. Chat
+için varsayılan 4, bir chat kullanıcısının isteğinin zamanın yaklaşık dörtte
+birinde çalıştığını varsayar. Agentic için varsayılan 1,5 ise bir ajanın
+isteğinin zamanın yaklaşık üçte ikisinde çalıştığını varsayar; çünkü ajan plan
+yaparken, araç çalıştırırken ve sonuçları kontrol ederken çağrıları art arda
+yapar.
+
+Maks C = 8 ise bu, 8 × 4 = 32 chat kullanıcısı ya da 8 × 1,5 = 12 agentic
+kullanıcı demektir.
+
+### KV cache bellek sınırı {#kv-cache-bellek-siniri}
+
+Model bir konuşmayı işlerken bir **KV cache** tutar: o ana kadarki her token
+için, önceki token'lar yeniden işlenmesin diye her katmanın ihtiyaç duyduğu ara
+sonuçlar. Bu cache konuşma uzadıkça büyür.
+
+Hız değerleri 128 tokenlık istemlerden gelir; gerçek bir tur ancak kullanıcının
+konuşması hâlâ cache'teyse, yani yalnızca yeni mesajın işlenmesi gerekiyorsa o
+kadar hızlıdır. Bu yüzden bellek sınırı, kaç kullanıcının oturumunun tamamının
+aynı anda cache'e sığdığını sayar. Bir oturumun uzunluğu, varsayımlarda
+ayarlanan **bağlam uzunluğudur** — geçmiş ve yanıtlar dahil tuttuğu bütün
+token'lar: chat için varsayılan 32K, oturumları araç çağrılarını ve sonuçlarını
+da taşıyan agentic iş için 128K. Bu sayının ötesinde sistem çalışmayı sürdürür,
+ama geri dönen bir kullanıcı konuşması yeniden işlenirken bekler.
+
+Hesap cihaz başına yapılır — GPU başına, DGX Spark'ta düğüm başına:
+
+1. **Engine'in belleği** = cihaz belleği × Engine Bellek Tahsisi: ayrık GPU'da
+   (DGX B300, RTX PRO 6000) %95, işletim sisteminin de aynı havuzu paylaştığı
+   birleşik bellekte (DGX Spark, Jetson Thor) %80.
+2. **Ağırlıklar ve cache için yer** = bunun × Ağırlık ve KV Cache Payı (%80).
+   Kalan %20, aktivasyonlar ve çalışma zamanı tamponları için çalışma
+   belleğidir.
+3. **KV cache için boş bellek** = bundan bu cihazdaki ağırlıklar çıkarılır:
+   çalıştırmanın yüklediği checkpoint'in boyutu, bölündüğü TP × PP cihaza
+   paylaştırılarak.
+4. **Bir oturum** = bağlam uzunluğu × modelin token başına cache'i, FP8 olarak
+   (değer başına bir bayt) saklanmış hâliyle; modelin varsa oturum başına sabit
+   bir kısmı da eklenir (aşağıya bakın); toplam, onu paylaşan cihazlara bölünür.
+5. **Kullanıcı** = floor(boş bellek ÷ bir oturum) × DP kopya sayısı.
+
+Token başına cache, modelin yayımlanmış yapılandırmasından gelir. Standart bir
+transformer için 2 (bir key ve bir value) × katman × KV başlığı × başlık
+boyutudur.
+
+<div class="bt-howto-example" markdown="1">
+**Örnek hesap.** 32 katmanlı, boyutu 128 olan 8 KV başlığına sahip ve 32 GB'lık
+bir FP8 checkpoint olarak sunulan varsayımsal bir model, 96 GB'lık tek bir GPU
+üzerinde:
+
+- engine'in belleği: 96 × %95 = 91,2 GB; ağırlıklar ve cache için yer: 91,2 × %80 = 72,96 GB
+- KV cache için boş bellek: 72,96 − 32 = 40,96 GB
+- token başına cache: 2 × 32 × 8 × 128 = 65.536 bayt; yani 40,96 GB 625.000 token alır
+- chat: 625.000 ÷ 32.768 = 19 oturum; agentic: 625.000 ÷ 131.072 = 4
+
+Maks C = 8 iken hız sınırı 32 chat ve 12 agentic kullanıcıdır; tablo **19** ve
+**4** gösterir ve ikisini de bellek belirler. TTFT hedefini Maks C 4'e düşene
+kadar sıkılaştırırsanız hız sınırı 16 ve 6 olur: chat'i artık hız (16),
+agentic'i hâlâ bellek (4) belirler.
+</div>
+
+### Farklı model tasarımları nasıl ele alınıyor {#farkli-model-tasarimlari}
+
+Modeller her token için tuttukları şeyde farklılaşır; bu yüzden her satır kendi
+modelinin değerlerini kullanır. Örneğin:
+
+- **Kayan pencere (sliding window) katmanları** yalnızca en son token'larını —
+  örneğin son 128 ya da 1.024 tanesini — tutar; bu yüzden oturumla birlikte
+  büyümek yerine oturum başına sabit bir yer kaplar.
+- **Doğrusal dikkat (linear attention) ve Mamba katmanları** token başına cache
+  yerine sabit boyutlu bir durum tutar; bu durum her oturum için bir kez sayılır.
+- **Sıkıştırılmış cache'ler**, örneğin DeepSeek, Kimi ve GLM-5'teki MLA, token
+  başına çok daha az yer kaplar; ama her GPU tam bir kopyasını tutar, bu yüzden
+  GPU eklemek onları bölmez.
+- **Standart bir cache** GPU'lara KV başlıkları üzerinden bölünür; başlıktan
+  fazla GPU varsa başlıklar daha fazla bölünmez, kopyalanır.
+
+Bazı satırlar yalnızca hız sınırını gösterir ve açılan satır nedenini söyler: ya
+yüklenen checkpoint tek başına kullanılabilir varsayılan bellekten büyüktür —
+çalıştırma engine'e standart tahsisten fazla bellek vermiş ya da modelin veya
+cache'in bir kısmını CPU belleğinde veya diskte tutmuştur — ya da model cache'ini
+bu tahminin modellemediği bir biçimde saklar. Bir modelin kendi **bağlam
+penceresinden**, yani tutabileceği en fazla token'dan uzun bir bağlam uzunluğu
+seçerseniz, model bu uzunlukta oturumlara hiç hizmet veremez: kapasitesi uyarı
+üçgenli bir tire olarak görünür.
+
+### Daha uzun istemlerde sonuçları okumak {#daha-uzun-istemler}
+
+TTFT hedefi doğrudan 128 tokenlık istemler için geçerlidir. Daha uzun
+istemlerde TTFT, prefill işi istemle birlikte büyüdüğü için istemin uzunluğuyla
+kabaca orantılı artar. TPS daha yavaş düşer: her token'ı üretmenin ana maliyeti
+olan ağırlık-matrisi çarpımları istemin uzunluğuna bağlı değildir; yine de
+attention ve cache okumaları bağlamla birlikte büyür.
+
+### Sayıların söylemedikleri {#sayilarin-soylemedikleri}
+
+Tablo, yapılandırmalar önce bir trafik modeli kurmadan karşılaştırılabilsin diye
+tek bir sabit iş yükü, ortalama değerler, basit kullanım çarpanları ve standart
+bir bellek hesabı kullanır. **Üretim ortamındaki bir yük testinin yerini
+tutmaz**: kuyruk gecikmesi (tail latency), değişken istem ve çıktı uzunlukları,
+isteklerin geliş düzeni, ajan çağrı zincirleri ve önek paylaşımı gerçek
+kapasiteyi değiştirir.
+
+Bellek sınırı engine'den okunmaz, hesaplanır. Engine'e özgü saklama
+ayrıntıları — blok yuvarlama, ölçek katsayıları, ayrı cache havuzları, data
+paralel cihazlara dağıtılan uzmanlar — onu iki yönde de oynatabilir. 32K ya da
+128K token tutan bir oturum da bu 128 tokenlık ölçümlerden daha uzun bir TTFT ve
+biraz daha düşük bir TPS görür. Kapasite, arkasında tam bir eşzamanlılık
+taraması olduğunda en anlamlıdır; yalnızca C=1'de ölçülmüş bir satır tek bir
+veri noktasına dayanır.
 
 Planlanan iyileştirmeler arasında iş yükü filtreleri, daha uzun bağlamlarda
-ölçülmüş hız ve ölçülmüş servis gecikmesi, kullanıcı düşünme süresi ile Little
-Yasası'nı kullanan zamanlama temelli kapasite modları var.
+ölçülen hız ve ölçülen gecikmeye, kullanıcı düşünme süresine ve Little Yasası'na
+dayanan kapasite tahminleri var.
 
 </div>
 </details>
