@@ -1,0 +1,22 @@
+{
+  "model": "GLM-5.3",
+  "repo": "zai-org/GLM-5.3",
+  "revision": "aca966e4e02791568aa6a4ced368624b3d897f42",
+  "config_sha256": "3ac72612095574542f7fff847ada8e59d9199dd8af44bdf625d7e02615572e69",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-08-25T06:42:50.000Z",
+    "last_modified": "2026-09-04T06:41:23.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 753329940480,
+    "parameters_by_dtype": {
+      "BF16": 2103729152,
+      "F8_E4M3": 751226191872,
+      "F32": 19456
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "model": "GLM-4.5-Air",
+  "repo": "zai-org/GLM-4.5-Air",
+  "revision": "a24ceef6ce4f3536971efe9b778bdaa1bab18daa",
+  "config_sha256": "e59f21d7be4b4b917d80bb3a2d1211356d29cf3aeff93372523daf7d0ffb839d",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2025-07-20T03:25:55.000Z",
+    "last_modified": "2025-08-11T13:25:37.000Z",
+    "gated": false,
+    "license": "mit",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 110468824832,
+    "parameters_by_dtype": {
+      "BF16": 110468818944,
+      "F32": 5888
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "repo": "Qwen/Qwen3.6-35B-A3B",
+  "revision": "995ad96eacd98c81ed38be0c5b274b04031597b0",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 71903776776,
+  "quantization": {
+    "method": null,
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-04-15T05:59:19.000Z",
+    "last_modified": "2026-04-24T02:53:42.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 35951822704,
+    "parameters_by_dtype": {
+      "BF16": 35951822704
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00026.safetensors",
+      "size": 3996199712
+    },
+    {
+      "path": "model-00002-of-00026.safetensors",
+      "size": 1284907696
+    },
+    {
+      "path": "model-00003-of-00026.safetensors",
+      "size": 3357898360
+    },
+    {
+      "path": "model-00004-of-00026.safetensors",
+      "size": 3370808712
+    },
+    {
+      "path": "model-00005-of-00026.safetensors",
+      "size": 3357898360
+    },
+    {
+      "path": "model-00006-of-00026.safetensors",
+      "size": 3959424904
+    },
+    {
+      "path": "model-00007-of-00026.safetensors",
+      "size": 1096788232
+    },
+    {
+      "path": "model-00008-of-00026.safetensors",
+      "size": 3946842008
+    },
+    {
+      "path": "model-00009-of-00026.safetensors",
+      "size": 1096460848
+    },
+    {
+      "path": "model-00010-of-00026.safetensors",
+      "size": 3946841992
+    },
+    {
+      "path": "model-00011-of-00026.safetensors",
+      "size": 1096460752
+    },
+    {
+      "path": "model-00012-of-00026.safetensors",
+      "size": 3409971080
+    },
+    {
+      "path": "model-00013-of-00026.safetensors",
+      "size": 1633331664
+    },
+    {
+      "path": "model-00014-of-00026.safetensors",
+      "size": 3422553872
+    },
+    {
+      "path": "model-00015-of-00026.safetensors",
+      "size": 1633659224
+    },
+    {
+      "path": "model-00016-of-00026.safetensors",
+      "size": 3946842136
+    },
+    {
+      "path": "model-00017-of-00026.safetensors",
+      "size": 1096460608
+    },
+    {
+      "path": "model-00018-of-00026.safetensors",
+      "size": 3946841992
+    },
+    {
+      "path": "model-00019-of-00026.safetensors",
+      "size": 1096460808
+    },
+    {
+      "path": "model-00020-of-00026.safetensors",
+      "size": 3409971072
+    },
+    {
+      "path": "model-00021-of-00026.safetensors",
+      "size": 1633331744
+    },
+    {
+      "path": "model-00022-of-00026.safetensors",
+      "size": 3370808752
+    },
+    {
+      "path": "model-00023-of-00026.safetensors",
+      "size": 3357898392
+    },
+    {
+      "path": "model-00024-of-00026.safetensors",
+      "size": 3370808752
+    },
+    {
+      "path": "model-00025-of-00026.safetensors",
+      "size": 3832888256
+    },
+    {
+      "path": "model-00026-of-00026.safetensors",
+      "size": 2231416848
+    }
+  ]
+}

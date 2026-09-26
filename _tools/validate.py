@@ -15,9 +15,13 @@ Kept out of the build: Jekyll ignores paths beginning with an underscore.
 """
 
 import json
+import os
 import re
 import sys
 from collections import Counter, defaultdict
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import kv_geometry  # noqa: E402  (same folder; regenerates the kv_* fields)
 
 PATH = sys.argv[1] if len(sys.argv) > 1 else "assets/data/benchmarks.json"
 
@@ -30,12 +34,13 @@ KNOWN_DEVICES = {
 
 REQUIRED = ["id", "model", "device", "quantization", "engine",
             "mtp", "tp", "dp", "pp", "data_points",
-            "kv_bytes_per_token", "kv_window_bytes", "kv_heads", "model_context_length"]
+            "kv_bytes_per_token", "kv_window_bytes", "kv_heads", "model_context_length",
+            "kv_replicated_bytes_per_token", "kv_state_bytes", "served_repo", "weights_gb"]
 
 # Properties of the model, not the run: every row for one model must carry the
 # same values, exactly like params and the two AA indexes.
 KV_FIELDS = ["kv_bytes_per_token", "kv_window_bytes", "kv_heads"]
-MODEL_FIELDS = KV_FIELDS + ["model_context_length"]
+MODEL_FIELDS = KV_FIELDS + ["model_context_length", "kv_replicated_bytes_per_token", "kv_state_bytes"]
 
 # The two Artificial Analysis columns. Required so a new entry cannot ship with
 # the cells simply absent — `null` is the way to say "AA publishes no score",
@@ -93,7 +98,7 @@ def main():
         return float(m.group(1)) * (1e12 if m.group(2) == "T" else 1e9) if m else None
 
     ttft_max = cfg.get("ttft_threshold_ms", 1000)
-    tps_min = cfg.get("tps_threshold", 15)
+    tps_min = cfg.get("tps_threshold", 20)
 
     # Must stay identical to meetsTargets() in assets/js/benchmark-table.js:
     # both bounds inclusive, so a run landing exactly on a threshold is judged
@@ -208,6 +213,54 @@ def main():
             err(f"{model!r} rows disagree on {'/'.join(MODEL_FIELDS)}: {sorted(vals, key=str)} — "
                 f"these describe the model and must match on every row")
 
+    # ---- stored Hugging Face data is intact --------------------------------
+    for problem in kv_geometry.verify(online=False):
+        err(f"_tools/model_meta: {problem}")
+
+    # ---- generated fields match what _tools/kv_geometry.py derives ----------
+    # Nothing in kv_* or weights_gb is typed by hand: each value must equal what
+    # the pinned config.json / checkpoint record in _tools/model_meta/ gives.
+    checkpoints = kv_geometry.load_checkpoints()
+    expected = {}
+    for e in entries:
+        model = e.get("model")
+        if model not in expected:
+            expected[model] = kv_geometry.expected_model_fields(model)
+        g, why = expected[model]
+        if g is None:
+            err(f"{e.get('id')}: model {model!r} has no _tools/model_meta/models entry — run "
+                f"python3 _tools/kv_geometry.py fetch-model \"{model}\" <publisher/repo>")
+            continue
+        stale = [k for k, v in g.items() if e.get(k) != v]
+        if stale:
+            err(f"{e.get('id')}: {', '.join(stale)} differ from what kv_geometry.py derives "
+                f"from the model's config — run python3 _tools/kv_geometry.py apply")
+        w = kv_geometry.expected_weights_gb(e, checkpoints)
+        if e.get("served_repo") and w is None:
+            err(f"{e.get('id')}: served_repo {e['served_repo']!r} has no _tools/model_meta/"
+                f"checkpoints record — run kv_geometry.py fetch-checkpoint {e['served_repo']}")
+        elif e.get("weights_gb") != w:
+            err(f"{e.get('id')}: weights_gb {e.get('weights_gb')} but the checkpoint gives {w} "
+                f"— run python3 _tools/kv_geometry.py apply")
+        # The run's own record of what it served, where one was kept.
+        run_repo = kv_geometry.run_served_repo(e.get("id"))
+        if run_repo and run_repo != e.get("served_repo"):
+            err(f"{e.get('id')}: served_repo is {e.get('served_repo')!r} but the run's "
+                f"models.json says {run_repo!r}")
+        if run_repo:
+            owner = kv_geometry._load(os.path.join(kv_geometry.RUNS, e["id"], "models.json"))
+            owner = str(((owner.get("data") or [{}])[0]).get("owned_by") or "").lower()
+            if owner and owner != str(e.get("engine")).lower():
+                warn(f"{e.get('id')}: engine is {e.get('engine')!r} but the run's models.json "
+                     f"says it was served by {owner!r}")
+    no_repo = [e.get("id") for e in entries if not e.get("served_repo")]
+    if no_repo:
+        warn(f"{len(no_repo)} row(s) record no served_repo, so their weights are estimated "
+             f"as parameters × bytes per parameter: {', '.join(no_repo)}")
+    unsupported = sorted({m for m, (g, why) in expected.items() if g is not None and why})
+    for m in unsupported:
+        warn(f"{m}: {expected[m][1]} — its rows show the speed limit alone")
+
     unmodelled = sorted(m for m, vals in by_model.items() if any(v[:3] == (None, None, None) for v in vals))
     if unmodelled:
         warn(f"{len(unmodelled)} model(s) have no KV-cache size, so their capacity rests "
@@ -223,13 +276,15 @@ def main():
         base = device_base(e.get("device"))
         gb, bpp = mem_gb.get(base), wbytes.get(e.get("quantization"))
         n = params_count(e.get("params"))
-        if e.get("kv_bytes_per_token") is None or not gb or not bpp or n is None:
+        total = e["weights_gb"] * 1e9 if e.get("weights_gb") is not None \
+            else (n * bpp if bpp and n is not None else None)
+        if e.get("kv_bytes_per_token") is None or not gb or total is None:
             continue
         tp, pp = e.get("tp") or 1, e.get("pp") or 1
         alloc = cfg.get("engine_memory_unified", 0.8) if base in unified \
             else cfg.get("engine_memory_discrete", 0.95)
         budget = gb * 1e9 * alloc * cfg.get("weights_kv_share", 0.8)
-        weights = n * bpp / (tp * pp)
+        weights = total / (tp * pp)
         if weights >= budget:
             conflicts.append(f"{e['id']} ({weights / 1e9:.0f} GB of weights per device "
                              f"against {budget / 1e9:.0f} GB)")
@@ -257,7 +312,10 @@ def main():
     for e in entries:
         groups[(e.get("model"), e.get("device"), e.get("quantization"),
                 e.get("engine"), bool(e.get("mtp")),
-                e.get("tp"), e.get("dp"), e.get("pp"))].append(e.get("id"))
+                e.get("tp"), e.get("dp"), e.get("pp"),
+                # the notes show in the expanded row, so rows that differ
+                # there (e.g. 300K vs 1M context) can be told apart
+                (e.get("notes") or "").strip())].append(e.get("id"))
     for key, ids in groups.items():
         if len(ids) > 1:
             err(f"these rows are indistinguishable in the table but show different "

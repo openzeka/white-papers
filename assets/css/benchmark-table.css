@@ -948,6 +948,9 @@ details.bt-howto {
   margin: 0 0 22px;
 }
 
+/* Several explanation panels stack as one group above the widget. */
+details.bt-howto + details.bt-howto { margin-top: -14px; }
+
 details.bt-howto > summary {
   display: inline-flex;
   align-items: center;

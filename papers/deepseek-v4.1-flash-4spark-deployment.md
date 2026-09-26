@@ -11,7 +11,7 @@ description: >-
   Spark (GB10) with tensor parallelism: vLLM build chain, 7 SM 12.1a patches,
   Engram-on-disk, benchmark results and B300 comparison.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
-last_modified_date: 2026-09-16
+last_modified_date: 2026-09-26
 toc: true
 ---
 
@@ -244,7 +244,7 @@ Measurements were taken with [CordatusAI/llm-benchmark](https://github.com/Corda
 - **29.5 tok/s at C=1** is sufficient for interactive use, above the reading speed threshold (~15 tok/s).
 - **TTFT** rises as expected with concurrency (272→806 ms, ~3x) — prefill is compute-bound.
 - **TPS decline** reflects growing memory bandwidth contention as the GPU approaches saturation (29.5→8.8 tok/s, ~70% drop).
-- **Max C = 2** at the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥15) — chat capacity 2, agentic capacity 1.
+- **Max C = 2** at the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20) — chat capacity 8, agentic capacity 3.
 
 ### 6.4 DSpark Acceptance
 
@@ -294,14 +294,14 @@ Especially in large MoE models, not only total memory capacity but also **memory
 
 ## 8. SLO and Capacity
 
-At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥15 tok/s), this configuration yields **Max C = 2**:
+At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s), this configuration yields **Max C = 2**:
 
 | SLO | Threshold | C=2 status |
 |---|---|---|
 | TTFT | ≤ 1000 ms | 396 ms ✓ |
-| TPS | ≥ 15 tok/s | 21.32 tok/s ✓ |
+| TPS | ≥ 20 tok/s | 21.32 tok/s ✓ |
 
-> **Warning:** At C=4, TPS drops to 13.09, falling below the 15 tok/s threshold. For interactive chat services, **1-2 concurrent users** are recommended; for higher loads, data center hardware (B300/GB300) should be preferred.
+> **Warning:** At C=4, TPS drops to 13.09, falling below the 20 tok/s threshold. For interactive chat services, **1-2 concurrent users** are recommended; for higher loads, data center hardware (B300/GB300) should be preferred.
 
 ---
 

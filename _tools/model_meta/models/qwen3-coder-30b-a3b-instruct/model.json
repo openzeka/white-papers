@@ -1,0 +1,20 @@
+{
+  "model": "Qwen3-Coder-30B-A3B-Instruct",
+  "repo": "Qwen/Qwen3-Coder-30B-A3B-Instruct",
+  "revision": "b2cff646eb4bb1d68355c01b18ae02e7cf42d120",
+  "config_sha256": "e2c8d8eea39471785cd93379d8b48241ad7dcda299013155dd02526e34a0de62",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2025-07-31T07:04:55.000Z",
+    "last_modified": "2025-12-03T08:05:17.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 30532122624,
+    "parameters_by_dtype": {
+      "BF16": 30532122624
+    }
+  }
+}

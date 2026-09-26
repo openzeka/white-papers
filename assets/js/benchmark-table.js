@@ -39,15 +39,15 @@
 
     /* Performance targets / assumptions */
     targetsHeading: "Performance Targets and Capacity Assumptions",
-    targetsIntro: "These values decide what counts as acceptable performance and how capacity is estimated. Every row's Max C, Chat Capacity and Agentic Capacity is recalculated from them, and the green and red colouring of the TPS and TTFT columns follows the two speed targets. Nothing here filters rows out — it changes what the numbers mean.",
+    targetsIntro: "These values define acceptable performance and how capacity is estimated. They do not hide rows; they recalculate every row's Max C and capacity, and the green and red colouring of TPS and TTFT.",
     ttftThreshold: "Maximum TTFT Target (ms)",
     tpsThreshold: "Minimum TPS Target (tok/s)",
     chatMultiplier: "Chat Usage Multiplier",
     agenticMultiplier: "Agentic Usage Multiplier",
     groupSpeed: "Speed limit",
-    groupSpeedIntro: "How fast each request has to be. Max C is the highest measured concurrency that meets both targets, and the multipliers turn it into people.",
+    groupSpeedIntro: "How fast each request must be. Max C is the highest measured concurrency that meets both targets; the multipliers turn it into people.",
     groupMemory: "KV cache memory limit",
-    groupMemoryIntro: "How many users' sessions fit in the KV cache left beside the model weights. Each user is given one session of the context length below; there is no multiplier on this side.",
+    groupMemoryIntro: "How many users' sessions of the length below fit in the KV cache left beside the model weights.",
     chatContext: "Chat Context Length (tokens)",
     agenticContext: "Agentic Context Length (tokens)",
     engineMemDiscrete: "Engine Memory Allocation — Discrete GPU (%)",
@@ -90,7 +90,7 @@
     capTie: function (ctx) { return "The speed targets and KV cache memory (" + ctx + "-token sessions) allow the same number."; },
     capUnchecked: function (why) { return "Set by the speed targets. " + why; },
     whyUnsupported: "The KV cache memory limit is not calculated for this model yet, because its cache layout is not modelled, so this figure rests on the speed measurements alone.",
-    whyWeights: "The KV cache memory limit cannot be calculated for this run: the model weights alone are larger than the memory assumed to be available, which usually means the run moved part of the model or its KV cache out to CPU memory or disk. This figure therefore rests on the speed measurements alone.",
+    whyWeights: "The KV cache memory limit cannot be calculated for this run: the model weights alone are larger than the memory this estimate assumes is available to it. The run evidently fitted, which usually means it gave the engine more memory than that standard allocation, or kept part of the model or its KV cache in CPU memory or on disk. This figure therefore rests on the speed measurements alone.",
     whyUnknown: "The KV cache memory limit cannot be calculated, because the hardware or the weight precision is missing from the memory table, so this figure rests on the speed measurements alone.",
     capShortCtx: function (len, ctx) { return "A " + ctx + "-token session is longer than this model's " + len + "-token context window — the most it can hold — so it cannot serve sessions that long. Choose a shorter context length to see a figure."; },
     capCeiling: function (c) { return " The speed figure is a lower bound: the run still met your targets at C=" + c + ", the highest level tested."; },
@@ -105,7 +105,8 @@
     capSpeedAllows: function (n, atLeast) { return "Speed targets allow " + (atLeast ? "at least " : "") + n; },
     capMemFits: function (n) { return "KV cache memory fits " + n; },
     capMemNa: "KV cache memory not calculated",
-    capKvSummary: function (kv, w, unit) { return "Once the model weights are loaded (" + w + " GB per " + unit + "), about " + kv + " GB per " + unit + " is left for the KV cache."; },
+    capKvSummary: function (kv, w, unit, prec) { return "Once the model weights are loaded (" + w + " GB per " + unit + "), about " + kv + " GB per " + unit + " is left for the KV cache, assumed stored at " + prec + "."; },
+    capWeightsEstimated: "The checkpoint this run served is not recorded, so its weight size is estimated from the parameter count.",
     capShortCtxLine: function (len) { return "This model's context window is " + len + " tokens, so it cannot hold a session as long as the one set in the assumptions."; },
     unitGpu: "GPU",
     unitNode: "node",
@@ -137,42 +138,42 @@
 
     /* Tooltips */
     tip: {
-      model: "<strong>Model</strong><p>The large language model being served — its identity, size and vendor.</p><p>A row is a complete deployment configuration, not a model, so the same model appears in several rows with different hardware, quantization, engine, parallelism or speculative-decoding setting.</p>",
-      params: "<strong>Parameter Count</strong><p>The total number of weights in the model as released, counted from the published checkpoint.</p><p>For mixture-of-experts models this is the total, not the smaller number active on any one token, so it reflects the memory the model occupies rather than the work done per token.</p>",
-      intel: "<strong>Intelligence Index</strong><p>Artificial Analysis’ composite score for how capable this model is, on a scale where higher is better. It combines nine independent evaluations covering reasoning, coding, science and long-context work.</p><p>A property of the model, not of this benchmark run — every row for the same model carries the same value, whatever the hardware or quantization. It says nothing about speed.</p><p>Where AA scores several reasoning-effort settings of one model, the highest-scoring one is shown. A dash means AA has not published a score.</p><p>Source: Artificial Analysis.</p>",
-      agenticIdx: "<strong>Agentic Index</strong><p>Artificial Analysis’ separate score for agentic work — following multi-step tasks, calling tools and staying on track without supervision. Higher is better.</p><p>Not a rescaling of the Intelligence Index: a model can rank well on one and poorly on the other.</p><p>Do not confuse it with <em>Agentic Capacity</em> further along the row, which counts how many people this hardware could serve. This column is about the model’s ability; that one is about your machine’s throughput.</p><p>AA publishes it for a minority of the models it tracks, so a dash is common here.</p><p>Source: Artificial Analysis.</p>",
-      device: "<strong>Device</strong><p>The hardware the model ran on, and how many units of it were used together.</p><p>4× DGX Spark means four machines serving one model as a single system, not four separate runs.</p>",
-      quant: "<strong>Quantization</strong><p>The number format the model weights are stored in. Lower precision uses fewer bits per weight, so the model takes less memory and usually runs faster, at some risk to output quality.</p><p>BF16 is the full-precision baseline; FP8, NVFP4, MXFP4 and INT4 are progressively more compressed.</p>",
-      tps: "<strong>TPS — Tokens per Second</strong><p>How fast text is produced for a <em>single</em> request, in tokens per second. A token is roughly three quarters of a word.</p><p>Per-request speed, not total throughput — the aggregate curve is in the expanded row. Mean of ten rounds at the selected concurrency, measured with a 128-token input and 128-token output.</p><p><em>Higher is better.</em></p>",
-      ttft: "<strong>TTFT — Time to First Token</strong><p>How long a user waits between sending a request and the first word appearing, in milliseconds.</p><p>Mean of ten rounds at the selected concurrency, measured with a 128-token input. Because prefill work grows with the prompt, expect TTFT to rise roughly in proportion at longer input lengths.</p><p><em>Lower is better.</em></p>",
-      maxc: "<strong>Max C — Maximum Supported Concurrency</strong><p>The highest <em>measured</em> concurrency at which this configuration meets both of your performance targets at once.</p><p>Taken from the measured points only; if none of them satisfies both targets it reads 0. Counts simultaneous requests, not people.</p><p>Not a fixed property of the configuration — it moves whenever you change a target, so the same row can reach 16 at one requirement and 8 at a stricter one.</p>",
-      chat: "<strong>Chat Capacity</strong><p>Roughly how many people can use this configuration for interactive chat at once. It is the smaller of two estimates.</p><p><strong>Speed:</strong> <code>floor(Max C × Chat Usage Multiplier)</code> — chat users spend most of their time reading, thinking and typing, holding no request slot while they do, so several share one.</p><p><strong>KV cache memory:</strong> how many sessions of the Chat Context Length fit in the KV cache left beside the model weights.</p><p>The icon beside the number shows which of the two set it; open the row for the working. An estimate, not a measurement — nobody connected this many users to the system.</p>",
-      agentic: "<strong>Agentic Capacity</strong><p>Roughly how many people this configuration supports for agentic use, where the model works through multi-step tasks and tool calls on their behalf. It is the smaller of two estimates.</p><p><strong>Speed:</strong> <code>floor(Max C × Agentic Usage Multiplier)</code> — lower than chat, because an agent may make consecutive calls while planning, running tools and evaluating results, holding a slot far longer.</p><p><strong>KV cache memory:</strong> how many sessions of the Agentic Context Length fit in the KV cache. Agentic sessions are longer, so fewer fit than for chat.</p><p>The icon beside the number shows which of the two set it; open the row for the working. An estimate, not a measurement of that many users.</p>",
-      par: "<strong>Parallelism — TP / DP / PP</strong><p>How one model is split across several GPUs or machines so it can run at all, or run faster.</p><p><strong>TP — Tensor Parallelism:</strong> one layer\u2019s maths is divided across GPUs, which all work on the same request.</p><p><strong>DP — Data Parallelism:</strong> several complete copies of the model each handle different requests.</p><p><strong>PP — Pipeline Parallelism:</strong> different layers live on different devices and requests pass through them in turn.</p><p>— means the method was not used.</p>",
-      engine: "<strong>Inference Engine</strong><p>The server software that loads the model and answers requests. It handles batching, memory and scheduling, so it affects speed as much as the hardware does.</p><p>vLLM and SGLang are two such servers; the same model on the same hardware can differ measurably between them.</p>",
-      mtp: "<strong>Speculative Decoding</strong><p>The model guesses several tokens ahead in one step and then verifies them in a single pass. Correct guesses are kept, so the same output arrives faster.</p><p>Yes means the run used it in some form. Which mechanism and how many tokens it guessed ahead — multi-token prediction (MTP) with a depth <em>k</em>, a draft model, or a vendor implementation such as DSpark — is named in the row's notes.</p><p>Compare rows with it on and off to see what it bought on that configuration.</p>",
+      model: "<strong>Model</strong><p>The large language model being served.</p><p>A row is a whole deployment, so the same model appears in several rows with different hardware, format, engine or parallelism.</p>",
+      params: "<strong>Parameters</strong><p>The model's total number of weights, as published.</p><p>For mixture-of-experts models this is the total, not the part active for each token, because all of it is held in memory.</p>",
+      intel: "<strong>Intelligence Index</strong><p>Artificial Analysis’ capability score, combining evaluations of reasoning, coding, science and long-context work. Higher is better.</p><p>It describes the model, not this run, so every row of the model shows the same value. Where several reasoning-effort settings are scored, the highest is shown; a dash means no score is published.</p><p>Source: Artificial Analysis.</p>",
+      agenticIdx: "<strong>Agentic Index</strong><p>Artificial Analysis’ score for agentic work: multi-step tasks, tool calls and staying on course without supervision. Higher is better.</p><p>It measures what the model can do; Agentic Capacity, further along the row, estimates how many people the hardware can serve. A dash means no score is published, which is common here.</p><p>Source: Artificial Analysis.</p>",
+      device: "<strong>Device</strong><p>The hardware the run used, and how many units served the model together.</p><p>4× DGX Spark means four machines serving one model as a single system.</p>",
+      quant: "<strong>Quantization</strong><p>The number format the weights are stored in.</p><p>Fewer bits per weight means less memory and usually more speed, at some risk to quality. BF16 and FP16 are full precision, FP8 and MXFP8 use 8 bits, and NVFP4, MXFP4, FP4, INT4 and AWQ use 4.</p>",
+      tps: "<strong>TPS — tokens per second</strong><p>How fast one request’s reply is produced at the selected concurrency. A token is about three quarters of a word.</p><p>Per request, not in total: at C=8, each of the eight requests gets this rate. Mean of ten rounds with 128-token prompts and replies. Higher is better.</p>",
+      ttft: "<strong>TTFT — time to first token</strong><p>How long a request waits for its first token at the selected concurrency, in milliseconds.</p><p>Mean of ten rounds with 128-token prompts; longer prompts take roughly proportionally longer. Lower is better.</p>",
+      maxc: "<strong>Max C — maximum supported concurrency</strong><p>The highest measured concurrency at which both your TTFT and your TPS target are met. It counts simultaneous requests, not people.</p><p>It follows your targets: tighten one and Max C can fall. 0 means no measured level passes.</p>",
+      chat: "<strong>Chat Capacity</strong><p>Roughly how many people can use this configuration for chat at once — the smaller of two estimates:</p><p><strong>Speed:</strong> Max C × Chat Usage Multiplier, because chat users spend most of their time reading and typing.<br><strong>Memory:</strong> how many sessions of the Chat Context Length fit in the KV cache.</p><p>The icon shows which one set the figure. An estimate, not a measured user count.</p>",
+      agentic: "<strong>Agentic Capacity</strong><p>Roughly how many people can use this configuration at once for agentic work, where the model carries out multi-step tasks and tool calls — the smaller of two estimates:</p><p><strong>Speed:</strong> Max C × Agentic Usage Multiplier, lower than for chat because an agent keeps sending requests while it works.<br><strong>Memory:</strong> how many sessions of the Agentic Context Length fit in the KV cache.</p><p>The icon shows which one set the figure. An estimate, not a measured user count.</p>",
+      par: "<strong>Parallelism — TP / DP / PP</strong><p>How the model is split across GPUs or machines.</p><p><strong>TP</strong> divides the work inside each layer, <strong>PP</strong> places different layers on different devices, and <strong>DP</strong> runs full copies that each serve their own requests. — means not used.</p>",
+      engine: "<strong>Inference Engine</strong><p>The server software that loads the model and schedules requests, such as vLLM or SGLang.</p><p>It affects speed as much as the hardware does: the same model on the same hardware can differ measurably between engines.</p>",
+      mtp: "<strong>Speculative Decoding</strong><p>The model drafts several tokens ahead and checks them in one pass; accepted tokens are kept, so the same output arrives sooner.</p><p>Yes means the run used it. The mechanism — MTP, a draft model or DSpark — and how far ahead it drafted are in the row’s notes.</p>",
 
-      fConcurrency: "<strong>Concurrency</strong><p>The number of requests being processed at the same instant — a load level, not a number of people. At C=8 the machine is working on eight generations at once.</p><p>Selects which measurement the TPS and TTFT columns show. Raise it to see behaviour under load.</p>",
-      fModel: "<strong>Model filter</strong><p>The large language model being served.</p><p>Pick several to compare them side by side.</p>",
-      fMinParams: "<strong>Minimum Parameter Count</strong><p>The total size of the model in parameters.</p><p>Hides models smaller than this, so you can look at only the large models or only the ones that fit modest hardware. The scale is logarithmic, because the models here span 4B to 2.8T.</p>",
-      fDevice: "<strong>Device filter</strong><p>The hardware a configuration ran on, and how many units were used together.</p><p>Pick several to compare hardware directly.</p>",
-      fQuant: "<strong>Quantization filter</strong><p>The number format the model weights are stored in — lower precision means less memory and usually more speed.</p><p>Select FP8 and NVFP4 together to compare those two formats.</p>",
-      fMtp: "<strong>Speculative Decoding filter</strong><p>Whether the run guessed several tokens ahead per step and verified them, which speeds generation up without changing the output.</p><p>Select both options to compare performance with it on and off.</p>",
-      fMinTps: "<strong>Minimum TPS</strong><p>TPS is how fast text is produced for one request, in tokens per second.</p><p>Hides configurations slower than this at the selected concurrency.</p>",
-      fMaxTtft: "<strong>Maximum TTFT</strong><p>TTFT is how long a user waits before the first word appears.</p><p>Hides configurations that take longer than this at the selected concurrency.</p>",
-      fMinChat: "<strong>Minimum Chat Capacity</strong><p>The estimated number of interactive chat users a configuration can serve.</p><p>Hides anything below this. Counted in people, not simultaneous requests.</p>",
-      fMinAgentic: "<strong>Minimum Agentic Capacity</strong><p>The estimated number of agentic users a configuration can serve, where each user drives multi-step model work.</p><p>Hides anything below this. Counted in people, not simultaneous requests.</p>",
+      fConcurrency: "<strong>Concurrency</strong><p>The number of requests being processed at the same moment — a load level, not a number of people.</p><p>Chooses which measurement the TPS and TTFT columns show. Rows not measured at this level are hidden.</p>",
+      fModel: "<strong>Model filter</strong><p>Shows only the chosen models. Pick several to compare them side by side.</p>",
+      fMinParams: "<strong>Minimum Parameters</strong><p>Hides models whose total parameter count is below this.</p><p>The scale is logarithmic, because the models here range from 4B to 2.8T.</p>",
+      fDevice: "<strong>Device filter</strong><p>Shows only runs on the chosen hardware. Pick several to compare devices directly.</p>",
+      fQuant: "<strong>Quantization filter</strong><p>Shows only the chosen weight formats. Pick FP8 and NVFP4 together to compare the two.</p>",
+      fMtp: "<strong>Speculative Decoding filter</strong><p>Shows runs with speculative decoding on, off or both. Choose both to see what it gains.</p>",
+      fMinTps: "<strong>Minimum TPS</strong><p>Hides configurations whose per-request speed at the selected concurrency is below this.</p>",
+      fMaxTtft: "<strong>Maximum TTFT</strong><p>Hides configurations whose first token takes longer than this at the selected concurrency.</p>",
+      fMinChat: "<strong>Minimum Chat Capacity</strong><p>Hides configurations estimated to serve fewer chat users than this. Counted in people.</p>",
+      fMinAgentic: "<strong>Minimum Agentic Capacity</strong><p>Hides configurations estimated to serve fewer agentic users than this. Counted in people.</p>",
 
-      aTps: "<strong>Minimum TPS Target</strong><p>The generation speed you consider acceptable for one request, in tokens per second.</p><p>Raising it makes the requirement stricter and can lower Max C.</p>",
-      aTtft: "<strong>Maximum TTFT Target</strong><p>The longest first-token wait you consider acceptable, in milliseconds.</p><p>Lowering it makes the requirement stricter and can lower Max C.</p>",
-      aChat: "<strong>Chat Usage Multiplier</strong><p>How busy you assume a chat user is: how many of them can share one simultaneous request slot, given that they spend most of their time reading and typing rather than waiting on the model.</p><p>Raise it for lighter usage, lower it for constant activity.</p>",
-      aAgentic: "<strong>Agentic Usage Multiplier</strong><p>How busy you assume an agentic user is: how many of them can share one simultaneous request slot.</p><p>Usually below the chat value, because agentic work keeps a slot occupied for longer. Lower it for agents that run almost continuously; raise it for intermittent use.</p>",
-      aChatCtx: "<strong>Chat Context Length</strong><p>Every token a chat session keeps in memory — the conversation history, anything pasted in, and the replies — budgeted per chat user.</p><p>The memory limit reserves one session of this length for each user, so doubling it roughly halves how many chat users fit.</p>",
-      aAgenticCtx: "<strong>Agentic Context Length</strong><p>The same budget for an agentic user, whose session also holds tool calls, tool results and intermediate steps, so it is usually several times the chat value.</p><p>One session of this length is reserved for each agentic user.</p>",
-      aEngineDiscrete: "<strong>Engine Memory Allocation — Discrete GPU</strong><p>The share of each GPU's own memory handed to the inference engine — what vLLM calls <code>gpu_memory_utilization</code>. The rest is left to the driver and other processes.</p><p>Applies to DGX B300 and RTX PRO 6000.</p>",
-      aEngineUnified: "<strong>Engine Memory Allocation — Unified Memory</strong><p>The same share on systems where the CPU and GPU draw on one memory pool. The operating system and every other process live in that pool too, so the default is lower.</p><p>Applies to DGX Spark and Jetson Thor.</p>",
-      aShare: "<strong>Weights and KV Cache Share</strong><p>The part of the engine's allocation that holds the model weights and the KV cache. The remainder is working memory for activations and other runtime state.</p><p>The KV cache gets what is left once the weights are in: memory × allocation × this share − weights.</p>",
-      reset: "<strong>Reset All Filters</strong><p>Clears every filter and returns the performance targets and capacity assumptions to their defaults.</p>"
+      aTps: "<strong>Minimum TPS Target</strong><p>The slowest per-request speed you accept, in tokens per second.</p><p>Raising it can lower Max C and the capacity figures.</p>",
+      aTtft: "<strong>Maximum TTFT Target</strong><p>The longest wait for the first token you accept, in milliseconds.</p><p>Lowering it can lower Max C and the capacity figures.</p>",
+      aChat: "<strong>Chat Usage Multiplier</strong><p>How many chat users share one request slot on average, since each spends most of the time reading and typing. The default of 4 means a user has a request running about a quarter of the time.</p><p>Raise it for lighter use, lower it for heavier.</p>",
+      aAgentic: "<strong>Agentic Usage Multiplier</strong><p>The same for agentic users. The default of 1.5 means an agent has a request running about two thirds of the time, because it chains its calls.</p><p>Lower it for agents that run almost continuously.</p>",
+      aChatCtx: "<strong>Chat Context Length</strong><p>How many tokens one chat session holds: its history, pasted text and replies.</p><p>The memory limit counts how many sessions of this length fit in the KV cache; doubling it roughly halves that number.</p>",
+      aAgenticCtx: "<strong>Agentic Context Length</strong><p>The same for an agentic session, which also holds tool calls and their results, so it is usually several times longer.</p>",
+      aEngineDiscrete: "<strong>Engine Memory Allocation — Discrete GPU</strong><p>The share of each GPU’s memory given to the inference engine, what vLLM calls <code>gpu_memory_utilization</code>.</p><p>Applies to DGX B300 and RTX PRO 6000.</p>",
+      aEngineUnified: "<strong>Engine Memory Allocation — Unified Memory</strong><p>The same share where the CPU and GPU draw on one memory pool. The operating system runs in that pool too, so the default is lower.</p><p>Applies to DGX Spark and Jetson Thor.</p>",
+      aShare: "<strong>Weights and KV Cache Share</strong><p>The part of the engine’s memory that holds the weights and the KV cache; the rest is working memory for activations.</p><p>KV cache = memory × allocation × this share − weights.</p>",
+      reset: "<strong>Reset All Filters</strong><p>Clears every filter and returns the targets and assumptions to their defaults.</p>"
     }
   };
 
@@ -182,7 +183,7 @@
 
   var DEFAULT_CONFIG = {
     ttft_threshold_ms: 1000,
-    tps_threshold: 15,
+    tps_threshold: 20,
     chat_multiplier: 4,
     agentic_multiplier: 1.5,
     chat_context_tokens: 32768,
@@ -372,8 +373,8 @@
   }
 
   /* One definition of "meets the target" per metric, driving every coloured
-     cell in both tables as well as Max C. A minimum of 15 tok/s is met by
-     exactly 15, and a maximum of 1000 ms is met by exactly 1000, so both
+     cell in both tables as well as Max C. A minimum of 20 tok/s is met by
+     exactly 20, and a maximum of 1000 ms is met by exactly 1000, so both
      bounds are inclusive. They used to disagree: a cell could be green while
      its own sweep row read FAIL. */
   function ttftMeets(ttft) {
@@ -412,10 +413,12 @@
      no multiplier — chat and agentic differ only in their context length.
 
      One GPU (or Spark node) stands for all of them, because the weights and
-     the cache are split evenly across the run's tp × pp devices. The memory
-     tables come from benchmarks.json; the per-model KV sizes are the entry's
-     kv_* fields, worked out from the model's config.json when the run was
-     added. */
+     the cache are split evenly across the run's tp × pp devices; each of the
+     dp copies serves its own users, so the result is multiplied by dp. The
+     memory tables come from benchmarks.json; the per-model KV sizes are the
+     entry's kv_* fields, generated by _tools/kv_geometry.py from the model's
+     config.json. The weights are the served checkpoint's size (weights_gb)
+     when the row records it, else parameters × bytes per parameter. */
 
   function deviceBase(device) {
     return String(device).replace(/^\d+×\s*/, "");
@@ -430,25 +433,36 @@
     var gb = mem.memory_gb ? mem.memory_gb[base] : null;
     var bpp = mem.weight_bytes_per_param ? mem.weight_bytes_per_param[entry.quantization] : null;
     var params = parseParams(entry.params);
-    if (!gb || !bpp || params === null) return { status: "unknown" };
+    var measured = entry.weights_gb != null;
+    var total = measured ? entry.weights_gb * 1e9 : bpp && params !== null ? params * bpp : null;
+    if (!gb || total === null) return { status: "unknown" };
     var tp = entry.tp || 1, pp = entry.pp || 1, dp = entry.dp || 1;
+    /* Bytes per stored KV value: 1 = FP8, assumed for every row. An FP8 cache
+       is an engine setting, available whatever precision the weights use. */
+    var perValue = mem.kv_cache_bytes_per_value || 1;
     var unified = (mem.unified_memory || []).indexOf(base) > -1;
     var alloc = unified ? config.engine_memory_unified : config.engine_memory_discrete;
     /* Both reserves come off the physical memory before the weights do. */
     var budget = gb * 1e9 * alloc * config.weights_kv_share;
-    var weights = params * bpp / (tp * pp);
+    var weights = total / (tp * pp);
     return {
       status: budget - weights > 0 ? "ok" : "weights",
       base: base, gb: gb, alloc: alloc, weights: weights, kv: budget - weights,
-      tp: tp, pp: pp, dp: dp,
+      tp: tp, pp: pp, dp: dp, perValue: perValue, measured: measured,
       /* GQA heads divide across TP down to one head per GPU; a cache with no
          kv_heads (MLA and other compressed layouts) is copied to every GPU. */
       split: entry.kv_heads ? Math.min(tp, entry.kv_heads) : 1
     };
   }
 
+  /* One session on one device. The KV cache splits over min(tp, kv_heads);
+     single-head index keys cannot split and sit on every GPU; the fixed
+     recurrent state of linear-attention layers splits over all tp GPUs and is
+     already in the precision the engine keeps it in. */
   function sessionBytes(entry, b, ctx) {
-    return (entry.kv_bytes_per_token * ctx + entry.kv_window_bytes) / b.split / b.pp;
+    var kv = (entry.kv_bytes_per_token * ctx + entry.kv_window_bytes) * b.perValue / b.split;
+    var copied = (entry.kv_replicated_bytes_per_token || 0) * ctx * b.perValue;
+    return (kv + copied) / b.pp + (entry.kv_state_bytes || 0) / (b.tp * b.pp);
   }
 
   /* The single source for every capacity figure on screen: the cell, its
@@ -592,9 +606,11 @@
     var notes = [];
     if (b.status === "ok") {
       var unit = b.base === "DGX Spark" ? S.unitNode : b.base === "Thor" ? S.unitModule : S.unitGpu;
-      notes.push(S.capKvSummary(fmtGB(b.kv), fmtGB(b.weights), unit));
+      notes.push(S.capKvSummary(fmtGB(b.kv), fmtGB(b.weights), unit, b.perValue === 2 ? "BF16" : "FP8"));
+      if (!b.measured) notes.push(S.capWeightsEstimated);
     } else {
       notes.push(limitWhy(rows[0]));
+      if (b.status === "weights" && !b.measured) notes.push(S.capWeightsEstimated);
     }
     if (rows[0].tooLong || rows[1].tooLong) notes.push(S.capShortCtxLine(fmtTokens(entry.model_context_length)));
     html += notes.map(function (l) { return '<p class="bt-capacity-note">' + escapeHTML(l) + "</p>"; }).join("");

@@ -1,0 +1,45 @@
+{
+  "repo": "OPENZEKA/Qwen3-Coder-30B-A3B-Instruct-NVFP4",
+  "revision": "c24333e4f0261dd3d4c7fd6878426498a7458e08",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 18096319232,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2025-12-16T05:04:31.000Z",
+    "last_modified": "2026-01-13T10:17:46.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3-Coder-30B-A3B-Instruct"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 15583623168,
+    "parameters_by_dtype": {
+      "BF16": 635123712,
+      "F8_E4M3": 1868562432,
+      "U8": 14948499456
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00004.safetensors",
+      "size": 5002177944
+    },
+    {
+      "path": "model-00002-of-00004.safetensors",
+      "size": 5002607704
+    },
+    {
+      "path": "model-00003-of-00004.safetensors",
+      "size": 5001920136
+    },
+    {
+      "path": "model-00004-of-00004.safetensors",
+      "size": 3089613448
+    }
+  ]
+}

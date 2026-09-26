@@ -11,7 +11,7 @@ description: >-
   (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM 12.1a patch'i,
   Engram-on-disk, benchmark sonuçları ve B300 karşılaştırması.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
-last_modified_date: 2026-09-16
+last_modified_date: 2026-09-26
 toc: true
 ---
 
@@ -244,7 +244,7 @@ Model, düşünme modu kapalı (`"thinking": false`), araç çağırma ve çok m
 - **C=1'de 29.5 tok/s**, interaktif kullanım için yeterli bir hıztır. Okuma hızı (~15 tok/s) eşiğinin üzerindedir.
 - **TTFT**, concurrency artışıyla beklenen biçimde yükselir (272→806 ms, ~3x) — prefill aşaması hesaplama sınırlıdır (compute-bound).
 - **TPS düşüşü**, GPU'nun doygunluğa yaklaşmasıyla bellek bant genişliği çekişmesinin artmasından kaynaklanır (29.5→8.8 tok/s, ~%70 düşüş).
-- **Max C = 2** (Benchmark Gezgini'nin varsayılan hedeflerinde: TTFT≤1000ms ve TPS≥15) — sohbet kapasitesi 2, agentic kapasite 1.
+- **Max C = 2** (Benchmark Gezgini'nin varsayılan hedeflerinde: TTFT≤1000ms ve TPS≥20) — sohbet kapasitesi 8, agentic kapasite 3.
 
 ### 6.4 DSpark Acceptance
 
@@ -292,14 +292,14 @@ Donanım düzeyinde temel farklar şunlardır:
 
 ## 8. SLO ve Kapasite
 
-Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥15 tok/s), bu yapılandırma **Max C = 2** değerini verir:
+Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), bu yapılandırma **Max C = 2** değerini verir:
 
 | SLO | Eşik | C=2 durumu |
 |---|---|---|
 | TTFT | ≤ 1000 ms | 396 ms ✓ |
-| TPS | ≥ 15 tok/s | 21.32 tok/s ✓ |
+| TPS | ≥ 20 tok/s | 21.32 tok/s ✓ |
 
-> **Uyarı:** C=4'te TPS 13.09'a düşerek 15 tok/s eşiğinin altına iner. Bu nedenle interaktif sohbet servisleri için **1-2 eşzamanlı kullanıcı** önerilir; daha yüksek yük için veri merkezi donanımı (B300/GB300) tercih edilmelidir.
+> **Uyarı:** C=4'te TPS 13.09'a düşerek 20 tok/s eşiğinin altına iner. Bu nedenle interaktif sohbet servisleri için **1-2 eşzamanlı kullanıcı** önerilir; daha yüksek yük için veri merkezi donanımı (B300/GB300) tercih edilmelidir.
 
 ---
 

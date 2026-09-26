@@ -1,0 +1,21 @@
+{
+  "model": "Tencent-Hy3",
+  "repo": "tencent/Hy3",
+  "revision": "a960ebc3da325ba167f069f76c41eb62c9280d22",
+  "config_sha256": "0c9daab42bff9cce1b6f058b10d7b730f76d583e583e28ad56e92b36373246f0",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-07-02T13:23:54.000Z",
+    "last_modified": "2026-07-20T07:01:39.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 298786155776,
+    "parameters_by_dtype": {
+      "BF16": 298786140416,
+      "F32": 15360
+    }
+  }
+}

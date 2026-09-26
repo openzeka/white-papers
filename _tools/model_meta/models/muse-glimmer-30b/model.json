@@ -1,0 +1,20 @@
+{
+  "model": "Muse-Glimmer-30B",
+  "repo": "meta-models/Muse-Glimmer-30B",
+  "revision": "a4e59da52a7bc87ae7251dd5545c0dd437c44b68",
+  "config_sha256": "5a9df2d8a385b3d361ab6ae68d73586f4e775033933bd0cd863fb7f3820e6a14",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-08-09T17:51:35.000Z",
+    "last_modified": "2026-08-11T19:23:35.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 29776626688,
+    "parameters_by_dtype": {
+      "BF16": 29776626688
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "repo": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+  "revision": "1355db6a052410cfd62085d94b58866fd0f2c3c5",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 23424338320,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-05-27T18:09:46.000Z",
+    "last_modified": "2026-08-29T02:26:14.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3.6-35B-A3B"
+    ],
+    "library": "Model Optimizer",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 18683860336,
+    "parameters_by_dtype": {
+      "BF16": 1825916784,
+      "F8_E4M3": 1279262720,
+      "U8": 16423321600
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00003.safetensors",
+      "size": 10006877608
+    },
+    {
+      "path": "model-00002-of-00003.safetensors",
+      "size": 10003595752
+    },
+    {
+      "path": "model-00003-of-00003.safetensors",
+      "size": 3413864960
+    }
+  ]
+}

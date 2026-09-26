@@ -1,0 +1,22 @@
+{
+  "model": "Kimi-K2-Thinking",
+  "repo": "moonshotai/Kimi-K2-Thinking",
+  "revision": "a51ccc050d73dab088bf7b0e2dd9b30ae85a4e55",
+  "config_sha256": "666ee58fc3871ecc369a22bc8c100075c2ad24ccbe8b3e336fa5f726e6111c15",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2025-11-04T08:25:31.000Z",
+    "last_modified": "2026-01-30T04:49:39.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 1026408240256,
+    "parameters_by_dtype": {
+      "F32": 23040,
+      "I32": 1014686023680,
+      "BF16": 11722193536
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "model": "Qwen3.8-2.4T-A95B",
+  "repo": "Qwen/Qwen3.8-2.4T-A95B",
+  "revision": "207bd685a7e3696cfaff12ded7c6a7ea0f88c996",
+  "config_sha256": "4e3819548967e319ab435d044a3a331dbe3b078590ce822e9d74b79430533987",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-08-08T01:50:52.000Z",
+    "last_modified": "2026-08-12T10:24:04.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 2446182725504,
+    "parameters_by_dtype": {
+      "BF16": 2446182725504
+    }
+  }
+}

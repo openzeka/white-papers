@@ -1,0 +1,167 @@
+{
+  "repo": "thinkingmachines/Inkling-NVFP4",
+  "revision": "42a75a99a40eb2ba1e0717db6357a0bf15205044",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 592005609232,
+  "quantization": {
+    "method": null,
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-07-14T13:23:43.000Z",
+    "last_modified": "2026-07-30T15:47:41.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "thinkingmachines/Inkling"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 552845034562,
+    "parameters_by_dtype": {
+      "I64": 378,
+      "F32": 48704,
+      "BF16": 39160185992,
+      "F8_E4M3": 57076088832,
+      "U8": 456608710656
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00033.safetensors",
+      "size": 19116985342
+    },
+    {
+      "path": "model-00002-of-00033.safetensors",
+      "size": 19974331454
+    },
+    {
+      "path": "model-00003-of-00033.safetensors",
+      "size": 19167394188
+    },
+    {
+      "path": "model-00004-of-00033.safetensors",
+      "size": 15696646890
+    },
+    {
+      "path": "model-00005-of-00033.safetensors",
+      "size": 17858589788
+    },
+    {
+      "path": "model-00006-of-00033.safetensors",
+      "size": 19944324836
+    },
+    {
+      "path": "model-00007-of-00033.safetensors",
+      "size": 19208103526
+    },
+    {
+      "path": "model-00008-of-00033.safetensors",
+      "size": 19950824732
+    },
+    {
+      "path": "model-00009-of-00033.safetensors",
+      "size": 18726640016
+    },
+    {
+      "path": "model-00010-of-00033.safetensors",
+      "size": 19997716432
+    },
+    {
+      "path": "model-00011-of-00033.safetensors",
+      "size": 19503730654
+    },
+    {
+      "path": "model-00012-of-00033.safetensors",
+      "size": 15632104382
+    },
+    {
+      "path": "model-00013-of-00033.safetensors",
+      "size": 18122786004
+    },
+    {
+      "path": "model-00014-of-00033.safetensors",
+      "size": 18000161310
+    },
+    {
+      "path": "model-00015-of-00033.safetensors",
+      "size": 19849789206
+    },
+    {
+      "path": "model-00016-of-00033.safetensors",
+      "size": 19579605120
+    },
+    {
+      "path": "model-00017-of-00033.safetensors",
+      "size": 18349586234
+    },
+    {
+      "path": "model-00018-of-00033.safetensors",
+      "size": 19542373784
+    },
+    {
+      "path": "model-00019-of-00033.safetensors",
+      "size": 15483680186
+    },
+    {
+      "path": "model-00020-of-00033.safetensors",
+      "size": 19255845282
+    },
+    {
+      "path": "model-00021-of-00033.safetensors",
+      "size": 16632058036
+    },
+    {
+      "path": "model-00022-of-00033.safetensors",
+      "size": 17755343330
+    },
+    {
+      "path": "model-00023-of-00033.safetensors",
+      "size": 17842745792
+    },
+    {
+      "path": "model-00024-of-00033.safetensors",
+      "size": 16021544096
+    },
+    {
+      "path": "model-00025-of-00033.safetensors",
+      "size": 19384613910
+    },
+    {
+      "path": "model-00026-of-00033.safetensors",
+      "size": 19126417732
+    },
+    {
+      "path": "model-00027-of-00033.safetensors",
+      "size": 18252708640
+    },
+    {
+      "path": "model-00028-of-00033.safetensors",
+      "size": 19645387122
+    },
+    {
+      "path": "model-00029-of-00033.safetensors",
+      "size": 19871788438
+    },
+    {
+      "path": "model-00030-of-00033.safetensors",
+      "size": 1224040074
+    },
+    {
+      "path": "model-00031-of-00033.safetensors",
+      "size": 19352518936
+    },
+    {
+      "path": "model-00032-of-00033.safetensors",
+      "size": 18582473448
+    },
+    {
+      "path": "model-00033-of-00033.safetensors",
+      "size": 4831838368
+    },
+    {
+      "path": "mtp.safetensors",
+      "size": 10520911944
+    }
+  ]
+}

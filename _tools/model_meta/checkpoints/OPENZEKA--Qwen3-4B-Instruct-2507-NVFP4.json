@@ -1,0 +1,37 @@
+{
+  "repo": "OPENZEKA/Qwen3-4B-Instruct-2507-NVFP4",
+  "revision": "7009563e02c47b3ce728ecdc8cab2f0d9cd52ee4",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 2822180032,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": {
+      "dynamic": false,
+      "num_bits": 8,
+      "type": "float"
+    }
+  },
+  "hf": {
+    "created": "2025-12-12T05:10:19.000Z",
+    "last_modified": "2025-12-25T11:04:02.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3-4B-Instruct-2507"
+    ],
+    "library": null,
+    "pipeline_tag": null,
+    "safetensors_parameters": 2432892416,
+    "parameters_by_dtype": {
+      "BF16": 389152256,
+      "F8_E4M3": 227082240,
+      "U8": 1816657920
+    }
+  },
+  "files": [
+    {
+      "path": "model.safetensors",
+      "size": 2822180032
+    }
+  ]
+}

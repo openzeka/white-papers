@@ -1,0 +1,33 @@
+{
+  "repo": "meta-models/Muse-Glimmer-30B",
+  "revision": "a4e59da52a7bc87ae7251dd5545c0dd437c44b68",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 59553435272,
+  "quantization": {
+    "method": null,
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-08-09T17:51:35.000Z",
+    "last_modified": "2026-08-11T19:23:35.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 29776626688,
+    "parameters_by_dtype": {
+      "BF16": 29776626688
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00002.safetensors",
+      "size": 49950112952
+    },
+    {
+      "path": "model-00002-of-00002.safetensors",
+      "size": 9603322320
+    }
+  ]
+}

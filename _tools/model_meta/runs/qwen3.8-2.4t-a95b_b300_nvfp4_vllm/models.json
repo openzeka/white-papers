@@ -1,0 +1,30 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "Inferact/Qwen3.8-2.4T-A95B-NVFP4",
+      "object": "model",
+      "created": 1786617449,
+      "owned_by": "vllm",
+      "root": "Inferact/Qwen3.8-2.4T-A95B-NVFP4",
+      "parent": null,
+      "max_model_len": 262144,
+      "permission": [
+        {
+          "id": "modelperm-951b66841cc3847b",
+          "object": "model_permission",
+          "created": 1786617449,
+          "allow_create_engine": false,
+          "allow_sampling": true,
+          "allow_logprobs": true,
+          "allow_search_indices": false,
+          "allow_view": true,
+          "allow_fine_tuning": false,
+          "organization": "*",
+          "group": null,
+          "is_blocking": false
+        }
+      ]
+    }
+  ]
+}

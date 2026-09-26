@@ -1,0 +1,292 @@
+{
+  "repo": "Qwen/Qwen3.8-27B-FP8",
+  "revision": "017b9c7af6b5689d5dd426a76e0bc077eb5ca20a",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 30866866928,
+  "quantization": {
+    "method": "fp8",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-08-13T08:01:58.000Z",
+    "last_modified": "2026-08-14T14:44:41.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3.8-27B"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 27781427952,
+    "parameters_by_dtype": {
+      "BF16": 3082220272,
+      "F8_E4M3": 24699207680
+    }
+  },
+  "files": [
+    {
+      "path": "layers-0.safetensors",
+      "size": 383865448
+    },
+    {
+      "path": "layers-1.safetensors",
+      "size": 383865448
+    },
+    {
+      "path": "layers-10.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-11.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-12.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-13.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-14.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-15.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-16.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-17.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-18.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-19.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-2.safetensors",
+      "size": 383865448
+    },
+    {
+      "path": "layers-20.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-21.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-22.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-23.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-24.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-25.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-26.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-27.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-28.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-29.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-3.safetensors",
+      "size": 372313744
+    },
+    {
+      "path": "layers-30.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-31.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-32.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-33.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-34.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-35.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-36.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-37.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-38.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-39.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-4.safetensors",
+      "size": 383865448
+    },
+    {
+      "path": "layers-40.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-41.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-42.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-43.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-44.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-45.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-46.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-47.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-48.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-49.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-5.safetensors",
+      "size": 383865448
+    },
+    {
+      "path": "layers-50.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-51.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-52.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-53.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-54.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-55.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-56.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-57.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-58.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-59.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-6.safetensors",
+      "size": 383865448
+    },
+    {
+      "path": "layers-60.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-61.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-62.safetensors",
+      "size": 383865472
+    },
+    {
+      "path": "layers-63.safetensors",
+      "size": 372313760
+    },
+    {
+      "path": "layers-7.safetensors",
+      "size": 372313744
+    },
+    {
+      "path": "layers-8.safetensors",
+      "size": 383865448
+    },
+    {
+      "path": "layers-9.safetensors",
+      "size": 383865448
+    },
+    {
+      "path": "mtp.safetensors",
+      "size": 477202224
+    },
+    {
+      "path": "outside.safetensors",
+      "size": 6007102112
+    }
+  ]
+}

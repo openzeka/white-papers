@@ -1,0 +1,45 @@
+{
+  "repo": "RadixArk/Qwen3.8-27B-NVFP4",
+  "revision": "319f741cce68d7914884900c138a1fbb70a42f30",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 21921697280,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": {
+      "dynamic": false,
+      "num_bits": 8,
+      "type": "float"
+    }
+  },
+  "hf": {
+    "created": "2026-08-14T05:41:23.000Z",
+    "last_modified": "2026-08-22T07:38:11.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3.8-27B"
+    ],
+    "library": "Model Optimizer",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 18164649200,
+    "parameters_by_dtype": {
+      "BF16": 3454464752,
+      "F8_E4M3": 7214202880,
+      "U8": 8556380160
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00003.safetensors",
+      "size": 9965652544
+    },
+    {
+      "path": "model-00002-of-00003.safetensors",
+      "size": 9985757064
+    },
+    {
+      "path": "model-00003-of-00003.safetensors",
+      "size": 1970287672
+    }
+  ]
+}

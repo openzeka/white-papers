@@ -1,0 +1,22 @@
+{
+  "model": "Kimi K3",
+  "repo": "moonshotai/Kimi-K3",
+  "revision": "f831ab66814297da540d832a5235f8e904f29d06",
+  "config_sha256": "9710e121a58d03ac92c8d6da287a19541994319afbbe6d6202af001ffd379213",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-06-13T06:42:57.000Z",
+    "last_modified": "2026-09-02T02:22:41.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 2779931837184,
+    "parameters_by_dtype": {
+      "F32": 11122432,
+      "BF16": 57179884544,
+      "U8": 2722740830208
+    }
+  }
+}

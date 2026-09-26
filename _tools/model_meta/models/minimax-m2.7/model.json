@@ -1,0 +1,22 @@
+{
+  "model": "MiniMax-M2.7",
+  "repo": "MiniMaxAI/MiniMax-M2.7",
+  "revision": "d494266a4affc0d2995ba1fa35c8481cbd84294b",
+  "config_sha256": "697c30492781d55ac516011f937b5cdec045710b5b0c9ca39a6ea277785df9aa",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-04-09T03:37:12.000Z",
+    "last_modified": "2026-04-20T04:28:14.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 228689764864,
+    "parameters_by_dtype": {
+      "F32": 48774656,
+      "BF16": 1230021632,
+      "F8_E4M3": 227410968576
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "model": "GLM-5.3-Flash",
+  "repo": "zai-org/GLM-5.3-Flash",
+  "revision": "eb9eb208eb0d988989d07a6a12d0fdeb5f52574a",
+  "config_sha256": "bb8f01c42cb92a52ca72e65afb4d5bd8d11aef083cd210e8de25dfb904f23e9f",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-08-25T06:43:14.000Z",
+    "last_modified": "2026-09-07T12:13:47.000Z",
+    "gated": false,
+    "license": "mit",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 321323031390,
+    "parameters_by_dtype": {
+      "BF16": 6926096640,
+      "F8_E4M3": 314396639232,
+      "F32": 295518
+    }
+  }
+}

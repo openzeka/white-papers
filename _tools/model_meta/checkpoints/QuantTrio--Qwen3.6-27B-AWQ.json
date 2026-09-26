@@ -1,0 +1,60 @@
+{
+  "repo": "QuantTrio/Qwen3.6-27B-AWQ",
+  "revision": "9b507bdc9afafb87b7898700cc2a591aa6639461",
+  "fetched": "2026-09-26",
+  "safetensors_bytes": 21853077544,
+  "quantization": {
+    "method": "awq",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-04-22T23:51:58.000Z",
+    "last_modified": "2026-04-23T00:11:23.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3.6-27B"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 27781427952,
+    "parameters_by_dtype": {
+      "BF16": 5011600112,
+      "I32": 22769827840
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00008.safetensors",
+      "size": 2952818680
+    },
+    {
+      "path": "model-00002-of-00008.safetensors",
+      "size": 2969521480
+    },
+    {
+      "path": "model-00003-of-00008.safetensors",
+      "size": 2999244424
+    },
+    {
+      "path": "model-00004-of-00008.safetensors",
+      "size": 2997092080
+    },
+    {
+      "path": "model-00005-of-00008.safetensors",
+      "size": 2976080968
+    },
+    {
+      "path": "model-00006-of-00008.safetensors",
+      "size": 2997850024
+    },
+    {
+      "path": "model-00007-of-00008.safetensors",
+      "size": 2998375912
+    },
+    {
+      "path": "model-00008-of-00008.safetensors",
+      "size": 962093976
+    }
+  ]
+}

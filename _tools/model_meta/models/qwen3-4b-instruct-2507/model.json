@@ -1,0 +1,20 @@
+{
+  "model": "Qwen3-4B-Instruct-2507",
+  "repo": "Qwen/Qwen3-4B-Instruct-2507",
+  "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+  "config_sha256": "5beea1a4a34c62782bfb2f911c606741a3bab8f92d80a118fa053c28af12e8ba",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2025-08-05T10:58:03.000Z",
+    "last_modified": "2025-09-17T06:56:53.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 4022468096,
+    "parameters_by_dtype": {
+      "BF16": 4022468096
+    }
+  }
+}

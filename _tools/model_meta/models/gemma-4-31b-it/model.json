@@ -1,0 +1,22 @@
+{
+  "model": "Gemma-4-31B-it",
+  "repo": "google/gemma-4-31b-it",
+  "revision": "842da3794eaa0b77d5f08bae87a17459d91ff475",
+  "config_sha256": "e967dd38bc5cfd38bd09a995a7bf4a754075df2b46aba68f7fbb5a791e6d8dd1",
+  "fetched": "2026-09-26",
+  "hf": {
+    "created": "2026-03-11T18:22:36.000Z",
+    "last_modified": "2026-07-20T16:42:18.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "google/gemma-4-31B"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 31273088876,
+    "parameters_by_dtype": {
+      "BF16": 31273088876
+    }
+  }
+}
