@@ -270,7 +270,7 @@ def main():
     # Must stay identical to memoryBudget() and capacity() in
     # assets/js/benchmark-table.js: both reserves come off the physical memory
     # before the weights do, and the weights split evenly over tp × pp.
-    ctx_agentic = cfg.get("agentic_context_tokens", 131072)
+    ctx_agentic = cfg.get("agentic_context_tokens", 65536)
     conflicts, short = [], []
     for e in entries:
         base = device_base(e.get("device"))

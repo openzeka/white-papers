@@ -232,8 +232,8 @@ The speed figures come from 128-token prompts, and a real turn is that quick onl
 if the user's conversation is still in the cache, so that just the new message has
 to be processed. The memory limit therefore counts how many users' whole sessions
 fit in the cache at once. A session is as long as the **context length** set under
-the assumptions — every token it holds, history and replies included: 32K by
-default for chat, 128K for agentic work, whose sessions also carry tool calls and
+the assumptions — every token it holds, history and replies included: 16K by
+default for chat, 64K for agentic work, whose sessions also carry tool calls and
 their results. Beyond that number the system still runs, but a returning user
 waits while their conversation is processed again.
 
@@ -261,12 +261,11 @@ served as a 32 GB FP8 checkpoint on one 96 GB GPU:
 - memory for the engine: 96 × 95% = 91.2 GB; room for weights and cache: 91.2 × 80% = 72.96 GB
 - free for the KV cache: 72.96 − 32 = 40.96 GB
 - cache per token: 2 × 32 × 8 × 128 = 65,536 bytes, so 40.96 GB holds 625,000 tokens
-- chat: 625,000 ÷ 32,768 = 19 sessions; agentic: 625,000 ÷ 131,072 = 4
+- chat: 625,000 ÷ 16,384 = 38 sessions; agentic: 625,000 ÷ 65,536 = 9
 
 With Max C = 8 the speed limit is 32 chat and 12 agentic users, so the table shows
-**19** and **4**, both set by memory. Tighten TTFT until Max C falls to 4 and the
-speed limit becomes 16 and 6: chat is then set by speed (16), agentic still by
-memory (4).
+**32**, set by speed, and **9**, set by memory. Tighten TTFT until Max C falls to 4
+and the speed limit becomes 16 and 6: both are then set by speed.
 </div>
 
 ### How different model designs are handled
@@ -310,8 +309,8 @@ chains and prefix sharing all change real capacity.
 
 The memory limit is calculated, not read from the engine. Engine-specific storage
 details — block rounding, scale factors, separate cache pools, experts spread
-across data-parallel devices — can move it either way. A session holding 32K or
-128K tokens will also see a longer TTFT and a somewhat lower TPS than these
+across data-parallel devices — can move it either way. A session holding 16K or
+64K tokens will also see a longer TTFT and a somewhat lower TPS than these
 128-token measurements. Capacity is most meaningful where a full concurrency sweep
 stands behind it; a row measured only at C=1 rests on a single data point.
 

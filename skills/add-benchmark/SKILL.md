@@ -331,7 +331,7 @@ the user what you decided:
   are null and its rows show the speed limit alone. Tell the user which config
   fields the tool could not place.
 - **context window shorter than the default agentic context** — the model
-  cannot hold a 128K session, so its agentic capacity shows a dash. Correct if
+  cannot hold a 64K session, so its agentic capacity shows a dash. Correct if
   the config says so; tell the user.
 
 ## 7. Report back
