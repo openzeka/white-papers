@@ -186,8 +186,8 @@
     tps_threshold: 20,
     chat_multiplier: 4,
     agentic_multiplier: 1.5,
-    chat_context_tokens: 32768,
-    agentic_context_tokens: 131072,
+    chat_context_tokens: 16384,
+    agentic_context_tokens: 65536,
     engine_memory_discrete: 0.95,
     engine_memory_unified: 0.8,
     weights_kv_share: 0.8
@@ -506,7 +506,7 @@
     return capacity(entry, "agentic").shown;
   }
 
-  /* 32768 -> "32K", 1048576 -> "1M": the power-of-two convention context
+  /* 16384 -> "16K", 1048576 -> "1M": the power-of-two convention context
      lengths are quoted in. */
   function fmtTokens(n) {
     if (n >= 1048576 && n % 1048576 === 0) return n / 1048576 + "M";

@@ -243,8 +243,8 @@ konuşması hâlâ cache'teyse, yani yalnızca yeni mesajın işlenmesi gerekiyo
 kadar hızlıdır. Bu yüzden bellek sınırı, kaç kullanıcının oturumunun tamamının
 aynı anda cache'e sığdığını sayar. Bir oturumun uzunluğu, varsayımlarda
 ayarlanan **bağlam uzunluğudur** — geçmiş ve yanıtlar dahil tuttuğu bütün
-token'lar: chat için varsayılan 32K, oturumları araç çağrılarını ve sonuçlarını
-da taşıyan agentic iş için 128K. Bu sayının ötesinde sistem çalışmayı sürdürür,
+token'lar: chat için varsayılan 16K, oturumları araç çağrılarını ve sonuçlarını
+da taşıyan agentic iş için 64K. Bu sayının ötesinde sistem çalışmayı sürdürür,
 ama geri dönen bir kullanıcı konuşması yeniden işlenirken bekler.
 
 Hesap cihaz başına yapılır — GPU başına, DGX Spark'ta düğüm başına:
@@ -275,12 +275,12 @@ bir FP8 checkpoint olarak sunulan varsayımsal bir model, 96 GB'lık tek bir GPU
 - engine'in belleği: 96 × %95 = 91,2 GB; ağırlıklar ve cache için yer: 91,2 × %80 = 72,96 GB
 - KV cache için boş bellek: 72,96 − 32 = 40,96 GB
 - token başına cache: 2 × 32 × 8 × 128 = 65.536 bayt; yani 40,96 GB 625.000 token alır
-- chat: 625.000 ÷ 32.768 = 19 oturum; agentic: 625.000 ÷ 131.072 = 4
+- chat: 625.000 ÷ 16.384 = 38 oturum; agentic: 625.000 ÷ 65.536 = 9
 
-Maks C = 8 iken hız sınırı 32 chat ve 12 agentic kullanıcıdır; tablo **19** ve
-**4** gösterir ve ikisini de bellek belirler. TTFT hedefini Maks C 4'e düşene
-kadar sıkılaştırırsanız hız sınırı 16 ve 6 olur: chat'i artık hız (16),
-agentic'i hâlâ bellek (4) belirler.
+Maks C = 8 iken hız sınırı 32 chat ve 12 agentic kullanıcıdır; tablo hızın
+belirlediği **32** ve belleğin belirlediği **9** değerlerini gösterir. TTFT
+hedefini Maks C 4'e düşene kadar sıkılaştırırsanız hız sınırı 16 ve 6 olur:
+ikisini de artık hız belirler.
 </div>
 
 ### Farklı model tasarımları nasıl ele alınıyor {#farkli-model-tasarimlari}
@@ -327,8 +327,8 @@ kapasiteyi değiştirir.
 
 Bellek sınırı engine'den okunmaz, hesaplanır. Engine'e özgü saklama
 ayrıntıları — blok yuvarlama, ölçek katsayıları, ayrı cache havuzları, data
-paralel cihazlara dağıtılan uzmanlar — onu iki yönde de oynatabilir. 32K ya da
-128K token tutan bir oturum da bu 128 tokenlık ölçümlerden daha uzun bir TTFT ve
+paralel cihazlara dağıtılan uzmanlar — onu iki yönde de oynatabilir. 16K ya da
+64K token tutan bir oturum da bu 128 tokenlık ölçümlerden daha uzun bir TTFT ve
 biraz daha düşük bir TPS görür. Kapasite, arkasında tam bir eşzamanlılık
 taraması olduğunda en anlamlıdır; yalnızca C=1'de ölçülmüş bir satır tek bir
 veri noktasına dayanır.
