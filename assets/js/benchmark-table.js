@@ -189,7 +189,7 @@
     chat_context_tokens: 16384,
     agentic_context_tokens: 65536,
     engine_memory_discrete: 0.95,
-    engine_memory_unified: 0.8,
+    engine_memory_unified: 0.85,
     weights_kv_share: 0.8
   };
 
