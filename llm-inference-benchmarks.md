@@ -240,7 +240,7 @@ waits while their conversation is processed again.
 It is worked out per device — per GPU, or per node on DGX Spark:
 
 1. **Memory for the engine** = device memory × Engine Memory Allocation: 95% on a
-   discrete GPU (DGX B300, RTX PRO 6000), 80% on unified memory (DGX Spark, Jetson
+   discrete GPU (DGX B300, RTX PRO 6000), 85% on unified memory (DGX Spark, Jetson
    Thor), where the operating system shares the same pool.
 2. **Room for weights and cache** = that × Weights and KV Cache Share (80%). The
    other 20% is working memory for activations and runtime buffers.

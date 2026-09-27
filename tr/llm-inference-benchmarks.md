@@ -251,7 +251,7 @@ Hesap cihaz başına yapılır — GPU başına, DGX Spark'ta düğüm başına:
 
 1. **Engine'in belleği** = cihaz belleği × Engine Bellek Tahsisi: ayrık GPU'da
    (DGX B300, RTX PRO 6000) %95, işletim sisteminin de aynı havuzu paylaştığı
-   birleşik bellekte (DGX Spark, Jetson Thor) %80.
+   birleşik bellekte (DGX Spark, Jetson Thor) %85.
 2. **Ağırlıklar ve cache için yer** = bunun × Ağırlık ve KV Cache Payı (%80).
    Kalan %20, aktivasyonlar ve çalışma zamanı tamponları için çalışma
    belleğidir.
