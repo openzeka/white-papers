@@ -252,8 +252,8 @@ Hesap cihaz başına yapılır — GPU başına, DGX Spark'ta düğüm başına:
 1. **Engine'in belleği** = cihaz belleği × Engine Bellek Tahsisi: ayrık GPU'da
    (DGX B300, RTX PRO 6000) %95, işletim sisteminin de aynı havuzu paylaştığı
    birleşik bellekte (DGX Spark, Jetson Thor) %85.
-2. **Ağırlıklar ve cache için yer** = bunun × Ağırlık ve KV Cache Payı (%80).
-   Kalan %20, aktivasyonlar ve çalışma zamanı tamponları için çalışma
+2. **Ağırlıklar ve cache için yer** = bunun × Ağırlık ve KV Cache Payı (%90).
+   Kalan %10, aktivasyonlar ve çalışma zamanı tamponları için çalışma
    belleğidir.
 3. **KV cache için boş bellek** = bundan bu cihazdaki ağırlıklar çıkarılır:
    çalıştırmanın yüklediği checkpoint'in boyutu, bölündüğü TP × PP cihaza
@@ -272,13 +272,13 @@ boyutudur.
 bir FP8 checkpoint olarak sunulan varsayımsal bir model, 96 GB'lık tek bir GPU
 üzerinde:
 
-- engine'in belleği: 96 × %95 = 91,2 GB; ağırlıklar ve cache için yer: 91,2 × %80 = 72,96 GB
-- KV cache için boş bellek: 72,96 − 32 = 40,96 GB
-- token başına cache: 2 × 32 × 8 × 128 = 65.536 bayt; yani 40,96 GB 625.000 token alır
-- chat: 625.000 ÷ 16.384 = 38 oturum; agentic: 625.000 ÷ 65.536 = 9
+- engine'in belleği: 96 × %95 = 91,2 GB; ağırlıklar ve cache için yer: 91,2 × %90 = 82,08 GB
+- KV cache için boş bellek: 82,08 − 32 = 50,08 GB
+- token başına cache: 2 × 32 × 8 × 128 = 65.536 bayt; yani 50,08 GB 764.160 token alır
+- chat: 764.160 ÷ 16.384 = 46 oturum; agentic: 764.160 ÷ 65.536 = 11
 
 Maks C = 8 iken hız sınırı 32 chat ve 12 agentic kullanıcıdır; tablo hızın
-belirlediği **32** ve belleğin belirlediği **9** değerlerini gösterir. TTFT
+belirlediği **32** ve belleğin belirlediği **11** değerlerini gösterir. TTFT
 hedefini Maks C 4'e düşene kadar sıkılaştırırsanız hız sınırı 16 ve 6 olur:
 ikisini de artık hız belirler.
 </div>
