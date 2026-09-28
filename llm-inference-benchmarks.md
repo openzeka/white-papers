@@ -73,7 +73,8 @@ text at that rate.
 ### 4. Read Max C and the capacity columns
 
 **Max C** is the highest measured concurrency that meets both targets. It counts
-simultaneous requests.
+simultaneous requests. A plus — **64+** — means the run met both targets even at
+the highest level it was tested at, so its real maximum was not reached.
 
 **Chat Capacity** and **Agentic Capacity** turn that into a number of people and
 check it against memory. Each shows the smaller of two estimates, and the icon
@@ -82,6 +83,10 @@ beside the figure says which one set it:
 - a lightning bolt — the speed targets;
 - a memory chip — the KV cache memory;
 - a warning triangle — the chosen context length is longer than the model can hold.
+
+A plus on a capacity figure — **256+** — follows from a Max C with a plus: speed
+set the figure, but the speed limit was never reached, so the figure is a minimum.
+Sorting and the minimum-capacity filters use the number itself.
 
 Hover over a figure for a one-line reason. *What the numbers mean and how they
 are calculated*, below, explains both estimates in full.

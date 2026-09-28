@@ -94,6 +94,7 @@
     whyUnknown: "Donanım ya da ağırlık hassasiyeti bellek tablosunda olmadığı için KV cache bellek sınırı hesaplanamıyor; bu değer yalnızca hız ölçümlerine dayanır.",
     capShortCtx: function (len, ctx) { return ctx + " tokenlık bir oturum, bu modelin " + len + " tokenlık bağlam penceresinden — tutabileceği en fazla tokendan — uzun; model bu uzunlukta oturumlara hizmet veremez. Bir değer görmek için daha kısa bir bağlam uzunluğu seçin."; },
     capCeiling: function (c) { return " Hız değeri bir alt sınırdır: çalıştırma, test edilen en yüksek seviye olan C=" + c + " noktasında da hedeflerinizi karşıladı."; },
+    maxcAtLeast: function (c) { return "En az " + c + ": çalıştırma, test edilen en yüksek seviye olan C=" + c + " noktasında da hedeflerinizi karşıladı; gerçek üst sınıra ulaşılmadı."; },
     capHeading: "Kapasite",
     capChatRow: function (ctx) { return "Chat · " + ctx + " tokenlık oturumlar"; },
     capAgenticRow: function (ctx) { return "Agentic · " + ctx + " tokenlık oturumlar"; },
@@ -146,9 +147,9 @@
       quant: "<strong>Kuantizasyon</strong><p>Ağırlıkların saklandığı sayı biçimi.</p><p>Ağırlık başına daha az bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar risk taşır. BF16 ve FP16 tam hassasiyettir, FP8 ve MXFP8 8 bit, NVFP4, MXFP4, FP4, INT4 ve AWQ 4 bit kullanır.</p>",
       tps: "<strong>TPS — saniyedeki token</strong><p>Seçili eşzamanlılıkta tek bir isteğin yanıtının üretilme hızı. Bir token kabaca bir kelimenin dörtte üçüdür.</p><p>Toplam değil, istek başınadır: C=8'de sekiz isteğin her biri bu hızı alır. 128 tokenlık istem ve yanıtlarla on turun ortalamasıdır. Yüksek olması iyidir.</p>",
       ttft: "<strong>TTFT — ilk token süresi</strong><p>Seçili eşzamanlılıkta bir isteğin ilk token'ı için beklediği süre, milisaniye cinsinden.</p><p>128 tokenlık istemlerle on turun ortalamasıdır; daha uzun istemler kabaca orantılı olarak daha uzun sürer. Düşük olması iyidir.</p>",
-      maxc: "<strong>Maks C — desteklenen en yüksek eşzamanlılık</strong><p>TTFT ve TPS hedeflerinizin ikisinin birden karşılandığı en yüksek ölçülmüş eşzamanlılık. Kişileri değil, aynı anda çalışan istekleri sayar.</p><p>Hedeflerinizi izler: birini sıkılaştırırsanız Maks C düşebilir. 0, hiçbir ölçülmüş seviyenin geçmediği anlamına gelir.</p>",
-      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı sohbet için aynı anda kabaca kaç kişinin kullanabileceği — iki tahminden küçük olanı:</p><p><strong>Hız:</strong> Maks C × Chat Kullanım Çarpanı; chat kullanıcıları zamanlarının çoğunu okuyup yazarak geçirir.<br><strong>Bellek:</strong> KV cache'e Chat Bağlam Uzunluğunda kaç oturumun sığdığı.</p><p>Simge, değeri hangisinin belirlediğini gösterir. Ölçülmüş bir kullanıcı sayısı değil, tahmindir.</p>",
-      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını yürüttüğü agentic iş için bu yapılandırmayı aynı anda kabaca kaç kişinin kullanabileceği — iki tahminden küçük olanı:</p><p><strong>Hız:</strong> Maks C × Agentic Kullanım Çarpanı; bir ajan çalışırken istek göndermeyi sürdürdüğü için chat'tekinden düşüktür.<br><strong>Bellek:</strong> KV cache'e Agentic Bağlam Uzunluğunda kaç oturumun sığdığı.</p><p>Simge, değeri hangisinin belirlediğini gösterir. Ölçülmüş bir kullanıcı sayısı değil, tahmindir.</p>",
+      maxc: "<strong>Maks C — desteklenen en yüksek eşzamanlılık</strong><p>TTFT ve TPS hedeflerinizin ikisinin birden karşılandığı en yüksek ölçülmüş eşzamanlılık. Kişileri değil, aynı anda çalışan istekleri sayar.</p><p>Hedeflerinizi izler: birini sıkılaştırırsanız Maks C düşebilir. 0, hiçbir ölçülmüş seviyenin geçmediği anlamına gelir.</p><p>Artı işareti (64+), test edilen en yüksek seviyenin bile geçtiğini gösterir; gerçek üst sınır ölçülenden yüksektir.</p>",
+      chat: "<strong>Chat Kapasitesi</strong><p>Bu yapılandırmayı sohbet için aynı anda kabaca kaç kişinin kullanabileceği — iki tahminden küçük olanı:</p><p><strong>Hız:</strong> Maks C × Chat Kullanım Çarpanı; chat kullanıcıları zamanlarının çoğunu okuyup yazarak geçirir.<br><strong>Bellek:</strong> KV cache'e Chat Bağlam Uzunluğunda kaç oturumun sığdığı.</p><p>Artı işareti (256+), hedeflerinizi hiç kaçırmamış bir çalıştırmanın hız değerini işaretler: hız sınırına ulaşılmadığı için bu bir alt sınırdır.</p><p>Simge, değeri hangisinin belirlediğini gösterir. Ölçülmüş bir kullanıcı sayısı değil, tahmindir.</p>",
+      agentic: "<strong>Agentic Kapasitesi</strong><p>Modelin çok adımlı görevleri ve araç çağrılarını yürüttüğü agentic iş için bu yapılandırmayı aynı anda kabaca kaç kişinin kullanabileceği — iki tahminden küçük olanı:</p><p><strong>Hız:</strong> Maks C × Agentic Kullanım Çarpanı; bir ajan çalışırken istek göndermeyi sürdürdüğü için chat'tekinden düşüktür.<br><strong>Bellek:</strong> KV cache'e Agentic Bağlam Uzunluğunda kaç oturumun sığdığı.</p><p>Artı işareti (256+), hedeflerinizi hiç kaçırmamış bir çalıştırmanın hız değerini işaretler: hız sınırına ulaşılmadığı için bu bir alt sınırdır.</p><p>Simge, değeri hangisinin belirlediğini gösterir. Ölçülmüş bir kullanıcı sayısı değil, tahmindir.</p>",
       par: "<strong>Paralellik — TP / DP / PP</strong><p>Modelin GPU'lara ya da makinelere nasıl bölündüğü.</p><p><strong>TP</strong> her katmanın içindeki işi böler, <strong>PP</strong> farklı katmanları farklı cihazlara yerleştirir, <strong>DP</strong> ise her biri kendi isteklerine hizmet eden tam kopyalar çalıştırır. — kullanılmadığı anlamına gelir.</p>",
       engine: "<strong>Inference Engine</strong><p>Modeli yükleyip istekleri zamanlayan sunucu yazılımı; örneğin vLLM ya da SGLang.</p><p>Hıza donanım kadar etki eder: aynı model aynı donanımda engine'ler arasında ölçülebilir biçimde farklılaşabilir.</p>",
       mtp: "<strong>Spekülatif Kod Çözme</strong><p>Model birkaç token ilerisini taslak olarak üretip tek geçişte doğrular; kabul edilen token'lar korunur, böylece aynı çıktı daha erken gelir.</p><p>Evet, çalıştırmanın bunu kullandığı anlamına gelir. Mekanizma — MTP, bir taslak model ya da DSpark — ve kaç token ileri gidildiği satırın notlarında yazar.</p>",
@@ -495,6 +496,9 @@
       r.shown = Math.min(r.perf, r.mem);
       r.limit = r.perf < r.mem ? "perf" : r.mem < r.perf ? "mem" : "tie";
     }
+    /* Speed set the figure but the run never failed the targets: the true
+       figure is at least this, so the cell marks it with a plus. */
+    r.atLeast = r.ceiling && r.limit === "perf";
     return r;
   }
 
@@ -563,7 +567,7 @@
 
   function capCell(entry, kind) {
     var r = capacity(entry, kind);
-    var shown = r.limit === "context" ? '<span class="bt-muted">—</span>' : r.shown;
+    var shown = r.limit === "context" ? '<span class="bt-muted">—</span>' : r.shown + (r.atLeast ? "+" : "");
     return '<td class="bt-num bt-cap" title="' + escapeHTML(capTitle(r)) + '">' + shown + capIcons(r) + "</td>";
   }
 
@@ -597,7 +601,7 @@
         (r.mem === null ? S.capMemNa : S.capMemFits(r.mem));
       html += '<span class="bt-cap-label">' + escapeHTML(label) + "</span>";
       html += '<span class="bt-cap-result" title="' + escapeHTML(capTitle(r)) + '">' +
-        "<strong>" + (r.limit === "context" ? "—" : escapeHTML(S.capUsers(r.shown))) + "</strong>" +
+        "<strong>" + (r.limit === "context" ? "—" : escapeHTML(S.capUsers(r.atLeast ? r.shown + "+" : r.shown))) + "</strong>" +
         capIcons(r) + ' <span class="bt-cap-by">' + escapeHTML(by) + "</span>" +
         '<span class="bt-cap-detail">' + escapeHTML(detail) + "</span></span>";
     });
@@ -1456,7 +1460,12 @@
       }
       html += '<td class="' + ttftCls + '"' + ttftTitle + ">" + (ttft !== null ? fmt(ttft, 0) : "—") + "</td>";
 
-      html += '<td class="bt-num">' + (maxC > 0 ? maxC : '<span class="bt-muted">0</span>') + "</td>";
+      /* A plus when even the highest tested level met the targets: the real
+         maximum was not reached, so Max C is a minimum. */
+      var maxCOpen = maxC > 0 && maxC === highestTestedC(entry);
+      html += maxCOpen ?
+        '<td class="bt-num" title="' + escapeHTML(S.maxcAtLeast(maxC)) + '">' + maxC + "+</td>" :
+        '<td class="bt-num">' + (maxC > 0 ? maxC : '<span class="bt-muted">0</span>') + "</td>";
       html += capCell(entry, "chat");
       html += capCell(entry, "agentic");
       html += '<td class="bt-num">' + (entry.tp != null && entry.tp !== 1 ? entry.tp : '<span class="bt-muted">—</span>') + "</td>";
