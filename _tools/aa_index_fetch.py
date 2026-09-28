@@ -31,6 +31,9 @@ PINNED = {
     "Tencent-Hy3": "hy3",                                  # not hy3-preview, an older build
     "Nemotron-3-Ultra": "nvidia-nemotron-3-ultra-550b-a55b",
     "Muse-Glimmer-30B": "muse-glimmer",                    # AA's name carries no size; 30B is our assumption
+    "DeepSeek-V4-Pro": "deepseek-v4-pro-0424",             # AA now dates it; 0813 is a separate row
+    "DeepSeek-V4-Flash-Vision-Exp": "deepseek-v4-flash-vision",  # AA dropped the "Exp"
+    "MiMo-V2.6-Pro-RL": "mimo-v2-6-pro",                   # same model; AA lists it without "-RL"
 }
 # Not in AA's catalogue at all, so both fields stay null.
 UNTRACKED = {"Laguna-S-2.1"}

@@ -183,7 +183,11 @@ bağlam değerlendirmelerini birleştirir; ikincisi araç çağrılı, çok adı
 ölçer. İkisi de modeli tanımlar; bu yüzden bir modelin her satırı, donanım ne
 olursa olsun aynı iki değeri taşır. Birden fazla akıl yürütme seviyesi
 puanlanmışsa en yüksek olanı gösterilir; tire, puan yayımlanmadığı anlamına
-gelir. Agentic Endeksi modelin ne yapabildiğini ölçer; satırın devamındaki
+gelir. Değerler, 28 Eylül 2026'da alınan Intelligence Index v4.3 sürümündendir.
+Farklı endeks sürümlerinin puanları karşılaştırılamaz — v4.2 ve v4.3 daha zor
+görevler ekledi, bu yüzden her model v4.1'dekinden düşük puan alır — ve bazı
+eski modellerin henüz bir v4.3 Agentic Endeksi yoktur. Agentic Endeksi modelin
+ne yapabildiğini ölçer; satırın devamındaki
 Agentic Kapasitesi ise donanımın kaç kişiye hizmet edebileceğini tahmin eder.
 
 **Kuantizasyon** — ağırlıkların saklandığı sayı biçimi. Ağırlık başına daha az

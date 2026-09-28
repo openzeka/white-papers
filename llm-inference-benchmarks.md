@@ -174,7 +174,11 @@ combines evaluations of reasoning, coding, science and long-context work; the
 second measures multi-step work with tool calls. Both describe the model, so
 every row of one model carries the same pair, whatever the hardware. Where
 several reasoning-effort settings are scored, the highest is shown, and a dash
-means no score has been published. The Agentic Index measures what the model can
+means no score has been published. The values are from Intelligence Index
+v4.3, retrieved on 28 September 2026. Scores from different index versions are
+not comparable — v4.2 and v4.3 added harder tasks, so every model scores lower
+than it did under v4.1 — and some older models have no v4.3 Agentic Index yet.
+The Agentic Index measures what the model can
 do; Agentic Capacity, further along the row, estimates how many people the
 hardware can serve.
 
