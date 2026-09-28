@@ -5595,6 +5595,68 @@
       "kv_state_bytes": 0,
       "served_repo": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
       "weights_gb": 167.82
+    },
+    {
+      "id": "mimo-v2.6-pro-rl_b300_fp4_vllm_tp4",
+      "model": "MiMo-V2.6-Pro-RL",
+      "params": "1.02T",
+      "intelligence_index": null,
+      "agentic_index": null,
+      "device": "DGX B300",
+      "quantization": "FP4",
+      "engine": "vLLM",
+      "mtp": true,
+      "mtp_k": 7,
+      "tp": 4,
+      "notes": "DFlash speculative decoding, 1M context. Model: XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "sources": [],
+      "data_points": [
+        {
+          "c": 1,
+          "ttft_ms": 46.11,
+          "tps": 333.47
+        },
+        {
+          "c": 2,
+          "ttft_ms": 57.07,
+          "tps": 271.25
+        },
+        {
+          "c": 4,
+          "ttft_ms": 68.41,
+          "tps": 226.55
+        },
+        {
+          "c": 8,
+          "ttft_ms": 89.71,
+          "tps": 172.29
+        },
+        {
+          "c": 16,
+          "ttft_ms": 117.3,
+          "tps": 137.18
+        },
+        {
+          "c": 32,
+          "ttft_ms": 166.41,
+          "tps": 110.04
+        },
+        {
+          "c": 64,
+          "ttft_ms": 167.89,
+          "tps": 89.53
+        }
+      ],
+      "dp": null,
+      "pp": null,
+      "kv_bytes_per_token": 25600,
+      "kv_window_bytes": 19660800,
+      "kv_heads": 8,
+      "model_context_length": 1048576,
+      "kv_replicated_bytes_per_token": 0,
+      "kv_state_bytes": 0,
+      "served_repo": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "weights_gb": 566.05
     }
   ]
 }
