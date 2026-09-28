@@ -190,7 +190,7 @@
     agentic_context_tokens: 65536,
     engine_memory_discrete: 0.95,
     engine_memory_unified: 0.85,
-    weights_kv_share: 0.8
+    weights_kv_share: 0.9
   };
 
   var rawData = null;

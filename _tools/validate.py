@@ -283,7 +283,7 @@ def main():
         tp, pp = e.get("tp") or 1, e.get("pp") or 1
         alloc = cfg.get("engine_memory_unified", 0.85) if base in unified \
             else cfg.get("engine_memory_discrete", 0.95)
-        budget = gb * 1e9 * alloc * cfg.get("weights_kv_share", 0.8)
+        budget = gb * 1e9 * alloc * cfg.get("weights_kv_share", 0.9)
         weights = total / (tp * pp)
         if weights >= budget:
             conflicts.append(f"{e['id']} ({weights / 1e9:.0f} GB of weights per device "

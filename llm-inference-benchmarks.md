@@ -242,8 +242,8 @@ It is worked out per device — per GPU, or per node on DGX Spark:
 1. **Memory for the engine** = device memory × Engine Memory Allocation: 95% on a
    discrete GPU (DGX B300, RTX PRO 6000), 85% on unified memory (DGX Spark, Jetson
    Thor), where the operating system shares the same pool.
-2. **Room for weights and cache** = that × Weights and KV Cache Share (80%). The
-   other 20% is working memory for activations and runtime buffers.
+2. **Room for weights and cache** = that × Weights and KV Cache Share (90%). The
+   other 10% is working memory for activations and runtime buffers.
 3. **Free for the KV cache** = that − the weights held on this device: the size of
    the checkpoint the run served, divided over the TP × PP devices it is split across.
 4. **One session** = context length × the model's cache per token, stored at FP8
@@ -258,13 +258,13 @@ standard transformer it is 2 (a key and a value) × layers × KV heads × head s
 **Worked example.** A hypothetical 32-layer model with 8 KV heads of size 128,
 served as a 32 GB FP8 checkpoint on one 96 GB GPU:
 
-- memory for the engine: 96 × 95% = 91.2 GB; room for weights and cache: 91.2 × 80% = 72.96 GB
-- free for the KV cache: 72.96 − 32 = 40.96 GB
-- cache per token: 2 × 32 × 8 × 128 = 65,536 bytes, so 40.96 GB holds 625,000 tokens
-- chat: 625,000 ÷ 16,384 = 38 sessions; agentic: 625,000 ÷ 65,536 = 9
+- memory for the engine: 96 × 95% = 91.2 GB; room for weights and cache: 91.2 × 90% = 82.08 GB
+- free for the KV cache: 82.08 − 32 = 50.08 GB
+- cache per token: 2 × 32 × 8 × 128 = 65,536 bytes, so 50.08 GB holds 764,160 tokens
+- chat: 764,160 ÷ 16,384 = 46 sessions; agentic: 764,160 ÷ 65,536 = 11
 
 With Max C = 8 the speed limit is 32 chat and 12 agentic users, so the table shows
-**32**, set by speed, and **9**, set by memory. Tighten TTFT until Max C falls to 4
+**32**, set by speed, and **11**, set by memory. Tighten TTFT until Max C falls to 4
 and the speed limit becomes 16 and 6: both are then set by speed.
 </div>
 
