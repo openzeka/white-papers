@@ -94,6 +94,7 @@
     whyUnknown: "The KV cache memory limit cannot be calculated, because the hardware or the weight precision is missing from the memory table, so this figure rests on the speed measurements alone.",
     capShortCtx: function (len, ctx) { return "A " + ctx + "-token session is longer than this model's " + len + "-token context window — the most it can hold — so it cannot serve sessions that long. Choose a shorter context length to see a figure."; },
     capCeiling: function (c) { return " The speed figure is a lower bound: the run still met your targets at C=" + c + ", the highest level tested."; },
+    maxcAtLeast: function (c) { return "At least " + c + ": the run met your targets at C=" + c + ", the highest level tested, so its real maximum was not reached."; },
     capHeading: "Capacity",
     capChatRow: function (ctx) { return "Chat · " + ctx + "-token sessions"; },
     capAgenticRow: function (ctx) { return "Agentic · " + ctx + "-token sessions"; },
@@ -146,9 +147,9 @@
       quant: "<strong>Quantization</strong><p>The number format the weights are stored in.</p><p>Fewer bits per weight means less memory and usually more speed, at some risk to quality. BF16 and FP16 are full precision, FP8 and MXFP8 use 8 bits, and NVFP4, MXFP4, FP4, INT4 and AWQ use 4.</p>",
       tps: "<strong>TPS — tokens per second</strong><p>How fast one request’s reply is produced at the selected concurrency. A token is about three quarters of a word.</p><p>Per request, not in total: at C=8, each of the eight requests gets this rate. Mean of ten rounds with 128-token prompts and replies. Higher is better.</p>",
       ttft: "<strong>TTFT — time to first token</strong><p>How long a request waits for its first token at the selected concurrency, in milliseconds.</p><p>Mean of ten rounds with 128-token prompts; longer prompts take roughly proportionally longer. Lower is better.</p>",
-      maxc: "<strong>Max C — maximum supported concurrency</strong><p>The highest measured concurrency at which both your TTFT and your TPS target are met. It counts simultaneous requests, not people.</p><p>It follows your targets: tighten one and Max C can fall. 0 means no measured level passes.</p>",
-      chat: "<strong>Chat Capacity</strong><p>Roughly how many people can use this configuration for chat at once — the smaller of two estimates:</p><p><strong>Speed:</strong> Max C × Chat Usage Multiplier, because chat users spend most of their time reading and typing.<br><strong>Memory:</strong> how many sessions of the Chat Context Length fit in the KV cache.</p><p>The icon shows which one set the figure. An estimate, not a measured user count.</p>",
-      agentic: "<strong>Agentic Capacity</strong><p>Roughly how many people can use this configuration at once for agentic work, where the model carries out multi-step tasks and tool calls — the smaller of two estimates:</p><p><strong>Speed:</strong> Max C × Agentic Usage Multiplier, lower than for chat because an agent keeps sending requests while it works.<br><strong>Memory:</strong> how many sessions of the Agentic Context Length fit in the KV cache.</p><p>The icon shows which one set the figure. An estimate, not a measured user count.</p>",
+      maxc: "<strong>Max C — maximum supported concurrency</strong><p>The highest measured concurrency at which both your TTFT and your TPS target are met. It counts simultaneous requests, not people.</p><p>It follows your targets: tighten one and Max C can fall. 0 means no measured level passes.</p><p>A plus (64+) means even the highest level tested passed, so the real maximum is higher than measured.</p>",
+      chat: "<strong>Chat Capacity</strong><p>Roughly how many people can use this configuration for chat at once — the smaller of two estimates:</p><p><strong>Speed:</strong> Max C × Chat Usage Multiplier, because chat users spend most of their time reading and typing.<br><strong>Memory:</strong> how many sessions of the Chat Context Length fit in the KV cache.</p><p>A plus (256+) marks a speed figure from a run that never failed your targets: it is a minimum, because the speed limit was not reached.</p><p>The icon shows which one set the figure. An estimate, not a measured user count.</p>",
+      agentic: "<strong>Agentic Capacity</strong><p>Roughly how many people can use this configuration at once for agentic work, where the model carries out multi-step tasks and tool calls — the smaller of two estimates:</p><p><strong>Speed:</strong> Max C × Agentic Usage Multiplier, lower than for chat because an agent keeps sending requests while it works.<br><strong>Memory:</strong> how many sessions of the Agentic Context Length fit in the KV cache.</p><p>A plus (256+) marks a speed figure from a run that never failed your targets: it is a minimum, because the speed limit was not reached.</p><p>The icon shows which one set the figure. An estimate, not a measured user count.</p>",
       par: "<strong>Parallelism — TP / DP / PP</strong><p>How the model is split across GPUs or machines.</p><p><strong>TP</strong> divides the work inside each layer, <strong>PP</strong> places different layers on different devices, and <strong>DP</strong> runs full copies that each serve their own requests. — means not used.</p>",
       engine: "<strong>Inference Engine</strong><p>The server software that loads the model and schedules requests, such as vLLM or SGLang.</p><p>It affects speed as much as the hardware does: the same model on the same hardware can differ measurably between engines.</p>",
       mtp: "<strong>Speculative Decoding</strong><p>The model drafts several tokens ahead and checks them in one pass; accepted tokens are kept, so the same output arrives sooner.</p><p>Yes means the run used it. The mechanism — MTP, a draft model or DSpark — and how far ahead it drafted are in the row’s notes.</p>",
@@ -495,6 +496,9 @@
       r.shown = Math.min(r.perf, r.mem);
       r.limit = r.perf < r.mem ? "perf" : r.mem < r.perf ? "mem" : "tie";
     }
+    /* Speed set the figure but the run never failed the targets: the true
+       figure is at least this, so the cell marks it with a plus. */
+    r.atLeast = r.ceiling && r.limit === "perf";
     return r;
   }
 
@@ -563,7 +567,7 @@
 
   function capCell(entry, kind) {
     var r = capacity(entry, kind);
-    var shown = r.limit === "context" ? '<span class="bt-muted">—</span>' : r.shown;
+    var shown = r.limit === "context" ? '<span class="bt-muted">—</span>' : r.shown + (r.atLeast ? "+" : "");
     return '<td class="bt-num bt-cap" title="' + escapeHTML(capTitle(r)) + '">' + shown + capIcons(r) + "</td>";
   }
 
@@ -597,7 +601,7 @@
         (r.mem === null ? S.capMemNa : S.capMemFits(r.mem));
       html += '<span class="bt-cap-label">' + escapeHTML(label) + "</span>";
       html += '<span class="bt-cap-result" title="' + escapeHTML(capTitle(r)) + '">' +
-        "<strong>" + (r.limit === "context" ? "—" : escapeHTML(S.capUsers(r.shown))) + "</strong>" +
+        "<strong>" + (r.limit === "context" ? "—" : escapeHTML(S.capUsers(r.atLeast ? r.shown + "+" : r.shown))) + "</strong>" +
         capIcons(r) + ' <span class="bt-cap-by">' + escapeHTML(by) + "</span>" +
         '<span class="bt-cap-detail">' + escapeHTML(detail) + "</span></span>";
     });
@@ -1456,7 +1460,12 @@
       }
       html += '<td class="' + ttftCls + '"' + ttftTitle + ">" + (ttft !== null ? fmt(ttft, 0) : "—") + "</td>";
 
-      html += '<td class="bt-num">' + (maxC > 0 ? maxC : '<span class="bt-muted">0</span>') + "</td>";
+      /* A plus when even the highest tested level met the targets: the real
+         maximum was not reached, so Max C is a minimum. */
+      var maxCOpen = maxC > 0 && maxC === highestTestedC(entry);
+      html += maxCOpen ?
+        '<td class="bt-num" title="' + escapeHTML(S.maxcAtLeast(maxC)) + '">' + maxC + "+</td>" :
+        '<td class="bt-num">' + (maxC > 0 ? maxC : '<span class="bt-muted">0</span>') + "</td>";
       html += capCell(entry, "chat");
       html += capCell(entry, "agentic");
       html += '<td class="bt-num">' + (entry.tp != null && entry.tp !== 1 ? entry.tp : '<span class="bt-muted">—</span>') + "</td>";

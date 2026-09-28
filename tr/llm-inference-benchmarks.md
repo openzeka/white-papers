@@ -77,7 +77,9 @@ Bir TPS değerinin nasıl hissettirdiğini görmek isterseniz, hedeflerin altın
 ### 4. Maks C ve kapasite sütunlarını okuyun {#maks-c-ve-kapasite-sutunlarini-okuyun}
 
 **Maks C**, iki hedefi birden karşılayan en yüksek ölçülmüş eşzamanlılıktır.
-Aynı anda çalışan istekleri sayar.
+Aynı anda çalışan istekleri sayar. Artı işareti — **64+** — çalıştırmanın test
+edildiği en yüksek seviyede bile iki hedefi karşıladığını, yani gerçek üst
+sınırına ulaşılmadığını gösterir.
 
 **Chat Kapasitesi** ve **Agentic Kapasitesi** bunu kişi sayısına çevirir ve
 belleğe karşı sınar. Her biri iki tahminden küçük olanını gösterir; değerin
@@ -86,6 +88,10 @@ yanındaki simge hangisinin belirlediğini söyler:
 - şimşek — hız hedefleri;
 - bellek yongası — KV cache belleği;
 - uyarı üçgeni — seçilen bağlam uzunluğu, modelin tutabileceğinden uzun.
+
+Bir kapasite değerindeki artı işareti — **256+** — artılı bir Maks C'den gelir:
+değeri hız belirlemiştir ama hız sınırına hiç ulaşılmamıştır; bu yüzden değer bir
+alt sınırdır. Sıralama ve en az kapasite filtreleri sayının kendisini kullanır.
 
 Tek satırlık gerekçe için değerin üzerine gelin. İki tahmin de aşağıdaki
 *Sayılar ne anlama geliyor, nasıl hesaplanıyor?* bölümünde ayrıntısıyla
