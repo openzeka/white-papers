@@ -146,8 +146,15 @@ this list is recoverable from the folder.
    - `null` is the correct answer when AA publishes no score. It is not zero, and
      the table renders it as an em dash. Many rows have no Agentic Index.
    - Never invent or interpolate these. If the user is unsure, the supported
-     automated path is `AA_API_KEY=... python3 _tools/aa_index_fetch.py --write`,
-     which resolves every model and leaves anything ambiguous untouched.
+     automated path is `python3 _tools/aa_index_fetch.py` (a dry run; add
+     `--write` to apply), which resolves every model and leaves anything
+     ambiguous untouched.
+   - It needs an Artificial Analysis API key, which the team has. Each person
+     keeps their own copy in `~/.aa_key` on their own machine — one line, the
+     key only, `chmod 600` — and the script reads it from there (or from
+     `AA_API_KEY` if set). Check the file exists before running; if it does
+     not, ask the user for the key and save it there. **Never write the key
+     into the repository, a commit, a PR, or any file that ships.**
    - Attribution is a licensing condition. It already sits under the widget and
      inside `benchmarks.json`; do not remove it.
 

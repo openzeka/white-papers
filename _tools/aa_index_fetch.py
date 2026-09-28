@@ -2,9 +2,13 @@
 """Refresh intelligence_index / agentic_index in assets/data/benchmarks.json
 from the Artificial Analysis Data API.
 
-    export AA_API_KEY=...          # free key: https://artificialanalysis.ai/data-api
     python3 _tools/aa_index_fetch.py            # dry run — prints what would change
     python3 _tools/aa_index_fetch.py --write    # applies it
+
+The API key is read from AA_API_KEY, or else from ~/.aa_key — one line holding
+the key, on each person's own machine, readable only by them (chmod 600). Get a
+free key at https://artificialanalysis.ai/data-api. The key never goes into this
+repository.
 
 Never guesses. A model it cannot resolve to exactly one AA entry is listed for a
 human, with near misses, and its two fields are left untouched.
@@ -75,7 +79,12 @@ def main():
 
     key = os.environ.get("AA_API_KEY")
     if not key:
-        sys.exit("set AA_API_KEY (free key at https://artificialanalysis.ai/data-api)")
+        path = os.path.expanduser("~/.aa_key")
+        if os.path.isfile(path):
+            key = open(path, encoding="utf-8").read().strip()
+    if not key:
+        sys.exit("no API key: put it in ~/.aa_key (chmod 600) or set AA_API_KEY — "
+                 "free key at https://artificialanalysis.ai/data-api")
 
     raw = open(a.data, encoding="utf-8").read()
     doc = json.loads(raw, object_pairs_hook=collections.OrderedDict)
