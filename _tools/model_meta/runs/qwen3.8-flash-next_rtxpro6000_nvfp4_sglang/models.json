@@ -1,0 +1,14 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "nvidia/Qwen3.8-Flash-Next-NVFP4",
+      "object": "model",
+      "created": 1789641718,
+      "owned_by": "sglang",
+      "root": "nvidia/Qwen3.8-Flash-Next-NVFP4",
+      "parent": null,
+      "max_model_len": 262144
+    }
+  ]
+}

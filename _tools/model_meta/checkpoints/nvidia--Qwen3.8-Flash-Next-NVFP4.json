@@ -1,0 +1,74 @@
+{
+  "repo": "nvidia/Qwen3.8-Flash-Next-NVFP4",
+  "revision": "fc694b54fb0174e0913e6adf86691ef85a4ead47",
+  "fetched": "2026-09-28",
+  "safetensors_bytes": 132680249378,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-09-02T04:03:35.000Z",
+    "last_modified": "2026-09-05T23:36:02.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": [
+      "Qwen/Qwen3.8-Flash-Next"
+    ],
+    "library": "Model Optimizer",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 119602003859,
+    "parameters_by_dtype": {
+      "I64": 35,
+      "BF16": 5487198064,
+      "U8": 60397977600,
+      "F8_E4M3": 53716828160
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00010.safetensors",
+      "size": 3115991696
+    },
+    {
+      "path": "model-00002-of-00010.safetensors",
+      "size": 10005510304
+    },
+    {
+      "path": "model-00003-of-00010.safetensors",
+      "size": 10005364728
+    },
+    {
+      "path": "model-00004-of-00010.safetensors",
+      "size": 10006060112
+    },
+    {
+      "path": "model-00005-of-00010.safetensors",
+      "size": 10005362392
+    },
+    {
+      "path": "model-00006-of-00010.safetensors",
+      "size": 10005375328
+    },
+    {
+      "path": "model-00007-of-00010.safetensors",
+      "size": 10005956544
+    },
+    {
+      "path": "model-00008-of-00010.safetensors",
+      "size": 10005375200
+    },
+    {
+      "path": "model-00009-of-00010.safetensors",
+      "size": 5679113808
+    },
+    {
+      "path": "model-00010-of-00010.safetensors",
+      "size": 128587536
+    },
+    {
+      "path": "model-fp8-mtp-ple.safetensors",
+      "size": 53717551730
+    }
+  ]
+}
