@@ -5600,7 +5600,7 @@
       "id": "mimo-v2.6-pro-rl_b300_fp4_vllm_tp4",
       "model": "MiMo-V2.6-Pro-RL",
       "params": "1.02T",
-      "intelligence_index": null,
+      "intelligence_index": 46.3,
       "agentic_index": null,
       "device": "DGX B300",
       "quantization": "FP4",
