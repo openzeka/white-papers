@@ -1,7 +1,7 @@
 ---
 title: DeepSeek-V4.1-Flash 8× DGX Spark TP8 Deployment
 parent: White Papers
-nav_order: 10
+nav_order: 11
 lang: en
 page_id: deepseek-v4.1-flash-8spark-deployment
 date: 2026-09-17 08:34:11 +0300
@@ -11,7 +11,7 @@ description: >-
   Spark (GB10) with TP8: two configurations (300K Engram-in-memory, 1M
   Engram-on-disk), NCCL optimization, benchmark results and TP4 comparison.
 permalink: /papers/deepseek-v4.1-flash-8spark-deployment/
-last_modified_date: 2026-09-26
+last_modified_date: 2026-09-29
 toc: true
 ---
 
@@ -40,7 +40,7 @@ Two configurations were tested:
 
 Both configurations use DSpark k=5 speculative decoding, CUDA graphs (`FULL_AND_PIECEWISE` mode), and vision and tool calling enabled.
 
-> **Why two configurations?** The Engram-on-disk patch stages rows into GPU memory before the forward pass, enabling CUDA graph capture. At 300K context, however, the unified memory across 8 ranks is enough to hold Engram in pinned host memory instead. The 300K-memory configuration tests whether the simpler stock path is faster when context is bounded; the 1M-disk configuration tests the maximum context ceiling.
+> **Why two configurations?** The Engram-on-disk patch stages rows into GPU memory before the forward pass, enabling CUDA graph capture. At 300K context, however, the unified memory across 8 ranks is enough to hold Engram in pinned host memory instead. The 300K-memory configuration tests whether the simpler stock path is faster when context is bounded; the 1M-disk configuration raises the configured context ceiling. The benchmarks use short prompts and do not test the maximum context length.
 
 ---
 
@@ -221,7 +221,7 @@ sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp8-1m.y
 | 1M context requirement | ~3.7 GB |
 | **Free headroom** | ~26 GB |
 
-The Engram-on-disk configuration leaves significantly more memory for KV cache (~30 GB vs ~8.7 GB), which is what enables 1M context. The trade-off is disk I/O latency per decode step.
+The Engram-on-disk configuration reports more memory allocated to KV cache (~30 GB vs ~8.7 GB) and a 1M configured context limit. Table placement, memory settings and execution paths all differ, so the measured speed difference is not an isolated disk-I/O penalty. See [Conditional Memory and Offloading in LLM Inference]({{ '/papers/conditional-memory-offloading/' | relative_url }}) for the mechanism and the same-hardware comparison.
 
 ---
 
@@ -273,8 +273,8 @@ Measurements were taken with [CordatusAI/llm-benchmark](https://github.com/Corda
 
 ### 7.5 Assessment
 
-- **TP8-300K is faster than TP8-1M at every concurrency level** for TPS (35.98 vs 33.28 at C=1), despite the 1M configuration having Engram on disk (which should enable CUDA graphs). The 1M context overhead and AutoTuner profiling cost outweigh the CUDA graph benefit at these concurrency levels.
-- **TTFT at C=1** is lower for the 1M configuration (199 ms vs 213 ms) — the Engram-on-disk path avoids the host round-trip during prefill.
+- **TP8-300K has higher TPS than TP8-1M at every tested concurrency level** (35.98 vs 33.28 at C=1). This compares the complete configurations; the measurements do not isolate the effects of table placement, context settings, CUDA graphs or AutoTuner.
+- **TTFT at C=1** is lower for the 1M configuration (199 ms vs 213 ms). The execution paths differ; this measurement alone does not identify the cause.
 - **Max C = 4** for TP8-300K and **2** for TP8-1M at the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s). TP8-300K doubles the TP4 capacity (Max C=2); TP8-1M reaches 17.07 tok/s at C=4, just under the TPS target.
 - **TPS decline** from C=1 to C=8: 62% drop (300K), 65% drop (1M) — memory bandwidth contention as the cluster approaches saturation.
 
@@ -326,7 +326,7 @@ At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s), TP8
 1. **NCCL 8-rank overhead is significant.** The default 64 channels consume ~37 GB/rank. `NCCL_MAX_NCHANNELS=8` and `NCCL_BUFFSIZE=1048576` reduce this to ~11 GB — a critical optimization without which the model cannot fit.
 2. **`memlock=-1` and `IPC_LOCK` are mandatory for 8-rank RDMA.** Without them, NCCL initialization fails with `ibv_reg_mr_iova2 failed with error Cannot allocate memory`.
 3. **`nofile=1048576` is required for NCCL 2.30.** The 8-rank socket accept exceeds the container's default soft limit of 1024.
-4. **Engram-on-disk is paradoxically faster at C=1 for TTFT** (199 ms vs 213 ms) despite disk I/O — because the Engram-on-disk path stages rows before the forward pass, avoiding the host round-trip that stock Engram-in-memory makes on every step.
+4. **The disk configuration has lower measured C=1 TTFT** (199 ms vs 213 ms). It stages rows before the forward pass, but the comparison does not isolate that change from the other configuration differences.
 5. **AutoTuner can cause OOM.** `VLLM_FLASHINFER_AUTOTUNE: '0'` disables FlashInfer autotune but not DeepGEMM/CUTLASS mxfp8_gemm autotune, which consumes ~10 GB during profiling. The 1M configuration has sufficient headroom; the 300K configuration disables it.
 6. **sparkrun cluster management.** `sparkrun cluster set-default <name>` changes the active cluster; `sparkrun cluster default` only displays it.
 7. **Docker `ENTRYPOINT []` is mandatory.** The stock `vllm/vllm-openai` image has `ENTRYPOINT ["vllm","serve"]`, which prevents sparkrun from appending its command. The final image must clear the entrypoint.
@@ -336,7 +336,7 @@ At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s), TP8
 ## 11. Conclusion
 
 1. **DeepSeek-V4.1-Flash (763B) runs on 8× DGX Spark with TP=8** — the larger cluster doubles the usable concurrency (Max C=4 vs Max C=2 at TP4) and improves TPS by 22-55%.
-2. **Two configurations serve different use cases.** TP8-300K (Engram in memory) is faster for bounded-context workloads; TP8-1M (Engram-on-disk) enables the full 1M context ceiling with acceptable performance.
+2. **Two configurations serve different use cases.** TP8-300K (Engram in memory) has higher TPS on the measured short-prompt workload; TP8-1M (Engram-on-disk) leaves more KV-cache memory and configures a 1M context limit. Performance at that maximum context length was not measured.
 3. **NCCL optimization is the critical TP8 delta.** Without channel reduction and proper ulimits, the 8-rank overhead prevents the model from fitting.
 4. **TP8 does not replace data center hardware.** B300 is still ~8× faster at C=1, but TP8 brings the 763B model into the reach of a 4× capacity increase over TP4 — enough for development, prototyping, and limited-team production scenarios.
 

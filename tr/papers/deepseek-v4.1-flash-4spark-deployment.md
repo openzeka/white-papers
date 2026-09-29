@@ -1,7 +1,7 @@
 ---
 title: DeepSeek-V4.1-Flash 4× DGX Spark Dağıtımı
 parent: White Papers
-nav_order: 9
+nav_order: 10
 lang: tr
 page_id: deepseek-v4.1-flash-4spark-deployment
 date: 2026-09-16 11:17:32 +0300
@@ -11,7 +11,7 @@ description: >-
   (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM 12.1a patch'i,
   Engram-on-disk, benchmark sonuçları ve B300 karşılaştırması.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
-last_modified_date: 2026-09-26
+last_modified_date: 2026-09-29
 toc: true
 ---
 
@@ -84,6 +84,8 @@ FP4 ana KV önbelleği (E2M1 formatı, 16 kanal başına bir E4M3 ölçeği) ile
 ### 2.4 Engram Koşullu Bellek
 
 196B parametrelik Engram katmanı, token tabanlı lookup ile seyrek erişilir. Bu çalışmada **Engram-on-disk** modu kullanılmıştır: Engram satırları GPU belleğinde değil, her düğümün yerel diskinde tutulur ve ihtiyaç duyulduğunda GPU belleğine stage'lenir. Bu, 763B'lik modelin 4× 128 GB (512 GB toplam) birleşik belleğe sığmasını sağlar.
+
+Embedding lookup mekanizması, bellek bütçesi ve offloading sonuçlarının değerlendirmesi için [LLM Inference Sürecinde Conditional Memory ve Offloading]({{ '/papers/conditional-memory-offloading/' | relative_url }}) rehberine bakınız.
 
 ### 2.5 DSpark Speculative Decoding
 

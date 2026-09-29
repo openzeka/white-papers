@@ -1,7 +1,7 @@
 ---
 title: DeepSeek-V4.1-Flash 8× DGX Spark TP8 Dağıtımı
 parent: White Papers
-nav_order: 10
+nav_order: 11
 lang: tr
 page_id: deepseek-v4.1-flash-8spark-deployment
 date: 2026-09-17 08:34:11 +0300
@@ -11,7 +11,7 @@ description: >-
   (GB10) üzerinde TP8 dağıtımı: iki yapılandırma (300K Engram-bellekte, 1M
   Engram-diskte), NCCL optimizasyonu, benchmark sonuçları ve TP4 karşılaştırması.
 permalink: /papers/deepseek-v4.1-flash-8spark-deployment/
-last_modified_date: 2026-09-26
+last_modified_date: 2026-09-29
 toc: true
 ---
 
@@ -40,7 +40,7 @@ Bu rapor, DeepSeek-V4.1-Flash (763B MoE) modelinin **8× NVIDIA DGX Spark (GB10)
 
 Her iki yapılandırma da DSpark k=5 speculative decoding, CUDA graphs (`FULL_AND_PIECEWISE` modu) ile görüntü (vision) ve araç çağırma (tool calling) desteğini kullanır.
 
-> **Neden iki yapılandırma?** Engram-on-disk patch'i satırları forward öncesinde GPU belleğine stage eder ve CUDA graph capture'ı etkinleştirir. Ancak 300K bağlamda 8 rank'in birleşik belleği, Engram'ı sabitlenmiş host belleğinde tutmak için yeterlidir. 300K-bellek yapılandırması, bağlam sınırlıyken orijinal yolun daha hızlı olup olmadığını test eder; 1M-disk yapılandırması ise maksimum bağlam tavanını test eder.
+> **Neden iki yapılandırma?** Engram-on-disk patch'i satırları forward öncesinde GPU belleğine stage eder ve CUDA graph capture'ı etkinleştirir. Ancak 300K bağlamda 8 rank'in birleşik belleği, Engram'ı sabitlenmiş host belleğinde tutmak için yeterlidir. 300K-bellek yapılandırması, bağlam sınırlıyken orijinal yolun daha hızlı olup olmadığını test eder; 1M-disk yapılandırması ise yapılandırılan bağlam sınırını yükseltir. Benchmark kısa prompt'lar kullanır; azami bağlam uzunluğunu test etmez.
 
 ---
 
@@ -221,7 +221,7 @@ sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp8-1m.y
 | 1M bağlam gereksinimi | ~3.7 GB |
 | **Boş headroom** | ~26 GB |
 
-Engram-on-disk yapılandırması, KV önbellek için önemli ölçüde daha fazla bellek bırakır (~30 GB vs ~8.7 GB) ve bu da 1M bağlamı mümkün kılar. Bedel, decode adımı başına disk I/O gecikmesidir.
+Engram-on-disk yapılandırmasında KV cache'e daha fazla bellek ayrıldığı (~30 GB vs ~8.7 GB) ve bağlam sınırının 1M olarak ayarlandığı raporlanmıştır. Tablo yerleşimi, bellek ayarları ve yürütme yolları birlikte değiştiğinden ölçülen hız farkı yalnızca disk I/O maliyeti olarak yorumlanamaz. Mekanizma ve aynı donanımdaki karşılaştırma için [LLM Inference Sürecinde Conditional Memory ve Offloading]({{ '/papers/conditional-memory-offloading/' | relative_url }}) rehberine bakınız.
 
 ---
 
@@ -273,8 +273,8 @@ Engram-on-disk yapılandırması, KV önbellek için önemli ölçüde daha fazl
 
 ### 7.5 Değerlendirme
 
-- **TP8-300K, her concurrency seviyesinde TP8-1M'den daha hızlıdır** (C=1'de 35.98 vs 33.28). 1M yapılandırmasında Engram diskte olmasına rağmen CUDA graph avantajı, 1M bağlam overhead'i ve AutoTuner profiling maliyeti tarafından aşılır.
-- **C=1'de TTFT**, 1M yapılandırmasında daha düşüktür (199 ms vs 213 ms) — Engram-on-disk yolu, prefill sırasında host round-trip'ini önler.
+- **TP8-300K, test edilen her eşzamanlılık seviyesinde TP8-1M'den daha yüksek TPS sağlar** (C=1'de 35.98 vs 33.28). Karşılaştırma, yapılandırmaların bütününü kapsar; tablo yerleşimi, bağlam ayarları, CUDA graph ve AutoTuner etkileri ayrı ölçülmemiştir.
+- **C=1'de TTFT**, 1M yapılandırmasında daha düşüktür (199 ms vs 213 ms). Yürütme yolları farklıdır; bu ölçüm tek başına farkın nedenini belirlemez.
 - **Max C = 4** TP8-300K için, **2** TP8-1M için (Benchmark Gezgini'nin varsayılan hedeflerinde: TTFT≤1000ms, TPS≥20). TP8-300K, TP4 kapasitesinin (Max C=2) iki katıdır; TP8-1M C=4'te 17.07 tok/s ile TPS hedefinin hemen altında kalır.
 - **TPS düşüşü** C=1'den C=8'e: %62 (300K), %65 (1M) — küme doygunluğa yaklaşırken bellek bant genişliği çekişmesi.
 
@@ -326,7 +326,7 @@ Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), 
 1. **NCCL 8-rank overhead'i büyüktür.** Default 64 kanal, rank başına ~37 GB tüketir. `NCCL_MAX_NCHANNELS=8` ve `NCCL_BUFFSIZE=1048576` bunu ~11 GB'a düşürür — olmadan model belleğe sığmaz.
 2. **`memlock=-1` ve `IPC_LOCK` 8-rank RDMA için zorunludur.** Olmadan NCCL init `ibv_reg_mr_iova2 failed with error Cannot allocate memory` hatasıyla başarısız olur.
 3. **`nofile=1048576` NCCL 2.30 için gereklidir.** 8-rank socket accept, container'ın default 1024 soft limitini aşar.
-4. **Engram-on-disk, C=1 TTFT'de paradoksal olarak daha hızlıdır** (199 ms vs 213 ms) — Engram-on-disk yolu satırları forward öncesinde stage eder ve orijinal Engram-bellekte yolunun her adımda yaptığı host round-trip'ini önler.
+4. **Disk yapılandırmasında ölçülen C=1 TTFT daha düşüktür** (199 ms vs 213 ms). Satırlar forward pass öncesinde hazırlanır; ancak karşılaştırma bu değişikliğin etkisini diğer yapılandırma farklarından ayırmaz.
 5. **AutoTuner OOM'a sebep olabilir.** `VLLM_FLASHINFER_AUTOTUNE: '0'` FlashInfer autotune'u kapatır ama DeepGEMM/CUTLASS mxfp8_gemm autotune'ını kapatmaz; bu da profiling sırasında ~10 GB tüketir. 1M yapılandırmasında yeterli headroom vardır; 300K yapılandırmasında kapatılır.
 6. **sparkrun cluster yönetimi.** `sparkrun cluster set-default <name>` aktif cluster'ı değiştirir; `sparkrun cluster default` yalnızca görüntüler.
 7. **Docker `ENTRYPOINT []` zorunludur.** Orijinal `vllm/vllm-openai` imajında `ENTRYPOINT ["vllm","serve"]` vardır ve sparkrun komutunu append etmeyi engeller. Son imajda entrypoint temizlenmelidir.
@@ -336,7 +336,7 @@ Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), 
 ## 11. Sonuç
 
 1. **DeepSeek-V4.1-Flash (763B), 8× DGX Spark üzerinde TP=8 ile çalışır** — daha büyük cluster, kullanılabilir concurrency'yi ikiye katlar (TP4'te Max C=2, TP8'de Max C=4) ve TPS'yi %22-55 oranında artırır.
-2. **İki yapılandırma farklı kullanım senaryolarına hizmet eder.** TP8-300K (Engram bellekte) sınırlı bağlam iş yükleri için daha hızlıdır; TP8-1M (Engram diskte) kabul edilebilir performansla tam 1M bağlam tavanını etkinleştirir.
+2. **İki yapılandırma farklı kullanım senaryolarına hizmet eder.** TP8-300K (Engram bellekte), ölçülen kısa prompt iş yükünde daha yüksek TPS sağlar. TP8-1M (Engram diskte) ise KV cache için daha fazla bellek bırakır ve 1M bağlam sınırıyla yapılandırılır. Bu azami bağlam uzunluğundaki performans ölçülmemiştir.
 3. **NCCL optimizasyonu TP8'in kritik deltasıdır.** Kanal azaltma ve uygun ulimit'ler olmadan, 8-rank overhead'i modelin belleğe sığmasını engeller.
 4. **TP8, veri merkezi donanımının yerini almaz.** B300, C=1'de hâlâ ~8× daha hızlıdır, ancak TP8, 763B modeli TP4 üzerinden 4× kapasite artışına taşır — geliştirme, prototipleme ve sınırlı ekip production senaryoları için yeterli.
 
