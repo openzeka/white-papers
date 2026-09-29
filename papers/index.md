@@ -15,6 +15,7 @@ The following technical white papers are published by Openzeka Teknoloji A.Ş.
 | Title | Topic | Platform |
 | --- | --- | --- |
 | [Local LLM Usage Guide](yerel-llm-rehberi) | Hardware → model → software decision guide | Jetson, RTX PRO, DGX Spark, DGX/HGX |
+| [Conditional Memory and Offloading in LLM Inference](conditional-memory-offloading) | Architecture, memory placement and measured inference with conditional-memory offloading | DGX Spark, RTX PRO 6000; DGX B300 memory architecture |
 | [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](b300-gb300-cluster-mimarisi) | Technical comparison of two Blackwell Ultra architectures, workload-based platform selection guide | NVIDIA DGX B300, GB300 NVL72 (Blackwell Ultra) |
 | [DGX Spark 2-Node AI Cluster Setup Guide](dgx-spark-2node-cluster-kurulumu) | Point-to-point topology cluster setup, RoCEv2/RDMA, sparkrun | 2x NVIDIA DGX Spark (GB10) |
 | [DGX Spark 3-Node AI Cluster Setup Guide](dgx-spark-3node-cluster-kurulumu) | Ring (mesh) topology cluster setup, RoCEv2/RDMA, sparkrun | 3x NVIDIA DGX Spark (GB10) |

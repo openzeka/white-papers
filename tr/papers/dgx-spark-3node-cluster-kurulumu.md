@@ -1,7 +1,7 @@
 ---
 title: DGX Spark 3-Node AI Cluster Kurulum Rehberi
 parent: White Papers
-nav_order: 4
+nav_order: 5
 lang: tr
 page_id: dgx-spark-3node-cluster-kurulumu
 date: 2026-07-30 08:21:44 +0300

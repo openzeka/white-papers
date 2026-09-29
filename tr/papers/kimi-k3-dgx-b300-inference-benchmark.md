@@ -1,7 +1,7 @@
 ---
 title: Kimi K3 DGX-B300 Inference Benchmark
 parent: White Papers
-nav_order: 11
+nav_order: 12
 lang: tr
 page_id: kimi-k3-dgx-b300-inference-benchmark
 date: 2026-07-30 08:27:02 +0300

@@ -1,7 +1,7 @@
 ---
 title: Qwen3.6-27B DGX Spark Benchmark
 parent: White Papers
-nav_order: 7
+nav_order: 8
 lang: tr
 page_id: qwen3.6-27b-dgx-spark-benchmark
 date: 2026-07-03 14:10:23 +0300
