@@ -34,3 +34,10 @@
 {%- endfor %}
 <link rel="alternate" hreflang="x-default" href="{{ page.oz_alternates[site.default_lang] }}">
 {%- endif %}
+{%- comment -%}
+  Site icon. The theme links /favicon.ico by itself when that file exists;
+  the 192 px PNG is the size Google prefers for the icon in search results
+  (square, a multiple of 48 px), and the 180 px one is for iOS home screens.
+{%- endcomment %}
+<link rel="icon" type="image/png" sizes="192x192" href="{{ '/assets/images/favicon-192.png' | relative_url }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
