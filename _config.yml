@@ -87,6 +87,7 @@ exclude:
   - _diagram_sources
   - LICENSE
   - Makefile
+  - docker-compose.yml
 
 # Analytics (GA4)
 google_analytics: G-9MRMQ9VTZF
