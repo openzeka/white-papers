@@ -242,4 +242,6 @@ kaynağı gerektiriyor. O koşular beklemede; tablo geldiklerinde büyüyecek.
 <p class="bt-attribution">Bu sayfadaki her değer OpenZeka&rsquo;nın kendi
 donanımı üzerinde aldığı kendi ölçümüdür.</p>
 
+{% include benchmark-jsonld.html kind="cv" %}
+
 <script src="/assets/js/cv-benchmark-table.tr.js"></script>

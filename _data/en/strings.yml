@@ -16,3 +16,27 @@ consent_privacy_url: "https://openzeka.com/gizlilik-kisisel-veri-politikasi/"
 
 # Home page card dates (from each page's `date`)
 months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+# One explanation per benchmark row: filled in at build time by
+# _plugins/visibility.rb, shown in the opened row of the LLM explorer and
+# published in /llms-full.txt. %name% placeholders; numbers arrive formatted.
+sentences:
+  llm_intro: "Each entry below describes one serving configuration — a model on one device, in one number format, with one engine and one parallelism and speculative-decoding setting — measured by OpenZeka with the open-source CordatusAI LLM Benchmark Tool (128 input and 128 output tokens, prompts on different topics, ten rounds at each concurrency level C = 1, 2, 4, 8, 16, 32, 64, mean values). Max C is the highest measured concurrency meeting both targets; the capacity figures turn it into people and check it against the KV cache memory, taking the smaller of the two limits. Capacity is an estimate, not a measurement, and no substitute for a production load test. The Intelligence and Agentic Index values in the interactive table come from Artificial Analysis. The chat and agentic capacity estimates are the two ends of a range: for coding- and agent-heavy use the realistic figure is closer to the agentic estimate, for simple question-and-answer use closer to the chat estimate."
+  llm_run: "In OpenZeka's measurement, %model% (%params% parameters), served in %quant% format with %engine%%spec% on %device%%par%, reached a generation speed of %tps% tok/s per request and a time to first token (TTFT) of %ttft% ms with a single request."
+  llm_spec: " and speculative decoding"
+  llm_par: " (%par%)"
+  basis_both: "Considering the speed targets and the available KV cache capacity"
+  basis_speed: "Considering the speed targets alone (the KV cache limit was not calculated for this configuration)"
+  cap_range: "%basis%, the estimated capacity is %chat% users for chat use and %agentic% for agentic use. The realistic capacity will likely fall between these two values. In scenarios dominated by coding, tool use, long workflows and multi-agent use, capacity approaches the agentic estimate; where shorter interactions, standard conversations and lighter tasks dominate, it approaches the chat estimate."
+  cap_same: "%basis%, the estimated capacity is %chat% users for both chat and agentic use."
+  cap_chat_only: "%basis%, the estimated capacity is %chat% users for chat use; the model's context window is too short for the long sessions of agentic use."
+  cap_none: "At the default speed targets (at least %tps_t% tok/s per request, TTFT at most %ttft_t% ms) there is no capacity estimate for this configuration: no measured load level met them."
+  cap_min_n: "at least %n%"
+  cap_min: "“At least” means the configuration met the speed targets even at the highest load tested, so the real capacity may be higher."
+  cap_single: "This configuration was measured with a single request only, so the estimate rests on one measurement."
+  cv_intro: "Each entry below describes one deployment configuration — one detection model, at one precision and input resolution, on one device, running on the Cordatus Inference Engine over DeepStream — measured by OpenZeka with the cordatus-benchmark tool against live 1080p H.264 IP cameras streaming a fixed 20 FPS, with 30 seconds of steady-state sampling at each camera count. Max cameras is the highest measured camera count that still holds the target frame rate per camera; nothing is extrapolated. These are speed measurements only, and no substitute for a test on your own cameras."
+  cv_run: "In OpenZeka's measurement, %model%%prec% (%input% input) on %device%, at its heaviest measured load of %cams% cameras, processed %fps% FPS per camera and %total% FPS in total, with %drop%% frame drop."
+  cv_prec: " %prec%"
+  cv_max: "At the default target of %target% FPS per camera, the highest measured camera count that holds it (Max cameras) is %max%."
+  cv_max_zero: "No measured camera count held the default target of %target% FPS per camera, so Max cameras is 0."
+  cv_open: "At that load it still delivered the cameras' own %src% FPS within 10%, so the device never reached its own limit — the figure is a floor, not a ceiling."

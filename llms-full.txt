@@ -1,0 +1,60 @@
+---
+layout: null
+permalink: /llms-full.txt
+---
+{%- comment -%}
+  The full companion to llms.txt, for AI agents only (nothing here is shown on
+  the site). Every benchmark run as a labelled record plus a plain-language
+  explanation in Turkish (the primary audience) and English. Generated from the
+  benchmark data by _plugins/visibility.rb — nothing to edit when a run is added.
+{%- endcomment -%}
+{%- assign llm = site.data.oz_llm.benchmarks -%}
+{%- assign cfg = site.data.oz_llm.oz_config -%}
+{%- assign cv = site.data.oz_cv.oz_rows -%}
+{%- assign tr = site.data.tr.strings.sentences -%}
+{%- assign en = site.data.en.strings.sentences -%}
+# {{ site.title }} — benchmark sonuçları / benchmark results
+
+> OpenZeka Teknoloji A.Ş.'nin LLM ve CV çıkarım benchmark'ları: hangi model, hangi NVIDIA cihazında, hangi hızda ve kaç kullanıcıya ya da kameraya hizmet verebilir. / OpenZeka's LLM and CV inference benchmarks: which model runs on which NVIDIA device, how fast, and for how many users or cameras.
+
+Birincil kaynak (Türkçe) / Primary source (Turkish): {{ site.url }}/tr/llm-inference-benchmarks/ · {{ site.url }}/tr/cv-inference-benchmarks/
+English: {{ site.url }}/llm-inference-benchmarks/ · {{ site.url }}/cv-inference-benchmarks/
+Ham veri / Raw data: {{ site.url }}/assets/data/benchmarks.json · {{ site.url }}/assets/data/cv-benchmarks/index.json
+Please cite the explorer page, not this file. Each record's link opens that run in the interactive table.
+
+## LLM çıkarım benchmark'ları / LLM inference benchmarks
+
+{{ tr.llm_intro }}
+
+{{ en.llm_intro }}
+
+Defaults used below / Aşağıdaki varsayılanlar: TTFT ≤ {{ cfg.ttft_threshold_ms }} ms, TPS ≥ {{ cfg.tps_threshold }} tok/s per request; chat sessions {{ cfg.chat_context_tokens }} tokens, speed × {{ cfg.chat_multiplier }}; agentic sessions {{ cfg.agentic_context_tokens }} tokens, speed × {{ cfg.agentic_multiplier }}. Capacity = min(speed limit, KV cache memory limit); "+" = the run never failed the targets, so the figure is a minimum.
+{% for r in llm %}
+### {{ r.model }} · {{ r.device }} · {{ r.quantization }} · {{ r.engine }}{% if r.mtp %} · speculative decoding{% endif %}
+
+- link: {{ site.url }}/tr/llm-inference-benchmarks/#{{ r.id }} (EN: {{ site.url }}/llm-inference-benchmarks/#{{ r.id }})
+- model: {{ r.model }}; parameters: {{ r.params }}{% if r.served_repo %}; checkpoint: https://huggingface.co/{{ r.served_repo }}{% endif %}
+- setup: {{ r.device }}, {{ r.quantization }}, {{ r.engine }}, TP={{ r.tp | default: 1 }}, DP={{ r.dp | default: 1 }}, PP={{ r.pp | default: 1 }}, speculative decoding: {% if r.mtp %}yes{% else %}no{% endif %}
+- measured (C = concurrent requests; TTFT / per-request TPS): {{ r.oz_sweep }}
+- Max C: {{ r.oz_max_c }}{% if r.oz_max_c_open %}+{% endif %}
+{%- for kind in (1..2) %}{% if kind == 1 %}{% assign k = r.oz_chat %}{% assign kn = "chat" %}{% else %}{% assign k = r.oz_agentic %}{% assign kn = "agentic" %}{% endif %}
+- {{ kn }} capacity (users): {% if k.limit == "context" %}none — session length exceeds the model's context window{% else %}{{ k.shown }}{% if k.at_least %}+{% endif %}, limited by {% if k.mem_known == false %}speed (KV cache memory limit not calculated){% elsif k.limit == "mem" %}KV cache memory{% elsif k.limit == "tie" %}speed and KV cache memory equally{% else %}speed{% endif %}{% endif %}
+{%- endfor %}
+- TR: {{ r.oz_text.tr }}
+- EN: {{ r.oz_text.en }}
+{% endfor %}
+## CV çıkarım benchmark'ları / CV inference benchmarks
+
+{{ tr.cv_intro }}
+
+{{ en.cv_intro }}
+{% for r in cv %}
+### {{ r.model }}{% if r.precision != "" %} {{ r.precision }}{% endif %} · {{ r.device }}
+
+- link: {{ site.url }}/tr/cv-inference-benchmarks/ (EN: {{ site.url }}/cv-inference-benchmarks/)
+- model: {{ r.model }}; precision: {% if r.precision != "" %}{{ r.precision }}{% else %}not recorded{% endif %}; input resolution: {{ r.input_resolution }}; device: {{ r.device }}
+- measured (cameras: FPS per camera, frame drop): {{ r.sweep }}
+- Max cameras at the default {{ site.data.oz_cv.config.target_fps }} FPS per camera: {{ r.max_cameras }}
+- TR: {{ r.text.tr }}
+- EN: {{ r.text.en }}
+{% endfor %}

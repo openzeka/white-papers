@@ -16,3 +16,27 @@ consent_privacy_url: "https://openzeka.com/gizlilik-kisisel-veri-politikasi/"
 
 # Ana sayfa kart tarihleri (her sayfanın `date` alanından)
 months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+
+# Her benchmark satırı için açıklama; derleme sırasında _plugins/visibility.rb
+# doldurur, LLM gezgininde açılan satırda gösterilir ve /llms-full.txt içinde
+# yayımlanır. %ad% yer tutucuları; sayılar biçimlendirilmiş gelir.
+sentences:
+  llm_intro: "Aşağıdaki her kayıt tek bir kurulum yapılandırmasını anlatır — belirli bir donanımda, belirli bir sayı biçiminde, belirli bir engine ile ve belirli bir paralellik ve spekülatif kod çözme ayarıyla sunulan bir model. Ölçümler OpenZeka'nın, açık kaynaklı CordatusAI LLM Benchmark Tool ile aldığı ölçümlerdir: 128 girdi ve 128 çıktı token'ı, farklı konulardaki istemler, her eşzamanlılık seviyesinde (C = 1, 2, 4, 8, 16, 32, 64) on tur ve on turun ortalaması. Maks C, iki hedefi birden karşılayan en yüksek ölçülmüş eşzamanlılıktır; kapasite değerleri bunu kişi sayısına çevirir ve KV cache belleğine karşı sınar, iki sınırdan küçük olanı alır. Kapasite bir ölçüm değil, tahmindir ve üretim ortamındaki bir yük testinin yerini tutmaz. Etkileşimli tablodaki Zekâ Endeksi ve Agentic Endeksi değerleri Artificial Analysis'ten alınmıştır. Chat ve agentic kapasite tahminleri bir aralığın iki ucudur: kodlama ve agentic iş ağırlıklı kullanımda gerçekçi değer agentic tahmine, basit soru-cevap kullanımında chat tahminine daha yakındır."
+  llm_run: "OpenZeka'nın ölçümünde, %device% üzerinde %engine% ile %quant% formatında%spec% sunulan %model% (%params% parametre%par%), tek istekte istek başına %tps% tok/s üretim hızına ve %ttft% ms ilk token süresine (TTFT) ulaştı."
+  llm_spec: " ve spekülatif kod çözmeyle"
+  llm_par: ", %par%"
+  basis_both: "Hız hedefleri ve kullanılabilir KV önbelleği kapasitesi göz önünde bulundurulduğunda"
+  basis_speed: "Yalnızca hız hedefleri göz önünde bulundurulduğunda (bu yapılandırma için KV önbelleği sınırı hesaplanmadı)"
+  cap_range: "%basis%, tahmini kapasite chat kullanımı için %chat%, agentic kullanım için %agentic% kullanıcıdır. Gerçekçi kapasite muhtemelen bu iki değer arasında olacaktır. Kodlama, araç kullanımı, uzun iş akışları ve çoklu ajan kullanımının ağırlıklı olduğu senaryolarda kapasite agentic tahmine yaklaşırken; daha kısa etkileşimlerin, standart sohbetlerin ve daha hafif görevlerin ağırlıkta olduğu kullanımlarda chat tahminine yaklaşacaktır."
+  cap_same: "%basis%, tahmini kapasite hem chat hem agentic kullanım için %chat% kullanıcıdır."
+  cap_chat_only: "%basis%, tahmini kapasite chat kullanımı için %chat% kullanıcıdır; modelin bağlam penceresi agentic kullanımın uzun oturumları için yeterli değildir."
+  cap_none: "Varsayılan hız hedeflerinde (istek başına en az %tps_t% tok/s, en fazla %ttft_t% ms TTFT) bu yapılandırma için bir kapasite tahmini çıkmıyor: ölçülen hiçbir yük seviyesi bu hedefleri karşılamadı."
+  cap_min_n: "en az %n%"
+  cap_min: "“En az”, yapılandırmanın test edilen en yüksek yükte bile hız hedeflerini karşıladığı, yani gerçek kapasitenin daha yüksek olabileceği anlamına gelir."
+  cap_single: "Bu yapılandırma yalnızca tek istekle ölçüldüğü için tahmin tek bir ölçüme dayanır."
+  cv_intro: "Aşağıdaki her kayıt tek bir dağıtım yapılandırmasını anlatır — tek bir tespit modeli, tek bir precision ve giriş çözünürlüğünde, tek bir cihaz üzerinde, DeepStream üstünde çalışan Cordatus Inference Engine ile. Ölçümler OpenZeka'nın, cordatus-benchmark aracıyla sabit 20 FPS yayın yapan canlı 1080p H.264 IP kameralara karşı, her kamera sayısında 30 saniyelik kararlı durum örneklemesiyle aldığı ölçümlerdir. Maks. kamera, kamera başına hedef kare hızını hâlâ tutan en yüksek ölçülmüş kamera sayısıdır; hiçbir şey ekstrapole edilmez. Bunlar yalnızca hız ölçümleridir ve kendi kameralarınızla yapılacak bir testin yerini tutmaz."
+  cv_run: "OpenZeka'nın ölçümünde, %device% üzerinde %model%%prec% (%input% giriş), ölçülen en ağır yük olan %cams% kamerada kamera başına %fps% FPS ve toplam %total% FPS işledi; kare kaybı %%drop% oldu."
+  cv_prec: " %prec%"
+  cv_max: "Varsayılan kamera başına %target% FPS hedefinde, bu hedefi tutan en yüksek ölçülmüş kamera sayısı (Maks. kamera) %max% kameradır."
+  cv_max_zero: "Ölçülen hiçbir kamera sayısı varsayılan kamera başına %target% FPS hedefini tutmadı; bu yüzden Maks. kamera 0'dır."
+  cv_open: "Bu yükte cihaz hâlâ kameraların kendi %src% FPS'ini en fazla %10 eksiğiyle veriyordu; kendi sınırına ulaşmadı — değer tavan değil, tabandır."

@@ -1,0 +1,52 @@
+---
+layout: null
+permalink: /llms.txt
+---
+{%- comment -%}
+  llms.txt (https://llmstxt.org) — a plain-text map of the site for AI agents.
+  Generated from front matter and the benchmark data (_plugins/visibility.rb),
+  so a new paper or benchmark run appears here with no edit.
+{%- endcomment -%}
+{%- assign pages = site.data.oz_pages | sort: "title" -%}
+{%- assign llm = site.data.oz_llm.benchmarks -%}
+{%- assign cv = site.data.oz_cv.oz_rows -%}
+# {{ site.title }}
+
+> {{ site.description | strip }} English at the root, Turkish under /tr/.
+
+Every benchmark figure is OpenZeka's own measurement on its own hardware. The
+Intelligence Index and Agentic Index fields in benchmarks.json are republished
+from Artificial Analysis (https://artificialanalysis.ai) and must be attributed
+to them wherever they are shown.
+
+## Benchmark explorers
+
+- [LLM Inference Benchmark Explorer]({{ site.url }}/llm-inference-benchmarks/): {{ llm.size }} runs — time to first token and per-request tokens/s at concurrency 1–64, with Max C (concurrent requests meeting TTFT ≤ 1 s and ≥ 20 tok/s by default) and estimated chat / agentic user capacity per model × device — how many people a model on a given device can serve. Each run's plain-language explanation is in the page HTML and in llms-full.txt. Turkish: {{ site.url }}/tr/llm-inference-benchmarks/
+- [CV Inference Benchmark Explorer]({{ site.url }}/cv-inference-benchmarks/): {{ cv.size }} device × model results — FPS per camera and frame drop by camera count. Turkish: {{ site.url }}/tr/cv-inference-benchmarks/
+
+## Results as sentences
+
+- [All results, explained (Turkish and English)]({{ site.url }}/llms-full.txt): one paragraph per benchmark run — measured speed, Max C, estimated chat and agentic user capacity and what limits it; for CV, FPS per camera and max cameras. Turkish first: OpenZeka's primary audience is in Türkiye, and the Turkish pages are under /tr/.
+
+## Raw data
+
+- [LLM benchmarks (JSON)]({{ site.url }}/assets/data/benchmarks.json): one entry per run; `data_points` holds `c` (concurrent requests), `ttft_ms` and `tps` (per-request output tokens/s). 128 input / 128 output tokens, ten rounds per level, mean values.
+- [CV benchmarks index (JSON)]({{ site.url }}/assets/data/cv-benchmarks/index.json): devices and models; each model's measurements are in the file named by its `path`.
+
+LLM models benchmarked: {{ llm | map: "model" | uniq | sort | join: ", " }}
+
+LLM devices: {{ llm | map: "device" | uniq | sort | join: ", " }}
+
+CV models benchmarked: {{ cv | map: "model" | uniq | sort | join: ", " }}
+
+CV devices: {{ cv | map: "device" | uniq | sort | join: ", " }}
+
+## White papers
+{% for p in pages %}{% if p.parent %}
+- [{{ p.title }}]({{ site.url }}{{ p.langs[site.default_lang] | default: p.langs.first[1] }}): {{ p.description | strip_newlines }}
+{%- endif %}{% endfor %}
+
+## Other pages
+{% for p in pages %}{% unless p.parent %}{% assign link = p.langs[site.default_lang] | default: p.langs.first[1] %}{% unless link contains "benchmarks" %}
+- [{{ p.title }}]({{ site.url }}{{ link }}){% if p.description != "" %}: {{ p.description | strip_newlines }}{% endif %}
+{%- endunless %}{% endunless %}{% endfor %}
