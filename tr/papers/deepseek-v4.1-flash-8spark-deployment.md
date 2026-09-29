@@ -221,7 +221,7 @@ sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp8-1m.y
 | 1M bağlam gereksinimi | ~3.7 GB |
 | **Boş headroom** | ~26 GB |
 
-Engram-on-disk yapılandırmasında KV cache'e daha fazla bellek ayrıldığı (~30 GB vs ~8.7 GB) ve bağlam sınırının 1M olarak ayarlandığı raporlanmıştır. Tablo yerleşimi, bellek ayarları ve yürütme yolları birlikte değiştiğinden ölçülen hız farkı yalnızca disk I/O maliyeti olarak yorumlanamaz. Mekanizma ve aynı donanımdaki karşılaştırma için [LLM Inference Sürecinde Conditional Memory ve Offloading]({{ '/papers/conditional-memory-offloading/' | relative_url }}) rehberine bakınız.
+Engram-on-disk yapılandırmasında KV cache'e daha fazla bellek ayrıldığı (~30 GB vs ~8.7 GB) ve bağlam sınırının 1M olarak ayarlandığı raporlanmıştır. Tablo yerleşimi, bellek ayarları ve yürütme yolları birlikte değiştiğinden ölçülen hız farkı yalnızca disk I/O maliyeti olarak yorumlanamaz. Mekanizma ve aynı donanımdaki karşılaştırma için [LLM Çıkarımında Conditional Memory ve Offloading]({{ '/papers/conditional-memory-offloading/' | relative_url }}) rehberine bakınız.
 
 ---
 

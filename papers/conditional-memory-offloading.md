@@ -33,12 +33,12 @@ toc: true
 ## Executive Summary
 
 - **Start with the memory budget.** Our [Local LLM Usage Guide]({{ '/papers/yerel-llm-rehberi/' | relative_url }}) treats VRAM as the central sizing constraint. Conditional memory changes which model parameters need to remain in GPU memory.
-- **Not every parameter is read on every token.** Recent models add **conditional memory**: large lookup tables of hashed n-gram embeddings (*Engram* in DeepSeek-V4.1-Flash, the *n-gram embedding table* in Qwen3.8-Flash-Next, called PLE in SGLang). Each token requires only a few kilobytes of embedding data, and the required rows can be identified from token IDs before the forward pass.
+- **Not every parameter is read on every token.** Some recent models, including the two examined here, add what DeepSeek calls **conditional memory**: large lookup tables of hashed n-gram embeddings (*Engram* in DeepSeek-V4.1-Flash, the *n-gram embedding table* in Qwen3.8-Flash-Next, called PLE in SGLang). Each token requires only a few kilobytes of embedding data, and the required rows can be identified from token IDs before the forward pass.
 - **Storage requirements and memory traffic differ.** Large tables supply only a few rows per token. Small transfers and prefetching make low-overhead offloading possible, while repeatedly moving active weight matrices or attention caches is more demanding.
 - **Where it can go depends on the device's memory design.** On **DGX Spark** (unified memory) host RAM and GPU memory are the same pool, so the table is backed by NVMe with frequently accessed pages cached in RAM. On **RTX PRO 6000** (dedicated GPU memory) the table goes to pinned host RAM across PCIe. On **DGX B300**, the four-GPU DeepSeek configuration has enough GPU memory to hold the tables as well.
 - **Measured results:** the tested 763B DeepSeek-V4.1-Flash configuration runs on 4× DGX Spark by placing its 196B-parameter Engram tables on NVMe; on 8× DGX Spark, moving them to NVMe increased the reported KV-cache allocation by ~21 GB per node and raised the configured context limit from 300K to 1M tokens. Qwen3.8-Flash-Next, with a 132.7 GB quantized checkpoint, runs on a single DGX Spark and a single RTX PRO 6000, with measured performance suitable for interactive use at the concurrency levels discussed below.
 - **Two practical outcomes.** The two 8× DGX Spark configurations show the trade-off between keeping Engram in memory and placing it on disk. The 4× Spark and single-device Qwen runs demonstrate useful service from checkpoints that exceed the memory available for model weights.
-- **Sizing consequence:** include the remaining model weights, KV cache, recurrent state and runtime buffers in the GPU memory budget; include offloaded tables in the host RAM or NVMe budget. As more models adopt this design, the same device capacity is expected to support more capable models over time.
+- **Sizing consequence:** include the remaining model weights, KV cache, recurrent state and runtime buffers in the GPU memory budget; include offloaded tables in the host RAM or NVMe budget. If more models adopt this design, the same device could run larger models than its GPU memory alone would suggest.
 
 ---
 
@@ -100,7 +100,7 @@ This creates two different memory demands:
 
 For fast GPU execution, these frequently accessed matrices and active caches are normally kept in GPU memory. Offloading them is possible, but repeated transfers can dominate inference latency.
 
-**Mixture-of-Experts (MoE)** changes the feed-forward part: a router selects a few expert networks for each token. Total parameters determine the storage requirement, while selected experts determine much of the weight traffic. This reduces computation, but selecting an expert still means using its matrices. Moreover, conventional routing depends on the current hidden state, so the exact selection becomes known during the forward pass. Expert caching and prefetching can help, but a cache miss is much more expensive than fetching a few embedding rows.
+**Mixture-of-Experts (MoE)** changes the feed-forward part: a router selects a few expert networks for each token. Total parameters determine the storage requirement, while selected experts determine much of the weight traffic. This reduces computation, but selecting an expert still means using its matrices. A learned router chooses experts from the current hidden state, so the selection is only known during the forward pass. Expert caching and prefetching can help, but a cache miss is much more expensive than fetching a few embedding rows.
 
 ### 3.2. Attention architectures that reduce memory requirements
 
@@ -120,6 +120,8 @@ Qwen3.8-Flash-Next, for example, uses Gated DeltaNet in three of every four laye
 
 An **embedding** is a learned vector of numbers. An ordinary input embedding table maps each token ID to a row. Conditional memory extends that idea to short sequences of tokens, or **n-grams**, providing learned information about local token combinations alongside the representation computed by the network.
 
+The term was introduced by DeepSeek in the [Engram paper](https://arxiv.org/abs/2601.07372) and is not yet a general name for the technique: Qwen describes its version as n-gram embeddings, and SGLang calls the table PLE. This paper uses *conditional memory* for both.
+
 The lookup and the computation that uses it are separate operations:
 
 1. **Form the key.** Take the recent token IDs: two for a bigram, three for a trigram. For example, IDs `[a, b, c]` give the suffixes `[b, c]` and `[a, b, c]`. A token may be a word, part of a word or another text fragment.
@@ -129,11 +131,7 @@ The lookup and the computation that uses it are separate operations:
 
 This separation of embedding lookup and context-dependent gating is described in the [Engram architecture](https://arxiv.org/html/2601.07372v2#S2). Qwen's [n-gram embedding design](https://arxiv.org/html/2608.30320#S2.SS3) uses the same broad approach.
 
-**Worked example — Qwen3.8-Flash-Next.** Its configuration uses bigrams and trigrams, eight heads each, and 160 values per row. With one byte per FP8 value, the embedding data read per token position is:
-
-> **2 n-gram orders × 8 heads × 160 values × 1 byte = 2,560 bytes per input position**
-
-The table occupies about **47.7 GiB**, yet one position needs only sixteen rows. Increasing the number of stored rows increases the number of learned parameters without requiring every token to read more rows. Quantization metadata and the size of memory transactions can increase the actual bytes transferred.
+**Example — Qwen3.8-Flash-Next.** Each input position reads sixteen rows (bigrams and trigrams, eight hash heads each) of 160 one-byte FP8 values: about **2.5 KB**, from a table of about **47.7 GiB**. Adding rows to the table adds learned parameters without adding reads per token.
 
 **Why prefetching is possible.** Row addresses depend on token IDs, which are available before the forward pass. An engine can start retrieving rows while preceding GPU layers execute. In ordinary decode this applies to the current known token, not to unknown future outputs. During prefill, all prompt IDs are already available. Placement after the first layers creates time for the fetch to overlap computation; whether that overlap is sufficient depends on the engine and memory tier.
 
@@ -163,7 +161,7 @@ Ordinary input embeddings also use row lookups. The large size of conditional-me
 | **Host RAM** on a discrete-GPU system | Hundreds of GB to TBs | PCIe Gen5 x16 offers about 64 GB/s per direction theoretically, before protocol and software overhead |
 | **Local NVMe** | Several TB | Larger capacity; random access and page faults cost more than resident-memory reads |
 
-For a transfer, **bytes ÷ effective bandwidth** estimates the data-transfer time. Actual access also includes latency and software overhead; only the portion not hidden behind useful work delays the model. For small scattered reads, latency and caching can matter more than peak bandwidth.
+Transfer time is roughly **bytes ÷ bandwidth**, plus latency and software overhead; only the part not hidden behind computation slows the model. For small scattered reads, latency and caching can matter more than peak bandwidth.
 
 ### 4.2. Unified memory vs dedicated GPU memory
 
@@ -184,7 +182,7 @@ The memory architecture determines which offloading destination frees GPU memory
 
 ### 4.4. Why conditional-memory offloading can have low overhead
 
-Transferring gigabytes of active weights per step can consume much of the available PCIe bandwidth. Qwen's 2,560 bytes (2.5 KiB) of embedding data per token position require far less transfer bandwidth. Its addresses can also be prepared before the layer that uses the embeddings, allowing an asynchronous fetch to finish while other layers run.
+Transferring gigabytes of active weights per step can consume much of the available PCIe bandwidth. Qwen's ~2.5 KB of embedding data per token position requires far less transfer bandwidth. Its addresses can also be prepared before the layer that uses the embeddings, allowing an asynchronous fetch to finish while other layers run.
 
 That is the architectural reason **a large table can be offloaded at low cost**. It requires an implementation that exploits the access pattern. Host RAM and NVMe are also different cases: a file-backed table may hit the page cache or wait for storage. Page reads can be much larger than the requested rows, and prefill, batching and speculative verification multiply the number of positions looked up.
 
@@ -210,7 +208,7 @@ Offloading a table without changing its values preserves its learned information
 | Maximum context length | 1,048,576 tokens (approximately 1M) |
 | Checkpoint size | 510.3 GB; mixed precision, including FP8 dense and Engram weights and FP4 experts |
 
-The Engram embedding values account for approximately **196.6 GB** at FP8. The rest of the checkpoint is approximately **313.7 GB**, including the other model weights and quantization metadata. The [model card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) distinguishes the 552B backbone from Engram and the auxiliary modules.
+The [model card](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) distinguishes the 552B backbone from Engram and the auxiliary modules.
 
 ### 5.2. Qwen3.8-Flash-Next
 
@@ -231,9 +229,7 @@ The Engram embedding values account for approximately **196.6 GB** at FP8. The r
 | DeepSeek-V4.1-Flash | 510.3 GB | ~196.6 GB | ~313.7 GB | 4× DGX Spark |
 | Qwen3.8-Flash-Next, NVIDIA NVFP4 | 132.7 GB | ~51.2 GB (47.7 GiB) | ~81.5 GB | 1× DGX Spark; 1× RTX PRO 6000 |
 
-**Units and memory requirements.** GB means 10⁹ bytes; GiB means 2³⁰ bytes. Checkpoint sizes are the sums of the safetensors files at the recorded revisions. The remaining checkpoint size is an approximate subtraction, not a measurement of GPU memory after loading: runtime allocations, weight layout and temporary buffers also matter.
-
-The [NVIDIA checkpoint files](https://huggingface.co/nvidia/Qwen3.8-Flash-Next-NVFP4/tree/fc694b54fb0174e0913e6adf86691ef85a4ead47) total 132,680,249,378 bytes. Runtime memory figures in Section 6 are reported separately from checkpoint sizes.
+GB means 10⁹ bytes and GiB 2³⁰ bytes. Checkpoint sizes are the safetensors file totals at the recorded revisions (for Qwen, the [NVIDIA checkpoint files](https://huggingface.co/nvidia/Qwen3.8-Flash-Next-NVFP4/tree/fc694b54fb0174e0913e6adf86691ef85a4ead47)). The remaining size is a subtraction, not a measurement of GPU memory after loading; runtime memory figures are given in Section 6.
 
 Offloading moves the table to another memory tier; it remains part of the model. The smaller configurations can then hold the remaining weights together with the memory needed for inference.
 
@@ -378,20 +374,11 @@ Use the Local LLM Usage Guide's headroom advice as a planning allowance, then ch
 - ☐ Measure response speed for that workload, including startup and cold-cache performance where relevant.
 - ☐ Validate model quality on the intended tasks; an external capability score is only a starting point.
 
-The common sizing error is to treat all offloading as equivalent. Check **which data moves, how much is accessed, and when it must arrive** before deciding whether a larger model is practical.
+One sizing mistake to avoid is treating all offloading as equivalent. Check **which data moves, how much is accessed, and when it must arrive** before deciding whether a larger model is practical.
 
 ---
 
-## 9. Limitations
-
-- **The 8-node comparison covers deployment configurations.** Table placement, context limits, memory settings and execution paths differ; the measured trade-off applies to those configurations.
-- **One OpenZeka workload.** Our deployment measurements use approximately 128 input tokens and an output limit of 128 tokens. Long prompts and long conversations, where freed KV-cache memory matters most, were not measured.
-- **Page-cache behavior was not isolated.** On DGX Spark, rows not in the page cache are read from NVMe; the effect of a cold cache on the first requests after startup was not measured separately.
-- **Capability scores describe models, not deployments.** The Intelligence Index is an external benchmark and does not replace evaluation on your own tasks (§5.9 of the Local LLM Usage Guide).
-
----
-
-## 10. Conclusion and Outlook
+## 9. Conclusion and Outlook
 
 **Summary of findings:**
 
@@ -404,7 +391,7 @@ The common sizing error is to treat all offloading as equivalent. Check **which 
 | What does it gain? | Models that otherwise do not fit (763B on 4× DGX Spark, 132.7 GB checkpoint on one DGX Spark or RTX PRO 6000), and more KV capacity (300K → 1M configured limit on 8× DGX Spark) |
 | What does it cost? | Startup time, NVMe space or locked host RAM, and dependence on engine support |
 
-**Outlook.** Model architectures are steadily separating what must be computed from what must only be stored. Mixture-of-Experts separated active from total parameters; conditional memory adds a large parameter pool whose access pattern suits slower memory tiers. As model architectures and inference engines develop, the same hardware may support more capable models by using host RAM and storage for suitable components. Realizing that benefit requires enough GPU memory for the remaining weights and request state, efficient data transfers, and acceptable measured latency.
+**Outlook.** Some recent architectures separate what must be computed from what only needs to be stored. Mixture-of-Experts separated active from total parameters; conditional memory, as used in the two models examined here, adds a large parameter pool whose access pattern suits slower memory tiers. Whether other models adopt it remains to be seen. If they do, and inference engines support it, the same hardware may run more capable models by using host RAM and storage for suitable components. Realizing that benefit requires enough GPU memory for the remaining weights and request state, efficient data transfers, and acceptable measured latency.
 
 ---
 
@@ -412,14 +399,15 @@ The common sizing error is to treat all offloading as equivalent. Check **which 
 
 - **Active parameters:** Parameters used for a token; their precision and reuse help determine weight traffic.
 - **Checkpoint:** Saved model weights and associated metadata; file size and runtime memory usage are different quantities.
-- **Conditional memory:** A lookup table of learned vectors, addressed by hashed n-grams of the input tokens and combined with the hidden state at selected layers.
+- **Conditional memory:** A lookup table of learned vectors, addressed by hashed n-grams of the input tokens and combined with the hidden state at selected layers. The term was introduced in DeepSeek's Engram paper.
 - **Decode:** Incremental response generation; often limited by memory bandwidth at small batch sizes.
 - **Embedding:** A learned vector representing a token or token sequence.
-- **Engram:** DeepSeek's name for conditional memory, used in DeepSeek-V4.1-Flash.
+- **Engram:** DeepSeek's conditional-memory module, used in DeepSeek-V4.1-Flash.
 - **Gated DeltaNet:** A linear-attention layer that keeps a fixed-size state per request instead of a growing KV cache.
 - **Hash head:** One of several independent hash functions that map an n-gram to a row of the table.
 - **Hidden state:** The vector representation of a token as it passes through the model's layers.
 - **KV cache:** Cached attention keys and values; its size depends on the attention architecture, context length, precision and concurrent requests.
+- **Lookup table:** A table read by fetching the rows addressed by a key; conditional-memory tables are read this way.
 - **Memory-mapped file:** A file made accessible as memory; pages are loaded from disk on first access and kept in the page cache.
 - **N-gram:** A sequence of n consecutive tokens (bigram: 2, trigram: 3).
 - **Offloading:** Placing part of a model's data in a slower, larger memory tier (host RAM, NVMe) instead of GPU memory.
@@ -444,7 +432,7 @@ The common sizing error is to treat all offloading as equivalent. Check **which 
 
 - DeepSeek-V4.1-Flash model card — <https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash>
 - DeepSeek-V4.1-Flash technical report — <https://arxiv.org/abs/2609.19969>
-- Engram: conditional memory via hashed n-gram embeddings — <https://arxiv.org/abs/2601.07372>
+- Conditional Memory via Scalable Lookup: A New Axis of Sparsity for Large Language Models (Engram) — <https://arxiv.org/abs/2601.07372>
 - NVIDIA Qwen3.8-Flash-Next NVFP4 model card and precision breakdown — <https://huggingface.co/nvidia/Qwen3.8-Flash-Next-NVFP4>
 - Qwen3.8-Flash-Next model card — <https://huggingface.co/Qwen/Qwen3.8-Flash-Next>
 - Qwen3.8-Flash-Next technical report — <https://arxiv.org/abs/2608.30320>
