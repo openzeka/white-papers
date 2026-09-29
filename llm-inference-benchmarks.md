@@ -339,6 +339,9 @@ published by <a href="https://artificialanalysis.ai" rel="noopener">Artificial
 Analysis</a> and are reproduced here with attribution. All other columns are
 OpenZeka&rsquo;s own measurements.</p>
 
+{% include benchmark-jsonld.html kind="llm" %}
+{% include benchmark-explained.html %}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1"></script>

@@ -1168,3 +1168,38 @@ details.bt-howto > summary:focus-visible {
   line-height: 1.55;
   color: var(--bt-text-muted);
 }
+
+/* ── Expanded row: results explanation (left) beside the capacity box (right) ──
+   Only when the page carries an explanation for the row (see explanation() in
+   the widget); otherwise the capacity box stands alone as before. Stacks on
+   narrow screens. */
+
+.bt-detail-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  margin: 0 0 16px;
+}
+
+.bt-detail-pair > .bt-detail-pair-col > .bt-capacity { margin: 0; height: 100%; box-sizing: border-box; }
+
+.bt-explained {
+  height: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-radius: var(--bt-radius);
+  text-align: left;
+  white-space: normal;
+  cursor: auto;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.bt-explained p { margin: 0 0 8px; }
+.bt-explained p:last-child { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  .bt-detail-pair { grid-template-columns: minmax(0, 1fr); }
+}
