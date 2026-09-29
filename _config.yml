@@ -12,7 +12,7 @@ baseurl: ""
 lang: en
 languages: ["en", "tr"]
 default_lang: "en"
-exclude_from_localization: ["javascript", "images", "css", "assets", "_sass", "CNAME"]
+exclude_from_localization: ["javascript", "images", "css", "assets", "_sass", "CNAME", "sitemap.xml", "feed.xml", "llms.txt", "llms-full.txt"]
 # false: paralel derlemede iki dil aynı nav önbelleğini paylaşıyor ve yaklaşık her
 # 10 derlemeden birinde tüm sayfalara tek dilin menüsü düşüyordu.
 parallel_localization: false
