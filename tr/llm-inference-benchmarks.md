@@ -360,6 +360,9 @@ dayanan kapasite tahminleri var.
 tarafından yayımlanmıştır ve kaynak belirtilerek burada aktarılmıştır. Diğer
 tüm sütunlar OpenZeka&rsquo;nın kendi ölçümleridir.</p>
 
+{% include benchmark-jsonld.html kind="llm" %}
+{% include benchmark-explained.html %}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1"></script>

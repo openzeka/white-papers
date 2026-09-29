@@ -1,0 +1,16 @@
+{%- comment -%}
+  Each run's explanation, written into the page at build time from
+  _plugins/visibility.rb, so search engines and AI agents find it in the HTML.
+  Hidden here; the widget shows a row's text beside its capacity box when the
+  row is opened (explanation() in assets/js/benchmark-table.js). Must sit
+  outside the [data-bt-src] element, whose content the widget replaces.
+
+  Include as: {% include benchmark-explained.html %}
+{%- endcomment -%}
+{%- if site.data.oz_llm -%}
+<div class="bt-explained-src" hidden>
+{%- for r in site.data.oz_llm.benchmarks %}
+<div data-bt-explained="{{ r.id }}">{% for p in r.oz_parts[site.active_lang] %}<p>{{ p }}</p>{% endfor %}</div>
+{%- endfor %}
+</div>
+{%- endif -%}

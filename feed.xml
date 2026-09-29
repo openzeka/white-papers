@@ -1,0 +1,31 @@
+---
+layout: null
+permalink: /feed.xml
+---
+{%- comment -%}
+  Replaces jekyll-feed (which skips itself when this file exists): that one only
+  reads _posts, which this site has none of, so it published an empty feed. One
+  entry per dated page (the same set as the home-page cards), newest first.
+{%- endcomment -%}
+{%- assign items = site.data.oz_pages | where_exp: "p", "p.date" | sort: "date" | reverse -%}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="{{ site.default_lang }}">
+  <title>{{ site.title | xml_escape }}</title>
+  <subtitle>{{ site.description | strip | xml_escape }}</subtitle>
+  <link href="{{ site.url }}{{ site.baseurl }}/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="{{ site.url }}{{ site.baseurl }}/" rel="alternate" type="text/html"/>
+  <id>{{ site.url }}{{ site.baseurl }}/feed.xml</id>
+  <updated>{{ site.time | date_to_xmlschema }}</updated>
+  <author><name>Openzeka Teknoloji A.Ş.</name></author>
+{%- for p in items %}
+{%- assign link = p.langs[site.default_lang] | default: p.langs.first[1] %}
+  <entry>
+    <title>{{ p.title | xml_escape }}</title>
+    <link href="{{ site.url }}{{ site.baseurl }}{{ link }}" rel="alternate" type="text/html"/>
+    <id>{{ site.url }}{{ site.baseurl }}{{ link }}</id>
+    <published>{{ p.date | date_to_xmlschema }}</published>
+    <updated>{{ p.last_modified_date | default: p.date | date_to_xmlschema }}</updated>
+    <summary>{{ p.description | xml_escape }}</summary>
+  </entry>
+{%- endfor %}
+</feed>

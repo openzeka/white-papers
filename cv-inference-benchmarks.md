@@ -244,4 +244,6 @@ when they land.
 <p class="bt-attribution">Every figure on this page is OpenZeka&rsquo;s own
 measurement on its own hardware.</p>
 
+{% include benchmark-jsonld.html kind="cv" %}
+
 <script src="/assets/js/cv-benchmark-table.js"></script>

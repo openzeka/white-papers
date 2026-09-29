@@ -95,9 +95,10 @@
     capShortCtx: function (len, ctx) { return "A " + ctx + "-token session is longer than this model's " + len + "-token context window — the most it can hold — so it cannot serve sessions that long. Choose a shorter context length to see a figure."; },
     capCeiling: function (c) { return " The speed figure is a lower bound: the run still met your targets at C=" + c + ", the highest level tested."; },
     maxcAtLeast: function (c) { return "At least " + c + ": the run met your targets at C=" + c + ", the highest level tested, so its real maximum was not reached."; },
-    capHeading: "Capacity",
-    capChatRow: function (ctx) { return "Chat · " + ctx + "-token sessions"; },
-    capAgenticRow: function (ctx) { return "Agentic · " + ctx + "-token sessions"; },
+    capHeading: "Capacity estimation details",
+    explainedHeading: "Benchmark results explained",
+    capChatRow: function (ctx) { return "Chat"; },
+    capAgenticRow: function (ctx) { return "Agentic"; },
     capUsers: function (n) { return n + (n === 1 ? " user" : " users"); },
     capByPerf: "set by the speed targets",
     capByMem: "set by KV cache memory",
@@ -585,6 +586,24 @@
       "</span>";
   }
 
+  /* The explanation, left of the capacity box. The whitepapers site writes one per
+     row into the page at build time (a hidden [data-bt-explained] element per
+     id), so the text is in the HTML for search engines and agents; the widget
+     only moves it into view. A page without them — the openzeka.com embed —
+     shows the capacity box alone. */
+  function explanation(entry) {
+    var el = document.querySelector('[data-bt-explained="' + CSS.escape(entry.id) + '"]');
+    return el ? el.innerHTML : "";
+  }
+
+  function detailPair(entry) {
+    var expl = explanation(entry);
+    if (!expl) return capBreakdown(entry);
+    return '<div class="bt-detail-pair"><div class="bt-detail-pair-col"><div class="bt-explained">' +
+      '<div class="bt-capacity-title">' + escapeHTML(S.explainedHeading) + "</div>" + expl + "</div></div>" +
+      '<div class="bt-detail-pair-col">' + capBreakdown(entry) + "</div></div>";
+  }
+
   /* A short, plain summary of both capacity cells for the expanded row: the
      figure, which limit set it, what each limit allows, and one sentence of
      context. The method itself is explained on the page, not here. */
@@ -601,7 +620,7 @@
         (r.mem === null ? S.capMemNa : S.capMemFits(r.mem));
       html += '<span class="bt-cap-label">' + escapeHTML(label) + "</span>";
       html += '<span class="bt-cap-result" title="' + escapeHTML(capTitle(r)) + '">' +
-        "<strong>" + (r.limit === "context" ? "—" : escapeHTML(S.capUsers(r.atLeast ? r.shown + "+" : r.shown))) + "</strong>" +
+        "<strong>" + (r.limit === "context" ? "—" : escapeHTML(S.capUsers(r.atLeast ? r.shown + "+" : "~" + r.shown))) + "</strong>" +
         capIcons(r) + ' <span class="bt-cap-by">' + escapeHTML(by) + "</span>" +
         '<span class="bt-cap-detail">' + escapeHTML(detail) + "</span></span>";
     });
@@ -1523,7 +1542,7 @@
         html += "</div>";
         html += "</div>";
 
-        html += capBreakdown(entry);
+        html += detailPair(entry);
 
         var deviceStr = escapeHTML(entry.device);
         if (entry.tp != null && entry.tp !== 1) {

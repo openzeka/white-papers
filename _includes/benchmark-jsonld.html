@@ -1,0 +1,54 @@
+{%- comment -%}
+  Dataset structured data (schema.org JSON-LD) for an explorer page, generated
+  at build time from the files the widget fetches (read in place by
+  _plugins/visibility.rb), so a new benchmark run is reflected with no edit.
+  Not visible on the page. The per-run explanations are written by
+  benchmark-explained.html and published in /llms-full.txt.
+
+  Include as: {% include benchmark-jsonld.html kind="llm" %}  or  kind="cv"
+{%- endcomment -%}
+{%- assign page_url = page.canonical_url | default: page.url | absolute_url -%}
+{%- if include.kind == "llm" and site.data.oz_llm -%}
+{%- assign rows = site.data.oz_llm.benchmarks -%}
+{%- assign data_url = "/assets/data/benchmarks.json" | absolute_url -%}
+{%- assign models = rows | map: "model" | uniq | sort -%}
+{%- assign devices = rows | map: "device" | uniq | sort -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": {{ page.title | jsonify }},
+  "description": {{ page.description | strip | jsonify }},
+  "url": {{ page_url | jsonify }},
+  "inLanguage": {{ site.active_lang | jsonify }},
+  "dateModified": {{ page.last_modified_date | default: page.date | date: "%Y-%m-%d" | jsonify }},
+  "creator": { "@type": "Organization", "name": "Openzeka Teknoloji A.Ş.", "url": "https://www.openzeka.com" },
+  "isAccessibleForFree": true,
+  "keywords": {{ models | concat: devices | jsonify }},
+  "measurementTechnique": "128 input / 128 output tokens, ten rounds per concurrency level, mean values",
+  "variableMeasured": ["Time to first token (ms)", "Per-request output tokens per second", "Concurrency", "Max concurrent requests meeting targets (Max C)", "Estimated chat user capacity", "Estimated agentic user capacity"],
+  "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": {{ data_url | jsonify }} }, { "@type": "DataDownload", "encodingFormat": "text/plain", "contentUrl": {{ "/llms-full.txt" | absolute_url | jsonify }} }]
+}
+</script>
+{%- elsif include.kind == "cv" and site.data.oz_cv -%}
+{%- assign rows = site.data.oz_cv.oz_rows -%}
+{%- assign data_url = "/assets/data/cv-benchmarks/index.json" | absolute_url -%}
+{%- assign models = rows | map: "model" | uniq | sort -%}
+{%- assign devices = rows | map: "device" | uniq | sort -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": {{ page.title | jsonify }},
+  "description": {{ page.description | strip | jsonify }},
+  "url": {{ page_url | jsonify }},
+  "inLanguage": {{ site.active_lang | jsonify }},
+  "dateModified": {{ page.last_modified_date | default: page.date | date: "%Y-%m-%d" | jsonify }},
+  "creator": { "@type": "Organization", "name": "Openzeka Teknoloji A.Ş.", "url": "https://www.openzeka.com" },
+  "isAccessibleForFree": true,
+  "keywords": {{ models | concat: devices | jsonify }},
+  "variableMeasured": ["Frames per second per camera", "Total frames per second", "Frame drop (%)", "Camera count", "Max cameras holding the target frame rate"],
+  "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": {{ data_url | jsonify }} }, { "@type": "DataDownload", "encodingFormat": "text/plain", "contentUrl": {{ "/llms-full.txt" | absolute_url | jsonify }} }]
+}
+</script>
+{%- endif -%}
