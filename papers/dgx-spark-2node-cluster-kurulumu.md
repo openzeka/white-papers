@@ -1,7 +1,7 @@
 ---
 title: DGX Spark 2-Node AI Cluster Setup Guide
 parent: White Papers
-nav_order: 3
+nav_order: 4
 lang: en
 page_id: dgx-spark-2node-cluster-kurulumu
 date: 2026-07-30 08:21:43 +0300

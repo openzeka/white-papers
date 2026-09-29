@@ -1,7 +1,7 @@
 ---
 title: DGX Spark 8-Node AI Cluster Setup Guide
 parent: White Papers
-nav_order: 6
+nav_order: 7
 lang: en
 page_id: dgx-spark-8node-cluster-kurulumu
 date: 2026-07-24 14:01:17 +0300

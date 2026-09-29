@@ -1,7 +1,7 @@
 ---
 title: NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison
 parent: White Papers
-nav_order: 2
+nav_order: 3
 lang: en
 page_id: b300-gb300-cluster-mimarisi
 date: 2026-08-03 09:01:15 +0300

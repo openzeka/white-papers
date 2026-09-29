@@ -1,7 +1,7 @@
 ---
 title: Qwen3.6-27B DGX Spark Cluster Scaling
 parent: White Papers
-nav_order: 8
+nav_order: 9
 lang: en
 page_id: qwen3.6-27b-dgx-spark-scaling
 date: 2026-07-06 08:53:32 +0300

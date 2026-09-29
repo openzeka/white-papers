@@ -1,7 +1,7 @@
 ---
 title: DGX Spark 4-Node AI Cluster Setup Guide
 parent: White Papers
-nav_order: 5
+nav_order: 6
 lang: en
 page_id: dgx-spark-4node-cluster-kurulumu
 date: 2026-07-24 14:01:16 +0300
