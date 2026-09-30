@@ -40,7 +40,7 @@ toc: true
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Bundle</h3>
 <p>2 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
-<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-bundle/">Bu Ürünü Satın Al →</a>
+{% include company/product-button.html product="dgx-spark-bundle" %}
 </div>
 </div>
 
@@ -596,6 +596,6 @@ Komutunu çalıştırın ve sparkrun'u tekrar çalıştırın.
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Bundle</h3>
 <p>2 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
-<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-bundle/">Bu Ürünü Satın Al →</a>
+{% include company/product-button.html product="dgx-spark-bundle" %}
 </div>
 </div>

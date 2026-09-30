@@ -14,7 +14,7 @@ last_modified_date: 2026-07-03
 toc: true
 ---
 
-*Hazırlayan: **Openzeka Teknoloji A.Ş.** — NVIDIA Türkiye & MEA Resmî Embedded Compute Distribütörü ve NVIDIA Elite Partner*
+{% include company/block.html name="prepared_by" %}
 
 *Test platformu: NVIDIA DGX Spark (GB10) · Model: Qwen3.6-27B · Rapor tarihi: Temmuz 2026*
 
@@ -1041,18 +1041,11 @@ Her dizinde 5 PNG grafiği (TTFT, ITL, TPS, Latency, Throughput), 5 HTML interak
 
 ---
 
-## Hakkımızda — Openzeka
-
-**Openzeka Teknoloji A.Ş.**, 2016 yılında Ankara Bilkent Cyberpark'ta kurulan; NVIDIA'nın **Türkiye ve MEA bölgesindeki resmî Embedded Compute distribütörü** ve **NVIDIA Elite Partner**'ıdır. Şirket; NVIDIA **DGX/HGX** sunucuları, veri merkezi ve profesyonel GPU'lar, **Jetson** gömülü sistemler ve iş istasyonları başta olmak üzere yapay zeka ve yüksek başarımlı hesaplama donanımlarının dağıtımını yaparken; kendi geliştirdiği **Cordatus AI** platformu ile uç (edge) ve bulut ortamlarında gerçek zamanlı görüntü analitiği ve yapay zeka çıkarım (inference) çözümleri sunmaktadır. Derin öğrenme tabanlı yapay zeka, dijital ikiz ve dijital dönüşüm alanlarındaki uzmanlığıyla bölgesinin öncü embedded yapay zeka sağlayıcılarından biridir.
+{% include company/block.html name="about_report" %}
 
 Bu raporun tüm ölçümleri, Openzeka'nın açık kaynaklı **[CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark)** aracıyla, bir **NVIDIA DGX Spark (GB10)** sistemi üzerinde gerçekleştirilmiştir.
 
-| | |
-|---|---|
-| **Web** | [openzeka.com](https://openzeka.com) |
-| **İletişim** | [openzeka.com/iletisim](https://openzeka.com/iletisim) |
-| **Telefon** | +90 312 266 2055 |
-| **Adres** | Üniversiteler Mah. 1606. Cad. No:11, Cyberpark H Blok, 06800 Bilkent/Ankara, Türkiye |
+{% include company/block.html name="contact_table" %}
 
 ---
 
@@ -1060,4 +1053,4 @@ Bu raporun tüm ölçümleri, Openzeka'nın açık kaynaklı **[CordatusAI/llm-b
 
 *Test platformu: NVIDIA DGX Spark (GB10) · Model: Qwen3.6-27B*
 
-*Hazırlayan: Openzeka Teknoloji A.Ş.*
+{% include company/block.html name="prepared_by_short" %}

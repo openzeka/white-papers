@@ -58,15 +58,7 @@ The key difference between the two approaches is:
 
 The purpose of this guide is to provide a current and actionable answer to the question "Is local LLM right for me / my organization, and if so, which hardware–model–software trio should I choose?"
 
-#### About OpenZeka
-
-![OpenZeka]({{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }})
-
-**OpenZeka Teknoloji A.Ş.** was founded in 2016 at Ankara Bilkent Cyberpark and offers innovative AI solutions in hardware and software. It is the **Official NVIDIA Robotics Distributor for Turkey and MEA (MENA)**; it is also an **NVIDIA DGX AI Compute Systems** and **NVIDIA Omniverse Partner**, and an **Elite Partner** in the NVIDIA Visualization field.
-
-- **Hardware:** DGX/HGX server solutions, professional graphics cards and workstations, NVIDIA Jetson embedded systems (developer kits, ready AI kits, modules, and carrier boards). We design and deploy fully redundant AI infrastructure covering compute, storage, networking, and orchestration.
-- **Software:** With our in-house **Cordatus AI** platform, we deliver industry-specific solutions, especially in intelligent video analytics.
-- **Digital transformation:** We lead digital transformation with NVIDIA Omniverse and Digital Twin technologies; we share our knowledge at events such as NVIDIA GTC, Embedded World, and Smart City Expo, through university collaborations and AI Workshops.
+{% include company/block.html name="about_profile" %}
 
 The hardware recommendations in this guide are based on this portfolio.
 
@@ -765,6 +757,6 @@ High-traffic (500+ concurrent) inference or pre-training (from scratch) → **8�
 
 ---
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }}" alt="OpenZeka" width="220"/></p>
+{% include company/block.html name="cta_logo" %}
 
-**Let's plan your local LLM infrastructure together.** For the right hardware–model–software match, VRAM sizing, and TCO analysis, contact OpenZeka: [support@openzeka.com](https://openzeka.com/en/contact/) · [openzeka.com](https://openzeka.com/en) · VRAM calculator: [Cordatus VRAM Calculator](https://app.cordatus.ai/#/vram-calculator)
+**Let's plan your local LLM infrastructure together.** For the right hardware–model–software match, VRAM sizing, and TCO analysis, {% include company/block.html name="contact_cta" %} · VRAM calculator: [Cordatus VRAM Calculator](https://app.cordatus.ai/#/vram-calculator)

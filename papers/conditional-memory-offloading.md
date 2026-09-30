@@ -470,6 +470,6 @@ One sizing mistake to avoid is treating all offloading as equivalent. Check **wh
 
 ---
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }}" alt="OpenZeka" width="220"/></p>
+{% include company/block.html name="cta_logo" %}
 
-**Let's plan your LLM infrastructure together.** For hardware sizing that accounts for model architecture, memory hierarchy and offloading, contact OpenZeka: [support@openzeka.com](https://openzeka.com/en/contact/) · [openzeka.com](https://openzeka.com/en)
+**Let's plan your LLM infrastructure together.** For hardware sizing that accounts for model architecture, memory hierarchy and offloading, {% include company/block.html name="contact_cta" %}

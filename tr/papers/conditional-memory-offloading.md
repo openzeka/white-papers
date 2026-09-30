@@ -470,6 +470,6 @@ Kaçınılması gereken bir boyutlandırma hatası, her offloading yöntemini ay
 
 ---
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }}" alt="OpenZeka" width="220"/></p>
+{% include company/block.html name="cta_logo" %}
 
-**LLM altyapınızı birlikte planlayalım.** Model mimarisini, bellek hiyerarşisini ve offloading'i hesaba katan donanım boyutlandırması için OpenZeka ile iletişime geçin: [support@openzeka.com](https://openzeka.com/iletisim/) · [openzeka.com](https://openzeka.com)
+**LLM altyapınızı birlikte planlayalım.** Model mimarisini, bellek hiyerarşisini ve offloading'i hesaba katan donanım boyutlandırması için {% include company/block.html name="contact_cta" %}

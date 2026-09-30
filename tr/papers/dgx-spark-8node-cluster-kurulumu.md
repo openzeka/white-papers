@@ -51,7 +51,7 @@ toc: true
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark 8-Node AI Cluster – 8 Node, 1 TB, 200GbE</h3>
 <p>8 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
-<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-8-node-ai-cluster-8-node/">Bu Ürünü Satın Al →</a>
+{% include company/product-button.html product="dgx-spark-8-node" %}
 </div>
 </div>
 
@@ -1419,6 +1419,6 @@ cat /sys/class/net/bond0/bonding/xmit_hash_policy
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark 8-Node AI Cluster – 8 Node, 1 TB, 200GbE</h3>
 <p>8 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
-<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-8-node-ai-cluster-8-node/">Bu Ürünü Satın Al →</a>
+{% include company/product-button.html product="dgx-spark-8-node" %}
 </div>
 </div>

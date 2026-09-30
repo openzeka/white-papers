@@ -15,7 +15,7 @@ last_modified_date: 2026-07-31
 toc: true
 ---
 
-*Hazırlayan: **Openzeka Teknoloji A.Ş.** — NVIDIA Türkiye & MEA Resmî Gömülü Hesaplama Distribütörü ve NVIDIA Elite Partner*
+{% include company/block.html name="prepared_by_alt" %}
 
 *Platform: NVIDIA Blackwell Ultra (B300 SXM) · Temmuz 2026*
 
