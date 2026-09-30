@@ -5,7 +5,7 @@ permalink: /llms-full.txt
 {%- comment -%}
   The full companion to llms.txt, for AI agents only (nothing here is shown on
   the site). Every benchmark run as a labelled record plus a plain-language
-  explanation in Turkish (the primary audience) and English. Generated from the
+  explanation in Turkish (the primary audience), English and Dutch. Generated from the
   benchmark data by _plugins/visibility.rb — nothing to edit when a run is added.
 {%- endcomment -%}
 {%- assign llm = site.data.oz_llm.benchmarks -%}
@@ -13,12 +13,14 @@ permalink: /llms-full.txt
 {%- assign cv = site.data.oz_cv.oz_rows -%}
 {%- assign tr = site.data.tr.strings.sentences -%}
 {%- assign en = site.data.en.strings.sentences -%}
+{%- assign nl = site.data.nl.strings.sentences -%}
 # {{ site.title }} — benchmark sonuçları / benchmark results
 
 > OpenZeka Teknoloji A.Ş.'nin LLM ve CV çıkarım benchmark'ları: hangi model, hangi NVIDIA cihazında, hangi hızda ve kaç kullanıcıya ya da kameraya hizmet verebilir. / OpenZeka's LLM and CV inference benchmarks: which model runs on which NVIDIA device, how fast, and for how many users or cameras.
 
 Birincil kaynak (Türkçe) / Primary source (Turkish): {{ site.url }}/tr/llm-inference-benchmarks/ · {{ site.url }}/tr/cv-inference-benchmarks/
 English: {{ site.url }}/llm-inference-benchmarks/ · {{ site.url }}/cv-inference-benchmarks/
+Nederlands / Dutch: {{ site.url }}/nl/llm-inference-benchmarks/ · {{ site.url }}/nl/cv-inference-benchmarks/
 Ham veri / Raw data: {{ site.url }}/assets/data/benchmarks.json · {{ site.url }}/assets/data/cv-benchmarks/index.json
 Please cite the explorer page, not this file. Each record's link opens that run in the interactive table.
 
@@ -27,6 +29,8 @@ Please cite the explorer page, not this file. Each record's link opens that run 
 {{ tr.llm_intro }}
 
 {{ en.llm_intro }}
+
+{{ nl.llm_intro }}
 
 Defaults used below / Aşağıdaki varsayılanlar: TTFT ≤ {{ cfg.ttft_threshold_ms }} ms, TPS ≥ {{ cfg.tps_threshold }} tok/s per request; chat sessions {{ cfg.chat_context_tokens }} tokens, speed × {{ cfg.chat_multiplier }}; agentic sessions {{ cfg.agentic_context_tokens }} tokens, speed × {{ cfg.agentic_multiplier }}. Capacity = min(speed limit, KV cache memory limit); "+" = the run never failed the targets, so the figure is a minimum.
 {% for r in llm %}
@@ -42,12 +46,15 @@ Defaults used below / Aşağıdaki varsayılanlar: TTFT ≤ {{ cfg.ttft_threshol
 {%- endfor %}
 - TR: {{ r.oz_text.tr }}
 - EN: {{ r.oz_text.en }}
+- NL: {{ r.oz_text.nl }}
 {% endfor %}
 ## CV çıkarım benchmark'ları / CV inference benchmarks
 
 {{ tr.cv_intro }}
 
 {{ en.cv_intro }}
+
+{{ nl.cv_intro }}
 {% for r in cv %}
 ### {{ r.model }}{% if r.precision != "" %} {{ r.precision }}{% endif %} · {{ r.device }}
 
@@ -57,4 +64,5 @@ Defaults used below / Aşağıdaki varsayılanlar: TTFT ≤ {{ cfg.ttft_threshol
 - Max cameras at the default {{ site.data.oz_cv.config.target_fps }} FPS per camera: {{ r.max_cameras }}
 - TR: {{ r.text.tr }}
 - EN: {{ r.text.en }}
+- NL: {{ r.text.nl }}
 {% endfor %}

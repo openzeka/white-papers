@@ -12,7 +12,7 @@ permalink: /llms.txt
 {%- assign cv = site.data.oz_cv.oz_rows -%}
 # {{ site.title }}
 
-> {{ site.description | strip }} English at the root, Turkish under /tr/.
+> {{ site.description | strip }} English at the root, Turkish under /tr/, Dutch under /nl/.
 
 Every benchmark figure is OpenZeka's own measurement on its own hardware. The
 Intelligence Index and Agentic Index fields in benchmarks.json are republished
@@ -21,12 +21,12 @@ to them wherever they are shown.
 
 ## Benchmark explorers
 
-- [LLM Inference Benchmark Explorer]({{ site.url }}/llm-inference-benchmarks/): {{ llm.size }} runs — time to first token and per-request tokens/s at concurrency 1–64, with Max C (concurrent requests meeting TTFT ≤ 1 s and ≥ 20 tok/s by default) and estimated chat / agentic user capacity per model × device — how many people a model on a given device can serve. Each run's plain-language explanation is in the page HTML and in llms-full.txt. Turkish: {{ site.url }}/tr/llm-inference-benchmarks/
-- [CV Inference Benchmark Explorer]({{ site.url }}/cv-inference-benchmarks/): {{ cv.size }} device × model results — FPS per camera and frame drop by camera count. Turkish: {{ site.url }}/tr/cv-inference-benchmarks/
+- [LLM Inference Benchmark Explorer]({{ site.url }}/llm-inference-benchmarks/): {{ llm.size }} runs — time to first token and per-request tokens/s at concurrency 1–64, with Max C (concurrent requests meeting TTFT ≤ 1 s and ≥ 20 tok/s by default) and estimated chat / agentic user capacity per model × device — how many people a model on a given device can serve. Each run's plain-language explanation is in the page HTML and in llms-full.txt. Turkish: {{ site.url }}/tr/llm-inference-benchmarks/ · Dutch: {{ site.url }}/nl/llm-inference-benchmarks/
+- [CV Inference Benchmark Explorer]({{ site.url }}/cv-inference-benchmarks/): {{ cv.size }} device × model results — FPS per camera and frame drop by camera count. Turkish: {{ site.url }}/tr/cv-inference-benchmarks/ · Dutch: {{ site.url }}/nl/cv-inference-benchmarks/
 
 ## Results as sentences
 
-- [All results, explained (Turkish and English)]({{ site.url }}/llms-full.txt): one paragraph per benchmark run — measured speed, Max C, estimated chat and agentic user capacity and what limits it; for CV, FPS per camera and max cameras. Turkish first: OpenZeka's primary audience is in Türkiye, and the Turkish pages are under /tr/.
+- [All results, explained (Turkish, English and Dutch)]({{ site.url }}/llms-full.txt): one paragraph per benchmark run — measured speed, Max C, estimated chat and agentic user capacity and what limits it; for CV, FPS per camera and max cameras. Turkish first: OpenZeka's primary audience is in Türkiye, and the Turkish pages are under /tr/; Dutch pages are under /nl/.
 
 ## Raw data
 
