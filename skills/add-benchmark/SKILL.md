@@ -358,8 +358,9 @@ commit, so a person can check it. Before finishing,
 match Hugging Face.
 
 If the run introduces a **quantization format not already explained** in the
-how-to glossary, say so — the glossary on `llm-inference-benchmarks.md` and
-`tr/llm-inference-benchmarks.md` should gain a line, in both languages.
+how-to glossary, say so — the glossary on `llm-inference-benchmarks.md`,
+`tr/llm-inference-benchmarks.md` and `nl/llm-inference-benchmarks.md` should
+gain a line, in all three languages (terms: `skills/add-white-paper/TERMINOLOGY.md`).
 
 ## Keeping this skill true
 
