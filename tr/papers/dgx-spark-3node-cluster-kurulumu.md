@@ -10,7 +10,7 @@ description: >-
   3 NVIDIA DGX Spark node'undan oluşan ring (mesh) topolojisine sahip AI cluster
   kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun yapılandırması.
 permalink: /papers/dgx-spark-3node-cluster-kurulumu/
-last_modified_date: 2026-07-29
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -483,7 +483,7 @@ Bu testte Intel/Qwen3.5-397B-A17B-int4-AutoRound modeli kullanılır. Model, 3 n
 **Modelin Çalıştırılması**  
 Aşağıdaki YAML dosyasını *qwen3.5-397b-a17b-int4-vllm.yaml* adıyla kaydedin:
 
-```bash
+```yaml
 model: Intel/Qwen3.5-397B-A17B-int4-AutoRound
 runtime: vllm-ray
 min_nodes: 3

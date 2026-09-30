@@ -10,7 +10,7 @@ description: >-
   Qwen3.6-27B modelinin NVIDIA DGX Spark (GB10) platformunda FP8, FP8-MTP,
   AWQ-MTP, NVFP4 ve NVFP4-MTP quantization varyantları ile performans değerlendirmesi.
 permalink: /papers/qwen3.6-27b-dgx-spark-benchmark/
-last_modified_date: 2026-07-03
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -894,7 +894,7 @@ Vurgulanmalıdır ki bu "kazanan" nitelemesi yalnızca hız metriklerine dayanı
 **NVFP4-MTP ne zaman tercih edilmeli?**
 - NVIDIA Blackwell GPU'larda donanım hızlandırmasından tam faydalanmak istendiğinde
 - Bellek kısıtlı ortamlarda (en düşük bellek ayak izi)
-- Düşük-orta yük altında (C≤4)
+- Yüksek yük altında (C=8-16)
 
 **Geleceğe dönük not:** Bu rapordaki AWQ-MTP üstünlüğü, yamasız stok vLLM v0.22.0'ın bir fotoğrafıdır. Bölüm 6.4.4'teki yazılım düzeltmeleri upstream'e girdikçe NVFP4-MTP'nin AWQ-MTP ile pariteye ulaşması, yüksek concurrency'de ise öne geçmesi beklenmektedir (nicel analiz için bkz. Ek A.3). DGX Spark üzerinde uzun ömürlü kurulumlar planlanıyorsa, donanım-yerel format olan NVFP4 stratejik tercih olarak değerlendirilmelidir.
 

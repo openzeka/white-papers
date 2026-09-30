@@ -11,7 +11,7 @@ description: >-
   (GB10) üzerinde TP8 dağıtımı: iki yapılandırma (300K Engram-bellekte, 1M
   Engram-diskte), NCCL optimizasyonu, benchmark sonuçları ve TP4 karşılaştırması.
 permalink: /papers/deepseek-v4.1-flash-8spark-deployment/
-last_modified_date: 2026-09-29
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -338,7 +338,7 @@ Benchmark Gezgini'nin varsayılan hedeflerinde (TTFT≤1000ms, TPS≥20 tok/s), 
 1. **DeepSeek-V4.1-Flash (763B), 8× DGX Spark üzerinde TP=8 ile çalışır** — daha büyük cluster, kullanılabilir concurrency'yi ikiye katlar (TP4'te Max C=2, TP8'de Max C=4) ve TPS'yi %22-55 oranında artırır.
 2. **İki yapılandırma farklı kullanım senaryolarına hizmet eder.** TP8-300K (Engram bellekte), ölçülen kısa prompt iş yükünde daha yüksek TPS sağlar. TP8-1M (Engram diskte) ise KV cache için daha fazla bellek bırakır ve 1M bağlam sınırıyla yapılandırılır. Bu azami bağlam uzunluğundaki performans ölçülmemiştir.
 3. **NCCL optimizasyonu TP8'in kritik deltasıdır.** Kanal azaltma ve uygun ulimit'ler olmadan, 8-rank overhead'i modelin belleğe sığmasını engeller.
-4. **TP8, veri merkezi donanımının yerini almaz.** B300, C=1'de hâlâ ~8× daha hızlıdır, ancak TP8, 763B modeli TP4 üzerinden 4× kapasite artışına taşır — geliştirme, prototipleme ve sınırlı ekip production senaryoları için yeterli.
+4. **TP8, veri merkezi donanımının yerini almaz.** B300, C=1'de hâlâ ~8× daha hızlıdır, ancak TP8, 763B modeli TP4 üzerinden 2× kapasite artışına taşır — geliştirme, prototipleme ve sınırlı ekip production senaryoları için yeterli.
 
 ---
 

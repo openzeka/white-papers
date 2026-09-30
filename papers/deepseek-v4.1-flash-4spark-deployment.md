@@ -11,7 +11,7 @@ description: >-
   Spark (GB10) with tensor parallelism: vLLM build chain, 7 SM 12.1a patches,
   Engram-on-disk, benchmark results and B300 comparison.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
-last_modified_date: 2026-09-29
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -46,7 +46,7 @@ Two aspects make this work worth documenting:
 - **The model is data center class.** DeepSeek-V4.1-Flash is normally served on DGX-B300 and similar-class hardware. 4× DGX Spark represents the scalable edge of the architecture.
 - **7 SM 12.1a-specific patches.** The stock vLLM nightly image has missing or broken code paths for SM 12.1a (GB10) — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — which are fixed with community patches.
 
-> **This is a deployment guide, not a benchmark comparison.** Benchmark results are presented in Section 6,
+> **This is a deployment guide, not a benchmark comparison.** Benchmark results are presented in Section 6.
 
 ---
 

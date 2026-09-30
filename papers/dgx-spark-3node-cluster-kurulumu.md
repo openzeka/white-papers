@@ -10,7 +10,7 @@ description: >-
   Ring (mesh) topology AI cluster setup with 3 NVIDIA DGX Spark nodes:
   management and compute networks, RoCEv2/RDMA, sparkrun configuration.
 permalink: /papers/dgx-spark-3node-cluster-kurulumu/
-last_modified_date: 2026-07-29
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -476,7 +476,7 @@ This test uses the Intel/Qwen3.5-397B-A17B-int4-AutoRound model. The model runs 
 **Running the Model**
 Save the following YAML file as *qwen3.5-397b-a17b-int4-vllm.yaml*:
 
-```bash
+```yaml
 model: Intel/Qwen3.5-397B-A17B-int4-AutoRound
 runtime: vllm-ray
 min_nodes: 3

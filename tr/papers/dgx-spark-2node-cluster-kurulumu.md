@@ -10,7 +10,7 @@ description: >-
   2 NVIDIA DGX Spark node'undan oluşan point-to-point topolojisine sahip AI cluster
   kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun yapılandırması.
 permalink: /papers/dgx-spark-2node-cluster-kurulumu/
-last_modified_date: 2026-08-03
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -63,6 +63,7 @@ Doküman; management ve compute ağlarının hazırlanması, ConnectX-7 QSFP112 
 * 2× NVIDIA DGX Spark sistemi
 * 1× Amphenol: NJAAKK-N911 Kablo
 * Cat6 kablolar (management ağı)
+* 1× RJ45 portlu switch (management ağı)
 
 **Yazılım ve İşletim Sistemi**
 

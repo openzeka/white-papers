@@ -11,7 +11,7 @@ description: >-
   Spark (GB10) with TP8: two configurations (300K Engram-in-memory, 1M
   Engram-on-disk), NCCL optimization, benchmark results and TP4 comparison.
 permalink: /papers/deepseek-v4.1-flash-8spark-deployment/
-last_modified_date: 2026-09-29
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -338,7 +338,7 @@ At the Benchmark Explorer's default targets (TTFT≤1000ms, TPS≥20 tok/s), TP8
 1. **DeepSeek-V4.1-Flash (763B) runs on 8× DGX Spark with TP=8** — the larger cluster doubles the usable concurrency (Max C=4 vs Max C=2 at TP4) and improves TPS by 22-55%.
 2. **Two configurations serve different use cases.** TP8-300K (Engram in memory) has higher TPS on the measured short-prompt workload; TP8-1M (Engram-on-disk) leaves more KV-cache memory and configures a 1M context limit. Performance at that maximum context length was not measured.
 3. **NCCL optimization is the critical TP8 delta.** Without channel reduction and proper ulimits, the 8-rank overhead prevents the model from fitting.
-4. **TP8 does not replace data center hardware.** B300 is still ~8× faster at C=1, but TP8 brings the 763B model into the reach of a 4× capacity increase over TP4 — enough for development, prototyping, and limited-team production scenarios.
+4. **TP8 does not replace data center hardware.** B300 is still ~8× faster at C=1, but TP8 brings the 763B model into the reach of a 2× capacity increase over TP4 — enough for development, prototyping, and limited-team production scenarios.
 
 ---
 

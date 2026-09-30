@@ -10,7 +10,7 @@ description: >-
   Point-to-point topology AI cluster setup with 2 NVIDIA DGX Spark nodes:
   management and compute networks, RoCEv2/RDMA, sparkrun configuration.
 permalink: /papers/dgx-spark-2node-cluster-kurulumu/
-last_modified_date: 2026-08-03
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -63,6 +63,7 @@ The document covers the preparation of management and compute networks, ConnectX
 * 2× NVIDIA DGX Spark systems
 * 1× Amphenol: NJAAKK-N911 cable
 * Cat6 cables (management network)
+* 1× switch with RJ45 ports (management network)
 
 **Software and Operating System**
 
