@@ -161,7 +161,8 @@ module OzVisibility
   end
 
   class DataGenerator < Jekyll::Generator
-    priority :lowest
+    # :low, not :lowest — _plugins/benchmark-pages.rb (:lowest) reads site.data["oz_llm"].
+    priority :low
 
     def generate(site)
       base = File.join(site.source, "assets", "data")

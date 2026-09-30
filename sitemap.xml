@@ -26,4 +26,17 @@ permalink: /sitemap.xml
   </url>
 {%- endfor %}
 {%- endfor %}
+{%- comment -%} Per-model and per-run benchmark pages, _plugins/benchmark-pages.rb. {%- endcomment -%}
+{%- for p in site.data.oz_bench_pages %}
+{%- for l in p.langs %}
+  <url>
+    <loc>{{ site.url }}{{ site.baseurl }}{% if l != site.default_lang %}/{{ l }}{% endif %}{{ p.permalink }}</loc>
+    {%- if p.langs.size > 1 %}
+    {%- for a in p.langs %}
+    <xhtml:link rel="alternate" hreflang="{{ a }}" href="{{ site.url }}{{ site.baseurl }}{% if a != site.default_lang %}/{{ a }}{% endif %}{{ p.permalink }}"/>
+    {%- endfor %}
+    {%- endif %}
+  </url>
+{%- endfor %}
+{%- endfor %}
 </urlset>

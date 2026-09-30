@@ -1157,6 +1157,10 @@
         var cams = allCameraCounts();
         /* Opens showing everything measured; the slider only ever narrows. */
         state.camerasMax = cams.length ? cams[cams.length - 1] : 1;
+        /* Carried over by the site's language switcher (window.ozCarry), so
+           switching language keeps the reader's filters and open rows. */
+        var carried = window.ozCarry && window.ozCarry.cvbt;
+        if (carried) for (var k in carried) if (state.hasOwnProperty(k)) state[k] = carried[k];
         buildUI(container);
       })
       .catch(function (err) {
@@ -1176,6 +1180,11 @@
       if (resumed && resumed.catch) resumed.catch(function () { /* fallback scene */ });
     }
   });
+
+  /* The reader's view as plain data, for the language switcher. */
+  window.CvBenchmarkTable = {
+    snapshot: function () { return data ? JSON.parse(JSON.stringify(state)) : null; }
+  };
 
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
