@@ -120,6 +120,9 @@
 
   var data = null;
   var previewVideoUrl = "";
+  /* Set from data-cvbt-only: the id of the one result a permanent result page
+     shows. The row is then drawn opened, with no filters and no collapsing. */
+  var only = null;
   var state = {
     /* An upper bound, not a selection: "show me what happens up to N cameras".
        Every row then reports its own highest measurement at or below it, so
@@ -214,6 +217,7 @@
   }
 
   function visibleEntries() {
+    if (only) return data.benchmarks.filter(function (b) { return b.id === only; });
     return data.benchmarks.filter(function (b) {
       if (state.devices.length && state.devices.indexOf(b.device) === -1) return false;
       /* Unticking "All" empties the selection, which must show an empty
@@ -229,6 +233,7 @@
 
   function buildUI(container) {
     container.className = "bt-container cvbt-container";
+    if (only) return buildSingle(container);
     var cameras = allCameraCounts();
     var maxCams = cameras.length ? cameras[cameras.length - 1] : 1;
 
@@ -293,6 +298,33 @@
       container.cvbtWired = true;
     }
     wireCameras(container);
+    renderTable(container);
+  }
+
+  /* A permanent result page: the table with its one row, opened. */
+  function buildSingle(container) {
+    var html = '<div class="bt-table-wrap bt-single" id="cvbt-table"></div>' +
+      '<div class="bt-tooltip" id="cvbt-tooltip" role="tooltip" hidden></div>';
+    if (previewVideoUrl) {
+      html += '<video class="cvbt-preview-src" id="cvbt-video" src="' +
+        escapeHTML(previewVideoUrl) + '" muted loop playsinline preload="auto" ' +
+        'aria-hidden="true" tabindex="-1"></video>';
+    }
+    container.innerHTML = html;
+    var video = container.querySelector("#cvbt-video");
+    if (video) {
+      video.muted = true;
+      video.addEventListener("loadeddata", function () {
+        previews.panes.forEach(function (p) { paintPreview(p, false); });
+      });
+      var started = video.play();
+      if (started && started.catch) started.catch(function () { /* fallback scene stays */ });
+    }
+    if (!container.cvbtWired) {
+      wire(container);
+      wireTooltips(container);
+      container.cvbtWired = true;
+    }
     renderTable(container);
   }
 
@@ -383,8 +415,13 @@
       }
 
       var row = e.target.closest(".bt-row");
-      if (row) {
-        state.expanded[row.dataset.id] = !state.expanded[row.dataset.id];
+      if (row && !only) {
+        var id = row.dataset.id;
+        state.expanded[id] = !state.expanded[id];
+        /* The address bar carries the opened row, as in the LLM explorer, so
+           the link can be copied and opens that row. */
+        if (state.expanded[id]) history.replaceState(null, "", "#" + id);
+        else if (location.hash === "#" + id) history.replaceState(null, "", location.pathname + location.search);
         renderTable(container);
       }
     });
@@ -604,7 +641,8 @@
 
   function renderTable(container) {
     var entries = sortEntries(visibleEntries());
-    container.querySelector("#cvbt-count").innerHTML =
+    var countEl = container.querySelector("#cvbt-count");
+    if (countEl) countEl.innerHTML =
       '<span class="bt-count-label">' + escapeHTML(S.matching) + "</span> " +
       S.matchingCount(entries.length, data.benchmarks.length);
 
@@ -635,7 +673,7 @@
 
     entries.forEach(function (entry) {
       html += entryRow(entry);
-      if (state.expanded[entry.id]) html += detailRow(entry);
+      if (only || state.expanded[entry.id]) html += detailRow(entry);
     });
     wrap.innerHTML = html + "</tbody></table>";
     startPreviews(container);
@@ -643,8 +681,9 @@
 
   function entryRow(entry) {
     var point = shownPoint(entry);
-    var expanded = !!state.expanded[entry.id];
-    var html = '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '" tabindex="0" role="button"' +
+    var expanded = only ? true : !!state.expanded[entry.id];
+    var html = only ? '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '">' :
+      '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '" tabindex="0" role="button"' +
       ' aria-expanded="' + expanded + '" title="' + escapeHTML(S.viewDetails) + '">';
 
     /* Precision rides with the model name rather than holding a column of its
@@ -680,7 +719,7 @@
                : ' title="' + escapeHTML(S.saturatedTip) + '"') + ">" +
       (max > 0 ? max : '<span class="bt-muted">0</span>') +
       (limited ? ' <span class="bt-muted">≥</span>' : "") + "</td>";
-    html += '<td class="bt-expand-cell">' + (expanded ? "&#9660;" : "&#9654;") + "</td>";
+    html += '<td class="bt-expand-cell">' + (only ? "" : expanded ? "&#9660;" : "&#9654;") + "</td>";
     return html + "</tr>";
   }
 
@@ -742,6 +781,11 @@
     }
     html += "</div>";
 
+    /* The whitepapers site writes a link to each result's permanent page into
+       the explorer page ([data-cvbt-permalink]); the openzeka.com embed has none. */
+    var link = !only && document.querySelector('[data-cvbt-permalink="' + CSS.escape(entry.id) + '"]');
+    if (link) html += '<p class="cvbt-permalink">' + link.innerHTML + "</p>";
+
     return html + "</div></td></tr>";
   }
 
@@ -769,7 +813,11 @@
 
     var html = '<div class="bt-detail-preview">';
     html += '<div class="bt-tps-preview-title">' + escapeHTML(S.previewTitle) + "</div>";
-    html += '<div class="bt-preview-sub' + (keepsUp ? "" : " bt-sub-bad") + '">' +
+    /* Coloured by the same target as the sweep's PASS / FAIL beside it, so the
+       two never disagree; keeping up with the cameras' own rate is the extra
+       note, not the colour. */
+    var meets = fps >= state.targetFps;
+    html += '<div class="bt-preview-sub' + (meets ? "" : " bt-sub-bad") + '">' +
       escapeHTML(S.previewSub(point.cameras, fmt(fps))) +
       (keepsUp ? " · " + escapeHTML(S.previewMatches) : "") + "</div>";
     /* 1280x400 backing store for a box that is rarely wider than 640 CSS px:
@@ -1138,6 +1186,7 @@
     var container = document.querySelector("[data-cvbt-src]");
     if (!container) return;
     previewVideoUrl = container.getAttribute("data-cvbt-video") || "";
+    only = container.getAttribute("data-cvbt-only");
     container.innerHTML = '<div class="bt-loading">' + escapeHTML(S.loading) + "</div>";
 
     var src = container.getAttribute("data-cvbt-src");
@@ -1161,7 +1210,14 @@
            switching language keeps the reader's filters and open rows. */
         var carried = window.ozCarry && window.ozCarry.cvbt;
         if (carried) for (var k in carried) if (state.hasOwnProperty(k)) state[k] = carried[k];
+        openFromHash();
         buildUI(container);
+        if (!only) {
+          scrollToHash(container);
+          window.addEventListener("hashchange", function () {
+            if (openFromHash()) { renderTable(container); scrollToHash(container); }
+          });
+        }
       })
       .catch(function (err) {
         container.innerHTML = '<div class="bt-error">' + escapeHTML(S.loadFailed + err.message) + "</div>";
@@ -1180,6 +1236,28 @@
       if (resumed && resumed.catch) resumed.catch(function () { /* fallback scene */ });
     }
   });
+
+  /* ── Deep links: #<id> opens that result ── */
+
+  function hashId() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    return id && data.benchmarks.some(function (b) { return b.id === id; }) ? id : null;
+  }
+
+  function openFromHash() {
+    var id = hashId();
+    if (id) state.expanded[id] = true;
+    return !!id;
+  }
+
+  function scrollToHash(container) {
+    var id = hashId();
+    if (!id) return;
+    setTimeout(function () {
+      var row = container.querySelector('tr.bt-row[data-id="' + CSS.escape(id) + '"]');
+      if (row) row.scrollIntoView({ behavior: "instant", block: "center" });
+    }, 200);
+  }
 
   /* The reader's view as plain data, for the language switcher. */
   window.CvBenchmarkTable = {

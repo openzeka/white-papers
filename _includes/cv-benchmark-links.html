@@ -1,0 +1,16 @@
+{%- comment -%}
+  Each CV result's link to its permanent page (_plugins/benchmark-pages.rb),
+  written into the explorer page at build time. Hidden here; the widget shows
+  a row's link at the end of the row when it is opened (detailRow() in
+  assets/js/cv-benchmark-table.js). Must sit outside the [data-cvbt-src]
+  element, whose content the widget replaces.
+
+  Include as: {% include cv-benchmark-links.html %}
+{%- endcomment -%}
+{%- if site.data.oz_cv -%}
+<div class="cvbt-permalinks-src" hidden>
+{%- for r in site.data.oz_cv.oz_rows %}
+<span data-cvbt-permalink="{{ r.id }}"><a href="{{ r.oz_permalink | relative_url }}">{{ site.data[site.active_lang].strings.bench_page.cv_permalink }}</a></span>
+{%- endfor %}
+</div>
+{%- endif -%}

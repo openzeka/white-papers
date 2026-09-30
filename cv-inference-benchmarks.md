@@ -245,5 +245,6 @@ when they land.
 measurement on its own hardware.</p>
 
 {% include benchmark-jsonld.html kind="cv" %}
+{% include cv-benchmark-links.html %}
 
 <script src="/assets/js/cv-benchmark-table.js"></script>

@@ -200,6 +200,10 @@ module OzVisibility
             pts = (md["points"] || {}).values.sort_by { |p| p["cameras"].to_i }
             next if pts.empty?
             rows << {
+              # The widget's own id (entryFrom() in cv-benchmark-table.js): the
+              # file's path in the store, "/" → "-". _plugins/benchmark-pages.rb
+              # builds each result's permanent page from "path".
+              "id" => m["path"].to_s.sub(/\.json\z/, "").tr("/", "-"), "path" => m["path"].to_s.sub(/\.json\z/, ""),
               "device" => d["name"], "kind" => d["kind"], "model" => m["name"],
               "precision" => m["precision"], "input_resolution" => m["input_resolution"],
               "points" => pts,

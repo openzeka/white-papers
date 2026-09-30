@@ -252,5 +252,6 @@ binnen zijn.
 OpenZeka op eigen hardware.</p>
 
 {% include benchmark-jsonld.html kind="cv" %}
+{% include cv-benchmark-links.html %}
 
 <script src="/assets/js/cv-benchmark-table.nl.js"></script>
