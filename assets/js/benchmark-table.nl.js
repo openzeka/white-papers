@@ -210,6 +210,9 @@
   var chartInstances = {};
   var logoPath = null;
   var repaint = {};
+  /* Set from data-bt-only: the id of the one run a permanent result page shows.
+     The row is then drawn opened, with no filters, targets or collapsing. */
+  var only = null;
 
 
   var allDevices = [];
@@ -233,6 +236,7 @@
     if (containers.length === 0) return;
     var container = containers[0];
     var dataSource = src || container.getAttribute("data-bt-src");
+    only = container.getAttribute("data-bt-only");
 
     /* Logo path: an explicit data-bt-logo wins, so a CMS that keeps images and
        scripts in separate folders can point at the real location. Otherwise
@@ -280,6 +284,10 @@
         }
 
         buildUI(container);
+        if (only) return;
+        /* Carried over by the site's language switcher (window.ozCarry), so
+           switching language keeps the reader's filters, targets and open rows. */
+        if (window.ozCarry && window.ozCarry.bt) restore(container, window.ozCarry.bt);
         handleHashOnLoad(container);
         window.addEventListener("hashchange", function () {
           handleHashChange(container);
@@ -666,6 +674,14 @@
 
   function buildUI(container) {
     container.className = "bt-container";
+
+    if (only) {
+      container.innerHTML = '<div class="bt-table-wrap bt-single" id="bt-table-wrap"></div>' +
+        '<div class="bt-tooltip" id="bt-tooltip" role="tooltip" hidden></div>';
+      wireTooltips(container);
+      renderTable(container);
+      return;
+    }
 
     var html = "";
     html += '<div class="bt-controls">';
@@ -1293,6 +1309,7 @@
   /* ── Filtering ── */
 
   function getFilteredEntries(container) {
+    if (only) return rawData.benchmarks.filter(function (e) { return e.id === only; });
     var minTps = parseInt(container.querySelector("#bt-min-tps").value, 10);
     var maxTtft = parseInt(container.querySelector("#bt-max-ttft").value, 10);
     var minChat = parseInt(container.querySelector("#bt-min-chat").value, 10);
@@ -1451,9 +1468,10 @@
       var maxC = getMaxC(entry);
       var tps = getMetricAtC(entry, c, "tps");
       var ttft = getMetricAtC(entry, c, "ttft_ms");
-      var isExpanded = !!expanded[entry.id];
+      var isExpanded = only ? true : !!expanded[entry.id];
 
-      html += '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '" tabindex="0" role="button" aria-expanded="' +
+      html += only ? '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '">' :
+        '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '" tabindex="0" role="button" aria-expanded="' +
         (isExpanded ? "true" : "false") + '" title="' + escapeHTML(S.viewDetails) + '">';
 
       html += '<td class="bt-left">' + escapeHTML(entry.model) + "</td>";
@@ -1492,7 +1510,7 @@
       html += '<td class="bt-num">' + (entry.pp != null && entry.pp !== 1 ? entry.pp : '<span class="bt-muted">—</span>') + "</td>";
       html += '<td class="bt-left">' + escapeHTML(entry.engine) + "</td>";
       html += entry.mtp ? '<td class="bt-mtp-yes">' + escapeHTML(S.yes) + "</td>" : '<td class="bt-muted">—</td>';
-      html += '<td class="bt-expand-cell">' + (isExpanded ? "&#9660;" : "&#9654;") + "</td>";
+      html += '<td class="bt-expand-cell">' + (only ? "" : isExpanded ? "&#9660;" : "&#9654;") + "</td>";
       html += "</tr>";
 
       if (isExpanded) {
@@ -1607,7 +1625,7 @@
       if (back) back.focus();
     }
 
-    wrap.querySelectorAll("tr.bt-row").forEach(function (tr) {
+    if (!only) wrap.querySelectorAll("tr.bt-row").forEach(function (tr) {
       tr.addEventListener("click", function (e) {
         if (e.target.closest("a, button, input, label")) return;
         toggleRow(tr.getAttribute("data-id"));
@@ -1621,7 +1639,7 @@
     });
 
     entries.forEach(function (entry) {
-      if (expanded[entry.id]) {
+      if (only || expanded[entry.id]) {
         renderChart(entry, container);
         wireRowPreview(entry, container);
       }
@@ -1730,6 +1748,80 @@
     });
   }
 
+  /* ── Carrying the view across a language switch ── */
+
+  /* Everything the reader has set, as plain data. The site's language switcher
+     stores it before leaving and hands it to the other language's page as
+     window.ozCarry.bt; restore() puts it back. */
+  var SLIDERS = ["#bt-min-tps", "#bt-max-ttft", "#bt-min-chat", "#bt-min-agentic", "#bt-min-params"];
+
+  function snapshot() {
+    var container = document.querySelector(".bt-container");
+    if (!container || only || !rawData) return null;
+    var sliders = {};
+    SLIDERS.forEach(function (sel) { sliders[sel] = container.querySelector(sel).value; });
+    var models = null;
+    if (!container.querySelector("#bt-model-all").checked) {
+      models = [];
+      container.querySelectorAll(".bt-model-cb").forEach(function (cb) {
+        if (cb.checked) models.push(cb.getAttribute("data-model"));
+      });
+    }
+    var open = [];
+    for (var id in expanded) if (expanded.hasOwnProperty(id) && expanded[id]) open.push(id);
+    return {
+      devices: state.devices.slice(), quants: state.quants.slice(), mtp: state.mtp,
+      concurrency: state.concurrency, sortCol: sortCol, sortDir: sortDir, expanded: open,
+      config: JSON.parse(JSON.stringify(config)), sliders: sliders, models: models,
+      search: container.querySelector("#bt-model-search").value,
+      targetsOpen: !container.querySelector("#bt-targets-body").hidden
+    };
+  }
+
+  function restore(container, s) {
+    try {
+      state.devices = s.devices || []; state.quants = s.quants || [];
+      state.mtp = s.mtp || "all"; state.concurrency = s.concurrency || 1;
+      if (s.sortCol) { sortCol = s.sortCol; sortDir = s.sortDir || "desc"; }
+      repaint.device(); repaint.quant();
+      container.querySelectorAll("[data-mtp]").forEach(function (b) {
+        b.classList.toggle("bt-active", b.getAttribute("data-mtp") === state.mtp);
+      });
+      container.querySelectorAll("[data-conc]").forEach(function (b) {
+        b.classList.toggle("bt-active", b.getAttribute("data-conc") === String(state.concurrency));
+      });
+      SLIDERS.forEach(function (sel) {
+        if (s.sliders && s.sliders[sel] != null) container.querySelector(sel).value = s.sliders[sel];
+      });
+      var allCb = container.querySelector("#bt-model-all");
+      allCb.checked = !s.models;
+      container.querySelectorAll(".bt-model-cb").forEach(function (cb) {
+        cb.checked = !s.models || s.models.indexOf(cb.getAttribute("data-model")) > -1;
+      });
+      var search = container.querySelector("#bt-model-search");
+      search.value = s.search || "";
+      search.dispatchEvent(new Event("input"));
+      if (s.config) for (var k in s.config) if (config.hasOwnProperty(k)) config[k] = s.config[k];
+      NUMBER_TARGETS.forEach(function (k) { container.querySelector("#bt-assump-" + k).value = shownTarget(k); });
+      CONTEXT_TARGETS.forEach(function (k) {
+        var sel = container.querySelector("#bt-assump-" + k);
+        if (!sel.querySelector('option[value="' + config[k] + '"]')) {
+          var o = document.createElement("option");
+          o.value = config[k]; o.textContent = fmtTokens(config[k]) + " (" + fmtInt(config[k]) + ")";
+          sel.appendChild(o);
+        }
+        sel.value = String(config[k]);
+      });
+      if (s.targetsOpen && container.querySelector("#bt-targets-body").hidden) {
+        container.querySelector("#bt-targets-toggle").click();
+      }
+      expanded = {};
+      (s.expanded || []).forEach(function (id) { expanded[id] = true; });
+      syncSliderLabels(container);
+      renderTable(container);
+    } catch (e) { /* a stale or foreign snapshot: keep the defaults */ }
+  }
+
   /* ── Deep Linking ── */
 
   function handleHashOnLoad(container) {
@@ -1776,7 +1868,7 @@
   /* ── Bootstrap ── */
 
   if (typeof window !== "undefined") {
-    window.BenchmarkTable = { init: init };
+    window.BenchmarkTable = { init: init, snapshot: snapshot };
   }
 
   if (typeof document !== "undefined") {

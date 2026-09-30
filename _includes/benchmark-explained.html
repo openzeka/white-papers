@@ -2,7 +2,8 @@
   Each run's explanation, written into the page at build time from
   _plugins/visibility.rb, so search engines and AI agents find it in the HTML.
   Hidden here; the widget shows a row's text beside its capacity box when the
-  row is opened (explanation() in assets/js/benchmark-table.js). Must sit
+  row is opened (explanation() in assets/js/benchmark-table.js), ending in a
+  link to the run's permanent page (_plugins/benchmark-pages.rb). Must sit
   outside the [data-bt-src] element, whose content the widget replaces.
 
   Include as: {% include benchmark-explained.html %}
@@ -10,7 +11,7 @@
 {%- if site.data.oz_llm -%}
 <div class="bt-explained-src" hidden>
 {%- for r in site.data.oz_llm.benchmarks %}
-<div data-bt-explained="{{ r.id }}">{% for p in r.oz_parts[site.active_lang] %}<p>{{ p }}</p>{% endfor %}</div>
+<div data-bt-explained="{{ r.id }}">{% for p in r.oz_parts[site.active_lang] %}<p>{{ p }}</p>{% endfor %}{% if r.oz_permalink %}<p><a href="{{ r.oz_permalink | relative_url }}">{{ site.data[site.active_lang].strings.bench_page.permalink }}</a></p>{% endif %}</div>
 {%- endfor %}
 </div>
 {%- endif -%}

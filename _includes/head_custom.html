@@ -41,3 +41,20 @@
 {%- endcomment %}
 <link rel="icon" type="image/png" sizes="192x192" href="{{ '/assets/images/favicon-192.png' | relative_url }}">
 <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/images/apple-touch-icon.png' | relative_url }}">
+{%- comment -%}
+  Search: the theme's script always fetches /assets/js/search-data.json, the
+  English index. On a Turkish or Dutch page, fetch that language's own index
+  instead (/search-data.json in the source, built once per language).
+{%- endcomment -%}
+{%- if site.active_lang and site.active_lang != site.default_lang %}
+<script>
+(function () {
+  var open = XMLHttpRequest.prototype.open;
+  var own = {{ site.baseurl | append: "/" | append: site.active_lang | append: "/search-data.json" | jsonify }};
+  XMLHttpRequest.prototype.open = function (method, url) {
+    if (typeof url === "string" && /assets\/js\/search-data\.json$/.test(url)) arguments[1] = own;
+    return open.apply(this, arguments);
+  };
+})();
+</script>
+{%- endif %}

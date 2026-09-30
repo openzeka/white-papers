@@ -1,10 +1,21 @@
+{%- comment -%}
+  Each language link opens the same page in that language — its twin's URL
+  from page.oz_alternates (_plugins/visibility.rb, benchmark-pages.rb) — and
+  falls back to that language's home page when the page has no twin.
+  assets/js/lang-switch.js carries the reader's place and explorer settings over.
+{%- endcomment -%}
 <div class="lang-switcher">
   {% for lang in site.languages %}
-    {% capture lang_href %}{{ site.baseurl }}/{% if lang != site.default_lang %}{{ lang }}/{% endif %}{% if page.permalink_lang and page.permalink_lang[lang] and page.permalink_lang[lang] != '/' %}{{ page.permalink_lang[lang] | remove_first: '/' }}{% endif %}{% endcapture %}
+    {% if page.oz_alternates and page.oz_alternates[lang] %}
+      {% capture lang_href %}{{ page.oz_alternates[lang] | remove_first: site.url }}{% endcapture %}
+    {% else %}
+      {% capture lang_href %}{{ site.baseurl }}/{% if lang != site.default_lang %}{{ lang }}/{% endif %}{% endcapture %}
+    {% endif %}
     {% if lang == site.active_lang %}
       <span class="lang-switcher-item active">{{ lang | upcase }}</span>
     {% else %}
-      <a class="lang-switcher-item" {% static_href %}href="{{ lang_href }}"{% endstatic_href %}>{{ lang | upcase }}</a>
+      <a class="lang-switcher-item" {% static_href %}href="{{ lang_href | strip }}"{% endstatic_href %}>{{ lang | upcase }}</a>
     {% endif %}
   {% endfor %}
 </div>
+<script src="{{ '/assets/js/lang-switch.js' | relative_url }}"></script>
