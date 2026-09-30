@@ -3,13 +3,15 @@ title: Handleiding voor lokaal LLM-gebruik
 parent: White Papers
 nav_order: 1
 lang: nl
-page_id: yerel-llm-rehberi
+page_id: local-llm-guide
 date: 2026-06-30 12:00:00 +0300
 card_tag: "Beslisgids"
 description: >-
   Integrale beslisgids voor lokaal LLM-gebruik: hardware (NVIDIA Jetson,
   RTX PRO, DGX Spark, DGX/HGX), modelkeuze, softwarestack en koppeling aan scenario's.
-permalink: /papers/yerel-llm-rehberi/
+permalink: /papers/local-llm-guide/
+redirect_from:
+  - /papers/yerel-llm-rehberi/
 last_modified_date: 2026-09-30
 toc: true
 ---
@@ -66,7 +68,7 @@ De hardwareaanbevelingen in deze handleiding zijn gebaseerd op dit portfolio.
 
 ## 2. Waarom een lokale LLM? (Motivatie)
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-2-advantages.png' | relative_url }}" alt="Belangrijkste voordelen van een lokale LLM" width="320"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/sema-2-advantages.png' | relative_url }}" alt="Belangrijkste voordelen van een lokale LLM" width="320"/></p>
 <sub><i>Figuur: Belangrijkste voordelen van een lokale LLM</i></sub>
 
 ### Voordelen
@@ -96,7 +98,7 @@ De hardwareaanbevelingen in deze handleiding zijn gebaseerd op dit portfolio.
 
 ## 3. Wie heeft het nodig? (Doelgroepen en scenario's)
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-3-target-audience.png' | relative_url }}" alt="Wie heeft een lokale LLM nodig?" width="760"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/sema-3-target-audience.png' | relative_url }}" alt="Wie heeft een lokale LLM nodig?" width="760"/></p>
 <sub><i>Figuur: Wie heeft een lokale LLM nodig?</i></sub>
 
 **Overheid en publieke instellingen.** Ministeries, overheidsinstanties, kritieke infrastructuur en defensie — data binnen het land en binnen de grenzen van de eigen instelling houden en voorkomen dat ze naar buiten lekken, is een vereiste van datasoevereiniteit en nationale veiligheid. Voor deze instellingen is een lokale LLM vaak de enige geschikte optie.
@@ -131,7 +133,7 @@ Daarom wordt in deze hele handleiding aan de hardwarekant alleen NVIDIA behandel
 
 Dit is de **belangrijkste vraag** die de hardwarevereisten bepaalt. Het antwoord op "Wordt er getraind?" bepaalt vanaf het begin de schaal van de hardware die u nodig hebt.
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-training-inference.png' | relative_url }}" alt="Eerste beslissing: training of inferentie?" width="640"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/sema-4-training-inference.png' | relative_url }}" alt="Eerste beslissing: training of inferentie?" width="640"/></p>
 <sub><i>Figuur: Eerste beslissing: training of inferentie?</i></sub>
 
 **Voor de meeste organisaties is inferentie het startpunt** — een kant-en-klaar open model op uw eigen server draaien. Training/aanpassing komt pas in beeld wanneer het model aan uw eigen data moet worden aangepast, en kent vier niveaus:
@@ -238,8 +240,8 @@ We hebben de hardwareaanbevelingen in deze handleiding beperkt tot de NVIDIA-pro
 - **Jetson AGX Thor / T5000 (128 GB-klasse, Blackwell-generatie)** — het vlaggenschip van de volgende generatie voor physical AI en robotica; grote modellen en gelijktijdige workloads aan de edge. De optie met het "meeste geheugen" aan de edgekant.
 
 <p>
-<img src="{{ '/papers/yerel-llm-rehberi/images/jetson-orin-nano.png' | relative_url }}" alt="NVIDIA Jetson Orin Nano AI-kit" width="300"/>
-<img src="{{ '/papers/yerel-llm-rehberi/images/jetson-agx-thor.png' | relative_url }}" alt="NVIDIA Jetson AGX Thor Developer Kit" width="300"/>
+<img src="{{ '/papers/local-llm-guide/images/jetson-orin-nano.png' | relative_url }}" alt="NVIDIA Jetson Orin Nano AI-kit" width="300"/>
+<img src="{{ '/papers/local-llm-guide/images/jetson-agx-thor.png' | relative_url }}" alt="NVIDIA Jetson AGX Thor Developer Kit" width="300"/>
 </p>
 <sub><i>Jetson Orin Nano AI-kit en Jetson AGX Thor Developer Kit (Afbeelding: OpenZeka)</i></sub>
 
@@ -252,7 +254,7 @@ We hebben de hardwareaanbevelingen in deze handleiding beperkt tot de NVIDIA-pro
 
 > **Als kant-en-klaar werkstation (OpenZeka):** We leveren deze GPU's niet alleen als losse kaarten, maar ook als **vooraf geïnstalleerde en geteste complete werkstations** (RTX PRO 4000 / 4500 / 5000 / 6000 Workstation en Max-Q). De systemen worden geleverd met een CPU uit de Intel Core i9-14900KF-klasse; **Ubuntu + een geoptimaliseerde NVIDIA-softwarestack vooraf geïnstalleerd**, na het doorstaan van prestatie- en temperatuurtests, en met **2 jaar garantie** — dat wil zeggen "werkt direct uit de doos" voor lokale LLM's. Details: [openzeka.com/is-istasyonlari](https://openzeka.com/is-istasyonlari/).
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/rtx-pro-6000.webp' | relative_url }}" alt="NVIDIA RTX PRO 6000 Blackwell Workstation" width="360"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/rtx-pro-6000.webp' | relative_url }}" alt="NVIDIA RTX PRO 6000 Blackwell Workstation" width="360"/></p>
 <sub><i>NVIDIA RTX PRO 6000 Blackwell Workstation Edition — 96 GB (Afbeelding: OpenZeka)</i></sub>
 
 **C) Datacenter-GPU's (één / enkele) — productiedienst met hoog volume en meerdere gebruikers.** Passief gekoelde kaarten voor montage in servers; voor veel gelijktijdige verzoeken met vLLM/TensorRT-LLM. Anders dan de B200/B300 **kunnen ze afzonderlijk worden verkocht (of met 2–8 per server).**
@@ -260,7 +262,7 @@ We hebben de hardwareaanbevelingen in deze handleiding beperkt tot de NVIDIA-pro
 - **NVIDIA L40 / L40S — 48 GB.** Veelzijdig voor inferentie + fine-tuning; serveert middelgrote modellen met hoge doorvoer (één kaart is niet genoeg voor 70B — zie "veelgemaakte fouten", paragraaf 8; de 70B-klasse vereist een H100/H200 of 2× kaarten).
 - **NVIDIA H100 NVL — 94 GB** en **H200 NVL — 141 GB.** Het hoogste niveau dat als losse kaart wordt verkocht; grote MoE-modellen, lange context, intensieve gelijktijdigheid. De 141 GB van de H200 biedt de hoogste modelcapaciteit op één kaart.
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/dgx-sunucu.webp' | relative_url }}" alt="NVIDIA DGX AI-server" width="420"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/dgx-sunucu.webp' | relative_url }}" alt="NVIDIA DGX AI-server" width="420"/></p>
 <sub><i>NVIDIA DGX/HGX-serverinfrastructuur van datacenterklasse (Afbeelding: OpenZeka)</i></sub>
 
 **D) Blackwell-topklasse — kant-en-klare datacentersystemen (HGX / DGX, team van 8 GPU's).** Voor volledige training en inferentie met veel verkeer (500+ gelijktijdige gebruikers). Deze klasse **wordt niet als losse kaarten verkocht**; ze komt als een vooraf geïnstalleerde, bekabelde en gekoelde server/rack met 8 GPU's — budget en infrastructuur moeten daarop worden afgestemd.
@@ -278,8 +280,8 @@ We hebben de hardwareaanbevelingen in deze handleiding beperkt tot de NVIDIA-pro
   - **3× Spark (ringtopologie)** — 384 GB, fine-tune van 405B+ / hoge doorvoer, geen switch nodig.
 
 <p>
-<img src="{{ '/papers/yerel-llm-rehberi/images/dgx-spark.png' | relative_url }}" alt="NVIDIA DGX Spark" width="320"/>
-<img src="{{ '/papers/yerel-llm-rehberi/images/dgx-spark-3x.png' | relative_url }}" alt="Ringtopologie met 3x DGX Spark" width="320"/>
+<img src="{{ '/papers/local-llm-guide/images/dgx-spark.png' | relative_url }}" alt="NVIDIA DGX Spark" width="320"/>
+<img src="{{ '/papers/local-llm-guide/images/dgx-spark-3x.png' | relative_url }}" alt="Ringtopologie met 3x DGX Spark" width="320"/>
 </p>
 <sub><i>NVIDIA DGX Spark (128 GB, 240 W) en een 3× ringtopologie die een pool van 384 GB oplevert (Afbeelding: OpenZeka)</i></sub>
 
@@ -318,7 +320,7 @@ Geschikt voor een instap, kleine/gekwantiseerde modellen en **batch-/niet-intera
 
 ### 4.8. Koppeling van scenario aan hardware
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-4-gpu-decision.png' | relative_url }}" alt="Beslisboom voor de GPU-keuze" width="600"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/sema-4-gpu-decision.png' | relative_url }}" alt="Beslisboom voor de GPU-keuze" width="600"/></p>
 <sub><i>Figuur: Beslisboom voor de GPU-keuze</i></sub>
 
 **Algemene koppeling (van edge tot enterprise):**
@@ -360,7 +362,7 @@ Geschikt voor een instap, kleine/gekwantiseerde modellen en **batch-/niet-intera
 
 ## 5. Modelkeuze
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-5-model-selection.png' | relative_url }}" alt="Modelkeuze per taak" width="720"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/sema-5-model-selection.png' | relative_url }}" alt="Modelkeuze per taak" width="720"/></p>
 <sub><i>Figuur: Modelkeuze per taak</i></sub>
 
 > Balans tussen grootte en kosten: voor de meeste lokale workloads zijn **7–14B dense** of **~30B MoE (~3B actief)** de optimale balans; de zwaarste taken vereisen 70B+ / grote MoE-modellen.
@@ -474,7 +476,7 @@ De algemene ranglijsten in §5.8 zijn een goed startsignaal, maar **weerspiegele
 
 Het is het verstandigst om de softwarelaag in zeven categorieën te bekijken: **(A) inferentie-engines** (de backend die het model daadwerkelijk draait), **(B) alles-in-één desktopapplicaties**, **(C) self-hosted AI-werkruimtes van de nieuwe generatie**, **(D) klassieke web-UI's en RAG-oplossingen**, **(E) API-gateways / routering** (de laag vóór opstellingen met meerdere modellen en meerdere gebruikers), **(F) tools voor fine-tuning & training** en **(G) code-assistenten & agents**.
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-6-software-layers.png' | relative_url }}" alt="Softwarelagen: UI → (gateway) → engine → hardware, met fine-tuning ernaast" width="620"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/sema-6-software-layers.png' | relative_url }}" alt="Softwarelagen: UI → (gateway) → engine → hardware, met fine-tuning ernaast" width="620"/></p>
 <sub><i>Figuur: Softwarelagen: UI → engine → hardware</i></sub>
 
 > **Gemeenschappelijke basis — OpenAI-compatibele API:** llama.cpp (llama-server), Ollama, vLLM, SGLang en LM Studio bieden allemaal een **OpenAI-compatibel endpoint**. Dezelfde clientcode (alleen `base_url` wijzigen naar localhost) werkt dus met al deze tools — een cruciaal gemak voor integratie.
@@ -576,7 +578,7 @@ Het is het verstandigst om de softwarelaag in zeven categorieën te bekijken: **
 
 ## 7. Voorbeeldscenario's voor deployment
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-7-scenario.png' | relative_url }}" alt="Koppeling van scenario aan hardware" width="420"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/sema-7-scenario.png' | relative_url }}" alt="Koppeling van scenario aan hardware" width="420"/></p>
 <sub><i>Figuur: Koppeling van scenario aan hardware</i></sub>
 
 **Scenario A — Individuele / privacybewuste gebruiker (instapwerkstation).**
@@ -630,7 +632,7 @@ Inferentie met veel verkeer (500+ gelijktijdig) of pre-training (vanaf nul) → 
 
 ### Proces voor het dimensioneren van hardware
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/sema-8-process.png' | relative_url }}" alt="Proces voor het dimensioneren van hardware" width="820"/></p>
+<p><img src="{{ '/papers/local-llm-guide/images/sema-8-process.png' | relative_url }}" alt="Proces voor het dimensioneren van hardware" width="820"/></p>
 <sub><i>Figuur: Proces voor het dimensioneren van hardware</i></sub>
 
 ### Checklist voor het dimensioneren van hardware

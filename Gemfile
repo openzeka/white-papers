@@ -12,6 +12,7 @@ group :jekyll_plugins do
   gem "jekyll-sitemap"
   gem "jekyll-feed"
   gem "jekyll-polyglot", "~> 1.7"
+  gem "jekyll-redirect-from"
 end
 
 # Windows / JRuby için zaman dilimi verileri

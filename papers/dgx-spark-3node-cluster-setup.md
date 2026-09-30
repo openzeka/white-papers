@@ -1,50 +1,50 @@
 ---
-title: DGX Spark 2-Node AI Cluster Setup Guide
+title: DGX Spark 3-Node AI Cluster Setup Guide
 parent: White Papers
-nav_order: 4
+nav_order: 5
 lang: en
-page_id: dgx-spark-2node-cluster-kurulumu
-date: 2026-07-30 08:21:43 +0300
+page_id: dgx-spark-3node-cluster-setup
+date: 2026-07-30 08:21:44 +0300
 card_tag: "Cluster Setup"
 description: >-
-  Point-to-point topology AI cluster setup with 2 NVIDIA DGX Spark nodes:
+  Ring (mesh) topology AI cluster setup with 3 NVIDIA DGX Spark nodes:
   management and compute networks, RoCEv2/RDMA, sparkrun configuration.
-permalink: /papers/dgx-spark-2node-cluster-kurulumu/
+permalink: /papers/dgx-spark-3node-cluster-setup/
+redirect_from:
+  - /papers/dgx-spark-3node-cluster-kurulumu/
 last_modified_date: 2026-09-30
 toc: true
 ---
 
 ## Table of Contents
 
-1. [Architecture Overview](#architecture-overview)
-2. [Prerequisites](#prerequisites)
-3. [DGX Spark Node Preparation](#dgx-spark-node-preparation)
-   - [System and Firmware Updates](#system-and-firmware-updates)
-   - [Docker Configuration](#docker-configuration)
-4. [Management Network (10GbE) Connection](#management-network-10gbe-connection)
-5. [Compute Network (200GbE QSFP) Physical Connection](#compute-network-200gbe-qsfp-physical-connection)
-6. [Installing sparkrun on Spark Nodes](#installing-sparkrun-on-spark-nodes)
-   - [User and SSH Configuration](#user-and-ssh-configuration)
-   - [sparkrun Installation](#sparkrun-installation)
-7. [Speed and RDMA Tests](#speed-and-rdma-tests)
-8. [Running Models with sparkrun](#running-models-with-sparkrun)
-9. [Results and Verification](#results-and-verification)
-10. [Troubleshooting](#troubleshooting)
-
----
+- [Architecture Overview](#architecture-overview)
+- [Prerequisites](#prerequisites)
+- [DGX Spark Node Preparation](#dgx-spark-node-preparation)
+  - [System and Firmware Updates](#system-and-firmware-updates)
+  - [Docker Configuration](#docker-configuration)
+- [Management Network (10GbE) Connection](#management-network-10gbe-connection)
+- [Compute Network (200GbE QSFP) Physical Connection](#compute-network-200gbe-qsfp-physical-connection)
+- [Installing sparkrun on Spark Nodes](#installing-sparkrun-on-spark-nodes)
+  - [User and SSH Configuration](#user-and-ssh-configuration)
+  - [sparkrun Installation](#sparkrun-installation)
+- [Speed and RDMA Tests](#speed-and-rdma-tests)
+- [Running Models with sparkrun](#running-models-with-sparkrun)
+- [Results and Verification](#results-and-verification)
+- [Troubleshooting](#troubleshooting)
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-2node-cluster-kurulumu/images/DGX_Spark_Bundle-700x700.png' | relative_url }}" alt="NVIDIA DGX Spark Bundle" />
+<img src="{{ '/papers/dgx-spark-3node-cluster-setup/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
 </div>
 <div class="product-card-body">
-<h3>NVIDIA DGX Spark Bundle</h3>
-<p>2 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-{% include company/product-button.html product="dgx-spark-bundle" %}
+<h3>NVIDIA DGX Spark Triple</h3>
+<p>3 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
+{% include company/product-button.html product="dgx-spark-triple" %}
 </div>
 </div>
 
-This document describes the end-to-end installation and configuration steps for an AI cluster consisting of 2 NVIDIA DGX Spark nodes in a point-to-point topology. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
+This document describes the end-to-end installation and configuration steps for an AI cluster consisting of 3 NVIDIA DGX Spark nodes in a ring (mesh) topology. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
 
 The document covers the preparation of management and compute networks, ConnectX-7 QSFP112 port configuration, RoCEv2/RDMA settings, SSH access, and cluster health check steps.
 
@@ -52,18 +52,17 @@ The document covers the preparation of management and compute networks, ConnectX
 
 | Component | Description |
 | :---- | :---- |
-| **DGX Spark × 2** | Each has a ConnectX-7 200GbE QSFP112 port |
-| **QSFP112 Cable** | Amphenol: NJAAKK-N911 |
+| **DGX Spark × 3** | Each has a ConnectX-7 200GbE QSFP112 port |
+| **QSFP112 Cable × 3** | Amphenol: NJAAKK-N911 |
 | **sparkrun** | Cluster management, SSH mesh and CX7 configuration toolkit |
 
 ## Prerequisites
 
 **Hardware**
 
-* 2× NVIDIA DGX Spark systems
-* 1× Amphenol: NJAAKK-N911 cable
+* 3× NVIDIA DGX Spark systems
+* 3× Amphenol: NJAAKK-N911 cables
 * Cat6 cables (management network)
-* 1× switch with RJ45 ports (management network)
 
 **Software and Operating System**
 
@@ -85,7 +84,7 @@ You can use the following video for DGX Spark OS installation:
 
 Before proceeding to physical connections and network configuration, ensure that all Spark systems are running the latest software and firmware versions. A significant portion of performance issues encountered during installation stem from outdated drivers, missing updates, or firmware incompatibilities.
 
-The following steps must be applied on both Spark systems.
+The following steps must be applied on all three Spark systems.
 
 ### **System and Firmware Updates**
 
@@ -105,7 +104,7 @@ sudo fwupdmgr upgrade
 
 Check the DGX Dashboard for any available updates and apply them if present:
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/01-dgx-dashboard.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/01-dgx-dashboard.png' | relative_url }})
 
 After updates are complete, reboot the system:
 
@@ -133,7 +132,7 @@ Verify the configuration with the following test:
 docker run hello-world
 ```
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/02-docker-hello.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/02-docker-hello.png' | relative_url }})
 
 Successful execution of the command and Docker's ability to launch the example container confirms that the necessary preparation for container-based tools in subsequent steps is complete.
 
@@ -163,7 +162,7 @@ sudo systemctl restart docker
 
 After configuration, the same check command was run again and the storage driver was confirmed to be `overlayfs`.
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/03-docker-storage.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/03-docker-storage.png' | relative_url }})
 
 ## Management Network (10GbE) Connection
 
@@ -175,7 +174,7 @@ Open a terminal on the Spark desktop and check whether the device has obtained a
 ip addr show
 ```
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/04-ip-addr.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/04-ip-addr.png' | relative_url }})
 
 If you see an IP address on the 10GbE interface as in the example, SSH access over the management network is available. If no IP address is assigned, assign one manually via the DGX OS desktop:
 
@@ -184,21 +183,22 @@ If you see an IP address on the 10GbE interface as in the example, SSH access ov
 3. Switch to the IPv4 tab
 4. Change the Method to Manual
 5. Enter the following information:
-- Address: 192.168.1.148 (different for each Spark, e.g. .147 — adjust to your network)
+- Address: 192.168.1.163 (different for each Spark, e.g. .147, .148 — adjust to your network)
 - Netmask: 255.255.255.0
 - Gateway: 192.168.1.1 (if available, otherwise leave blank)
 - DNS: 1.1.1.1,8.8.8.8
 6. Click Apply and toggle the connection off and back on
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/05-wired-settings.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/05-wired-settings.png' | relative_url }})
 
-If internet access is available, the 10GbE management connection is ready. Repeat the same steps on the other Spark system, assigning a different IP address.
+If internet access is available, the 10GbE management connection is ready. Repeat the same steps on the other two Spark systems, assigning a different IP address to each.
 
 **Inter-node Access Check**
 
-Verify that all Spark systems can see each other over the management network. From one Spark, ping the other:
+Verify that all Spark systems can see each other over the management network. From one Spark, ping the others:
 
 ```bash
+ping -c 4 192.168.1.147
 ping -c 4 192.168.1.148
 ```
 
@@ -206,15 +206,19 @@ If all pings are successful, the management network is ready and all nodes can c
 
 ## Compute Network (200GbE QSFP) Physical Connection
 
-In this setup, the two Spark systems are connected to each other at 200GbE via their ConnectX-7 QSFP112 ports.
+In this setup, each Spark connects to the other two Sparks at 100GbE (two ports totaling 200GbE) via its two ConnectX-7 QSFP ports.
 
 **Cable Plan**
 
-The port mapping for the physical connection between the two Spark systems is as follows:
+The port mappings for the physical connections between the three Spark systems are as follows:
 
 | Source | Destination |
 | ----- | ----- |
-| Spark1 Port0 | Spark2 Port0 |
+| Spark1 Port0 | Spark2 Port1 |
+| Spark1 Port1 | Spark3 Port0 |
+| Spark2 Port0 | Spark3 Port1 |
+
+**![]({{ '/papers/dgx-spark-3node-cluster-setup/images/06-cable-plan.png' | relative_url }})**
 
 ## Installing sparkrun on Spark Nodes
 
@@ -231,10 +235,13 @@ sudo hostnamectl set-hostname spark1
 
 # On Spark 2:
 sudo hostnamectl set-hostname spark2
+
+# On Spark 3:
+sudo hostnamectl set-hostname spark3
 ```
 
 **Creating a Shared User**
-The same username must be created on all Spark systems. This document uses the `nvidia` username. Run the following commands on both Spark systems:
+The same username must be created on all Spark systems. This document uses the `nvidia` username. Run the following commands on all three Spark systems:
 
 ```bash
 sudo useradd -m nvidia
@@ -253,7 +260,7 @@ echo "nvidia ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nvidia
 sudo chmod 440 /etc/sudoers.d/nvidia
 ```
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/07-passwordless-sudo.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/07-passwordless-sudo.png' | relative_url }})
 
 ### sparkrun Installation
 
@@ -283,49 +290,58 @@ Answer the prompts during installation:
 3. Enter `nvidia` as the SSH username (created in the previous step)
 4. Select Y for MESH setup
 
-    ![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/08-sparkrun-wizard.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/08-sparkrun-wizard.png' | relative_url }})
 
 5. Answer Y to "Configure CX7 networking?":
+6. Leave topology selection as "auto" or select "ring":
 
-    ![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/09-sparkrun-topology.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/09-sparkrun-topology.png' | relative_url }})
 
-6. Answer Y to "Add 'nvidia' to the docker group on all hosts?"
-7. Answer Y to "Generate the NVIDIA CDI spec on all hosts?"
+7. Answer Y to "Add 'nvidia' to the docker group on all hosts?"
 8. Answer Y to "Install sudoers entries?"
 9. Answer Y to "Install earlyoom?"
 10. When the "Setup complete" message appears, the installation is successfully finished
 
-    ![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/10-sparkrun-complete.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/10-sparkrun-complete.png' | relative_url }})
 
 ## Speed and RDMA Tests
 
-In this step, we will verify that the compute network is functioning correctly and that RDMA communication over RoCEv2 performs as expected.
+In this step, we will verify that the compute network is functioning correctly and that RDMA communication over RoCEv2 performs as expected. The tests are performed between two Spark systems.
 
 **IP Assignment Reference**
 The IP addresses assigned by the sparkrun wizard to the CX7 interfaces are shown below. In your scenario, use your own addresses instead:
 
-| Spark | Management (enP7s7) | enp1s0f1np1 | enP2p1s0f1np1 |
-| ----- | ----- | ----- | ----- |
-| Spark 1 | 192.168.1.148 | 192.168.0.148 | 192.168.2.148 |
-| Spark 2 | 192.168.1.147 | 192.168.0.147 | 192.168.2.147 |
+| Spark | Management (enP7s7) | enp1s0f0np0 | enp1s0f1np1 | enP2p1s0f0np0 | enP2p1s0f1np1 |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| Spark 1 | 192.168.1.163 | 192.168.0.2 | 192.168.3.1 | 192.168.2.2 | 192.168.4.1 |
+| Spark 2 | 192.168.1.147 | 192.168.5.2 | 192.168.2.1 | 192.168.6.2 | 192.168.0.1 |
+| Spark 3 | 192.168.1.148 | 192.168.4.2 | 192.168.6.1 | 192.168.3.2 | 192.168.5.1 |
 
-In the current topology, there are 2 subnets between the nodes. Tests are performed on one subnet; tests for the other subnet can be repeated similarly:
+In a ring topology, there are 2 subnets between each node pair (6 subnets total). Tests are performed on one node pair and can be repeated similarly for the others:
 
-- Subnet 1: 192.168.0.0/24
-- Subnet 2: 192.168.2.0/24
+- Link 0 (Spark 1 ↔ Spark 2): 192.168.0.0/24 + 192.168.2.0/24
+- Link 1 (Spark 1 ↔ Spark 3): 192.168.3.0/24 + 192.168.4.0/24
+- Link 2 (Spark 2 ↔ Spark 3): 192.168.5.0/24 + 192.168.6.0/24
 
 **IP and MTU Test**
 From Spark 1, test connectivity and jumbo frames by pinging Spark 2:
 
 ```bash
 # On Spark 1:
-ping -c 4 192.168.0.147
-ping -M do -s 8972 -c 4 192.168.0.147
+ping -c 4 192.168.0.1
+ping -M do -s 8972 -c 4 192.168.0.1
 ```
 
 The first ping tests basic connectivity; the second tests 9000-byte MTU. `-M do` prevents fragmentation — if the packet doesn't drop, MTU 9000 is working end-to-end.
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/11-ping-mtu.png' | relative_url }})
+Repeat for the second subnet:
+
+```bash
+ping -c 4 192.168.2.1
+ping -M do -s 8972 -c 4 192.168.2.1
+```
+
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/11-ping-mtu.png' | relative_url }})
 
 **TCP Throughput Test (iperf3)**
 Measure the basic bandwidth over the Ethernet/IP layer. This test is not RDMA — it uses TCP with CPU involvement.
@@ -334,7 +350,7 @@ Measure the basic bandwidth over the Ethernet/IP layer. This test is not RDMA �
 # On Spark 2 (server):
 iperf3 -s
 # On Spark 1 (client):
-iperf3 -c 192.168.0.147 -P 8 -t 30
+iperf3 -c 192.168.0.1 -P 8 -t 30
 ```
 
 `-P 8` means eight parallel streams, `-t 30` means a thirty-second test duration. Expected result: ~100-120 Gbps total throughput.
@@ -345,7 +361,7 @@ Note: Install iperf3 if it's not already installed:
 sudo apt install iperf3
 ```
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/12-iperf3.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/12-iperf3.png' | relative_url }})
 
 **Identifying RDMA Devices**
 List the RDMA device names:
@@ -355,33 +371,17 @@ ibdev2netdev
 ```
 
 Example output:
-rocep1s0f0 port 1 ==> enp1s0f0np0 (Down)
+rocep1s0f0 port 1 ==> enp1s0f0np0 (Up)
 rocep1s0f1 port 1 ==> enp1s0f1np1 (Up)
-roceP2p1s0f0 port 1 ==> enP2p1s0f0np0 (Down)
+roceP2p1s0f0 port 1 ==> enP2p1s0f0np0 (Up)
 roceP2p1s0f1 port 1 ==> enP2p1s0f1np1 (Up)
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/13-ibdev2netdev.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/13-ibdev2netdev.png' | relative_url }})
 
 **RDMA Write Test (ib_write_bw)**
 Measure the bandwidth of RDMA write operations over RoCEv2. This tests direct memory transfer without CPU involvement.
 
-**Subnet 1:**
-On Spark 2 (server):
-
-```bash
-ib_write_bw -d rocep1s0f1 -F --report_gbits
-```
-
-On Spark 1 (client):
-
-```bash
-ib_write_bw -d rocep1s0f1 -F --report_gbits 192.168.0.147
-```
-
-Expected result: ~100-111 Gbps.
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/14-ib-write-bw-1.png' | relative_url }})
-
-**Subnet 2:**
+**Subnet 192.168.0.0/24:**
 On Spark 2 (server):
 
 ```bash
@@ -391,34 +391,34 @@ ib_write_bw -d roceP2p1s0f1 -F --report_gbits
 On Spark 1 (client):
 
 ```bash
-ib_write_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.147
+ib_write_bw -d rocep1s0f0 -F --report_gbits 192.168.0.1
 ```
 
 Expected result: ~100-111 Gbps.
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/15-ib-write-bw-2.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/14-ib-write-bw-1.png' | relative_url }})
 
-If both interfaces deliver ~100 Gbps, there is a total of ~200 Gbps RDMA bandwidth between the Spark systems.
-
-**RDMA Read Test (ib_read_bw)**
-Measure the bandwidth of RDMA read operations:
-
-**Subnet 1:**
+**Subnet 192.168.2.0/24:**
 On Spark 2 (server):
 
 ```bash
-ib_read_bw -d rocep1s0f1 -F --report_gbits
+ib_write_bw -d rocep1s0f1 -F --report_gbits
 ```
 
 On Spark 1 (client):
 
 ```bash
-ib_read_bw -d rocep1s0f1 -F --report_gbits 192.168.0.147
+ib_write_bw -d roceP2p1s0f0 -F --report_gbits 192.168.2.1
 ```
 
-Expected result: ~95-110 Gbps.
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/17-ib-read-bw-1.png' | relative_url }})
+Expected result: ~100-111 Gbps.
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/15-ib-write-bw-2.png' | relative_url }})
 
-**Subnet 2:**
+If both interfaces deliver ~100 Gbps, each Spark pair has a total of ~200 Gbps RDMA bandwidth.
+
+**RDMA Read Test (ib_read_bw)**
+Measure the bandwidth of RDMA read operations:
+
+**Subnet 192.168.0.0/24:**
 On Spark 2 (server):
 
 ```bash
@@ -428,10 +428,26 @@ ib_read_bw -d roceP2p1s0f1 -F --report_gbits
 On Spark 1 (client):
 
 ```bash
-ib_read_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.147
+ib_read_bw -d rocep1s0f0 -F --report_gbits 192.168.0.1
 ```
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/17-ib-read-bw-2.png' | relative_url }})
+Expected result: ~95-110 Gbps.
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/16-ib-read-bw-1.png' | relative_url }})
+
+**Subnet 192.168.2.0/24:**
+On Spark 2 (server):
+
+```bash
+ib_read_bw -d rocep1s0f1 -F --report_gbits
+```
+
+On Spark 1 (client):
+
+```bash
+ib_read_bw -d roceP2p1s0f0 -F --report_gbits 192.168.2.1
+```
+
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/17-ib-read-bw-2.png' | relative_url }})
 
 Expected result: ~95-110 Gbps.
 
@@ -439,16 +455,16 @@ Expected result: ~95-110 Gbps.
 On Spark 2 (server):
 
 ```bash
-ib_write_lat -d rocep1s0f1
+ib_write_lat -d roceP2p1s0f1
 ```
 
 On Spark 1 (client):
 
 ```bash
-ib_write_lat -d rocep1s0f1 192.168.0.147
+ib_write_lat -d rocep1s0f0 192.168.0.1
 ```
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/18-ib-write-lat.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/18-ib-write-lat.png' | relative_url }})
 
 Expected result: ~1-3 microsecond latency.
 
@@ -457,43 +473,40 @@ Expected result: ~1-3 microsecond latency.
 In this step, we will run a multi-node inference workload via sparkrun to verify that the cluster works end-to-end.
 
 **Model and Recipe**
-This test uses the nvidia/MiniMax-M2.7-NVFP4 model. The model runs with tensor parallelism (TP=2) across 2 nodes. sparkrun's built-in recipe is configured to use the `vllm-distributed` runtime; therefore, a custom YAML file was prepared to use the `vllm-ray` runtime for 2 nodes.
+This test uses the Intel/Qwen3.5-397B-A17B-int4-AutoRound model. The model runs with pipeline parallelism across 3 nodes. sparkrun's default recipe is configured for tensor parallelism; therefore, a custom YAML file was prepared to use pipeline parallelism for 3 nodes.
 
 **Running the Model**
-Save the following YAML file as *minimax-M2.7-nvfp4.yaml*:
+Save the following YAML file as *qwen3.5-397b-a17b-int4-vllm.yaml*:
 
 ```yaml
-model: nvidia/MiniMax-M2.7-NVFP4
-name: MiniMax-M2.7-NVFP4
+model: Intel/Qwen3.5-397B-A17B-int4-AutoRound
 runtime: vllm-ray
-min_nodes: 2
-container: sparkrun-eugr-vllm
+min_nodes: 3
+container: ghcr.io/spark-arena/dgx-vllm-eugr-nightly:latest
+
+metadata:
+  description: "Qwen3.5-397B-A17B int4 AutoRound - 3 Node PP3"
 
 defaults:
-  max_model_len: 196608
-  host: 0.0.0.0
   port: 8000
-  tensor_parallel: 2
+  host: 0.0.0.0
+  tensor_parallel: 1
+  pipeline_parallel: 3
   gpu_memory_utilization: 0.85
-  reasoning_parser: minimax_m2
-  tool_call_parser: minimax_m2
-  load_format: instanttensor
-  pipeline_parallel: 1
-recipe_version: '2'
-env:
-  VLLM_MARLIN_USE_ATOMIC_ADD: '1'
-builder: eugr
-metadata:
-  quantization: nvfp4
-  head_dim: 128
-  num_kv_heads: 8
-  description: MiniMax-M2.7 NVFP4 (NVIDIA quant)
-  kv_dtype: fp8
-  model_dtype: nvfp4
-  quant_bits: 4
-  num_layers: 62
+  max_model_len: 131072
+  load_format: auto
+  tool_call_parser: qwen3_coder
+  reasoning_parser: qwen3
 
-command: |-
+env:
+  VLLM_MARLIN_USE_ATOMIC_ADD: "1"
+  NCCL_DEBUG: "INFO"
+  HF_TOKEN: ${HF_TOKEN}
+  HF_HUB_OFFLINE: "1"
+  TRANSFORMERS_OFFLINE: "1"
+  HF_DATASETS_OFFLINE: "1"
+
+command: |
   vllm serve {model} \
     --trust-remote-code \
     --gpu-memory-utilization {gpu_memory_utilization} \
@@ -511,7 +524,7 @@ command: |-
 Then run the model:
 
 ```bash
-sparkrun run minimax-M2.7-nvfp4.yaml
+sparkrun run qwen3.5-397b-a17b-int4-vllm.yaml
 ```
 
 **SSH Authorization Error Fix**
@@ -521,22 +534,21 @@ If you encounter an authorization-related error when sparkrun tries to connect t
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/19-ssh-auth-fix.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/19-ssh-auth-fix.png' | relative_url }})
 
 **Verifying the Model is Ready**
 When the model starts, you will see an "Application startup complete." message, indicating the model is ready for use:
-![]({{ '/papers/dgx-spark-2node-cluster-kurulumu/images/20-model-startup.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/20-model-startup.png' | relative_url }})
 
 **Benchmark Results**
 Average values obtained from tests run with the [benchmark tool](https://github.com/CordatusAI/llm-benchmark) on the model deployed in this manner are as follows:
 
 | Concurrent Requests | TTFT (ms) | Token/s | Latency (s) | Throughput (RPS) |
 | ----- | ----- | ----- | ----- | ----- |
-| 1 | 245 | 26.27 | 4.87 | 0.21 |
-| 2 | 299 | 22.34 | 5.74 | 0.17 |
-| 4 | 386 | 17.24 | 7.43 | 0.13 |
-| 8 | 450 | 12.69 | 10.09 | 0.10 |
-| 16 | 435 | 9.05 | 14.16 | 0.07 |
+| 1 | 452 | 16.69 | 7.67 | 0.13 |
+| 2 | 708 | 13.63 | 9.40 | 0.11 |
+| 4 | 827 | 10.19 | 12.57 | 0.08 |
+| 8 | 1394 | 6.54 | 19.57 | 0.05 |
 
 ## Results and Verification
 
@@ -592,11 +604,11 @@ Run the command above and re-run sparkrun.
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-2node-cluster-kurulumu/images/DGX_Spark_Bundle-700x700.png' | relative_url }}" alt="NVIDIA DGX Spark Bundle" />
+<img src="{{ '/papers/dgx-spark-3node-cluster-setup/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
 </div>
 <div class="product-card-body">
-<h3>NVIDIA DGX Spark Bundle</h3>
-<p>2 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-{% include company/product-button.html product="dgx-spark-bundle" %}
+<h3>NVIDIA DGX Spark Triple</h3>
+<p>3 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
+{% include company/product-button.html product="dgx-spark-triple" %}
 </div>
 </div>

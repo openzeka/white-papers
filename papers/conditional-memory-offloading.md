@@ -32,7 +32,7 @@ toc: true
 
 ## Executive Summary
 
-- **Start with the memory budget.** Our [Local LLM Usage Guide]({{ '/papers/yerel-llm-rehberi/' | relative_url }}) treats VRAM as the central sizing constraint. Conditional memory changes which model parameters need to remain in GPU memory.
+- **Start with the memory budget.** Our [Local LLM Usage Guide]({{ '/papers/local-llm-guide/' | relative_url }}) treats VRAM as the central sizing constraint. Conditional memory changes which model parameters need to remain in GPU memory.
 - **Not every parameter is read on every token.** Some recent models, including the two examined here, add what DeepSeek calls **conditional memory**: large lookup tables of hashed n-gram embeddings (*Engram* in DeepSeek-V4.1-Flash, the *n-gram embedding table* in Qwen3.8-Flash-Next, called PLE in SGLang). Each token requires only a few kilobytes of embedding data, and the required rows can be identified from token IDs before the forward pass.
 - **Storage requirements and memory traffic differ.** Large tables supply only a few rows per token. Small transfers and prefetching make low-overhead offloading possible, while repeatedly moving active weight matrices or attention caches is more demanding.
 - **Where it can go depends on the device's memory design.** On **DGX Spark** (unified memory) host RAM and GPU memory are the same pool, so the table is backed by NVMe with frequently accessed pages cached in RAM. On **RTX PRO 6000** (dedicated GPU memory) the table goes to pinned host RAM across PCIe. On **DGX B300**, the four-GPU DeepSeek configuration has enough GPU memory to hold the tables as well.
@@ -44,7 +44,7 @@ toc: true
 
 ## 1. Introduction
 
-The [Local LLM Usage Guide]({{ '/papers/yerel-llm-rehberi/' | relative_url }}) starts hardware sizing with GPU memory: model weights, KV cache, recurrent state and runtime buffers must fit. Conditional memory adds a useful distinction to that budget. Some learned parameters form large tables from which each token retrieves only a few rows; keeping those tables outside GPU memory can make a previously oversized model practical on the same device.
+The [Local LLM Usage Guide]({{ '/papers/local-llm-guide/' | relative_url }}) starts hardware sizing with GPU memory: model weights, KV cache, recurrent state and runtime buffers must fit. Conditional memory adds a useful distinction to that budget. Some learned parameters form large tables from which each token retrieves only a few rows; keeping those tables outside GPU memory can make a previously oversized model practical on the same device.
 
 This paper follows that distinction from **architecture to deployment**: why attention, experts and embeddings have different access patterns; how those patterns affect offloading; and what OpenZeka's DeepSeek-V4.1-Flash and Qwen3.8-Flash-Next runs demonstrate on DGX Spark and RTX PRO 6000. DGX B300 provides an example of a system with separate CPU and GPU memory in the hardware discussion.
 
@@ -450,7 +450,7 @@ One sizing mistake to avoid is treating all offloading as equivalent. Check **wh
 
 **OpenZeka papers and tools:**
 
-- [Local LLM Usage Guide]({{ '/papers/yerel-llm-rehberi/' | relative_url }})
+- [Local LLM Usage Guide]({{ '/papers/local-llm-guide/' | relative_url }})
 - [DeepSeek-V4.1-Flash 4× DGX Spark Deployment]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/' | relative_url }})
 - [DeepSeek-V4.1-Flash 8× DGX Spark TP8 Deployment]({{ '/papers/deepseek-v4.1-flash-8spark-deployment/' | relative_url }})
 - [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }})

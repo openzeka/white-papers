@@ -28,9 +28,10 @@ obvious, the user confirms it:
   whether a translation exists. Every translation — yours or supplied — follows
   [`TERMINOLOGY.md`](TERMINOLOGY.md) in this folder: what is never translated,
   the register, and the term to use for each concept in each language.
-- **The slug** — propose one: lowercase, hyphenated, e.g.
-  `qwen3.6-27b-dgx-spark-benchmark`. It becomes the URL `/papers/<slug>/` and
-  cannot change later without breaking links.
+- **The slug** — propose one: **English**, lowercase, hyphenated, e.g.
+  `qwen3.6-27b-dgx-spark-benchmark`. It becomes the URL `/papers/<slug>/` in
+  every language. Changing it later needs a `redirect_from:` line with the old
+  URL in all three files, or existing links break.
 - **The publication date** — propose today's date.
 - **The title and one-sentence description** in each language (step 2).
 - **The `card_tag`** — propose one from the existing list (step 2).

@@ -3,14 +3,16 @@ title: NVIDIA DGX B300 ve GB300 NVL72 Cluster Mimarisi Karşılaştırması
 parent: White Papers
 nav_order: 3
 lang: tr
-page_id: b300-gb300-cluster-mimarisi
+page_id: b300-gb300-cluster-architecture
 date: 2026-08-03 09:01:15 +0300
 card_tag: "Mimari Karşılaştırma"
 description: >-
   NVIDIA Blackwell Ultra tabanlı iki mimarinin karşılaştırması, DGX B300 ve GB300
   NVL72: sistem tasarımı, ölçekleme yaklaşımı, ağ mimarisi, güç ve soğutma, hangi
   iş yükünün hangi platforma uyduğu.
-permalink: /papers/b300-gb300-cluster-mimarisi/
+permalink: /papers/b300-gb300-cluster-architecture/
+redirect_from:
+  - /papers/b300-gb300-cluster-mimarisi/
 last_modified_date: 2026-07-31
 toc: true
 ---
@@ -339,7 +341,7 @@ Ethernet tarafında ise NetQ/Mission Control üzerinden network telemetry ve mon
 
 Aşağıda örnek bir DGX B300 cluster topolojisi görülmektedir:
 
-<p><img src="{{ '/papers/b300-gb300-cluster-mimarisi/images/dgx-b300.png' | relative_url }}" alt="Örnek DGX B300 cluster topolojisi" width="720"/></p>
+<p><img src="{{ '/papers/b300-gb300-cluster-architecture/images/dgx-b300.png' | relative_url }}" alt="Örnek DGX B300 cluster topolojisi" width="720"/></p>
 <sub><i>Şekil 1: Örnek DGX B300 cluster topolojisi — Compute Fabric (Quantum-X800 IB), In-band/Storage ve OOB ağları</i></sub>
 
 Bu topolojide her DGX B300 düğümü 8 × 800 Gb/s InfiniBand bağlantısıyla Compute Fabric'e bağlıdır. Storage ve yönetim trafiği ayrı bir Ethernet ağı üzerinden ilerler. OOB ağı tüm BMC ve switch yönetimini taşır.
@@ -440,7 +442,7 @@ için fiziksel olarak ayrılmış 1 GbE management erişimi sağlar.
 
 Aşağıda örnek bir GB300 NVL72 cluster topolojisi görülmektedir:
 
-<p><img src="{{ '/papers/b300-gb300-cluster-mimarisi/images/rack.png' | relative_url }}" alt="Örnek GB300 NVL72 cluster topolojisi" width="720"/></p>
+<p><img src="{{ '/papers/b300-gb300-cluster-architecture/images/rack.png' | relative_url }}" alt="Örnek GB300 NVL72 cluster topolojisi" width="720"/></p>
 <sub><i>Şekil 2: Örnek GB300 NVL72 cluster topolojisi — GPU Compute Fabric (Spectrum-X), CPU Converged ve OOB ağları</i></sub>
 
 Bu topolojide her NVL72 rack'in 18 compute tray'i, iki plane'li Spectrum-X Ethernet fabric üzerinden birbirine ve diğer rack'lere bağlanır. NVLink domain rack içi 72 GPU'yu kapsar; rack'ler arası iletişim Ethernet üzerinden gerçekleştirilir.

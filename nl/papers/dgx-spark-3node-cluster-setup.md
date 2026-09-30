@@ -3,13 +3,15 @@ title: Installatiehandleiding voor een DGX Spark AI-cluster met 3 nodes
 parent: White Papers
 nav_order: 5
 lang: nl
-page_id: dgx-spark-3node-cluster-kurulumu
+page_id: dgx-spark-3node-cluster-setup
 date: 2026-07-30 08:21:44 +0300
 card_tag: "Clusterinstallatie"
 description: >-
   Installatie van een AI-cluster in ringtopologie (mesh) met 3 NVIDIA DGX Spark-nodes:
   management- en compute-netwerk, RoCEv2/RDMA, sparkrun-configuratie.
-permalink: /papers/dgx-spark-3node-cluster-kurulumu/
+permalink: /papers/dgx-spark-3node-cluster-setup/
+redirect_from:
+  - /papers/dgx-spark-3node-cluster-kurulumu/
 last_modified_date: 2026-09-30
 toc: true
 ---
@@ -33,7 +35,7 @@ toc: true
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-3node-cluster-kurulumu/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
+<img src="{{ '/papers/dgx-spark-3node-cluster-setup/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
 </div>
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Triple</h3>
@@ -102,7 +104,7 @@ sudo fwupdmgr upgrade
 
 Controleer in het DGX Dashboard of er updates beschikbaar zijn en installeer deze als dat het geval is:
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/01-dgx-dashboard.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/01-dgx-dashboard.png' | relative_url }})
 
 Start het systeem opnieuw op nadat de updates zijn voltooid:
 
@@ -130,7 +132,7 @@ Controleer de configuratie met de volgende test:
 docker run hello-world
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/02-docker-hello.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/02-docker-hello.png' | relative_url }})
 
 Als de opdracht met succes wordt uitgevoerd en Docker de voorbeeldcontainer kan starten, is bevestigd dat de benodigde voorbereiding voor de containergebaseerde tools in de volgende stappen voltooid is.
 
@@ -160,7 +162,7 @@ sudo systemctl restart docker
 
 Na de configuratie werd dezelfde controleopdracht opnieuw uitgevoerd en werd bevestigd dat de storage driver `overlayfs` is.
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/03-docker-storage.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/03-docker-storage.png' | relative_url }})
 
 ## Aansluiting van het managementnetwerk (10GbE)
 
@@ -172,7 +174,7 @@ Open een terminal op het bureaublad van de Spark en controleer of het apparaat e
 ip addr show
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/04-ip-addr.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/04-ip-addr.png' | relative_url }})
 
 Als u, zoals in het voorbeeld, een IP-adres op de 10GbE-interface ziet, is SSH-toegang via het managementnetwerk beschikbaar. Als er geen IP-adres is toegewezen, wijs er dan handmatig een toe via het bureaublad van DGX OS:
 
@@ -187,7 +189,7 @@ Als u, zoals in het voorbeeld, een IP-adres op de 10GbE-interface ziet, is SSH-t
 - DNS: 1.1.1.1,8.8.8.8
 6. Klik op Apply en schakel de verbinding uit en weer in
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/05-wired-settings.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/05-wired-settings.png' | relative_url }})
 
 Als er internettoegang is, is de 10GbE-managementverbinding gereed. Herhaal dezelfde stappen op de andere twee Spark-systemen en wijs elk daarvan een ander IP-adres toe.
 
@@ -216,7 +218,7 @@ De poorttoewijzingen voor de fysieke verbindingen tussen de drie Spark-systemen 
 | Spark1 Port1 | Spark3 Port0 |
 | Spark2 Port0 | Spark3 Port1 |
 
-**![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/06-cable-plan.png' | relative_url }})**
+**![]({{ '/papers/dgx-spark-3node-cluster-setup/images/06-cable-plan.png' | relative_url }})**
 
 ## sparkrun installeren op de Spark-nodes
 
@@ -258,7 +260,7 @@ echo "nvidia ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nvidia
 sudo chmod 440 /etc/sudoers.d/nvidia
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/07-passwordless-sudo.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/07-passwordless-sudo.png' | relative_url }})
 
 ### Installatie van sparkrun
 
@@ -288,19 +290,19 @@ Beantwoord de vragen tijdens de installatie:
 3. Voer `nvidia` in als SSH-gebruikersnaam (aangemaakt in de vorige stap)
 4. Kies Y voor de MESH-installatie
 
-    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/08-sparkrun-wizard.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/08-sparkrun-wizard.png' | relative_url }})
 
 5. Antwoord Y op "Configure CX7 networking?":
 6. Laat de topologiekeuze op "auto" staan of kies "ring":
 
-    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/09-sparkrun-topology.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/09-sparkrun-topology.png' | relative_url }})
 
 7. Antwoord Y op "Add 'nvidia' to the docker group on all hosts?"
 8. Antwoord Y op "Install sudoers entries?"
 9. Antwoord Y op "Install earlyoom?"
 10. Wanneer het bericht "Setup complete" verschijnt, is de installatie met succes voltooid
 
-    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/10-sparkrun-complete.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/10-sparkrun-complete.png' | relative_url }})
 
 ## Snelheidstests en RDMA-tests
 
@@ -339,7 +341,7 @@ ping -c 4 192.168.2.1
 ping -M do -s 8972 -c 4 192.168.2.1
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/11-ping-mtu.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/11-ping-mtu.png' | relative_url }})
 
 **TCP-doorvoertest (iperf3)**
 Meet de basisbandbreedte (bandwidth) over de Ethernet/IP-laag. Deze test is geen RDMA — hij gebruikt TCP, waarbij de CPU betrokken is.
@@ -359,7 +361,7 @@ Opmerking: installeer iperf3 als het nog niet is geïnstalleerd:
 sudo apt install iperf3
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/12-iperf3.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/12-iperf3.png' | relative_url }})
 
 **RDMA-apparaten identificeren**
 Toon de namen van de RDMA-apparaten:
@@ -374,7 +376,7 @@ rocep1s0f1 port 1 ==> enp1s0f1np1 (Up)
 roceP2p1s0f0 port 1 ==> enP2p1s0f0np0 (Up)
 roceP2p1s0f1 port 1 ==> enP2p1s0f1np1 (Up)
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/13-ibdev2netdev.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/13-ibdev2netdev.png' | relative_url }})
 
 **RDMA-schrijftest (ib_write_bw)**
 Meet de bandbreedte van RDMA-schrijfbewerkingen via RoCEv2. Hiermee wordt directe geheugenoverdracht zonder betrokkenheid van de CPU getest.
@@ -393,7 +395,7 @@ ib_write_bw -d rocep1s0f0 -F --report_gbits 192.168.0.1
 ```
 
 Verwacht resultaat: ~100-111 Gbps.
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/14-ib-write-bw-1.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/14-ib-write-bw-1.png' | relative_url }})
 
 **Subnet 192.168.2.0/24:**
 Op Spark 2 (server):
@@ -409,7 +411,7 @@ ib_write_bw -d roceP2p1s0f0 -F --report_gbits 192.168.2.1
 ```
 
 Verwacht resultaat: ~100-111 Gbps.
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/15-ib-write-bw-2.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/15-ib-write-bw-2.png' | relative_url }})
 
 Als beide interfaces ~100 Gbps leveren, heeft elk paar Sparks in totaal ~200 Gbps RDMA-bandbreedte.
 
@@ -430,7 +432,7 @@ ib_read_bw -d rocep1s0f0 -F --report_gbits 192.168.0.1
 ```
 
 Verwacht resultaat: ~95-110 Gbps.
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/16-ib-read-bw-1.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/16-ib-read-bw-1.png' | relative_url }})
 
 **Subnet 192.168.2.0/24:**
 Op Spark 2 (server):
@@ -445,7 +447,7 @@ Op Spark 1 (client):
 ib_read_bw -d roceP2p1s0f0 -F --report_gbits 192.168.2.1
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/17-ib-read-bw-2.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/17-ib-read-bw-2.png' | relative_url }})
 
 Verwacht resultaat: ~95-110 Gbps.
 
@@ -462,7 +464,7 @@ Op Spark 1 (client):
 ib_write_lat -d rocep1s0f0 192.168.0.1
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/18-ib-write-lat.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/18-ib-write-lat.png' | relative_url }})
 
 Verwacht resultaat: een latentie (latency) van ~1-3 microseconden.
 
@@ -532,11 +534,11 @@ Als u na het uitvoeren van de opdracht een autorisatiegerelateerde fout krijgt w
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/19-ssh-auth-fix.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/19-ssh-auth-fix.png' | relative_url }})
 
 **Controleren of het model gereed is**
 Wanneer het model start, ziet u het bericht "Application startup complete."; dit geeft aan dat het model klaar is voor gebruik:
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/20-model-startup.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/20-model-startup.png' | relative_url }})
 
 **Benchmarkresultaten**
 De gemiddelde waarden uit tests met de [benchmarktool](https://github.com/CordatusAI/llm-benchmark) op het op deze manier uitgerolde model zijn als volgt:
@@ -602,7 +604,7 @@ Voer de bovenstaande opdracht uit en voer sparkrun opnieuw uit.
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-3node-cluster-kurulumu/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
+<img src="{{ '/papers/dgx-spark-3node-cluster-setup/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
 </div>
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Triple</h3>

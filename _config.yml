@@ -72,6 +72,7 @@ plugins:
   - jekyll-sitemap
   - jekyll-feed
   - jekyll-polyglot
+  - jekyll-redirect-from
 
 # Hariç tutulan dosyalar
 exclude:

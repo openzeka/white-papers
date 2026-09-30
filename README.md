@@ -17,13 +17,13 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 
 | Title | Topic | Platform |
 |---|---|---|
-| [Local LLM Usage Guide](https://whitepapers.openzeka.com/papers/yerel-llm-rehberi/) | Hardware → model → software decision guide | Jetson, RTX PRO, DGX Spark, DGX/HGX |
+| [Local LLM Usage Guide](https://whitepapers.openzeka.com/papers/local-llm-guide/) | Hardware → model → software decision guide | Jetson, RTX PRO, DGX Spark, DGX/HGX |
 | [Conditional Memory and Offloading in LLM Inference](https://whitepapers.openzeka.com/papers/conditional-memory-offloading/) | Architecture, memory placement and measured inference with conditional-memory offloading | DGX Spark, RTX PRO 6000; DGX B300 memory architecture |
-| [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](https://whitepapers.openzeka.com/papers/b300-gb300-cluster-mimarisi/) | Blackwell Ultra architecture comparison and workload-based platform selection | NVIDIA DGX B300 and GB300 NVL72 |
-| [DGX Spark 2-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-kurulumu/) | Point-to-point topology, RoCEv2/RDMA and sparkrun | 2× NVIDIA DGX Spark (GB10) |
-| [DGX Spark 3-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-3node-cluster-kurulumu/) | Ring/mesh topology, RoCEv2/RDMA and sparkrun | 3× NVIDIA DGX Spark (GB10) |
-| [DGX Spark 4-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-kurulumu/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 4× NVIDIA DGX Spark (GB10) |
-| [DGX Spark 8-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-kurulumu/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 8× NVIDIA DGX Spark (GB10) |
+| [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](https://whitepapers.openzeka.com/papers/b300-gb300-cluster-architecture/) | Blackwell Ultra architecture comparison and workload-based platform selection | NVIDIA DGX B300 and GB300 NVL72 |
+| [DGX Spark 2-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-setup/) | Point-to-point topology, RoCEv2/RDMA and sparkrun | 2× NVIDIA DGX Spark (GB10) |
+| [DGX Spark 3-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-3node-cluster-setup/) | Ring/mesh topology, RoCEv2/RDMA and sparkrun | 3× NVIDIA DGX Spark (GB10) |
+| [DGX Spark 4-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-setup/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 4× NVIDIA DGX Spark (GB10) |
+| [DGX Spark 8-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-setup/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 8× NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Benchmark](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/) | LLM quantization comparison: FP8, AWQ, NVFP4 and MTP | NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Cluster Scaling](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-scaling/) | Multi-node scaling (TP1/TP2/TP4) and SLO-driven capacity planning | 1× / 2× / 4× NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 4× DGX Spark Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/) | 763B MoE model with TP4: vLLM build chain, SM121 patches, Engram-on-disk, DSpark speculative decoding | 4× NVIDIA DGX Spark (GB10) |
@@ -270,7 +270,7 @@ The guides cover progressively different network topologies:
 ### 4-Node Cluster
 
 <p align="center">
-  <img src="papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png" width="760" alt="OpenZeka four-node NVIDIA DGX Spark AI cluster">
+  <img src="papers/dgx-spark-4node-cluster-setup/images/spark-4-1.2.png" width="760" alt="OpenZeka four-node NVIDIA DGX Spark AI cluster">
 </p>
 
 The 4-node implementation documents a complete switch-based environment including:
@@ -293,10 +293,10 @@ The 4-node implementation documents a complete switch-based environment includin
 
 The guide contains actual configuration steps and screenshots from deployment, making it useful as an implementation reference rather than only a conceptual topology.
 
-**[2-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-kurulumu/)**  
-**[3-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-3node-cluster-kurulumu/)**  
-**[4-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-kurulumu/)**  
-**[8-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-kurulumu/)**
+**[2-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-setup/)**  
+**[3-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-3node-cluster-setup/)**  
+**[4-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-setup/)**  
+**[8-Node Setup Guide →](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-setup/)**
 
 ---
 
@@ -307,7 +307,7 @@ The guide contains actual configuration steps and screenshots from deployment, m
 DGX B300 and GB300 NVL72 both belong to the Blackwell Ultra generation, but they represent fundamentally different approaches to AI infrastructure.
 
 <p align="center">
-  <img src="papers/b300-gb300-cluster-mimarisi/images/rack.png" width="950" alt="NVIDIA GB300 NVL72 rack-scale architecture">
+  <img src="papers/b300-gb300-cluster-architecture/images/rack.png" width="950" alt="NVIDIA GB300 NVL72 rack-scale architecture">
 </p>
 
 The architecture study compares the platforms from a system-design perspective, covering topics such as:
@@ -331,7 +331,7 @@ The architecture study compares the platforms from a system-design perspective, 
 
 The objective is not to declare a universal winner, but to understand **which platform is appropriate for which workload and data-center environment**.
 
-**[Read the DGX B300 vs GB300 NVL72 architecture study →](https://whitepapers.openzeka.com/papers/b300-gb300-cluster-mimarisi/)**
+**[Read the DGX B300 vs GB300 NVL72 architecture study →](https://whitepapers.openzeka.com/papers/b300-gb300-cluster-architecture/)**
 
 ---
 
@@ -394,7 +394,7 @@ The goal is to help readers select an appropriate:
 
 combination for their workload.
 
-**[Read the Local LLM Usage Guide →](https://whitepapers.openzeka.com/papers/yerel-llm-rehberi/)**
+**[Read the Local LLM Usage Guide →](https://whitepapers.openzeka.com/papers/local-llm-guide/)**
 
 ---
 

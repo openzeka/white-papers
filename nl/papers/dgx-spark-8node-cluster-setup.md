@@ -3,14 +3,16 @@ title: Installatiehandleiding voor een DGX Spark AI-cluster met 8 nodes
 parent: White Papers
 nav_order: 7
 lang: nl
-page_id: dgx-spark-8node-cluster-kurulumu
+page_id: dgx-spark-8node-cluster-setup
 date: 2026-07-24 14:01:17 +0300
 card_tag: "Clusterinstallatie"
 description: >-
   Installatie van een switchgebaseerd AI-cluster met 8 NVIDIA DGX Spark-nodes via
   een MikroTik CRS804 met 200G-breakout: management- en compute-netwerk,
   RoCEv2/RDMA, sparkrun en NAS.
-permalink: /papers/dgx-spark-8node-cluster-kurulumu/
+permalink: /papers/dgx-spark-8node-cluster-setup/
+redirect_from:
+  - /papers/dgx-spark-8node-cluster-kurulumu/
 last_modified_date: 2026-09-30
 toc: true
 ---
@@ -46,7 +48,7 @@ toc: true
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-8node-cluster-kurulumu/images/spark-8-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark 8-Node AI Cluster" />
+<img src="{{ '/papers/dgx-spark-8node-cluster-setup/images/spark-8-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark 8-Node AI Cluster" />
 </div>
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark 8-Node AI Cluster – 8 nodes, 1 TB, 200GbE</h3>
@@ -127,7 +129,7 @@ sudo fwupdmgr upgrade
 ```
 Controleer via het DGX Dashboard dat er geen openstaande updates zijn; als die er wel zijn, voer ze dan uit:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/01-dgx-dashboard.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/01-dgx-dashboard.jpg' | relative_url }})
 
 Start het systeem opnieuw op nadat de updates zijn voltooid:
 
@@ -152,7 +154,7 @@ De configuratie kan met de volgende test worden gecontroleerd:
 ```bash
 docker run hello-world
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/02-docker-hello.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/02-docker-hello.jpg' | relative_url }})
 
 Als de opdracht met succes wordt uitgevoerd en Docker de voorbeeldcontainer kan starten, is de voorbereiding voor de containergebaseerde tools die in de volgende stappen worden gebruikt voltooid.
 
@@ -180,7 +182,7 @@ sudo systemctl restart docker
 ```
 Na de configuratie is dezelfde controleopdracht opnieuw uitgevoerd en is geverifieerd dat de storage driver overlayfs was.
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/03-docker-storage.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/03-docker-storage.png' | relative_url }})
 ## Aansluiting van het managementnetwerk (10GbE)
 
 De 10GbE-ethernetpoort van elke DGX Spark wordt met een Cat6-kabel aangesloten op een van de 10G-poorten van de MikroTik CRS312-switch. Controleer na het aansluiten van de kabel of de linkindicator van de betreffende switchpoort brandt.
@@ -191,7 +193,7 @@ Open een terminal op het bureaublad van de Spark en controleer of het apparaat e
 ip addr show
 ```
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/04-ip-addr.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/04-ip-addr.jpg' | relative_url }})
 
 Als u in de uitvoer, zoals in het voorbeeld, een IP-adres op de 10GbE-interface ziet, kan SSH-toegang via het managementnetwerk worden opgezet. Is er geen IP-adres toegekend, dan kunt u het handmatig toewijzen via het bureaublad van DGX OS:
 
@@ -219,7 +221,7 @@ Als u in de uitvoer, zoals in het voorbeeld, een IP-adres op de 10GbE-interface 
 
 6.  Druk op de knop Apply en schakel de verbinding uit en weer in
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/05-wired-settings.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/05-wired-settings.jpg' | relative_url }})
 
 Als er internettoegang is, is de 10GbE-managementverbinding gereed. Herhaal dezelfde stappen op de andere zeven Sparks en geef elk een ander IP-adres.
 
@@ -250,11 +252,11 @@ In het DGX Spark 8-Node AI Cluster is elke Spark via de ConnectX-7 QSFP-poort me
 
 1.  Steek het QSFP-DD-uiteinde van de eerste breakoutkabel in QSFP-DD-poort nummer 1 van de CRS804. Zorg ervoor dat de vergrendelingshendels aan beide uiteinden van de kabel volledig vastzitten.
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/06-breakout-cable.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/06-breakout-cable.jpg' | relative_url }})
 
 2.  Steek de twee QSFP56-uiteinden van dezelfde kabel in de buitenste ConnectX-7-poorten van de systemen Spark 1 en Spark 2.
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/07-connectx7-ports.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/07-connectx7-ports.jpg' | relative_url }})
 
 3.  Sluit de andere 3 kabels op dezelfde manier aan om de switch met de Sparks te verbinden.
 
@@ -272,13 +274,13 @@ Wanneer de switch wordt ingeschakeld, is het standaard-IP-adres 192.168.88.1/24.
 
 4.  De gebruikersnaam is admin en het wachtwoord staat op het label aan de onderkant van het apparaat. Meld u aan met deze gegevens:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/08-crs312-login.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/08-crs312-login.png' | relative_url }})
 
 **Toewijzing van het management-IP-adres**
 
 Na het aanmelden verschijnt een scherm waarin u wordt gevraagd uw wachtwoord te wijzigen. Nadat u hier het wachtwoord hebt gewijzigd, kunt u in het scherm dat daarna opent het management-IP-adres toewijzen. Hier wordt 192.168.1.122/24 als voorbeeld gebruikt; voer de gateway- en DNS-serveradressen in die bij uw netwerkinstellingen passen en druk op de knop “Apply Configuration”:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/09-crs312-mgmt-ip.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/09-crs312-mgmt-ip.jpg' | relative_url }})
 
 Door deze instelling toe te passen wordt uw sessie verbroken. Zet het IP-adres van uw computer daarom weer op een adres in het netwerk 192.168.1.0/24 en open de interface van de switch door 192.168.1.122 in uw browser in te voeren.
 
@@ -286,7 +288,7 @@ Door deze instelling toe te passen wordt uw sessie verbroken. Zet het IP-adres v
 
 Controleer in deze fase eerst of de RouterOS-software up-to-date is. Ga daarvoor naar de pagina System - Packages - Check for Updates, druk op de knop “Check for Updates” en voer de update uit als er een beschikbaar is:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/10-crs312-update.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/10-crs312-update.jpg' | relative_url }})
 
 ### Bonding van de NAS-poorten
 
@@ -300,7 +302,7 @@ Door de beide 10Gbps-poorten van de gebruikte NAS te bundelen en aan te sluiten 
 
 3.  Selecteer ze één voor één en klik op de knop Remove (−)
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/11-bridge-ports.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/11-bridge-ports.jpg' | relative_url }})
 
 **Bonding aanmaken**
 
@@ -320,7 +322,7 @@ Door de beide 10Gbps-poorten van de gebruikte NAS te bundelen en aan te sluiten 
 
 4.  Druk op de knoppen Apply en OK
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/12-bonding-config.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/12-bonding-config.jpg' | relative_url }})
 
 **De bond aan de bridge toevoegen**
 
@@ -334,7 +336,7 @@ Tot slot wordt de aangemaakte bond aan de bridge toegevoegd:
 
 4.  Druk op de knoppen Apply en OK
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/13-bond-bridge.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/13-bond-bridge.jpg' | relative_url }})
 
 ## Configuratie van de MikroTik CRS804-switch
 
@@ -350,13 +352,13 @@ Wanneer de switch wordt ingeschakeld, is het standaard-IP-adres 192.168.88.1/24.
 
 4.  De gebruikersnaam is admin en het wachtwoord staat op het label aan de onderkant van het apparaat. Meld u aan met deze gegevens:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/14-crs812-login.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/14-crs812-login.png' | relative_url }})
 
 **Toewijzing van het management-IP-adres**
 
 Na het aanmelden verschijnt een scherm waarin u wordt gevraagd uw wachtwoord te wijzigen. Nadat u hier het wachtwoord hebt gewijzigd, kunt u in het scherm dat daarna opent het management-IP-adres toewijzen. Hier wordt 192.168.1.155/24 als voorbeeld gebruikt; voer de gateway- en DNS-serveradressen in die bij uw netwerkinstellingen passen en druk op de knop “Apply Configuration”:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/15-crs812-mgmt-ip.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/15-crs812-mgmt-ip.jpg' | relative_url }})
 
 Door deze instelling toe te passen wordt uw sessie verbroken. Zet het IP-adres van uw computer daarom weer op een adres in het netwerk 192.168.1.0/24 en open de interface van de switch door 192.168.1.155 in uw browser in te voeren.
 
@@ -364,7 +366,7 @@ Door deze instelling toe te passen wordt uw sessie verbroken. Zet het IP-adres v
 
 Het eerste wat u in deze fase doet, is ervoor zorgen dat de RouterOS-software de nieuwste versie heeft. Ga daarvoor naar de pagina System - Packages - Check for Updates, druk op de knop “Check for Updates” en voer de update uit als er een beschikbaar is:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/16-crs812-update.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/16-crs812-update.jpg' | relative_url }})
 
 ### Inventarisatie en back-up vooraf
 
@@ -380,7 +382,7 @@ Maak een back-up van de huidige configuratie voordat u aan de RoCEv2-configurati
 /system/backup/save name=before-roce
 /file/print
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/17-config-backup.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/17-config-backup.png' | relative_url }})
 
 ### Breakoutconfiguratie 2×200G voor de QSFP-DD-poorten
 
@@ -399,7 +401,7 @@ set qsfp56-dd-3-5 auto-negotiation=no speed=200G-baseCR4
 set qsfp56-dd-4-1 auto-negotiation=no speed=200G-baseCR4
 set qsfp56-dd-4-5 auto-negotiation=no speed=200G-baseCR4
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/18-qsfp-breakout.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/18-qsfp-breakout.png' | relative_url }})
 
 ### Configuratie van jumboframes en MTU
 
@@ -416,7 +418,7 @@ set qsfp56-dd-3-5 l2mtu=9500 mtu=9000
 set qsfp56-dd-4-1 l2mtu=9500 mtu=9000
 set qsfp56-dd-4-5 l2mtu=9500 mtu=9000
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/19-mtu-config.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/19-mtu-config.png' | relative_url }})
 
 ### Classificatie van RoCEv2-verkeer
 
@@ -427,7 +429,7 @@ set qsfp56-dd-4-5 l2mtu=9500 mtu=9000
 add name=roce dscp=26 traffic-class=3
 add name=cnp dscp=48 traffic-class=6
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/20-qos-profiles.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/20-qos-profiles.png' | relative_url }})
 
 **Tx-queue, ETS, ECN en CNP-prioriteit**
 
@@ -439,7 +441,7 @@ set 6 schedule=strict-priority
 ```
 TC1 en TC3 draaien in de ETS-groep met een gelijk gewicht (1:1); op TC3 is ECN-markering ingeschakeld; CNP-controlepakketten krijgen voorrang via strict priority op TC6. Als TC1 inactief is, kan TC3 de volledige poort gebruiken — deze opdracht stelt geen permanente rate-limit van 100G/100G in.
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/21-tx-queue.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/21-tx-queue.png' | relative_url }})
 
 **PFC-profiel**
 
@@ -449,7 +451,7 @@ add name=pfc-tc3 traffic-class=3 rx=yes tx=yes
 ```
 Maakt een bidirectioneel profiel voor Priority-based Flow Control voor TC3 aan. Met tx=yes kan de switch voor TC3 XOFF/XON-frames naar de buur sturen; met rx=yes houdt hij rekening met TC3-PFC-frames die van de buur worden ontvangen.
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/22-pfc-profile.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/22-pfc-profile.png' | relative_url }})
 
 **Trust, PFC en referentie voor de queue-rate op de Spark-poorten**
 
@@ -464,7 +466,7 @@ set qsfp56-dd-3-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 set qsfp56-dd-4-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 set qsfp56-dd-4-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/23-trust-pfc.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/23-trust-pfc.png' | relative_url }})
 
 **Lossless traffic class en bufferpool**
 
@@ -472,7 +474,7 @@ set qsfp56-dd-4-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 /interface/ethernet/switch/qos/settings
 set lossless-traffic-class=3 lossless-buffers=auto
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/24-lossless.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/24-lossless.png' | relative_url }})
 
 **QoS-hardware-offload**
 
@@ -480,7 +482,7 @@ set lossless-traffic-class=3 lossless-buffers=auto
 /interface/ethernet/switch
 set switch1 qos-hw-offloading=yes
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/25-qos-hw-offload.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/25-qos-hw-offload.png' | relative_url }})
 
 **LLDP-DCBX-advertisement**
 
@@ -489,7 +491,7 @@ set switch1 qos-hw-offloading=yes
 set lldp-dcbx=yes
 ```
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/26-lldp-dcbx.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/26-lldp-dcbx.png' | relative_url }})
 ## sparkrun installeren op de Spark-nodes
 
 ### Configuratie van gebruiker en SSH
@@ -546,7 +548,7 @@ sparkrun voert tijdens de CX7-netwerkconfiguratie opdrachten met sudo uit. Om te
 echo "nvidia ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nvidia
 sudo chmod 440 /etc/sudoers.d/nvidia
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/27-passwordless-sudo.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/27-passwordless-sudo.png' | relative_url }})
 
 ### Installatie van sparkrun
 
@@ -579,11 +581,11 @@ Beantwoord de vragen die tijdens de installatie worden gesteld als volgt:
 
 4.  Kies Y voor de installatie van de MESH
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/28-sparkrun-wizard.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/28-sparkrun-wizard.jpg' | relative_url }})
 
 5.  Beantwoord de vraag Configure CX7 networking? met Y:
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/29-cx7-password.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/29-cx7-password.png' | relative_url }})
 
 6.  Kies Y bij de vraag Add 'nvidia' to the docker group on all hosts?
 
@@ -593,7 +595,7 @@ Beantwoord de vragen die tijdens de installatie worden gesteld als volgt:
 
 9.  Wanneer de melding Setup complete verschijnt, is de installatie met succes voltooid
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/30-sparkrun-complete.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/30-sparkrun-complete.png' | relative_url }})
 
 ### Configuratie van DCB (Data Center Bridging)
 
@@ -613,7 +615,7 @@ De interfaces met MTU 9000 en de status UP,LOWER_UP zijn de actieve. In dit docu
 
 - enP2p1s0f1np1 — Subnet 2
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/31-cx7-interfaces.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/31-cx7-interfaces.png' | relative_url }})
 
 **Koppeling van DSCP → traffic class**
 
@@ -637,7 +639,7 @@ sudo dcb pfc set dev enP2p1s0f1np1 prio-pfc 3:on
 
 prio-pfc 3:on — verzend en ontvang PFC-frames alleen voor prioriteit 3. Andere prioriteiten worden niet beïnvloed.
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/32-pfc-enable.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/32-pfc-enable.png' | relative_url }})
 
 **Persistentie (systemd-service)**
 
@@ -667,7 +669,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable dcb-roce.service
 sudo systemctl start dcb-roce.service
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/33-dcb-roce-service.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/33-dcb-roce-service.jpg' | relative_url }})
 ## Snelheidstests en RDMA-tests
 
 In deze stap controleren we of het compute-netwerk correct werkt en of de RDMA-communicatie via RoCEv2 naar verwachting presteert. De tests worden tussen twee Sparks uitgevoerd; voor 8 nodes kunnen kruistests op dezelfde manier worden herhaald.
@@ -706,7 +708,7 @@ ping -c 4 192.168.2.153
 ping -M do -s 8972 -c 4 192.168.2.153
 ```
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/34-ping-mtu.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/34-ping-mtu.jpg' | relative_url }})
 
 **Test van de TCP-doorvoer (iperf3)**
 
@@ -727,7 +729,7 @@ Opmerking: als iperf3 niet is geïnstalleerd, installeer het dan:
 ```bash
 sudo apt install iperf3
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/35-iperf3.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/35-iperf3.jpg' | relative_url }})
 
 **RDMA-apparaten identificeren**
 
@@ -743,7 +745,7 @@ rocep1s0f1 port 1 ==> enp1s0f1np1 (Up)
 
 roceP2p1s0f1 port 1 ==> enP2p1s0f1np1 (Up)
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/36-ibdev2netdev.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/36-ibdev2netdev.png' | relative_url }})
 
 **RDMA-schrijftest (ib_write_bw)**
 
@@ -765,7 +767,7 @@ ib_write_bw -d rocep1s0f1 -F --report_gbits 192.168.0.153
 
 Verwacht resultaat: ~100-111 Gbps.
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/37-ib-write-bw-1.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/37-ib-write-bw-1.jpg' | relative_url }})
 
 **Subnet 2 (enP2p1s0f1np1 → roceP2p1s0f1):**
 
@@ -783,7 +785,7 @@ ib_write_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.153
 
 Verwacht resultaat: ~100-111 Gbps.
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/38-ib-write-bw-2.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/38-ib-write-bw-2.jpg' | relative_url }})
 
 Als beide interfaces ~100 Gbps leveren, is er tussen elke Spark in totaal ~200 Gbps RDMA-bandbreedte beschikbaar.
 
@@ -806,7 +808,7 @@ ib_read_bw -d rocep1s0f1 -F --report_gbits 192.168.0.153
 ```
 Verwacht resultaat: ~95-110 Gbps.
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/39-ib-read-bw-1.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/39-ib-read-bw-1.jpg' | relative_url }})
 
 **Subnet 2 (enP2p1s0f1np1 → roceP2p1s0f1):**
 
@@ -821,7 +823,7 @@ Op Spark 1 (client):
 ```bash
 ib_read_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.153
 ```
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/40-ib-read-bw-2.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/40-ib-read-bw-2.jpg' | relative_url }})
 
 Verwacht resultaat: ~95-110 Gbps.
 
@@ -839,7 +841,7 @@ Op Spark 1 (client):
 ib_write_lat -d rocep1s0f1 192.168.0.153
 ```
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/41-ib-write-lat.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/41-ib-write-lat.jpg' | relative_url }})
 
 Verwacht resultaat: een latentie (latency) van ~1-3 microseconden.
 
@@ -975,13 +977,13 @@ Als er na het uitvoeren van de sparkrun-opdracht een autorisatiefout optreedt wa
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/42-ssh-auth-fix.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/42-ssh-auth-fix.png' | relative_url }})
 
 **Controleren of het model gereed is**
 
 Wanneer het model is gestart, krijgt u de melding "Application startup complete." — het model is nu klaar voor gebruik:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/43-model-startup.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/43-model-startup.jpg' | relative_url }})
 
 **Benchmarkresultaten**
 
@@ -1032,15 +1034,15 @@ Als er in uw netwerk geen DHCP-server is, krijgt de NAS een link-local-adres (16
 
 Ga, zodra u het IP-adres kent, in uw browser naar http://<nas-ip>:8000. Bijvoorbeeld: [http://192.168.1.31:8000](http://192.168.1.31:8000)
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/44-nas-login.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/44-nas-login.jpg' | relative_url }})
 
 In het scherm voor de eerste installatie zijn de standaardgebruikersnaam en het standaardwachtwoord admin / admin. Na het aanmelden wordt de standaardpoortconfiguratie getoond; u kunt die wijzigen of doorgaan met de standaardinstellingen:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/45-nas-port-config.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/45-nas-port-config.jpg' | relative_url }})
 
 Als u wordt gevraagd uw wachtwoord te wijzigen, doe dat dan. Wordt dat niet gevraagd, dan kunt u rechtsboven op het pictogram A klikken, daar Personal kiezen en uw wachtwoord wijzigen in het scherm dat opent:
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/46-nas-password.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/46-nas-password.jpg' | relative_url }})
 
 **RAID-configuratie**
 
@@ -1064,15 +1066,15 @@ In dit document wordt de RAID 0-configuratie beschreven, voor snelheid maar ten 
 
 3.  Klik op de knop Remove
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/47-raid-volume.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/47-raid-volume.jpg' | relative_url }})
 
 4.  Kies in het scherm dat verschijnt de optie Quick Setup
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/48-raid-quick-setup.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/48-raid-quick-setup.jpg' | relative_url }})
 
 5.  Kies in het volgende scherm de optie RAID 0
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/49-raid0-select.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/49-raid0-select.jpg' | relative_url }})
 
 6.  Druk op de knop Finish
 
@@ -1086,7 +1088,7 @@ Bundel de twee 10Gbps-ethernetpoorten van de NAS in één bondinginterface voor 
 
 2.  Klik op ADD → Create Link Aggregation
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/50-link-aggregation.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/50-link-aggregation.jpg' | relative_url }})
 
 3.  Selecteer in het veld Interface LAN 1 en LAN 2
 
@@ -1094,7 +1096,7 @@ Bundel de twee 10Gbps-ethernetpoorten van de NAS in één bondinginterface voor 
 
 5.  Druk op de knop Next
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/51-lacp-config.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/51-lacp-config.jpg' | relative_url }})
 
 6.  Vink de optie Set up IP address manually aan
 
@@ -1108,7 +1110,7 @@ Bundel de twee 10Gbps-ethernetpoorten van de NAS in één bondinginterface voor 
 
 8.  Druk op de knop Next
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/52-nas-ip-config.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/52-nas-ip-config.jpg' | relative_url }})
 
 9.  Controleer het overzichtsscherm en druk op de knop Finish
 
@@ -1124,7 +1126,7 @@ Om het script voor prestatie-afstemming te installeren, moet u via SSH verbindin
 
 3.  Druk op de knop Apply
 
-![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/53-ssh-enable.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/53-ssh-enable.jpg' | relative_url }})
 
 U kunt nu via SSH verbinding maken met de NAS:
 
@@ -1150,7 +1152,7 @@ Belangrijk: na het inschakelen van de NFS-service moet u de NAS opnieuw opstarte
 
 1.  Klik in de webinterface van de NAS op de knop File Explorer → + (Create New Shared Folder)
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/54-shared-folder.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/54-shared-folder.png' | relative_url }})
 
 2.  Klik op de knop Add
 
@@ -1164,7 +1166,7 @@ Belangrijk: na het inschakelen van de NFS-service moet u de NAS opnieuw opstarte
 
     2.  Of laat de standaardoptie Read and Write for admins staan
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/55-access-rights.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/55-access-rights.jpg' | relative_url }})
 
 5.  Druk op de knop Next
 
@@ -1172,7 +1174,7 @@ Belangrijk: na het inschakelen van de NFS-service moet u de NAS opnieuw opstarte
 
     1.  Encrypt this shared folder: u kunt dit desgewenst kiezen; in dit document is het niet gekozen
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/56-protection-measures.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/56-protection-measures.jpg' | relative_url }})
 
 7.  Druk op de knoppen Next → Finish
 
@@ -1184,7 +1186,7 @@ Belangrijk: na het inschakelen van de NFS-service moet u de NAS opnieuw opstarte
 
 3.  Klik op de knop Access Rights
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/57-nfs-privileges.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/57-nfs-privileges.jpg' | relative_url }})
 
 4.  Ga naar het tabblad NFS Privileges
 
@@ -1200,7 +1202,7 @@ Belangrijk: na het inschakelen van de NFS-service moet u de NAS opnieuw opstarte
 
 7.  Druk op de knop OK
 
-    ![]({{ '/papers/dgx-spark-8node-cluster-kurulumu/images/58-nfs-add.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/58-nfs-add.jpg' | relative_url }})
 
 **Script voor prestatie-afstemming**
 
@@ -1384,7 +1386,7 @@ cat /sys/class/net/bond0/bonding/xmit_hash_policy
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-8node-cluster-kurulumu/images/spark-8-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark 8-Node AI Cluster" />
+<img src="{{ '/papers/dgx-spark-8node-cluster-setup/images/spark-8-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark 8-Node AI Cluster" />
 </div>
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark 8-Node AI Cluster – 8 nodes, 1 TB, 200GbE</h3>

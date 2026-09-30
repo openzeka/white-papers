@@ -3,13 +3,15 @@ title: DGX Spark 3-Node AI Cluster Kurulum Rehberi
 parent: White Papers
 nav_order: 5
 lang: tr
-page_id: dgx-spark-3node-cluster-kurulumu
+page_id: dgx-spark-3node-cluster-setup
 date: 2026-07-30 08:21:44 +0300
 card_tag: "Cluster Kurulumu"
 description: >-
   3 NVIDIA DGX Spark node'undan oluşan ring (mesh) topolojisine sahip AI cluster
   kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun yapılandırması.
-permalink: /papers/dgx-spark-3node-cluster-kurulumu/
+permalink: /papers/dgx-spark-3node-cluster-setup/
+redirect_from:
+  - /papers/dgx-spark-3node-cluster-kurulumu/
 last_modified_date: 2026-09-30
 toc: true
 ---
@@ -35,7 +37,7 @@ toc: true
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-3node-cluster-kurulumu/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
+<img src="{{ '/papers/dgx-spark-3node-cluster-setup/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
 </div>
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Triple</h3>
@@ -109,7 +111,7 @@ sudo fwupdmgr upgrade
 
 DGX Dashboard üzerinden, herhangi bir güncelleme olmadığı kontrol edilir, eğer varsa yapılır:
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/01-dgx-dashboard.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/01-dgx-dashboard.png' | relative_url }})
 
 Güncellemelerin tamamlanmasının ardından sistem yeniden başlatılır:
 
@@ -137,7 +139,7 @@ Yapılandırmanın başarılı olduğu aşağıdaki test ile doğrulanabilir:
 docker run hello-world
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/02-docker-hello.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/02-docker-hello.png' | relative_url }})
 
 Komutun başarılı şekilde çalışması ve Docker'ın örnek container'ı başlatabilmesi, sonraki adımlarda kullanılacak container tabanlı araçlar için gerekli hazırlığın tamamlandığını göstermektedir.
 
@@ -167,7 +169,7 @@ sudo systemctl restart docker
 
 Yapılandırma sonrasında aynı kontrol komutu tekrar çalıştırıldı ve depolama sürücüsünün `overlayfs` olduğu doğrulandı.
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/03-docker-storage.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/03-docker-storage.png' | relative_url }})
 
 ## Management Ağı (10GbE) Bağlantısı
 
@@ -179,7 +181,7 @@ Spark masaüstünde terminal açılır ve cihazın IP adresi alıp almadığın�
 ip addr show
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/04-ip-addr.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/04-ip-addr.png' | relative_url }})
 
 Çıktıda, örnekte olduğu gibi 10GbE arayüzünde bir IP adresi görüyorsanız, management ağı üzerinden SSH erişimi sağlanabilir. IP adresi alınmamışsa, DGX OS masaüstü üzerinden manuel olarak atanır:
 
@@ -194,7 +196,7 @@ ip addr show
 - DNS: 1.1.1.1,8.8.8.8  
 6. Apply butonuna basın ve bağlantıyı kapatıp tekrar açın
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/05-wired-settings.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/05-wired-settings.png' | relative_url }})
 
 İnternet erişimi varsa 10GbE management bağlantısı hazırdır. Diğer iki Spark üzerinde de aynı adımları tekrarlayın ve her birine farklı bir IP adresi atayın.
 
@@ -223,7 +225,7 @@ Mevcut kurulumda her Spark, üzerinde bulunan iki ConnectX-7 QSFP portu üzerind
 | Spark1 Port1 | Spark3 Port0 |
 | Spark2 Port0 | Spark3 Port1 |
 
-**![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/06-cable-plan.png' | relative_url }})**
+**![]({{ '/papers/dgx-spark-3node-cluster-setup/images/06-cable-plan.png' | relative_url }})**
 
 ## Spark’lara Sparkrun Yüklenmesi
 
@@ -265,7 +267,7 @@ echo "nvidia ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nvidia
 sudo chmod 440 /etc/sudoers.d/nvidia
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/07-passwordless-sudo.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/07-passwordless-sudo.png' | relative_url }})
 
 ### sparkrun Kurulumu
 
@@ -295,19 +297,19 @@ Kurulum esnasında sorulan sorulara uygun cevaplar verilir:
 3. SSH kullanıcı adı olarak önceki adımda oluşturulan `nvidia` ismi girilir.  
 4. MESH kurulumu için Y seçilir
 
-    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/08-sparkrun-wizard.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/08-sparkrun-wizard.png' | relative_url }})
 
 5. Configure CX7 networking? sorusuna Y denir:  
 6. Topology seçimi “auto” olarak bırakılır veya ring de seçilebilir:
 
-    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/09-sparkrun-topology.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/09-sparkrun-topology.png' | relative_url }})
 
 7. Add 'nvidia' to the docker group on all hosts? sorusuna Y seçilir  
 8. Install sudoers entries? sorusuna “Y” seçilir  
 9. Install earlyoom? sorusuna “Y” seçilir  
 10. Setup complete mesajı geldiğinde kurulum başarıyla tamamlanmış demektir
 
-    ![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/10-sparkrun-complete.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-3node-cluster-setup/images/10-sparkrun-complete.png' | relative_url }})
 
 ## Hız ve RDMA Testleri
 
@@ -347,7 +349,7 @@ ping -c 4 192.168.2.1
 ping -M do -s 8972 -c 4 192.168.2.1
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/11-ping-mtu.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/11-ping-mtu.png' | relative_url }})
 
 **TCP Throughput Testi (iperf3)**  
 Ethernet/IP katmanı üzerinden temel bant genişliğini ölçün. Bu test RDMA değildir — TCP üzerinden CPU involvement'lı transferdir.
@@ -367,7 +369,7 @@ Not: iperf3 kurulu değilse yükleyin:
 sudo apt install iperf3
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/12-iperf3.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/12-iperf3.png' | relative_url }})
 
 **RDMA Cihazlarını Belirleme**  
 RDMA cihaz adlarını öğrenin:
@@ -382,7 +384,7 @@ rocep1s0f1 port 1 \==\> enp1s0f1np1 (Up)
 roceP2p1s0f0 port 1 \==\> enP2p1s0f0np0 (Up)  
 roceP2p1s0f1 port 1 \==\> enP2p1s0f1np1 (Up)
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/13-ibdev2netdev.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/13-ibdev2netdev.png' | relative_url }})
 
 **RDMA Write Testi (ib\_write\_bw)**  
 RoCEv2 üzerinden RDMA write işleminin bant genişliğini ölçün. Bu test CPU involvement olmadan doğrudan bellek transferini test eder.
@@ -401,7 +403,7 @@ ib_write_bw -d rocep1s0f0 -F --report_gbits 192.168.0.1
 ```
 
 Beklenen sonuç: \~100-111 Gbps.   
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/14-ib-write-bw-1.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/14-ib-write-bw-1.png' | relative_url }})
 
 **Subnet 192.168.2.0/24:**  
 Spark 2 üzerinde (sunucu):
@@ -417,7 +419,7 @@ ib_write_bw -d roceP2p1s0f0 -F --report_gbits 192.168.2.1
 ```
 
 Beklenen sonuç: \~100-111 Gbps.  
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/15-ib-write-bw-2.png' | relative_url }})  
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/15-ib-write-bw-2.png' | relative_url }})  
 İki arayüz de \~100 Gbps veriyorsa, her Spark arasında toplam \~200 Gbps RDMA bant genişliği mevcuttur.
 
 **RDMA Read Testi (ib\_read\_bw)**  
@@ -437,7 +439,7 @@ ib_read_bw -d rocep1s0f0 -F --report_gbits 192.168.0.1
 ```
 
 Beklenen sonuç: \~95-110 Gbps.  
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/16-ib-read-bw-1.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/16-ib-read-bw-1.png' | relative_url }})
 
 **Subnet 192.168.2.0/24:**  
 Spark 2 üzerinde (sunucu):
@@ -452,7 +454,7 @@ Spark 1 üzerinde (istemci):
 ib_read_bw -d roceP2p1s0f0 -F --report_gbits 192.168.2.1
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/17-ib-read-bw-2.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/17-ib-read-bw-2.png' | relative_url }})
 
 Beklenen sonuç: \~95-110 Gbps.
 
@@ -469,7 +471,7 @@ Spark 1 üzerinde (istemci):
 ib_write_lat -d rocep1s0f0 192.168.0.1
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/18-ib-write-lat.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/18-ib-write-lat.png' | relative_url }})
 
 Beklenen sonuç: \~1-3 microsecond latency.
 
@@ -539,11 +541,11 @@ Eğer sparkrun komutu çalıştırıldıktan sonra kendine bağlanırken authori
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/19-ssh-auth-fix.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/19-ssh-auth-fix.png' | relative_url }})
 
 **Modelin Hazır Olduğunun Doğrulanması**  
 Model başladığında “Application startup complete.” şeklinde bir mesaj alırsınız, artık model kullanıma hazırdır:  
-![]({{ '/papers/dgx-spark-3node-cluster-kurulumu/images/20-model-startup.png' | relative_url }})
+![]({{ '/papers/dgx-spark-3node-cluster-setup/images/20-model-startup.png' | relative_url }})
 
 **Benchmark Sonuçları**  
 Bu şekilde ayağa kalkan modelde [linkte](https://github.com/CordatusAI/llm-benchmark) verdiğimiz benchmark aracıyla yapılan testler sonucunda elde edilen ortalama değerler şu şekildedir:
@@ -609,7 +611,7 @@ Komutunu çalıştırın ve sparkrun'u tekrar çalıştırın.
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-3node-cluster-kurulumu/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
+<img src="{{ '/papers/dgx-spark-3node-cluster-setup/images/DGX_Spark_Triple_2-500x499.webp' | relative_url }}" alt="NVIDIA DGX Spark Triple" />
 </div>
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Triple</h3>

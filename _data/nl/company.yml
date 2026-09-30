@@ -53,7 +53,7 @@ contact_table: |-
 about_profile: |-
   #### Over OpenZeka
 
-  ![OpenZeka](/papers/yerel-llm-rehberi/images/openzeka-logo.png)
+  ![OpenZeka](/papers/local-llm-guide/images/openzeka-logo.png)
 
   **OpenZeka Teknoloji A.Ş.** is in 2016 opgericht in Ankara Bilkent Cyberpark en biedt innovatieve AI-oplossingen in hardware en software. Het is de **officiële NVIDIA Robotics-distributeur voor Turkije en MEA (MENA)**; daarnaast is het **NVIDIA DGX AI Compute Systems**- en **NVIDIA Omniverse Partner**, en **Elite Partner** op het gebied van NVIDIA Visualization.
 
@@ -62,7 +62,7 @@ about_profile: |-
   - **Digitale transformatie:** Wij lopen voorop in digitale transformatie met NVIDIA Omniverse- en Digital Twin-technologieën; wij delen onze kennis op evenementen zoals NVIDIA GTC, Embedded World en Smart City Expo, via samenwerkingen met universiteiten en AI Workshops.
 
 cta_logo: |-
-  <p><img src="/papers/yerel-llm-rehberi/images/openzeka-logo.png" alt="OpenZeka" width="220"/></p>
+  <p><img src="/papers/local-llm-guide/images/openzeka-logo.png" alt="OpenZeka" width="220"/></p>
 
 contact_cta: |-
   neem contact op met OpenZeka: [support@openzeka.com](https://openzeka.com/en/contact/) · [openzeka.com](https://openzeka.com/en)
