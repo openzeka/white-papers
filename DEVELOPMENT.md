@@ -15,13 +15,18 @@ site published via GitHub Pages with a custom domain. For the published site, se
 
 Follow [`skills/add-white-paper/SKILL.md`](skills/add-white-paper/SKILL.md) —
 step by step, readable by a person or by any coding agent. In short: every paper
-is two files, `papers/<slug>.md` and `tr/papers/<slug>.md`; its `date` puts it
-on both home pages automatically, newest first; you choose its topic position
-in the sidebar (`nav_order`) and add its row, at that position, to both
-`papers/index.md` tables and the `README.md` library table. Then:
+is three files — `papers/<slug>.md` (English, the source), `tr/papers/<slug>.md`
+and `nl/papers/<slug>.md` — with an English slug; the translations follow
+[`skills/add-white-paper/TERMINOLOGY.md`](skills/add-white-paper/TERMINOLOGY.md).
+Its `date` puts it on every home page automatically, newest first; you choose
+its topic position in the sidebar (`nav_order`) and add its row, at that
+position, to the three `papers/index.md` tables and the `README.md` library
+table. Company details (the "Prepared by" line, footers, purchase buttons) are
+never written into a paper: they come from `_data/<lang>/company.yml`. Then:
 
 ```bash
-python3 _tools/check_papers.py      # exit 0 = consistent
+python3 _tools/check_papers.py       # twins, front matter, tables — exit 0 = consistent
+python3 _tools/check_translation.py  # every translation against its English source
 ```
 
 Benchmark runs for the LLM Inference Benchmark Explorer have their own
@@ -91,14 +96,26 @@ Requirements: Ruby 3.3, Bundler, and the headers native gems need
 │   ├── color_schemes/openzeka.scss
 │   └── custom/custom.scss
 ├── Gemfile
+├── _data/<lang>/                  # interface strings and company blocks, per language
+├── _includes/company/             # places the company blocks in a paper
+├── _tools/                        # checkers and data tools (not built)
+├── skills/                        # procedures for a paper or a benchmark run
 ├── index.md                       # landing
 ├── about.md                       # about
-└── papers/                        # white papers
-    ├── index.md
-    ├── local-llm-guide.md
-    ├── qwen3.6-27b-dgx-spark-benchmark.md
-    └── qwen3.6-27b-dgx-spark-scaling.md
+├── papers/                        # English papers, and each paper's images in papers/<slug>/
+│   ├── index.md
+│   └── <slug>.md …
+├── tr/                            # Turkish: the same pages, same permalinks (site adds /tr)
+└── nl/                            # Dutch: the same pages, same permalinks (site adds /nl)
 ```
+
+## Cookie banner
+
+With `google_analytics` set in `_config.yml`, every page shows a consent banner
+(GDPR / KVKK) and analytics runs in Google's Consent Mode, denied until the
+visitor accepts. The choice is stored in the browser (`localStorage`), so a
+visitor who has answered once never sees the banner again — open a private
+window to see it.
 
 ## Pages Setup (first-time only)
 
