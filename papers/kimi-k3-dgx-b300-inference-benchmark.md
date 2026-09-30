@@ -11,7 +11,7 @@ description: >-
   DGX-B300 (8x Blackwell Ultra, TP=8): vLLM vs SGLang, direct vs DSpark
   speculative decoding, with SLO-driven capacity planning.
 permalink: /papers/kimi-k3-dgx-b300-inference-benchmark/
-last_modified_date: 2026-07-30
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -44,7 +44,7 @@ vLLM (direct), vLLM + DSpark speculative, SGLang (direct), and SGLang + DSpark s
    vLLM + Spec @c=64: per-user TPS **drops to 11 tok/s** (vLLM direct 27 tok/s).
    Break-even point: ~c16 for vLLM, ~c4 for SGLang.
 
-3. **Despite SGLang direct's lower TTFT issue**, at high load (c=64) it produces
+3. **Despite SGLang direct's higher TTFT issue**, at high load (c=64) it produces
    **similar aggregate output** (1863 vs 1759 tok/s).
 
 4. **vLLM direct is the most reliable general-purpose choice:**
@@ -344,7 +344,7 @@ Key configuration differences between the two engines:
 | Mamba full memory ratio | - | 0.9 (direct), 0.86 (spec) |
 
 > **Important:** vLLM's `TRTLLM_RAGGED` + `use_prefill_query_quantization` optimization plays
-> a significant role in vLLM's low TTFT in this benchmark (see Section 3.4).
+> a significant role in vLLM's low TTFT in this benchmark (see Section 4.2).
 
 ---
 
@@ -676,7 +676,7 @@ following observations:
   if your real application's think time differs, the numbers change.
 - The speculative decoding break-even point measured here is ~c16 for vLLM and ~c4 for SGLang;
   these points may shift under different workloads or hardware.
-- The most suitable config **depends on your target scenario's load profile** (see Section 8).
+- The most suitable config **depends on your target scenario's load profile** (see Section 1).
 
 ### 6.5 Impact of Full Context Deployment
 

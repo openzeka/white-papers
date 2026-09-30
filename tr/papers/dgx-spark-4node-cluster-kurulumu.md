@@ -10,7 +10,7 @@ description: >-
   MikroTik CRS812 üzerinden 4 NVIDIA DGX Spark node'u ile switch tabanlı AI
   cluster kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun ve NAS.
 permalink: /papers/dgx-spark-4node-cluster-kurulumu/
-last_modified_date: 2026-07-24
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -28,7 +28,7 @@ toc: true
 7. [CRS812 MikroTik Switch Yapılandırması](#crs812-mikrotik-switch-yapılandırması)
    - [Switch Hazırlığı](#switch-hazırlığı)
    - [Kurulum Öncesi Envanter ve Yedek](#kurulum-öncesi-envanter-ve-yedek)
-   - [QSFP-DD Portlarını 2×200G Breakout Yapılandırma](#qsfp-dd-portlarını-2×200g-breakout-yapılandırma)
+   - [QSFP-DD Portlarını 2×200G Breakout Yapılandırma](#qsfp-dd-portlarını-2200g-breakout-yapılandırma)
    - [Jumbo Frame ve MTU Yapılandırması](#jumbo-frame-ve-mtu-yapılandırması)
    - [RoCEv2 Trafik Sınıflandırması](#rocev2-trafik-sınıflandırması)
 8. [Spark'lara Sparkrun Yüklenmesi](#sparklara-sparkrun-yüklenmesi)
@@ -1362,7 +1362,7 @@ Komutunu çalıştırın ve sparkrun'u tekrar çalıştırın.
 
 NFS servisini enable yaptıktan sonra NAS'ı yeniden başlatın. NFS servisi tam olarak başlamadan export eklemeye çalışırsanız bu hatayı alırsınız.
 
-**NAS Bond Hash Policy layer2+4 Görünüyor**
+**NAS Bond Hash Policy layer3+4 Görünmüyor**
 
 Performance tuning script'ini çalıştırın ve doğrulayın:
 

@@ -3,11 +3,13 @@
 
     python3 _tools/check_papers.py        # exit 0 = consistent
 
-For each papers/<slug>.md it checks: a Turkish twin exists at tr/papers/<slug>.md;
-both carry the required front matter; the twins agree on page_id, permalink,
-parent, nav_order and date; no two papers share a nav_order; and both
-papers/index.md tables and the README library table list the papers in
-nav_order order.
+For each papers/<slug>.md it checks: a twin exists in every translation
+language (tr/papers/<slug>.md, nl/papers/<slug>.md); all carry the required
+front matter; the twins agree on page_id, permalink, parent, nav_order and
+date; no two papers share a nav_order; and every papers/index.md table (one
+per language) and the README library table list the papers in nav_order
+order. Whether the twins are faithful translations is
+_tools/check_translation.py's job.
 
 It also checks the company-identity blocks: every
 {% include company/block.html name="…" %} and
@@ -22,6 +24,7 @@ import io, re, sys, glob, os
 REQUIRED = ["title", "parent", "nav_order", "lang", "page_id", "date",
             "card_tag", "description", "permalink", "last_modified_date"]
 SAME = ["page_id", "permalink", "parent", "nav_order", "date"]
+LANGS = ["tr", "nl"]          # translations; English is the source at the root
 
 
 def front(path):
@@ -46,29 +49,33 @@ for en in sorted(glob.glob("papers/*.md")):
     slug = os.path.basename(en)[:-3]
     if slug == "index":
         continue
-    tr = "tr/" + en
-    if not os.path.exists(tr):
-        errors.append(f"{slug}: no Turkish twin at {tr}")
-        continue
-    a, b = front(en), front(tr)
-    for lang, fm, path in (("en", a, en), ("tr", b, tr)):
+    a = front(en)
+    twins = [("en", a, en)]
+    for lang in LANGS:
+        path = f"{lang}/{en}"
+        if not os.path.exists(path):
+            errors.append(f"{slug}: no {lang} twin at {path}")
+            continue
+        twins.append((lang, front(path), path))
+        if os.path.isdir(f"{lang}/papers/{slug}"):
+            errors.append(f"{slug}: {lang}/papers/{slug}/ exists — images belong only under papers/{slug}/")
+    for lang, fm, path in twins:
         missing = [k for k in REQUIRED if not fm.get(k)]
         if missing:
             errors.append(f"{path}: missing {', '.join(missing)}")
         if fm.get("lang") != lang:
             errors.append(f"{path}: lang should be {lang}")
-    for k in SAME:
-        if a.get(k) != b.get(k):
-            errors.append(f"{slug}: {k} differs — en {a.get(k)!r}, tr {b.get(k)!r}")
+        for k in SAME:
+            if lang != "en" and a.get(k) != fm.get(k):
+                errors.append(f"{slug}: {k} differs — en {a.get(k)!r}, {lang} {fm.get(k)!r}")
     if a.get("permalink") != f"/papers/{slug}/":
         errors.append(f"{slug}: permalink should be /papers/{slug}/")
-    if os.path.isdir(f"tr/papers/{slug}"):
-        errors.append(f"{slug}: tr/papers/{slug}/ exists — images belong only under papers/{slug}/")
     papers[slug] = float(a.get("nav_order") or 0)
 
-for tr in glob.glob("tr/papers/*.md"):
-    if not os.path.exists(tr[3:]):
-        errors.append(f"{tr}: no English twin at {tr[3:]}")
+for lang in LANGS:
+    for path in glob.glob(f"{lang}/papers/*.md"):
+        if not os.path.exists(path[len(lang) + 1:]):
+            errors.append(f"{path}: no English twin at {path[len(lang) + 1:]}")
 
 seen = {}
 for slug, n in papers.items():
@@ -84,9 +91,14 @@ def readme_order(path="README.md"):
 
 
 expected = sorted(papers, key=papers.get)
-for idx, got in (("papers/index.md", table_order("papers/index.md")),
-                 ("tr/papers/index.md", table_order("tr/papers/index.md")),
-                 ("README.md library table", readme_order())):
+indexes = [("papers/index.md", table_order("papers/index.md"))]
+indexes += [(f"{l}/papers/index.md", table_order(f"{l}/papers/index.md"))
+            for l in LANGS if os.path.exists(f"{l}/papers/index.md")]
+indexes += [(f"{l}/papers/index.md", None) for l in LANGS if not os.path.exists(f"{l}/papers/index.md")]
+for idx, got in indexes + [("README.md library table", readme_order())]:
+    if got is None:
+        errors.append(f"{idx} is missing")
+        continue
     if got != expected:
         missing = [s for s in expected if s not in got]
         extra = [s for s in got if s not in expected]
@@ -120,7 +132,7 @@ HANDWRITTEN = [
     (re.compile(r"support@openzeka\.com"), "company contact email — use a company.yml block"),
     (re.compile(r"\+90 312 266 2055"), "company phone — use a company.yml block"),
 ]
-for lang, pattern in (("en", "papers/*.md"), ("tr", "tr/papers/*.md")):
+for lang, pattern in [("en", "papers/*.md")] + [(l, f"{l}/papers/*.md") for l in LANGS]:
     top, products = company_keys(lang)
     for path in sorted(glob.glob(pattern)):
         s = io.open(path, encoding="utf-8").read()

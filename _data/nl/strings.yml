@@ -1,0 +1,41 @@
+search_placeholder: "Zoeken"
+search_no_results: "Geen resultaten gevonden"
+skip_to_main: "Naar de hoofdinhoud"
+toc_heading: "Op deze pagina"
+copy_code: "Code naar klembord kopiëren"
+back_to_top: "Terug naar boven"
+page_last_modified: "Pagina laatst gewijzigd"
+nav_footer_text: "Openzeka Teknoloji A.Ş."
+
+# Cookie consent banner
+consent_message: "Wij gebruiken cookies om het websiteverkeer te analyseren en uw ervaring te verbeteren. Door op 'Accepteren' te klikken, stemt u in met het gebruik van analytische cookies zoals beschreven in ons privacybeleid."
+consent_accept: "Accepteren"
+consent_reject: "Weigeren"
+consent_learn_more: "Privacybeleid"
+
+# Home page card dates (from each page's `date`)
+months: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"]
+
+# One explanation per benchmark row: filled in at build time by
+# _plugins/visibility.rb, shown in the opened row of the LLM explorer and
+# published in /llms-full.txt. %name% placeholders; numbers arrive formatted.
+sentences:
+  llm_intro: "Elk item hieronder beschrijft één serving-configuratie — een model op één apparaat, in één getalformaat, met één engine en één instelling voor parallellisme en speculatieve decodering — gemeten door OpenZeka met de open-source CordatusAI LLM Benchmark Tool (128 input- en 128 output-tokens, prompts over verschillende onderwerpen, tien rondes op elk gelijktijdigheidsniveau C = 1, 2, 4, 8, 16, 32, 64, gemiddelde waarden). Max C is de hoogste gemeten gelijktijdigheid die aan beide doelen voldoet; de capaciteitscijfers zetten die om in aantallen personen en toetsen die aan het KV-cachegeheugen, waarbij de kleinste van de twee limieten wordt genomen. Capaciteit is een schatting, geen meting, en geen vervanging voor een belastingstest in productie. De waarden van de Intelligence Index en de Agentic Index in de interactieve tabel zijn afkomstig van Artificial Analysis. De capaciteitsschattingen voor chat- en agentisch gebruik zijn de twee uitersten van een bereik: bij gebruik waarin programmeren en agents overheersen, ligt het realistische cijfer dichter bij de agentische schatting, bij eenvoudig vraag-en-antwoordgebruik dichter bij de chatschatting."
+  llm_run: "In de meting van OpenZeka bereikte %model% (%params% parameters), aangeboden in %quant%-formaat met %engine%%spec% op %device%%par%, met één verzoek een generatiesnelheid van %tps% tok/s per verzoek en een time to first token (TTFT) van %ttft% ms."
+  llm_spec: " en speculatieve decodering"
+  llm_par: " (%par%)"
+  basis_both: "Rekening houdend met de snelheidsdoelen en de beschikbare KV-cachecapaciteit"
+  basis_speed: "Alleen rekening houdend met de snelheidsdoelen (de KV-cachelimiet is voor deze configuratie niet berekend)"
+  cap_range: "%basis%, bedraagt de geschatte capaciteit %chat% gebruikers voor chatgebruik en %agentic% voor agentisch gebruik. De realistische capaciteit ligt waarschijnlijk tussen deze twee waarden. In scenario's waarin programmeren, toolgebruik, lange workflows en multi-agentgebruik overheersen, benadert de capaciteit de agentische schatting; waar kortere interacties, standaardgesprekken en lichtere taken overheersen, benadert zij de chatschatting."
+  cap_same: "%basis%, bedraagt de geschatte capaciteit %chat% gebruikers voor zowel chat- als agentisch gebruik."
+  cap_chat_only: "%basis%, bedraagt de geschatte capaciteit %chat% gebruikers voor chatgebruik; het contextvenster van het model is te kort voor de lange sessies van agentisch gebruik."
+  cap_none: "Bij de standaard snelheidsdoelen (ten minste %tps_t% tok/s per verzoek, TTFT ten hoogste %ttft_t% ms) is er voor deze configuratie geen capaciteitsschatting: geen enkel gemeten belastingsniveau voldeed eraan."
+  cap_min_n: "ten minste %n%"
+  cap_min: "„Ten minste” betekent dat de configuratie zelfs bij de hoogste geteste belasting aan de snelheidsdoelen voldeed, zodat de werkelijke capaciteit hoger kan zijn."
+  cap_single: "Deze configuratie is alleen met één verzoek gemeten, dus de schatting berust op één meting."
+  cv_intro: "Elk item hieronder beschrijft één deploymentconfiguratie — één detectiemodel, met één precisie en inputresolutie, op één apparaat, draaiend op de Cordatus Inference Engine boven op DeepStream — gemeten door OpenZeka met de tool cordatus-benchmark tegen live 1080p H.264 IP-camera's die een vaste 20 FPS streamen, met 30 seconden steady-state-bemonstering bij elk aantal camera's. Max. camera's is het hoogste gemeten aantal camera's dat de beoogde framerate per camera nog haalt; er wordt niets geëxtrapoleerd. Dit zijn uitsluitend snelheidsmetingen en geen vervanging voor een test met uw eigen camera's."
+  cv_run: "In de meting van OpenZeka verwerkte %model%%prec% (%input% input) op %device%, bij de zwaarste gemeten belasting van %cams% camera's, %fps% FPS per camera en in totaal %total% FPS, met %drop%% frameverlies."
+  cv_prec: " %prec%"
+  cv_max: "Bij het standaarddoel van %target% FPS per camera is het hoogste gemeten aantal camera's dat dit haalt (Max. camera's) %max%."
+  cv_max_zero: "Geen enkel gemeten aantal camera's haalde het standaarddoel van %target% FPS per camera, dus Max. camera's is 0."
+  cv_open: "Bij die belasting leverde het apparaat nog steeds de eigen %src% FPS van de camera's binnen 10%, dus het apparaat heeft zijn eigen grens nooit bereikt — het cijfer is een ondergrens, geen bovengrens."

@@ -8,9 +8,9 @@ url: "https://whitepapers.openzeka.com"
 baseurl: ""
 
 # Çok dilli (i18n) — jekyll-polyglot
-# EN root'ta varsayılan, TR /tr/ altında
+# EN root'ta varsayılan, TR /tr/, NL /nl/ altında
 lang: en
-languages: ["en", "tr"]
+languages: ["en", "tr", "nl"]
 default_lang: "en"
 exclude_from_localization: ["javascript", "images", "css", "assets", "_sass", "CNAME", "sitemap.xml", "feed.xml", "llms.txt", "llms-full.txt"]
 # false: paralel derlemede iki dil aynı nav önbelleğini paylaşıyor ve yaklaşık her

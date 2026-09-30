@@ -11,7 +11,7 @@ description: >-
   Ultra, TP=8) üzerinde performans değerlendirmesi: vLLM vs SGLang, direct vs
   DSpark speculative decoding, SLO temelli kapasite planlama.
 permalink: /papers/kimi-k3-dgx-b300-inference-benchmark/
-last_modified_date: 2026-07-30
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -44,7 +44,7 @@ karşılaştırır: vLLM (direct), vLLM + DSpark speculative, SGLang (direct) ve
    vLLM + Spec @c=64: per-user TPS **11 tok/s'a düşüyor** (vLLM direct 27 tok/s).
    Break-even noktası: vLLM için ~c16, SGLang için ~c4.
 
-3. **SGLang direct'in düşük TTFT sorununa rağmen**
+3. **SGLang direct'in yüksek TTFT sorununa rağmen**
    yüksek yükte (c=64) **benzer aggregate output** üretiyor (1863 vs 1759 tok/s).
 
 4. **vLLM direct en güvenilir genel-amaçlı seçim:**
@@ -344,7 +344,7 @@ docker run --gpus all \
 | Mamba full memory ratio | - | 0.9 (direct), 0.86 (spec) |
 
 > **Önemli:** vLLM `TRTLLM_RAGGED` + `use_prefill_query_quantization` optimizasyonu,
-> bu benchmark'ta vLLM'in düşük TTFT'inde önemli rol oynar (Bölüm 3.4'e bakınız).
+> bu benchmark'ta vLLM'in düşük TTFT'inde önemli rol oynar (Bölüm 4.2'ye bakınız).
 
 ---
 
@@ -676,7 +676,7 @@ Yukarıdaki sınırlamalar ışığında, bu raporun sonuçları şu gözlemlerl
   gerçek uygulamanızın think time'ı farklıysa sayılar değişir.
 - Speculative decoding break-even noktası bu raporda vLLM için ~c16, SGLang için ~c4
   ölçülmüştür; farklı iş yükü veya donanımda bu noktalar değişebilir.
-- En uygun config, **hedef senaryonun yük profiline bağlıdır** (Bölüm 8'e bakınız).
+- En uygun config, **hedef senaryonun yük profiline bağlıdır** (Bölüm 1'e bakınız).
 
 ### 6.5 Tam Context Dağıtımının Etkisi
 

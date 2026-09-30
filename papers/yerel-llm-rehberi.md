@@ -393,7 +393,7 @@ The right model is not "the one with the highest benchmark score" but **the one 
 
 | Criterion | Question to ask |
 |---|---|
-| **Task fit** | Chat, code, reasoning, or inference? |
+| **Task fit** | Chat, code, reasoning, or extraction? |
 | **Size / VRAM budget** | Does it fit the hardware? In MoE, **total** parameters determine memory (all experts are loaded into VRAM); **active** parameters determine only **speed** |
 | **Context length** | How many tokens needed? (Determines KV cache load — see 4.3) |
 | **Turkish / language performance** | Not the general score, but **Turkish** benchmarks (see 5.6) |
@@ -459,7 +459,7 @@ The general leaderboards in §5.8 are a good starting signal but **do not reflec
 
 - **Data:** Collect **50–200 representative examples** from real usage (input + ideal output or acceptance criteria).
 - **Method (by task):**
-  - Inference / classification → automatic scoring (exact-match / regex)
+  - Information extraction / classification → automatic scoring (exact-match / regex)
   - Open-ended / chat → **LLM-as-judge** (with a larger model, rubric) + human side-by-side
   - RAG → retrieval **recall@k** + citation/faithfulness accuracy
 - **Measure not only quality:** on your own hardware, **TPS/TTFT**, concurrent capacity, **PII leakage / unnecessary refusal rate**.

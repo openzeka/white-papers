@@ -10,7 +10,7 @@ description: >-
   Performance evaluation of the Qwen3.6-27B model on the NVIDIA DGX Spark (GB10)
   platform with FP8, FP8-MTP, AWQ-MTP, NVFP4, and NVFP4-MTP quantization variants.
 permalink: /papers/qwen3.6-27b-dgx-spark-benchmark/
-last_modified_date: 2026-07-03
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -671,7 +671,7 @@ NVFP4 halves the memory bandwidth requirement compared to FP8 with 4-bit compres
 
 #### 6.4.1 SM121 vs SM100 Architecture Comparison
 
-DGX Spark has the GB10 SoC, where the NVIDIA Grace (ARM64) CPU and Blackwell GPU are on the same package. The system uses **128 GB LPDDR5x (273 GB/s) unified memory** shared between the CPU and GPU; there is no separate VRAM. The GPU is based on the SM 12.1 (compute capability) architecture and contains 48 SMs and 6.144 CUDA cores. There are 4 tensor cores per SM by conventional counting (≈192 total); however, unlike the data center Blackwell (SM100)'s 5th generation `tcgen05` + TMEM infrastructure, they only operate via the warp-level `mma.sync` path.
+DGX Spark has the GB10 SoC, where the NVIDIA Grace (ARM64) CPU and Blackwell GPU are on the same package. The system uses **128 GB LPDDR5x (273 GB/s) unified memory** shared between the CPU and GPU; there is no separate VRAM. The GPU is based on the SM 12.1 (compute capability) architecture and contains 48 SMs and 6,144 CUDA cores. There are 4 tensor cores per SM by conventional counting (≈192 total); however, unlike the data center Blackwell (SM100)'s 5th generation `tcgen05` + TMEM infrastructure, they only operate via the warp-level `mma.sync` path.
 
 Data center Blackwell GPUs (B200, GB200) are based on the SM 10.0 (compute capability) architecture. Although both architectures are referred to as "Blackwell," their tensor core infrastructures differ significantly:
 
@@ -894,7 +894,7 @@ It should be emphasized that this "winner" designation is based solely on speed 
 **When should NVFP4-MTP be preferred?**
 - When wanting to fully benefit from hardware acceleration on NVIDIA Blackwell GPUs
 - In memory-constrained environments (lowest memory footprint)
-- Under low-to-medium load (C≤4)
+- Under high load (C=8-16)
 
 **Forward-looking note:** The AWQ-MTP superiority in this report is a snapshot of unpatched stock vLLM v0.22.0. As the software fixes in Section 6.4.4 enter upstream, NVFP4-MTP is expected to reach parity with AWQ-MTP, and to surpass it at high concurrency (see Appendix A.3 for quantitative analysis). If long-lived installations are planned on DGX Spark, NVFP4, the hardware-native format, should be considered as the strategic choice.
 

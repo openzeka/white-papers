@@ -11,7 +11,7 @@ description: >-
   (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM 12.1a patch'i,
   Engram-on-disk, benchmark sonuçları ve B300 karşılaştırması.
 permalink: /papers/deepseek-v4.1-flash-4spark-deployment/
-last_modified_date: 2026-09-29
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -46,7 +46,7 @@ Bu çalışmayı belgelemeye değer kılan iki özellik:
 - **Model, veri merkezi sınıfında.** DeepSeek-V4.1-Flash normalde DGX-B300 ve benzeri sınıfı donanımda servis edilir. 4× DGX Spark, mimarinin ölçeklenebilir ucunu temsil eder.
 - **7 SM 12.1a'ya özgü patch.** vLLM'in stock nightly imajında SM 12.1a (GB10) için eksik veya hatalı olan kod yolları — Engram-on-disk, FlashInfer sparse attention, SWA block size, attention page sizes — topluluk patch'leri ile düzeltilmiştir.
 
-> **Bu çalışma bir dağıtım rehberidir, bir benchmark karşılaştırması değildir.** Benchmark sonuçları Bölüm 6'da sunulmuştur, 
+> **Bu çalışma bir dağıtım rehberidir, bir benchmark karşılaştırması değildir.** Benchmark sonuçları Bölüm 6'da sunulmuştur.
 
 ---
 

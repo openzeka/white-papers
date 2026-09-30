@@ -10,7 +10,7 @@ description: >-
   Switch-based AI cluster setup with 4 NVIDIA DGX Spark nodes over a MikroTik
   CRS812: management and compute networks, RoCEv2/RDMA, sparkrun and NAS.
 permalink: /papers/dgx-spark-4node-cluster-kurulumu/
-last_modified_date: 2026-07-24
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -28,7 +28,7 @@ toc: true
 - [CRS812 MikroTik Switch Configuration](#crs812-mikrotik-switch-configuration)
   - [Switch Preparation](#switch-preparation)
   - [Pre-installation Inventory and Backup](#pre-installation-inventory-and-backup)
-  - [QSFP-DD Port 2×200G Breakout Configuration](#qsfp-dd-port-2x200g-breakout-configuration)
+  - [QSFP-DD Port 2×200G Breakout Configuration](#qsfp-dd-port-2200g-breakout-configuration)
   - [Jumbo Frame and MTU Configuration](#jumbo-frame-and-mtu-configuration)
   - [RoCEv2 Traffic Classification](#rocev2-traffic-classification)
 - [Installing sparkrun on Spark Nodes](#installing-sparkrun-on-spark-nodes)
@@ -1361,7 +1361,7 @@ Run the command and run sparkrun again.
 
 Restart the NAS after enabling the NFS service. You will get this error if you try to add an export before the NFS service has fully started.
 
-**NAS Bond Hash Policy Shows layer2+4**
+**NAS Bond Hash Policy Is Not layer3+4**
 
 Run the performance tuning script and verify:
 
