@@ -13,7 +13,10 @@ two public pages with nothing in between to catch it. Work slowly, ask rather
 than guess, and never invent a value.
 
 **Adding a run is a data-only change.** The table is generated from this file, so
-no page, no JS and no CSS needs touching. Editing those is only for adding a
+no page, no JS and no CSS needs touching. Each run's own page
+(`/llm-inference-benchmarks/<model>/<device>/<configuration>/`, in every
+language), its sitemap entry and the link to it from the opened row are
+generated from the entry at build time too. Editing those is only for adding a
 *column*, which is a different job — see the `cols` array and the row loop in
 `assets/js/benchmark-table.js`.
 
@@ -342,6 +345,14 @@ the user what you decided:
   the config says so; tell the user.
 
 ## 7. Report back
+
+The run's page address is built from its fields — model, device, then
+quantization, engine, `tp`/`dp`/`pp` and speculative decoding (for example
+`/llm-inference-benchmarks/glm-5-3/dgx-b300/fp8-sglang-tp4/`). Tell the user
+that address. Once a row is live its address is permanent: **correcting one of
+those fields on an existing row moves its page**, so links and search results
+pointing at the old address stop working. Do it only when the value was wrong,
+and say so when you report.
 
 Say plainly that the change is **local only**: the table on the live sites
 changes only once it is committed, reviewed and merged, and publishing new

@@ -18,6 +18,11 @@ jetson-orin-nano/
 
 Dosya adı `<cihaz-slug>/<model-slug>[-<precision>].json`.
 
+Her sonucun kalıcı sayfası bu yoldan üretilir:
+`<cihaz-slug>/<model-slug>.json` → `/cv-inference-benchmarks/<cihaz-slug>/<model-slug>/`
+(her dilde; site derlenirken, elle bir şey yapmadan). Yayımlanmış bir dosyanın
+adını değiştirmek sayfasının adresini de değiştirir ve eski bağlantıları kırar.
+
 ## Ölçümler neden kamera sayısına göre anahtarlı
 
 ```json

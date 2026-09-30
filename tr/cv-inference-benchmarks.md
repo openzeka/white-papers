@@ -243,5 +243,6 @@ kaynağı gerektiriyor. O koşular beklemede; tablo geldiklerinde büyüyecek.
 donanımı üzerinde aldığı kendi ölçümüdür.</p>
 
 {% include benchmark-jsonld.html kind="cv" %}
+{% include cv-benchmark-links.html %}
 
 <script src="/assets/js/cv-benchmark-table.tr.js"></script>

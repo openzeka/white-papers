@@ -1,6 +1,11 @@
-# A permanent page for every LLM benchmark run, generated at build time.
+# A permanent page for every benchmark result, generated at build time.
 #
-#   /llm-inference-benchmarks/<model>/<device>/<config>/    in every language
+#   /llm-inference-benchmarks/<model>/<device>/<config>/    every LLM run
+#   /cv-inference-benchmarks/<device>/<model>/              every CV result
+#
+# (in every language). The CV URL is the result's file in the data store,
+# assets/data/cv-benchmarks/<device>/<model>.json, which the benchmark tool's
+# export names; the page then carries the widget's data-cvbt-only instead.
 #
 # The explorer addresses a run only by a #fragment, which search engines and AI
 # agents do not treat as a page of its own; this gives every run its own URL,
@@ -109,6 +114,53 @@ module OzBenchPages
     out << %(<script src="/assets/js/#{js}"></script>\n)
   end
 
+  CV_BASE = "/cv-inference-benchmarks".freeze
+
+  def self.cv_permalink(row)
+    "#{CV_BASE}/#{row['path'].split('/').map { |x| slug(x) }.join('/')}/"
+  end
+
+  def self.cv_name(row) = [row["model"], row["precision"]].reject { |x| x.to_s.empty? }.join(" ")
+
+  def self.cv_title(row, b)
+    OzVisibility.fill(b["cv_title"], "model" => cv_name(row), "device" => row["device"])
+  end
+
+  # The CV explorer's row and its opened sweep, as plain HTML (see fallback()).
+  def self.cv_fallback(row, target, b)
+    pts = row["points"]
+    last = pts.last || {}
+    maxc = pts.select { |p| p["fps_per_camera"].to_f >= target }.map { |p| p["cameras"].to_i }.max || 0
+    t = target == target.round ? target.round : target
+    facts = [[b["cv_model"], cv_name(row)], [b["cv_input"], row["input_resolution"]], [b["cv_device"], row["device"]],
+             [b["cv_cameras"], last["cameras"]], [b["cv_percam"], format("%.1f", last["fps_per_camera"].to_f)],
+             [b["cv_total"], format("%.1f", last["fps_total"].to_f)], [b["cv_drop"], format("%.2f", last["drop_pct"].to_f)],
+             [OzVisibility.fill(b["cv_maxcams"], "target" => t), maxc]]
+    out = +%(<div class="bt-static">\n<table>\n<tbody>\n)
+    facts.each { |k, v| out << "<tr><th scope=\"row\">#{h k}</th><td>#{h v}</td></tr>\n" }
+    out << "</tbody>\n</table>\n<table>\n<thead><tr>"
+    %w[cv_cameras cv_percam cv_total cv_drop cv_status].each { |k| out << "<th>#{h b[k]}</th>" }
+    out << "</tr></thead>\n<tbody>\n"
+    pts.each do |p|
+      ok = p["fps_per_camera"].to_f >= target
+      out << "<tr><td>#{p['cameras']}</td><td>#{format('%.1f', p['fps_per_camera'].to_f)}</td>" \
+             "<td>#{format('%.1f', p['fps_total'].to_f)}</td><td>#{format('%.2f', p['drop_pct'].to_f)}</td>" \
+             "<td>#{h(ok ? b['cv_pass'] : b['cv_fail'])}</td></tr>\n"
+    end
+    out << "</tbody>\n</table>\n</div>\n"
+  end
+
+  def self.cv_page_html(row, target, b, lang)
+    js = lang == "en" ? "cv-benchmark-table.js" : "cv-benchmark-table.#{lang}.js"
+    out = +%(<p class="oz-crumb"><a href="#{CV_BASE}/">#{h b['cv_crumb']}</a></p>\n)
+    out << "<h1>#{h cv_title(row, b)}</h1>\n"
+    out << %(<p><a href="#{CV_BASE}/##{h row['id']}">#{h b['cv_open_explorer']}</a></p>\n)
+    out << %(<link rel="stylesheet" href="/assets/css/benchmark-table.css">\n<link rel="stylesheet" href="/assets/css/cv-benchmark-table.css">\n)
+    out << %(<div data-cvbt-src="/assets/data/cv-benchmarks/index.json" data-cvbt-video="/assets/video/cv-preview.mp4" data-cvbt-only="#{h row['id']}">\n)
+    out << cv_fallback(row, target, b) << "</div>\n"
+    out << %(<script src="/assets/js/#{js}"></script>\n)
+  end
+
   class Generator < Jekyll::Generator
     priority :lowest
 
@@ -117,23 +169,36 @@ module OzBenchPages
       rows = llm["benchmarks"] || []
       OzBenchPages.slugs(rows)
       langs = site.config["languages"].to_a
-      # For sitemap.xml: every run page, built in every language.
-      site.data["oz_bench_pages"] = rows.map { |r| { "permalink" => r["oz_permalink"], "langs" => langs } }
+      cv = site.data["oz_cv"] || {}
+      cv_rows = cv["oz_rows"] || []
+      cv_rows.each { |row| row["oz_permalink"] = OzBenchPages.cv_permalink(row) }
+      cv_target = ((cv["config"] || {})["target_fps"] || 15).to_f
+      # For sitemap.xml: every result page, built in every language.
+      site.data["oz_bench_pages"] = (rows + cv_rows).map { |r| { "permalink" => r["oz_permalink"], "langs" => langs } }
 
       lang = site.config["active_lang"] || site.config["default_lang"]
       b = (site.data[lang] || {}).dig("strings", "bench_page") or return
       rows.each do |r|
-        page = Jekyll::PageWithoutAFile.new(site, site.source, r["oz_permalink"].delete_prefix("/"), "index.html")
-        alternates = langs.map { |l| [l, OzVisibility.lang_url(site, l, r["oz_permalink"])] }.to_h
-        page.data.merge!(
-          "layout" => "default", "title" => OzBenchPages.title(r, b),
-          "description" => ((r["oz_parts"] || {})[lang] || []).first.to_s, "lang" => lang,
-          "permalink" => r["oz_permalink"], "nav_exclude" => true, "search_exclude" => true, "toc" => false,
-          "oz_alternates" => alternates, "canonical_url" => alternates[lang],
-        )
-        page.content = OzBenchPages.page_html(r, llm["oz_config"], b, lang)
-        site.pages << page
+        add(site, r["oz_permalink"], OzBenchPages.title(r, b), ((r["oz_parts"] || {})[lang] || []).first.to_s,
+            lang, langs, OzBenchPages.page_html(r, llm["oz_config"], b, lang))
       end
+      cv_rows.each do |row|
+        desc = (row["text"] || {})[lang].to_s.split(/(?<=\.) /).first.to_s
+        add(site, row["oz_permalink"], OzBenchPages.cv_title(row, b), desc, lang, langs,
+            OzBenchPages.cv_page_html(row, cv_target, b, lang))
+      end
+    end
+
+    def add(site, permalink, title, desc, lang, langs, html)
+      page = Jekyll::PageWithoutAFile.new(site, site.source, permalink.delete_prefix("/"), "index.html")
+      alternates = langs.map { |l| [l, OzVisibility.lang_url(site, l, permalink)] }.to_h
+      page.data.merge!(
+        "layout" => "default", "title" => title, "description" => desc, "lang" => lang,
+        "permalink" => permalink, "nav_exclude" => true, "search_exclude" => true, "toc" => false,
+        "oz_alternates" => alternates, "canonical_url" => alternates[lang],
+      )
+      page.content = html
+      site.pages << page
     end
   end
 end
