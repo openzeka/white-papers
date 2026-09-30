@@ -1,5 +1,5 @@
 ---
-title: Whitepapers
+title: White Papers
 nav_order: 3
 has_children: true
 lang: nl
