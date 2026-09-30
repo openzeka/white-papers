@@ -15,7 +15,7 @@ last_modified_date: 2026-07-30
 toc: true
 ---
 
-*Prepared by: **Openzeka Teknoloji A.Ş.** — Official Embedded Compute Distributor for NVIDIA Türkiye & MEA, and NVIDIA Elite Partner*
+{% include company/block.html name="prepared_by" %}
 
 *Test platform: NVIDIA DGX-B300 (8× Blackwell Ultra, TP=8) · Model: Moonshot AI Kimi K3 · Report date: July 2026*
 

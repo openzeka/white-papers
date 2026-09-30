@@ -15,7 +15,7 @@ last_modified_date: 2026-09-29
 toc: true
 ---
 
-*Prepared by: **Openzeka Teknoloji A.Ş.** — Official Embedded Compute Distributor for NVIDIA Türkiye & MEA, and NVIDIA Elite Partner*
+{% include company/block.html name="prepared_by" %}
 
 *Test platform: 8× NVIDIA DGX Spark (GB10) · Model: DeepSeek-V4.1-Flash (763B) · Report date: September 2026*
 
@@ -361,9 +361,7 @@ curl http://192.168.1.153:8000/v1/chat/completions \
 
 ---
 
-*Openzeka Teknoloji A.Ş. — [openzeka.com](https://www.openzeka.com/en) · Tel: +90 312 266 2055*
-
-*Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye*
+{% include company/block.html name="footer" %}
 
 *This report was generated from measurements produced with the [CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark) tool.*
 *Deployment recipe adapted from [tonyd2wild/DeepSeek-V4.1-Flash-vLLM-DGX-Spark](https://github.com/tonyd2wild/DeepSeek-V4.1-Flash-vLLM-DGX-Spark) boot10 config and [im0xMagnus/deepseek-v4.1-flash-uncensored-8x-dgx-spark](https://github.com/im0xMagnus/deepseek-v4.1-flash-uncensored-8x-dgx-spark) TP8 port.*

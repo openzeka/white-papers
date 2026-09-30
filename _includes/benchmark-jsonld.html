@@ -8,6 +8,7 @@
   Include as: {% include benchmark-jsonld.html kind="llm" %}  or  kind="cv"
 {%- endcomment -%}
 {%- assign page_url = page.canonical_url | default: page.url | absolute_url -%}
+{%- assign company = site.data[site.active_lang].company -%}
 {%- if include.kind == "llm" and site.data.oz_llm -%}
 {%- assign rows = site.data.oz_llm.benchmarks -%}
 {%- assign data_url = "/assets/data/benchmarks.json" | absolute_url -%}
@@ -22,7 +23,7 @@
   "url": {{ page_url | jsonify }},
   "inLanguage": {{ site.active_lang | jsonify }},
   "dateModified": {{ page.last_modified_date | default: page.date | date: "%Y-%m-%d" | jsonify }},
-  "creator": { "@type": "Organization", "name": "Openzeka Teknoloji A.Ş.", "url": "https://www.openzeka.com" },
+  "creator": { "@type": "Organization", "name": {{ company.legal_name | jsonify }}, "url": {{ company.website | jsonify }} },
   "isAccessibleForFree": true,
   "keywords": {{ models | concat: devices | jsonify }},
   "measurementTechnique": "128 input / 128 output tokens, ten rounds per concurrency level, mean values",
@@ -44,7 +45,7 @@
   "url": {{ page_url | jsonify }},
   "inLanguage": {{ site.active_lang | jsonify }},
   "dateModified": {{ page.last_modified_date | default: page.date | date: "%Y-%m-%d" | jsonify }},
-  "creator": { "@type": "Organization", "name": "Openzeka Teknoloji A.Ş.", "url": "https://www.openzeka.com" },
+  "creator": { "@type": "Organization", "name": {{ company.legal_name | jsonify }}, "url": {{ company.website | jsonify }} },
   "isAccessibleForFree": true,
   "keywords": {{ models | concat: devices | jsonify }},
   "variableMeasured": ["Frames per second per camera", "Total frames per second", "Frame drop (%)", "Camera count", "Max cameras holding the target frame rate"],

@@ -15,7 +15,7 @@ last_modified_date: 2026-07-31
 toc: true
 ---
 
-*Prepared by: **Openzeka Teknoloji A.Ş.** — Official Embedded Compute Distributor for NVIDIA Türkiye & MEA, and NVIDIA Elite Partner*
+{% include company/block.html name="prepared_by" %}
 
 *Platform: NVIDIA Blackwell Ultra (B300 SXM) · July 2026*
 

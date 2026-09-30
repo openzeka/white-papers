@@ -1,0 +1,77 @@
+# Company identity — Turkish.
+#
+# Every company-specific block a paper shows — the "Prepared by" line, the
+# contact footer, the "About us" section, the closing call to action and the
+# product purchase buttons — is kept here, not in the paper. A paper places a
+# block with
+#   {% include company/block.html name="<key>" %}
+# and a purchase button with
+#   {% include company/product-button.html product="<key>" %}
+# so the paper itself holds only paper content. Change a company detail once,
+# here, in every language file under _data/<lang>/company.yml.
+#
+# Blocks are Markdown, inserted before the page is converted. Links and image
+# paths are written out literally: Liquid inside these values is not run.
+# A key used by a paper must exist in that paper's language; the paper checker
+# (_tools/check_papers.py) verifies it.
+
+name: OpenZeka
+legal_name: Openzeka Teknoloji A.Ş.
+website: https://www.openzeka.com
+privacy_url: https://openzeka.com/gizlilik-kisisel-veri-politikasi/
+
+prepared_by: |-
+  *Hazırlayan: **Openzeka Teknoloji A.Ş.** — NVIDIA Türkiye & MEA Resmî Embedded Compute Distribütörü ve NVIDIA Elite Partner*
+
+prepared_by_alt: |-
+  *Hazırlayan: **Openzeka Teknoloji A.Ş.** — NVIDIA Türkiye & MEA Resmî Gömülü Hesaplama Distribütörü ve NVIDIA Elite Partner*
+
+prepared_by_short: |-
+  *Hazırlayan: Openzeka Teknoloji A.Ş.*
+
+footer: |-
+  *Openzeka Teknoloji A.Ş. — [openzeka.com](https://www.openzeka.com) · Tel: +90 312 266 2055*
+
+  *Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye*
+
+about_report: |-
+  ## Hakkımızda — Openzeka
+
+  **Openzeka Teknoloji A.Ş.**, 2016 yılında Ankara Bilkent Cyberpark'ta kurulan; NVIDIA'nın **Türkiye ve MEA bölgesindeki resmî Embedded Compute distribütörü** ve **NVIDIA Elite Partner**'ıdır. Şirket; NVIDIA **DGX/HGX** sunucuları, veri merkezi ve profesyonel GPU'lar, **Jetson** gömülü sistemler ve iş istasyonları başta olmak üzere yapay zeka ve yüksek başarımlı hesaplama donanımlarının dağıtımını yaparken; kendi geliştirdiği **Cordatus AI** platformu ile uç (edge) ve bulut ortamlarında gerçek zamanlı görüntü analitiği ve yapay zeka çıkarım (inference) çözümleri sunmaktadır. Derin öğrenme tabanlı yapay zeka, dijital ikiz ve dijital dönüşüm alanlarındaki uzmanlığıyla bölgesinin öncü embedded yapay zeka sağlayıcılarından biridir.
+
+contact_table: |-
+  | | |
+  |---|---|
+  | **Web** | [openzeka.com](https://openzeka.com) |
+  | **İletişim** | [openzeka.com/iletisim](https://openzeka.com/iletisim) |
+  | **Telefon** | +90 312 266 2055 |
+  | **Adres** | Üniversiteler Mah. 1606. Cad. No:11, Cyberpark H Blok, 06800 Bilkent/Ankara, Türkiye |
+
+about_profile: |-
+  #### OpenZeka hakkında
+
+  ![OpenZeka](/papers/yerel-llm-rehberi/images/openzeka-logo.png)
+
+  **OpenZeka Teknoloji A.Ş.**, 2016 yılında Ankara Bilkent Cyberpark'ta kuruldu ve donanım–yazılım alanında yenilikçi yapay zekâ çözümleri sunuyor. **NVIDIA Robotics Türkiye ve MEA (MENA) Resmi Distribütörü**; aynı zamanda **NVIDIA DGX AI Compute Systems** ve **NVIDIA Omniverse Partner'ı**, NVIDIA Visualization alanında **Elite Partner**'dır.
+
+  - **Donanım:** DGX/HGX sunucu çözümleri, profesyonel ekran kartları ve iş istasyonları, NVIDIA Jetson gömülü sistemleri (geliştirici kitleri, hazır AI kitleri, modüller ve taşıyıcı kartlar). İşlem, depolama, ağ ve orkestrasyonu kapsayan tam yedekli yapay zekâ altyapıları tasarlayıp devreye alıyoruz.
+  - **Yazılım:** Kendi geliştirdiğimiz **Cordatus AI** platformuyla akıllı video analitiği başta olmak üzere sektöre özel çözümler üretiyoruz.
+  - **Dijital dönüşüm:** NVIDIA Omniverse ve Dijital İkiz teknolojileriyle dijital dönüşüme öncülük ediyor; NVIDIA GTC, Embedded World, Smart City Expo gibi etkinliklerde, üniversite iş birlikleri ve AI Workshop'larıyla bilgi birikimimizi paylaşıyoruz.
+
+cta_logo: |-
+  <p><img src="/papers/yerel-llm-rehberi/images/openzeka-logo.png" alt="OpenZeka" width="220"/></p>
+
+contact_cta: |-
+  OpenZeka ile iletişime geçin: [support@openzeka.com](https://openzeka.com/iletisim/) · [openzeka.com](https://openzeka.com)
+
+contact_cta_web_only: |-
+  OpenZeka ile iletişime geçin: [openzeka.com](https://openzeka.com)
+
+# Purchase buttons: label, and the product page per product key. A
+# product without a URL here shows its card with no button.
+purchase_label: Bu Ürünü Satın Al →
+products:
+  dgx-spark-bundle: https://openzeka.com/urun/nvidia-dgx-spark-bundle/
+  dgx-spark-triple: https://openzeka.com/urun/nvidia-dgx-spark-triple/
+  dgx-spark-4-node: https://openzeka.com/urun/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe
+  dgx-spark-8-node: https://openzeka.com/urun/nvidia-dgx-spark-8-node-ai-cluster-8-node/

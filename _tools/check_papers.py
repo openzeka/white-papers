@@ -8,6 +8,14 @@ both carry the required front matter; the twins agree on page_id, permalink,
 parent, nav_order and date; no two papers share a nav_order; and both
 papers/index.md tables and the README library table list the papers in
 nav_order order.
+
+It also checks the company-identity blocks: every
+{% include company/block.html name="…" %} and
+{% include company/product-button.html product="…" %} in a paper must name a
+key that exists in that paper's language file, _data/<lang>/company.yml; and no
+paper may carry company details written out by hand ("Prepared by" /
+"Hazırlayan" lines, purchase-button links, the legal name, contact email or
+phone) — those belong in company.yml.
 """
 import io, re, sys, glob, os
 
@@ -86,6 +94,46 @@ for idx, got in (("papers/index.md", table_order("papers/index.md")),
                       + (f" — missing {missing}" if missing else "")
                       + (f" — unknown {extra}" if extra else "")
                       + ("" if missing or extra else f" — expected {expected}"))
+
+# ── Company identity ─────────────────────────────────────────────────────
+# company.yml is read with a regex rather than a YAML library, so the check
+# needs nothing beyond the standard library: top-level keys start in column 0,
+# product keys are indented two spaces under `products:`.
+def company_keys(lang):
+    path = f"_data/{lang}/company.yml"
+    if not os.path.exists(path):
+        errors.append(f"{path} is missing")
+        return set(), set()
+    s = io.open(path, encoding="utf-8").read()
+    top = set(re.findall(r"^([a-z_]+):", s, re.M))
+    m = re.search(r"^products:\n((?:  .*\n?)*)", s, re.M)
+    products = set(re.findall(r"^  ([a-z0-9-]+):", m.group(1), re.M)) if m else set()
+    return top, products
+
+
+BLOCK = re.compile(r'\{%-?\s*include\s+company/block\.html\s+name="([^"]+)"')
+PRODUCT = re.compile(r'\{%-?\s*include\s+company/product-button\.html\s+product="([^"]+)"')
+HANDWRITTEN = [
+    (re.compile(r"^\*(Prepared by|Hazırlayan):", re.M), '"Prepared by" line — use {% include company/block.html name="prepared_by" %}'),
+    (re.compile(r'class="product-card-btn"'), 'purchase button — use {% include company/product-button.html product="…" %}'),
+    (re.compile(r"Teknoloji A\.Ş\."), "company legal name — use a company.yml block"),
+    (re.compile(r"support@openzeka\.com"), "company contact email — use a company.yml block"),
+    (re.compile(r"\+90 312 266 2055"), "company phone — use a company.yml block"),
+]
+for lang, pattern in (("en", "papers/*.md"), ("tr", "tr/papers/*.md")):
+    top, products = company_keys(lang)
+    for path in sorted(glob.glob(pattern)):
+        s = io.open(path, encoding="utf-8").read()
+        for name in BLOCK.findall(s):
+            if name not in top:
+                errors.append(f"{path}: company block {name!r} is not in _data/{lang}/company.yml")
+        for name in PRODUCT.findall(s):
+            if name not in products:
+                errors.append(f"{path}: product {name!r} has no URL under products in _data/{lang}/company.yml")
+        for rx, what in HANDWRITTEN:
+            for m in rx.finditer(s):
+                line = s.count("\n", 0, m.start()) + 1
+                errors.append(f"{path}:{line}: hand-written {what}")
 
 for e in errors:
     print("ERROR", e)

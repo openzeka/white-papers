@@ -1,0 +1,77 @@
+# Company identity — English.
+#
+# Every company-specific block a paper shows — the "Prepared by" line, the
+# contact footer, the "About us" section, the closing call to action and the
+# product purchase buttons — is kept here, not in the paper. A paper places a
+# block with
+#   {% include company/block.html name="<key>" %}
+# and a purchase button with
+#   {% include company/product-button.html product="<key>" %}
+# so the paper itself holds only paper content. Change a company detail once,
+# here, in every language file under _data/<lang>/company.yml.
+#
+# Blocks are Markdown, inserted before the page is converted. Links and image
+# paths are written out literally: Liquid inside these values is not run.
+# A key used by a paper must exist in that paper's language; the paper checker
+# (_tools/check_papers.py) verifies it.
+
+name: OpenZeka
+legal_name: Openzeka Teknoloji A.Ş.
+website: https://www.openzeka.com
+privacy_url: https://openzeka.com/gizlilik-kisisel-veri-politikasi/
+
+prepared_by: |-
+  *Prepared by: **Openzeka Teknoloji A.Ş.** — Official Embedded Compute Distributor for NVIDIA Türkiye & MEA, and NVIDIA Elite Partner*
+
+prepared_by_short: |-
+  *Prepared by: Openzeka Teknoloji A.Ş.*
+
+footer: |-
+  *Openzeka Teknoloji A.Ş. — [openzeka.com](https://www.openzeka.com/en) · Tel: +90 312 266 2055*
+
+  *Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye*
+
+footer_with_email: |-
+  *Openzeka Teknoloji A.Ş. — [openzeka.com](https://openzeka.com/en) · [support@openzeka.com](https://openzeka.com/en/contact/) · Tel: +90 312 266 2055*
+
+  *Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye*
+
+about_report: |-
+  ## About Us — Openzeka
+
+  **Openzeka Teknoloji A.Ş.**, founded in 2016 at Ankara Bilkent Cyberpark; is the **official Embedded Compute distributor for NVIDIA in the Türkiye and MEA region** and an **NVIDIA Elite Partner**. The company distributes NVIDIA **DGX/HGX** servers, data center and professional GPUs, **Jetson** embedded systems, and workstations for artificial intelligence and high-performance computing hardware; while offering real-time video analytics and AI inference solutions at edge and cloud environments with its self-developed **Cordatus AI** platform. With its expertise in deep learning-based artificial intelligence, digital twins, and digital transformation, it is one of the leading embedded AI providers in its region.
+
+contact_table: |-
+  | | |
+  |---|---|
+  | **Web** | [openzeka.com](https://openzeka.com/en) |
+  | **Email** | [support@openzeka.com](https://openzeka.com/en/contact/) |
+  | **Contact** | [openzeka.com/en/contact](https://openzeka.com/en/contact/) |
+  | **Phone** | +90 312 266 2055 |
+  | **Address** | Üniversiteler Mah. 1606. Cad. No:11, Cyberpark H Blok, 06800 Bilkent/Ankara, Türkiye |
+
+about_profile: |-
+  #### About OpenZeka
+
+  ![OpenZeka](/papers/yerel-llm-rehberi/images/openzeka-logo.png)
+
+  **OpenZeka Teknoloji A.Ş.** was founded in 2016 at Ankara Bilkent Cyberpark and offers innovative AI solutions in hardware and software. It is the **Official NVIDIA Robotics Distributor for Turkey and MEA (MENA)**; it is also an **NVIDIA DGX AI Compute Systems** and **NVIDIA Omniverse Partner**, and an **Elite Partner** in the NVIDIA Visualization field.
+
+  - **Hardware:** DGX/HGX server solutions, professional graphics cards and workstations, NVIDIA Jetson embedded systems (developer kits, ready AI kits, modules, and carrier boards). We design and deploy fully redundant AI infrastructure covering compute, storage, networking, and orchestration.
+  - **Software:** With our in-house **Cordatus AI** platform, we deliver industry-specific solutions, especially in intelligent video analytics.
+  - **Digital transformation:** We lead digital transformation with NVIDIA Omniverse and Digital Twin technologies; we share our knowledge at events such as NVIDIA GTC, Embedded World, and Smart City Expo, through university collaborations and AI Workshops.
+
+cta_logo: |-
+  <p><img src="/papers/yerel-llm-rehberi/images/openzeka-logo.png" alt="OpenZeka" width="220"/></p>
+
+contact_cta: |-
+  contact OpenZeka: [support@openzeka.com](https://openzeka.com/en/contact/) · [openzeka.com](https://openzeka.com/en)
+
+# Purchase buttons: label, and the product page per product key. A
+# product without a URL here shows its card with no button.
+purchase_label: Purchase This Product →
+products:
+  dgx-spark-bundle: https://openzeka.com/en/product/nvidia-dgx-spark-bundle/
+  dgx-spark-triple: https://openzeka.com/en/product/nvidia-dgx-spark-triple/
+  dgx-spark-4-node: https://openzeka.com/en/product/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe/
+  dgx-spark-8-node: https://openzeka.com/en/product/nvidia-dgx-spark-8-node-ai-cluster-8-node/

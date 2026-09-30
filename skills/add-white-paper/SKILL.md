@@ -84,6 +84,35 @@ Links to other pages use the same form,
 `{{ '/papers/other-slug/' | relative_url }}`, so they get the `/tr` prefix on
 Turkish pages. A plain `[text](/papers/x/)` link does not.
 
+**Company details are never written into a paper.** The "Prepared by" line,
+the contact footer, the "About us" section, the closing call to action and
+the purchase buttons all come from `_data/en/company.yml` and
+`_data/tr/company.yml`; the paper places them with one line each, and holds
+only its own content:
+
+```markdown
+{% include company/block.html name="prepared_by" %}
+{% include company/product-button.html product="dgx-spark-bundle" %}
+```
+
+| Block (`name=`) | What it shows | Used by |
+|---|---|---|
+| `prepared_by` | the "Prepared by" / "Hazırlayan" line under the title | most papers, line ~18 |
+| `prepared_by_short` | the short "Prepared by" line at the very end | Qwen3.6-27B benchmark |
+| `footer` | company, website, phone, address | DeepSeek papers |
+| `footer_with_email` | the same with the support email (English only) | Qwen3.6-27B scaling |
+| `about_report` / `contact_table` | an "About us" section and its contact table | Qwen3.6-27B benchmark |
+| `about_profile` | the longer company profile with logo | Local LLM guide |
+| `cta_logo` + `contact_cta` | logo and "contact us: …" at the close | Local LLM guide, Conditional Memory |
+| `legal_name`, `name`, `website` | single values, usable inside a sentence | `/papers/` index |
+
+Copy the lines from the paper most like yours. `contact_cta` stands inside a
+sentence (`… TCO analysis, {% include company/block.html name="contact_cta" %}`).
+A product card's button names a key under `products:`; a new product needs its
+page URL added there, in both languages. If a paper needs a company sentence
+that no block covers, add a new key to both `company.yml` files rather than
+writing the details into the paper.
+
 **Turkish headings inside a `<div markdown="1">` block** need an explicit ASCII
 id, e.g. `### Önce iki ayrım {#once-iki-ayrim}` — otherwise the Turkish letters
 are dropped from the anchor.
@@ -155,7 +184,10 @@ This fails if a Turkish twin is missing, a required field is missing, the two
 languages disagree on `page_id` / `permalink` / `parent` / `nav_order` /
 `date`, two papers share a `nav_order`, images were copied under `tr/papers/`,
 or any of the three tables — both `/papers/` tables and the README library
-table — is out of order or missing the paper. Fix every error.
+table — is out of order or missing the paper. It also fails if a paper names a
+company block or product that `company.yml` does not have in that language, or
+writes company details by hand (a "Prepared by" line, a purchase-button link,
+the legal name, the support email or phone). Fix every error.
 
 Then look at it in a browser, both languages:
 
@@ -175,5 +207,6 @@ Never describe the paper as "published".
 
 ## Keeping this skill true
 
-If the front-matter fields, the home-page ordering, or the table layout
-change, update this file and `_tools/check_papers.py` in the same commit.
+If the front-matter fields, the home-page ordering, the table layout or the
+company blocks change, update this file and `_tools/check_papers.py` in the
+same commit.

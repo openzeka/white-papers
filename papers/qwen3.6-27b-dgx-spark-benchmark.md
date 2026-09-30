@@ -14,7 +14,7 @@ last_modified_date: 2026-07-03
 toc: true
 ---
 
-*Prepared by: **Openzeka Teknoloji A.Ş.** — Official Embedded Compute Distributor for NVIDIA Türkiye & MEA, and NVIDIA Elite Partner*
+{% include company/block.html name="prepared_by" %}
 
 *Test platform: NVIDIA DGX Spark (GB10) · Model: Qwen3.6-27B · Report date: July 2026*
 
@@ -1041,19 +1041,11 @@ Each directory contains 5 PNG charts (TTFT, ITL, TPS, Latency, Throughput), 5 HT
 
 ---
 
-## About Us — Openzeka
-
-**Openzeka Teknoloji A.Ş.**, founded in 2016 at Ankara Bilkent Cyberpark; is the **official Embedded Compute distributor for NVIDIA in the Türkiye and MEA region** and an **NVIDIA Elite Partner**. The company distributes NVIDIA **DGX/HGX** servers, data center and professional GPUs, **Jetson** embedded systems, and workstations for artificial intelligence and high-performance computing hardware; while offering real-time video analytics and AI inference solutions at edge and cloud environments with its self-developed **Cordatus AI** platform. With its expertise in deep learning-based artificial intelligence, digital twins, and digital transformation, it is one of the leading embedded AI providers in its region.
+{% include company/block.html name="about_report" %}
 
 All measurements in this report were performed with Openzeka's open source **[CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark)** tool, on an **NVIDIA DGX Spark (GB10)** system.
 
-| | |
-|---|---|
-| **Web** | [openzeka.com](https://openzeka.com/en) |
-| **Email** | [support@openzeka.com](https://openzeka.com/en/contact/) |
-| **Contact** | [openzeka.com/en/contact](https://openzeka.com/en/contact/) |
-| **Phone** | +90 312 266 2055 |
-| **Address** | Üniversiteler Mah. 1606. Cad. No:11, Cyberpark H Blok, 06800 Bilkent/Ankara, Türkiye |
+{% include company/block.html name="contact_table" %}
 
 ---
 
@@ -1061,4 +1053,4 @@ All measurements in this report were performed with Openzeka's open source **[Co
 
 *Test platform: NVIDIA DGX Spark (GB10) · Model: Qwen3.6-27B*
 
-*Prepared by: Openzeka Teknoloji A.Ş.*
+{% include company/block.html name="prepared_by_short" %}

@@ -10,7 +10,7 @@ permalink: /papers/
 
 # White Papers
 
-The following technical white papers are published by Openzeka Teknoloji A.Ş.
+The following technical white papers are published by {% include company/block.html name="legal_name" %}
 
 | Title | Topic | Platform |
 | --- | --- | --- |

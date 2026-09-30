@@ -40,7 +40,7 @@ toc: true
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Bundle</h3>
 <p>2 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-bundle/">Purchase This Product →</a>
+{% include company/product-button.html product="dgx-spark-bundle" %}
 </div>
 </div>
 
@@ -596,6 +596,6 @@ Run the command above and re-run sparkrun.
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Bundle</h3>
 <p>2 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-bundle/">Purchase This Product →</a>
+{% include company/product-button.html product="dgx-spark-bundle" %}
 </div>
 </div>

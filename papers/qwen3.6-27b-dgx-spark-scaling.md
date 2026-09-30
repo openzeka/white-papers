@@ -15,7 +15,7 @@ last_modified_date: 2026-07-06
 toc: true
 ---
 
-*Prepared by: **Openzeka Teknoloji A.Ş.** — Official Embedded Compute Distributor for NVIDIA Türkiye & MEA, and NVIDIA Elite Partner*
+{% include company/block.html name="prepared_by" %}
 
 *Test platform: 1x / 2x / 4x NVIDIA DGX Spark (GB10) · Model: Qwen3.6-27B-NVFP4 · Report date: July 2026*
 
@@ -439,6 +439,4 @@ Accuracy cost is under 1 point on every benchmark, against a ~4x memory footprin
 
 ---
 
-*Openzeka Teknoloji A.Ş. — [openzeka.com](https://openzeka.com/en) · [support@openzeka.com](https://openzeka.com/en/contact/) · Tel: +90 312 266 2055*
-
-*Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye*
+{% include company/block.html name="footer_with_email" %}

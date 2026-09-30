@@ -1,0 +1,12 @@
+{%- comment -%}
+  One company-identity block, from _data/<lang>/company.yml, in the page's
+  language. Papers use it for every company-specific part — the "Prepared by"
+  line, the contact footer, "About us", the closing call to action — so the
+  paper file holds only paper content:
+
+    {% include company/block.html name="prepared_by" %}
+
+  The block is Markdown, placed where the tag is before the page is converted,
+  so it can stand on its own line or inside a sentence.
+{%- endcomment -%}
+{{- site.data[site.active_lang].company[include.name] -}}

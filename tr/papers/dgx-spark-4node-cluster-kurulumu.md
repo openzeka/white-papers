@@ -49,7 +49,7 @@ toc: true
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
 <p>4 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
-<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe">Bu Ürünü Satın Al →</a>
+{% include company/product-button.html product="dgx-spark-4-node" %}
 </div>
 </div>
 
@@ -1388,6 +1388,6 @@ cat /sys/class/net/bond0/bonding/xmit_hash_policy
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
 <p>4 DGX Spark node, 200GbE RoCEv2 RDMA ve sparkrun cluster yönetimi ile uçtan uca AI altyapısı.</p>
-<a class="product-card-btn" href="https://openzeka.com/urun/nvidia-dgx-spark-quad-ai-cluster-4-node-512-gb-200gbe">Bu Ürünü Satın Al →</a>
+{% include company/product-button.html product="dgx-spark-4-node" %}
 </div>
 </div>

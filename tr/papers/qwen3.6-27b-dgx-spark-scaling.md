@@ -15,7 +15,7 @@ last_modified_date: 2026-07-06
 toc: true
 ---
 
-*Hazırlayan: **Openzeka Teknoloji A.Ş.** — NVIDIA Türkiye & MEA Resmî Embedded Compute Distribütörü ve NVIDIA Elite Partner*
+{% include company/block.html name="prepared_by" %}
 
 *Test platformu: 1x / 2x / 4x NVIDIA DGX Spark (GB10) · Model: Qwen3.6-27B-NVFP4 · Rapor tarihi: Temmuz 2026*
 
@@ -439,6 +439,4 @@ TP, bellek bant genişliğini havuzlayarak *her isteği* hızlandırır; replika
 
 ---
 
-*Openzeka Teknoloji A.Ş. — [openzeka.com](https://www.openzeka.com) · Tel: +90 312 266 2055*
-
-*Üniversiteler Mah. Şehit Mustafa Tayyarcan Cad. Tepe Binası No:5 İç Kapı No:315, 06800 Çankaya/Ankara, Türkiye*
+{% include company/block.html name="footer" %}

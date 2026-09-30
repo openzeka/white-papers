@@ -1,0 +1,14 @@
+{%- comment -%}
+  The "Purchase This Product" button of a product card, linking the product's
+  page listed under `products` in _data/<lang>/company.yml:
+
+    {% include company/product-button.html product="dgx-spark-bundle" %}
+
+  A product with no URL there renders nothing, so the card shows without a
+  button.
+{%- endcomment -%}
+{%- assign company = site.data[site.active_lang].company -%}
+{%- assign url = company.products[include.product] -%}
+{%- if url -%}
+<a class="product-card-btn" href="{{ url }}">{{ company.purchase_label }}</a>
+{%- endif -%}

@@ -1,10 +1,10 @@
 {% comment %}
   Cookie consent banner (KVKK / GDPR).
   TR ziyaretçiye KVKK metni, EN ziyaretçiye GDPR metni gösterir.
-  openzeka.com/gizlilik-kisisel-veri-politikasi/ sayfasına link verir.
+  Şirketin gizlilik politikasına (_data/<dil>/company.yml → privacy_url) link verir.
 {% endcomment %}
 {% assign lang = site.active_lang | default: site.lang | default: 'en' %}
-{% assign t = site.data[lang].strings %}
+{% assign t = site.data[lang].strings %}{% assign company = site.data[lang].company %}
 <div id="cookie-consent-banner" class="cookie-consent" role="dialog"
      aria-modal="false" aria-label="Cookie consent"
      data-consent-state="pending" hidden>
@@ -16,7 +16,7 @@
         </svg>
       </span>
       <p>{{ t.consent_message }}
-        <a href="{{ t.consent_privacy_url }}" target="_blank" rel="noopener noreferrer"
+        <a href="{{ company.privacy_url }}" target="_blank" rel="noopener noreferrer"
            class="cookie-consent__link">{{ t.consent_learn_more }}</a>
       </p>
     </div>

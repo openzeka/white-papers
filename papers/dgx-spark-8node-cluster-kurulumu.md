@@ -51,7 +51,7 @@ toc: true
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark 8-Node AI Cluster – 8 Node, 1 TB, 200GbE</h3>
 <p>8 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-8-node-ai-cluster-8-node/">Purchase This Product →</a>
+{% include company/product-button.html product="dgx-spark-8-node" %}
 </div>
 </div>
 
@@ -1414,6 +1414,6 @@ cat /sys/class/net/bond0/bonding/xmit_hash_policy
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark 8-Node AI Cluster – 8 Node, 1 TB, 200GbE</h3>
 <p>8 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-<a class="product-card-btn" href="https://openzeka.com/en/product/nvidia-dgx-spark-8-node-ai-cluster-8-node/">Purchase This Product →</a>
+{% include company/product-button.html product="dgx-spark-8-node" %}
 </div>
 </div>

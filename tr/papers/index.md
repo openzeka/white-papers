@@ -10,7 +10,7 @@ permalink: /papers/
 
 # White Papers
 
-Aşağıdaki teknik white paper'lar Openzeka Teknoloji A.Ş. tarafından yayımlanmaktadır.
+Aşağıdaki teknik white paper'lar {% include company/block.html name="legal_name" %} tarafından yayımlanmaktadır.
 
 | Başlık | Konu | Platform |
 | --- | --- | --- |

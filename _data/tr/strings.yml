@@ -12,7 +12,6 @@ consent_message: "Sitemizi ziyaretçi davranışlarını analiz ederek iyileşti
 consent_accept: "Kabul Et"
 consent_reject: "Reddet"
 consent_learn_more: "Gizlilik Politikası"
-consent_privacy_url: "https://openzeka.com/gizlilik-kisisel-veri-politikasi/"
 
 # Ana sayfa kart tarihleri (her sayfanın `date` alanından)
 months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]

@@ -58,15 +58,7 @@ toc: true
 
 Bu rehberin amacı, "yerel LLM bana/kurumuma uygun mu, uygunsa hangi donanım–model–yazılım üçlüsünü seçmeliyim?" sorusuna güncel ve uygulanabilir bir yanıt vermektir.
 
-#### OpenZeka hakkında
-
-![OpenZeka]({{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }})
-
-**OpenZeka Teknoloji A.Ş.**, 2016 yılında Ankara Bilkent Cyberpark'ta kuruldu ve donanım–yazılım alanında yenilikçi yapay zekâ çözümleri sunuyor. **NVIDIA Robotics Türkiye ve MEA (MENA) Resmi Distribütörü**; aynı zamanda **NVIDIA DGX AI Compute Systems** ve **NVIDIA Omniverse Partner'ı**, NVIDIA Visualization alanında **Elite Partner**'dır.
-
-- **Donanım:** DGX/HGX sunucu çözümleri, profesyonel ekran kartları ve iş istasyonları, NVIDIA Jetson gömülü sistemleri (geliştirici kitleri, hazır AI kitleri, modüller ve taşıyıcı kartlar). İşlem, depolama, ağ ve orkestrasyonu kapsayan tam yedekli yapay zekâ altyapıları tasarlayıp devreye alıyoruz.
-- **Yazılım:** Kendi geliştirdiğimiz **Cordatus AI** platformuyla akıllı video analitiği başta olmak üzere sektöre özel çözümler üretiyoruz.
-- **Dijital dönüşüm:** NVIDIA Omniverse ve Dijital İkiz teknolojileriyle dijital dönüşüme öncülük ediyor; NVIDIA GTC, Embedded World, Smart City Expo gibi etkinliklerde, üniversite iş birlikleri ve AI Workshop'larıyla bilgi birikimimizi paylaşıyoruz.
+{% include company/block.html name="about_profile" %}
 
 Bu rehberdeki donanım önerileri bu portföye dayanır.
 
@@ -765,6 +757,6 @@ Yüksek trafik (500+ eş zamanlı) inference veya pre-training (sıfırdan) → 
 
 ---
 
-<p><img src="{{ '/papers/yerel-llm-rehberi/images/openzeka-logo.png' | relative_url }}" alt="OpenZeka" width="220"/></p>
+{% include company/block.html name="cta_logo" %}
 
-**Yerel LLM altyapınızı birlikte planlayalım.** Doğru donanım–model–yazılım eşleştirmesi, VRAM hesabı ve TCO analizi için OpenZeka ile iletişime geçin: [openzeka.com](https://openzeka.com) · VRAM hesaplama: [Cordatus VRAM Calculator](https://app.cordatus.ai/#/vram-calculator)
+**Yerel LLM altyapınızı birlikte planlayalım.** Doğru donanım–model–yazılım eşleştirmesi, VRAM hesabı ve TCO analizi için {% include company/block.html name="contact_cta_web_only" %} · VRAM hesaplama: [Cordatus VRAM Calculator](https://app.cordatus.ai/#/vram-calculator)
