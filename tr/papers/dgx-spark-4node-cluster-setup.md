@@ -3,13 +3,15 @@ title: DGX Spark 4-Node AI Cluster Kurulum Rehberi
 parent: White Papers
 nav_order: 6
 lang: tr
-page_id: dgx-spark-4node-cluster-kurulumu
+page_id: dgx-spark-4node-cluster-setup
 date: 2026-07-24 14:01:16 +0300
 card_tag: "Cluster Kurulumu"
 description: >-
   MikroTik CRS812 üzerinden 4 NVIDIA DGX Spark node'u ile switch tabanlı AI
   cluster kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun ve NAS.
-permalink: /papers/dgx-spark-4node-cluster-kurulumu/
+permalink: /papers/dgx-spark-4node-cluster-setup/
+redirect_from:
+  - /papers/dgx-spark-4node-cluster-kurulumu/
 last_modified_date: 2026-09-30
 toc: true
 ---
@@ -44,7 +46,7 @@ toc: true
 ---
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
+<img src="{{ '/papers/dgx-spark-4node-cluster-setup/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
 </div>
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
@@ -125,7 +127,7 @@ sudo fwupdmgr upgrade
 ```
 DGX Dashboard üzerinden, herhangi bir güncelleme olmadığı kontrol edilir, eğer varsa yapılır:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/01-dgx-dashboard.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/01-dgx-dashboard.jpg' | relative_url }})
 
 Güncellemelerin tamamlanmasının ardından sistem yeniden başlatılır:
 
@@ -150,7 +152,7 @@ Yapılandırmanın başarılı olduğu aşağıdaki test ile doğrulanabilir:
 ```bash
 docker run hello-world
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/02-docker-hello.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/02-docker-hello.jpg' | relative_url }})
 
 Komutun başarılı şekilde çalışması ve Docker'ın örnek container'ı başlatabilmesi, sonraki adımlarda kullanılacak container tabanlı araçlar için gerekli hazırlığın tamamlandığını göstermektedir.
 
@@ -178,7 +180,7 @@ sudo systemctl restart docker
 ```
 Yapılandırma sonrasında aynı kontrol komutu tekrar çalıştırıldı ve depolama sürücüsünün overlayfs olduğu doğrulandı.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/03-docker-storage.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/03-docker-storage.png' | relative_url }})
 
 ## Management Ağı (10GbE) Bağlantısı
 
@@ -190,7 +192,7 @@ Spark masaüstünde terminal açılır ve cihazın IP adresi alıp almadığın�
 ip addr show
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/04-ip-addr.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/04-ip-addr.jpg' | relative_url }})
 
 Çıktıda, örnekte olduğu gibi 10GbE arayüzünde bir IP adresi görüyorsanız, management ağı üzerinden SSH erişimi sağlanabilir. IP adresi alınmamışsa, DGX OS masaüstü üzerinden manuel olarak atanır:
 
@@ -218,7 +220,7 @@ ip addr show
 
 6.  Apply butonuna basın ve bağlantıyı kapatıp tekrar açın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/05-wired-settings.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/05-wired-settings.jpg' | relative_url }})
 
 İnternet erişimi varsa 10GbE management bağlantısı hazırdır. Diğer üç Spark üzerinde de aynı adımları tekrarlayın ve her birine farklı bir IP adresi atayın.
 
@@ -250,11 +252,11 @@ portu üzerinden 200GbE hızında MikroTik CRS812 switch'e bağlanır. CRS812'ni
 
 1.  İlk breakout kablosunun QSFP-DD ucunu CRS812'nin 1 numaralı QSFP-DD portuna takın. Kablonun her iki ucundaki kilitleme mandalının tam oturduğundan emin olun.
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/06-breakout-cable.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/06-breakout-cable.jpg' | relative_url }})
 
 2.  Aynı kablonun iki QSFP56 ucunu Spark 1 ve Spark 2 sistemlerinin en dışta bulunan ConnectX-7 portlarına takın.
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/07-connectx7-ports.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/07-connectx7-ports.jpg' | relative_url }})
 
 3.  İkinci breakout kablosunun QSFP-DD ucunu CRS812'nin 2 numaralı QSFP-DD portuna takın.
 
@@ -276,13 +278,13 @@ Switch açıldığında default IP adresi 192.168.88.1/24'tür. Bu adrese Ethern
 
 4.  Kullanıcı adı admin, şifre ise cihazın altındaki etikette yazandır. Bu bilgilerle giriş yapın:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/08-crs312-login.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/08-crs312-login.png' | relative_url }})
 
 **Yönetim IP Ataması**
 
 Giriş yaptıktan sonra şifrenizi değiştirmeniz istenen bir ekran gelecektir. Burada şifreyi değiştirdikten sonra açılan ekranda yönetim ile ilgili ip atamasını yapabilirsiniz. Burada örnek olarak 192.168.1.122/24 adresi verilmiştir, ağ ayarlarınıza göre uygun gateway ve DNS Sunucu adreslerini de girin ve “Apply Configuration” butonuna basın:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/09-crs312-mgmt-ip.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/09-crs312-mgmt-ip.jpg' | relative_url }})
 
 Bu ayarın uygulanmasıyla bağlantınız kopacaktır. Bu nedenle bağlantı için kullandığınız bilgisayarın ip adresini tekrar 192.168.1.0/24 ağında bir adrese alarak tarayıcıdan 192.168.1.122 adresini girerek switch arayüzüne ulaşabilirsiniz.
 
@@ -290,7 +292,7 @@ Bu ayarın uygulanmasıyla bağlantınız kopacaktır. Bu nedenle bağlantı iç
 
 Bu aşamada ilk olarak RouterOS yazılımının güncel olup olmadığı kontrol edilir. Bunu kontrol etmek için System - Packages - Check for Updates sayfasına gidilerek “Check for Updates” butonuna basılır ve güncelleme varsa yapılır:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/10-crs312-update.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/10-crs312-update.jpg' | relative_url }})
 
 ### NAS Portlarının Bond Yapılması
 
@@ -304,7 +306,7 @@ Kullanılan NAS cihazının her iki 10Gbps portu bond yapılarak, switch tarafı
 
 3.  Her birini seçip Remove (−) butonuna tıklayın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/11-bridge-ports.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/11-bridge-ports.jpg' | relative_url }})
 
 **Bonding Oluşturma**
 
@@ -324,7 +326,7 @@ Kullanılan NAS cihazının her iki 10Gbps portu bond yapılarak, switch tarafı
 
 4.  Apply ve OK butonlarına basılır
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/12-bonding-config.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/12-bonding-config.jpg' | relative_url }})
 
 **Bond'u Bridge'e Ekleme**
 
@@ -338,7 +340,7 @@ Son olarak oluşturulan bond, bridge üzerine eklenir:
 
 4.  Apply ve OK butonlarına basılır
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/13-bond-bridge.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/13-bond-bridge.jpg' | relative_url }})
 
 ## CRS812 MikroTik Switch Yapılandırması
 
@@ -354,13 +356,13 @@ Switch açıldığında default IP adresi 192.168.88.1/24'tür. Bu adrese MGMT-1
 
 4.  Kullanıcı adı admin, şifre ise cihazın altındaki etikette yazandır. Bu bilgilerle giriş yapın:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/14-crs812-login.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/14-crs812-login.png' | relative_url }})
 
 **Yönetim IP Ataması**
 
 Giriş yaptıktan sonra şifrenizi değiştirmeniz istenen bir ekran gelecektir. Burada şifreyi değiştirdikten sonra açılan ekranda yönetim ile ilgili ip atamasını yapabilirsiniz. Burada örnek olarak 192.168.1.155/24 adresi verilmiştir, ağ ayarlarınıza göre uygun gateway ve DNS Sunucu adreslerini de girin ve “Apply Configuration” butonuna basın:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/15-crs812-mgmt-ip.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/15-crs812-mgmt-ip.jpg' | relative_url }})
 
 Bu ayarın uygulanmasıyla bağlantınız kopacaktır. Bu nedenle bağlantı için kullandığınız bilgisayarın ip adresini tekrar 192.168.1.0/24 ağında bir adrese alarak tarayıcıdan 192.168.1.155 adresini girerek switch arayüzüne ulaşabilirsiniz.
 
@@ -368,7 +370,7 @@ Bu ayarın uygulanmasıyla bağlantınız kopacaktır. Bu nedenle bağlantı iç
 
 Bu aşamada ilk yapılacak işlem RouterOS yazılımının en güncel versiyonda olduğudur. Bunu kontrol etmek için System - Packages - Check for Updates sayfasına gidilerek “Check for Updates” butonuna basılır ve güncelleme varsa yapılır:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/16-crs812-update.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/16-crs812-update.jpg' | relative_url }})
 
 ### Kurulum Öncesi Envanter ve Yedek
 
@@ -384,7 +386,7 @@ RoCEv2 yapılandırmasına başlamadan önce mevcut config'i yedekleyin:
 /system/backup/save name=before-roce
 /file/print
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/17-config-backup.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/17-config-backup.png' | relative_url }})
 
 ### QSFP-DD Portlarını 2×200G Breakout Yapılandırma
 
@@ -399,7 +401,7 @@ set qsfp56-dd-1-5 auto-negotiation=no speed=200G-baseCR4
 set qsfp56-dd-2-1 auto-negotiation=no speed=200G-baseCR4
 set qsfp56-dd-2-5 auto-negotiation=no speed=200G-baseCR4
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/18-qsfp-breakout.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/18-qsfp-breakout.png' | relative_url }})
 
 ### Jumbo Frame ve MTU Yapılandırması
 
@@ -412,7 +414,7 @@ set qsfp56-dd-1-5 l2mtu=9500 mtu=9000
 set qsfp56-dd-2-1 l2mtu=9500 mtu=9000
 set qsfp56-dd-2-5 l2mtu=9500 mtu=9000
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/19-mtu-config.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/19-mtu-config.png' | relative_url }})
 
 ### RoCEv2 Trafik Sınıflandırması
 
@@ -423,7 +425,7 @@ set qsfp56-dd-2-5 l2mtu=9500 mtu=9000
 add name=roce dscp=26 traffic-class=3
 add name=cnp dscp=48 traffic-class=6
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/20-qos-profiles.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/20-qos-profiles.png' | relative_url }})
 
 **Tx Queue, ETS, ECN ve CNP Önceliği**
 
@@ -435,7 +437,7 @@ set 6 schedule=strict-priority
 ```
 TC1 ve TC3 ETS grubunda eşit ağırlıkla (1:1) çalışır; TC3 üzerinde ECN işaretlemesi açıktır; CNP kontrol paketleri TC6 strict priority ile öncelik alır. TC1 boşsa TC3 portun tamamını kullanabilir — bu komut kalıcı 100G/100G rate-limit oluşturmaz.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/21-tx-queue.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/21-tx-queue.png' | relative_url }})
 
 **PFC Profili**
 
@@ -445,7 +447,7 @@ add name=pfc-tc3 traffic-class=3 rx=yes tx=yes
 ```
 TC3 için iki yönlü Priority-based Flow Control profili oluşturur. tx=yes switch'in komşuya TC3 için XOFF/XON frame göndermesine; rx=yes komşudan gelen TC3 PFC frame'lerine uymasına izin verir.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/22-pfc-profile.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/22-pfc-profile.png' | relative_url }})
 
 **Spark Portlarına Trust, PFC ve Queue Hız Referansı**
 
@@ -456,7 +458,7 @@ set qsfp56-dd-1-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 set qsfp56-dd-2-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 set qsfp56-dd-2-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/23-trust-pfc.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/23-trust-pfc.png' | relative_url }})
 
 **Lossless traffic class ve buffer havuzu**
 
@@ -464,7 +466,7 @@ set qsfp56-dd-2-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 /interface/ethernet/switch/qos/settings
 set lossless-traffic-class=3 lossless-buffers=auto
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/24-lossless.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/24-lossless.png' | relative_url }})
 
 **QoS hardware offload**
 
@@ -472,7 +474,7 @@ set lossless-traffic-class=3 lossless-buffers=auto
 /interface/ethernet/switch
 set switch1 qos-hw-offloading=yes
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/25-qos-hw-offload.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/25-qos-hw-offload.png' | relative_url }})
 
 **LLDP DCBX ilanı**
 
@@ -481,7 +483,7 @@ set switch1 qos-hw-offloading=yes
 set lldp-dcbx=yes
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/26-lldp-dcbx.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/26-lldp-dcbx.png' | relative_url }})
 
 ## Spark’lara Sparkrun Yüklenmesi
 
@@ -527,7 +529,7 @@ sparkrun, CX7 ağ yapılandırması sırasında sudo ile komutlar çalıştırı
 echo "nvidia ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nvidia
 sudo chmod 440 /etc/sudoers.d/nvidia
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/27-passwordless-sudo.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/27-passwordless-sudo.png' | relative_url }})
 
 ### sparkrun Kurulumu
 
@@ -560,11 +562,11 @@ Kurulum esnasında sorulan sorulara uygun cevaplar verilir:
 
 4.  MESH kurulumu için Y seçilir
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/28-sparkrun-wizard.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/28-sparkrun-wizard.jpg' | relative_url }})
 
 5.  Configure CX7 networking? sorusuna Y denir, burada sorduğu nvidia değil orijinal kullanıcı şifresidir:
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/29-cx7-password.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/29-cx7-password.png' | relative_url }})
 
 6.  Add 'nvidia' to the docker group on all hosts? sorusuna Y seçilir
 
@@ -574,7 +576,7 @@ Kurulum esnasında sorulan sorulara uygun cevaplar verilir:
 
 9.  Setup complete mesajı geldiğinde kurulum başarıyla tamamlanmış demektir
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/30-sparkrun-complete.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/30-sparkrun-complete.png' | relative_url }})
 
 ### DCB (Data Center Bridging) Konfigürasyonu
 
@@ -594,7 +596,7 @@ MTU 9000 ve UP,LOWER_UP durumundaki arayüzler aktif olanlardır. Bu dokümanda 
 
 - enP2p1s0f1np1 — Subnet 2
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/31-cx7-interfaces.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/31-cx7-interfaces.png' | relative_url }})
 
 **DSCP → Traffic Class Eşlemesi**
 
@@ -618,7 +620,7 @@ sudo dcb pfc set dev enP2p1s0f1np1 prio-pfc 3:on
 
 prio-pfc 3:on — yalnızca priority 3 için PFC frame'leri gönder ve alın. Diğer priority'ler etkilenmez.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/32-pfc-enable.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/32-pfc-enable.png' | relative_url }})
 
 **Kalıcılaştırma (systemd Servisi)**
 
@@ -648,7 +650,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable dcb-roce.service
 sudo systemctl start dcb-roce.service
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/33-dcb-roce-service.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/33-dcb-roce-service.jpg' | relative_url }})
 
 ## Hız ve RDMA Testleri
 
@@ -690,7 +692,7 @@ ping -c 4 192.168.2.157
 ping -M do -s 8972 -c 4 192.168.2.157
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/34-ping-mtu.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/34-ping-mtu.jpg' | relative_url }})
 
 **TCP Throughput Testi (iperf3)**
 
@@ -711,7 +713,7 @@ Not: iperf3 kurulu değilse yükleyin:
 ```
 sudo apt install iperf3
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/35-iperf3.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/35-iperf3.jpg' | relative_url }})
 
 **RDMA Cihazlarını Belirleme**
 
@@ -727,7 +729,7 @@ rocep1s0f1 port 1 ==> enp1s0f1np1 (Up)
 
 roceP2p1s0f1 port 1 ==> enP2p1s0f1np1 (Up)
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/36-ibdev2netdev.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/36-ibdev2netdev.png' | relative_url }})
 
 **RDMA Write Testi (ib_write_bw)**
 
@@ -749,7 +751,7 @@ ib_write_bw -d rocep1s0f1 -F --report_gbits 192.168.0.157
 
 Beklenen sonuç: ~100-111 Gbps.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/37-ib-write-bw-1.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/37-ib-write-bw-1.jpg' | relative_url }})
 
 **Subnet 2 (enP2p1s0f1np1 → roceP2p1s0f1):**
 
@@ -767,7 +769,7 @@ ib_write_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.157
 
 Beklenen sonuç: ~100-111 Gbps.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/38-ib-write-bw-2.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/38-ib-write-bw-2.jpg' | relative_url }})
 
 İki arayüz de ~100 Gbps veriyorsa, her Spark arasında toplam ~200 Gbps RDMA bant genişliği mevcuttur.
 
@@ -790,7 +792,7 @@ ib_read_bw -d rocep1s0f1 -F --report_gbits 192.168.0.157
 ```
 Beklenen sonuç: ~95-110 Gbps.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/39-ib-read-bw-1.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/39-ib-read-bw-1.jpg' | relative_url }})
 
 **Subnet 2 (enP2p1s0f1np1 → roceP2p1s0f1):**
 
@@ -805,7 +807,7 @@ Spark 1 üzerinde (istemci):
 ```bash
 ib_read_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.157
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/40-ib-read-bw-2.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/40-ib-read-bw-2.jpg' | relative_url }})
 
 Beklenen sonuç: ~95-110 Gbps.
 
@@ -823,7 +825,7 @@ Spark 1 üzerinde (istemci):
 ib_write_lat -d rocep1s0f1 192.168.0.157
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/41-ib-write-lat.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/41-ib-write-lat.jpg' | relative_url }})
 
 Beklenen sonuç: ~1-3 microsecond latency.
 
@@ -973,13 +975,13 @@ Eğer sparkrun komutu çalıştırıldıktan sonra kendine bağlanırken authori
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/42-ssh-auth-fix.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/42-ssh-auth-fix.png' | relative_url }})
 
 **Modelin Hazır Olduğunun Doğrulanması**
 
 Model başladığında “Application startup complete.” şeklinde bir mesaj alırsınız, artık model kullanıma hazırdır:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/43-model-startup.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/43-model-startup.jpg' | relative_url }})
 
 **Benchmark Sonuçları**
 
@@ -1030,15 +1032,15 @@ Eğer ağınızda DHCP sunucu yoksa, NAS link-local adresi (169.254.x.x) alır. 
 
 IP adresini öğrendikten sonra tarayıcıdan http://<nas-ip>:8000 adresine gidin. Örneğin: [http://192.168.1.31:8000](http://192.168.1.31:8000)
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/44-nas-login.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/44-nas-login.jpg' | relative_url }})
 
 İlk kurulum ekranında varsayılan kullanıcı adı ve şifre admin / admin'dir. Giriş yaptıktan sonra default olan port yapılandırmasını gösterecektir, değiştirebilir veya default ayarlarla devam edebilirsiniz:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/45-nas-port-config.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/45-nas-port-config.jpg' | relative_url }})
 
 Şifre değiştirmeniz istenirse şifrenizi değiştirin, eğer istenmezse sağ üstte bulunan A isimli simgeye tıklayıp buradan Personal seçeneğini seçerek açılan ekranda şifrenizi değiştirebilirsiniz:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/46-nas-password.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/46-nas-password.jpg' | relative_url }})
 
 **RAID Yapılandırması**
 
@@ -1062,15 +1064,15 @@ Bu dokümanda hızlı olması için ama yedeklikten feragat ederek RAID 0 yapıl
 
 3.  Remove butonuna tıklayın
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/47-raid-volume.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/47-raid-volume.jpg' | relative_url }})
 
 4.  Gelen ekranda Quick Setup seçeneğini seçin
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/48-raid-quick-setup.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/48-raid-quick-setup.jpg' | relative_url }})
 
 5.  Sonraki ekranda RAID 0 seçeneğini seçin
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/49-raid0-select.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/49-raid0-select.jpg' | relative_url }})
 
 6.  Finish butonuna basın
 
@@ -1084,7 +1086,7 @@ NAS'ın iki adet 10Gbps Ethernet portunu tek bir bonding interface altında birl
 
 2.  Add → Create Link Aggregation seçeneğine tıklayın
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/50-link-aggregation.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/50-link-aggregation.jpg' | relative_url }})
 
 3.  Interface alanında LAN 1 ve LAN 2'yi seçin
 
@@ -1092,7 +1094,7 @@ NAS'ın iki adet 10Gbps Ethernet portunu tek bir bonding interface altında birl
 
 5.  Next butonuna basın
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/51-lacp-config.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/51-lacp-config.jpg' | relative_url }})
 
 6.  Set up IP address manually seçeneğini işaretleyin
 
@@ -1106,7 +1108,7 @@ NAS'ın iki adet 10Gbps Ethernet portunu tek bir bonding interface altında birl
 
 8.  Next butonuna basın
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/52-nas-ip-config.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/52-nas-ip-config.jpg' | relative_url }})
 
 9.  Özet ekranını kontrol edin ve Finish butonuna basın
 
@@ -1122,7 +1124,7 @@ Performance tuning script'ini yüklemek için NAS'a SSH ile bağlanmak gereklidi
 
 3.  Apply butonuna basın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/53-ssh-enable.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/53-ssh-enable.jpg' | relative_url }})
 
 Artık NAS'a SSH ile bağlanabilirsiniz:
 
@@ -1142,7 +1144,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
 4.  NFS servisinin tam olarak başlaması için NAS'ı yeniden başlatın
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/image49.png' | relative_url }})
+![]({{ '/papers/dgx-spark-4node-cluster-setup/images/image49.png' | relative_url }})
 
 Önemli: NFS servisini enable yaptıktan sonra NAS'ı yeniden başlatmanız gerekir. Aksi takdirde NFS export eklerken "unknown error (ref. 5052)" hatası alabilirsiniz.
 
@@ -1150,7 +1152,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
 1.  NAS web arayüzünde File Explorer → + (Create New Shared Folder) butonuna tıklayın
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/54-shared-folder.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/54-shared-folder.png' | relative_url }})
 
 2.  Add butonuna tıklayın
 
@@ -1164,7 +1166,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
     2.  Veya default olan Read and Write for admins seçeneğini bırakabilirsiniz
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/55-access-rights.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/55-access-rights.jpg' | relative_url }})
 
 5.  Next butonuna basın
 
@@ -1172,7 +1174,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
     1.  Encrypt this shared folder: İsterseniz seçebilirsiniz, bu dokümanda seçilmemiştir
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/56-protection-measures.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/56-protection-measures.jpg' | relative_url }})
 
 7.  Next → Finish butonuna basın
 
@@ -1184,7 +1186,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
 3.  Access Rights butonuna tıklayın
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/57-nfs-privileges.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/57-nfs-privileges.jpg' | relative_url }})
 
 4.  NFS Privileges sekmesine geçin
 
@@ -1200,7 +1202,7 @@ Kullanıcı adı admin, şifre kurulum sırasında belirlediğiniz şifredir.
 
 7. OK butonuna basın
 
-    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/58-nfs-add.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-4node-cluster-setup/images/58-nfs-add.jpg' | relative_url }})
 
 **Performance Tuning Script**
 
@@ -1383,7 +1385,7 @@ cat /sys/class/net/bond0/bonding/xmit_hash_policy
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
+<img src="{{ '/papers/dgx-spark-4node-cluster-setup/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
 </div>
 <div class="product-card-body">
 <h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>

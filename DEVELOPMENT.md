@@ -95,7 +95,7 @@ Requirements: Ruby 3.3, Bundler, and the headers native gems need
 ├── about.md                       # about
 └── papers/                        # white papers
     ├── index.md
-    ├── yerel-llm-rehberi.md
+    ├── local-llm-guide.md
     ├── qwen3.6-27b-dgx-spark-benchmark.md
     └── qwen3.6-27b-dgx-spark-scaling.md
 ```

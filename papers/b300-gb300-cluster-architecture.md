@@ -3,14 +3,16 @@ title: NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison
 parent: White Papers
 nav_order: 3
 lang: en
-page_id: b300-gb300-cluster-mimarisi
+page_id: b300-gb300-cluster-architecture
 date: 2026-08-03 09:01:15 +0300
 card_tag: "Architecture Comparison"
 description: >-
   Technical comparison of two NVIDIA Blackwell Ultra architectures, DGX B300 and
   GB300 NVL72: system design, scaling approach, network fabric, power and cooling,
   and which workloads suit which platform.
-permalink: /papers/b300-gb300-cluster-mimarisi/
+permalink: /papers/b300-gb300-cluster-architecture/
+redirect_from:
+  - /papers/b300-gb300-cluster-mimarisi/
 last_modified_date: 2026-07-31
 toc: true
 ---
@@ -315,7 +317,7 @@ On the Ethernet side, network telemetry and monitoring can be done via NetQ/Miss
 
 Below is an example DGX B300 cluster topology:
 
-<p><img src="{{ '/papers/b300-gb300-cluster-mimarisi/images/dgx-b300.png' | relative_url }}" alt="Example DGX B300 cluster topology" width="720"/></p>
+<p><img src="{{ '/papers/b300-gb300-cluster-architecture/images/dgx-b300.png' | relative_url }}" alt="Example DGX B300 cluster topology" width="720"/></p>
 <sub><i>Figure 1: Example DGX B300 cluster topology — Compute Fabric (Quantum-X800 IB), In-band/Storage, and OOB networks</i></sub>
 
 In this topology, each DGX B300 node connects to the Compute Fabric via 8 × 800 Gb/s InfiniBand links. Storage and management traffic runs over a separate Ethernet network. The OOB network carries all BMC and switch management traffic.
@@ -402,7 +404,7 @@ The OOB network provides physically separated 1 GbE management access for:
 
 Below is an example GB300 NVL72 cluster topology:
 
-<p><img src="{{ '/papers/b300-gb300-cluster-mimarisi/images/rack.png' | relative_url }}" alt="Example GB300 NVL72 cluster topology" width="720"/></p>
+<p><img src="{{ '/papers/b300-gb300-cluster-architecture/images/rack.png' | relative_url }}" alt="Example GB300 NVL72 cluster topology" width="720"/></p>
 <sub><i>Figure 2: Example GB300 NVL72 cluster topology — GPU Compute Fabric (Spectrum-X), CPU Converged, and OOB networks</i></sub>
 
 In this topology, each NVL72 rack's 18 compute trays connect to each other and to other racks via a dual-plane Spectrum-X Ethernet fabric. The NVLink domain covers 72 GPUs within the rack; inter-rack communication occurs over Ethernet.

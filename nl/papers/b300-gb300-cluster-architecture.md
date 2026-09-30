@@ -3,14 +3,16 @@ title: "NVIDIA DGX B300 vs GB300 NVL72: vergelijking van clusterarchitecturen"
 parent: White Papers
 nav_order: 3
 lang: nl
-page_id: b300-gb300-cluster-mimarisi
+page_id: b300-gb300-cluster-architecture
 date: 2026-08-03 09:01:15 +0300
 card_tag: "Architectuurvergelijking"
 description: >-
   Technische vergelijking van twee NVIDIA Blackwell Ultra-architecturen, DGX B300
   en GB300 NVL72: systeemontwerp, schaalaanpak, netwerkfabric, stroom en koeling,
   en welke workloads bij welk platform passen.
-permalink: /papers/b300-gb300-cluster-mimarisi/
+permalink: /papers/b300-gb300-cluster-architecture/
+redirect_from:
+  - /papers/b300-gb300-cluster-mimarisi/
 last_modified_date: 2026-07-31
 toc: true
 ---
@@ -315,7 +317,7 @@ Aan de Ethernet-zijde kunnen netwerktelemetrie en monitoring via NetQ/Mission Co
 
 Hieronder staat een voorbeeld van een DGX B300-clustertopologie:
 
-<p><img src="{{ '/papers/b300-gb300-cluster-mimarisi/images/dgx-b300.png' | relative_url }}" alt="Voorbeeld van een DGX B300-clustertopologie" width="720"/></p>
+<p><img src="{{ '/papers/b300-gb300-cluster-architecture/images/dgx-b300.png' | relative_url }}" alt="Voorbeeld van een DGX B300-clustertopologie" width="720"/></p>
 <sub><i>Figuur 1: Voorbeeld van een DGX B300-clustertopologie — Compute Fabric (Quantum-X800 IB), In-band/Storage- en OOB-netwerken</i></sub>
 
 In deze topologie is elke DGX B300-node via 8 × 800 Gb/s InfiniBand-links verbonden met de Compute Fabric. Opslag- en beheerverkeer loopt over een apart Ethernet-netwerk. Het OOB-netwerk transporteert al het BMC- en switchbeheerverkeer.
@@ -402,7 +404,7 @@ Het OOB-netwerk biedt fysiek gescheiden 1 GbE-beheertoegang voor:
 
 Hieronder staat een voorbeeld van een GB300 NVL72-clustertopologie:
 
-<p><img src="{{ '/papers/b300-gb300-cluster-mimarisi/images/rack.png' | relative_url }}" alt="Voorbeeld van een GB300 NVL72-clustertopologie" width="720"/></p>
+<p><img src="{{ '/papers/b300-gb300-cluster-architecture/images/rack.png' | relative_url }}" alt="Voorbeeld van een GB300 NVL72-clustertopologie" width="720"/></p>
 <sub><i>Figuur 2: Voorbeeld van een GB300 NVL72-clustertopologie — GPU Compute Fabric (Spectrum-X), CPU Converged- en OOB-netwerken</i></sub>
 
 In deze topologie zijn de 18 compute trays van elk NVL72-rack met elkaar en met andere racks verbonden via een Spectrum-X Ethernet-fabric met twee planes. Het NVLink-domein omvat de 72 GPU's binnen het rack; communicatie tussen racks verloopt via Ethernet.

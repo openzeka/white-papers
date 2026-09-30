@@ -32,7 +32,7 @@ toc: true
 
 ## Yönetici Özeti
 
-- **Bellek bütçesinden başlayın.** [Yerel LLM Kullanım Rehberi]({{ '/papers/yerel-llm-rehberi/' | relative_url }}), donanım boyutlandırmasında VRAM'i temel kısıt olarak ele alır. Conditional memory, hangi model parametrelerinin GPU belleğinde kalması gerektiğini değiştirir.
+- **Bellek bütçesinden başlayın.** [Yerel LLM Kullanım Rehberi]({{ '/papers/local-llm-guide/' | relative_url }}), donanım boyutlandırmasında VRAM'i temel kısıt olarak ele alır. Conditional memory, hangi model parametrelerinin GPU belleğinde kalması gerektiğini değiştirir.
 - **Her token için tüm parametreler okunmaz.** Burada incelenen iki model de dahil olmak üzere bazı yeni modeller, DeepSeek'in **conditional memory** adını verdiği yapıyı kullanır: hash ile adreslenen n-gram embedding'lerinden oluşan büyük arama tabloları. Bu bileşen DeepSeek-V4.1-Flash'ta *Engram*, Qwen3.8-Flash-Next'te *n-gram embedding tablosu* olarak adlandırılır; SGLang ise tabloya PLE der. Her token için yalnızca birkaç kilobayt embedding verisi gerekir ve gerekli satırlar, ileri yayılım başlamadan token ID'lerinden belirlenebilir.
 - **Depolama ihtiyacı ile bellek trafiği farklı şeylerdir.** Büyük tablolardan her token için yalnızca birkaç satır okunur. Küçük aktarımlar ve önceden getirme, düşük ek yükle offloading yapılmasını mümkün kılar. Etkin ağırlık matrislerini veya attention önbelleklerini sürekli taşımak ise çok daha fazla veri aktarımı gerektirir.
 - **Verinin nereye taşınabileceğini cihazın bellek mimarisi belirler.** **DGX Spark**'ta CPU ve GPU aynı birleşik belleği paylaşır; bu nedenle tablo NVMe'de tutulur, sık erişilen sayfalar RAM'deki önbellekte kalır. **RTX PRO 6000**'in ayrı GPU belleği vardır; tablo, PCIe üzerinden erişilen sabitlenmiş sistem RAM'ine taşınır. **DGX B300** üzerindeki dört GPU'lu DeepSeek yapılandırmasında ise tabloları da tutacak kadar GPU belleği bulunur.
@@ -44,7 +44,7 @@ toc: true
 
 ## 1. Giriş
 
-[Yerel LLM Kullanım Rehberi]({{ '/papers/yerel-llm-rehberi/' | relative_url }}), donanım boyutlandırmasına GPU belleğinden başlar: model ağırlıkları, KV cache, tekrarlayan durum ve çalışma zamanı arabellekleri belleğe sığmalıdır. Conditional memory bu bütçeye yararlı bir ayrım ekler. Öğrenilmiş parametrelerin bir bölümü, her token için yalnızca birkaç satırın okunduğu büyük tablolarda tutulur. Bu tabloları GPU belleği dışında saklamak, daha önce sığmayan bir modeli aynı cihazda kullanılabilir hale getirebilir.
+[Yerel LLM Kullanım Rehberi]({{ '/papers/local-llm-guide/' | relative_url }}), donanım boyutlandırmasına GPU belleğinden başlar: model ağırlıkları, KV cache, tekrarlayan durum ve çalışma zamanı arabellekleri belleğe sığmalıdır. Conditional memory bu bütçeye yararlı bir ayrım ekler. Öğrenilmiş parametrelerin bir bölümü, her token için yalnızca birkaç satırın okunduğu büyük tablolarda tutulur. Bu tabloları GPU belleği dışında saklamak, daha önce sığmayan bir modeli aynı cihazda kullanılabilir hale getirebilir.
 
 Bu çalışma söz konusu ayrımı **mimariden dağıtıma** kadar izler: attention, uzman ve embedding bileşenlerinin erişim biçimleri neden farklıdır, bu farklar offloading'i nasıl etkiler ve OpenZeka'nın DGX Spark ile RTX PRO 6000 üzerindeki DeepSeek-V4.1-Flash ve Qwen3.8-Flash-Next ölçümleri ne gösterir? Donanım bölümünde DGX B300, CPU ve GPU belleği ayrı olan bir sistem örneği olarak ele alınır.
 
@@ -450,7 +450,7 @@ Kaçınılması gereken bir boyutlandırma hatası, her offloading yöntemini ay
 
 **OpenZeka raporları ve araçları:**
 
-- [Yerel LLM Kullanım Rehberi]({{ '/papers/yerel-llm-rehberi/' | relative_url }})
+- [Yerel LLM Kullanım Rehberi]({{ '/papers/local-llm-guide/' | relative_url }})
 - [DeepSeek-V4.1-Flash 4× DGX Spark Dağıtımı]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/' | relative_url }})
 - [DeepSeek-V4.1-Flash 8× DGX Spark TP8 Dağıtımı]({{ '/papers/deepseek-v4.1-flash-8spark-deployment/' | relative_url }})
 - [LLM Çıkarım Benchmark Gezgini]({{ '/llm-inference-benchmarks/' | relative_url }})

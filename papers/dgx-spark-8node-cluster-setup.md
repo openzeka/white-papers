@@ -1,15 +1,18 @@
 ---
-title: DGX Spark 4-Node AI Cluster Setup Guide
+title: DGX Spark 8-Node AI Cluster Setup Guide
 parent: White Papers
-nav_order: 6
+nav_order: 7
 lang: en
-page_id: dgx-spark-4node-cluster-kurulumu
-date: 2026-07-24 14:01:16 +0300
+page_id: dgx-spark-8node-cluster-setup
+date: 2026-07-24 14:01:17 +0300
 card_tag: "Cluster Setup"
 description: >-
-  Switch-based AI cluster setup with 4 NVIDIA DGX Spark nodes over a MikroTik
-  CRS812: management and compute networks, RoCEv2/RDMA, sparkrun and NAS.
-permalink: /papers/dgx-spark-4node-cluster-kurulumu/
+  Switch-based AI cluster setup with 8 NVIDIA DGX Spark nodes over a MikroTik
+  CRS804 with 200G breakout: management and compute networks, RoCEv2/RDMA,
+  sparkrun and NAS.
+permalink: /papers/dgx-spark-8node-cluster-setup/
+redirect_from:
+  - /papers/dgx-spark-8node-cluster-kurulumu/
 last_modified_date: 2026-09-30
 toc: true
 ---
@@ -25,7 +28,7 @@ toc: true
 - [Compute Network (200GbE QSFP) Physical Connection](#compute-network-200gbe-qsfp-physical-connection)
 - [CRS312 MikroTik Switch Configuration](#crs312-mikrotik-switch-configuration)
   - [Bonding NAS Ports](#bonding-nas-ports)
-- [CRS812 MikroTik Switch Configuration](#crs812-mikrotik-switch-configuration)
+- [CRS804 MikroTik Switch Configuration](#crs804-mikrotik-switch-configuration)
   - [Switch Preparation](#switch-preparation)
   - [Pre-installation Inventory and Backup](#pre-installation-inventory-and-backup)
   - [QSFP-DD Port 2×200G Breakout Configuration](#qsfp-dd-port-2200g-breakout-configuration)
@@ -45,28 +48,26 @@ toc: true
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
+<img src="{{ '/papers/dgx-spark-8node-cluster-setup/images/spark-8-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark 8-Node AI Cluster" />
 </div>
 <div class="product-card-body">
-<h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
-<p>4 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-{% include company/product-button.html product="dgx-spark-4-node" %}
+<h3>NVIDIA DGX Spark 8-Node AI Cluster – 8 Node, 1 TB, 200GbE</h3>
+<p>8 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
+{% include company/product-button.html product="dgx-spark-8-node" %}
 </div>
 </div>
 
-This document describes the end-to-end installation and configuration steps for a switch-based AI cluster consisting of 4 NVIDIA DGX Spark nodes. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
+This document describes the end-to-end installation and configuration steps for a switch-based AI cluster consisting of 8 NVIDIA DGX Spark nodes. The cluster uses the **sparkrun** toolkit to manage distributed AI workloads and model execution.
 
 The document covers the preparation of management and compute networks, ConnectX-7/QSFP port configuration, RoCEv2/RDMA settings, SSH access, NCCL communication validation, and cluster health check steps.
-
-
 
 ## Architecture Overview
 
 | **Component** | **Description** |
 | --- | --- |
-| **DGX Spark × 4** | Each has a ConnectX-7 200GbE QSFP56 port |
+| **DGX Spark × 8** | Each has a ConnectX-7 200GbE QSFP56 port |
 | **MikroTik CRS312** | 10GbE management network switch; also includes NAS bonding ports |
-| **MikroTik CRS812** | 400G QSFP-DD compute network switch; provides 4×200G via breakout |
+| **MikroTik CRS804** | 400G QSFP-DD compute network switch; provides 8×200G via breakout |
 | **ASUSTOR AS6808T** | 8-disk NAS; connected to CRS312 via 2×10Gbps LACP |
 | **sparkrun** | Cluster management, SSH mesh, and CX7 configuration toolkit |
 
@@ -74,15 +75,15 @@ The document covers the preparation of management and compute networks, ConnectX
 
 **Hardware**
 
-- 4× NVIDIA DGX Spark systems
+- 8× NVIDIA DGX Spark systems
 
 - 1× MikroTik CRS312-4C+8XS switch (management network)
 
-- 1× MikroTik CRS812 switch (compute network)
+- 1× MikroTik CRS804 switch (compute network)
 
 - 1× ASUSTOR AS6808T NAS (8× HDD)
 
-- 2× QSFP-DD → 2× QSFP56 passive breakout cable (compute network)
+- 4× QSFP-DD → 2× QSFP56 passive breakout cable (compute network)
 
 - Cat6 cables (management network and NAS connections)
 
@@ -110,7 +111,7 @@ For DGX Spark OS installation, you can use the following video:
 
 Before proceeding to physical connections and network configurations, ensure that all Spark systems are running the latest software and firmware versions. A significant portion of the performance issues encountered during installation can be caused by outdated drivers, missing updates, or firmware incompatibilities.
 
-The following steps must be applied on all four Spark systems.
+The following steps must be applied on all eight Spark systems.
 
 ### **System and Firmware Updates**
 
@@ -120,21 +121,24 @@ First, the operating system packages are updated:
 sudo apt update
 sudo apt dist-upgrade
 ```
+
 Next, the system firmware is updated:
 
 ```bash
 sudo fwupdmgr refresh --force
 sudo fwupdmgr upgrade
 ```
+
 Via the DGX Dashboard, verify that there are no pending updates; if any exist, apply them:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/01-dgx-dashboard.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/01-dgx-dashboard.jpg' | relative_url }})
 
 After the updates are complete, reboot the system:
 
 ```bash
 sudo reboot
 ```
+
 During testing performed in the installation process, it was observed that connection performance did not reach the expected level due to outdated firmware versions. For this reason, updating all systems is recommended as the first step of the installation.
 
 ### **Docker Configuration**
@@ -148,16 +152,18 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 newgrp docker
 ```
+
 The configuration can be verified with the following test:
 
 ```bash
 docker run hello-world
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/02-docker-hello.jpg' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/02-docker-hello.jpg' | relative_url }})
 
 The successful execution of the command and Docker's ability to launch the sample container indicate that the necessary preparation for the container-based tools to be used in the subsequent steps has been completed.
 
-**Storage Driver Check**
+**Storage Driver Verification**
 
 Additionally, the Docker storage driver was checked on all Spark nodes. The Storage Driver value in the docker info output was verified to be overlayfs. If overlay2 or a different storage driver was detected, Docker was configured to use the containerd snapshotter (overlayfs), and the Docker service was restarted. This ensured a consistent runtime environment by using the same storage infrastructure across all nodes.
 
@@ -166,6 +172,7 @@ First, the current storage driver was checked with the following command:
 ```bash
 docker info -f 'Driver={{.Driver}} DriverStatus={{.DriverStatus}} DockerRootDir={{.DockerRootDir}}'
 ```
+
 If the output showed the driver as overlay2, the following configuration was applied:
 
 ```bash
@@ -179,9 +186,11 @@ EOF
 
 sudo systemctl restart docker
 ```
+
 After configuration, the same check command was run again, and the storage driver was verified to be overlayfs.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/03-docker-storage.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/03-docker-storage.png' | relative_url }})
+
 ## Management Network (10GbE) Connection
 
 The 10GbE Ethernet port of each DGX Spark is connected to one of the MikroTik CRS312 switch's 10G ports using a Cat6 cable. After plugging in the cable, verify that the link indicator on the relevant switch port is lit.
@@ -192,7 +201,7 @@ Open a terminal on the Spark desktop and check whether the device has obtained a
 ip addr show
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/04-ip-addr.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/04-ip-addr.jpg' | relative_url }})
 
 If you see an IP address on the 10GbE interface in the output, as in the example, SSH access can be established over the management network. If no IP address has been obtained, it can be assigned manually through the DGX OS desktop:
 
@@ -204,9 +213,9 @@ If you see an IP address on the 10GbE interface in the output, as in the example
 
 4.  Change the Method field to Manual
 
-5. Enter the following information:
+5.  Enter the following information:
 
-   - Address: 192.168.1.162 (different for each Spark and according to your own network— .163, .164, .165)
+    - Address: 192.168.1.x (different for each Spark and according to your own network)
 
 
    - Netmask: 255.255.255.0
@@ -220,49 +229,46 @@ If you see an IP address on the 10GbE interface in the output, as in the example
 
 6.  Press the Apply button and toggle the connection off and back on
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/05-wired-settings.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/05-wired-settings.jpg' | relative_url }})
 
-If there is internet access, the 10GbE management connection is ready. Repeat the same steps on the other three Sparks and assign each a different IP address.
+If there is internet access, the 10GbE management connection is ready. Repeat the same steps on the other seven Sparks and assign each a different IP address.
 
-**Inter-node Access Check**
+**Inter-node Access Control**
 
 Verify that all Sparks can see each other over the management network. Ping the others from one Spark:
 
 ```bash
-ping -c 4 192.168.1.157
-ping -c 4 192.168.1.158
-ping -c 4 192.168.1.161
+ping -c 4 192.168.1.x #Other Sparks' addresses
 ```
+
 If all pings are successful, the management network is ready and all nodes can communicate with each other.
 
 ## Compute Network (200GbE QSFP) Physical Connection
 
-In the DGX Spark Quad AI Cluster, each Spark is connected to the MikroTik CRS812 switch at 200GbE speed via the ConnectX-7 QSFP port. The CRS812's 400G QSFP-DD ports are split into two 200G connections each using passive breakout cables.
+In the DGX Spark 8-Node AI Cluster, each Spark is connected to the MikroTik CRS804 switch at 200GbE speed via the ConnectX-7 QSFP port. The CRS804's 400G QSFP-DD ports are split into two 200G connections each using passive breakout cables.
 
 **Cable Plan**
 
-| **CRS812 Port** | **Port Speed** | **Breakout**    | **Connected Spark** |
+| **CRS804 Port** | **Port Speed** | **Breakout**    | **Connected Spark** |
 | --------------- | -------------- | --------------- | ------------------- |
 | QSFP-DD Port 1  | 400G           | 2 × 200G QSFP56 | Spark 1 + Spark 2   |
 | QSFP-DD Port 2  | 400G           | 2 × 200G QSFP56 | Spark 3 + Spark 4   |
+| QSFP-DD Port 3  | 400G           | 2 × 200G QSFP56 | Spark 5 + Spark 6   |
+| QSFP-DD Port 4  | 400G           | 2 × 200G QSFP56 | Spark 7 + Spark 8   |
 
 **Connection Steps**
 
-1.  Plug the QSFP-DD end of the first breakout cable into the CRS812's QSFP-DD port number 1. Ensure the locking levers on both ends of the cable are fully seated.
+1.  Plug the QSFP-DD end of the first breakout cable into the CRS804's QSFP-DD port number 1. Ensure the locking levers on both ends of the cable are fully seated.
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/06-breakout-cable.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/06-breakout-cable.jpg' | relative_url }})
 
 2.  Plug the two QSFP56 ends of the same cable into the outermost ConnectX-7 ports of the Spark 1 and Spark 2 systems.
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/07-connectx7-ports.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/07-connectx7-ports.jpg' | relative_url }})
 
-3.  Plug the QSFP-DD end of the second breakout cable into the CRS812's QSFP-DD port number 2.
+3.  Plug the other 3 cables in the same way to connect the switch and the Sparks.
 
-4.  Plug the two QSFP56 ends of this cable into the ConnectX-7 ports of the Spark 3 and Spark 4 systems.
-
-5.  Verify that all connections are physically seated and the levers are locked.
-
-6.  Power on the CRS812 switch.
+4.  Power on the CRS804 switch.
 
 ## CRS312 MikroTik Switch Configuration
 
@@ -276,13 +282,13 @@ When the switch is powered on, the default IP address is 192.168.88.1/24. You ca
 
 4.  The username is admin, and the password is the one on the label under the device. Log in with these credentials:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/08-crs312-login.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/08-crs312-login.png' | relative_url }})
 
 **Management IP Assignment**
 
 After logging in, a screen will appear asking you to change your password. After changing the password here, you can assign the management IP address on the screen that opens. Here, 192.168.1.122/24 is given as an example; enter the appropriate gateway and DNS server addresses according to your network settings and press the “Apply Configuration” button:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/09-crs312-mgmt-ip.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/09-crs312-mgmt-ip.jpg' | relative_url }})
 
 Applying this setting will disconnect your session. Therefore, change your computer's IP address to an address in the 192.168.1.0/24 network again, and access the switch interface by entering 192.168.1.122 in your browser.
 
@@ -290,7 +296,7 @@ Applying this setting will disconnect your session. Therefore, change your compu
 
 At this stage, first check whether the RouterOS software is up to date. To check this, go to the System - Packages - Check for Updates page, press the “Check for Updates” button, and apply the update if one is available:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/10-crs312-update.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/10-crs312-update.jpg' | relative_url }})
 
 ### Bonding NAS Ports
 
@@ -304,7 +310,7 @@ By bonding both 10Gbps ports of the NAS device in use and connecting them to the
 
 3.  Select each one and click the Remove (−) button
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/11-bridge-ports.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/11-bridge-ports.jpg' | relative_url }})
 
 **Creating Bonding**
 
@@ -324,9 +330,9 @@ By bonding both 10Gbps ports of the NAS device in use and connecting them to the
 
 4.  Press the Apply and OK buttons
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/12-bonding-config.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/12-bonding-config.jpg' | relative_url }})
 
-**Adding the Bond to Bridge**
+**Adding Bond to Bridge**
 
 Finally, the created bond is added to the bridge:
 
@@ -338,15 +344,15 @@ Finally, the created bond is added to the bridge:
 
 4.  Press the Apply and OK buttons
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/13-bond-bridge.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/13-bond-bridge.jpg' | relative_url }})
 
-## CRS812 MikroTik Switch Configuration
+## CRS804 MikroTik Switch Configuration
 
 ### Switch Preparation:
 
 When the switch is powered on, the default IP address is 192.168.88.1/24. You can access this address from the MGMT-1 port:
 
-1.  Connect the CRS812's MGMT-1 port to your computer.
+1.  Connect the CRS804's MGMT-1 port to your computer.
 
 2.  Assign the static IP address 192.168.88.2/24 to your computer's Ethernet interface.
 
@@ -354,13 +360,13 @@ When the switch is powered on, the default IP address is 192.168.88.1/24. You ca
 
 4.  The username is admin, and the password is the one on the label under the device. Log in with these credentials:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/14-crs812-login.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/14-crs812-login.png' | relative_url }})
 
 **Management IP Assignment**
 
 After logging in, a screen will appear asking you to change your password. After changing the password here, you can assign the management IP address on the screen that opens. Here, 192.168.1.155/24 is given as an example; enter the appropriate gateway and DNS server addresses according to your network settings and press the “Apply Configuration” button:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/15-crs812-mgmt-ip.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/15-crs812-mgmt-ip.jpg' | relative_url }})
 
 Applying this setting will disconnect your session. Therefore, change your computer's IP address to an address in the 192.168.1.0/24 network again, and access the switch interface by entering 192.168.1.155 in your browser.
 
@@ -368,7 +374,7 @@ Applying this setting will disconnect your session. Therefore, change your compu
 
 At this stage, the first thing to do is to ensure that the RouterOS software is on the latest version. To check this, go to the System - Packages - Check for Updates page, press the “Check for Updates” button, and apply the update if one is available:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/16-crs812-update.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/16-crs812-update.jpg' | relative_url }})
 
 ### Pre-installation Inventory and Backup
 
@@ -377,6 +383,7 @@ Connect to the switch interface via SSH over the management IP. All configuratio
 ```bash
 ssh admin@192.168.1.155
 ```
+
 Back up the current config before starting the RoCEv2 configuration:
 
 ```bash
@@ -384,11 +391,12 @@ Back up the current config before starting the RoCEv2 configuration:
 /system/backup/save name=before-roce
 /file/print
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/17-config-backup.png' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/17-config-backup.png' | relative_url }})
 
 ### QSFP-DD Port 2×200G Breakout Configuration
 
-Each of the CRS812's two QSFP-DD physical ports is 400G by default. Each 400G port is split into two 200G connections using a passive breakout cable. The QSFP-DD ports have 8 sub-interfaces; in 2×200G mode, the 200G main interfaces are -1 and -5. The other sub-interfaces (-2, -3, -4, -6, -7, -8) are not shut down, they remain active but do not require configuration.
+Each of the CRS804's four QSFP-DD physical ports is 400G by default. Each 400G port is split into two 200G connections using a passive breakout cable. The QSFP-DD ports have 8 sub-interfaces; in 2×200G mode, the 200G main interfaces are -1 and -5. The other sub-interfaces (-2, -3, -4, -6, -7, -8) are not shut down, they remain active but do not require configuration.
 
 After plugging in the breakout cables, configure each 200G main interface with forced speed and auto-negotiation disabled:
 
@@ -398,8 +406,13 @@ set qsfp56-dd-1-1 auto-negotiation=no speed=200G-baseCR4
 set qsfp56-dd-1-5 auto-negotiation=no speed=200G-baseCR4
 set qsfp56-dd-2-1 auto-negotiation=no speed=200G-baseCR4
 set qsfp56-dd-2-5 auto-negotiation=no speed=200G-baseCR4
+set qsfp56-dd-3-1 auto-negotiation=no speed=200G-baseCR4
+set qsfp56-dd-3-5 auto-negotiation=no speed=200G-baseCR4
+set qsfp56-dd-4-1 auto-negotiation=no speed=200G-baseCR4
+set qsfp56-dd-4-5 auto-negotiation=no speed=200G-baseCR4
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/18-qsfp-breakout.png' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/18-qsfp-breakout.png' | relative_url }})
 
 ### Jumbo Frame and MTU Configuration
 
@@ -411,8 +424,13 @@ set qsfp56-dd-1-1 l2mtu=9500 mtu=9000
 set qsfp56-dd-1-5 l2mtu=9500 mtu=9000
 set qsfp56-dd-2-1 l2mtu=9500 mtu=9000
 set qsfp56-dd-2-5 l2mtu=9500 mtu=9000
+set qsfp56-dd-3-1 l2mtu=9500 mtu=9000
+set qsfp56-dd-3-5 l2mtu=9500 mtu=9000
+set qsfp56-dd-4-1 l2mtu=9500 mtu=9000
+set qsfp56-dd-4-5 l2mtu=9500 mtu=9000
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/19-mtu-config.png' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/19-mtu-config.png' | relative_url }})
 
 ### RoCEv2 Traffic Classification
 
@@ -423,9 +441,10 @@ set qsfp56-dd-2-5 l2mtu=9500 mtu=9000
 add name=roce dscp=26 traffic-class=3
 add name=cnp dscp=48 traffic-class=6
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/20-qos-profiles.png' | relative_url }})
 
-**Tx Queue, ETS, ECN and CNP Priority**
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/20-qos-profiles.png' | relative_url }})
+
+**Tx Queue, ETS, ECN, and CNP Priority**
 
 ```bash
 /interface/ethernet/switch/qos/tx-manager/queue
@@ -433,9 +452,10 @@ set 1 schedule=high-priority-group weight=1
 set 3 schedule=high-priority-group weight=1 ecn=yes
 set 6 schedule=strict-priority
 ```
+
 TC1 and TC3 run in the ETS group with equal weight (1:1); ECN marking is enabled on TC3; CNP control packets are prioritized with TC6 strict priority. If TC1 is idle, TC3 can use the entire port — this command does not create a permanent 100G/100G rate-limit.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/21-tx-queue.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/21-tx-queue.png' | relative_url }})
 
 **PFC Profile**
 
@@ -443,11 +463,12 @@ TC1 and TC3 run in the ETS group with equal weight (1:1); ECN marking is enabled
 /interface/ethernet/switch/qos/priority-flow-control
 add name=pfc-tc3 traffic-class=3 rx=yes tx=yes
 ```
+
 Creates a bidirectional Priority-based Flow Control profile for TC3. tx=yes allows the switch to send XOFF/XON frames to the neighbor for TC3; rx=yes allows it to honor TC3 PFC frames received from the neighbor.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/22-pfc-profile.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/22-pfc-profile.png' | relative_url }})
 
-**Trust, PFC and Queue Rate Reference for Spark Ports**
+**Trust, PFC, and Queue Rate Reference for Spark Ports**
 
 ```bash
 /interface/ethernet/switch/qos/port
@@ -455,8 +476,13 @@ set qsfp56-dd-1-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 set qsfp56-dd-1-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 set qsfp56-dd-2-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 set qsfp56-dd-2-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
+set qsfp56-dd-3-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
+set qsfp56-dd-3-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
+set qsfp56-dd-4-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
+set qsfp56-dd-4-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/23-trust-pfc.png' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/23-trust-pfc.png' | relative_url }})
 
 **Lossless Traffic Class and Buffer Pool**
 
@@ -464,7 +490,8 @@ set qsfp56-dd-2-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 /interface/ethernet/switch/qos/settings
 set lossless-traffic-class=3 lossless-buffers=auto
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/24-lossless.png' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/24-lossless.png' | relative_url }})
 
 **QoS hardware offload**
 
@@ -472,7 +499,8 @@ set lossless-traffic-class=3 lossless-buffers=auto
 /interface/ethernet/switch
 set switch1 qos-hw-offloading=yes
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/25-qos-hw-offload.png' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/25-qos-hw-offload.png' | relative_url }})
 
 **LLDP DCBX Advertisement**
 
@@ -481,7 +509,8 @@ set switch1 qos-hw-offloading=yes
 set lldp-dcbx=yes
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/26-lldp-dcbx.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/26-lldp-dcbx.png' | relative_url }})
+
 ## Installing sparkrun on Spark Nodes
 
 ### User and SSH Configuration
@@ -504,11 +533,23 @@ sudo hostnamectl set-hostname spark3
 
 # On Spark 4:
 sudo hostnamectl set-hostname spark4
+
+# On Spark 5:
+sudo hostnamectl set-hostname spark5
+
+# On Spark 6:
+sudo hostnamectl set-hostname spark6
+
+# On Spark 7:
+sudo hostnamectl set-hostname spark7
+
+# On Spark 8:
+sudo hostnamectl set-hostname spark8
 ```
 
 **Creating Common User**
 
-The same username must be created on all Spark systems. This document will use the nvidia username. The following commands are run on all four Spark systems:
+The same username must be created on all Spark systems. This document will use the nvidia username. The following commands are run on all eight Spark systems:
 
 ```bash
 sudo useradd -m nvidia
@@ -526,7 +567,8 @@ sparkrun runs commands with sudo during CX7 network configuration. To avoid prom
 echo "nvidia ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/nvidia
 sudo chmod 440 /etc/sudoers.d/nvidia
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/27-passwordless-sudo.png' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/27-passwordless-sudo.png' | relative_url }})
 
 ### sparkrun Installation
 
@@ -559,11 +601,11 @@ Appropriate answers are given to the questions asked during installation:
 
 4.  Y is selected for MESH setup
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/28-sparkrun-wizard.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/28-sparkrun-wizard.jpg' | relative_url }})
 
-5.  Answer Y to the Configure CX7 networking? question; here it asks for the original user password, not nvidia's:
+5.  Answer Y to the Configure CX7 networking? question:
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/29-cx7-password.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/29-cx7-password.png' | relative_url }})
 
 6.  Select Y for the Add 'nvidia' to the docker group on all hosts? question
 
@@ -573,17 +615,17 @@ Appropriate answers are given to the questions asked during installation:
 
 9.  When the Setup complete message appears, the installation has been completed successfully
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/30-sparkrun-complete.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/30-sparkrun-complete.png' | relative_url }})
 
 ### DCB (Data Center Bridging) Configuration
 
 PFC and ECN were configured on the switch side, but DSCP tagging and PFC must also be enabled for the ConnectX-7 interfaces on the Spark side. This step is not performed by sparkrun — it must be applied manually on each Spark.
 
-**Detecting Active CX7 Interfaces**
+**Identifying Active CX7 Interfaces**
 
 Detect the active CX7 interfaces on each Spark:
 
-```bash
+```
 ip link show | grep -E 'enp.*np|enP.*np'
 ```
 
@@ -593,7 +635,7 @@ Interfaces with MTU 9000 and UP,LOWER_UP status are the active ones. In this doc
 
 - enP2p1s0f1np1 — Subnet 2
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/31-cx7-interfaces.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/31-cx7-interfaces.png' | relative_url }})
 
 **DSCP → Traffic Class Mapping**
 
@@ -617,7 +659,7 @@ sudo dcb pfc set dev enP2p1s0f1np1 prio-pfc 3:on
 
 prio-pfc 3:on — send and receive PFC frames only for priority 3. Other priorities are not affected.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/32-pfc-enable.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/32-pfc-enable.png' | relative_url }})
 
 **Persistence (systemd Service)**
 
@@ -647,21 +689,21 @@ sudo systemctl daemon-reload
 sudo systemctl enable dcb-roce.service
 sudo systemctl start dcb-roce.service
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/33-dcb-roce-service.jpg' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/33-dcb-roce-service.jpg' | relative_url }})
+
 ## Speed and RDMA Tests
 
-In this step, we will verify that the compute network is working correctly and that RDMA communication over RoCEv2 performs as expected. The tests are performed between two Sparks; for 4 nodes, cross tests can be repeated similarly.
+In this step, we will verify that the compute network is working correctly and that RDMA communication over RoCEv2 performs as expected. The tests are performed between two Sparks; for 8 nodes, cross tests can be repeated similarly.
 
 **IP Assignment Reference**
 
-The IP addresses assigned to the CX7 interfaces by the sparkrun wizard are as shown below; in your scenario, you should use your own addresses instead of these:
+The IP addresses assigned to the CX7 interfaces by the sparkrun wizard for the first two Sparks are as shown below; in your scenario, you should use your own addresses instead of these:
 
 | **Spark** | **Management (enP7s7)** | **CX7 Subnet 1 (enp1s0f1np1)** | **CX7 Subnet 2 (enP2p1s0f1np1)** |
 | --- | --- | --- | --- |
-| Spark 1 | 192.168.1.162 | 192.168.0.162 | 192.168.2.162 |
-| Spark 2 | 192.168.1.157 | 192.168.0.157 | 192.168.2.157 |
-| Spark 3 | 192.168.1.158 | 192.168.0.158 | 192.168.2.158 |
-| Spark 4 | 192.168.1.161 | 192.168.0.161 | 192.168.2.161 |
+| Spark 1 | 192.168.1.147 | 192.168.0.147 | 192.168.2.147 |
+| Spark 2 | 192.168.1.153 | 192.168.0.153 | 192.168.2.153 |
 
 Two CX7 subnets are used for the tests:
 
@@ -675,8 +717,8 @@ Test connectivity and jumbo frames from Spark 1 to Spark 2 with ping:
 
 ```bash
 # On Spark 1:
-ping -c 4 192.168.0.157
-ping -M do -s 8972 -c 4 192.168.0.157
+ping -c 4 192.168.0.153
+ping -M do -s 8972 -c 4 192.168.0.153
 ```
 
 The first ping tests normal connectivity, the second ping tests 9000 byte MTU. -M do prevents fragmentation — if packets don't drop, MTU 9000 is working end-to-end.
@@ -684,11 +726,11 @@ The first ping tests normal connectivity, the second ping tests 9000 byte MTU. -
 Repeat for the second subnet:
 
 ```bash
-ping -c 4 192.168.2.157
-ping -M do -s 8972 -c 4 192.168.2.157
+ping -c 4 192.168.2.153
+ping -M do -s 8972 -c 4 192.168.2.153
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/34-ping-mtu.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/34-ping-mtu.jpg' | relative_url }})
 
 **TCP Throughput Test (iperf3)**
 
@@ -699,7 +741,7 @@ Measure the base bandwidth over the Ethernet/IP layer. This test is not RDMA —
 iperf3 -s
 
 # On Spark 1 (client):
-iperf3 -c 192.168.0.157 -P 8 -t 30
+iperf3 -c 192.168.0.153 -P 8 -t 30
 ```
 
 -P 8 means eight parallel flows, -t 30 means thirty seconds test duration. Expected result: ~100-120 Gbps total throughput.
@@ -709,7 +751,8 @@ Note: if iperf3 is not installed, install it:
 ```bash
 sudo apt install iperf3
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/35-iperf3.jpg' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/35-iperf3.jpg' | relative_url }})
 
 **Identifying RDMA Devices**
 
@@ -725,7 +768,7 @@ rocep1s0f1 port 1 ==> enp1s0f1np1 (Up)
 
 roceP2p1s0f1 port 1 ==> enP2p1s0f1np1 (Up)
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/36-ibdev2netdev.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/36-ibdev2netdev.png' | relative_url }})
 
 **RDMA Write Test (ib_write_bw)**
 
@@ -742,12 +785,12 @@ ib_write_bw -d rocep1s0f1 -F --report_gbits
 On Spark 1 (client):
 
 ```bash
-ib_write_bw -d rocep1s0f1 -F --report_gbits 192.168.0.157
+ib_write_bw -d rocep1s0f1 -F --report_gbits 192.168.0.153
 ```
 
 Expected result: ~100-111 Gbps.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/37-ib-write-bw-1.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/37-ib-write-bw-1.jpg' | relative_url }})
 
 **Subnet 2 (enP2p1s0f1np1 → roceP2p1s0f1):**
 
@@ -760,12 +803,12 @@ ib_write_bw -d roceP2p1s0f1 -F --report_gbits
 On Spark 1 (client):
 
 ```bash
-ib_write_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.157
+ib_write_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.153
 ```
 
 Expected result: ~100-111 Gbps.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/38-ib-write-bw-2.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/38-ib-write-bw-2.jpg' | relative_url }})
 
 If both interfaces provide ~100 Gbps, a total ~200 Gbps RDMA bandwidth is available between each Spark.
 
@@ -784,11 +827,12 @@ ib_read_bw -d rocep1s0f1 -F --report_gbits
 On Spark 1 (client):
 
 ```bash
-ib_read_bw -d rocep1s0f1 -F --report_gbits 192.168.0.157
+ib_read_bw -d rocep1s0f1 -F --report_gbits 192.168.0.153
 ```
+
 Expected result: ~95-110 Gbps.
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/39-ib-read-bw-1.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/39-ib-read-bw-1.jpg' | relative_url }})
 
 **Subnet 2 (enP2p1s0f1np1 → roceP2p1s0f1):**
 
@@ -801,9 +845,10 @@ ib_read_bw -d roceP2p1s0f1 -F --report_gbits
 On Spark 1 (client):
 
 ```bash
-ib_read_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.157
+ib_read_bw -d roceP2p1s0f1 -F --report_gbits 192.168.2.153
 ```
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/40-ib-read-bw-2.jpg' | relative_url }})
+
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/40-ib-read-bw-2.jpg' | relative_url }})
 
 Expected result: ~95-110 Gbps.
 
@@ -818,10 +863,10 @@ ib_write_lat -d rocep1s0f1
 On Spark 1 (client):
 
 ```bash
-ib_write_lat -d rocep1s0f1 192.168.0.157
+ib_write_lat -d rocep1s0f1 192.168.0.153
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/41-ib-write-lat.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/41-ib-write-lat.jpg' | relative_url }})
 
 Expected result: ~1-3 microsecond latency.
 
@@ -831,7 +876,7 @@ In this step, we will verify that the cluster works end-to-end by running a mult
 
 **Model and Recipe**
 
-The glm-5.2-int4 model is used in this test. The model runs with tensor parallelism across 4 nodes. The custom container image and recipe YAML file for this model have been prepared by OpenZeka.
+The glm-5.2-nvfp4 model is used in this test. The model runs with tensor parallelism across 8 nodes. The custom container image and recipe YAML file for this model have been prepared by OpenZeka.
 
 First, download the container image using the following command:
 
@@ -839,56 +884,58 @@ First, download the container image using the following command:
 docker pull registry.cordata.ai/spark-cluster/vllm-zatz-dcp:probe
 ```
 
-After the image has been downloaded, the inference workload can be executed with sparkrun using the provided recipe YAML file.
+Then retag it:
+
+```bash
+docker tag registry.cordata.ai/spark-cluster/vllm-zatz-dcp:probe vllm-zatz-dcp:probe
+```
+
+After the image has been set up, the inference workload can be executed with sparkrun using the provided recipe YAML file.
 
 **Running the Model**
 
 Below is the command and yaml file content for the model to be run as an example:
 
 ```bash
-sparkrun run glm52-qt-dcp4-4spark.yaml
+sparkrun run glm52-nvfp4-tp8-256k.yaml
 ```
 
 The content of the executed yaml file is as follows:
 
 ```bash
-model: QuantTrio/GLM-5.2-Int4-Int8Mix
-runtime: vllm-distributed
+model: nvidia/GLM-5.2-NVFP4
+runtime: vllm-ray
 container: vllm-zatz-dcp:probe
 
-min_nodes: 4
-max_nodes: 4
+min_nodes: 8
+max_nodes: 8
 
 metadata:
-  description: GLM-5.2 Int4-Int8Mix TP4 DCP4 128K MTP k=4 cudagraph FULL (Xanu dcp4-cc128 lane - 5 agents)
+  description: nvidia/GLM-5.2-NVFP4 TP8 + Expert-Parallel (resmi config) 8x DGX Spark, B12X_MLA_SPARSE, cudagraph NONE
   maintainer: local
-  model_params: 744B-MoE-40B-active
-  model_dtype: int4-int8mix
-  lane: dcp4-cc128
+  model_dtype: nvfp4
 
+# --- Variables defined here in ONE place; used with curly braces in command ---
 defaults:
   port: 8210
   host: 0.0.0.0
-  tensor_parallel: 4
+  tensor_parallel: 8
   pipeline_parallel: 1
-  decode_context_parallel: 4
-  gpu_memory_utilization: 0.885
-  max_model_len: 131072
-  max_num_seqs: 5
-  max_num_batched_tokens: 2048
+  gpu_memory_utilization: 0.75
+  max_model_len: 256000
+  max_num_seqs: 2
+  max_num_batched_tokens: 4096
   kv_cache_dtype: fp8_ds_mla
-  kv_cache_memory_bytes: 9000000000
-  max_cudagraph_capture_size: 32
+  kv_cache_memory_bytes: 35000000000
   load_format: auto
-  served_model_name: glm-5.2
-  quantization: compressed-tensors
+  served_model_name: glm-5.2-nvfp4
+  quantization: modelopt
   reasoning_parser: glm45
   tool_call_parser: glm47
 
 env:
   NCCL_IB_TC: "106"
   HF_HUB_OFFLINE: "1"
-  VLLM_MARLIN_USE_ATOMIC_ADD: "1"
   TRANSFORMERS_OFFLINE: "1"
   SAFETENSORS_FAST_GPU: "1"
   CUDA_DEVICE_ORDER: "PCI_BUS_ID"
@@ -896,37 +943,24 @@ env:
   CUTE_DSL_ARCH: "sm_121a"
   TORCH_CUDA_ARCH_LIST: "12.1a"
   VLLM_ALLOW_LONG_MAX_MODEL_LEN: "1"
-  VLLM_EXECUTE_MODEL_TIMEOUT_SECONDS: "1800"
+  VLLM_RPC_TIMEOUT: "1800000"
   NCCL_MAX_NCHANNELS: "4"
   NCCL_MIN_NCHANNELS: "4"
-  NCCL_CROSS_NIC: "1"
-  NCCL_CUMEM_ENABLE: "0"
-  NCCL_IGNORE_CPU_AFFINITY: "1"
-  NCCL_NET_PLUGIN: "none"
-  NCCL_IB_MERGE_NICS: "0"
-  NCCL_IB_SUBNET_AWARE_ROUTING: "1"
-  NCCL_DEBUG: "WARN"
-  NCCL_IB_HCA: "rocep1s0f1,roceP2p1s0f1"
-  NCCL_SOCKET_IFNAME: "enp1s0f1np1,enP2p1s0f1np1"
-  GLOO_SOCKET_IFNAME: "enp1s0f1np1,enP2p1s0f1np1"
   PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
   VLLM_WORKER_MULTIPROC_METHOD: "spawn"
   VLLM_USE_FLASHINFER_SAMPLER: "1"
   VLLM_USE_V2_MODEL_RUNNER: "1"
   VLLM_USE_B12X_SPARSE_INDEXER: "1"
-  VLLM_DCP_GLOBAL_TOPK: "1"
-  VLLM_DCP_SHARD_DRAFT: "1"
   VLLM_KZ_TRIM_AFTER_LOAD: "1"
   VLLM_USE_B12X_MOE: "0"
   VLLM_USE_B12X_FP8_GEMM: "0"
   VLLM_DISABLE_TP_MQ_BROADCASTER: "1"
   VLLM_ENABLE_PCIE_ALLREDUCE: "0"
-  VLLM_MEMORY_PROFILER_ESTIMATE_CUDAGRAPHS: "0"
-  VLLM_SPARSE_INDEXER_MAX_LOGITS_MB: "256"
   USES_B12X: "True"
   FLASHINFER_DISABLE_VERSION_CHECK: "1"
   RAY_memory_usage_threshold: "0.99"
   RAY_memory_monitor_refresh_ms: "0"
+  VLLM_DEEP_GEMM_WARMUP: "skip"
 
 command: |
   vllm serve {model} \
@@ -934,11 +968,9 @@ command: |
       --trust-remote-code \
       --load-format {load_format} \
       --quantization {quantization} \
+      --distributed-executor-backend ray \
       --tensor-parallel-size {tensor_parallel} \
       --pipeline-parallel-size {pipeline_parallel} \
-      --decode-context-parallel-size {decode_context_parallel} \
-      --dcp-comm-backend ag_rs \
-      --dcp-kv-cache-interleave-size 1 \
       --gpu-memory-utilization {gpu_memory_utilization} \
       --max-model-len {max_model_len} \
       --max-num-seqs {max_num_seqs} \
@@ -947,19 +979,18 @@ command: |
       --kv-cache-memory-bytes {kv_cache_memory_bytes} \
       --generation-config vllm \
       --hf-overrides '{"use_index_cache":true,"index_topk_pattern":"FFFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSSFSSS"}' \
-      --default-chat-template-kwargs '{"clear_thinking":false}' \
       --port {port} \
       --host {host} \
-      --compilation-config '{"cudagraph_mode":"FULL","max_cudagraph_capture_size":32}' \
       --no-enable-log-requests \
+      --compilation-config '{"cudagraph_mode":"NONE"}' \
       --attention-backend B12X_MLA_SPARSE \
       --moe-backend flashinfer_cutlass \
       --reasoning-parser {reasoning_parser} \
       --tool-call-parser {tool_call_parser} \
       --enable-auto-tool-choice \
-      --enable-prefix-caching \
-      --speculative-config '{"model":"QuantTrio/GLM-5.2-Int4-Int8Mix","method":"mtp","num_speculative_tokens":4,"quantization":"compressed-tensors","moe_backend":"flashinfer_cutlass","draft_attention_backend":"B12X_MLA_SPARSE","draft_sample_method":"probabilistic"}' \
+      --speculative-config '{"method":"mtp","num_speculative_tokens":5,"draft_attention_backend":"B12X_MLA_SPARSE","moe_backend":"flashinfer_cutlass"}' \
       --long-prefill-token-threshold 2048 \
+      --load-format instanttensor \
       --async-scheduling
 ```
 
@@ -971,26 +1002,26 @@ If an authorization-related error is received when connecting to itself after ru
 cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 ```
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/42-ssh-auth-fix.png' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/42-ssh-auth-fix.png' | relative_url }})
 
 **Verifying Model Readiness**
 
 When the model starts, you will receive a message "Application startup complete." — the model is now ready to use:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/43-model-startup.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/43-model-startup.jpg' | relative_url }})
 
 **Benchmark Results**
 
 The average values obtained as a result of the tests performed with the benchmark tool we provided at [this link](https://github.com/CordatusAI/llm-benchmark) on the model deployed this way are as follows:
 
-| Concurrency | Average TTFT | Average ITL |   Average TPS | Average Latency | p90 Latency |
-| ----------: | -----------: | ----------: | ------------: | --------------: | ----------: |
-|           1 |    490.02 ms |    32.94 ms | 27.39 token/s |          4.69 s |      5.01 s |
-|           2 |    716.95 ms |    45.33 ms | 20.02 token/s |          6.48 s |      7.22 s |
-|           4 |    955.36 ms |    63.22 ms | 14.33 token/s |          8.99 s |     10.01 s |
-|           8 |   6560.43 ms |    73.35 ms |  8.51 token/s |         15.88 s |     19.52 s |
+| Concurrency | Avg TTFT | Avg ITL | Avg TPS | Avg Latency | p90 Latency |
+| ----------: | -------: | ------: | ------: | -----------: | ----------: |
+|           1 | 346.31 ms | 39.17 ms | 24.80 token/s | 5.32 s | 6.48 s |
+|           2 | 609.43 ms | 52.36 ms | 18.15 token/s | 7.26 s | 9.14 s |
+|           4 | 7710.88 ms | 55.84 ms | 8.90 token/s | 14.81 s | 17.45 s |
+|           8 | 22812.65 ms | 57.75 ms | 4.54 token/s | 30.15 s | 35.06 s |
 
-The test results confirmed that the model successfully ran in a distributed configuration across 4 nodes and that the multi-node inference infrastructure was validated end-to-end. As concurrency increased, TTFT and overall latency increased, while the token generation rate per user decreased.
+The test results show that the model successfully ran in a distributed manner across 8 nodes, confirming end-to-end validation of the multi-node inference infrastructure. As concurrency increased, TTFT and total latency values rose, while per-user token generation rate decreased.
 
 ## NAS Configuration (ASUSTOR AS6808T)
 
@@ -1004,7 +1035,7 @@ This section describes the setup of the NAS device used in this configuration st
 
 3.  Make the power connection.
 
-**NAS First Boot and Factory Reset**
+**Initial NAS Boot and Factory Reset**
 
 Turn on the device by pressing and holding the Power button for 1-2 seconds. During boot, the following messages will appear sequentially on the LCD panel:
 
@@ -1028,21 +1059,21 @@ If there is no DHCP server on your network, the NAS will obtain a link-local add
 
 After learning the IP address, go to http://<nas-ip>:8000 from your browser. For example: [http://192.168.1.31:8000](http://192.168.1.31:8000)
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/44-nas-login.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/44-nas-login.jpg' | relative_url }})
 
 On the initial setup screen, the default username and password are admin / admin. After logging in, it will show the default port configuration; you can change it or continue with the default settings:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/45-nas-port-config.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/45-nas-port-config.jpg' | relative_url }})
 
 If you are asked to change your password, change your password. If not asked, you can click the A icon in the upper right corner, select Personal from there, and change your password on the screen that opens:
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/46-nas-password.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/46-nas-password.jpg' | relative_url }})
 
 **RAID Configuration**
 
 The NAS comes configured with RAID 5 using 8 disks in factory defaults. RAID 5 provides 1 disk tolerance and offers ~51 TB of usable space.
 
-| **RAID** | **Disk Tolerance** | **Available Space** | **Speed** | **Recommended Use** |
+| **RAID** | **Disk Tolerance** | **Usable Space** | **Speed** | **Recommended Use** |
 | --- | --- | --- | --- | --- |
 | RAID 0 | None | 58 TB | Fastest | Maximum performance, data safety not important |
 | RAID 5 | 1 Disk | 51 TB | Medium | Default, balanced use |
@@ -1060,15 +1091,15 @@ In this document, RAID 0 configuration will be described for speed, but at the c
 
 3.  Click the Remove button
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/47-raid-volume.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/47-raid-volume.jpg' | relative_url }})
 
 4.  On the screen that appears, select the Quick Setup option
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/48-raid-quick-setup.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/48-raid-quick-setup.jpg' | relative_url }})
 
 5.  On the next screen, select the RAID 0 option
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/49-raid0-select.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/49-raid0-select.jpg' | relative_url }})
 
 6.  Press the Finish button
 
@@ -1080,9 +1111,9 @@ Combine the two 10Gbps Ethernet ports of the NAS under a single bonding interfac
 
 1.  In the NAS web interface, go to Settings → Network → Network Interface page
 
-2.  Click Add → Create Link Aggregation
+2.  Click ADD → Create Link Aggregation
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/50-link-aggregation.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/50-link-aggregation.jpg' | relative_url }})
 
 3.  In the Interface field, select LAN 1 and LAN 2
 
@@ -1090,7 +1121,7 @@ Combine the two 10Gbps Ethernet ports of the NAS under a single bonding interfac
 
 5.  Press the Next button
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/51-lacp-config.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/51-lacp-config.jpg' | relative_url }})
 
 6.  Check the Set up IP address manually option
 
@@ -1104,7 +1135,7 @@ Combine the two 10Gbps Ethernet ports of the NAS under a single bonding interfac
 
 8.  Press the Next button
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/52-nas-ip-config.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/52-nas-ip-config.jpg' | relative_url }})
 
 9.  Review the summary screen and press the Finish button
 
@@ -1120,7 +1151,7 @@ To install the performance tuning script, you need to connect to the NAS via SSH
 
 3.  Press the Apply button
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/53-ssh-enable.jpg' | relative_url }})
+![]({{ '/papers/dgx-spark-8node-cluster-setup/images/53-ssh-enable.jpg' | relative_url }})
 
 You can now connect to the NAS via SSH:
 
@@ -1140,15 +1171,13 @@ The username is admin, and the password is the one you set during installation.
 
 4.  Restart the NAS for the NFS service to start completely
 
-![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/image49.png' | relative_url }})
-
 Important: After enabling the NFS service, you must restart the NAS. Otherwise, you may get an "unknown error (ref. 5052)" when adding an NFS export.
 
 **Creating a Shared Folder**
 
 1.  In the NAS web interface, click the File Explorer → + (Create New Shared Folder) button
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/54-shared-folder.png' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/54-shared-folder.png' | relative_url }})
 
 2.  Click the Add button
 
@@ -1162,7 +1191,7 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
     2.  Or you can leave the default Read and Write for admins option
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/55-access-rights.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/55-access-rights.jpg' | relative_url }})
 
 5.  Press the Next button
 
@@ -1170,7 +1199,7 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
     1.  Encrypt this shared folder: You can select this if you wish, it is not selected in this document
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/56-protection-measures.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/56-protection-measures.jpg' | relative_url }})
 
 7.  Press Next → Finish buttons
 
@@ -1182,7 +1211,7 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
 3.  Click the Access Rights button
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/57-nfs-privileges.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/57-nfs-privileges.jpg' | relative_url }})
 
 4.  Switch to the NFS Privileges tab
 
@@ -1196,9 +1225,9 @@ Important: After enabling the NFS service, you must restart the NAS. Otherwise, 
 
     3.  Root Mapping: root (0)
 
-7\. Press the OK button
+7.  Press the OK button
 
-​    ![]({{ '/papers/dgx-spark-4node-cluster-kurulumu/images/58-nfs-add.jpg' | relative_url }})
+    ![]({{ '/papers/dgx-spark-8node-cluster-setup/images/58-nfs-add.jpg' | relative_url }})
 
 **Performance Tuning Script**
 
@@ -1298,12 +1327,12 @@ By following the steps in this document, a fully functional DGX Spark AI cluster
 | **Component** | **Status** | **Verification Method** |
 | --- | --- | --- |
 | Management Network (10GbE) | Ready | Inter-node ping successful |
-| Compute Network (200GbE QSFP) | Ready      | ib_write_bw ~100-111 Gbps |
-| RoCEv2 / RDMA | Ready      | ib_write_lat ~1-3 µs |
-| sparkrun Cluster | Ready      | sparkrun setup completed |
-| DCB / PFC | Ready      | dcb pfc show output TC3:on |
-| NAS (NFS) | Ready      | dd write/read test |
-| Model Service | Ready      | "Application startup complete." message |
+| Compute Network (200GbE QSFP) | Ready | ib_write_bw ~100-111 Gbps |
+| RoCEv2 / RDMA | Ready | ib_write_lat ~1-3 µs |
+| sparkrun Cluster | Ready | sparkrun setup completed |
+| DCB / PFC | Ready | dcb pfc show output TC3:on |
+| NAS (NFS) | Ready | dd write/read test |
+| Model Service | Ready | "Application startup complete." message |
 
 **Cluster Health Check Summary**
 
@@ -1370,7 +1399,7 @@ sudo /usr/local/etc/init.d/S98nfstune start
 cat /sys/class/net/bond0/bonding/xmit_hash_policy
 # Expected: layer3+4
 ```
-**CRS812 Breakout Ports Not Linking Up**
+**CRS804 Breakout Ports Not Linking Up**
 
 - Check that the breakout cable latches are fully seated.
 
@@ -1382,11 +1411,11 @@ cat /sys/class/net/bond0/bonding/xmit_hash_policy
 
 <div class="product-card" markdown="1">
 <div class="product-card-image">
-<img src="{{ '/papers/dgx-spark-4node-cluster-kurulumu/images/spark-4-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark Quad AI Cluster" />
+<img src="{{ '/papers/dgx-spark-8node-cluster-setup/images/spark-8-1.2.png' | relative_url }}" alt="NVIDIA DGX Spark 8-Node AI Cluster" />
 </div>
 <div class="product-card-body">
-<h3>NVIDIA DGX Spark Quad AI Cluster – 4 Node, 512 GB, 200GbE</h3>
-<p>4 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
-{% include company/product-button.html product="dgx-spark-4-node" %}
+<h3>NVIDIA DGX Spark 8-Node AI Cluster – 8 Node, 1 TB, 200GbE</h3>
+<p>8 DGX Spark nodes, 200GbE RoCEv2 RDMA, and sparkrun cluster management for an end-to-end AI infrastructure.</p>
+{% include company/product-button.html product="dgx-spark-8-node" %}
 </div>
 </div>

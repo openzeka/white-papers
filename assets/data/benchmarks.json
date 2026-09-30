@@ -1766,7 +1766,7 @@
       "tp": 4,
       "notes": "TP=4, DCP=4, cudagraph FULL, GMU 0.885, B12X_MLA_SPARSE",
       "sources": [
-        "https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-kurulumu/"
+        "https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-setup/"
       ],
       "data_points": [
         {
@@ -2568,7 +2568,7 @@
       "tp": 2,
       "notes": "Best 2-node config. 55% faster than PP=2.",
       "sources": [
-        "https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-kurulumu/"
+        "https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-setup/"
       ],
       "data_points": [
         {

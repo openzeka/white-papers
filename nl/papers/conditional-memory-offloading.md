@@ -32,7 +32,7 @@ toc: true
 
 ## Managementsamenvatting
 
-- **Begin bij het geheugenbudget.** Onze [Handleiding voor lokaal LLM-gebruik]({{ '/papers/yerel-llm-rehberi/' | relative_url }}) behandelt VRAM als de centrale beperking bij de dimensionering. Conditional memory verandert welke modelparameters in het GPU-geheugen moeten blijven.
+- **Begin bij het geheugenbudget.** Onze [Handleiding voor lokaal LLM-gebruik]({{ '/papers/local-llm-guide/' | relative_url }}) behandelt VRAM als de centrale beperking bij de dimensionering. Conditional memory verandert welke modelparameters in het GPU-geheugen moeten blijven.
 - **Niet elke parameter wordt bij elk token gelezen.** Sommige recente modellen, waaronder de twee die hier worden onderzocht, voegen toe wat DeepSeek **conditional memory** noemt: grote opzoektabellen (lookup tables) met gehashte n-gram-embeddings (*Engram* in DeepSeek-V4.1-Flash, de *n-gram embedding table* in Qwen3.8-Flash-Next, in SGLang PLE genoemd). Elk token heeft slechts enkele kilobytes aan embeddingdata nodig, en de benodigde rijen zijn vóór de forward pass al uit de token-ID's af te leiden.
 - **Opslagbehoefte en geheugenverkeer verschillen.** Grote tabellen leveren per token maar een paar rijen. Kleine overdrachten en prefetching maken offloading met weinig overhead mogelijk, terwijl het herhaaldelijk verplaatsen van actieve gewichtsmatrices of attention-caches veel zwaarder is.
 - **Waar de tabel terechtkan, hangt af van het geheugenontwerp van het apparaat.** Op **DGX Spark** (unified memory) zijn systeem-RAM en GPU-geheugen dezelfde pool; de tabel staat daarom op NVMe, met vaak gebruikte pagina's in het RAM gecachet. Op **RTX PRO 6000** (dedicated GPU-geheugen) gaat de tabel via PCIe naar pinned systeem-RAM. Op **DGX B300** heeft de DeepSeek-configuratie met vier GPU's genoeg GPU-geheugen om ook de tabellen te bevatten.
@@ -44,7 +44,7 @@ toc: true
 
 ## 1. Inleiding
 
-De [Handleiding voor lokaal LLM-gebruik]({{ '/papers/yerel-llm-rehberi/' | relative_url }}) begint de hardwaredimensionering bij het GPU-geheugen: modelgewichten, KV-cache, recurrente toestand en runtimebuffers moeten erin passen. Conditional memory voegt aan dat budget een nuttig onderscheid toe. Sommige aangeleerde parameters vormen grote tabellen waaruit elk token slechts een paar rijen ophaalt; door die tabellen buiten het GPU-geheugen te houden, kan een model dat eerder te groot was op hetzelfde apparaat praktisch bruikbaar worden.
+De [Handleiding voor lokaal LLM-gebruik]({{ '/papers/local-llm-guide/' | relative_url }}) begint de hardwaredimensionering bij het GPU-geheugen: modelgewichten, KV-cache, recurrente toestand en runtimebuffers moeten erin passen. Conditional memory voegt aan dat budget een nuttig onderscheid toe. Sommige aangeleerde parameters vormen grote tabellen waaruit elk token slechts een paar rijen ophaalt; door die tabellen buiten het GPU-geheugen te houden, kan een model dat eerder te groot was op hetzelfde apparaat praktisch bruikbaar worden.
 
 Deze paper volgt dat onderscheid van **architectuur tot deployment**: waarom attention, experts en embeddings verschillende toegangspatronen hebben; hoe die patronen offloading beïnvloeden; en wat de runs van OpenZeka met DeepSeek-V4.1-Flash en Qwen3.8-Flash-Next op DGX Spark en RTX PRO 6000 aantonen. DGX B300 dient in de hardwarebespreking als voorbeeld van een systeem met gescheiden CPU- en GPU-geheugen.
 
@@ -450,7 +450,7 @@ Een dimensioneringsfout om te vermijden is alle offloading als gelijkwaardig te 
 
 **Papers en tools van OpenZeka:**
 
-- [Handleiding voor lokaal LLM-gebruik]({{ '/papers/yerel-llm-rehberi/' | relative_url }})
+- [Handleiding voor lokaal LLM-gebruik]({{ '/papers/local-llm-guide/' | relative_url }})
 - [DeepSeek-V4.1-Flash-deployment op 4× DGX Spark]({{ '/papers/deepseek-v4.1-flash-4spark-deployment/' | relative_url }})
 - [DeepSeek-V4.1-Flash-deployment op 8× DGX Spark met TP8]({{ '/papers/deepseek-v4.1-flash-8spark-deployment/' | relative_url }})
 - [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }})
