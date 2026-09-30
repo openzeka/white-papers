@@ -10,7 +10,7 @@ description: >-
   End-to-end decision guide for local LLM usage: hardware (NVIDIA Jetson,
   RTX PRO, DGX Spark, DGX/HGX), model selection, software stack and scenario mapping.
 permalink: /papers/yerel-llm-rehberi/
-last_modified_date: 2026-07-03
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -71,7 +71,7 @@ The hardware recommendations in this guide are based on this portfolio.
 
 ### Advantages
 
-**Data privacy and security.** This is the strongest rationale. In fields such as legal, healthcare, finance, and defense, data never leaves the device; KVKK and GDPR compliance becomes significantly easier. Sensitive customer data, contracts, or patient records are not sent to a third party's server.
+**Data privacy and security.** This is the strongest rationale. In fields such as legal, healthcare, finance, and defense, data never leaves the device; data-protection compliance becomes significantly easier. Sensitive customer data, contracts, or patient records are not sent to a third party's server.
 
 **Data sovereignty — government and public institutions.** This is one of the most decisive rationales for state agencies, critical infrastructure, and public institutions: with local LLM, corporate/classified information can never leak to overseas or third-party servers under any circumstances. Data is processed entirely within the institution's own boundaries, on its own hardware; this directly meets data sovereignty and national security requirements. Being able to run even on completely isolated (air-gapped) and classified networks is a critical advantage for these institutions.
 
@@ -443,7 +443,7 @@ The right model is not "the one with the highest benchmark score" but **the one 
 
 - **Fully free (Apache 2.0 / MIT):** Qwen3/3.5 (Apache 2.0), DeepSeek V4 & R1 (MIT), GLM-5.1 (MIT), Mistral open layers (Apache 2.0), Phi-4 (MIT). Kimi K2.6 "Modified MIT" (check the brand/attribution clause at very large scale).
 - **Restrictive:** **Llama 4 Community License** — commercial use is free only for organizations under 700M monthly active users; EU-based users are excluded from multimodal/vision capabilities. **Gemma** is under Google's own terms (permissive but not pure Apache).
-- **Safest foundations for commercial distribution in Turkey:** Qwen (Apache 2.0) and DeepSeek/GLM (MIT). Turkish derivative models inherit the base model's license — Trendyol v4.x → Qwen2.5, ytu-cosmos → Llama; check each model card separately.
+- **Safest foundations for commercial distribution:** Qwen (Apache 2.0) and DeepSeek/GLM (MIT). Turkish derivative models inherit the base model's license — Trendyol v4.x → Qwen2.5, ytu-cosmos → Llama; check each model card separately.
 
 ### 5.8. Where do you compare models in 2026?
 
