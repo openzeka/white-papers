@@ -10,7 +10,7 @@ description: >-
   Yerel (local) LLM kullanımı için uçtan uca karar rehberi: donanım (NVIDIA Jetson,
   RTX PRO, DGX Spark, DGX/HGX), model seçimi, yazılım stack ve senaryo eşlemesi.
 permalink: /papers/yerel-llm-rehberi/
-last_modified_date: 2026-07-03
+last_modified_date: 2026-09-30
 toc: true
 ---
 
@@ -71,7 +71,7 @@ Bu rehberdeki donanım önerileri bu portföye dayanır.
 
 ### Avantajlar
 
-**Veri gizliliği ve güvenlik.** En güçlü gerekçe budur. Hukuk, sağlık, finans, savunma gibi alanlarda veriler cihazdan hiç çıkmaz; KVKK ve GDPR uyumu büyük ölçüde kolaylaşır. Hassas müşteri verisi, sözleşmeler veya hasta kayıtları üçüncü bir tarafın sunucusuna gönderilmez.
+**Veri gizliliği ve güvenlik.** En güçlü gerekçe budur. Hukuk, sağlık, finans, savunma gibi alanlarda veriler cihazdan hiç çıkmaz; veri koruma mevzuatına uyum büyük ölçüde kolaylaşır. Hassas müşteri verisi, sözleşmeler veya hasta kayıtları üçüncü bir tarafın sunucusuna gönderilmez.
 
 **Veri egemenliği — kamu ve devlet kurumları.** Devlet kuruluşları, kritik altyapı ve kamu kurumları için en belirleyici gerekçelerden biri budur: yerel LLM ile kurumsal/gizli bilgiler hiçbir koşulda yurt dışındaki veya üçüncü taraf sunuculara sızmaz. Veri tamamen kurumun kendi sınırları içinde, kendi donanımında işlenir; bu da veri egemenliği ve ulusal güvenlik gereksinimlerini doğrudan karşılar. Ağdan tamamen yalıtılmış (izole / air-gapped) ve gizli ağlarda dahi çalışabilmesi bu kurumlar için kritik bir avantajdır.
 
@@ -443,7 +443,7 @@ Doğru model "en yüksek benchmark skorlu" değil, **görevinize + donanımını
 
 - **Tam serbest (Apache 2.0 / MIT):** Qwen3/3.5 (Apache 2.0), DeepSeek V4 & R1 (MIT), GLM-5.1 (MIT), Mistral açık katman (Apache 2.0), Phi-4 (MIT). Kimi K2.6 "Modified MIT" (çok büyük ölçekte marka/atıf maddesine bakın).
 - **Kısıtlayıcı:** **Llama 4 Community License** — ticari kullanım yalnız 700M aylık aktif kullanıcının altındaki kurumlar için serbest; AB merkezli kullanıcılar çok kipli/görüntü yeteneklerinden hariç. **Gemma** Google'ın kendi şartlarıyla (izin verici ama saf Apache değil).
-- **Türkiye'de ticari dağıtım için en güvenli temeller:** Qwen (Apache 2.0) ve DeepSeek/GLM (MIT). Türkçe türev modeller temel modelin lisansını miras alır — Trendyol v4.x → Qwen2.5, ytu-cosmos → Llama; her model kartını ayrıca kontrol edin.
+- **Ticari dağıtım için en güvenli temeller:** Qwen (Apache 2.0) ve DeepSeek/GLM (MIT). Türkçe türev modeller temel modelin lisansını miras alır — Trendyol v4.x → Qwen2.5, ytu-cosmos → Llama; her model kartını ayrıca kontrol edin.
 
 ### 5.8. 2026'da modelleri nerede karşılaştırırsınız?
 
