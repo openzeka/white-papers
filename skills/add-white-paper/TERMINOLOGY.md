@@ -17,6 +17,9 @@ Copy these **byte for byte** from the English file:
 - **Liquid and HTML mechanics:** every `{% … %}` and `{{ … }}` tag, HTML tag
   names, attributes and classes (`<div class="product-card" markdown="1">`),
   image paths, link URLs.
+- **The title of `papers/index.md` in every language: `White Papers`.** The
+  sidebar puts a paper under the page whose title equals its `parent`; a
+  translated title leaves that language's papers out of the menu.
 - **Front matter keys and these values:** `parent`, `nav_order`, `page_id`,
   `date`, `permalink`, `last_modified_date`, `toc`, `layout`. `lang` is `tr` or
   `nl`.

@@ -95,6 +95,14 @@ indexes = [("papers/index.md", table_order("papers/index.md"))]
 indexes += [(f"{l}/papers/index.md", table_order(f"{l}/papers/index.md"))
             for l in LANGS if os.path.exists(f"{l}/papers/index.md")]
 indexes += [(f"{l}/papers/index.md", None) for l in LANGS if not os.path.exists(f"{l}/papers/index.md")]
+# The sidebar groups a paper under the page whose title equals its `parent`,
+# so every language's papers index must carry that exact title — a translated
+# title leaves that language's papers out of the group.
+parents = {front(p).get("parent") for p in glob.glob("papers/*.md") if not p.endswith("index.md")}
+for idx in ["papers/index.md"] + [f"{l}/papers/index.md" for l in LANGS]:
+    if os.path.exists(idx) and front(idx).get("title") not in parents:
+        errors.append(f"{idx}: title {front(idx).get('title')!r} must be the papers' parent {sorted(parents)} — the sidebar matches them by name")
+
 for idx, got in indexes + [("README.md library table", readme_order())]:
     if got is None:
         errors.append(f"{idx} is missing")
