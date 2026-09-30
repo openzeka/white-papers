@@ -367,11 +367,14 @@ gain a line, in all three languages (terms: `skills/add-white-paper/TERMINOLOGY.
 The field table in step 5 and the CSV mapping in step 1 mirror the real schema.
 **If a field is added to or removed from `benchmarks.json`, or the benchmark
 tool's CSV headers change, update this file in the same commit** — along with the
-`cols` array and row loop in *both* widget files, `REQUIRED` in
+`cols` array and row loop in the widget (edit `benchmark-table.js`, then copy
+its body into the `.tr.js` and `.nl.js` files — only the `S` string block
+differs between them), `REQUIRED` in
 `_tools/validate.py`, and `FIELDS` / `CSV_*` in `_tools/bench_import.py`. The
 KV cache memory calculation is implemented in `memoryBudget()` / `sessionBytes()`
 / `capacity()` in the widget, mirrored by the memory check in
 `_tools/validate.py`, fed by `geometry()` in `_tools/kv_geometry.py`, and
-explained in the how-to of both `llm-inference-benchmarks.md` files; change all
+explained in the how-to of the three `llm-inference-benchmarks.md` files
+(English, `tr/`, `nl/`); change all
 of them together, and step 4 here if its inputs change. A skill that describes a
 stale schema is worse than no skill, because it will be followed.

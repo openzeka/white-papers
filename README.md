@@ -500,8 +500,9 @@ This provides a consistent methodology for comparing different models, inference
 ```text
 white-papers/
 │
-├── papers/                # English papers, benchmark data and paper assets
-├── tr/                    # Turkish content
+├── papers/                # English papers (the source) and their images
+├── tr/                    # Turkish translations of every page
+├── nl/                    # Dutch translations of every page
 ├── assets/                # Shared website assets
 ├── _diagram_sources/      # Technical diagram sources
 ├── _data/                 # Structured site data
@@ -510,13 +511,18 @@ white-papers/
 ├── _sass/                 # Site styling
 ├── _tools/                # Maintenance scripts, kept out of the build
 │   └── model_meta/        # Pinned Hugging Face configs and checkpoint sizes behind the capacity columns
-├── skills/                # Step-by-step procedures for adding a benchmark run or a paper
+├── skills/                # Step-by-step procedures for adding a benchmark run or a paper,
+│                          # and the translation rules and glossary (add-white-paper/TERMINOLOGY.md)
 ├── docker-compose.yml     # Local development server
 ├── index.md
 └── README.md
 ```
 
-This repository is also the source for the public OpenZeka White Papers website.
+This repository is also the source for the public OpenZeka White Papers
+website, published in English, Turkish (`/tr/`) and Dutch (`/nl/`). English is
+written first; every page has a Turkish and a Dutch version, made by the rules
+in [`skills/add-white-paper/TERMINOLOGY.md`](skills/add-white-paper/TERMINOLOGY.md)
+and checked by `_tools/check_translation.py`.
 
 ---
 
@@ -548,8 +554,10 @@ printf 'UID=%s\nGID=%s\n' "$(id -u)" "$(id -g)" > .env
 ```
 
 Publishing still goes through git: commit and push, and GitHub Actions builds
-and deploys. See [`DEVELOPMENT.md`](DEVELOPMENT.md) for the rest — adding a
-paper, updating gems, and running Jekyll directly on the host.
+and deploys. Adding a paper: [`skills/add-white-paper/SKILL.md`](skills/add-white-paper/SKILL.md);
+adding a benchmark run: [`skills/add-benchmark/SKILL.md`](skills/add-benchmark/SKILL.md).
+See [`DEVELOPMENT.md`](DEVELOPMENT.md) for updating gems and running Jekyll
+directly on the host.
 
 ---
 
