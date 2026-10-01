@@ -34,9 +34,12 @@ PINNED = {
     "DeepSeek-V4-Pro": "deepseek-v4-pro-0424",             # AA now dates it; 0813 is a separate row
     "DeepSeek-V4-Flash-Vision-Exp": "deepseek-v4-flash-vision",  # AA dropped the "Exp"
     "MiMo-V2.6-Pro-RL": "mimo-v2-6-pro",                   # same model; AA lists it without "-RL"
+    "MiMo-V2.6-Pro-MOPD": "mimo-v2-6-pro",                 # same model; AA lists it without "-MOPD"
 }
 # Not in AA's catalogue at all, so both fields stay null.
-UNTRACKED = {"Laguna-S-2.1"}
+# MiMo-V2.6-Flash-RL: "MiMo-V2.6-Flash" is a near miss, not this model — the
+# author's call, 2026-10-01, so its scores stay out rather than being borrowed.
+UNTRACKED = {"Laguna-S-2.1", "MiMo-V2.6-Flash-RL"}
 
 
 def fetch(key):

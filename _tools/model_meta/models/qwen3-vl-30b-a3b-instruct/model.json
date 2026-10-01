@@ -1,0 +1,20 @@
+{
+  "model": "Qwen3-VL-30B-A3B-Instruct",
+  "repo": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+  "revision": "9c4b90e1e4ba969fd3b5378b57d966d725f1b86c",
+  "config_sha256": "6129b3f54d517a18553cf7525ff4886be6831c5806fc094d632b8ef38d859912",
+  "fetched": "2026-10-01",
+  "hf": {
+    "created": "2025-09-30T10:52:01.000Z",
+    "last_modified": "2025-11-26T13:18:04.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 31070754032,
+    "parameters_by_dtype": {
+      "BF16": 31070754032
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "model": "MiMo-V2.6-Flash-RL",
+  "repo": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
+  "revision": "5711b268169967567844e1e560e8a3966da959b1",
+  "config_sha256": "61bea4a0f7a0dd8969f8cae528761e26b697dd12ff63e98804c3f0945492e621",
+  "fetched": "2026-10-01",
+  "hf": {
+    "created": "2026-09-21T15:39:51.000Z",
+    "last_modified": "2026-09-22T03:52:25.000Z",
+    "gated": false,
+    "license": "mit",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 310756322688,
+    "parameters_by_dtype": {
+      "F32": 12032,
+      "BF16": 4101308032,
+      "F8_E4M3": 3859808256,
+      "U8": 302795194368
+    }
+  }
+}

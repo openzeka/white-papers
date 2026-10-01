@@ -1,0 +1,30 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "XiaomiMiMo/MiMo-V2.6-Pro-MOPD",
+      "object": "model",
+      "created": 1790838499,
+      "owned_by": "vllm",
+      "root": "XiaomiMiMo/MiMo-V2.6-Pro-MOPD",
+      "parent": null,
+      "max_model_len": 1048576,
+      "permission": [
+        {
+          "id": "modelperm-a34fdcad98f018fb",
+          "object": "model_permission",
+          "created": 1790838499,
+          "allow_create_engine": false,
+          "allow_sampling": true,
+          "allow_logprobs": true,
+          "allow_search_indices": false,
+          "allow_view": true,
+          "allow_fine_tuning": false,
+          "organization": "*",
+          "group": null,
+          "is_blocking": false
+        }
+      ]
+    }
+  ]
+}

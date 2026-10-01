@@ -1,0 +1,48 @@
+{
+  "repo": "nvidia/gemma-4-31B-it-NVFP4",
+  "revision": "4135a98a9b728a548947683219633b25682223ac",
+  "fetched": "2026-10-01",
+  "safetensors_bytes": 32633477808,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": {
+      "dynamic": false,
+      "num_bits": 8,
+      "type": "float"
+    }
+  },
+  "hf": {
+    "created": "2026-04-02T16:47:30.000Z",
+    "last_modified": "2026-07-13T22:33:54.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": [
+      "google/gemma-4-31B-it"
+    ],
+    "library": "Model Optimizer",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 20868591152,
+    "parameters_by_dtype": {
+      "BF16": 10464098156,
+      "U8": 10404495360
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00004.safetensors",
+      "size": 9954637578
+    },
+    {
+      "path": "model-00002-of-00004.safetensors",
+      "size": 9977124474
+    },
+    {
+      "path": "model-00003-of-00004.safetensors",
+      "size": 9999145338
+    },
+    {
+      "path": "model-00004-of-00004.safetensors",
+      "size": 2702570418
+    }
+  ]
+}

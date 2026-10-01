@@ -1,0 +1,45 @@
+{
+  "repo": "Qwen/Qwen3-VL-30B-A3B-Instruct-FP8",
+  "revision": "d9748a51ae66354c4dad665aab2c71f26cf2c8cd",
+  "fetched": "2026-10-01",
+  "safetensors_bytes": 32251954920,
+  "quantization": {
+    "method": "fp8",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2025-10-01T14:49:16.000Z",
+    "last_modified": "2025-11-26T13:18:10.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "Qwen/Qwen3-VL-30B-A3B-Instruct"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 31072578800,
+    "parameters_by_dtype": {
+      "F32": 1824768,
+      "BF16": 1173755120,
+      "F8_E4M3": 29896998912
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00004.safetensors",
+      "size": 10597785920
+    },
+    {
+      "path": "model-00002-of-00004.safetensors",
+      "size": 10600204240
+    },
+    {
+      "path": "model-00003-of-00004.safetensors",
+      "size": 10728745128
+    },
+    {
+      "path": "model-00004-of-00004.safetensors",
+      "size": 325219632
+    }
+  ]
+}

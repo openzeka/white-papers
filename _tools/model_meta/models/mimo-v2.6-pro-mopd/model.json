@@ -1,0 +1,23 @@
+{
+  "model": "MiMo-V2.6-Pro-MOPD",
+  "repo": "XiaomiMiMo/MiMo-V2.6-Pro-MOPD",
+  "revision": "adea8e2c5373181e5a973fa1ecb343cb31af214b",
+  "config_sha256": "a9dc00e2a0c2c172efd198f42e81e41c95472021b57c65366c06587d44038b62",
+  "fetched": "2026-10-01",
+  "hf": {
+    "created": "2026-09-27T03:58:00.000Z",
+    "last_modified": "2026-09-27T16:58:58.000Z",
+    "gated": false,
+    "license": "mit",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 1024216603392,
+    "parameters_by_dtype": {
+      "BF16": 10647286656,
+      "F32": 26496,
+      "F8_E4M3": 13378781184,
+      "U8": 1000190509056
+    }
+  }
+}
