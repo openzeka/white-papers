@@ -260,7 +260,7 @@ apply:
 | `mtp` | boolean | user; the column headed **Speculative Decoding** |
 | `mtp_k` | number \| null | user; the depth guessed ahead, null when `mtp` is false |
 | `tp` | number | user; `1` on a single GPU or node, never null |
-| `notes` | string | user; `""` when there is nothing to say |
+| `notes` | string | user; `""` when there is nothing to say; facts about the run only, no company names |
 | `sources` | array | `[]`, or the URL of the white paper this run came from |
 | `data_points` | array | the CSV — `{c, ttft_ms, tps}`, ascending by `c` |
 | `dp` | number \| null | user |
