@@ -115,6 +115,13 @@ page URL added there, in every language. If a paper needs a company sentence
 that no block covers, add a new key to every `company.yml` file rather than
 writing the details into the paper.
 
+**Keep the company name out of the running text as well.** Say what was done
+and with what, not by whom: "measured with the CordatusAI LLM Benchmark Tool",
+"these results show", not "our measurements" or "<company> measured". Where
+the paper genuinely needs the company — who prepared it, how to get in touch,
+a product — use a block above, or add one. The text then stays correct
+wherever the paper is shown, whichever company presents it.
+
 **Turkish headings inside a `<div markdown="1">` block** need an explicit ASCII
 id, e.g. `### Önce iki ayrım {#once-iki-ayrim}` — otherwise the Turkish letters
 are dropped from the anchor.
