@@ -1,5 +1,5 @@
 ---
-title: Conditional memory en offloading bij LLM-inferentie
+title: Engram-offloading bij LLM-inferentie
 parent: White Papers
 nav_order: 2
 lang: nl
@@ -7,17 +7,17 @@ page_id: conditional-memory-offloading
 date: 2026-09-29
 card_tag: "Technische gids"
 description: >-
-  Hoe de modelarchitectuur bepaalt wat in het GPU-geheugen moet blijven en wat naar
-  systeem-RAM of NVMe kan: conditional memory, de geheugenhiërarchieën van DGX Spark,
-  RTX PRO 6000 en DGX B300, en meetresultaten met DeepSeek-V4.1-Flash en
-  Qwen3.8-Flash-Next.
+  Engram-tabellen zijn groot, maar per token worden er maar een paar rijen uit
+  gelezen; daarom kunnen ze van het GPU-geheugen naar systeem-RAM of NVMe. Wat
+  dat betekent op DGX Spark, RTX PRO 6000 en DGX B300, en meetresultaten met
+  DeepSeek-V4.1-Flash en Qwen3.8-Flash-Next.
 permalink: /papers/conditional-memory-offloading/
-last_modified_date: 2026-09-29
+last_modified_date: 2026-10-05
 toc: true
 ---
 
-> **Publicatiedatum:** september 2026
-> **Reikwijdte:** Hoe een LLM tijdens inferentie geheugen gebruikt, welke architectuurkeuzes dat veranderen, hoe de geheugenhiërarchieën van DGX Spark, RTX PRO 6000 en DGX B300 van elkaar verschillen, en wat offloading wel en niet kan bereiken — beoordeeld aan de hand van OpenZeka-metingen van DeepSeek-V4.1-Flash en Qwen3.8-Flash-Next.
+> **Publicatiedatum:** september 2026 (herzien in oktober 2026)
+> **Reikwijdte:** Wat Engram-tabellen zijn, waarom hun toegangspatroon het mogelijk maakt ze buiten het GPU-geheugen te plaatsen, waar ze terechtkunnen op DGX Spark, RTX PRO 6000 en DGX B300, en wat offloading ervan oplevert. Beoordeeld aan de hand van OpenZeka-metingen van DeepSeek-V4.1-Flash en Qwen3.8-Flash-Next.
 > **Opmerking:** Modelnamen, softwareversies en meetresultaten zijn geldig per september 2026. De ondersteuning voor offloading in inferentie-engines verandert snel; de blijvende vraag is hoeveel data elke stap nodig heeft en wanneer die data er moet zijn.
 
 ---
@@ -32,146 +32,94 @@ toc: true
 
 ## Managementsamenvatting
 
-- **Begin bij het geheugenbudget.** Onze [Handleiding voor lokaal LLM-gebruik]({{ '/papers/local-llm-guide/' | relative_url }}) behandelt VRAM als de centrale beperking bij de dimensionering. Conditional memory verandert welke modelparameters in het GPU-geheugen moeten blijven.
-- **Niet elke parameter wordt bij elk token gelezen.** Sommige recente modellen, waaronder de twee die hier worden onderzocht, voegen toe wat DeepSeek **conditional memory** noemt: grote opzoektabellen (lookup tables) met gehashte n-gram-embeddings (*Engram* in DeepSeek-V4.1-Flash, de *n-gram embedding table* in Qwen3.8-Flash-Next, in SGLang PLE genoemd). Elk token heeft slechts enkele kilobytes aan embeddingdata nodig, en de benodigde rijen zijn vóór de forward pass al uit de token-ID's af te leiden.
-- **Opslagbehoefte en geheugenverkeer verschillen.** Grote tabellen leveren per token maar een paar rijen. Kleine overdrachten en prefetching maken offloading met weinig overhead mogelijk, terwijl het herhaaldelijk verplaatsen van actieve gewichtsmatrices of attention-caches veel zwaarder is.
-- **Waar de tabel terechtkan, hangt af van het geheugenontwerp van het apparaat.** Op **DGX Spark** (unified memory) zijn systeem-RAM en GPU-geheugen dezelfde pool; de tabel staat daarom op NVMe, met vaak gebruikte pagina's in het RAM gecachet. Op **RTX PRO 6000** (dedicated GPU-geheugen) gaat de tabel via PCIe naar pinned systeem-RAM. Op **DGX B300** heeft de DeepSeek-configuratie met vier GPU's genoeg GPU-geheugen om ook de tabellen te bevatten.
-- **Meetresultaten:** de geteste configuratie van het 763B-model DeepSeek-V4.1-Flash draait op 4× DGX Spark doordat de Engram-tabellen van 196B parameters op NVMe worden geplaatst; op 8× DGX Spark verhoogde het verplaatsen ervan naar NVMe de gerapporteerde KV-cachetoewijzing met ~21 GB per node en de geconfigureerde contextlimiet van 300K naar 1M tokens. Qwen3.8-Flash-Next, met een gekwantiseerde checkpoint van 132.7 GB, draait op één DGX Spark en op één RTX PRO 6000, met gemeten prestaties die geschikt zijn voor interactief gebruik bij de hieronder besproken niveaus van gelijktijdigheid (concurrency).
-- **Twee praktische uitkomsten.** De twee configuraties op 8× DGX Spark laten de afweging zien tussen Engram in het geheugen houden en Engram op schijf plaatsen. De run op 4× Spark en de Qwen-runs op één apparaat tonen aan dat checkpoints die groter zijn dan het geheugen dat voor modelgewichten beschikbaar is, bruikbaar kunnen worden geserveerd.
-- **Gevolg voor de dimensionering:** neem de overige modelgewichten, de KV-cache, de recurrente toestand en de runtimebuffers op in het budget voor GPU-geheugen; neem geoffloade tabellen op in het budget voor systeem-RAM of NVMe. Als meer modellen dit ontwerp overnemen, zou hetzelfde apparaat grotere modellen kunnen draaien dan het GPU-geheugen alleen doet vermoeden.
+- **Twee recente modellen bevatten een zeer grote embeddingtabel.** DeepSeek-V4.1-Flash (*Engram*) en Qwen3.8-Flash-Next (*n-gram-embeddings*, in SGLang PLE genoemd) voegen allebei een opzoektabel (lookup table) toe met aangeleerde vectoren, geadresseerd via korte reeksen invoertokens; deze paper noemt beide **Engram-tabellen**. De tabel van DeepSeek bevat 196B parameters, die van Qwen 51B.
+- **De tabel is groot, maar wordt conditioneel gelezen.** Per token worden alleen de paar rijen gelezen die bij de recente tokens passen: ongeveer 2.5 KB voor Qwen en 12 KB voor DeepSeek. De rest van de tabel wordt niet aangeraakt. De Engram-paper van DeepSeek noemt dit *conditional memory*.
+- **Dat toegangspatroon maakt offloading mogelijk.** Een tabel die veel opslag maar heel weinig bandbreedte vraagt, kan naar een tragere, grotere geheugenlaag (systeem-RAM of NVMe), terwijl het rekenwerk op de GPU blijft. De rijadressen volgen uit token-ID's, zijn dus bekend voordat de laag draait, en de rijen kunnen vooraf worden opgehaald. Het GPU-geheugen bevat dan de rest van het model, zodat een groter model op hetzelfde apparaat past.
+- **Waar de tabel terechtkomt, hangt af van het geheugenontwerp van het apparaat.** Op **DGX Spark** (unified memory) zijn systeem-RAM en GPU-geheugen dezelfde pool; de tabel gaat daarom naar NVMe. Op **RTX PRO 6000** (dedicated GPU-geheugen) gaat hij via PCIe naar pinned systeem-RAM. Op **DGX B300** heeft de DeepSeek-configuratie met vier GPU's genoeg GPU-geheugen om hem te bevatten.
+- **Meetresultaten:** de geteste configuratie van het 763B-model DeepSeek-V4.1-Flash draait op 4× DGX Spark doordat de Engram-tabellen op NVMe worden geplaatst; op 8× DGX Spark verhoogde het verplaatsen ervan naar NVMe de gerapporteerde KV-cachetoewijzing met ~21 GB per node en de geconfigureerde contextlimiet van 300K naar 1M tokens. Qwen3.8-Flash-Next, met een gekwantiseerde checkpoint van 132.7 GB, draait op één DGX Spark en op één RTX PRO 6000, met gemeten prestaties die geschikt zijn voor interactief gebruik bij de hieronder besproken niveaus van gelijktijdigheid (concurrency).
+- **Wat het oplevert:** een model met een Artificial Analysis Intelligence Index van 39.8 draait op **één DGX Spark met 28.5 tok/s per verzoek**, voor naar schatting 8 chat- of 3 agentische gebruikers, en op **één RTX PRO 6000 met 155.8 tok/s**, voor naar schatting 64 chat- of 24 agentische gebruikers (schattingen van de [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}); sectie 6.2).
+- **Gevolg voor de dimensionering:** budgetteer GPU-geheugen voor de overige gewichten, de KV-cache, de recurrente toestand en de runtimebuffers; budgetteer de geoffloade tabel in systeem-RAM of NVMe. Als meer modellen dit ontwerp overnemen, zou hetzelfde apparaat grotere modellen kunnen draaien dan het GPU-geheugen alleen doet vermoeden.
 
 ---
 
 ## 1. Inleiding
 
-De [Handleiding voor lokaal LLM-gebruik]({{ '/papers/local-llm-guide/' | relative_url }}) begint de hardwaredimensionering bij het GPU-geheugen: modelgewichten, KV-cache, recurrente toestand en runtimebuffers moeten erin passen. Conditional memory voegt aan dat budget een nuttig onderscheid toe. Sommige aangeleerde parameters vormen grote tabellen waaruit elk token slechts een paar rijen ophaalt; door die tabellen buiten het GPU-geheugen te houden, kan een model dat eerder te groot was op hetzelfde apparaat praktisch bruikbaar worden.
+De [Handleiding voor lokaal LLM-gebruik]({{ '/papers/local-llm-guide/' | relative_url }}) dimensioneert hardware op basis van GPU-geheugen: modelgewichten, KV-cache, recurrente toestand en runtimebuffers moeten erin passen. Dat budget behandelt alle gewichten gelijk. Engram-tabellen zijn een uitzondering: ze vormen een groot deel van de parameters, maar elk token leest er maar een heel klein deel van. Door ze buiten het GPU-geheugen te houden, kan een model dat anders te groot is op hetzelfde apparaat praktisch bruikbaar worden.
 
-Deze paper volgt dat onderscheid van **architectuur tot deployment**: waarom attention, experts en embeddings verschillende toegangspatronen hebben; hoe die patronen offloading beïnvloeden; en wat de runs van OpenZeka met DeepSeek-V4.1-Flash en Qwen3.8-Flash-Next op DGX Spark en RTX PRO 6000 aantonen. DGX B300 dient in de hardwarebespreking als voorbeeld van een systeem met gescheiden CPU- en GPU-geheugen.
-
-De nadruk ligt op het mechanisme en de gevolgen ervan voor de dimensionering. Opstartinstructies staan in de gelinkte deploymentpapers en het SGLang-cookbook.
+Deze paper zet eerst tegenover elkaar wat een LLM voor elk token berekent en wat het alleen opzoekt, en wat dat voor het geheugen betekent (sectie 2); daarna waar de tabel op elk apparaat kan worden geplaatst (sectie 3) en wat de OpenZeka-runs van DeepSeek-V4.1-Flash en Qwen3.8-Flash-Next op DGX Spark en RTX PRO 6000 laten zien (secties 4 en 5). Startinstructies staan in de gelinkte deploymentpapers en het SGLang-cookbook.
 
 ---
 
-## 2. Hoe een LLM geheugen gebruikt
+## 2. Rekenwerk versus conditional memory
 
-### 2.1. Geheugencapaciteit, bandbreedte en latentie
+### 2.1. Wat een LLM per token berekent, en wat dat van het GPU-geheugen vraagt
 
-**Geheugencapaciteit** bepaalt hoeveel data erin past; **geheugenbandbreedte (bandwidth)** bepaalt hoe snel die data gelezen kan worden. Offloading maakt GPU-geheugen vrij door data in systeem-RAM of opslag te plaatsen, die via een tragere verbinding wordt benaderd. Of dat goed werkt, hangt af van het aantal bytes dat elke stap nodig heeft, de latentie (latency) van de toegang en de vraag of het ophalen kan overlappen met nuttig rekenwerk.
+Een LLM genereert tekst token voor token. Elk nieuw token wordt omgezet in een vector en door alle lagen van het model gestuurd. In elke laag:
 
-Een tabel van 50 GB die per token een paar kilobytes levert, vergt veel minder dataoverdracht dan 50 GB aan matrices die herhaaldelijk in berekeningen worden gebruikt. De opslagbehoefte alleen zegt niets over wat het kost om een van beide uit het GPU-geheugen te halen.
+- **Attention** vergelijkt het token met de tokens ervoor. Om het verleden niet opnieuw te hoeven berekenen, worden hun keys en values bewaard in de **KV-cache**, die groeit met de contextlengte en het aantal gelijktijdige verzoeken.
+- **Het feed-forward-netwerk** vermenigvuldigt de vector met grote aangeleerde gewichtsmatrices. In een Mixture-of-Experts-model (MoE) kiest een router per token een paar experts en worden alleen hun matrices gebruikt, maar elk daarvan volledig.
 
-### 2.2. Wat tijdens inferentie geheugen inneemt
+Eén token produceren betekent dus een volledige doorgang door het model: elke dense gewichtsmatrix, elke geselecteerde expert en de KV-cache worden **bij elke decodestap** gelezen. Daarom moeten ze allemaal in het GPU-geheugen staan: ze bij elke stap via een tragere verbinding lezen, zou van die verbinding het knelpunt maken. De geheugenbehoefte is daarom *gewichten + KV-cache + runtimebuffers*, en bij kleine batchgroottes is de decodesnelheid ruwweg *geheugenbandbreedte ÷ gelezen bytes per token*.
 
-Het geheugenbudget uit §4.3 van de Handleiding voor lokaal LLM-gebruik blijft van toepassing:
-
-> **Totaal geheugen = Modelgewichten + KV-cache + Recurrente toestand + Activaties + Overhead**
-
-| Component | Wat het is | Groeit met |
+| Data | Gelezen per token | Indien buiten de GPU geplaatst |
 |---|---|---|
-| **Modelgewichten** | De parameters: attention-projecties, experts, embeddings, output-head | Modelgrootte en precisie |
-| **KV-cache** | Gecachete keys en values, opgeslagen zodat attention-lagen ze niet opnieuw hoeven te berekenen | Contextlengte × gelijktijdige verzoeken |
-| **Recurrente toestand** | Geheugen van vaste grootte van linear-attention-lagen (bijv. Gated DeltaNet), plus servingbuffers en bewaarde kopieën | Actieve verzoeken, cachebeleid en instellingen voor speculatieve decodering |
-| **Activaties en overhead** | Tijdelijke buffers, CUDA-context, fragmentatie van de allocator | Batch- en promptgroottes, engine-instellingen |
+| **Dense gewichten** | Elke matrix, bij elke stap | De overdrachtsverbinding wordt het knelpunt |
+| **MoE-experts** | Geselecteerde experts, volledig; de selectie is pas tijdens de forward pass bekend | Kleinere actieve set, maar een miss is duur en er is weinig tijd vooraf |
+| **KV-cache en recurrente toestand** | Bij elke decodestap gelezen (de recurrente toestand ook bijgewerkt); KV-verkeer groeit met de context | Lange contexten veroorzaken zwaar overdrachtsverkeer |
+| **Engram-tabellen** | Een paar rijen, geadresseerd vanuit token-ID's | Kleine overdrachten die vooraf kunnen worden opgehaald |
 
-Deze paper voegt één onderscheid aan de tabel toe: **niet alle modelgewichten gedragen zich hetzelfde.** Sommige worden als volledige matrices gebruikt; andere leveren alleen geselecteerde rijen. Sectie 3 legt uit welke welke zijn.
+De laatste rij is de uitzondering waar deze paper over gaat.
 
-### 2.3. Waarom vaak benaderde data dicht bij de GPU blijft
+### 2.2. Wat "conditional" betekent, en wat het verandert aan de geheugenbehoefte
 
-**Prefill (verwerking van de prompt)** verwerkt de invoertokens; **decode (tokengeneratie)** produceert het antwoord. Bij kleine batchgroottes domineert het lezen van gewichten vaak de decode, waardoor geheugenbandbreedte een bruikbare eerste schatting geeft:
+Een **embeddingtabel** koppelt een sleutel aan een aangeleerde vector. Een gewone input-embedding koppelt elk token-ID aan één rij. Een Engram-tabel doet hetzelfde voor korte reeksen tokens (**n-grams**). DeepSeek introduceerde dit als *Engram* in de [Engram-paper](https://arxiv.org/abs/2601.07372); Qwen noemt zijn versie n-gram-embeddings en SGLang noemt de tabel PLE. Deze paper noemt beide **Engram-tabellen**.
 
-> **Geheugengebonden decodesnelheid (tokens/s) ≈ Effectieve geheugenbandbreedte (bytes/s) ÷ Gelezen bytes per gegenereerd token**
+**Wat Engram voor het model doet.** Een groot deel van taal bestaat uit vaste, lokale patronen: namen, vaste uitdrukkingen, veelvoorkomende woordcombinaties. Een standaard-Transformer heeft daarvoor geen opzoekbewerking; hij reconstrueert ze voor elk token door rekenwerk in zijn eerste lagen. Engram slaat zulke patronen op in een aangeleerde tabel en haalt ze op door op te zoeken. De Engram-paper stelt dat hierdoor meer van de diepte van het netwerk overblijft voor reasoning, en presenteert het als een as van sparsity die MoE aanvult: MoE is *conditional computation* (alleen sommige experts rekenen), Engram is *conditional memory* (alleen sommige rijen worden gelezen).
 
-Ook rekenkracht, kerneloverhead, communicatie en de toegang tot KV-cache of recurrente toestand kunnen de snelheid beperken. Batching en speculatieve decodering (speculative decoding) hergebruiken gewichten over meerdere tokens, dus een gewicht wordt niet per se voor elk uitvoertoken opnieuw gelezen.
+*Conditional* betekent hier dus dat een rij alleen wordt gelezen wanneer de invoer erom vraagt. De tabel als geheel is groot, maar een token leest alleen de paar rijen die bij zijn recente tokens passen; de rest wordt niet aangeraakt. In de tabel wordt opgezocht, er wordt niet mee gerekend.
 
-Door vaak benaderde data in het GPU-geheugen te houden, blijft een tragere overdracht buiten het uitvoeringspad. Uitvoering op de CPU en het streamen van gewichten kunnen grotere modellen aan de praat krijgen, maar de prestaties hangen dan af van de werklast en de implementatie. Conditional memory biedt een andere mogelijkheid: het rekenwerk blijft op de GPU, terwijl een kleine hoeveelheid data wordt opgehaald uit een veel grotere tabel in systeem-RAM of opslag.
+Dat splitst de geheugenbehoefte in tweeën:
+
+- **Wat bij elk token in het rekenwerk wordt gebruikt** (gewichten, KV-cache) vraagt **capaciteit én bandbreedte**, en moet dus in het GPU-geheugen staan.
+- **Wat alleen conditioneel wordt opgezocht** (de Engram-tabel) vraagt **capaciteit, maar bijna geen bandbreedte**, en kan dus naar een tragere, grotere geheugenlaag zoals systeem-RAM of NVMe.
+
+| Eigenschap | Wat het betekent | Gevolg |
+|---|---|---|
+| **Grote opslag** | Tientallen tot honderden miljarden parameters | Neemt een groot deel van het GPU-geheugen in als de tabel daar blijft |
+| **Sparse, conditionele toegang** | Een paar kilobytes per token, uit tientallen of honderden GB | Een tragere geheugenlaag is snel genoeg |
+| **Adressen vroeg bekend** | Rijen worden gekozen op basis van token-ID's, niet van het rekenwerk van het model | Rijen kunnen worden opgehaald terwijl eerdere lagen draaien |
+
+Het GPU-geheugen hoeft dan alleen het deel van het model te bevatten waarmee wordt gerekend, zodat een groter model op hetzelfde apparaat past. Ter vergelijking: Qwen3.8-Flash-Next leest bij elke decodestap gigabytes aan actieve gewichten, tegenover 2.5 KB uit zijn tabel.
+
+### 2.3. Hoe het opzoeken werkt
+
+1. **Vorm de sleutel.** Neem de recente token-ID's: twee voor een bigram, drie voor een trigram. De ID's `[a, b, c]` geven bijvoorbeeld de suffixen `[b, c]` en `[a, b, c]`.
+2. **Hash naar de tabel.** Elke hash-head zet die reeks om in een rijadres. Meerdere heads leveren meerdere vectoren, zodat een botsing in één head weinig schaadt. Zoeken door alle rijen is niet nodig.
+3. **Haal de rijen op.** Lees de geadresseerde rijen en voeg ze aaneen. De tabel is vaste aangeleerde data; het is geen gesprekscache of documentdatabase.
+4. **Combineer op de GPU.** Projecties transformeren de opgehaalde vector, en een gate die uit de huidige verborgen toestand (hidden state) wordt berekend, bepaalt hoe sterk die bijdraagt. Alleen deze stap heeft de GPU nodig; de tabel zelf kan elders staan.
+
+Het [n-gram-embeddingontwerp](https://arxiv.org/html/2608.30320#S2.SS3) van Qwen volgt dezelfde aanpak als de [Engram-architectuur](https://arxiv.org/html/2601.07372v2#S2).
+
+| | Qwen3.8-Flash-Next | DeepSeek-V4.1-Flash |
+|---|---|---|
+| Tabelgrootte | ~51.2 GB (47.7 GiB), FP8 | ~196.6 GB, FP8 |
+| Gelezen rijen per token | 16 (2 n-gram-ordes × 8 heads, één laag) | 48 (3 n-gram-ordes × 8 heads, twee lagen) |
+| Gelezen bytes per token | 16 × 160 B ≈ **2.5 KB** | 48 × 256 B ≈ **12 KB** |
+
+Rijen aan de tabel toevoegen voegt parameters toe zonder het aantal leesacties per token te verhogen.
+
+**Waarom prefetching werkt.** Rijadressen hangen alleen af van token-ID's, en die zijn vóór de forward pass bekend: tijdens prefill de hele prompt, tijdens decode het huidige token. Door de tabel na de eerste lagen te plaatsen (laag 2 in Qwen en lagen 1 en 14 in DeepSeek, geteld vanaf nul), krijgt het ophalen tijd om met rekenwerk te overlappen. Of het op tijd klaar is, hangt af van de engine en de geheugenlaag.
 
 ---
 
-## 3. Architectuur en geheugentoegang
+## 3. Waar de tabel terechtkan
 
-### 3.1. Standaard attention en MoE: wat wordt er bij elke stap gelezen?
+De kosten van een geoffloade leesactie zijn ruwweg **bytes ÷ bandbreedte van de verbinding**, plus latentie en softwareoverhead; alleen het deel dat niet achter rekenwerk verborgen blijft, vertraagt het model. Bij 2.5–12 KB per token verplaatst zelfs PCIe Gen5 x16 (theoretisch ongeveer 64 GB/s per richting) de rijen van een token ruim binnen een microseconde. Bij kleine, verspreide leesacties wegen latentie en caching zwaarder dan de piekbandbreedte, en bij bestandsgebaseerde tabellen telt ook of de pagina al in de cache staat.
 
-In een Transformer wordt de huidige representatie van een token vermenigvuldigd met aangeleerde matrices om een **query, key en value** te vormen. De query wordt vergeleken met de keys van het huidige en de voorgaande tokens. Na normalisatie bepalen de attention-gewichten hoe hun value-vectoren worden gecombineerd. De uitvoer gaat daarna door verdere projecties en een feed-forward-netwerk.
+Welke bestemming daadwerkelijk GPU-geheugen vrijmaakt, hangt af van het geheugenontwerp:
 
-Dit leidt tot twee verschillende eisen aan het geheugen:
-
-- **Gewichten** worden tijdens de training aangeleerd en over verzoeken heen hergebruikt. Dense projecties en feed-forward-lagen gebruiken bij elke forward-stap grote matrices.
-- **KV-cache** bevat de keys en values die voor het huidige gesprek zijn berekend. Volledige attention raadpleegt bij elke decodestap de voorgaande context, dus dit verkeer groeit met de contextlengte.
-
-Voor snelle uitvoering op de GPU worden deze vaak benaderde matrices en actieve caches normaal gesproken in het GPU-geheugen gehouden. Ze offloaden kan, maar herhaalde overdrachten kunnen de inferentielatentie gaan domineren.
-
-**Mixture-of-Experts (MoE)** verandert het feed-forward-deel: een router kiest voor elk token een paar expertnetwerken. Het totale aantal parameters bepaalt de opslagbehoefte, terwijl de gekozen experts een groot deel van het gewichtsverkeer bepalen. Dat vermindert het rekenwerk, maar een expert kiezen betekent nog steeds dat zijn matrices worden gebruikt. Een aangeleerde router kiest experts op basis van de huidige verborgen toestand (hidden state), dus de keuze is pas tijdens de forward pass bekend. Caching en prefetching van experts kunnen helpen, maar een cache-miss is veel duurder dan het ophalen van een paar embeddingrijen.
-
-### 3.2. Attention-architecturen die de geheugenbehoefte verkleinen
-
-Verschillende architectuurwijzigingen verkleinen de cache of de hoeveelheid die ervan wordt gelezen:
-
-| Architectuur | Wat verandert | Gevolg voor de plaatsing in het geheugen |
-|---|---|---|
-| **Grouped-query attention (GQA)** | Meerdere query-heads delen keys en values | Kleinere KV-cache; de actieve cache wordt tijdens decode nog steeds geraadpleegd |
-| **Gecomprimeerde / sparse attention** | Slaat gecomprimeerde representaties op of selecteert een deelverzameling van posities | Minder opslag of minder leesacties; selectie en cache-indeling bepalen de overdrachtskosten |
-| **Linear-attention-hybrides** | Sommige lagen werken een recurrente toestand van vaste grootte bij in plaats van voor elk token een key en value te bewaren | Minder contextafhankelijke opslag; de toestand moet nog steeds bij elke stap worden gelezen en bijgewerkt |
-
-Qwen3.8-Flash-Next gebruikt bijvoorbeeld Gated DeltaNet in drie van elke vier lagen en sparse attention in de overige lagen. DeepSeek-V4.1-Flash comprimeert en deelt attention-caches. Deze wijzigingen laten meer ruimte voor verzoeken, maar maken de resterende toestand op zichzelf niet goedkoop om te offloaden.
-
-**Conditional memory is een extra component naast deze lagen.** Het voordeel bij offloading komt voort uit het hierna beschreven opzoekpatroon; het vereist niet dat attention-berekeningen van de GPU worden gehaald.
-
-### 3.3. Conditional memory: van token-ID's naar aangeleerde vectoren
-
-Een **embedding** is een aangeleerde vector van getallen. Een gewone input-embeddingtabel koppelt elk token-ID aan een rij. Conditional memory breidt dat idee uit naar korte reeksen tokens, of **n-grams**, en levert zo aangeleerde informatie over lokale tokencombinaties naast de representatie die het netwerk berekent.
-
-De term werd door DeepSeek geïntroduceerd in de [Engram-paper](https://arxiv.org/abs/2601.07372) en is nog geen algemene naam voor de techniek: Qwen beschrijft zijn versie als n-gram-embeddings, en SGLang noemt de tabel PLE. Deze paper gebruikt voor beide *conditional memory*.
-
-Het opzoeken en de berekening die het resultaat gebruikt, zijn afzonderlijke bewerkingen:
-
-1. **Vorm de sleutel.** Neem de recente token-ID's: twee voor een bigram, drie voor een trigram. De ID's `[a, b, c]` geven bijvoorbeeld de suffixen `[b, c]` en `[a, b, c]`. Een token kan een woord zijn, een deel van een woord of een ander tekstfragment.
-2. **Hash naar tabellen.** Elke hash-head zet die korte reeks om in een rijadres. Meerdere heads leveren meerdere aangeleerde vectoren, ook wanneer twee reeksen in één tabel botsen. Zoeken door alle rijen is niet nodig.
-3. **Haal de embeddings op.** Lees de geadresseerde rijen en voeg ze aaneen. De tabel is aangeleerde modeldata, vast tijdens inferentie; het is geen gesprekscache of documentdatabase.
-4. **Combineer met de verborgen toestand.** Projecties transformeren de opgehaalde vector; een gate die uit de huidige verborgen toestand wordt berekend, bepaalt hoe sterk die bijdraagt. Dezelfde opgehaalde rijen kunnen daardoor in verschillende contexten verschillend bijdragen. Deze berekening blijft op de GPU; de grote tabel kan elders staan.
-
-Deze scheiding tussen het opzoeken van embeddings en contextafhankelijke gating wordt beschreven in de [Engram-architectuur](https://arxiv.org/html/2601.07372v2#S2). Het [n-gram-embeddingontwerp](https://arxiv.org/html/2608.30320#S2.SS3) van Qwen volgt in grote lijnen dezelfde aanpak.
-
-**Voorbeeld — Qwen3.8-Flash-Next.** Elke invoerpositie leest zestien rijen (bigrams en trigrams, elk met acht hash-heads) van 160 FP8-waarden van één byte: ongeveer **2.5 KB**, uit een tabel van ongeveer **47.7 GiB**. Rijen aan de tabel toevoegen voegt aangeleerde parameters toe zonder het aantal leesacties per token te verhogen.
-
-**Waarom prefetching mogelijk is.** Rijadressen hangen af van token-ID's, en die zijn vóór de forward pass beschikbaar. Een engine kan beginnen met het ophalen van rijen terwijl voorgaande GPU-lagen worden uitgevoerd. Bij gewone decode geldt dit voor het huidige, bekende token, niet voor onbekende toekomstige uitvoer. Tijdens prefill zijn alle prompt-ID's al beschikbaar. Plaatsing na de eerste lagen schept tijd waarin het ophalen kan overlappen met rekenwerk; of die overlap volstaat, hangt af van de engine en de geheugenlaag.
-
-Gewone input-embeddings gebruiken ook rij-opzoekingen. Door de grote omvang van conditional-memorytabellen is het offloaden ervan bijzonder nuttig om de behoefte aan GPU-geheugen te verkleinen. Als input-embeddings hun gewichten delen met de uitvoerlaag, gebruikt die laag de tabel ook om scores voor het vocabulaire te berekenen; de geheugentoegang is daar dus anders dan bij een input-opzoeking.
-
-### 3.4. Vergelijking: wat maakt offloading praktisch?
-
-| Data | Toegangspatroon | Gevolg voor offloading |
-|---|---|---|
-| **Dense projecties en feed-forward-gewichten** | Grote matrixleesacties bij elke forward-stap | Het streamen van gewichten kan de overdrachtsverbinding op het kritieke pad plaatsen |
-| **MoE-experts** | Alleen geselecteerde matrices, waarbij de selectie meestal van verborgen toestanden afhangt | Kleinere actieve set, maar dure misses en de selectie is minder ver vooraf bekend |
-| **Actieve KV-cache** | Contextafhankelijke leesacties; volledige attention raadpleegt de voorgaande context | Lange contexten kunnen aanzienlijk overdrachtsverkeer veroorzaken |
-| **Recurrente toestand** | Bij elke stap gelezen en bijgewerkt | Herhaalde lees- en schrijfacties kunnen overdrachtsoverhead veroorzaken |
-| **Conditional-memorytabellen** | Een paar rijen, geadresseerd vanuit token-ID's | Kleine overdrachten en voorspelbare adressen maken prefetching mogelijk dat met rekenwerk overlapt |
-
-> **Praktische conclusie:** Grote tabellen, kleine overdrachten en genoeg tijd om ze op te halen maken een component tot een goede kandidaat voor offloading. Conditional memory combineert kleine overdrachten met adressen die bekend zijn voordat de laag wordt uitgevoerd. Offloading van attention en experts vraagt om andere afwegingen.
-
----
-
-## 4. De geheugenhiërarchie van de apparaten
-
-### 4.1. Geheugenlagen
-
-| Laag | Typische capaciteit | Toegangskenmerk |
-|---|---|---|
-| **GPU-geheugen** (HBM, GDDR, unified LPDDR) | Tientallen tot honderden GB per apparaat | Hoge bandbreedte voor herhaalde matrix- en cacheleesacties |
-| **Systeem-RAM** op een systeem met discrete GPU | Honderden GB tot TB's | PCIe Gen5 x16 biedt theoretisch ongeveer 64 GB/s per richting, vóór protocol- en softwareoverhead |
-| **Lokale NVMe** | Enkele TB | Grotere capaciteit; willekeurige toegang en page faults kosten meer dan leesacties uit resident geheugen |
-
-De overdrachtstijd is ruwweg **bytes ÷ bandbreedte**, plus latentie en softwareoverhead; alleen het deel dat niet achter rekenwerk verborgen blijft, vertraagt het model. Bij kleine, verspreide leesacties kunnen latentie en caching zwaarder wegen dan de piekbandbreedte.
-
-### 4.2. Unified memory versus dedicated GPU-geheugen
-
-De geheugenarchitectuur bepaalt welke bestemming voor offloading daadwerkelijk GPU-geheugen vrijmaakt.
-
-**Dedicated GPU-geheugen (RTX PRO 6000, DGX B300).** De GPU heeft zijn eigen geheugen; de CPU heeft apart systeem-RAM, dat via PCIe bereikbaar is. Een tabel van het GPU-geheugen naar systeem-RAM verplaatsen maakt GPU-geheugen vrij. De hier gebruikte offloading-implementatie plaatst de tabel in **pinned (page-locked) host-geheugen**, zodat de GPU rijen rechtstreeks kan verzamelen zonder dat het besturingssysteem die pagina's naar swap wegschrijft.
-
-**Unified memory (DGX Spark).** De CPU en GPU van de GB10-chip delen één pool van 128 GB LPDDR5X, met cachecoherente toegang vanuit beide processors. Er is geen apart systeem-RAM: de tabel als CPU-geheugen toewijzen vermindert het gebruik van de gedeelde pool niet, en een tabel die in host-geheugen is gepind, verbruikt nog steeds dezelfde 128 GB. De bestandsgebaseerde implementatie maakt gebruik van de toegang van GB10 tot pageable geheugen via de paginatabellen van de host. De tabel staat op lokale NVMe; opgehaalde pagina's nemen zolang ze gecachet zijn nog steeds unified memory in. Slechts een deel van de tabel hoeft tegelijk in het RAM te blijven.
-
-### 4.3. Vergelijking van de apparaten
+- **Dedicated GPU-geheugen (RTX PRO 6000, DGX B300).** De CPU heeft apart systeem-RAM, bereikbaar via PCIe. De tabel daarheen verplaatsen maakt GPU-geheugen vrij. De hier gebruikte implementatie plaatst hem in **pinned (page-locked) host-geheugen**, dat de GPU rechtstreeks kan lezen.
+- **Unified memory (DGX Spark).** De CPU en GPU van de GB10 delen één pool van 128 GB LPDDR5X. Er is geen apart systeem-RAM; de tabel "in host-geheugen" plaatsen, gepind of niet, gebruikt dus nog steeds dezelfde 128 GB. Alleen door hem helemaal uit het geheugen te halen, naar lokale NVMe, komt er ruimte vrij. De GPU leest het memory-mapped bestand via de paginatabellen van de host; recent gebruikte pagina's blijven gecachet in de gedeelde pool.
 
 | | DGX Spark (GB10) | RTX PRO 6000 Blackwell | DGX B300 |
 |---|---|---|---|
@@ -180,27 +128,19 @@ De geheugenarchitectuur bepaalt welke bestemming voor offloading daadwerkelijk G
 | Locatie van de tabel | Lokale NVMe met een paginacache in het geheugen | Pinned systeem-RAM via PCIe | In het GPU-geheugen opgeslagen in de DeepSeek-configuratie met vier GPU's |
 | Gevolg voor de dimensionering | Houd in de gedeelde pool rekening met besturingssysteem, paginacache en runtime | Budgetteer systeem-RAM los van GPU-geheugen | Voldoende GPU-geheugen voor deze checkpoints in configuraties met meerdere GPU's |
 
-### 4.4. Waarom offloading van conditional memory weinig overhead kan hebben
-
-Het overdragen van gigabytes aan actieve gewichten per stap kan een groot deel van de beschikbare PCIe-bandbreedte opslokken. De ~2.5 KB aan embeddingdata per tokenpositie van Qwen vergt veel minder overdrachtsbandbreedte. De adressen kunnen bovendien worden voorbereid vóór de laag die de embeddings gebruikt, zodat een asynchrone ophaalactie kan afronden terwijl andere lagen draaien.
-
-Dat is de architecturale reden waarom **een grote tabel tegen lage kosten kan worden geoffload**. Het vereist wel een implementatie die het toegangspatroon benut. Systeem-RAM en NVMe zijn bovendien verschillende gevallen: een bestandsgebaseerde tabel kan een treffer in de paginacache opleveren of op de opslag moeten wachten. Paginaleesacties kunnen veel groter zijn dan de gevraagde rijen, en prefill, batching en speculatieve verificatie vermenigvuldigen het aantal posities dat wordt opgezocht.
-
-**Aanwijzingen dat het mechanisme kan werken.** In het H800-experiment uit de Engram-paper verlaagde het toevoegen van een in host-geheugen geplaatste tabel van 100B parameters aan dense backbones van 4B en 8B de doorvoer (throughput) met ongeveer 1.9% en 2.8%, ten opzichte van hun respectievelijke baselines zonder Engram. De implementatie liet het ophalen overlappen met het eerste blok. Het resultaat geldt voor die implementatie met host-geheugen en die werklast ([Engram, §6.4](https://arxiv.org/html/2601.07372v2#S6.SS4)).
-
-Een tabel offloaden zonder de waarden ervan te veranderen, behoudt de aangeleerde informatie: dezelfde rijen worden aan de GPU geleverd. De praktische vraag is of ze op tijd aankomen. Sectie 6 laat de keuzes zien die daaruit voor deployment volgen: een vergelijking tussen geheugen en NVMe op 8× DGX Spark, en bruikbare inferentie vanuit checkpoints die anders te groot zouden zijn, op kleinere configuraties.
+**Bewijs dat het mechanisme werkt.** In het H800-experiment uit de Engram-paper verlaagde het toevoegen van een tabel van 100B parameters in host-geheugen aan dense backbones van 4B en 8B de doorvoer (throughput) met slechts ongeveer 1.9% en 2.8%, waarbij het ophalen overlapte met het eerste blok ([Engram, §6.4](https://arxiv.org/html/2601.07372v2#S6.SS4)). Offloading verandert de waarden van de tabel niet: de GPU krijgt dezelfde rijen, dus het model berekent hetzelfde resultaat. De enige vraag is of de rijen op tijd aankomen.
 
 ---
 
-## 5. De onderzochte modellen
+## 4. De onderzochte modellen
 
-### 5.1. DeepSeek-V4.1-Flash
+### 4.1. DeepSeek-V4.1-Flash
 
 | Eigenschap | Waarde |
 |---|---|
 | Totaal aantal parameters | 763B |
 | — backbone | 552B |
-| — Engram conditional memory | 196B |
+| — Engram-embeddingtabellen | 196B |
 | — vision-encoder, projector, draftmodel | ~15B |
 | Actieve parameters per token | ~16B bij decode (~8B bij prefill) |
 | Attention | Gecomprimeerde sparse attention met een sliding window van 128 tokens; KV-cache gedeeld over lagen |
@@ -210,7 +150,7 @@ Een tabel offloaden zonder de waarden ervan te veranderen, behoudt de aangeleerd
 
 De [modelkaart](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) onderscheidt de backbone van 552B van Engram en de hulpmodules.
 
-### 5.2. Qwen3.8-Flash-Next
+### 4.2. Qwen3.8-Flash-Next
 
 | Eigenschap | Waarde |
 |---|---|
@@ -222,26 +162,26 @@ De [modelkaart](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash) ondersch
 | Geserveerde checkpoint | `nvidia/Qwen3.8-Flash-Next-NVFP4`; 132.7 GB (123.6 GiB) aan safetensors-bestanden |
 | Precisie van de gewichten | NVFP4 voor de gerouteerde experts in het hoofdmodel; BF16 voor attention en gedeelde experts; FP8 voor de gerouteerde MTP-experts en de n-gram-tabel |
 
-### 5.3. Modelgrootte en geheugenbehoefte
+### 4.3. Modelgrootte en geheugenbehoefte
 
-| Model | Grootte van de checkpoint | Conditional-memorytabel | Rest van de checkpoint | Configuraties die hier offloading van de tabel vereisen |
+| Model | Grootte van de checkpoint | Embeddingtabel | Rest van de checkpoint | Configuraties die hier offloading van de tabel vereisen |
 |---|---|---|---|---|
 | DeepSeek-V4.1-Flash | 510.3 GB | ~196.6 GB | ~313.7 GB | 4× DGX Spark |
 | Qwen3.8-Flash-Next, NVIDIA NVFP4 | 132.7 GB | ~51.2 GB (47.7 GiB) | ~81.5 GB | 1× DGX Spark; 1× RTX PRO 6000 |
 
-GB betekent 10⁹ bytes en GiB 2³⁰ bytes. De checkpointgroottes zijn de totalen van de safetensors-bestanden bij de vastgelegde revisies (voor Qwen de [checkpointbestanden van NVIDIA](https://huggingface.co/nvidia/Qwen3.8-Flash-Next-NVFP4/tree/fc694b54fb0174e0913e6adf86691ef85a4ead47)). De resterende grootte is een aftreksom, geen meting van het GPU-geheugen na het laden; cijfers over het geheugen tijdens runtime staan in Sectie 6.
+GB betekent 10⁹ bytes en GiB 2³⁰ bytes. De checkpointgroottes zijn de totalen van de safetensors-bestanden bij de vastgelegde revisies (voor Qwen de [checkpointbestanden van NVIDIA](https://huggingface.co/nvidia/Qwen3.8-Flash-Next-NVFP4/tree/fc694b54fb0174e0913e6adf86691ef85a4ead47)). De resterende grootte is een aftreksom, geen meting van het GPU-geheugen na het laden; cijfers over het geheugen tijdens runtime staan in sectie 5.
 
 Offloading verplaatst de tabel naar een andere geheugenlaag; ze blijft deel van het model. De kleinere configuraties kunnen dan de overige gewichten bevatten, samen met het geheugen dat voor inferentie nodig is.
 
 ---
 
-## 6. Benchmarkresultaten
+## 5. Benchmarkresultaten
 
-### 6.1. Methodologie
+### 5.1. Methodologie
 
 De onderstaande deploymentresultaten zijn OpenZeka-metingen, uitgevoerd met de open-source [CordatusAI LLM Benchmark Tool](https://github.com/CordatusAI/llm-benchmark), met ongeveer 128 invoertokens en een uitvoerlimiet van 128 tokens, tien rondes per niveau van gelijktijdigheid, waarbij gemiddelde waarden worden gerapporteerd. **Gelijktijdigheid (C)** is het aantal gelijktijdige verzoeken. **TTFT (time to first token)** omvat wachtrijtijd en promptverwerking; ook het eerste reasoning-token telt mee wanneer het wordt gestreamd. **TPS (tokens per seconde)** is het aantal uitvoertokens gedeeld door de totale verzoektijd, inclusief TTFT. Het wordt per verzoek gerapporteerd, niet als geaggregeerde doorvoer. Alle resultaten zijn ook beschikbaar in de [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}).
 
-| Run | Hardware | Engine, tensorparallellisme (TP) | Speculatieve decodering | Conditional memory |
+| Run | Hardware | Engine, tensorparallellisme (TP) | Speculatieve decodering | Locatie van de tabel |
 |---|---|---|---|---|
 | DeepSeek-V4.1-Flash | 4× DGX Spark | vLLM, TP=4 | DSpark, k=5 | NVMe |
 | DeepSeek-V4.1-Flash, 300K | 8× DGX Spark | vLLM, TP=8 | DSpark, k=5 | In het geheugen |
@@ -251,7 +191,7 @@ De onderstaande deploymentresultaten zijn OpenZeka-metingen, uitgevoerd met de o
 
 De **twee DeepSeek-configuraties op 8× DGX Spark** vergelijken de plaatsing van de tabel op dezelfde hardware. De andere runs beantwoorden een andere dimensioneringsvraag: welke inferentieprestaties levert de configuratie zodra het model met offloading past? Hun resultaten worden hieronder afzonderlijk beoordeeld.
 
-### 6.2. DeepSeek-V4.1-Flash op 4× DGX Spark: het model passend maken met Engram-on-disk
+### 5.2. DeepSeek-V4.1-Flash op 4× DGX Spark: het model passend maken met Engram-on-disk
 
 Verdeeld over vier nodes heeft de volledige checkpoint van 510 GB ongeveer 128 GB per node nodig — meer dan een DGX Spark aan het model kan geven zodra het besturingssysteem, de CUDA-context en de KV-cache zijn meegerekend. Met **Engram-on-disk** bewaart elke node zijn deel van de Engram-rijen op lokale NVMe en zet hij de rijen die elke stap nodig heeft vóór de forward pass klaar in het GPU-geheugen. De overige gewichten kunnen dan worden geladen, met de volgende benchmarkresultaten:
 
@@ -264,7 +204,7 @@ Verdeeld over vier nodes heeft de volledige checkpoint van 510 GB ongeveer 128 G
 
 **Waarom dit nuttig is.** Een model met 763B parameters draait verdeeld over vier desktopapparaten met **29.5 tok/s per verzoek en 272 ms TTFT bij C=1**. Bij C=2 houdt het **21.3 tok/s en 396 ms TTFT** vast en haalt het daarmee de standaarddoelen van de Explorer: minstens 20 tok/s en hoogstens 1,000 ms TTFT. Hogere gelijktijdigheid blijft mogelijk, met 13.1 tok/s bij C=4 en 8.8 tok/s bij C=8, maar met tragere antwoorden. Voor deze werklast ondersteunt de configuratie interactief gebruik bij lage gelijktijdigheid.
 
-### 6.3. DeepSeek-V4.1-Flash op 8× DGX Spark: de tabel in het geheugen versus op NVMe
+### 5.3. DeepSeek-V4.1-Flash op 8× DGX Spark: de tabel in het geheugen versus op NVMe
 
 Op acht nodes past de checkpoint in beide gevallen, zodat twee deploymentconfiguraties vergeleken kunnen worden. Op DGX Spark gebruikt een tabel in "host-geheugen" nog steeds de gedeelde geheugenpool van 128 GB. Door de tabel naar NVMe te verplaatsen, daalt dat gebruik, afgezien van gecachete pagina's en staging-buffers.
 
@@ -280,7 +220,7 @@ Op acht nodes past de checkpoint in beide gevallen, zodat twee deploymentconfigu
 
 Dit is een vergelijking van de twee deploymentconfiguraties: ook contextlimieten, geheugeninstellingen en uitvoeringspaden verschillen (zie de [8×-paper]({{ '/papers/deepseek-v4.1-flash-8spark-deployment/' | relative_url }})). De geconfigureerde contextlimiet stijgt van 300K naar 1M tokens. De benchmark gebruikte korte prompts en testte de maximale contextlengte niet.
 
-### 6.4. Qwen3.8-Flash-Next op één DGX Spark: een checkpoint van 132.7 GB passend maken
+### 5.4. Qwen3.8-Flash-Next op één DGX Spark: een checkpoint van 132.7 GB passend maken
 
 De **NVIDIA NVFP4-checkpoint van 132.7 GB** kan niet volledig in het geheugen van één Spark worden gehouden naast het besturingssysteem, de KV-cache en de runtimebuffers. Door de **FP8-n-gram-tabel van 47.7 GiB** op te slaan in een memory-mapped bestand op lokale NVMe, kunnen de overige gewichten in unified memory blijven.
 
@@ -297,7 +237,7 @@ De GPU benadert de memory-mapped tabel via de paginatabellen van de CPU. Recent 
 
 De opstarttijd is een operationeel aandachtspunt: deze implementatie herschrijft het tabelbestand bij elke start, wat ongeveer 10 minuten duurt bij een nieuw bestand of 55 minuten wanneer het eerder gevulde bestand nog aanwezig is. Dat is van belang bij herstarts, ook al levert de draaiende service de bovenstaande responssnelheden.
 
-### 6.5. Qwen3.8-Flash-Next op één RTX PRO 6000: het model passend maken met offloading naar host-geheugen
+### 5.5. Qwen3.8-Flash-Next op één RTX PRO 6000: het model passend maken met offloading naar host-geheugen
 
 Dezelfde **NVFP4-checkpoint van 132.7 GB** is groter dan het **dedicated geheugen van 96 GB** van de kaart. De offloading-implementatie met pinned memory plaatst de FP8-tabel van 47.7 GiB in het aparte systeem-RAM, zodat de overige modelgewichten op de GPU passen. De host heeft minstens 64 GB vrij nodig voor de pinned toewijzing en reserve; gevraagde rijen bereiken de GPU via PCIe.
 
@@ -318,27 +258,34 @@ Deze waarnemingen gelden voor de gemeten werklast met korte prompts. Langere pro
 
 ---
 
-## 7. Bespreking
+## 6. Bespreking
 
-### 7.1. Geheugen versus NVMe wanneer het model al past
+### 6.1. Geheugen versus NVMe wanneer het model al past
 
-De DeepSeek-vergelijking op 8× Spark is nuttig bij de keuze hoe geheugen wordt toegewezen. Beide configuraties serveren hetzelfde model op dezelfde hardware: Engram in het geheugen houden geeft de hogere gemeten TPS, terwijl het verplaatsen naar schijf meer geheugen beschikbaar maakt voor de KV-cache. De keuze hangt ervan af of de toepassing de extra KV-cachecapaciteit genoeg waardeert om het waargenomen snelheidsverschil te accepteren.
+De DeepSeek-vergelijking op 8× Spark is nuttig bij de keuze hoe geheugen wordt toegewezen. Beide configuraties serveren hetzelfde model op dezelfde hardware: Engram in het geheugen houden geeft de hogere gemeten TPS, terwijl het verplaatsen naar schijf meer geheugen beschikbaar maakt voor de KV-cache. De keuze hangt ervan af of de toepassing de extra KV-cachecapaciteit genoeg waardeert om het waargenomen snelheidsverschil te accepteren. In de Explorer haalt de configuratie in het geheugen Max C = 4 (naar schatting 16 chat- of 6 agentische gebruikers) en de schijfconfiguratie Max C = 2 (8 chat- of 3 agentische gebruikers). De benchmark met korte prompts gebruikt de extra KV-cache van de schijfconfiguratie niet; die telt bij lange contexten.
 
-### 7.2. Modellen draaien die groter zijn dan het GPU-geheugen
+### 6.2. Wat offloading mogelijk maakt: vaardigheid, snelheid en capaciteit
 
-De DeepSeek-run op 4× Spark en de Qwen-runs op één apparaat laten een ander voordeel zien: hun checkpoints en geheugenbehoefte tijdens runtime zijn groter dan het beschikbare geheugen, maar het offloaden van de opzoektabellen maakt inferentie met bruikbare snelheden per verzoek mogelijk. De afzonderlijke resultaten in Sectie 6 tonen zowel de ervaring bij één verzoek als wat er gebeurt wanneer de gelijktijdigheid stijgt.
+De keten is kort. De Engram-tabel verlaat het GPU-geheugen, de rest van het model past, en het apparaat serveert dan een model dat het anders niet zou kunnen bevatten. De [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) vertaalt het resultaat naar planningstermen:
 
-Voor planning per werklast biedt de [LLM Inference Benchmark Explorer]({{ '/llm-inference-benchmarks/' | relative_url }}) de gemeten TTFT/TPS-curves en een toetsing aan doelen voor TTFT en TPS. De capaciteitsschattingen daarin zijn hulpmiddelen voor planning; controleer of een schatting rekening houdt met de werkelijke plaatsing van de tabel en de toestandspools voordat u haar op een run met offloading toepast. Gebruik de gemeten gelijktijdigheidsreeks om doelen voor latentie en TPS te controleren; valideer de geheugencapaciteit voor de offloadingconfiguratie afzonderlijk.
+| Model (Intelligence Index) | Apparaat | Waarom het past | TPS per verzoek bij C=1 | Max C | Geschatte chatgebruikers | Geschatte agentische gebruikers |
+|---|---|---|---|---|---|---|
+| DeepSeek-V4.1-Flash (39.5) | 4× DGX Spark | ~196.6 GB aan Engram-tabellen op NVMe; de rest van de checkpoint van 510.3 GB is verdeeld over vier nodes van 128 GB | 29.5 tok/s | 2 | 8 | 3 |
+| Qwen3.8-Flash-Next (39.8) | 1× DGX Spark | Tabel van 51.2 GB op NVMe; de rest van de checkpoint van 132.7 GB past in de pool van 128 GB | 28.5 tok/s | 2 | 8 | 3 |
+| Qwen3.8-Flash-Next (39.8) | 1× RTX PRO 6000 | Tabel van 51.2 GB in systeem-RAM; de rest van de checkpoint van 132.7 GB past op de kaart van 96 GB | 155.8 tok/s | 16 | 64 | 24 |
 
-### 7.3. Modelvaardigheid
+Met andere woorden: omdat de Engram-tabel kan worden geoffload, draait een model met een Artificial Analysis Intelligence Index van 39.8 op **één DGX Spark met 28.5 tok/s**, genoeg voor naar schatting **8 chatgebruikers of 3 agentische gebruikers**. Op **één RTX PRO 6000** draait hetzelfde model met **155.8 tok/s** en haalt het naar schatting **64 chatgebruikers of 24 agentische gebruikers**. Een 763B-model met een index van 39.5 bedient op **vier DGX Sparks** naar schatting 8 chat- of 3 agentische gebruikers.
 
-Qwen3.8-Flash-Next heeft volgens de vastgelegde gegevens van de Explorer een **Artificial Analysis Intelligence Index van 39.8**. Deze externe benchmarkscore biedt context voor de modelkeuze, naast de gemeten inferentieprestaties. Ze beschrijft het model; ze valideert niet de gekwantiseerde deployment voor een bepaalde taak.
+Zo leest u deze cijfers:
 
-*Intelligence Index v4.3, gepubliceerd door [Artificial Analysis](https://artificialanalysis.ai), opgehaald op 28 september 2026 en met bronvermelding overgenomen.*
+- **Max C** is de hoogste geteste gelijktijdigheid die aan de standaarddoelen van de Explorer voldoet: minstens 20 tok/s per verzoek en hoogstens 1,000 ms gemiddelde TTFT.
+- **Gebruikersaantallen zijn een schatting, geen meting.** De Explorer vermenigvuldigt Max C met een standaard gebruiksfactor: ×4 voor chatgebruikers, die het grootste deel van de tijd lezen en typen (ongeveer een kwart van de tijd loopt er een verzoek), en ×1.5 voor agentische gebruikers, bij wie aan elkaar gekoppelde aanroepen ongeveer twee derde van de tijd een verzoek laten lopen.
+- **Deze capaciteiten volgen alleen uit de snelheid.** De geheugenlimiet van de Explorer gaat ervan uit dat de hele checkpoint in het GPU-geheugen staat, en juist dat vermijdt offloading; voor deze runs berekent de Explorer er daarom geen. De eigen verzoeklimieten van de deployments (8 lopende verzoeken op DGX Spark, 16 op RTX PRO 6000) liggen op of boven Max C, dus het geheugen verlaagt de schatting niet.
+- **De werklast was kort:** ongeveer 128 invoer- en 128 uitvoertokens. Langere prompts en gespreksgeschiedenissen verhogen de TTFT en verlagen de capaciteit.
 
-Beoordeel de geserveerde checkpoint op de beoogde taken, naast de responssnelheid. De praktische winst is toegang tot een capabel model met prestaties die op het beschikbare apparaat aan de eisen van de toepassing voldoen.
+*Intelligence Index v4.3, gepubliceerd door [Artificial Analysis](https://artificialanalysis.ai), opgehaald op 28 september 2026 en met bronvermelding overgenomen.* De index beschrijft het model, niet de gekwantiseerde deployment voor een bepaalde taak; beoordeel de geserveerde checkpoint ook op de beoogde taken.
 
-### 7.4. Operationele vereisten
+### 6.3. Operationele vereisten
 
 De volgende vereisten komen bovenop de opslag van de gedownloade checkpoint:
 
@@ -351,11 +298,11 @@ De volgende vereisten komen bovenop de opslag van de gedownloade checkpoint:
 
 ---
 
-## 8. Dimensioneren met conditional memory
+## 7. Dimensioneren met Engram-tabellen
 
-### 8.1. Het herziene geheugenbudget
+### 7.1. Het herziene geheugenbudget
 
-Budgetteer voor ondersteunde conditional-memorymodellen het GPU-geheugen en de bestemming voor offloading afzonderlijk:
+Budgetteer voor ondersteunde modellen met Engram-tabellen het GPU-geheugen en de bestemming voor offloading afzonderlijk:
 
 > **Benodigd GPU-geheugen (of unified memory) = Overige modelgewichten + KV-cache + Pools voor de recurrente toestand + Activaties + Offloadingbuffers en gecachete pagina's + Runtime-overhead**
 >
@@ -365,9 +312,9 @@ Op Spark gebruikt ook het besturingssysteem unified memory. Gecachete bestandspa
 
 Gebruik het advies over reserve uit de Handleiding voor lokaal LLM-gebruik als planningsmarge en controleer daarna de werkelijke toewijzing en het piekgebruik van de engine. Een geconfigureerde geheugenfractie is niet uitwisselbaar met een vast percentage dat bij de checkpointgrootte wordt opgeteld.
 
-### 8.2. Checklist voor dimensionering
+### 7.2. Checklist voor dimensionering
 
-- ☐ Bepaal de overige modelgewichten en de conditional-memorytabellen van de geserveerde checkpoint afzonderlijk, inclusief hun precisie.
+- ☐ Bepaal de overige modelgewichten en de Engram-tabellen van de geserveerde checkpoint afzonderlijk, inclusief hun precisie.
 - ☐ Controleer of de engine het model en de bestemming ondersteunt: pinned systeem-RAM of bestandsgebaseerde opslag in de hier onderzochte configuraties.
 - ☐ Budgetteer resident caches, buffers en geheugen voor het besturingssysteem, naast de geoffloade tabel.
 - ☐ Reserveer pools voor KV en recurrente toestand voor de vereiste context en gelijktijdigheid; controleer de effectieve limieten van de engine.
@@ -378,20 +325,20 @@ Een dimensioneringsfout om te vermijden is alle offloading als gelijkwaardig te 
 
 ---
 
-## 9. Conclusie en vooruitblik
+## 8. Conclusie en vooruitblik
 
 **Samenvatting van de bevindingen:**
 
 | Vraag | Antwoord |
 |---|---|
-| Kan conditional memory het GPU-geheugen verlaten? | Ja — de tabellen zijn groot, maar elk token haalt slechts enkele kilobytes op, op vooraf bekende adressen |
+| Kan de tabel het GPU-geheugen verlaten? | Ja — de tabellen zijn groot, maar elk token haalt slechts enkele kilobytes op, op vooraf bekende adressen |
 | Waar gaat het naartoe? | Lokale NVMe op DGX Spark; apart pinned systeem-RAM op RTX PRO 6000 |
 | Wat laat de vergelijking op dezelfde hardware zien? | Op 8× Spark rapporteert de schijfconfiguratie ~21 GB meer KV-cachetoewijzing per node, met 7.5% lagere TPS bij C=1 en 14% lagere TPS bij C=8 |
-| Welke prestaties halen de kleinere configuraties? | DeepSeek op 4× Spark: 29.5 tok/s bij C=1; Qwen op één Spark: 28.5 tok/s bij C=1; Qwen op RTX PRO 6000: 43.2 tok/s per verzoek bij C=16 |
+| Wat leveren de kleinere configuraties? | DeepSeek op 4× Spark: 29.5 tok/s bij C=1, naar schatting 8 chat- / 3 agentische gebruikers; Qwen op één Spark: 28.5 tok/s, 8 chat- / 3 agentische gebruikers; Qwen op RTX PRO 6000: 155.8 tok/s bij C=1 en 43.2 tok/s per verzoek bij C=16, 64 chat- / 24 agentische gebruikers |
 | Wat levert het op? | Modellen die anders niet passen (763B op 4× DGX Spark, een checkpoint van 132.7 GB op één DGX Spark of RTX PRO 6000), en meer KV-capaciteit (geconfigureerde limiet 300K → 1M op 8× DGX Spark) |
 | Wat kost het? | Opstarttijd, NVMe-ruimte of gepind systeem-RAM, en afhankelijkheid van ondersteuning in de engine |
 
-**Vooruitblik.** Sommige recente architecturen scheiden wat berekend moet worden van wat alleen opgeslagen hoeft te worden. Mixture-of-Experts scheidde actieve van totale parameters; conditional memory, zoals gebruikt in de twee hier onderzochte modellen, voegt een grote parameterpool toe waarvan het toegangspatroon past bij tragere geheugenlagen. Of andere modellen het overnemen, valt nog te bezien. Als dat gebeurt en inferentie-engines het ondersteunen, kan dezelfde hardware capabelere modellen draaien door systeem-RAM en opslag te gebruiken voor geschikte componenten. Om dat voordeel te benutten, zijn genoeg GPU-geheugen voor de overige gewichten en de verzoektoestand, efficiënte dataoverdrachten en een aanvaardbare gemeten latentie nodig.
+**Vooruitblik.** Sommige recente architecturen scheiden wat berekend moet worden van wat alleen opgeslagen hoeft te worden. Mixture-of-Experts scheidde actieve van totale parameters; Engram-tabellen, zoals gebruikt in de twee hier onderzochte modellen, voegen een grote parameterpool toe waarvan het toegangspatroon past bij tragere geheugenlagen. Of andere modellen het overnemen, valt nog te bezien. Als dat gebeurt en inferentie-engines het ondersteunen, kan dezelfde hardware capabelere modellen draaien door systeem-RAM en opslag te gebruiken voor geschikte componenten. Om dat voordeel te benutten, zijn genoeg GPU-geheugen voor de overige gewichten en de verzoektoestand, efficiënte dataoverdrachten en een aanvaardbare gemeten latentie nodig.
 
 ---
 
@@ -399,15 +346,16 @@ Een dimensioneringsfout om te vermijden is alle offloading als gelijkwaardig te 
 
 - **Actieve parameters:** Parameters die voor een token worden gebruikt; hun precisie en hergebruik bepalen mede het gewichtsverkeer.
 - **Checkpoint:** Opgeslagen modelgewichten en bijbehorende metadata; bestandsgrootte en geheugengebruik tijdens runtime zijn verschillende grootheden.
-- **Conditional memory:** Een opzoektabel met aangeleerde vectoren, geadresseerd via gehashte n-grams van de invoertokens en in geselecteerde lagen gecombineerd met de verborgen toestand. De term werd geïntroduceerd in de Engram-paper van DeepSeek.
+- **Conditional memory:** De naam die DeepSeek gebruikt voor een Engram-tabel: de tabel is groot, maar een rij wordt alleen gelezen wanneer de invoertokens erom vragen.
 - **Decode:** Stapsgewijze generatie van het antwoord; bij kleine batchgroottes vaak begrensd door de geheugenbandbreedte.
 - **Embedding:** Een aangeleerde vector die een token of een reeks tokens representeert.
-- **Engram:** De conditional-memorymodule van DeepSeek, gebruikt in DeepSeek-V4.1-Flash.
+- **Engram:** De embeddingtabelmodule van DeepSeek, gebruikt in DeepSeek-V4.1-Flash.
+- **Engram-tabel:** Een opzoektabel met aangeleerde vectoren, geadresseerd via gehashte n-grams van de invoertokens en in geselecteerde lagen gecombineerd met de verborgen toestand.
 - **Gated DeltaNet:** Een linear-attention-laag die per verzoek een toestand van vaste grootte bijhoudt in plaats van een groeiende KV-cache.
 - **Hash-head:** Een van meerdere onafhankelijke hashfuncties die een n-gram aan een rij van de tabel koppelen.
 - **Verborgen toestand (hidden state):** De vectorrepresentatie van een token terwijl het door de lagen van het model gaat.
 - **KV-cache:** Gecachete attention-keys en -values; de grootte hangt af van de attention-architectuur, de contextlengte, de precisie en het aantal gelijktijdige verzoeken.
-- **Opzoektabel (lookup table):** Een tabel die wordt gelezen door de rijen op te halen die door een sleutel worden geadresseerd; conditional-memorytabellen worden zo gelezen.
+- **Opzoektabel (lookup table):** Een tabel die wordt gelezen door de rijen op te halen die door een sleutel worden geadresseerd; Engram-tabellen worden zo gelezen.
 - **Memory-mapped bestand:** Een bestand dat als geheugen toegankelijk is gemaakt; pagina's worden bij de eerste toegang van schijf geladen en in de paginacache bewaard.
 - **N-gram:** Een reeks van n opeenvolgende tokens (bigram: 2, trigram: 3).
 - **Offloading:** Een deel van de data van een model in een tragere, grotere geheugenlaag plaatsen (systeem-RAM, NVMe) in plaats van in het GPU-geheugen.

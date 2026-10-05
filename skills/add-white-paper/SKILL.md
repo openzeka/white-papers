@@ -105,7 +105,7 @@ content:
 | `footer_with_email` | the same with the support email (English only) | Qwen3.6-27B scaling |
 | `about_report` / `contact_table` | an "About us" section and its contact table | Qwen3.6-27B benchmark |
 | `about_profile` | the longer company profile with logo | Local LLM guide |
-| `cta_logo` + `contact_cta` | logo and "contact us: …" at the close | Local LLM guide, Conditional Memory |
+| `cta_logo` + `contact_cta` | logo and "contact us: …" at the close | Local LLM guide, Engram Offloading |
 | `legal_name`, `name`, `website` | single values, usable inside a sentence | `/papers/` index |
 
 Copy the lines from the paper most like yours. `contact_cta` stands inside a

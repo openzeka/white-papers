@@ -85,7 +85,7 @@ In combinatie met FP4-caching van de hoofd-KV (E2M1-formaat, één E4M3-schaal p
 
 De Engram-laag van 196B wordt spaarzaam benaderd via opzoeking op basis van tokens. Deze deployment gebruikt de modus **Engram-on-disk**: Engram-rijen worden op de lokale schijf van elke node opgeslagen in plaats van in het GPU-geheugen, en naar behoefte in het GPU-geheugen klaargezet. Daardoor past het model van 763B binnen 4× 128 GB (in totaal 512 GB) unified memory.
 
-Voor het opzoekmechanisme van de embeddings, het geheugenbudget en de interpretatie van de resultaten van offloading, zie [Conditional memory en offloading bij LLM-inferentie]({{ '/papers/conditional-memory-offloading/' | relative_url }}).
+Voor het opzoekmechanisme van de embeddings, het geheugenbudget en de interpretatie van de resultaten van offloading, zie [Engram-offloading bij LLM-inferentie]({{ '/papers/conditional-memory-offloading/' | relative_url }}).
 
 ### 2.5 Speculatieve decodering met DSpark
 

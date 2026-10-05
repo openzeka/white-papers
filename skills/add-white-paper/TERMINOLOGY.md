@@ -85,8 +85,13 @@ that language's technical writing keeps the English word; write it as shown
 | context length / window | bağlam uzunluğu / penceresi | contextlengte / contextvenster |
 | token, prompt, prefill, decode, batch | *(English)* | *(English)* |
 | embedding, checkpoint, attention | *(English)* | *(English)* |
-| offloading; to offload | offloading | offloading; offloaden (geoffload) — never *uitbesteden* |
+| offloading; to offload | taşıma; taşımak — first use *taşıma (offloading)*; network "hardware offload" stays English | offloading; offloaden (geoffload) — never *uitbesteden* |
 | conditional memory | conditional memory | conditional memory |
+| conditional computation | conditional computation | conditional computation |
+| Engram table | Engram tablosu | Engram-tabel |
+| hash head | hash fonksiyonu (hash head) | hash-head |
+| sparsity | seyreklik (sparsity) | sparsity |
+| bottleneck | darboğaz | knelpunt |
 | expert / router (MoE) | uzman / yönlendirici | expert / router |
 | hidden state | gizli durum | verborgen toestand |
 | forward pass | ileri yayılım | forward pass |

@@ -18,7 +18,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | Title | Topic | Platform |
 |---|---|---|
 | [Local LLM Usage Guide](https://whitepapers.openzeka.com/papers/local-llm-guide/) | Hardware → model → software decision guide | Jetson, RTX PRO, DGX Spark, DGX/HGX |
-| [Conditional Memory and Offloading in LLM Inference](https://whitepapers.openzeka.com/papers/conditional-memory-offloading/) | Architecture, memory placement and measured inference with conditional-memory offloading | DGX Spark, RTX PRO 6000; DGX B300 memory architecture |
+| [Engram Offloading in LLM Inference](https://whitepapers.openzeka.com/papers/conditional-memory-offloading/) | Large embedding tables read a few rows per token: offloading them to host RAM or NVMe, with measured results | DGX Spark, RTX PRO 6000; DGX B300 memory architecture |
 | [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](https://whitepapers.openzeka.com/papers/b300-gb300-cluster-architecture/) | Blackwell Ultra architecture comparison and workload-based platform selection | NVIDIA DGX B300 and GB300 NVL72 |
 | [DGX Spark 2-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-setup/) | Point-to-point topology, RoCEv2/RDMA and sparkrun | 2× NVIDIA DGX Spark (GB10) |
 | [DGX Spark 3-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-3node-cluster-setup/) | Ring/mesh topology, RoCEv2/RDMA and sparkrun | 3× NVIDIA DGX Spark (GB10) |
@@ -116,7 +116,7 @@ DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060 and RTX 3090.
 
 # Featured Research
 
-## Conditional Memory and Offloading in LLM Inference
+## Engram Offloading in LLM Inference
 
 **763B DeepSeek on 4× DGX Spark · A 132.7 GB Qwen checkpoint on one device · Same-hardware Engram placement comparison on 8× DGX Spark**
 
@@ -131,7 +131,7 @@ node, with lower measured TPS. The 4-Spark DeepSeek and single-device Qwen runs
 show useful inference from checkpoints that exceed the available model-weight
 memory; each is evaluated on its own results.
 
-**[Read the Conditional Memory and Offloading Guide →](https://whitepapers.openzeka.com/papers/conditional-memory-offloading/)**
+**[Read the Engram Offloading Guide →](https://whitepapers.openzeka.com/papers/conditional-memory-offloading/)**
 
 ---
 

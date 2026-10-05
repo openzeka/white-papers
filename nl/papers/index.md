@@ -15,7 +15,7 @@ De volgende technische whitepapers worden gepubliceerd door {% include company/b
 | Titel | Onderwerp | Platform |
 | --- | --- | --- |
 | [Handleiding voor lokaal LLM-gebruik](local-llm-guide) | Beslisgids hardware → model → software | Jetson, RTX PRO, DGX Spark, DGX/HGX |
-| [Conditional memory en offloading bij LLM-inferentie](conditional-memory-offloading) | Architectuur, geheugenplaatsing en gemeten inferentie met conditional-memory-offloading | DGX Spark, RTX PRO 6000; geheugenarchitectuur van DGX B300 |
+| [Engram-offloading bij LLM-inferentie](conditional-memory-offloading) | Grote embeddingtabellen waaruit per token een paar rijen worden gelezen: offloading naar systeem-RAM of NVMe, met meetresultaten | DGX Spark, RTX PRO 6000; geheugenarchitectuur van DGX B300 |
 | [NVIDIA DGX B300 vs GB300 NVL72: vergelijking van clusterarchitecturen](b300-gb300-cluster-architecture) | Technische vergelijking van twee Blackwell Ultra-architecturen, gids voor platformkeuze op basis van de workload | NVIDIA DGX B300, GB300 NVL72 (Blackwell Ultra) |
 | [Installatiehandleiding voor een DGX Spark AI-cluster met 2 nodes](dgx-spark-2node-cluster-setup) | Clusterinstallatie met point-to-point-topologie, RoCEv2/RDMA, sparkrun | 2x NVIDIA DGX Spark (GB10) |
 | [Installatiehandleiding voor een DGX Spark AI-cluster met 3 nodes](dgx-spark-3node-cluster-setup) | Clusterinstallatie met ringtopologie (mesh), RoCEv2/RDMA, sparkrun | 3x NVIDIA DGX Spark (GB10) |

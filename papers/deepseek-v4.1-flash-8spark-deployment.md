@@ -221,7 +221,7 @@ sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp8-1m.y
 | 1M context requirement | ~3.7 GB |
 | **Free headroom** | ~26 GB |
 
-The Engram-on-disk configuration reports more memory allocated to KV cache (~30 GB vs ~8.7 GB) and a 1M configured context limit. Table placement, memory settings and execution paths all differ, so the measured speed difference is not an isolated disk-I/O penalty. See [Conditional Memory and Offloading in LLM Inference]({{ '/papers/conditional-memory-offloading/' | relative_url }}) for the mechanism and the same-hardware comparison.
+The Engram-on-disk configuration reports more memory allocated to KV cache (~30 GB vs ~8.7 GB) and a 1M configured context limit. Table placement, memory settings and execution paths all differ, so the measured speed difference is not an isolated disk-I/O penalty. See [Engram Offloading in LLM Inference]({{ '/papers/conditional-memory-offloading/' | relative_url }}) for the mechanism and the same-hardware comparison.
 
 ---
 
