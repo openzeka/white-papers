@@ -85,7 +85,7 @@ FP4 ana KV önbelleği (E2M1 formatı, 16 kanal başına bir E4M3 ölçeği) ile
 
 196B parametrelik Engram katmanı, token tabanlı lookup ile seyrek erişilir. Bu çalışmada **Engram-on-disk** modu kullanılmıştır: Engram satırları GPU belleğinde değil, her düğümün yerel diskinde tutulur ve ihtiyaç duyulduğunda GPU belleğine stage'lenir. Bu, 763B'lik modelin 4× 128 GB (512 GB toplam) birleşik belleğe sığmasını sağlar.
 
-Embedding arama mekanizması, bellek bütçesi ve offloading sonuçlarının değerlendirmesi için [LLM Çıkarımında Conditional Memory ve Offloading]({{ '/papers/conditional-memory-offloading/' | relative_url }}) rehberine bakınız.
+Embedding arama mekanizması, bellek bütçesi ve taşıma sonuçlarının değerlendirmesi için [LLM Çıkarımında Engram Offloading]({{ '/papers/conditional-memory-offloading/' | relative_url }}) rehberine bakınız.
 
 ### 2.5 DSpark Speculative Decoding
 

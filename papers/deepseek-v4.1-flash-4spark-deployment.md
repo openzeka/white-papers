@@ -85,7 +85,7 @@ Combined with FP4 main KV caching (E2M1 format, one E4M3 scale per 16 channels),
 
 The 196B Engram layer is sparsely accessed via token-based lookup. This deployment uses **Engram-on-disk** mode: Engram rows are stored on each node's local disk rather than in GPU memory, and staged into GPU memory on demand. This enables the 763B model to fit within 4× 128 GB (512 GB total) unified memory.
 
-For the embedding lookup mechanism, memory budget and interpretation of the offloading results, see [Conditional Memory and Offloading in LLM Inference]({{ '/papers/conditional-memory-offloading/' | relative_url }}).
+For the embedding lookup mechanism, memory budget and interpretation of the offloading results, see [Engram Offloading in LLM Inference]({{ '/papers/conditional-memory-offloading/' | relative_url }}).
 
 ### 2.5 DSpark Speculative Decoding
 

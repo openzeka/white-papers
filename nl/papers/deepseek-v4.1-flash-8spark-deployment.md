@@ -221,7 +221,7 @@ sparkrun run /home/nvidia/.cordatus-sparkrun/recipes/deepseek-v41-flash-tp8-1m.y
 | Benodigd voor een context van 1M | ~3.7 GB |
 | **Vrije reserve** | ~26 GB |
 
-De Engram-on-disk-configuratie rapporteert meer geheugen toegewezen aan de KV-cache (~30 GB tegenover ~8.7 GB) en een geconfigureerde contextlimiet van 1M. Plaatsing van de tabellen, geheugeninstellingen en uitvoeringspaden verschillen allemaal, dus het gemeten snelheidsverschil is geen geïsoleerde prijs voor schijf-I/O. Zie [Conditional memory en offloading bij LLM-inferentie]({{ '/papers/conditional-memory-offloading/' | relative_url }}) voor het mechanisme en de vergelijking op dezelfde hardware.
+De Engram-on-disk-configuratie rapporteert meer geheugen toegewezen aan de KV-cache (~30 GB tegenover ~8.7 GB) en een geconfigureerde contextlimiet van 1M. Plaatsing van de tabellen, geheugeninstellingen en uitvoeringspaden verschillen allemaal, dus het gemeten snelheidsverschil is geen geïsoleerde prijs voor schijf-I/O. Zie [Engram-offloading bij LLM-inferentie]({{ '/papers/conditional-memory-offloading/' | relative_url }}) voor het mechanisme en de vergelijking op dezelfde hardware.
 
 ---
 
