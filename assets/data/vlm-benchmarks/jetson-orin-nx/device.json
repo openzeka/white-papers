@@ -1,0 +1,6 @@
+{
+  "name": "Jetson Orin NX",
+  "product": "Jetson Orin NX 16GB",
+  "memory_gb": 16,
+  "unified": true
+}

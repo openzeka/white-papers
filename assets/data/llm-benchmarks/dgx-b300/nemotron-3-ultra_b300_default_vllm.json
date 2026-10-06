@@ -1,0 +1,62 @@
+{
+  "id": "nemotron-3-ultra_b300_default_vllm",
+  "model": "Nemotron-3-Ultra",
+  "params": "550B",
+  "intelligence_index": 22.9,
+  "agentic_index": 20.1,
+  "device": "DGX B300",
+  "quantization": "BF16",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 8,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 131.64,
+      "tps": 177.32
+    },
+    {
+      "c": 2,
+      "ttft_ms": 464.92,
+      "tps": 128.5
+    },
+    {
+      "c": 4,
+      "ttft_ms": 134.43,
+      "tps": 118.36
+    },
+    {
+      "c": 8,
+      "ttft_ms": 159.4,
+      "tps": 97.07
+    },
+    {
+      "c": 16,
+      "ttft_ms": 265.59,
+      "tps": 59.35
+    },
+    {
+      "c": 32,
+      "ttft_ms": 2159.25,
+      "tps": 33.09
+    },
+    {
+      "c": 64,
+      "ttft_ms": 6064.24,
+      "tps": 17.61
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 6144,
+  "kv_window_bytes": 0,
+  "kv_heads": 2,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 815923200,
+  "served_repo": "nvidia/NVIDIA-Nemotron-3-Ultra-550B-A55B-BF16",
+  "weights_gb": 1121.06
+}

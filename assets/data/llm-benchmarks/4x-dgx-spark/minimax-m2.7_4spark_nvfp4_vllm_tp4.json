@@ -1,0 +1,62 @@
+{
+  "id": "minimax-m2.7_4spark_nvfp4_vllm_tp4",
+  "model": "MiniMax-M2.7",
+  "params": "229B",
+  "intelligence_index": 22.8,
+  "agentic_index": 15.3,
+  "device": "4× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 234.76,
+      "tps": 30.1
+    },
+    {
+      "c": 2,
+      "ttft_ms": 277.65,
+      "tps": 26.71
+    },
+    {
+      "c": 4,
+      "ttft_ms": 358.9,
+      "tps": 21.72
+    },
+    {
+      "c": 8,
+      "ttft_ms": 440.12,
+      "tps": 16.12
+    },
+    {
+      "c": 16,
+      "ttft_ms": 422.4,
+      "tps": 12.71
+    },
+    {
+      "c": 32,
+      "ttft_ms": 512.52,
+      "tps": 9.28
+    },
+    {
+      "c": 64,
+      "ttft_ms": 629.51,
+      "tps": 6.8
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 126976,
+  "kv_window_bytes": 0,
+  "kv_heads": 8,
+  "model_context_length": 204800,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "nvidia/MiniMax-M2.7-NVFP4",
+  "weights_gb": 139.89
+}

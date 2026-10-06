@@ -1,0 +1,52 @@
+{
+  "id": "glm-5.3-flash_2spark_nvfp4_vllm",
+  "model": "GLM-5.3-Flash",
+  "params": "321B",
+  "intelligence_index": 41.8,
+  "agentic_index": 50.9,
+  "device": "2× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "Model: LibertAIDAI/GLM-5.3-Flash-NVFP4. Docker: radixark/vllm-glm53-flash:sm121-v8",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 394.8,
+      "tps": 24.34
+    },
+    {
+      "c": 2,
+      "ttft_ms": 575.27,
+      "tps": 17.66
+    },
+    {
+      "c": 4,
+      "ttft_ms": 765.39,
+      "tps": 13.58
+    },
+    {
+      "c": 8,
+      "ttft_ms": 4300.31,
+      "tps": 8.94
+    },
+    {
+      "c": 16,
+      "ttft_ms": 18900.28,
+      "tps": 4.51
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 5984,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 295239680,
+  "served_repo": "LibertAIDAI/GLM-5.3-Flash-NVFP4",
+  "weights_gb": 194.67
+}

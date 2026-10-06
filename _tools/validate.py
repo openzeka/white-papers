@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-Validate assets/data/benchmarks.json before publishing.
+Validate the LLM benchmark data before publishing.
 
-    python3 _tools/validate.py [path]
+    python3 _tools/validate.py              # the store, assets/data/llm-benchmarks/
+    python3 _tools/validate.py <file.json>  # a combined file instead (as /assets/data/benchmarks.json serves it)
 
-That file feeds two live websites from a single commit — this repo's benchmark
-page and openzeka.com, which fetches it cross-origin — so a typo here becomes a
-wrong number on two public pages with nothing in between to catch it.
+The store is combined at build time into /assets/data/benchmarks.json, which
+feeds two live websites from a single commit — this repo's benchmark page and
+openzeka.com, which fetches it cross-origin — so a typo here becomes a wrong
+number on two public pages with nothing in between to catch it.
 
 Exit code 0 = safe to publish, 1 = errors found.
 Warnings do not fail the run, but each one is a thing a visitor will notice.
@@ -23,7 +25,9 @@ from collections import Counter, defaultdict
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import kv_geometry  # noqa: E402  (same folder; regenerates the kv_* fields)
 
-PATH = sys.argv[1] if len(sys.argv) > 1 else "assets/data/benchmarks.json"
+import bench_store  # noqa: E402  (same folder; the LLM data store)
+
+PATH = sys.argv[1] if len(sys.argv) > 1 else os.path.relpath(bench_store.LLM_DIR)
 
 KNOWN_DEVICES = {
     "Thor",
@@ -61,8 +65,11 @@ def warn(msg):
 
 def main():
     try:
-        with open(PATH, encoding="utf-8") as fh:
-            data = json.load(fh)
+        if os.path.isdir(PATH):
+            data = bench_store.load_llm(PATH)
+        else:
+            with open(PATH, encoding="utf-8") as fh:
+                data = json.load(fh)
     except FileNotFoundError:
         print(f"error: {PATH} not found — run this from the repository root")
         return 1

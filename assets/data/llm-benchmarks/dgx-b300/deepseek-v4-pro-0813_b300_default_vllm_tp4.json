@@ -1,0 +1,62 @@
+{
+  "id": "deepseek-v4-pro-0813_b300_default_vllm_tp4",
+  "model": "DeepSeek-V4-Pro-0813",
+  "params": "1.65T",
+  "intelligence_index": 36,
+  "agentic_index": 41.3,
+  "device": "DGX B300",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "1M context",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 278.56,
+      "tps": 117.77
+    },
+    {
+      "c": 2,
+      "ttft_ms": 86.54,
+      "tps": 107.49
+    },
+    {
+      "c": 4,
+      "ttft_ms": 284.27,
+      "tps": 80.85
+    },
+    {
+      "c": 8,
+      "ttft_ms": 106.76,
+      "tps": 72.79
+    },
+    {
+      "c": 16,
+      "ttft_ms": 306.54,
+      "tps": 52.36
+    },
+    {
+      "c": 32,
+      "ttft_ms": 314.19,
+      "tps": 45.17
+    },
+    {
+      "c": 64,
+      "ttft_ms": 584.27,
+      "tps": 16.64
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 4924,
+  "kv_window_bytes": 3997696,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "deepseek-ai/DeepSeek-V4-Pro-0813",
+  "weights_gb": 892.74
+}

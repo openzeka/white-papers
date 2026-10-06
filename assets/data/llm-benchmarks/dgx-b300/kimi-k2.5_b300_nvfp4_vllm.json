@@ -1,0 +1,62 @@
+{
+  "id": "kimi-k2.5_b300_nvfp4_vllm",
+  "model": "Kimi-K2.5",
+  "params": "1.03T",
+  "intelligence_index": 23.5,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 64.21,
+      "tps": 128.78
+    },
+    {
+      "c": 2,
+      "ttft_ms": 96.25,
+      "tps": 113.38
+    },
+    {
+      "c": 4,
+      "ttft_ms": 93.71,
+      "tps": 104.33
+    },
+    {
+      "c": 8,
+      "ttft_ms": 120.0,
+      "tps": 87.38
+    },
+    {
+      "c": 16,
+      "ttft_ms": 196.94,
+      "tps": 68.52
+    },
+    {
+      "c": 32,
+      "ttft_ms": 225.39,
+      "tps": 56.73
+    },
+    {
+      "c": 64,
+      "ttft_ms": 263.21,
+      "tps": 43.01
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 35136,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "nvidia/Kimi-K2.5-NVFP4",
+  "weights_gb": 590.82
+}

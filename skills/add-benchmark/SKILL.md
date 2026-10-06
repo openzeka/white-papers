@@ -1,16 +1,40 @@
 ---
 name: add-benchmark
-description: Add one or more benchmark-tool result folders to the LLM Inference Benchmark Explorer (assets/data/benchmarks.json). Use whenever the user points at a benchmark result folder and asks to add it to the whitepapers, add these results to the table, publish a benchmark run, or import a benchmark. Handles the CSV, asks for the facts the folder does not contain, writes the entry and validates it.
+description: Add one or more benchmark-tool result folders to the LLM Inference Benchmark Explorer (the LLM data store, assets/data/llm-benchmarks/). Use whenever the user points at a benchmark result folder and asks to add it to the whitepapers, add these results to the table, publish a benchmark run, or import a benchmark. Handles the CSV, asks for the facts the folder does not contain, writes the entry and validates it.
 ---
 
 # Add a benchmark run to the Explorer
 
-`assets/data/benchmarks.json` is the single source of truth for the
+This skill is for **LLM** runs. Vision-language model runs (a VLM benchmark
+tool export) go to the VLM Inference Benchmark Explorer by their own
+procedure: [`skills/add-vlm-benchmark/SKILL.md`](../add-vlm-benchmark/SKILL.md).
+
+The LLM data store, `assets/data/llm-benchmarks/`, is the single source of truth
+for the
 [LLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/llm-inference-benchmarks/).
-It feeds **two live sites** from one commit — this repo's page, and openzeka.com,
-which fetches the same URL cross-origin. A wrong number here is a wrong number on
+It is laid out like the CV store — a folder per device with a `device.json`,
+one `<run id>.json` per run, and an `index.json` with the shared settings and
+the list of what exists:
+
+```
+assets/data/llm-benchmarks/
+├── index.json                 attribution, default targets, memory constants, devices and their runs
+├── dgx-b300/
+│   ├── device.json            name, base device, units, memory per GPU/node, unified or not
+│   └── <run id>.json          one run = one row of the Explorer
+└── 4x-dgx-spark/ …
+```
+
+The site build combines it into `/assets/data/benchmarks.json`, which the
+Explorer fetches — and so does openzeka.com, cross-origin, so the store feeds
+**two live sites** from one commit. A wrong number here is a wrong number on
 two public pages with nothing in between to catch it. Work slowly, ask rather
 than guess, and never invent a value.
+
+**Never edit the store by hand.** `_tools/bench_import.py`, `_tools/kv_geometry.py`
+and `_tools/aa_index_fetch.py` read and write it through `_tools/bench_store.py`,
+which keeps the index, the device files and the run files consistent. The one
+exception is a new device's memory, below.
 
 **Adding a run is a data-only change.** The table is generated from this file, so
 no page, no JS and no CSS needs touching. Each run's own page
@@ -80,10 +104,11 @@ this list is recoverable from the folder.
    `Thor`, `1× DGX Spark`, `2× DGX Spark`, `3× DGX Spark`, `4× DGX Spark`,
    `8× DGX Spark`, `RTX PRO 6000`, `DGX B300`.
    Anything else fails validation and sorts last in the filter row. A genuinely
-   new device is more than a new string: it also needs its memory per GPU or
-   node in the `memory.memory_gb` block of `benchmarks.json` (and a place in
-   `memory.unified_memory` if the CPU and GPU share one pool), or its rows get
-   no KV cache memory limit. Tell the user rather than adding it silently.
+   new device is more than a new string: `add` creates its folder and its
+   `device.json`, whose `memory_gb` (per GPU, node or module) and `unified`
+   (whether CPU and GPU share one pool) must then be filled in — a device with
+   `memory_gb: null` gets no KV cache memory limit. Ask the user for both values
+   rather than guessing, edit them into `device.json`, and run the validator.
 2. **Quantization** — confirm the guess from the repo name. Uppercase.
    Already in use: `BF16` `FP16` `FP8` `MXFP8` `NVFP4` `MXFP4` `FP4` `INT4` `AWQ`.
    If the run did not record a precision, say so — do **not** label it `BF16` by
@@ -105,8 +130,8 @@ this list is recoverable from the folder.
 
    **The two fields are still named `mtp` and `mtp_k`.** That is deliberate, not
    a leftover: the column was renamed from MTP to Speculative Decoding because
-   MTP is only one mechanism, but `benchmarks.json` is fetched cross-origin by
-   another site, so the field names did not change with it. Do not "fix" them.
+   MTP is only one mechanism, but `/assets/data/benchmarks.json` is fetched
+   cross-origin by another site, so the field names did not change with it. Do not "fix" them.
 5. **TP / DP / PP** — the parallelism actually used. `dp` and `pp` are `null`
    when not used, but **`tp` is always a number — `1` on a single GPU or node**.
    The memory limit reads `tp × dp × pp` as the number of devices the run
@@ -159,7 +184,7 @@ this list is recoverable from the folder.
      not, ask the user for the key and save it there. **Never write the key
      into the repository, a commit, a PR, or any file that ships.**
    - Attribution is a licensing condition. It already sits under the widget and
-     inside `benchmarks.json`; do not remove it.
+     inside the store (`index.json`); do not remove it.
 
 ## 4. Store the Hugging Face data, then generate the fields
 
@@ -206,7 +231,7 @@ command prints the six fields it derives. Gated repos need `HF_TOKEN` in the
 environment. Record the repo and commit in your report to the user.
 
 **c.** `bench_import.py add --folder <result-folder>` (step 5) then keeps the
-run's `models.json` and writes every generated field into `benchmarks.json`.
+run's `models.json` and writes every generated field into the run files.
 To regenerate the fields at any other time: `python3 _tools/kv_geometry.py apply`.
 
 What the six model fields mean, all at one byte per stored value except the
@@ -353,7 +378,7 @@ home page, in every language, linked to the run's own page:
 ```yaml
 - date: 2026-10-01          # the day the run goes live (the merge day)
   type: benchmarks
-  run: <the run's id in benchmarks.json>
+  run: <the run's id — its file name in the store, without .json>
   text:
     en: "Qwen3.8-27B on a single RTX PRO 6000: FP8 weights served with vLLM, with MTP speculative decoding (k=3), measured up to 128 concurrent requests."
     tr: "…"
@@ -403,7 +428,7 @@ gain a line, in all three languages (terms: `skills/add-white-paper/TERMINOLOGY.
 ## Keeping this skill true
 
 The field table in step 5 and the CSV mapping in step 1 mirror the real schema.
-**If a field is added to or removed from `benchmarks.json`, or the benchmark
+**If a field is added to or removed from the run files, or the benchmark
 tool's CSV headers change, update this file in the same commit** — along with the
 `cols` array and row loop in the widget (edit `benchmark-table.js`, then copy
 its body into the `.tr.js` and `.nl.js` files — only the `S` string block

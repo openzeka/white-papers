@@ -1,14 +1,18 @@
 # Search-engine and AI-agent visibility, generated at build time.
 #
 # Nothing here needs editing when a paper or a benchmark run is added: every
-# value is read from front matter or from the data files the explorers already
-# fetch. The data files are only read, never moved or copied — openzeka.com
-# fetches assets/data/benchmarks.json by that exact URL.
+# value is read from front matter or from the benchmark data stores
+# (assets/data/llm-benchmarks/, vlm-benchmarks/, cv-benchmarks/), the LLM and
+# VLM ones through _plugins/bench_store.rb. That plugin also writes the
+# combined files the explorers fetch — openzeka.com fetches
+# /assets/data/benchmarks.json by that exact URL.
 #
-#   site.data["oz_llm"]      assets/data/benchmarks.json, plus per row: the sweep,
+#   site.data["oz_llm"]      the LLM store (combined), plus per row: the sweep,
 #                            Max C, capacity, and its explanation in each language
 #   site.data["oz_cv"]       assets/data/cv-benchmarks/, flattened to one row per
 #                            device × model
+#   site.data["oz_vlm"]      the VLM store (combined), plus per row: Max
+#                            Cameras at the default target and its explanation
 #   site.data["oz_pages"]    every translated page (one entry per page_id) with
 #                            its permalink per language — sitemap, feed, llms.txt
 #   page.canonical_url       set on non-default-language pages, so og:url and the
@@ -26,7 +30,7 @@ module OzVisibility
   # ── Capacity at the explorer's default targets ──
   # A line-for-line port of getMaxC() / memoryBudget() / sessionBytes() /
   # capacity() in assets/js/benchmark-table.js, which stays the reference;
-  # DEFAULT_CONFIG mirrors the widget's, and benchmarks.json "config" overrides
+  # DEFAULT_CONFIG mirrors the widget's, and the store's "config" overrides
   # it the same way. If the widget's formula changes, change this with it.
   DEFAULT_CONFIG = {
     "ttft_threshold_ms" => 1000, "tps_threshold" => 20,
@@ -148,6 +152,60 @@ module OzVisibility
     out
   end
 
+  # ── VLM: Max Cameras at the explorer's default target ──
+  # A port of responseOf() / meetsTarget() / maxCams() in
+  # assets/js/vlm-benchmark-table.js, which stays the reference. Response time
+  # is the time to first token; each camera keeps one request in flight, so the
+  # number of cameras is the concurrency. Only the mean TTFT counts (over the
+  # requests that completed); a failed request does not affect a cell.
+  VLM_DEFAULT_CONFIG = { "response_target_s" => 3 }.freeze
+  VLM_DEFAULT_RES = "720p".freeze
+  VLM_DEFAULT_IMAGES = 1
+  VLM_SIZES = %w[480p 720p 1080p 2K].freeze
+
+  def self.vlm_response(p, _cfg = nil)
+    p.nil? || p["ttft_s"].nil? ? nil : p["ttft_s"].to_f
+  end
+
+  def self.vlm_meets(p, cfg)
+    r = vlm_response(p)
+    !r.nil? && r <= cfg["response_target_s"]
+  end
+
+  def self.vlm_points(e, res, images)
+    (e["data_points"] || []).select { |p| p["res"] == res && p["images"].to_i == images }.sort_by { |p| p["c"].to_i }
+  end
+
+  def self.vlm_max_c(e, res, images, cfg)
+    vlm_points(e, res, images).select { |p| vlm_meets(p, cfg) }.map { |p| p["c"].to_i }.max || 0
+  end
+
+  def self.vlm_text(r, vlm, cfg, res, images, t, lang)
+    m = (vlm["models"] || {})[r["model"]] || {}
+    pts = vlm_points(r, res, images)
+    c1 = pts.find { |p| p["c"].to_i == 1 }
+    params = lang == "tr" ? m["params"].to_s.gsub(/(\d)\.(\d)/, '\1,\2') : m["params"]
+    out = []
+    if c1
+      out << fill(t["vlm_run"], "model" => r["model"], "params" => params, "quant" => r["quantization"],
+                  "engine" => r["engine"], "device" => r["device"], "res" => res,
+                  "resp" => num(vlm_response(c1), lang, 2), "tps" => num(c1["tps"], lang, 1))
+    end
+    singles = (r["data_points"] || []).select { |p| p["c"].to_i == 1 }
+    many = singles.select { |p| p["res"] == res && p["images"].to_i > images }.max_by { |p| p["images"].to_i }
+    big = singles.select { |p| p["images"].to_i == images }.max_by { |p| VLM_SIZES.index(p["res"]).to_i }
+    parts = []
+    parts << fill(t["vlm_cost_many"], "n" => many["images"], "res" => res, "resp" => num(vlm_response(many), lang, 2)) if many
+    parts << fill(t["vlm_cost_big"], "res" => big["res"], "resp" => num(vlm_response(big), lang, 2)) if big && big["res"] != res
+    out << parts.join(" ") unless parts.empty?
+    mc = vlm_max_c(r, res, images, cfg)
+    top = pts.map { |p| p["c"].to_i }.max || 0
+    tv = { "target" => num(cfg["response_target_s"], lang, 1), "res" => res, "max" => mc }
+    key = mc.zero? ? "vlm_cams_none" : mc == top ? "vlm_cams_open" : mc == 1 ? "vlm_cams_one" : "vlm_cams"
+    out << fill(t[key], tv) unless pts.empty?
+    out
+  end
+
   def self.cv_text(row, target, src, t, lang)
     last = row["points"].last || {}
     maxc = row["points"].select { |p| p["fps_per_camera"].to_f >= target }.map { |p| p["cameras"].to_i }.max || 0
@@ -167,7 +225,7 @@ module OzVisibility
     def generate(site)
       base = File.join(site.source, "assets", "data")
 
-      llm = OzVisibility.read_json(File.join(base, "benchmarks.json"))
+      llm = OzBenchStore.load_llm(File.join(base, "llm-benchmarks"))
       if llm
         (llm["benchmarks"] || []).each do |r|
           pts = (r["data_points"] || []).sort_by { |p| p["c"].to_i }
@@ -188,6 +246,32 @@ module OzVisibility
           end
         end
         site.data["oz_llm"] = llm
+      end
+
+      vlm = OzBenchStore.load_vlm(File.join(base, "vlm-benchmarks"))
+      if vlm
+        cfg = OzVisibility::VLM_DEFAULT_CONFIG.merge(vlm["config"] || {})
+        res, images = OzVisibility::VLM_DEFAULT_RES, OzVisibility::VLM_DEFAULT_IMAGES
+        vlm["oz_config"] = cfg.merge("resolution" => res, "images" => images)
+        (vlm["benchmarks"] || []).each do |r|
+          m = (vlm["models"] || {})[r["model"]] || {}
+          r["oz_params"] = m["params"]
+          r["oz_sweep"] = (r["data_points"] || []).group_by { |p| [p["res"], p["images"]] }.map do |(rs, n), pts|
+            "#{rs} × #{n}: " + pts.sort_by { |p| p["c"].to_i }.map { |p| "#{p['c']} cam #{p['ttft_s']} s / #{p['tps']} tok/s#{p['failed'].to_i.positive? ? " (#{p['failed']} of #{p['requests']} failed)" : ''}" }.join("; ")
+          end.join(" | ")
+          pts = OzVisibility.vlm_points(r, res, images)
+          r["oz_default_points"] = pts
+          r["oz_max_c"] = OzVisibility.vlm_max_c(r, res, images, cfg)
+          r["oz_max_c_open"] = r["oz_max_c"] > 0 && r["oz_max_c"] == (pts.map { |p| p["c"].to_i }.max || 0)
+        end
+        OzVisibility.each_lang(site) do |lang, t|
+          vlm["benchmarks"].each do |r|
+            parts = OzVisibility.vlm_text(r, vlm, cfg, res, images, t, lang)
+            (r["oz_parts"] ||= {})[lang] = parts
+            (r["oz_text"] ||= {})[lang] = parts.join(" ")
+          end
+        end
+        site.data["oz_vlm"] = vlm
       end
 
       cv_dir = File.join(base, "cv-benchmarks")

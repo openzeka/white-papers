@@ -1,0 +1,62 @@
+{
+  "id": "deepseek-v4-pro_b300_default_vllm",
+  "model": "DeepSeek-V4-Pro",
+  "params": "1.60T",
+  "intelligence_index": 30.4,
+  "agentic_index": 26.3,
+  "device": "DGX B300",
+  "quantization": "FP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 303.29,
+      "tps": 86.84
+    },
+    {
+      "c": 2,
+      "ttft_ms": 325.02,
+      "tps": 76.84
+    },
+    {
+      "c": 4,
+      "ttft_ms": 421.48,
+      "tps": 51.41
+    },
+    {
+      "c": 8,
+      "ttft_ms": 428.6,
+      "tps": 40.94
+    },
+    {
+      "c": 16,
+      "ttft_ms": 858.57,
+      "tps": 25.56
+    },
+    {
+      "c": 32,
+      "ttft_ms": 655.27,
+      "tps": 20.22
+    },
+    {
+      "c": 64,
+      "ttft_ms": 1055.87,
+      "tps": 14.14
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 4924,
+  "kv_window_bytes": 3997696,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "deepseek-ai/DeepSeek-V4-Pro",
+  "weights_gb": 864.72
+}

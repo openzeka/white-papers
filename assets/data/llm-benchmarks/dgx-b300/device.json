@@ -1,0 +1,7 @@
+{
+  "name": "DGX B300",
+  "base": "DGX B300",
+  "units": 1,
+  "memory_gb": 288,
+  "unified": false
+}

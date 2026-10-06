@@ -1,0 +1,57 @@
+{
+  "id": "mimo-v2.5-pro_b300_default_vllm",
+  "model": "MiMo-V2.5-Pro",
+  "params": "1.02T",
+  "intelligence_index": 26,
+  "agentic_index": 21.3,
+  "device": "DGX B300",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 8,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 64.2,
+      "tps": 137.09
+    },
+    {
+      "c": 2,
+      "ttft_ms": 184.04,
+      "tps": 105.76
+    },
+    {
+      "c": 4,
+      "ttft_ms": 64.99,
+      "tps": 104.67
+    },
+    {
+      "c": 8,
+      "ttft_ms": 90.99,
+      "tps": 84.16
+    },
+    {
+      "c": 16,
+      "ttft_ms": 119.39,
+      "tps": 67.71
+    },
+    {
+      "c": 32,
+      "ttft_ms": 174.41,
+      "tps": 44.97
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 25600,
+  "kv_window_bytes": 19660800,
+  "kv_heads": 8,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "XiaomiMiMo/MiMo-V2.5-Pro",
+  "weights_gb": 1033.39
+}

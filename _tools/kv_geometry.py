@@ -6,7 +6,7 @@ KV-cache and weight fields from it.
     python3 _tools/kv_geometry.py fetch-checkpoint <served/repo>           # new served checkpoint
     python3 _tools/kv_geometry.py record-run <row-id> <result-folder>      # keep the run's models.json
     python3 _tools/kv_geometry.py show "<model>"                           # what the config gives
-    python3 _tools/kv_geometry.py apply                                    # write benchmarks.json
+    python3 _tools/kv_geometry.py apply                                    # write the LLM data store
     python3 _tools/kv_geometry.py verify [--online]                        # check the stored data
 
 Everything is stored under _tools/model_meta/ (see its README.md):
@@ -42,7 +42,7 @@ from collections import OrderedDict
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, "assets/data/benchmarks.json")
+DATA = os.path.join(ROOT, "assets/data/llm-benchmarks")  # the LLM data store, via bench_import / bench_store
 META = os.path.join(ROOT, "_tools/model_meta")
 MODELS = os.path.join(META, "models")
 CHECKPOINTS = os.path.join(META, "checkpoints")
@@ -533,7 +533,7 @@ def main():
     r.add_argument("id"); r.add_argument("folder"); r.set_defaults(fn=cmd_record_run)
     w = sub.add_parser("show", help="print what a model's config gives")
     w.add_argument("model"); w.set_defaults(fn=cmd_show)
-    p = sub.add_parser("apply", help="write the generated fields into benchmarks.json")
+    p = sub.add_parser("apply", help="write the generated fields into the LLM data store")
     p.set_defaults(fn=cmd_apply)
     v = sub.add_parser("verify", help="check the stored Hugging Face data")
     v.add_argument("--online", action="store_true", help="also re-read Hugging Face")

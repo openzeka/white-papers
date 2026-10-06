@@ -1,0 +1,47 @@
+{
+  "id": "qwen3.5-397b-a17b_4spark_int4_vllm",
+  "model": "Qwen3.5-397B-A17B",
+  "params": "397B",
+  "intelligence_index": 21.4,
+  "agentic_index": null,
+  "device": "4× DGX Spark",
+  "quantization": "INT4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "Switch topology, TP=4. 2.24x faster than PP=3 at C1.",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 324.61,
+      "tps": 38.14
+    },
+    {
+      "c": 2,
+      "ttft_ms": 392.9,
+      "tps": 30.54
+    },
+    {
+      "c": 4,
+      "ttft_ms": 540.59,
+      "tps": 24.54
+    },
+    {
+      "c": 8,
+      "ttft_ms": 621.73,
+      "tps": 18.83
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 15360,
+  "kv_window_bytes": 0,
+  "kv_heads": 2,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 384122880,
+  "served_repo": "Intel/Qwen3.5-397B-A17B-int4-AutoRound",
+  "weights_gb": 226.33
+}

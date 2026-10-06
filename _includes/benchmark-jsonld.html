@@ -5,7 +5,7 @@
   Not visible on the page. The per-run explanations are written by
   benchmark-explained.html and published in /llms-full.txt.
 
-  Include as: {% include benchmark-jsonld.html kind="llm" %}  or  kind="cv"
+  Include as: {% include benchmark-jsonld.html kind="llm" %}  or  kind="cv"  or  kind="vlm"
 {%- endcomment -%}
 {%- assign page_url = page.canonical_url | default: page.url | absolute_url -%}
 {%- assign company = site.data[site.active_lang].company -%}
@@ -49,6 +49,28 @@
   "isAccessibleForFree": true,
   "keywords": {{ models | concat: devices | jsonify }},
   "variableMeasured": ["Frames per second per camera", "Total frames per second", "Frame drop (%)", "Camera count", "Max cameras holding the target frame rate"],
+  "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": {{ data_url | jsonify }} }, { "@type": "DataDownload", "encodingFormat": "text/plain", "contentUrl": {{ "/llms-full.txt" | absolute_url | jsonify }} }]
+}
+</script>
+{%- elsif include.kind == "vlm" and site.data.oz_vlm -%}
+{%- assign rows = site.data.oz_vlm.benchmarks -%}
+{%- assign data_url = "/assets/data/vlm-benchmarks.json" | absolute_url -%}
+{%- assign models = rows | map: "model" | uniq | sort -%}
+{%- assign devices = rows | map: "device" | uniq | sort -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": {{ page.title | jsonify }},
+  "description": {{ page.description | strip | jsonify }},
+  "url": {{ page_url | jsonify }},
+  "inLanguage": {{ site.active_lang | jsonify }},
+  "dateModified": {{ page.last_modified_date | default: page.date | date: "%Y-%m-%d" | jsonify }},
+  "creator": { "@type": "Organization", "name": {{ company.legal_name | jsonify }}, "url": {{ company.website | jsonify }} },
+  "isAccessibleForFree": true,
+  "keywords": {{ models | concat: devices | jsonify }},
+  "measurementTechnique": "One or more photos per request (480p to 2K), prompt \"Describe the scene.\", up to 128 output tokens, one request in flight per camera, up to 4, 8 or 16 cameras depending on the device, mean values",
+  "variableMeasured": ["Response time: time to first token (s)", "Per-request output tokens per second", "Concurrent cameras", "Max cameras meeting the response time target"],
   "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": {{ data_url | jsonify }} }, { "@type": "DataDownload", "encodingFormat": "text/plain", "contentUrl": {{ "/llms-full.txt" | absolute_url | jsonify }} }]
 }
 </script>

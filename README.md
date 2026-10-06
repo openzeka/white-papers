@@ -31,6 +31,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [Kimi K3 Inference Benchmark on DGX-B300](https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/) | vLLM vs SGLang and direct vs speculative decoding | NVIDIA DGX-B300, 8× Blackwell Ultra, TP=8 |
 | [LLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/llm-inference-benchmarks/) | Interactive table of every LLM configuration we have measured: filter, set your own latency and speed targets, read the supported concurrency and estimated user capacity | DGX Spark (1–8 nodes), DGX B300, RTX PRO 6000, Jetson Thor |
 | [CV Inference Benchmark Explorer](https://whitepapers.openzeka.com/cv-inference-benchmarks/) | Interactive computer-vision benchmark: sustained FPS per device and model, and how many cameras it carries at your target FPS | DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060, RTX 3090 |
+| [VLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/vlm-inference-benchmarks/) | Interactive vision-language model benchmark: how many cameras each configuration keeps up with at your target response time, by image size | RTX PRO 6000 Blackwell, Jetson AGX Orin, Jetson Orin NX |
 
 ---
 
@@ -111,6 +112,22 @@ target. Measured with the Cordatus Inference Engine on DeepStream, across
 DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060 and RTX 3090.
 
 **[Open the CV Inference Benchmark Explorer →](https://whitepapers.openzeka.com/cv-inference-benchmarks/)**
+
+---
+
+## VLM Inference Benchmark Explorer
+
+**How many cameras can this device watch with this vision-language model?**
+
+Pick the image size your cameras send and the longest a camera may wait for its
+answer to start, and the table shows the response time (time to first token)
+and the per-camera speed for every measured configuration, and how many cameras
+it keeps up with. Each camera has one request in flight, so concurrency is the
+number of cameras. Measured with llama.cpp and vLLM on RTX PRO 6000 Blackwell,
+Jetson AGX Orin and Jetson Orin NX, with one to five images per request from
+480p to 2K.
+
+**[Open the VLM Inference Benchmark Explorer →](https://whitepapers.openzeka.com/vlm-inference-benchmarks/)**
 
 ---
 
@@ -511,7 +528,7 @@ white-papers/
 ├── _sass/                 # Site styling
 ├── _tools/                # Maintenance scripts, kept out of the build
 │   └── model_meta/        # Pinned Hugging Face configs and checkpoint sizes behind the capacity columns
-├── skills/                # Step-by-step procedures for adding a benchmark run or a paper,
+├── skills/                # Step-by-step procedures for adding an LLM or VLM benchmark run or a paper,
 │                          # and the translation rules and glossary (add-white-paper/TERMINOLOGY.md)
 ├── docker-compose.yml     # Local development server
 ├── index.md
@@ -555,7 +572,8 @@ printf 'UID=%s\nGID=%s\n' "$(id -u)" "$(id -g)" > .env
 
 Publishing still goes through git: commit and push, and GitHub Actions builds
 and deploys. Adding a paper: [`skills/add-white-paper/SKILL.md`](skills/add-white-paper/SKILL.md);
-adding a benchmark run: [`skills/add-benchmark/SKILL.md`](skills/add-benchmark/SKILL.md).
+adding an LLM benchmark run: [`skills/add-benchmark/SKILL.md`](skills/add-benchmark/SKILL.md);
+adding VLM benchmark runs: [`skills/add-vlm-benchmark/SKILL.md`](skills/add-vlm-benchmark/SKILL.md).
 See [`DEVELOPMENT.md`](DEVELOPMENT.md) for updating gems and running Jekyll
 directly on the host.
 

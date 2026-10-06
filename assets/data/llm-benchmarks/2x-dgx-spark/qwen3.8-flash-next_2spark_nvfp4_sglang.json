@@ -1,0 +1,47 @@
+{
+  "id": "qwen3.8-flash-next_2spark_nvfp4_sglang",
+  "model": "Qwen3.8-Flash-Next",
+  "params": "176B",
+  "intelligence_index": 39.8,
+  "agentic_index": 53.6,
+  "device": "2× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "SGLang",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "262K context. 176B MoE, 6B active, 512 experts.",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 200.13,
+      "tps": 35.8
+    },
+    {
+      "c": 2,
+      "ttft_ms": 205.89,
+      "tps": 29.94
+    },
+    {
+      "c": 4,
+      "ttft_ms": 243.23,
+      "tps": 22.39
+    },
+    {
+      "c": 8,
+      "ttft_ms": 2670.9,
+      "tps": 13.8
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 12288,
+  "kv_window_bytes": 0,
+  "kv_heads": 2,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 384,
+  "kv_state_bytes": 230916096,
+  "served_repo": "RadixArk/Qwen3.8-Flash-Next-NVFP4",
+  "weights_gb": 135.2
+}

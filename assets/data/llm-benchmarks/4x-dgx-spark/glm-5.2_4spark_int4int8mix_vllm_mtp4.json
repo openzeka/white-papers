@@ -1,0 +1,49 @@
+{
+  "id": "glm-5.2_4spark_int4int8mix_vllm_mtp4",
+  "model": "GLM-5.2",
+  "params": "753B",
+  "intelligence_index": 33.7,
+  "agentic_index": 38.4,
+  "device": "4× DGX Spark",
+  "quantization": "INT4",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": 4,
+  "tp": 4,
+  "notes": "TP=4, DCP=4, cudagraph FULL, GMU 0.885, B12X_MLA_SPARSE",
+  "sources": [
+    "https://whitepapers.openzeka.com/papers/dgx-spark-4node-cluster-setup/"
+  ],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 490.02,
+      "tps": 27.39
+    },
+    {
+      "c": 2,
+      "ttft_ms": 716.95,
+      "tps": 20.02
+    },
+    {
+      "c": 4,
+      "ttft_ms": 955.36,
+      "tps": 14.33
+    },
+    {
+      "c": 8,
+      "ttft_ms": 6560.43,
+      "tps": 8.51
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 47616,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "QuantTrio/GLM-5.2-Int4-Int8Mix",
+  "weights_gb": 405.48
+}

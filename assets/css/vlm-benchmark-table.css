@@ -1,0 +1,46 @@
+/* VLM Inference Benchmark Explorer — the few rules the LLM widget's stylesheet
+   does not already provide. Everything else (filters, table, the opened row's
+   two columns, the chart card) is shared with benchmark-table.css, which this
+   file is loaded after. */
+
+/* The measurements by number of cameras, with a caption naming the image size
+   and image count they were read at. */
+.vlmbt-sweep .bt-detail-table {
+  margin-bottom: 0;
+}
+
+.vlmbt-pane-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bt-text-muted);
+  margin: 0 0 6px;
+}
+
+/* A workload button that, with the other selections, names a cell no run
+   measured: still clickable, visibly empty. */
+.vlmbt-container .bt-btn.vlmbt-na:not(.bt-active) {
+  opacity: 0.45;
+  border-style: dashed;
+}
+
+/* The opened row: the measurements take the width they need, and the
+   explanation fills the rest beside them, rather than each taking half the
+   row and leaving a gap after the table. Stacks on narrow screens. */
+.bt-detail-pair.vlmbt-pair {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.vlmbt-pair > .bt-detail-pair-col:first-child {
+  flex: 0 0 auto;
+}
+
+.vlmbt-pair > .bt-detail-pair-col:last-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .bt-detail-pair.vlmbt-pair { flex-direction: column; }
+}

@@ -1,0 +1,18 @@
+{%- comment -%}
+  Each VLM run's explanation at the explorer's default settings, written into
+  the page at build time from _plugins/visibility.rb, so search engines and AI
+  agents find it in the HTML. Hidden here; the widget shows a row's text beside
+  its published scores when the row is opened (explanation() in
+  assets/js/vlm-benchmark-table.js), ending in a link to the run's permanent
+  page (_plugins/benchmark-pages.rb). Must sit outside the [data-vlmbt-src]
+  element, whose content the widget replaces.
+
+  Include as: {% include vlm-benchmark-explained.html %}
+{%- endcomment -%}
+{%- if site.data.oz_vlm -%}
+<div class="bt-explained-src" hidden>
+{%- for r in site.data.oz_vlm.benchmarks %}
+<div data-vlmbt-explained="{{ r.id }}">{% for p in r.oz_parts[site.active_lang] %}<p>{{ p }}</p>{% endfor %}{% if r.oz_permalink %}<p><a href="{{ r.oz_permalink | relative_url }}">{{ site.data[site.active_lang].strings.bench_page.vlm_permalink }}</a></p>{% endif %}</div>
+{%- endfor %}
+</div>
+{%- endif -%}

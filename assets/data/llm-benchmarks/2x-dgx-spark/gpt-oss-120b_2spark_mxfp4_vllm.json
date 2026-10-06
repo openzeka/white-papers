@@ -1,0 +1,57 @@
+{
+  "id": "gpt-oss-120b_2spark_mxfp4_vllm",
+  "model": "GPT-OSS 120B",
+  "params": "120B",
+  "intelligence_index": 11.6,
+  "agentic_index": 3.7,
+  "device": "2× DGX Spark",
+  "quantization": "MXFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "CUTLASS MoE, FlashInfer attn. +26% TPS over TP=1 at C1",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 167.69,
+      "tps": 69.86
+    },
+    {
+      "c": 2,
+      "ttft_ms": 227.76,
+      "tps": 51.52
+    },
+    {
+      "c": 4,
+      "ttft_ms": 255.41,
+      "tps": 37.14
+    },
+    {
+      "c": 8,
+      "ttft_ms": 291.94,
+      "tps": 26.92
+    },
+    {
+      "c": 16,
+      "ttft_ms": 319.99,
+      "tps": 19.08
+    },
+    {
+      "c": 32,
+      "ttft_ms": 464.91,
+      "tps": 12.63
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 18432,
+  "kv_window_bytes": 2359296,
+  "kv_heads": 8,
+  "model_context_length": 131072,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "openai/gpt-oss-120b",
+  "weights_gb": 65.25
+}

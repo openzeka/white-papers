@@ -1,0 +1,47 @@
+{
+  "id": "deepseek-v4.1-flash_8spark_fp8_vllm_tp8_1m",
+  "model": "DeepSeek-V4.1-Flash",
+  "params": "763B",
+  "intelligence_index": 39.5,
+  "agentic_index": null,
+  "device": "8× DGX Spark",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": 5,
+  "tp": 8,
+  "notes": "DSpark k=5, 1M context, Engram-on-disk. Model: deepseek-ai/DeepSeek-V4.1-Flash",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 198.54,
+      "tps": 33.28
+    },
+    {
+      "c": 2,
+      "ttft_ms": 301.32,
+      "tps": 26.76
+    },
+    {
+      "c": 4,
+      "ttft_ms": 400.58,
+      "tps": 17.07
+    },
+    {
+      "c": 8,
+      "ttft_ms": 553.68,
+      "tps": 11.74
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 1600,
+  "kv_window_bytes": 2621440,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "weights_gb": 510.3
+}

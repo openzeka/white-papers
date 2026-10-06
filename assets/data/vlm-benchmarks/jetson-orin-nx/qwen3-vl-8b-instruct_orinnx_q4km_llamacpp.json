@@ -1,0 +1,28 @@
+{
+  "id": "qwen3-vl-8b-instruct_orinnx_q4km_llamacpp",
+  "model": "Qwen3-VL-8B-Instruct",
+  "device": "Jetson Orin NX",
+  "quantization": "Q4_K_M",
+  "engine": "llama.cpp",
+  "engine_version": "6d78fb0",
+  "platform": "L4T R36.5",
+  "served_repo": null,
+  "notes": "GGUF weights; prompt cache off; parallel slots = cameras",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 2.605, "tps": 11.51, "requests": 8, "failed": 0},
+    {"res": "480p", "images": 1, "c": 2, "ttft_s": 3.897, "tps": 7.67, "requests": 8, "failed": 0},
+    {"res": "480p", "images": 1, "c": 4, "ttft_s": 7.099, "tps": 8.85, "requests": 8, "failed": 0},
+    {"res": "480p", "images": 3, "c": 1, "ttft_s": 7.479, "tps": 11.29, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 5, "c": 1, "ttft_s": 12.412, "tps": 11.09, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 6.916, "tps": 11.37, "requests": 8, "failed": 0},
+    {"res": "720p", "images": 1, "c": 2, "ttft_s": 10.327, "tps": 4.89, "requests": 8, "failed": 0},
+    {"res": "720p", "images": 1, "c": 4, "ttft_s": 22.224, "tps": 8.57, "requests": 8, "failed": 0},
+    {"res": "720p", "images": 3, "c": 1, "ttft_s": 20.612, "tps": 10.99, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 5, "c": 1, "ttft_s": 34.431, "tps": 10.66, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 1, "ttft_s": 21.785, "tps": 11.12, "requests": 8, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 2, "ttft_s": 32.579, "tps": 7.13, "requests": 8, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 4, "ttft_s": 64.969, "tps": 6.12, "requests": 8, "failed": 0},
+    {"res": "1080p", "images": 3, "c": 1, "ttft_s": 65.754, "tps": 10.4, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 5, "c": 1, "ttft_s": 110.85, "tps": 9.78, "requests": 5, "failed": 0}
+  ]
+}

@@ -25,7 +25,7 @@
 <div class="oz-changelog" data-oz-changelog>
 <div class="oz-cl-filters" role="group">
 <button type="button" class="oz-cl-filter is-active" data-filter="">{{ t.filter_all }}</button>
-{%- assign kinds = "paper,benchmarks,cv" | split: "," %}
+{%- assign kinds = "paper,benchmarks,vlm,cv" | split: "," %}
 {%- for k in kinds %}
 <button type="button" class="oz-cl-filter oz-cl-tag--{{ k }}" data-filter="{{ k }}">{% assign tk = "type_" | append: k %}{{ t[tk] }}</button>
 {%- endfor %}

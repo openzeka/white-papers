@@ -1,0 +1,57 @@
+{
+  "id": "minimax-m2.5_b300_default_vllm",
+  "model": "MiniMax-M2.5",
+  "params": "229B",
+  "intelligence_index": 22.8,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 169.43,
+      "tps": 66.84
+    },
+    {
+      "c": 2,
+      "ttft_ms": 193.84,
+      "tps": 53.63
+    },
+    {
+      "c": 4,
+      "ttft_ms": 250.65,
+      "tps": 51.22
+    },
+    {
+      "c": 8,
+      "ttft_ms": 297.17,
+      "tps": 44.15
+    },
+    {
+      "c": 16,
+      "ttft_ms": 419.64,
+      "tps": 35.94
+    },
+    {
+      "c": 32,
+      "ttft_ms": 339.61,
+      "tps": 29.57
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 126976,
+  "kv_window_bytes": 0,
+  "kv_heads": 8,
+  "model_context_length": 196608,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "MiniMaxAI/MiniMax-M2.5",
+  "weights_gb": 230.13
+}

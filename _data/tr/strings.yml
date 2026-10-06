@@ -39,6 +39,14 @@ sentences:
   cv_max: "Varsayılan kamera başına %target% FPS hedefinde, bu hedefi tutan en yüksek ölçülmüş kamera sayısı (Maks. kamera) %max% kameradır."
   cv_max_zero: "Ölçülen hiçbir kamera sayısı varsayılan kamera başına %target% FPS hedefini tutmadı; bu yüzden Maks. kamera 0'dır."
   cv_open: "Bu yükte cihaz hâlâ kameraların kendi %src% FPS'ini en fazla %10 eksiğiyle veriyordu; kendi sınırına ulaşmadı — değer tavan değil, tabandır."
+  vlm_intro: "Aşağıdaki her kayıt bir kurulum yapılandırmasını anlatır: tek bir sayı biçiminde, tek bir engine ile tek bir cihazda sunulan bir görüntü-dil modeli. Her istek bir ya da daha fazla fotoğraf ve “Describe the scene.” istemini taşıdı ve en fazla 128 token istedi. Her kamera işlenmekte olan bir istek tutar; bu yüzden eşzamanlı istek sayısı kamera sayısıdır. Yanıt süresi, yanıtın başlamasına kadar geçen süredir (ilk token süresi, ölçülen isteklerin ortalaması); Maks. kamera, 720p'de ve kamera başına bir görüntüyle, yanıt süresinin 3 sn hedefini karşıladığı en yüksek ölçülmüş kamera sayısıdır. Hiçbir değer ekstrapole edilmez."
+  vlm_run: "%model% (%params% parametre), %quant% biçiminde %engine% ile %device% üzerinde sunuldu; bir %res% görüntü gönderen tek bir kameraya %resp% sn sonra yanıt vermeye başlar, ardından %tps% tok/s hızla yazar."
+  vlm_cost_many: "Kamera başına %res% boyutunda %n% görüntüyle yanıt %resp% sn sonra başlar."
+  vlm_cost_big: "Tek bir %res% görüntüyle %resp% sn sonra."
+  vlm_cams: "Yanıtın %target% sn içinde başlaması varsayılan hedefinde (%res%, kamera başına bir görüntü) aynı anda %max% kameraya yetişir."
+  vlm_cams_one: "Yanıtın %target% sn içinde başlaması varsayılan hedefinde (%res%, kamera başına bir görüntü) yalnızca tek bir kameraya yetişir."
+  vlm_cams_open: "Yanıtın %target% sn içinde başlaması varsayılan hedefinde (%res%, kamera başına bir görüntü) aynı anda en az %max% kameraya yetişir: ölçülen en yüksek kamera sayısında bile hedefi karşıladı, gerçek sınır daha yüksektir."
+  vlm_cams_none: "Yanıtın %target% sn içinde başlaması varsayılan hedefinde (%res%, kamera başına bir görüntü) tek bir kamera bile zamanında yanıt almaz."
 
 # Kalıcı benchmark sayfaları: her ölçüm ve her model için bir sayfa, derleme
 # sırasında _plugins/benchmark-pages.rb üretir. %ad% yer tutucuları.
@@ -82,6 +90,17 @@ bench_page:
   cv_status: "Sonuç"
   cv_pass: "GEÇTİ"
   cv_fail: "KALDI"
+  # VLM gezgini sonuç sayfaları
+  vlm_title: "%model%, %device% üzerinde — %config% görüntü-dil çıkarım benchmark'ı"
+  vlm_crumb: "VLM Çıkarım Benchmark Gezgini"
+  vlm_open_explorer: "Bu yapılandırmayı VLM Çıkarım Benchmark Gezgini'nde açın"
+  vlm_permalink: "Bu yapılandırmanın kalıcı sayfası"
+  vlm_res: "Görüntü boyutu"
+  vlm_images: "Kamera başına görüntü"
+  vlm_cams: "Kamera"
+  vlm_tps: "TPS (tok/s)"
+  vlm_resp: "Yanıt (sn)"
+  vlm_maxcams: "Maks. kamera (yanıt ≤ %target% sn)"
 
 # The changelog: /changelog/ and the home-page block (_includes/changelog.html).
 changelog:
@@ -90,4 +109,5 @@ changelog:
   filter_all: "Tümü"
   type_paper: "Yeni white paper"
   type_benchmarks: "Yeni LLM benchmark"
+  type_vlm: "Yeni VLM benchmark"
   type_cv: "Yeni CV benchmark"

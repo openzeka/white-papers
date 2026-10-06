@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh intelligence_index / agentic_index in assets/data/benchmarks.json
+"""Refresh intelligence_index / agentic_index in the LLM data store (assets/data/llm-benchmarks/)
 from the Artificial Analysis Data API.
 
     python3 _tools/aa_index_fetch.py            # dry run — prints what would change
@@ -18,6 +18,9 @@ values are published. Their Terms of Use §3.3(vi) prohibits scraping the site, 
 this API is the only supported way to refresh them.
 """
 import argparse, collections, difflib, json, os, re, sys, urllib.error, urllib.request
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import bench_store  # noqa: E402  (same folder; the LLM data store)
 
 # Verified 2026-09-02 on a free key. Do NOT substitute:
 #   /api/v2/language/models   -> 403, Pro only
@@ -78,9 +81,6 @@ def norm(s):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--write", action="store_true", help="apply the changes")
-    ap.add_argument("--data", default=os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        "assets/data/benchmarks.json"))
     a = ap.parse_args()
 
     key = os.environ.get("AA_API_KEY")
@@ -92,8 +92,7 @@ def main():
         sys.exit("no API key: put it in ~/.aa_key (chmod 600) or set AA_API_KEY — "
                  "free key at https://artificialanalysis.ai/data-api")
 
-    raw = open(a.data, encoding="utf-8").read()
-    doc = json.loads(raw, object_pairs_hook=collections.OrderedDict)
+    doc = bench_store.load_llm()
     entries = doc["benchmarks"]
 
     rows, version = fetch(key)
@@ -167,9 +166,8 @@ def main():
     if not a.write:
         print("\nDry run. Re-run with --write to apply.", file=sys.stderr)
         return
-    open(a.data, "w", encoding="utf-8").write(
-        json.dumps(doc, indent=2, ensure_ascii=False) + "\n")
-    print(f"\nWrote {a.data}", file=sys.stderr)
+    bench_store.save_llm(doc)
+    print(f"\nWrote {os.path.relpath(bench_store.LLM_DIR)}", file=sys.stderr)
 
 
 if __name__ == "__main__":

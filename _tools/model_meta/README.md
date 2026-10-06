@@ -1,8 +1,8 @@
 # Model metadata
 
 The Hugging Face data behind the capacity columns of the LLM Inference Benchmark
-Explorer. Every KV-cache field and every weight size in
-`assets/data/benchmarks.json` is derived from these files by
+Explorer. Every KV-cache field and every weight size in the LLM data store
+(`assets/data/llm-benchmarks/`, one file per run) is derived from these files by
 `_tools/kv_geometry.py`; `_tools/validate.py` recomputes each one and fails on
 a mismatch. **Do not edit anything here by hand** — fetch it again.
 
@@ -34,7 +34,7 @@ has `served_repo: null` and falls back to parameter count × bytes per parameter
 python3 _tools/kv_geometry.py fetch-model "<model>" <publisher/repo>   # new model
 python3 _tools/kv_geometry.py fetch-checkpoint <served/repo>           # new served checkpoint
 python3 _tools/kv_geometry.py record-run <row-id> <result-folder>      # keep a run's models.json
-python3 _tools/kv_geometry.py apply                                    # regenerate benchmarks.json fields
+python3 _tools/kv_geometry.py apply                                    # regenerate the store's generated fields
 python3 _tools/kv_geometry.py verify [--online]                        # check these files
 ```
 

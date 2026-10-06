@@ -1,0 +1,62 @@
+{
+  "id": "tencent-hy3_b300_default_vllm",
+  "model": "Tencent-Hy3",
+  "params": "299B",
+  "intelligence_index": 25.3,
+  "agentic_index": 24.1,
+  "device": "DGX B300",
+  "quantization": "BF16",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 36.61,
+      "tps": 149.61
+    },
+    {
+      "c": 2,
+      "ttft_ms": 42.93,
+      "tps": 94.29
+    },
+    {
+      "c": 4,
+      "ttft_ms": 51.46,
+      "tps": 103.12
+    },
+    {
+      "c": 8,
+      "ttft_ms": 64.11,
+      "tps": 82.08
+    },
+    {
+      "c": 16,
+      "ttft_ms": 102.87,
+      "tps": 63.09
+    },
+    {
+      "c": 32,
+      "ttft_ms": 100.06,
+      "tps": 48.42
+    },
+    {
+      "c": 64,
+      "ttft_ms": 106.25,
+      "tps": 40.43
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 163840,
+  "kv_window_bytes": 0,
+  "kv_heads": 8,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "tencent/Hy3",
+  "weights_gb": 597.58
+}

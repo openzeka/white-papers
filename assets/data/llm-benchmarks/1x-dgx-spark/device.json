@@ -1,0 +1,7 @@
+{
+  "name": "1× DGX Spark",
+  "base": "DGX Spark",
+  "units": 1,
+  "memory_gb": 128,
+  "unified": true
+}
