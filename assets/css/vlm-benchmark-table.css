@@ -44,3 +44,15 @@
 @media (max-width: 900px) {
   .bt-detail-pair.vlmbt-pair { flex-direction: column; }
 }
+
+/* Cameras, Image Size and the response time are one group: a rule above
+   Cameras, none between the three, and the slider row's rule below. */
+.vlmbt-container .bt-filter-row-perf.vlmbt-no-rule {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.vlmbt-container .bt-filter-row-perf.vlmbt-group-start {
+  padding-top: 12px;
+  border-top: 1px solid var(--bt-border);
+}

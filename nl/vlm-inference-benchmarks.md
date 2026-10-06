@@ -38,8 +38,8 @@ die instellingen tussen hen verschillen.
 ### Filters en het doel hebben een andere taak
 
 **Filters bepalen welke rijen u ziet.** De filters voor apparaat, model, aantal
-parameters, kwantisatie en engine, en de schuifregelaars voor responstijd en
-camera's, tonen of verbergen alleen rijen.
+parameters, kwantisatie en engine, en de schuifregelaar voor de responstijd,
+tonen of verbergen alleen rijen.
 
 **Het doel en de aanname bepalen wat de getallen zeggen.** Ze staan onder
 *Prestatiedoel en aannames*. Als u er een wijzigt, blijven de rijen staan, maar
@@ -51,10 +51,10 @@ opnieuw berekend.
 Twee keuzeknoppen beschrijven de workload, en elk getal in de tabel wordt bij
 die keuzes afgelezen:
 
-- **Beeldformaat** — het formaat van elk beeld dat een camera stuurt: 480p,
-  720p, 1080p of 2K.
 - **Camera's** — hoeveel camera's op hetzelfde moment verzoeken sturen. Dit is
   de gelijktijdigheid (concurrency) waarbij het systeem is gemeten.
+- **Beeldformaat** — het formaat van elk beeld dat een camera stuurt: 480p,
+  720p, 1080p of 2K.
 
 Rijen die bij de gekozen combinatie niet zijn gemeten, worden verborgen, en
 gedimde knoppen markeren combinaties zonder meting. Meerdere camera's zijn
@@ -102,9 +102,9 @@ De grafiek kan als PNG worden gedownload voor rapporten en presentaties.
 ### Waar te beginnen
 
 **"Hoeveel camera's kan één Jetson AGX Orin volgen?"** Kies het apparaat, stel
-het beeldformaat in dat uw camera's sturen en lees Max. camera's af. Zet de
-schuifregelaar voor het minimum aantal camera's op het aantal dat u nodig hebt
-om alleen de configuraties te zien die het bijhouden.
+het beeldformaat in dat uw camera's sturen en lees Max. camera's af. Om alleen
+de configuraties te zien die het bijhouden, kiest u het aantal camera's dat u
+nodig hebt en zet u Max. responstijd op uw doel.
 
 **"Is 1080p de moeite waard?"** Wissel van beeldformaat en kijk naar Max.
 camera's, of open een rij: de grafiek heeft één lijn per beeldformaat.

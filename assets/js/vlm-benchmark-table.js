@@ -31,8 +31,6 @@
     maxResponse: "Max Response Time",
     noLimit: "No limit",
     paramsAll: "All sizes",
-    minCameras: "Min. Cameras",
-    cameras: "cameras",
     atC: function (c, res, n) { return " at " + c + (c === 1 ? " camera, " : " cameras, ") + res + ", " + n + (n === 1 ? " image" : " images"); },
 
     /* Performance target / assumptions */
@@ -97,8 +95,7 @@
       fDevice: "<strong>Device filter</strong><p>Shows only runs on the chosen hardware. Pick several to compare devices directly.</p>",
       fQuant: "<strong>Quantization filter</strong><p>Shows only the chosen weight formats. Pick two to compare them.</p>",
       fEngine: "<strong>Engine filter</strong><p>Shows only runs served with the chosen engine.</p>",
-      fMaxResp: "<strong>Maximum Response Time</strong><p>Hides configurations whose answer takes longer than this to start at the selected number of cameras, image size and image count.</p>",
-      fMinCams: "<strong>Minimum Cameras</strong><p>Hides configurations that keep up with fewer cameras than this at your response time target.</p>",
+      fMaxResp: "<strong>Maximum Response Time</strong><p>Hides configurations whose answer takes longer than this to start at the selected number of cameras, image size and image count.</p><p>It works with the Cameras selector: select the number of cameras you need and set this to your target to see only the configurations that keep up with them.</p>",
 
       aImages: "<strong>Images per Camera</strong><p>How many images each request carries — one snapshot, or several frames of the same camera sent together, as video is often sent to a vision-language model. Default 1.</p><p>Every image is read before the answer starts, so more images mean a longer response time. Several images per request were measured with one camera only.</p>",
       aResponse: "<strong>Maximum Response Time Target</strong><p>The longest a camera may wait for its answer to start, in seconds.</p><p>Lowering it can lower Max Cameras.</p>",
@@ -430,26 +427,21 @@
     html += row(S.quant, S.tip.fQuant, pillGroup("bt-filter-quants", "quant", allQuants));
     html += row(S.engine, S.tip.fEngine, pillGroup("bt-filter-engines", "engine", allEngines));
 
-    /* The image size and the number of cameras frame every number in the
-       table, the way concurrency does in the LLM explorer. */
-    var work = '<div class="bt-filter-row bt-filter-row-perf">';
-    work += '<span class="bt-filter-label">' + escapeHTML(S.resolution) + tip(S.tip.fResolution) + "</span>";
-    work += singleGroup("bt-filter-res", "res", allRes, state.res, function (r) { return r; });
-    work += "</div>";
-    html += work;
+    /* The number of cameras and the image size frame every number in the
+       table, the way concurrency does in the LLM explorer. With the response
+       time they form one group, ruled off above and below. */
     html += row(S.concurrency, S.tip.fConcurrency,
-      singleGroup("bt-filter-concurrency", "conc", allConcurrency, state.concurrency, function (c) { return String(c); }));
+      singleGroup("bt-filter-concurrency", "conc", allConcurrency, state.concurrency, function (c) { return String(c); }),
+      "bt-filter-row-perf vlmbt-no-rule vlmbt-group-start");
+    html += row(S.resolution, S.tip.fResolution,
+      singleGroup("bt-filter-res", "res", allRes, state.res, function (r) { return r; }),
+      "bt-filter-row-perf vlmbt-no-rule");
 
     var sliders = '<div class="bt-filter-row bt-filter-row-perf">';
     sliders += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
       escapeHTML(S.maxResponse) + tip(S.tip.fMaxResp) + "</span>" +
       '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-max-resp-val"></span>' +
       '<input type="range" id="bt-max-resp" min="1" max="' + RESP_SLIDER_MAX + '" value="' + RESP_SLIDER_MAX + '" step="1"></div></div>';
-    sliders += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
-      escapeHTML(S.minCameras) + tip(S.tip.fMinCams) + "</span>" +
-      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-min-cams-val"></span>' +
-      '<input type="range" id="bt-min-cams" min="0" max="' + (allConcurrency[allConcurrency.length - 1] || 16) +
-      '" value="0" step="1"></div></div>';
     sliders += "</div>";
     html += sliders;
 
@@ -528,8 +520,6 @@
     var at = S.atC(state.concurrency, state.res, config.images);
     var resp = sliderToResp(parseInt(container.querySelector("#bt-max-resp").value, 10));
     container.querySelector("#bt-max-resp-val").textContent = (resp === null ? S.noLimit : resp + " s") + at;
-    container.querySelector("#bt-min-cams-val").textContent =
-      container.querySelector("#bt-min-cams").value + " " + S.cameras;
     var pIdx = parseInt(container.querySelector("#bt-min-params").value, 10);
     container.querySelector("#bt-min-params-val").textContent =
       pIdx <= 0 ? S.paramsAll : "≥ " + formatThreshold(sliderToParams(pIdx));
@@ -673,7 +663,6 @@
     container.querySelectorAll(".bt-model-option").forEach(function (l) { l.style.display = ""; });
 
     container.querySelector("#bt-max-resp").value = RESP_SLIDER_MAX;
-    container.querySelector("#bt-min-cams").value = 0;
     container.querySelector("#bt-min-params").value = 0;
 
     resetConfig();
@@ -759,12 +748,11 @@
 
   /* ── Filtering ── */
 
-  var SLIDERS = ["#bt-max-resp", "#bt-min-cams", "#bt-min-params"];
+  var SLIDERS = ["#bt-max-resp", "#bt-min-params"];
 
   function getFilteredEntries(container) {
     if (only) return rawData.benchmarks.filter(function (e) { return e.id === only; });
     var maxResp = sliderToResp(parseInt(container.querySelector("#bt-max-resp").value, 10));
-    var minCams = parseInt(container.querySelector("#bt-min-cams").value, 10);
     var minParams = sliderToParams(parseInt(container.querySelector("#bt-min-params").value, 10));
 
     var allCb = container.querySelector("#bt-model-all");
@@ -787,7 +775,6 @@
       var p = current(entry);
       if (!p) return false;
       if (maxResp !== null && responseOf(p) > maxResp) return false;
-      if (maxCams(entry) < minCams) return false;
       return true;
     });
   }

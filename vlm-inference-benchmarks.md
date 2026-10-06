@@ -38,8 +38,8 @@ them.
 ### Filters and the target do different jobs
 
 **Filters decide which rows you see.** The device, model, parameter-count,
-quantization and engine filters, and the response-time and camera sliders, only
-show or hide rows.
+quantization and engine filters, and the response-time slider, only show or hide
+rows.
 
 **The target and the assumption decide what the numbers say.** They sit under
 *Performance Target and Assumptions*. Changing one leaves the rows in place but
@@ -51,10 +51,10 @@ every row.
 Two selectors describe the workload, and every number in the table is read at
 them:
 
-- **Image Size** — the size of each image a camera sends: 480p, 720p, 1080p or
-  2K.
 - **Cameras** — how many cameras send requests at the same moment. This is the
   concurrency the system was measured at.
+- **Image Size** — the size of each image a camera sends: 480p, 720p, 1080p or
+  2K.
 
 Rows not measured at the selected combination are hidden, and dimmed buttons
 mark combinations that have no measurement. Several cameras were measured at
@@ -102,9 +102,9 @@ The chart downloads as a PNG for reports and presentations.
 ### Where to start
 
 **"How many cameras can one Jetson AGX Orin watch?"** Select the device, set the
-image size your cameras send, and read Max Cameras. Set the
-minimum cameras slider to the number you need to see only the configurations
-that keep up.
+image size your cameras send, and read Max Cameras. To see only the
+configurations that keep up, select the number of cameras you need and set Max
+Response Time to your target.
 
 **"Is 1080p worth it?"** Switch the image size and watch Max Cameras, or open a
 row: its chart has one line per image size.
