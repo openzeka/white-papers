@@ -1,0 +1,57 @@
+{
+  "id": "deepseek-v3.1_b300_nvfp4_vllm",
+  "model": "DeepSeek-V3.1",
+  "params": "685B",
+  "intelligence_index": 13.7,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 139.74,
+      "tps": 108.59
+    },
+    {
+      "c": 2,
+      "ttft_ms": 291.37,
+      "tps": 90.52
+    },
+    {
+      "c": 4,
+      "ttft_ms": 287.51,
+      "tps": 85.63
+    },
+    {
+      "c": 8,
+      "ttft_ms": 287.23,
+      "tps": 79.59
+    },
+    {
+      "c": 16,
+      "ttft_ms": 298.7,
+      "tps": 70.96
+    },
+    {
+      "c": 32,
+      "ttft_ms": 352.62,
+      "tps": 62.21
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 35136,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 163840,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "nvidia/DeepSeek-V3.1-NVFP4",
+  "weights_gb": 413.33
+}

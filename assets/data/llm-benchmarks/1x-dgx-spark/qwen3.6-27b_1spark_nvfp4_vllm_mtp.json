@@ -1,0 +1,52 @@
+{
+  "id": "qwen3.6-27b_1spark_nvfp4_vllm_mtp",
+  "model": "Qwen3.6-27B",
+  "params": "27B",
+  "intelligence_index": 21.4,
+  "agentic_index": 18.5,
+  "device": "1× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": null,
+  "tp": 1,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 519.21,
+      "tps": 21.02
+    },
+    {
+      "c": 2,
+      "ttft_ms": 634.9,
+      "tps": 21.68
+    },
+    {
+      "c": 4,
+      "ttft_ms": 849.66,
+      "tps": 19.94
+    },
+    {
+      "c": 8,
+      "ttft_ms": 592.18,
+      "tps": 18.27
+    },
+    {
+      "c": 16,
+      "ttft_ms": 838.59,
+      "tps": 14.47
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 32768,
+  "kv_window_bytes": 0,
+  "kv_heads": 4,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 307888128,
+  "served_repo": "nvidia/Qwen3.6-27B-NVFP4",
+  "weights_gb": 21.92
+}

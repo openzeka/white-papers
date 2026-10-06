@@ -1,0 +1,42 @@
+{
+  "id": "glm-5.3-flash_4spark_fp8_vllm",
+  "model": "GLM-5.3-Flash",
+  "params": "321B",
+  "intelligence_index": 41.8,
+  "agentic_index": 50.9,
+  "device": "4× DGX Spark",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "Model: zai-org/GLM-5.3-Flash, 500K context (full-precision FP8)",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 382.88,
+      "tps": 29.61
+    },
+    {
+      "c": 2,
+      "ttft_ms": 558.11,
+      "tps": 20.85
+    },
+    {
+      "c": 4,
+      "ttft_ms": 705.64,
+      "tps": 13.52
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 5984,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 295239680,
+  "served_repo": "zai-org/GLM-5.3-Flash",
+  "weights_gb": 328.34
+}

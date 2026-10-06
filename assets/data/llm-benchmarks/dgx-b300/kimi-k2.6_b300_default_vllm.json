@@ -1,0 +1,57 @@
+{
+  "id": "kimi-k2.6_b300_default_vllm",
+  "model": "Kimi-K2.6",
+  "params": "1.03T",
+  "intelligence_index": 27,
+  "agentic_index": 20.5,
+  "device": "DGX B300",
+  "quantization": "INT4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 55.93,
+      "tps": 203.9
+    },
+    {
+      "c": 2,
+      "ttft_ms": 115.02,
+      "tps": 155.25
+    },
+    {
+      "c": 4,
+      "ttft_ms": 85.61,
+      "tps": 121.97
+    },
+    {
+      "c": 8,
+      "ttft_ms": 107.34,
+      "tps": 95.99
+    },
+    {
+      "c": 16,
+      "ttft_ms": 150.67,
+      "tps": 71.17
+    },
+    {
+      "c": 32,
+      "ttft_ms": 356.46,
+      "tps": 51.5
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 35136,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "moonshotai/Kimi-K2.6",
+  "weights_gb": 595.18
+}

@@ -1,0 +1,57 @@
+{
+  "id": "glm-4.7_b300_default_vllm_4gpu",
+  "model": "GLM-4.7",
+  "params": "358B",
+  "intelligence_index": 22.2,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "BF16",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "4 GPU",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 53.38,
+      "tps": 85.92
+    },
+    {
+      "c": 2,
+      "ttft_ms": 67.69,
+      "tps": 92.25
+    },
+    {
+      "c": 4,
+      "ttft_ms": 64.13,
+      "tps": 80.46
+    },
+    {
+      "c": 8,
+      "ttft_ms": 137.95,
+      "tps": 63.65
+    },
+    {
+      "c": 16,
+      "ttft_ms": 246.79,
+      "tps": 44.84
+    },
+    {
+      "c": 32,
+      "ttft_ms": 267.97,
+      "tps": 38.33
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 188416,
+  "kv_window_bytes": 0,
+  "kv_heads": 8,
+  "model_context_length": 202752,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "zai-org/GLM-4.7",
+  "weights_gb": 716.68
+}

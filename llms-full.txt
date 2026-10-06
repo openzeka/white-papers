@@ -11,6 +11,8 @@ permalink: /llms-full.txt
 {%- assign llm = site.data.oz_llm.benchmarks -%}
 {%- assign cfg = site.data.oz_llm.oz_config -%}
 {%- assign cv = site.data.oz_cv.oz_rows -%}
+{%- assign vlm = site.data.oz_vlm.benchmarks -%}
+{%- assign vcfg = site.data.oz_vlm.oz_config -%}
 {%- assign tr = site.data.tr.strings.sentences -%}
 {%- assign en = site.data.en.strings.sentences -%}
 {%- assign nl = site.data.nl.strings.sentences -%}
@@ -18,10 +20,10 @@ permalink: /llms-full.txt
 
 > OpenZeka Teknoloji A.Ş.'nin LLM ve CV çıkarım benchmark'ları: hangi model, hangi NVIDIA cihazında, hangi hızda ve kaç kullanıcıya ya da kameraya hizmet verebilir. / OpenZeka's LLM and CV inference benchmarks: which model runs on which NVIDIA device, how fast, and for how many users or cameras.
 
-Birincil kaynak (Türkçe) / Primary source (Turkish): {{ site.url }}/tr/llm-inference-benchmarks/ · {{ site.url }}/tr/cv-inference-benchmarks/
-English: {{ site.url }}/llm-inference-benchmarks/ · {{ site.url }}/cv-inference-benchmarks/
-Nederlands / Dutch: {{ site.url }}/nl/llm-inference-benchmarks/ · {{ site.url }}/nl/cv-inference-benchmarks/
-Ham veri / Raw data: {{ site.url }}/assets/data/benchmarks.json · {{ site.url }}/assets/data/cv-benchmarks/index.json
+Birincil kaynak (Türkçe) / Primary source (Turkish): {{ site.url }}/tr/llm-inference-benchmarks/ · {{ site.url }}/tr/cv-inference-benchmarks/ · {{ site.url }}/tr/vlm-inference-benchmarks/
+English: {{ site.url }}/llm-inference-benchmarks/ · {{ site.url }}/cv-inference-benchmarks/ · {{ site.url }}/vlm-inference-benchmarks/
+Nederlands / Dutch: {{ site.url }}/nl/llm-inference-benchmarks/ · {{ site.url }}/nl/cv-inference-benchmarks/ · {{ site.url }}/nl/vlm-inference-benchmarks/
+Ham veri / Raw data: {{ site.url }}/assets/data/benchmarks.json · {{ site.url }}/assets/data/cv-benchmarks/index.json · {{ site.url }}/assets/data/vlm-benchmarks.json
 Please cite the explorer page, not this file. Each record's link opens that run in the interactive table.
 
 ## LLM çıkarım benchmark'ları / LLM inference benchmarks
@@ -44,6 +46,27 @@ Defaults used below / Aşağıdaki varsayılanlar: TTFT ≤ {{ cfg.ttft_threshol
 {%- for kind in (1..2) %}{% if kind == 1 %}{% assign k = r.oz_chat %}{% assign kn = "chat" %}{% else %}{% assign k = r.oz_agentic %}{% assign kn = "agentic" %}{% endif %}
 - {{ kn }} capacity (users): {% if k.limit == "context" %}none — session length exceeds the model's context window{% else %}{{ k.shown }}{% if k.at_least %}+{% endif %}, limited by {% if k.mem_known == false %}speed (KV cache memory limit not calculated){% elsif k.limit == "mem" %}KV cache memory{% elsif k.limit == "tie" %}speed and KV cache memory equally{% else %}speed{% endif %}{% endif %}
 {%- endfor %}
+- TR: {{ r.oz_text.tr }}
+- EN: {{ r.oz_text.en }}
+- NL: {{ r.oz_text.nl }}
+{% endfor %}
+## VLM çıkarım benchmark'ları / VLM inference benchmarks
+
+{{ tr.vlm_intro }}
+
+{{ en.vlm_intro }}
+
+{{ nl.vlm_intro }}
+
+Defaults used below / Aşağıdaki varsayılanlar: image size {{ vcfg.resolution }}, {{ vcfg.images }} image per camera, response time (time to first token) ≤ {{ vcfg.response_target_s }} s. Max Cameras = highest measured number of cameras meeting it with no failed request; "+" = the run met the target even at the highest level tested, so the figure is a minimum.
+{% for r in vlm %}
+### {{ r.model }} · {{ r.device }} · {{ r.quantization }} · {{ r.engine }}
+
+- link: {{ site.url }}/tr/vlm-inference-benchmarks/#{{ r.id }} (EN: {{ site.url }}/vlm-inference-benchmarks/#{{ r.id }})
+- model: {{ r.model }}; parameters: {{ r.oz_params }}
+- setup: {{ r.device }}, {{ r.quantization }}, {{ r.engine }}{% if r.engine_version %} {{ r.engine_version }}{% endif %}{% if r.platform %}, {{ r.platform }}{% endif %}
+- measured (image size × images per camera: cameras, response time / per-request TPS): {{ r.oz_sweep }}
+- Max Cameras: {{ r.oz_max_c }}{% if r.oz_max_c_open %}+{% endif %}
 - TR: {{ r.oz_text.tr }}
 - EN: {{ r.oz_text.en }}
 - NL: {{ r.oz_text.nl }}

@@ -1,0 +1,47 @@
+{
+  "id": "inkling_8spark_nvfp4_vllm_mtp1",
+  "model": "Inkling",
+  "params": "952B",
+  "intelligence_index": 25,
+  "agentic_index": 22.5,
+  "device": "8× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": 1,
+  "tp": 8,
+  "notes": "Model: thinkingmachines/Inkling-NVFP4 (975B MoE, 552 GB). GMU 0.80, MoE FLASHINFER_CUTLASS",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 411.92,
+      "tps": 27.28
+    },
+    {
+      "c": 2,
+      "ttft_ms": 556.78,
+      "tps": 20.99
+    },
+    {
+      "c": 4,
+      "ttft_ms": 777.58,
+      "tps": 15.49
+    },
+    {
+      "c": 8,
+      "ttft_ms": 8618.69,
+      "tps": 8.03
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 22528,
+  "kv_window_bytes": 115343360,
+  "kv_heads": 8,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "thinkingmachines/Inkling-NVFP4",
+  "weights_gb": 592.01
+}

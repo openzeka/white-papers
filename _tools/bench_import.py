@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Import a benchmark-tool result folder into assets/data/benchmarks.json.
+"""Import a benchmark-tool result folder into the LLM data store (assets/data/llm-benchmarks/).
 
     python3 _tools/bench_import.py inspect <folder>                  # what the folder tells us
     python3 _tools/bench_import.py add <entry.json> --folder <folder>  # insert a finished entry
@@ -17,7 +17,8 @@ import kv_geometry
 from collections import OrderedDict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA = os.path.join(ROOT, "assets/data/benchmarks.json")
+import bench_store  # noqa: E402  (same folder; the LLM data store)
+DATA = bench_store.LLM_DIR
 
 # The on-disk key order, identical in all existing entries. Keep it: a reordered
 # entry produces a needlessly large diff and hides the real change.
@@ -44,15 +45,14 @@ ENGINE_BY_OWNER = {"vllm": "vLLM", "sglang": "SGLang"}
 
 
 def load_data():
-    with open(DATA, encoding="utf-8") as fh:
-        return json.load(fh, object_pairs_hook=OrderedDict)
+    """The combined document (what /assets/data/benchmarks.json serves)."""
+    return bench_store.load_llm()
 
 
 def write_data(doc):
-    """Byte-identical formatting to what is on disk: 2-space indent, real UTF-8
-    (the device names contain '×'), one trailing newline."""
-    with open(DATA, "w", encoding="utf-8") as fh:
-        fh.write(json.dumps(doc, ensure_ascii=False, indent=2) + "\n")
+    """Back to the store: one file per run under its device, plus index.json
+    and the device files. A file that would not change is not rewritten."""
+    bench_store.save_llm(doc)
 
 
 def num(s):

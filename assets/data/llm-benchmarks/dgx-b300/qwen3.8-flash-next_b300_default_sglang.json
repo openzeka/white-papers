@@ -1,0 +1,62 @@
+{
+  "id": "qwen3.8-flash-next_b300_default_sglang",
+  "model": "Qwen3.8-Flash-Next",
+  "params": "176B",
+  "intelligence_index": 39.8,
+  "agentic_index": 53.6,
+  "device": "DGX B300",
+  "quantization": "BF16",
+  "engine": "SGLang",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "TP=2",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 107.59,
+      "tps": 250.08
+    },
+    {
+      "c": 2,
+      "ttft_ms": 152.68,
+      "tps": 181.91
+    },
+    {
+      "c": 4,
+      "ttft_ms": 183.03,
+      "tps": 144.97
+    },
+    {
+      "c": 8,
+      "ttft_ms": 206.91,
+      "tps": 104.12
+    },
+    {
+      "c": 16,
+      "ttft_ms": 376.92,
+      "tps": 78.76
+    },
+    {
+      "c": 32,
+      "ttft_ms": 287.42,
+      "tps": 65.39
+    },
+    {
+      "c": 64,
+      "ttft_ms": 333.1,
+      "tps": 49.2
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 12288,
+  "kv_window_bytes": 0,
+  "kv_heads": 2,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 384,
+  "kv_state_bytes": 230916096,
+  "served_repo": "Qwen/Qwen3.8-Flash-Next",
+  "weights_gb": 360.0
+}

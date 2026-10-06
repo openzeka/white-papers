@@ -39,6 +39,14 @@ sentences:
   cv_max: "Bij het standaarddoel van %target% FPS per camera is het hoogste gemeten aantal camera's dat dit haalt (Max. camera's) %max%."
   cv_max_zero: "Geen enkel gemeten aantal camera's haalde het standaarddoel van %target% FPS per camera, dus Max. camera's is 0."
   cv_open: "Bij die belasting leverde het apparaat nog steeds de eigen %src% FPS van de camera's binnen 10%, dus het apparaat heeft zijn eigen grens nooit bereikt — het cijfer is een ondergrens, geen bovengrens."
+  vlm_intro: "Elke vermelding hieronder beschrijft één deploymentconfiguratie — één vision-languagemodel, in één getalformaat, geserveerd door één engine op één apparaat. Elk verzoek bevatte één of meer foto's en de prompt “Describe the scene.” en vroeg om maximaal 128 tokens. Elke camera heeft één verzoek in behandeling, dus het aantal gelijktijdige verzoeken is het aantal camera's. De responstijd is de tijd tot het antwoord begint (time to first token, gemiddelde van de gemeten verzoeken); Max. camera's is het hoogste gemeten aantal camera's waarbij de responstijd het doel van 3 s haalt zonder mislukt verzoek, afgelezen bij 720p met één beeld per camera. Er wordt niets geëxtrapoleerd."
+  vlm_run: "%model% (%params% parameters), geserveerd in %quant%-formaat met %engine% op %device%, begint één camera die één %res%-beeld stuurt na %resp% s te antwoorden en schrijft daarna %tps% tok/s."
+  vlm_cost_many: "Met %n% beelden per camera op %res% begint het antwoord na %resp% s."
+  vlm_cost_big: "Met één beeld op %res% na %resp% s."
+  vlm_cams: "Bij het standaarddoel van een antwoord dat binnen %target% s begint (%res%, één beeld per camera) houdt het %max% camera's tegelijk bij."
+  vlm_cams_one: "Bij het standaarddoel van een antwoord dat binnen %target% s begint (%res%, één beeld per camera) houdt het één camera tegelijk bij."
+  vlm_cams_open: "Bij het standaarddoel van een antwoord dat binnen %target% s begint (%res%, één beeld per camera) houdt het minstens %max% camera's tegelijk bij: ook bij het hoogste gemeten aantal haalde het het doel, dus de werkelijke grens ligt hoger."
+  vlm_cams_none: "Bij het standaarddoel van een antwoord dat binnen %target% s begint (%res%, één beeld per camera) krijgt zelfs één camera niet op tijd antwoord."
 
 # Permanente benchmarkpagina's: één per meting en één per model, bij het bouwen
 # gegenereerd door _plugins/benchmark-pages.rb. %naam%-plaatshouders.
@@ -82,6 +90,17 @@ bench_page:
   cv_status: "Status"
   cv_pass: "PASS"
   cv_fail: "FAIL"
+  # Resultaatpagina's van de VLM-explorer
+  vlm_title: "%model% op %device% — %config% vision-language-inferentiebenchmark"
+  vlm_crumb: "VLM Inference Benchmark Explorer"
+  vlm_open_explorer: "Deze configuratie openen in de VLM Inference Benchmark Explorer"
+  vlm_permalink: "Permanente pagina van deze configuratie"
+  vlm_res: "Beeldformaat"
+  vlm_images: "Beelden per camera"
+  vlm_cams: "Camera's"
+  vlm_tps: "TPS (tok/s)"
+  vlm_resp: "Respons (s)"
+  vlm_maxcams: "Max. camera's (respons ≤ %target% s)"
 
 # The changelog: /changelog/ and the home-page block (_includes/changelog.html).
 changelog:
@@ -90,4 +109,5 @@ changelog:
   filter_all: "Alle"
   type_paper: "Nieuwe whitepaper"
   type_benchmarks: "Nieuwe LLM-benchmark"
+  type_vlm: "Nieuwe VLM-benchmark"
   type_cv: "Nieuwe CV-benchmark"

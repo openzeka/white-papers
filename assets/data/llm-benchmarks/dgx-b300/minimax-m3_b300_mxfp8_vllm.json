@@ -1,0 +1,62 @@
+{
+  "id": "minimax-m3_b300_mxfp8_vllm",
+  "model": "MiniMax-M3",
+  "params": "427B",
+  "intelligence_index": 29.2,
+  "agentic_index": 29.5,
+  "device": "DGX B300",
+  "quantization": "MXFP8",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 57.12,
+      "tps": 114.43
+    },
+    {
+      "c": 2,
+      "ttft_ms": 195.52,
+      "tps": 97.9
+    },
+    {
+      "c": 4,
+      "ttft_ms": 101.14,
+      "tps": 90.53
+    },
+    {
+      "c": 8,
+      "ttft_ms": 134.55,
+      "tps": 84.46
+    },
+    {
+      "c": 16,
+      "ttft_ms": 225.95,
+      "tps": 60.8
+    },
+    {
+      "c": 32,
+      "ttft_ms": 384.09,
+      "tps": 40.82
+    },
+    {
+      "c": 64,
+      "ttft_ms": 496.94,
+      "tps": 28.0
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 61440,
+  "kv_window_bytes": 0,
+  "kv_heads": 4,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 7296,
+  "kv_state_bytes": 0,
+  "served_repo": "MiniMaxAI/MiniMax-M3-MXFP8",
+  "weights_gb": 443.75
+}

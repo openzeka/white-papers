@@ -4,7 +4,8 @@
 #
 # The entries are written by hand; this only turns each entry's reference into
 # a link in the reader's language: page (a page_id) → that page's title and
-# permalink, run → the LLM run's permanent page, cv → the CV result's page. An
+# permalink, run → the LLM run's permanent page, vlm → the VLM run's page, cv →
+# the CV result's page. An
 # id that does not resolve fails the build, so no link can point nowhere.
 #
 # Runs at :site, :pre_render — after every generator, so the run pages
@@ -12,7 +13,9 @@
 # language, because polyglot builds each language as its own pass.
 
 module OzChangelog
-  TYPES = %w[paper benchmarks cv].freeze
+  TYPES = %w[paper benchmarks vlm cv].freeze
+  # The reference each type needs.
+  NEEDS = { "paper" => "page", "benchmarks" => "run", "vlm" => "vlm", "cv" => "cv" }.freeze
 
   def self.build(site)
     lang = site.active_lang || site.config["default_lang"]
@@ -23,6 +26,7 @@ module OzChangelog
     end
     llm = ((site.data["oz_llm"] || {})["benchmarks"] || []).to_h { |r| [r["id"], r] }
     cv = ((site.data["oz_cv"] || {})["oz_rows"] || []).to_h { |r| [r["id"], r] }
+    vlm = ((site.data["oz_vlm"] || {})["benchmarks"] || []).to_h { |r| [r["id"], r] }
 
     seen = Hash.new(0)
     (site.data["changelog"] || []).each_with_index.map do |e, i|
@@ -32,7 +36,10 @@ module OzChangelog
       raise "#{where}: no #{lang} text" if text.empty?
       link =
         if e["run"]
-          r = llm[e["run"]] or raise "#{where}: run #{e['run'].inspect} is not in assets/data/benchmarks.json"
+          r = llm[e["run"]] or raise "#{where}: run #{e['run'].inspect} is not in the LLM store (assets/data/llm-benchmarks/)"
+          { "title" => "#{r['model']} — #{r['device']}", "url" => r["oz_permalink"] }
+        elsif e["vlm"]
+          r = vlm[e["vlm"]] or raise "#{where}: VLM run #{e['vlm'].inspect} is not in the VLM store (assets/data/vlm-benchmarks/)"
           { "title" => "#{r['model']} — #{r['device']}", "url" => r["oz_permalink"] }
         elsif e["cv"]
           r = cv[e["cv"]] or raise "#{where}: CV result #{e['cv'].inspect} is not in assets/data/cv-benchmarks/"
@@ -41,7 +48,7 @@ module OzChangelog
           p = pages[e["page"]] or raise "#{where}: page_id #{e['page'].inspect} has no #{lang} page"
           { "title" => p.data["title"], "url" => p.data["permalink"] }
         end
-      raise "#{where}: a #{e['type']} entry needs #{e['type'] == 'benchmarks' ? 'run' : e['type'] == 'cv' ? 'cv' : 'page'}" if link.nil?
+      raise "#{where}: a #{e['type']} entry needs #{NEEDS[e['type']]}" if link.nil?
       date = Date.parse(e["date"].to_s)
       key = "#{date.strftime('%Y-%m-%d')}-#{e['type']}"
       seen[key] += 1

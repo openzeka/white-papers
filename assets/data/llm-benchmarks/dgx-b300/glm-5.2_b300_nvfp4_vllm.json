@@ -1,0 +1,62 @@
+{
+  "id": "glm-5.2_b300_nvfp4_vllm",
+  "model": "GLM-5.2",
+  "params": "753B",
+  "intelligence_index": 33.7,
+  "agentic_index": 38.4,
+  "device": "DGX B300",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "Model: nvidia/GLM-5.2-NVFP4",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 89.44,
+      "tps": 213.23
+    },
+    {
+      "c": 2,
+      "ttft_ms": 216.77,
+      "tps": 174.97
+    },
+    {
+      "c": 4,
+      "ttft_ms": 129.11,
+      "tps": 157.38
+    },
+    {
+      "c": 8,
+      "ttft_ms": 156.95,
+      "tps": 117.76
+    },
+    {
+      "c": 16,
+      "ttft_ms": 192.93,
+      "tps": 86.18
+    },
+    {
+      "c": 32,
+      "ttft_ms": 243.8,
+      "tps": 73.69
+    },
+    {
+      "c": 64,
+      "ttft_ms": 409.74,
+      "tps": 36.36
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 47616,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "nvidia/GLM-5.2-NVFP4",
+  "weights_gb": 464.82
+}

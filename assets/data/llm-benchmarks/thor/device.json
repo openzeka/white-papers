@@ -1,0 +1,7 @@
+{
+  "name": "Thor",
+  "base": "Thor",
+  "units": 1,
+  "memory_gb": 128,
+  "unified": true
+}

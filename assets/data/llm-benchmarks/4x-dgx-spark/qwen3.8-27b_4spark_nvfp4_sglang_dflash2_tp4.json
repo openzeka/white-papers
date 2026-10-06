@@ -1,0 +1,57 @@
+{
+  "id": "qwen3.8-27b_4spark_nvfp4_sglang_dflash2_tp4",
+  "model": "Qwen3.8-27B",
+  "params": "27B",
+  "intelligence_index": 33.7,
+  "agentic_index": 45.8,
+  "device": "4× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "SGLang",
+  "mtp": true,
+  "mtp_k": 8,
+  "tp": 4,
+  "notes": "DFlash2 TP=4. Best multi-spark config.",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 226.8,
+      "tps": 77.28
+    },
+    {
+      "c": 2,
+      "ttft_ms": 246.81,
+      "tps": 61.91
+    },
+    {
+      "c": 4,
+      "ttft_ms": 264.35,
+      "tps": 48.14
+    },
+    {
+      "c": 8,
+      "ttft_ms": 379.43,
+      "tps": 26.96
+    },
+    {
+      "c": 16,
+      "ttft_ms": 410.72,
+      "tps": 18.59
+    },
+    {
+      "c": 32,
+      "ttft_ms": 579.22,
+      "tps": 10.96
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 32768,
+  "kv_window_bytes": 0,
+  "kv_heads": 4,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 307888128,
+  "served_repo": "RadixArk/Qwen3.8-27B-NVFP4",
+  "weights_gb": 21.92
+}

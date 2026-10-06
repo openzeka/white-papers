@@ -3,15 +3,24 @@
 # resolved by _plugins/changelog.rb). Newest first; entries on the same day
 # keep this file's order.
 #
-# One entry per addition — three kinds only:
+# One entry per addition — four kinds only:
 #   paper       a new white paper            page: <page_id>
-#   benchmarks  a new LLM benchmark run      run:  <id in assets/data/benchmarks.json>
+#   benchmarks  a new LLM benchmark run      run:  <run id in assets/data/llm-benchmarks/>
+#   vlm         a new VLM benchmark run      vlm:  <run id in assets/data/vlm-benchmarks/>
 #   cv          a new CV benchmark result    cv:   <device>-<model> (the store's file path)
 # Every entry has `date` (YYYY-MM-DD, the day it went live) and one sentence
 # of `text` in en, tr and nl. The link (title and URL in the reader's
 # language) comes from page/run/cv. Not in the changelog: paper revisions,
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
+
+- date: 2026-10-06
+  type: paper
+  page: vlm-inference-benchmarks
+  text:
+    en: "Explore vision-language model inference benchmarks on RTX PRO 6000 Blackwell, Jetson AGX Orin and Jetson Orin NX. Pick the image size, set how long a camera may wait for its answer, and see how many cameras each configuration keeps up with."
+    tr: "RTX PRO 6000 Blackwell, Jetson AGX Orin ve Jetson Orin NX üzerindeki görüntü-dil modeli çıkarım benchmark'larını keşfedin. Görüntü boyutunu seçin, bir kameranın yanıtı için ne kadar bekleyebileceğini belirleyin ve her yapılandırmanın kaç kameraya yetiştiğini görün."
+    nl: "Verken inferentiebenchmarks van vision-languagemodellen op RTX PRO 6000 Blackwell, Jetson AGX Orin en Jetson Orin NX. Kies het beeldformaat, stel in hoe lang een camera op zijn antwoord mag wachten, en zie hoeveel camera's elke configuratie bijhoudt."
 
 - date: 2026-10-01
   type: benchmarks

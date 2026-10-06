@@ -49,7 +49,7 @@ AUTOLINK = re.compile(r"<(https?://[^>\s]+)>")
 
 
 def sources():
-    en = sorted(glob.glob("papers/*.md")) + ["llm-inference-benchmarks.md", "cv-inference-benchmarks.md"]
+    en = sorted(glob.glob("papers/*.md")) + ["llm-inference-benchmarks.md", "cv-inference-benchmarks.md", "vlm-inference-benchmarks.md"]
     return [p for p in en if os.path.exists(p)]
 
 

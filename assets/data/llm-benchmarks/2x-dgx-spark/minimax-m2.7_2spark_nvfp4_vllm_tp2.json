@@ -1,0 +1,49 @@
+{
+  "id": "minimax-m2.7_2spark_nvfp4_vllm_tp2",
+  "model": "MiniMax-M2.7",
+  "params": "229B",
+  "intelligence_index": 22.8,
+  "agentic_index": 15.3,
+  "device": "2× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "Best 2-node config. 55% faster than PP=2.",
+  "sources": [
+    "https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-setup/"
+  ],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 288.98,
+      "tps": 26.64
+    },
+    {
+      "c": 2,
+      "ttft_ms": 258.11,
+      "tps": 24.4
+    },
+    {
+      "c": 4,
+      "ttft_ms": 408.74,
+      "tps": 17.98
+    },
+    {
+      "c": 8,
+      "ttft_ms": 474.84,
+      "tps": 12.98
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 126976,
+  "kv_window_bytes": 0,
+  "kv_heads": 8,
+  "model_context_length": 204800,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "nvidia/MiniMax-M2.7-NVFP4",
+  "weights_gb": 139.89
+}

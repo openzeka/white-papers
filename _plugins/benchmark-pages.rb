@@ -2,6 +2,7 @@
 #
 #   /llm-inference-benchmarks/<model>/<device>/<config>/    every LLM run
 #   /cv-inference-benchmarks/<device>/<model>/              every CV result
+#   /vlm-inference-benchmarks/<model>/<device>/<quant>-<engine>/   every VLM run
 #
 # (in every language). The CV URL is the result's file in the data store,
 # assets/data/cv-benchmarks/<device>/<model>.json, which the benchmark tool's
@@ -161,6 +162,72 @@ module OzBenchPages
     out << %(<script src="/assets/js/#{js}"></script>\n)
   end
 
+  VLM_BASE = "/vlm-inference-benchmarks".freeze
+
+  # Model, device, then number format and engine — the settings that tell the
+  # VLM runs apart. Two runs that agree on all of them get the extra tail of
+  # their id, as in slugs(). Published URLs are permanent.
+  def self.vlm_slugs(rows)
+    rows.group_by { |r| [slug(r["model"]), slug(r["device"]), "#{slug(r['quantization'])}-#{slug(r['engine'])}"] }.each do |(m, d, c), group|
+      first = group.min_by { |r| [r["id"].length, r["id"]] }
+      group.each do |r|
+        tail = r.equal?(first) ? "" : slug(r["id"].delete_prefix(first["id"]))
+        tail = slug(r["id"]) if !r.equal?(first) && tail.empty?
+        r["oz_permalink"] = "#{VLM_BASE}/#{m}/#{d}/#{c}#{tail.empty? ? '' : "-#{tail}"}/"
+      end
+    end
+  end
+
+  def self.vlm_title(r, b)
+    OzVisibility.fill(b["vlm_title"], "model" => r["model"], "device" => r["device"],
+                      "config" => "#{r['quantization']}, #{r['engine']}")
+  end
+
+  def self.sec(x) = x.nil? ? "—" : format(x.to_f < 10 ? "%.2f" : "%.1f", x.to_f)
+
+  # The VLM explorer's row and its opened sweep at the default image size, as
+  # plain HTML (see fallback()).
+  def self.vlm_fallback(r, vlm, b, lang)
+    cfg = vlm["oz_config"]
+    res = cfg["resolution"]
+    t = cfg["response_target_s"] == cfg["response_target_s"].round ? cfg["response_target_s"].round : cfg["response_target_s"]
+    m = (vlm["models"] || {})[r["model"]] || {}
+    facts = [[b["model"], r["model"]], [b["params"], m["params"] || "—"]]
+    facts += [[b["device"], r["device"]], [b["quant"], r["quantization"]], [b["vlm_res"], res],
+              [b["vlm_images"], cfg["images"]],
+              [OzVisibility.fill(b["vlm_maxcams"], "target" => t), "#{r['oz_max_c']}#{r['oz_max_c_open'] ? '+' : ''}"],
+              [b["engine"], r["engine"]]]
+    out = +%(<div class="bt-static">\n<table>\n<tbody>\n)
+    facts.each { |k, v| out << "<tr><th scope=\"row\">#{h k}</th><td>#{h v}</td></tr>\n" }
+    out << "</tbody>\n</table>\n<table>\n<thead><tr>"
+    [b["vlm_cams"], b["vlm_resp"], b["vlm_tps"], b["col_status"]].each { |k| out << "<th>#{h k}</th>" }
+    out << "</tr></thead>\n<tbody>\n"
+    (r["oz_default_points"] || []).each do |p|
+      out << "<tr><td>#{p['c']}</td><td>#{sec(p['ttft_s'])}</td><td>#{format('%.1f', p['tps'].to_f)}</td>" \
+             "<td>#{OzVisibility.vlm_meets(p, cfg) ? 'PASS' : 'FAIL'}</td></tr>\n"
+    end
+    out << "</tbody>\n</table>\n"
+    (r["oz_parts"] || {})[lang].to_a.each { |p| out << "<p>#{h p}</p>\n" }
+    out << "</div>\n"
+  end
+
+  def self.vlm_page_html(r, vlm, b, lang)
+    js = lang == "en" ? "vlm-benchmark-table.js" : "vlm-benchmark-table.#{lang}.js"
+    out = +%(<p class="oz-crumb"><a href="#{VLM_BASE}/">#{h b['vlm_crumb']}</a></p>\n)
+    out << "<h1>#{h vlm_title(r, b)}</h1>\n"
+    out << %(<p><a href="#{VLM_BASE}/##{h r['id']}">#{h b['vlm_open_explorer']}</a></p>\n)
+    out << %(<link rel="stylesheet" href="/assets/css/benchmark-table.css">\n<link rel="stylesheet" href="/assets/css/vlm-benchmark-table.css">\n)
+    out << %(<div data-vlmbt-src="/assets/data/vlm-benchmarks.json" data-vlmbt-logo="/assets/images/benchmark-logo.png" data-vlmbt-only="#{h r['id']}">\n)
+    out << vlm_fallback(r, vlm, b, lang) << "</div>\n"
+    # The widget reads the explanation from here, as on the explorer page.
+    out << %(<div class="bt-explained-src" hidden><div data-vlmbt-explained="#{h r['id']}">)
+    (r["oz_parts"] || {})[lang].to_a.each { |p| out << "<p>#{h p}</p>" }
+    out << "</div></div>\n"
+    %w[https://cdn.jsdelivr.net/npm/chart.js@4 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2
+       https://cdn.jsdelivr.net/npm/html2canvas@1].each { |s| out << %(<script src="#{s}"></script>\n) }
+    out << %(<script src="/assets/js/#{js}"></script>\n)
+  end
+
   class Generator < Jekyll::Generator
     priority :lowest
 
@@ -173,8 +240,11 @@ module OzBenchPages
       cv_rows = cv["oz_rows"] || []
       cv_rows.each { |row| row["oz_permalink"] = OzBenchPages.cv_permalink(row) }
       cv_target = ((cv["config"] || {})["target_fps"] || 15).to_f
+      vlm = site.data["oz_vlm"] || {}
+      vlm_rows = vlm["benchmarks"] || []
+      OzBenchPages.vlm_slugs(vlm_rows)
       # For sitemap.xml: every result page, built in every language.
-      site.data["oz_bench_pages"] = (rows + cv_rows).map { |r| { "permalink" => r["oz_permalink"], "langs" => langs } }
+      site.data["oz_bench_pages"] = (rows + cv_rows + vlm_rows).map { |r| { "permalink" => r["oz_permalink"], "langs" => langs } }
 
       lang = site.config["active_lang"] || site.config["default_lang"]
       b = (site.data[lang] || {}).dig("strings", "bench_page") or return
@@ -186,6 +256,10 @@ module OzBenchPages
         desc = (row["text"] || {})[lang].to_s.split(/(?<=\.) /).first.to_s
         add(site, row["oz_permalink"], OzBenchPages.cv_title(row, b), desc, lang, langs,
             OzBenchPages.cv_page_html(row, cv_target, b, lang))
+      end
+      vlm_rows.each do |r|
+        add(site, r["oz_permalink"], OzBenchPages.vlm_title(r, b), ((r["oz_parts"] || {})[lang] || []).first.to_s,
+            lang, langs, OzBenchPages.vlm_page_html(r, vlm, b, lang))
       end
     end
 

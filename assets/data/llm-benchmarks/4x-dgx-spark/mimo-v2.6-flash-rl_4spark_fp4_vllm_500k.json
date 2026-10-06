@@ -1,0 +1,47 @@
+{
+  "id": "mimo-v2.6-flash-rl_4spark_fp4_vllm_500k",
+  "model": "MiMo-V2.6-Flash-RL",
+  "params": "310B",
+  "intelligence_index": null,
+  "agentic_index": null,
+  "device": "4× DGX Spark",
+  "quantization": "FP4",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": 7,
+  "tp": 4,
+  "notes": "DFlash speculative decoding k=7, 500K context. Served as MiMo-V2.6-Flash-RL. Model: XiaomiMiMo/MiMo-V2.6-Flash-RL",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 302.57,
+      "tps": 45.68
+    },
+    {
+      "c": 2,
+      "ttft_ms": 401.98,
+      "tps": 32.47
+    },
+    {
+      "c": 4,
+      "ttft_ms": 496.5,
+      "tps": 22.94
+    },
+    {
+      "c": 8,
+      "ttft_ms": 643.13,
+      "tps": 14.88
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 11520,
+  "kv_window_bytes": 12779520,
+  "kv_heads": 4,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
+  "weights_gb": 172.93
+}

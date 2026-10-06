@@ -1,0 +1,47 @@
+{
+  "id": "muse-glimmer-30b_1spark_sglang",
+  "model": "Muse-Glimmer-30B",
+  "params": "30B",
+  "intelligence_index": 17.5,
+  "agentic_index": 8.5,
+  "device": "1× DGX Spark",
+  "quantization": "BF16",
+  "engine": "SGLang",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 1,
+  "notes": "max_model_len 131072",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 765.26,
+      "tps": 25.04
+    },
+    {
+      "c": 2,
+      "ttft_ms": 1001.66,
+      "tps": 22.75
+    },
+    {
+      "c": 4,
+      "ttft_ms": 1106.17,
+      "tps": 20.5
+    },
+    {
+      "c": 8,
+      "ttft_ms": 1190.36,
+      "tps": 17.42
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 6656,
+  "kv_window_bytes": 40894464,
+  "kv_heads": 2,
+  "model_context_length": 131072,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "meta-models/Muse-Glimmer-30B",
+  "weights_gb": 59.55
+}

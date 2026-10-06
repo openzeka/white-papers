@@ -1,0 +1,57 @@
+{
+  "id": "kimi-k2-thinking_b300_nvfp4_vllm",
+  "model": "Kimi-K2-Thinking",
+  "params": "1.03T",
+  "intelligence_index": 22,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 48.44,
+      "tps": 53.58
+    },
+    {
+      "c": 2,
+      "ttft_ms": 61.84,
+      "tps": 52.89
+    },
+    {
+      "c": 4,
+      "ttft_ms": 85.53,
+      "tps": 51.94
+    },
+    {
+      "c": 8,
+      "ttft_ms": 132.38,
+      "tps": 46.56
+    },
+    {
+      "c": 16,
+      "ttft_ms": 316.01,
+      "tps": 38.46
+    },
+    {
+      "c": 32,
+      "ttft_ms": 393.41,
+      "tps": 30.21
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 35136,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "nvidia/Kimi-K2-Thinking-NVFP4",
+  "weights_gb": 594.24
+}

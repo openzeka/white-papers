@@ -1,0 +1,64 @@
+{
+  "id": "kimi-k3_b300_mxfp4_sglang",
+  "model": "Kimi K3",
+  "params": "2.78T",
+  "intelligence_index": 43.6,
+  "agentic_index": 50,
+  "device": "DGX B300",
+  "quantization": "MXFP4",
+  "engine": "SGLang",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 8,
+  "notes": "GMU 0.85",
+  "sources": [
+    "https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/"
+  ],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 399.5,
+      "tps": 83.4
+    },
+    {
+      "c": 2,
+      "ttft_ms": 771.7,
+      "tps": 63.79
+    },
+    {
+      "c": 4,
+      "ttft_ms": 811.0,
+      "tps": 59.33
+    },
+    {
+      "c": 8,
+      "ttft_ms": 782.6,
+      "tps": 52.88
+    },
+    {
+      "c": 16,
+      "ttft_ms": 833.6,
+      "tps": 43.54
+    },
+    {
+      "c": 32,
+      "ttft_ms": 915.2,
+      "tps": 33.55
+    },
+    {
+      "c": 64,
+      "ttft_ms": 948.4,
+      "tps": 29.11
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 13824,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 898744320,
+  "served_repo": "moonshotai/Kimi-K3",
+  "weights_gb": 1560.94
+}

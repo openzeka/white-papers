@@ -1,0 +1,25 @@
+{
+  "id": "qwen3-vl-4b-instruct_orinnx_fp8_vllm",
+  "model": "Qwen3-VL-4B-Instruct",
+  "device": "Jetson Orin NX",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "engine_version": null,
+  "platform": "L4T R36.5",
+  "served_repo": null,
+  "notes": "max-num-seqs 4; NVIDIA Jetson vLLM container",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 0.766, "tps": 14.19, "requests": 8, "failed": 0},
+    {"res": "480p", "images": 1, "c": 2, "ttft_s": 0.88, "tps": 13.52, "requests": 8, "failed": 0},
+    {"res": "480p", "images": 1, "c": 4, "ttft_s": 1.935, "tps": 13.35, "requests": 8, "failed": 0},
+    {"res": "480p", "images": 3, "c": 1, "ttft_s": 1.669, "tps": 14.17, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 5, "c": 1, "ttft_s": 2.891, "tps": 14.22, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 1.668, "tps": 14.21, "requests": 8, "failed": 1},
+    {"res": "720p", "images": 1, "c": 2, "ttft_s": 2.59, "tps": 13.1, "requests": 8, "failed": 2},
+    {"res": "720p", "images": 1, "c": 4, "ttft_s": 4.744, "tps": 13.07, "requests": 8, "failed": 2},
+    {"res": "720p", "images": 3, "c": 1, "ttft_s": 4.004, "tps": 14.22, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 1, "ttft_s": 4.345, "tps": 14.16, "requests": 8, "failed": 3},
+    {"res": "1080p", "images": 1, "c": 2, "ttft_s": 7.158, "tps": 12.33, "requests": 8, "failed": 4},
+    {"res": "1080p", "images": 1, "c": 4, "ttft_s": 13.757, "tps": 11.36, "requests": 8, "failed": 4}
+  ]
+}

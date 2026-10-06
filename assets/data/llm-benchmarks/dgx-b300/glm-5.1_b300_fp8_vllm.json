@@ -1,0 +1,62 @@
+{
+  "id": "glm-5.1_b300_fp8_vllm",
+  "model": "GLM-5.1",
+  "params": "754B",
+  "intelligence_index": 26.1,
+  "agentic_index": 23.9,
+  "device": "DGX B300",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 453.35,
+      "tps": 91.46
+    },
+    {
+      "c": 2,
+      "ttft_ms": 496.38,
+      "tps": 72.74
+    },
+    {
+      "c": 4,
+      "ttft_ms": 563.66,
+      "tps": 55.87
+    },
+    {
+      "c": 8,
+      "ttft_ms": 594.98,
+      "tps": 50.8
+    },
+    {
+      "c": 16,
+      "ttft_ms": 613.76,
+      "tps": 36.92
+    },
+    {
+      "c": 32,
+      "ttft_ms": 902.62,
+      "tps": 33.48
+    },
+    {
+      "c": 64,
+      "ttft_ms": 1844.13,
+      "tps": 27.69
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 54912,
+  "kv_window_bytes": 0,
+  "kv_heads": null,
+  "model_context_length": 202752,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "zai-org/GLM-5.1-FP8",
+  "weights_gb": 756.18
+}

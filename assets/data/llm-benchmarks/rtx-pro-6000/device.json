@@ -1,0 +1,7 @@
+{
+  "name": "RTX PRO 6000",
+  "base": "RTX PRO 6000",
+  "units": 1,
+  "memory_gb": 96,
+  "unified": false
+}

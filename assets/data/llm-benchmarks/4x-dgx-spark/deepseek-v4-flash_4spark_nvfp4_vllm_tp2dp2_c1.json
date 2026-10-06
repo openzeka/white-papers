@@ -1,0 +1,32 @@
+{
+  "id": "deepseek-v4-flash_4spark_nvfp4_vllm_tp2dp2_c1",
+  "model": "DeepSeek V4 Flash 0731",
+  "params": "304B",
+  "intelligence_index": 34.3,
+  "agentic_index": 41,
+  "device": "4× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "TP=2, DP=2. Single C=1 test (scaling comparison)",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 277,
+      "tps": 48.54
+    }
+  ],
+  "dp": 2,
+  "pp": null,
+  "kv_bytes_per_token": 3440,
+  "kv_window_bytes": 2818048,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "deepseek-ai/DeepSeek-V4-Flash-0731",
+  "weights_gb": 166.89
+}

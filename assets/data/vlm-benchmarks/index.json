@@ -1,0 +1,319 @@
+{
+  "source": {
+    "tool": "VLM Benchmark Tool",
+    "exported": "2026-10-01T15:50:17"
+  },
+  "config": {
+    "response_target_s": 3,
+    "images": 1
+  },
+  "workload": {
+    "prompt": "Describe the scene.",
+    "max_tokens": 128,
+    "photos": 16,
+    "sizes": {
+      "480p": "854×480",
+      "720p": "1280×720",
+      "1080p": "1920×1080",
+      "2K": "2560×1440"
+    }
+  },
+  "models": {
+    "Cosmos-Reason1-7B": {
+      "repo": "nvidia/Cosmos-Reason1-7B",
+      "params": "8.3B"
+    },
+    "Cosmos-Reason2-2B": {
+      "repo": "nvidia/Cosmos-Reason2-2B",
+      "params": "2.4B"
+    },
+    "Cosmos-Reason2-8B": {
+      "repo": "nvidia/Cosmos-Reason2-8B",
+      "params": "8.8B"
+    },
+    "Cosmos3-Edge": {
+      "repo": "nvidia/Cosmos3-Edge",
+      "params": "3.9B"
+    },
+    "Cosmos3-Nano": {
+      "repo": "nvidia/Cosmos3-Nano",
+      "params": "16B"
+    },
+    "Eagle2.5-8B": {
+      "repo": "nvidia/Eagle2.5-8B",
+      "params": "8.1B"
+    },
+    "Gemma-4-26B-A4B-it": {
+      "repo": "google/gemma-4-26B-A4B-it",
+      "params": "26B"
+    },
+    "Gemma-4-31B-it": {
+      "repo": "google/gemma-4-31B-it",
+      "params": "31B"
+    },
+    "Gemma-4-E2B-it": {
+      "repo": "google/gemma-4-E2B-it",
+      "params": "5.1B"
+    },
+    "Gemma-4-E4B-it": {
+      "repo": "google/gemma-4-E4B-it",
+      "params": "8.0B"
+    },
+    "Llama-3.1-Nemotron-Nano-VL-8B": {
+      "repo": "nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1",
+      "params": "8.7B"
+    },
+    "MedGemma-1.5-4B-it": {
+      "repo": "google/medgemma-1.5-4b-it",
+      "params": "4.3B"
+    },
+    "Nemotron-Nano-12B-v2-VL": {
+      "repo": "nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16",
+      "params": "13B"
+    },
+    "Qwen3-VL-30B-A3B-Instruct": {
+      "repo": "Qwen/Qwen3-VL-30B-A3B-Instruct",
+      "params": "30B"
+    },
+    "Qwen3-VL-4B-Instruct": {
+      "repo": "Qwen/Qwen3-VL-4B-Instruct",
+      "params": "4.4B"
+    },
+    "Qwen3-VL-8B-Instruct": {
+      "repo": "Qwen/Qwen3-VL-8B-Instruct",
+      "params": "8.8B"
+    },
+    "Qwen3.5-4B": {
+      "repo": "Qwen/Qwen3.5-4B",
+      "params": "4.7B"
+    },
+    "Qwen3.6-35B-A3B": {
+      "repo": "Qwen/Qwen3.6-35B-A3B",
+      "params": "35B"
+    },
+    "Qwen3.8-27B": {
+      "repo": "Qwen/Qwen3.8-27B",
+      "params": "27B"
+    }
+  },
+  "devices": [
+    {
+      "name": "Jetson Orin NX",
+      "slug": "jetson-orin-nx",
+      "path": "jetson-orin-nx/device.json",
+      "runs": [
+        {
+          "id": "cosmos-reason1-7b_orinnx_q4km_llamacpp",
+          "model": "Cosmos-Reason1-7B",
+          "path": "jetson-orin-nx/cosmos-reason1-7b_orinnx_q4km_llamacpp.json"
+        },
+        {
+          "id": "cosmos-reason2-2b_orinnx_q80_llamacpp",
+          "model": "Cosmos-Reason2-2B",
+          "path": "jetson-orin-nx/cosmos-reason2-2b_orinnx_q80_llamacpp.json"
+        },
+        {
+          "id": "cosmos-reason2-8b_orinnx_q4km_llamacpp",
+          "model": "Cosmos-Reason2-8B",
+          "path": "jetson-orin-nx/cosmos-reason2-8b_orinnx_q4km_llamacpp.json"
+        },
+        {
+          "id": "gemma-4-e2b-it_orinnx_q40_llamacpp",
+          "model": "Gemma-4-E2B-it",
+          "path": "jetson-orin-nx/gemma-4-e2b-it_orinnx_q40_llamacpp.json"
+        },
+        {
+          "id": "gemma-4-e4b-it_orinnx_q40_llamacpp",
+          "model": "Gemma-4-E4B-it",
+          "path": "jetson-orin-nx/gemma-4-e4b-it_orinnx_q40_llamacpp.json"
+        },
+        {
+          "id": "qwen3-vl-4b-instruct_orinnx_fp8_vllm",
+          "model": "Qwen3-VL-4B-Instruct",
+          "path": "jetson-orin-nx/qwen3-vl-4b-instruct_orinnx_fp8_vllm.json"
+        },
+        {
+          "id": "qwen3-vl-4b-instruct_orinnx_q80_llamacpp",
+          "model": "Qwen3-VL-4B-Instruct",
+          "path": "jetson-orin-nx/qwen3-vl-4b-instruct_orinnx_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3-vl-8b-instruct_orinnx_q4km_llamacpp",
+          "model": "Qwen3-VL-8B-Instruct",
+          "path": "jetson-orin-nx/qwen3-vl-8b-instruct_orinnx_q4km_llamacpp.json"
+        },
+        {
+          "id": "qwen3.5-4b_orinnx_q4km_llamacpp",
+          "model": "Qwen3.5-4B",
+          "path": "jetson-orin-nx/qwen3.5-4b_orinnx_q4km_llamacpp.json"
+        }
+      ]
+    },
+    {
+      "name": "Jetson AGX Orin",
+      "slug": "jetson-agx-orin",
+      "path": "jetson-agx-orin/device.json",
+      "runs": [
+        {
+          "id": "cosmos-reason1-7b_agxorin_q4km_llamacpp",
+          "model": "Cosmos-Reason1-7B",
+          "path": "jetson-agx-orin/cosmos-reason1-7b_agxorin_q4km_llamacpp.json"
+        },
+        {
+          "id": "cosmos-reason2-2b_agxorin_q80_llamacpp",
+          "model": "Cosmos-Reason2-2B",
+          "path": "jetson-agx-orin/cosmos-reason2-2b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "cosmos-reason2-8b_agxorin_q4km_llamacpp",
+          "model": "Cosmos-Reason2-8B",
+          "path": "jetson-agx-orin/cosmos-reason2-8b_agxorin_q4km_llamacpp.json"
+        },
+        {
+          "id": "cosmos3-edge_agxorin_bf16_vllm",
+          "model": "Cosmos3-Edge",
+          "path": "jetson-agx-orin/cosmos3-edge_agxorin_bf16_vllm.json"
+        },
+        {
+          "id": "gemma-4-26b-a4b-it_agxorin_q40_llamacpp",
+          "model": "Gemma-4-26B-A4B-it",
+          "path": "jetson-agx-orin/gemma-4-26b-a4b-it_agxorin_q40_llamacpp.json"
+        },
+        {
+          "id": "gemma-4-e4b-it_agxorin_q40_llamacpp",
+          "model": "Gemma-4-E4B-it",
+          "path": "jetson-agx-orin/gemma-4-e4b-it_agxorin_q40_llamacpp.json"
+        },
+        {
+          "id": "qwen3-vl-4b-instruct_agxorin_q80_llamacpp",
+          "model": "Qwen3-VL-4B-Instruct",
+          "path": "jetson-agx-orin/qwen3-vl-4b-instruct_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3-vl-8b-instruct_agxorin_q4km_llamacpp",
+          "model": "Qwen3-VL-8B-Instruct",
+          "path": "jetson-agx-orin/qwen3-vl-8b-instruct_agxorin_q4km_llamacpp.json"
+        },
+        {
+          "id": "qwen3-vl-8b-instruct_agxorin_q80_llamacpp",
+          "model": "Qwen3-VL-8B-Instruct",
+          "path": "jetson-agx-orin/qwen3-vl-8b-instruct_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3.5-4b_agxorin_q4km_llamacpp",
+          "model": "Qwen3.5-4B",
+          "path": "jetson-agx-orin/qwen3.5-4b_agxorin_q4km_llamacpp.json"
+        }
+      ]
+    },
+    {
+      "name": "RTX PRO 6000 Max-Q",
+      "slug": "rtx-pro-6000-max-q",
+      "path": "rtx-pro-6000-max-q/device.json",
+      "runs": [
+        {
+          "id": "cosmos3-edge_rtxpro6000maxq_bf16_vllm",
+          "model": "Cosmos3-Edge",
+          "path": "rtx-pro-6000-max-q/cosmos3-edge_rtxpro6000maxq_bf16_vllm.json"
+        },
+        {
+          "id": "cosmos3-nano_rtxpro6000maxq_bf16_vllm",
+          "model": "Cosmos3-Nano",
+          "path": "rtx-pro-6000-max-q/cosmos3-nano_rtxpro6000maxq_bf16_vllm.json"
+        }
+      ]
+    },
+    {
+      "name": "RTX PRO 6000",
+      "slug": "rtx-pro-6000",
+      "path": "rtx-pro-6000/device.json",
+      "runs": [
+        {
+          "id": "cosmos-reason1-7b_rtxpro6000_bf16_vllm",
+          "model": "Cosmos-Reason1-7B",
+          "path": "rtx-pro-6000/cosmos-reason1-7b_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "cosmos-reason2-2b_rtxpro6000_bf16_vllm",
+          "model": "Cosmos-Reason2-2B",
+          "path": "rtx-pro-6000/cosmos-reason2-2b_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "cosmos-reason2-8b_rtxpro6000_bf16_vllm",
+          "model": "Cosmos-Reason2-8B",
+          "path": "rtx-pro-6000/cosmos-reason2-8b_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "eagle2.5-8b_rtxpro6000_bf16_vllm",
+          "model": "Eagle2.5-8B",
+          "path": "rtx-pro-6000/eagle2.5-8b_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "gemma-4-31b-it_rtxpro6000_bf16_vllm",
+          "model": "Gemma-4-31B-it",
+          "path": "rtx-pro-6000/gemma-4-31b-it_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "gemma-4-31b-it_rtxpro6000_nvfp4_vllm",
+          "model": "Gemma-4-31B-it",
+          "path": "rtx-pro-6000/gemma-4-31b-it_rtxpro6000_nvfp4_vllm.json"
+        },
+        {
+          "id": "llama-3.1-nemotron-nano-vl-8b_rtxpro6000_bf16_vllm",
+          "model": "Llama-3.1-Nemotron-Nano-VL-8B",
+          "path": "rtx-pro-6000/llama-3.1-nemotron-nano-vl-8b_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "medgemma-1.5-4b-it_rtxpro6000_bf16_vllm",
+          "model": "MedGemma-1.5-4B-it",
+          "path": "rtx-pro-6000/medgemma-1.5-4b-it_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "nemotron-nano-12b-v2-vl_rtxpro6000_bf16_vllm",
+          "model": "Nemotron-Nano-12B-v2-VL",
+          "path": "rtx-pro-6000/nemotron-nano-12b-v2-vl_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "qwen3-vl-30b-a3b-instruct_rtxpro6000_fp8_vllm",
+          "model": "Qwen3-VL-30B-A3B-Instruct",
+          "path": "rtx-pro-6000/qwen3-vl-30b-a3b-instruct_rtxpro6000_fp8_vllm.json"
+        },
+        {
+          "id": "qwen3-vl-4b-instruct_rtxpro6000_bf16_vllm",
+          "model": "Qwen3-VL-4B-Instruct",
+          "path": "rtx-pro-6000/qwen3-vl-4b-instruct_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "qwen3-vl-4b-instruct_rtxpro6000_q80_llamacpp",
+          "model": "Qwen3-VL-4B-Instruct",
+          "path": "rtx-pro-6000/qwen3-vl-4b-instruct_rtxpro6000_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3-vl-8b-instruct_rtxpro6000_bf16_vllm",
+          "model": "Qwen3-VL-8B-Instruct",
+          "path": "rtx-pro-6000/qwen3-vl-8b-instruct_rtxpro6000_bf16_vllm.json"
+        },
+        {
+          "id": "qwen3-vl-8b-instruct_rtxpro6000_q80_llamacpp",
+          "model": "Qwen3-VL-8B-Instruct",
+          "path": "rtx-pro-6000/qwen3-vl-8b-instruct_rtxpro6000_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3.6-35b-a3b_rtxpro6000_fp8_vllm",
+          "model": "Qwen3.6-35B-A3B",
+          "path": "rtx-pro-6000/qwen3.6-35b-a3b_rtxpro6000_fp8_vllm.json"
+        },
+        {
+          "id": "qwen3.6-35b-a3b_rtxpro6000_nvfp4_vllm",
+          "model": "Qwen3.6-35B-A3B",
+          "path": "rtx-pro-6000/qwen3.6-35b-a3b_rtxpro6000_nvfp4_vllm.json"
+        },
+        {
+          "id": "qwen3.8-27b_rtxpro6000_fp8_vllm",
+          "model": "Qwen3.8-27B",
+          "path": "rtx-pro-6000/qwen3.8-27b_rtxpro6000_fp8_vllm.json"
+        }
+      ]
+    }
+  ]
+}

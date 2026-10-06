@@ -1,0 +1,62 @@
+{
+  "id": "gemma-4-31b_2spark_nvfp4_vllm",
+  "model": "Gemma-4-31B-it",
+  "params": "31B",
+  "intelligence_index": 14.7,
+  "agentic_index": 4.2,
+  "device": "2× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 136.35,
+      "tps": 19.42
+    },
+    {
+      "c": 2,
+      "ttft_ms": 227.38,
+      "tps": 19.59
+    },
+    {
+      "c": 4,
+      "ttft_ms": 246.13,
+      "tps": 19.17
+    },
+    {
+      "c": 8,
+      "ttft_ms": 279.98,
+      "tps": 18.2
+    },
+    {
+      "c": 16,
+      "ttft_ms": 293.24,
+      "tps": 15.81
+    },
+    {
+      "c": 32,
+      "ttft_ms": 337.48,
+      "tps": 13.21
+    },
+    {
+      "c": 64,
+      "ttft_ms": 420.49,
+      "tps": 9.16
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 40960,
+  "kv_window_bytes": 419430400,
+  "kv_heads": 4,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "RedHatAI/gemma-4-31B-it-NVFP4",
+  "weights_gb": 23.27
+}

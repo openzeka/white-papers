@@ -1,0 +1,57 @@
+{
+  "id": "qwen3.8-27b_1spark_nvfp4_sglang_dflash2_ult",
+  "model": "Qwen3.8-27B",
+  "params": "27B",
+  "intelligence_index": 33.7,
+  "agentic_index": 45.8,
+  "device": "1× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "SGLang",
+  "mtp": true,
+  "mtp_k": 8,
+  "tp": 1,
+  "notes": "DFlash2 Ultimate, BF16-LMHead, k=8, mem-fraction 0.50, KV fp8_e4m3",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 232.28,
+      "tps": 47.94
+    },
+    {
+      "c": 2,
+      "ttft_ms": 320.15,
+      "tps": 39.8
+    },
+    {
+      "c": 4,
+      "ttft_ms": 342.98,
+      "tps": 35.6
+    },
+    {
+      "c": 8,
+      "ttft_ms": 389.07,
+      "tps": 27.64
+    },
+    {
+      "c": 16,
+      "ttft_ms": 2356.76,
+      "tps": 18.62
+    },
+    {
+      "c": 32,
+      "ttft_ms": 9388.17,
+      "tps": 9.47
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 32768,
+  "kv_window_bytes": 0,
+  "kv_heads": 4,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 307888128,
+  "served_repo": "RadixArk/Qwen3.8-27B-NVFP4",
+  "weights_gb": 21.92
+}

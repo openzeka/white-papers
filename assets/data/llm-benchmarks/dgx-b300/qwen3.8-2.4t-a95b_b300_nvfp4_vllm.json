@@ -1,0 +1,62 @@
+{
+  "id": "qwen3.8-2.4t-a95b_b300_nvfp4_vllm",
+  "model": "Qwen3.8-2.4T-A95B",
+  "params": "2.4T",
+  "intelligence_index": 39.9,
+  "agentic_index": 50.1,
+  "device": "DGX B300",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 8,
+  "notes": "Model: Inferact/Qwen3.8-2.4T-A95B-NVFP4, 262K context",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 112.74,
+      "tps": 115.87
+    },
+    {
+      "c": 2,
+      "ttft_ms": 94.03,
+      "tps": 104.57
+    },
+    {
+      "c": 4,
+      "ttft_ms": 169.46,
+      "tps": 87.07
+    },
+    {
+      "c": 8,
+      "ttft_ms": 191.78,
+      "tps": 75.53
+    },
+    {
+      "c": 16,
+      "ttft_ms": 364.52,
+      "tps": 58.98
+    },
+    {
+      "c": 32,
+      "ttft_ms": 421.86,
+      "tps": 45.51
+    },
+    {
+      "c": 64,
+      "ttft_ms": 718.76,
+      "tps": 31.3
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 47104,
+  "kv_window_bytes": 0,
+  "kv_heads": 4,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 1174585344,
+  "served_repo": "Inferact/Qwen3.8-2.4T-A95B-NVFP4",
+  "weights_gb": 1447.33
+}

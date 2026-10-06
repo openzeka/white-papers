@@ -1,0 +1,62 @@
+{
+  "id": "deepseek-v4-flash_8spark_nvfp4_vllm",
+  "model": "DeepSeek V4 Flash 0731",
+  "params": "304B",
+  "intelligence_index": 34.3,
+  "agentic_index": 41,
+  "device": "8× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": false,
+  "mtp_k": null,
+  "tp": 2,
+  "notes": "TP=2, DP=4. Best for high concurrency.",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 288.84,
+      "tps": 48.86
+    },
+    {
+      "c": 2,
+      "ttft_ms": 326.29,
+      "tps": 43.12
+    },
+    {
+      "c": 4,
+      "ttft_ms": 346.21,
+      "tps": 38.47
+    },
+    {
+      "c": 8,
+      "ttft_ms": 410.64,
+      "tps": 29.85
+    },
+    {
+      "c": 16,
+      "ttft_ms": 522.56,
+      "tps": 23.37
+    },
+    {
+      "c": 32,
+      "ttft_ms": 652.71,
+      "tps": 16.44
+    },
+    {
+      "c": 64,
+      "ttft_ms": 939.26,
+      "tps": 10.71
+    }
+  ],
+  "dp": 4,
+  "pp": null,
+  "kv_bytes_per_token": 3440,
+  "kv_window_bytes": 2818048,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "deepseek-ai/DeepSeek-V4-Flash-0731",
+  "weights_gb": 166.89
+}
