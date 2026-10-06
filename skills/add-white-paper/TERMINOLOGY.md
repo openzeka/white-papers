@@ -144,6 +144,7 @@ that language's technical writing keeps the English word; write it as shown
 | ambiguous sentence; human-in-the-loop | belirsiz cümle; insan onayı | dubbelzinnige zin; mens in de lus |
 | label, expected label | etiket, beklenen etiket | label, verwacht label |
 | metric names (ECE, MAE, accuracy, flip, p50/p95) | *(English)* | *(English)* |
+| appendix | ek | bijlage |
 
 ### More Dutch terms
 
