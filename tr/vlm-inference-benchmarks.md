@@ -79,8 +79,8 @@ yüzden üç ya da beş görüntüyle Maks. kamera 1'den yüksek olamaz.
 
 ### 4. Maks. kamera değerini okuyun {#maks-kamera-degerini-okuyun}
 
-**Maks. kamera**, her kameranın yanıtının hedefiniz içinde başladığı ve hiçbir
-isteğin başarısız olmadığı en yüksek ölçülmüş kamera sayısıdır. Artı işareti —
+**Maks. kamera**, her kameranın yanıtının hedefiniz içinde başladığı en yüksek
+ölçülmüş kamera sayısıdır. Artı işareti —
 **16+** — yapılandırmanın test edildiği en yüksek sayıda bile hedefi karşıladığı,
 yani gerçek üst sınırına ulaşılmadığı anlamına gelir. 0, tek bir kameranın bile
 zamanında yanıt almadığı demektir.
@@ -137,8 +137,9 @@ boyutlarına ölçeklenen on altı sabit resimdir; OpenAI uyumlu sohbet API'si
 ile, GGUF dosyaları llama.cpp ile sunuldu.
 
 Görüntü boyutu, istek başına görüntü ve kamera sayısının her birleşimi, atılan
-bir ısınma turundan sonra ayrı ayrı ölçülür. Değerler, ölçülen isteklerin
-ortalamasıdır.
+bir ısınma turundan sonra ayrı ayrı ölçülür. Değerler, tamamlanan isteklerin
+ortalamasıdır; benchmark sırasında başarısız olan bir istek ortalamaya
+katılmaz ve yapılandırmanın aleyhine sayılmaz.
 
 - **Birden fazla kamera**, 480p, 720p ve 1080p'de istek başına bir görüntüyle
   ölçüldü: Jetson Orin NX'te 1, 2 ve 4 kamera (bir yapılandırmada 8'e kadar),
@@ -174,8 +175,8 @@ Bir kamera, önceki isteği yanıtlanır yanıtlanmaz sıradaki isteğini gönde
 yani her zaman tam olarak bir isteği işlenmektedir. Bu yüzden eşzamanlı istek
 sayısı kamera sayısıdır.
 
-Maks. kamera, yanıt süresinin hedefinizi karşıladığı ve hiçbir isteğin başarısız
-olmadığı en yüksek **ölçülmüş** kamera sayısıdır. Yalnızca ölçülen sayılar
+Maks. kamera, yanıt süresinin hedefinizi karşıladığı en yüksek **ölçülmüş**
+kamera sayısıdır. Yalnızca ölçülen sayılar
 sayılır, ara değer üretilmez; hiçbiri geçmezse değer 0'dır. Hedefinize bağlıdır
 ve onunla birlikte değişir: 720p'de ve kamera başına bir görüntüyle, Jetson AGX
 Orin üzerindeki Cosmos3-Edge 1 saniyede 2 kameraya, 3 saniyede 8 kameraya —

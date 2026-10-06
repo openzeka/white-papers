@@ -156,8 +156,8 @@ module OzVisibility
   # A port of responseOf() / meetsTarget() / maxCams() in
   # assets/js/vlm-benchmark-table.js, which stays the reference. Response time
   # is the time to first token; each camera keeps one request in flight, so the
-  # number of cameras is the concurrency. A cell with a failed request never
-  # passes.
+  # number of cameras is the concurrency. Only the mean TTFT counts (over the
+  # requests that completed); a failed request does not affect a cell.
   VLM_DEFAULT_CONFIG = { "response_target_s" => 3 }.freeze
   VLM_DEFAULT_RES = "720p".freeze
   VLM_DEFAULT_IMAGES = 1
@@ -169,7 +169,7 @@ module OzVisibility
 
   def self.vlm_meets(p, cfg)
     r = vlm_response(p)
-    p["failed"].to_i.zero? && !r.nil? && r <= cfg["response_target_s"]
+    !r.nil? && r <= cfg["response_target_s"]
   end
 
   def self.vlm_points(e, res, images)

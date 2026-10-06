@@ -64,7 +64,6 @@
     targetNotMet: "Doel niet gehaald — het duurt langer dan uw doel voor de responstijd voordat het antwoord begint.",
     viewDetails: "Details bekijken — toont de metingen per aantal camera's, de toelichting op de resultaten en een grafiek voor deze configuratie.",
     maxAtLeast: function (c) { return "Minstens " + c + ": zelfs bij " + c + (c === 1 ? " camera" : " camera's") + ", het hoogste geteste aantal, kreeg elke camera op tijd antwoord, dus het werkelijke maximum is niet bereikt."; },
-    failedReq: function (n, of) { return n + " van de " + of + " verzoeken mislukten op dit niveau, dus het telt niet mee."; },
 
     /* Expanded row */
     detailC: "Camera's", detailTps: "TPS (tok/s)", detailResponse: "Respons (s)", detailStatus: "Status",
@@ -89,7 +88,7 @@
       engine: "<strong>Inferentie-engine</strong><p>De serversoftware die het model laadt en verzoeken inplant: vLLM voor Hugging Face-checkpoints, llama.cpp voor GGUF-bestanden.</p><p>Ze beïnvloedt de snelheid net zoveel als de hardware: hetzelfde model op hetzelfde apparaat kan tussen engines meetbaar verschillen.</p>",
       tps: "<strong>TPS — tokens per seconde</strong><p>Hoe snel het antwoord van één camera wordt geschreven zodra het begonnen is, bij het gekozen aantal camera's. Een token is ongeveer driekwart woord.</p><p>Per camera, niet in totaal. Max. camera's wordt bepaald door de responstijd; TPS laat zien hoe lang een langer antwoord daarna duurt. Hoger is beter.</p>",
       response: "<strong>Responstijd</strong><p>Hoe lang een camera wacht tot zijn antwoord begint, bij het gekozen aantal camera's, beeldformaat en aantal beelden, in seconden. Gemeten als de time to first token (TTFT).</p><p>Bij een vision-languagemodel is dat vooral het lezen van de beelden, dus het groeit met hun formaat en aantal, en met het aantal camera's dat het apparaat deelt. Groen is binnen uw doel. Lager is beter.</p>",
-      maxCams: "<strong>Max. camera's</strong><p>Het hoogste gemeten aantal camera's waarbij de responstijd uw doel haalt en geen verzoek mislukte, bij het gekozen beeldformaat en aantal beelden.</p><p>Elke camera stuurt zijn volgende verzoek zodra het vorige is beantwoord, dus hij heeft altijd één verzoek in behandeling: het aantal gelijktijdige verzoeken is het aantal camera's.</p><p>Een plus (16+) betekent dat zelfs het hoogste geteste aantal het doel haalde, dus het werkelijke maximum ligt hoger. 0 betekent dat zelfs één camera niet op tijd antwoord krijgt.</p>",
+      maxCams: "<strong>Max. camera's</strong><p>Het hoogste gemeten aantal camera's waarbij de responstijd uw doel haalt, bij het gekozen beeldformaat en aantal beelden.</p><p>Elke camera stuurt zijn volgende verzoek zodra het vorige is beantwoord, dus hij heeft altijd één verzoek in behandeling: het aantal gelijktijdige verzoeken is het aantal camera's.</p><p>Een plus (16+) betekent dat zelfs het hoogste geteste aantal het doel haalde, dus het werkelijke maximum ligt hoger. 0 betekent dat zelfs één camera niet op tijd antwoord krijgt.</p>",
 
       fConcurrency: "<strong>Camera's</strong><p>Het aantal camera's dat op hetzelfde moment verzoeken stuurt — de gelijktijdigheid waarbij het systeem is gemeten.</p><p>Bepaalt welke meting de kolommen Respons en TPS tonen. Rijen die bij dit aantal niet zijn gemeten, worden verborgen.</p>",
       fResolution: "<strong>Beeldformaat</strong><p>Het formaat van elk beeld dat een camera stuurt: 480p is 854×480, 720p 1280×720, 1080p 1920×1080, 2K 2560×1440.</p><p>Elk getal in de tabel, Max. camera's inbegrepen, wordt bij dit formaat afgelezen. Grotere beelden kosten meer leestijd. Rijen die bij dit formaat niet zijn gemeten, worden verborgen.</p>",
@@ -114,7 +113,7 @@
   /* Response time is the time to first token: how long a camera waits until
      its answer starts. Max Cameras is the highest measured number of cameras
      (= concurrent requests: each camera has one in flight) whose response
-     time meets the target with no failed request. */
+     time meets the target. */
   var DEFAULT_CONFIG = {
     response_target_s: 3,
     images: 1
@@ -315,14 +314,15 @@
   }
 
   /* The one definition of "meets the target", behind Max Cameras, PASS/FAIL
-     and every green or red cell. Inclusive: 3.00 s meets a 3 s target. A cell
-     where a request failed never counts. */
+     and every green or red cell. Inclusive: 3.00 s meets a 3 s target. Only
+     the mean time to first token counts: it is the mean of the requests that
+     completed, so a failed request (a benchmarking error) does not affect it. */
   function responseMeets(r) {
     return r !== null && r <= config.response_target_s;
   }
 
   function meetsTarget(p) {
-    return !p.failed && responseMeets(responseOf(p));
+    return responseMeets(responseOf(p));
   }
 
   function maxCams(entry, res, images) {
@@ -950,7 +950,7 @@
       else if (k === "quantization") html += "<td>" + escapeHTML(entry.quantization) + "</td>";
       else if (k === "response") {
         var ok = p && meetsTarget(p);
-        var title = p && p.failed ? S.failedReq(p.failed, p.requests) : ok ? S.targetMet : S.targetNotMet;
+        var title = ok ? S.targetMet : S.targetNotMet;
         html += '<td class="bt-num ' + (ok ? "bt-good" : "bt-bad") + '" title="' + escapeHTML(title) + '">' +
           fmtS(responseOf(p)) + "</td>";
       } else if (k === "maxcams") {
@@ -987,7 +987,7 @@
       escapeHTML(S.detailTps) + "</th><th>" + escapeHTML(S.detailStatus) + "</th></tr></thead><tbody>";
     pointsAt(entry, state.res, config.images).forEach(function (p) {
       var ok = meetsTarget(p);
-      var why = p.failed ? S.failedReq(p.failed, p.requests) : ok ? S.targetMet : S.targetNotMet;
+      var why = ok ? S.targetMet : S.targetNotMet;
       html += "<tr>";
       html += "<td>" + p.c + "</td>";
       html += '<td class="' + (responseMeets(responseOf(p)) ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtS(responseOf(p)) + "</td>";

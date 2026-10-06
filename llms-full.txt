@@ -58,7 +58,7 @@ Defaults used below / Aşağıdaki varsayılanlar: TTFT ≤ {{ cfg.ttft_threshol
 
 {{ nl.vlm_intro }}
 
-Defaults used below / Aşağıdaki varsayılanlar: image size {{ vcfg.resolution }}, {{ vcfg.images }} image per camera, response time (time to first token) ≤ {{ vcfg.response_target_s }} s. Max Cameras = highest measured number of cameras meeting it with no failed request; "+" = the run met the target even at the highest level tested, so the figure is a minimum.
+Defaults used below / Aşağıdaki varsayılanlar: image size {{ vcfg.resolution }}, {{ vcfg.images }} image per camera, response time (time to first token) ≤ {{ vcfg.response_target_s }} s. Max Cameras = highest measured number of cameras meeting it (means over the requests that completed); "+" = the run met the target even at the highest level tested, so the figure is a minimum.
 {% for r in vlm %}
 ### {{ r.model }} · {{ r.device }} · {{ r.quantization }} · {{ r.engine }}
 

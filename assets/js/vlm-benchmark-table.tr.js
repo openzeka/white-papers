@@ -64,7 +64,6 @@
     targetNotMet: "Hedef Karşılanmadı — yanıtın başlaması, yanıt süresi hedefinizden uzun sürer.",
     viewDetails: "Ayrıntıları Görüntüle — bu yapılandırmanın kamera sayısına göre ölçümlerini, sonuçların açıklamasını ve grafiğini gösterir.",
     maxAtLeast: function (c) { return "En az " + c + ": test edilen en yüksek sayı olan " + c + " kamerada bile her kamera zamanında yanıt aldı; gerçek üst sınıra ulaşılmadı."; },
-    failedReq: function (n, of) { return "Bu seviyede " + of + " isteğin " + n + " tanesi başarısız oldu, bu yüzden seviye sayılmaz."; },
 
     /* Expanded row */
     detailC: "Kamera", detailTps: "TPS (tok/s)", detailResponse: "Yanıt (sn)", detailStatus: "Durum",
@@ -89,7 +88,7 @@
       engine: "<strong>Inference Engine</strong><p>Modeli yükleyip istekleri zamanlayan sunucu yazılımı: Hugging Face checkpoint'leri için vLLM, GGUF dosyaları için llama.cpp.</p><p>Hıza donanım kadar etki eder: aynı model aynı cihazda engine'ler arasında ölçülebilir biçimde farklılaşabilir.</p>",
       tps: "<strong>TPS — saniyedeki token</strong><p>Seçili kamera sayısında, başladıktan sonra bir kameranın yanıtının yazılma hızı. Bir token kabaca bir kelimenin dörtte üçüdür.</p><p>Toplam değil, kamera başınadır. Maks. kamera yanıt süresine göre belirlenir; TPS ise daha uzun bir yanıtın ardından ne kadar süreceğini gösterir. Yüksek olması iyidir.</p>",
       response: "<strong>Yanıt süresi</strong><p>Seçili kamera sayısında, görüntü boyutunda ve görüntü sayısında bir kameranın yanıtı başlayana kadar beklediği süre, saniye cinsinden. İlk token süresi (TTFT) olarak ölçülür.</p><p>Bir görüntü-dil modelinde bu sürenin çoğu görüntüleri okumaktır; bu yüzden görüntülerin boyutu ve sayısıyla, cihazı paylaşan kamera sayısıyla birlikte artar. Yeşil, hedefinizin içinde demektir. Düşük olması iyidir.</p>",
-      maxCams: "<strong>Maks. kamera</strong><p>Seçili görüntü boyutunda ve görüntü sayısında, yanıt süresinin hedefinizi karşıladığı ve hiçbir isteğin başarısız olmadığı en yüksek ölçülmüş kamera sayısı.</p><p>Her kamera, önceki isteği yanıtlanır yanıtlanmaz sıradaki isteğini gönderir; yani her zaman işlenmekte olan bir isteği vardır: eşzamanlı istek sayısı kamera sayısıdır.</p><p>Artı işareti (16+), test edilen en yüksek sayının bile hedefi karşıladığı, gerçek üst sınırın daha yüksek olduğu anlamına gelir. 0, tek bir kameranın bile zamanında yanıt almadığı demektir.</p>",
+      maxCams: "<strong>Maks. kamera</strong><p>Seçili görüntü boyutunda ve görüntü sayısında, yanıt süresinin hedefinizi karşıladığı en yüksek ölçülmüş kamera sayısı.</p><p>Her kamera, önceki isteği yanıtlanır yanıtlanmaz sıradaki isteğini gönderir; yani her zaman işlenmekte olan bir isteği vardır: eşzamanlı istek sayısı kamera sayısıdır.</p><p>Artı işareti (16+), test edilen en yüksek sayının bile hedefi karşıladığı, gerçek üst sınırın daha yüksek olduğu anlamına gelir. 0, tek bir kameranın bile zamanında yanıt almadığı demektir.</p>",
 
       fConcurrency: "<strong>Kamera</strong><p>Aynı anda istek gönderen kamera sayısı — sistemin ölçüldüğü eşzamanlılık.</p><p>Yanıt ve TPS sütunlarının hangi ölçümü göstereceğini seçer. Bu sayıda ölçülmemiş satırlar gizlenir.</p>",
       fResolution: "<strong>Görüntü Boyutu</strong><p>Bir kameranın gönderdiği her görüntünün boyutu: 480p 854×480, 720p 1280×720, 1080p 1920×1080, 2K 2560×1440.</p><p>Maks. kamera dahil tablodaki her sayı bu boyutta okunur. Büyük görüntülerin okunması daha uzun sürer. Bu boyutta ölçülmemiş satırlar gizlenir.</p>",
@@ -114,7 +113,7 @@
   /* Response time is the time to first token: how long a camera waits until
      its answer starts. Max Cameras is the highest measured number of cameras
      (= concurrent requests: each camera has one in flight) whose response
-     time meets the target with no failed request. */
+     time meets the target. */
   var DEFAULT_CONFIG = {
     response_target_s: 3,
     images: 1
@@ -315,14 +314,15 @@
   }
 
   /* The one definition of "meets the target", behind Max Cameras, PASS/FAIL
-     and every green or red cell. Inclusive: 3.00 s meets a 3 s target. A cell
-     where a request failed never counts. */
+     and every green or red cell. Inclusive: 3.00 s meets a 3 s target. Only
+     the mean time to first token counts: it is the mean of the requests that
+     completed, so a failed request (a benchmarking error) does not affect it. */
   function responseMeets(r) {
     return r !== null && r <= config.response_target_s;
   }
 
   function meetsTarget(p) {
-    return !p.failed && responseMeets(responseOf(p));
+    return responseMeets(responseOf(p));
   }
 
   function maxCams(entry, res, images) {
@@ -950,7 +950,7 @@
       else if (k === "quantization") html += "<td>" + escapeHTML(entry.quantization) + "</td>";
       else if (k === "response") {
         var ok = p && meetsTarget(p);
-        var title = p && p.failed ? S.failedReq(p.failed, p.requests) : ok ? S.targetMet : S.targetNotMet;
+        var title = ok ? S.targetMet : S.targetNotMet;
         html += '<td class="bt-num ' + (ok ? "bt-good" : "bt-bad") + '" title="' + escapeHTML(title) + '">' +
           fmtS(responseOf(p)) + "</td>";
       } else if (k === "maxcams") {
@@ -987,7 +987,7 @@
       escapeHTML(S.detailTps) + "</th><th>" + escapeHTML(S.detailStatus) + "</th></tr></thead><tbody>";
     pointsAt(entry, state.res, config.images).forEach(function (p) {
       var ok = meetsTarget(p);
-      var why = p.failed ? S.failedReq(p.failed, p.requests) : ok ? S.targetMet : S.targetNotMet;
+      var why = ok ? S.targetMet : S.targetNotMet;
       html += "<tr>";
       html += "<td>" + p.c + "</td>";
       html += '<td class="' + (responseMeets(responseOf(p)) ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtS(responseOf(p)) + "</td>";

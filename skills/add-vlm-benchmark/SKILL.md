@@ -40,7 +40,8 @@ numbers without any error.
   soon as the previous one is answered, so concurrency *is* the number of
   cameras. Max Cameras is the highest measured concurrency at which the
   **response time — the mean time to first token (TTFT)** — meets the target
-  (default 3 s) with **no failed request**.
+  (default 3 s). The means are over the requests that completed, so a request
+  that failed during the benchmark does not count against a configuration.
 - **The measurement matrix.** Every configuration is two runs of the VLM
   Benchmark Tool, both with the prompt *Describe the scene.* and up to 128
   output tokens:
@@ -101,9 +102,10 @@ Also confirm with the user:
   the first token is a thinking token and the response time is wrong. The
   importer records `enable_thinking false` from the export's settings in the
   row's `notes`; if a reasoning model's notes do not say so, ask.
-- **Failed requests.** A cell with a failed request never passes. Many failures
-  in one run (the validator lists them) usually mean a server problem — ask
-  whether to rerun before publishing.
+- **Failed requests.** They are left out of the means and do not affect Max
+  Cameras. The validator lists them; when one run has many, mention it to the
+  user — it usually means a server problem worth rerunning, but it is not a
+  reason to hold the row back.
 
 ## 3. Import
 
@@ -128,7 +130,7 @@ python3 _tools/validate_vlm.py      # exit 0 = safe to publish; warnings do not 
 ```
 
 It checks the shape the widget and the build rely on and prints Max Cameras at
-the default target. Read every warning out to the user: failed requests,
+the default target. Read every warning out to the user: failed requests (informational),
 response times that fall as cameras are added (a measurement to recheck), cells
 without a request count.
 

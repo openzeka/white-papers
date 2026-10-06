@@ -80,7 +80,7 @@ be higher than 1.
 ### 4. Read Max Cameras
 
 **Max Cameras** is the highest measured number of cameras at which every
-camera's answer starts within your target and no request failed. A plus —
+camera's answer starts within your target. A plus —
 **16+** — means the configuration met the target even at the highest number it
 was tested with, so its real maximum was not reached. 0 means not even a single
 camera is answered in time.
@@ -137,7 +137,8 @@ llama.cpp.
 
 Every combination of image size, images per request and number of cameras is
 measured on its own, after a warm-up batch that is discarded. The figures are
-means of the measured requests.
+means of the requests that completed; a request that failed during the
+benchmark is left out of the mean and does not count against a configuration.
 
 - **Several cameras** were measured with one image per request at 480p, 720p
   and 1080p: 1, 2 and 4 cameras on Jetson Orin NX (up to 8 for one
@@ -173,7 +174,7 @@ always has exactly one request in flight. The number of concurrent requests is
 therefore the number of cameras.
 
 Max Cameras is the highest **measured** number of cameras at which the response
-time meets your target and no request failed. Only measured numbers count,
+time meets your target. Only measured numbers count,
 nothing is interpolated, and if none passes it is 0. It depends on your target
 and moves with it: at 720p with one image per camera, Cosmos3-Edge on Jetson AGX
 Orin keeps up with 2 cameras at 1 second and 8 — the highest number measured,

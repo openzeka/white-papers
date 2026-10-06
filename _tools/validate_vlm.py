@@ -8,7 +8,8 @@ change to it. It checks the shape the widget (assets/js/vlm-benchmark-table.js)
 and the build (_plugins/visibility.rb, _plugins/benchmark-pages.rb) rely on,
 and reports Max Cameras at the default target with the same rule they use:
 response time = TTFT, a cell passes when it is within the target (inclusive)
-and no request failed; Max Cameras is the highest passing number of cameras
+(failed requests do not count: the means are over the requests that
+completed); Max Cameras is the highest passing number of cameras
 (concurrency). Change the three together.
 """
 import io
@@ -33,7 +34,7 @@ def warn(msg): warnings.append(msg)
 
 
 def meets(p, cfg):
-    return not p["failed"] and p["ttft_s"] <= cfg["response_target_s"]
+    return p["ttft_s"] <= cfg["response_target_s"]
 
 
 def main():
@@ -91,7 +92,7 @@ def main():
             elif p["requests"] is not None and not 0 <= p["failed"] <= p["requests"]:
                 err(f"{where}: failed must be between 0 and requests")
             if p["failed"]:
-                warn(f"{where}: {p['failed']} of {p['requests']} requests failed — the cell never passes")
+                warn(f"{where}: {p['failed']} of {p['requests']} requests failed — the mean is over the {p['requests'] - p['failed']} that completed")
         if any(v["requests"] is None for v in cells.values()):
             warn(f"{rid}: some cells have no request count (imported from a one-at-a-time grid)")
         for (res, n) in sorted({(k[0], k[1]) for k in cells}):

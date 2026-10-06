@@ -64,7 +64,6 @@
     targetNotMet: "Target Not Met — the answer takes longer than your response time target to start.",
     viewDetails: "View Details — shows the measurements by number of cameras, the results explained and a chart for this configuration.",
     maxAtLeast: function (c) { return "At least " + c + ": every camera was still answered in time at " + c + (c === 1 ? " camera" : " cameras") + ", the highest number tested, so the real maximum was not reached."; },
-    failedReq: function (n, of) { return n + " of " + of + " requests failed at this level, so it does not count."; },
 
     /* Expanded row */
     detailC: "Cameras", detailTps: "TPS (tok/s)", detailResponse: "Response (s)", detailStatus: "Status",
@@ -89,7 +88,7 @@
       engine: "<strong>Inference Engine</strong><p>The server software that loads the model and schedules requests: vLLM for Hugging Face checkpoints, llama.cpp for GGUF files.</p><p>It affects speed as much as the hardware does: the same model on the same device can differ measurably between engines.</p>",
       tps: "<strong>TPS — tokens per second</strong><p>How fast one camera's answer is written once it has started, at the selected number of cameras. A token is about three quarters of a word.</p><p>Per camera, not in total. Max Cameras is decided by the response time; TPS tells you how long a longer answer then takes. Higher is better.</p>",
       response: "<strong>Response time</strong><p>How long a camera waits until its answer starts, at the selected number of cameras, image size and image count, in seconds. Measured as the time to first token (TTFT).</p><p>For a vision-language model this is mostly reading the images, so it grows with their size and number, and with the number of cameras sharing the device. Green is within your target. Lower is better.</p>",
-      maxCams: "<strong>Max Cameras</strong><p>The highest measured number of cameras at which the response time meets your target and no request failed, at the selected image size and image count.</p><p>Each camera sends its next request as soon as the previous one is answered, so it always has one request in flight: the number of concurrent requests is the number of cameras.</p><p>A plus (16+) means even the highest number tested met the target, so the real maximum is higher. 0 means not even one camera is answered in time.</p>",
+      maxCams: "<strong>Max Cameras</strong><p>The highest measured number of cameras at which the response time meets your target, at the selected image size and image count.</p><p>Each camera sends its next request as soon as the previous one is answered, so it always has one request in flight: the number of concurrent requests is the number of cameras.</p><p>A plus (16+) means even the highest number tested met the target, so the real maximum is higher. 0 means not even one camera is answered in time.</p>",
 
       fConcurrency: "<strong>Cameras</strong><p>The number of cameras sending requests at the same moment — the concurrency the system was measured at.</p><p>Chooses which measurement the Response and TPS columns show. Rows not measured at this number are hidden.</p>",
       fResolution: "<strong>Image Size</strong><p>The size of each image a camera sends: 480p is 854×480, 720p 1280×720, 1080p 1920×1080, 2K 2560×1440.</p><p>Every number in the table, Max Cameras included, is read at this size. Larger images take longer to read. Rows not measured at this size are hidden.</p>",
@@ -114,7 +113,7 @@
   /* Response time is the time to first token: how long a camera waits until
      its answer starts. Max Cameras is the highest measured number of cameras
      (= concurrent requests: each camera has one in flight) whose response
-     time meets the target with no failed request. */
+     time meets the target. */
   var DEFAULT_CONFIG = {
     response_target_s: 3,
     images: 1
@@ -315,14 +314,15 @@
   }
 
   /* The one definition of "meets the target", behind Max Cameras, PASS/FAIL
-     and every green or red cell. Inclusive: 3.00 s meets a 3 s target. A cell
-     where a request failed never counts. */
+     and every green or red cell. Inclusive: 3.00 s meets a 3 s target. Only
+     the mean time to first token counts: it is the mean of the requests that
+     completed, so a failed request (a benchmarking error) does not affect it. */
   function responseMeets(r) {
     return r !== null && r <= config.response_target_s;
   }
 
   function meetsTarget(p) {
-    return !p.failed && responseMeets(responseOf(p));
+    return responseMeets(responseOf(p));
   }
 
   function maxCams(entry, res, images) {
@@ -950,7 +950,7 @@
       else if (k === "quantization") html += "<td>" + escapeHTML(entry.quantization) + "</td>";
       else if (k === "response") {
         var ok = p && meetsTarget(p);
-        var title = p && p.failed ? S.failedReq(p.failed, p.requests) : ok ? S.targetMet : S.targetNotMet;
+        var title = ok ? S.targetMet : S.targetNotMet;
         html += '<td class="bt-num ' + (ok ? "bt-good" : "bt-bad") + '" title="' + escapeHTML(title) + '">' +
           fmtS(responseOf(p)) + "</td>";
       } else if (k === "maxcams") {
@@ -987,7 +987,7 @@
       escapeHTML(S.detailTps) + "</th><th>" + escapeHTML(S.detailStatus) + "</th></tr></thead><tbody>";
     pointsAt(entry, state.res, config.images).forEach(function (p) {
       var ok = meetsTarget(p);
-      var why = p.failed ? S.failedReq(p.failed, p.requests) : ok ? S.targetMet : S.targetNotMet;
+      var why = ok ? S.targetMet : S.targetNotMet;
       html += "<tr>";
       html += "<td>" + p.c + "</td>";
       html += '<td class="' + (responseMeets(responseOf(p)) ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtS(responseOf(p)) + "</td>";

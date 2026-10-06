@@ -81,7 +81,7 @@ Max. camera's niet hoger zijn dan 1.
 ### 4. Lees Max. camera's af
 
 **Max. camera's** is het hoogste gemeten aantal camera's waarbij het antwoord van
-elke camera binnen uw doel begint en geen verzoek mislukte. Een plus —
+elke camera binnen uw doel begint. Een plus —
 **16+** — betekent dat de configuratie het doel haalde, zelfs bij het hoogste
 aantal waarmee ze is getest, dus het werkelijke maximum is niet bereikt. 0
 betekent dat zelfs één camera niet op tijd antwoord krijgt.
@@ -137,7 +137,8 @@ geserveerd met vLLM en GGUF-bestanden met llama.cpp.
 
 Elke combinatie van beeldformaat, beelden per verzoek en aantal camera's wordt
 afzonderlijk gemeten, na een opwarmronde die wordt weggegooid. De waarden zijn
-gemiddelden van de gemeten verzoeken.
+gemiddelden van de voltooide verzoeken; een verzoek dat tijdens de benchmark
+mislukte, telt niet mee in het gemiddelde en niet tegen een configuratie.
 
 - **Meerdere camera's** zijn gemeten met één beeld per verzoek bij 480p, 720p
   en 1080p: 1, 2 en 4 camera's op Jetson Orin NX (tot 8 voor één configuratie),
@@ -174,7 +175,7 @@ heeft altijd precies één verzoek in behandeling. Het aantal gelijktijdige
 verzoeken is daarom het aantal camera's.
 
 Max. camera's is het hoogste **gemeten** aantal camera's waarbij de responstijd
-uw doel haalt en geen verzoek mislukte. Alleen gemeten aantallen tellen, er
+uw doel haalt. Alleen gemeten aantallen tellen, er
 wordt niets geïnterpoleerd, en als geen enkel aantal slaagt, is de waarde 0.
 Ze hangt af van uw doel en beweegt mee: bij 720p met één beeld per camera houdt
 Cosmos3-Edge op Jetson AGX Orin 2 camera's bij bij 1 seconde en 8 — het hoogste
