@@ -1,0 +1,67 @@
+{
+  "id": "qwen3.8-27b_rtxpro6000_bf16_vllm",
+  "model": "Qwen3.8-27B",
+  "params": "27B",
+  "intelligence_index": 33.7,
+  "agentic_index": 45.8,
+  "device": "RTX PRO 6000",
+  "quantization": "BF16",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": 3,
+  "tp": 1,
+  "notes": "Speculative MTP k=3.",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 104.31,
+      "tps": 65.37
+    },
+    {
+      "c": 2,
+      "ttft_ms": 157.92,
+      "tps": 62.88
+    },
+    {
+      "c": 4,
+      "ttft_ms": 178.59,
+      "tps": 57.38
+    },
+    {
+      "c": 8,
+      "ttft_ms": 211.76,
+      "tps": 50.3
+    },
+    {
+      "c": 16,
+      "ttft_ms": 263.9,
+      "tps": 43.42
+    },
+    {
+      "c": 32,
+      "ttft_ms": 384.53,
+      "tps": 31.96
+    },
+    {
+      "c": 64,
+      "ttft_ms": 2698.46,
+      "tps": 16.91
+    },
+    {
+      "c": 128,
+      "ttft_ms": 10271.84,
+      "tps": 8.66
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 32768,
+  "kv_window_bytes": 0,
+  "kv_heads": 4,
+  "model_context_length": 262144,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 307888128,
+  "served_repo": "Qwen/Qwen3.8-27B",
+  "weights_gb": 55.56
+}

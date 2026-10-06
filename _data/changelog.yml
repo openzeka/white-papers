@@ -15,6 +15,22 @@
 # Check with: python3 _tools/check_changelog.py
 
 - date: 2026-10-06
+  type: benchmarks
+  run: qwen3.8-27b_rtxpro6000_nvfp4_vllm
+  text:
+    en: "Qwen3.8-27B on a single RTX PRO 6000: NVFP4 weights served with vLLM, with MTP speculative decoding (k=3), measured up to 128 concurrent requests."
+    tr: "Qwen3.8-27B tek bir RTX PRO 6000 üzerinde: NVFP4 ağırlıklar vLLM ile sunuldu; MTP ile spekülatif kod çözme (k=3); 128 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Qwen3.8-27B op één RTX PRO 6000: NVFP4-gewichten geserveerd met vLLM, met MTP voor speculatieve decodering (k=3), gemeten tot 128 gelijktijdige verzoeken."
+
+- date: 2026-10-06
+  type: benchmarks
+  run: qwen3.8-27b_rtxpro6000_bf16_vllm
+  text:
+    en: "Qwen3.8-27B on a single RTX PRO 6000: BF16 weights served with vLLM, with MTP speculative decoding (k=3), measured up to 128 concurrent requests."
+    tr: "Qwen3.8-27B tek bir RTX PRO 6000 üzerinde: BF16 ağırlıklar vLLM ile sunuldu; MTP ile spekülatif kod çözme (k=3); 128 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Qwen3.8-27B op één RTX PRO 6000: BF16-gewichten geserveerd met vLLM, met MTP voor speculatieve decodering (k=3), gemeten tot 128 gelijktijdige verzoeken."
+
+- date: 2026-10-06
   type: paper
   page: jev-open-weight-alternatives
   text:

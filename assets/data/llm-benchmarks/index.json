@@ -407,6 +407,16 @@
           "id": "qwen3.8-27b_rtxpro6000_fp8_vllm",
           "model": "Qwen3.8-27B",
           "path": "rtx-pro-6000/qwen3.8-27b_rtxpro6000_fp8_vllm.json"
+        },
+        {
+          "id": "qwen3.8-27b_rtxpro6000_nvfp4_vllm",
+          "model": "Qwen3.8-27B",
+          "path": "rtx-pro-6000/qwen3.8-27b_rtxpro6000_nvfp4_vllm.json"
+        },
+        {
+          "id": "qwen3.8-27b_rtxpro6000_bf16_vllm",
+          "model": "Qwen3.8-27B",
+          "path": "rtx-pro-6000/qwen3.8-27b_rtxpro6000_bf16_vllm.json"
         }
       ]
     },
