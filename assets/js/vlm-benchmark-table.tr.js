@@ -31,8 +31,6 @@
     maxResponse: "Maks. Yanıt Süresi",
     noLimit: "Sınırsız",
     paramsAll: "Tüm boyutlar",
-    minCameras: "Min. Kamera",
-    cameras: "kamera",
     atC: function (c, res, n) { return " (" + c + " kamera, " + res + ", " + n + " görüntü)"; },
 
     /* Performance target / assumptions */
@@ -97,8 +95,7 @@
       fDevice: "<strong>Cihaz filtresi</strong><p>Yalnızca seçilen donanımdaki çalıştırmaları gösterir. Cihazları doğrudan karşılaştırmak için birkaçını seçin.</p>",
       fQuant: "<strong>Kuantizasyon filtresi</strong><p>Yalnızca seçilen ağırlık biçimlerini gösterir. Karşılaştırmak için ikisini seçin.</p>",
       fEngine: "<strong>Engine filtresi</strong><p>Yalnızca seçilen engine ile sunulan çalıştırmaları gösterir.</p>",
-      fMaxResp: "<strong>Maksimum Yanıt Süresi</strong><p>Seçili kamera sayısında, görüntü boyutunda ve görüntü sayısında yanıtı bundan geç başlayan yapılandırmaları gizler.</p>",
-      fMinCams: "<strong>Minimum Kamera</strong><p>Yanıt süresi hedefinizde bundan az kameraya yetişen yapılandırmaları gizler.</p>",
+      fMaxResp: "<strong>Maksimum Yanıt Süresi</strong><p>Seçili kamera sayısında, görüntü boyutunda ve görüntü sayısında yanıtı bundan geç başlayan yapılandırmaları gizler.</p><p>Kamera seçimiyle birlikte çalışır: ihtiyacınız olan kamera sayısını seçin ve bunu hedefinize ayarlayın; yalnızca o kadar kameraya yetişen yapılandırmalar kalır.</p>",
 
       aImages: "<strong>Kamera Başına Görüntü</strong><p>Her isteğin kaç görüntü taşıdığı — tek bir anlık görüntü ya da aynı kameranın birlikte gönderilen birkaç karesi; video, görüntü-dil modellerine çoğu zaman böyle gönderilir. Varsayılan 1.</p><p>Yanıt başlamadan önce her görüntü okunur; bu yüzden daha fazla görüntü daha uzun yanıt süresi demektir. İstek başına birden fazla görüntü yalnızca tek kamerayla ölçüldü.</p>",
       aResponse: "<strong>Maksimum Yanıt Süresi Hedefi</strong><p>Bir kameranın yanıtının başlaması için bekleyebileceği en uzun süre, saniye cinsinden.</p><p>Düşürmek Maks. kamera değerini düşürebilir.</p>",
@@ -430,26 +427,21 @@
     html += row(S.quant, S.tip.fQuant, pillGroup("bt-filter-quants", "quant", allQuants));
     html += row(S.engine, S.tip.fEngine, pillGroup("bt-filter-engines", "engine", allEngines));
 
-    /* The image size and the number of cameras frame every number in the
-       table, the way concurrency does in the LLM explorer. */
-    var work = '<div class="bt-filter-row bt-filter-row-perf">';
-    work += '<span class="bt-filter-label">' + escapeHTML(S.resolution) + tip(S.tip.fResolution) + "</span>";
-    work += singleGroup("bt-filter-res", "res", allRes, state.res, function (r) { return r; });
-    work += "</div>";
-    html += work;
+    /* The number of cameras and the image size frame every number in the
+       table, the way concurrency does in the LLM explorer. With the response
+       time they form one group, ruled off above and below. */
     html += row(S.concurrency, S.tip.fConcurrency,
-      singleGroup("bt-filter-concurrency", "conc", allConcurrency, state.concurrency, function (c) { return String(c); }));
+      singleGroup("bt-filter-concurrency", "conc", allConcurrency, state.concurrency, function (c) { return String(c); }),
+      "bt-filter-row-perf vlmbt-no-rule vlmbt-group-start");
+    html += row(S.resolution, S.tip.fResolution,
+      singleGroup("bt-filter-res", "res", allRes, state.res, function (r) { return r; }),
+      "bt-filter-row-perf vlmbt-no-rule");
 
     var sliders = '<div class="bt-filter-row bt-filter-row-perf">';
     sliders += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
       escapeHTML(S.maxResponse) + tip(S.tip.fMaxResp) + "</span>" +
       '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-max-resp-val"></span>' +
       '<input type="range" id="bt-max-resp" min="1" max="' + RESP_SLIDER_MAX + '" value="' + RESP_SLIDER_MAX + '" step="1"></div></div>';
-    sliders += '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
-      escapeHTML(S.minCameras) + tip(S.tip.fMinCams) + "</span>" +
-      '<div class="bt-slider-group bt-slider-perf"><span class="bt-slider-value" id="bt-min-cams-val"></span>' +
-      '<input type="range" id="bt-min-cams" min="0" max="' + (allConcurrency[allConcurrency.length - 1] || 16) +
-      '" value="0" step="1"></div></div>';
     sliders += "</div>";
     html += sliders;
 
@@ -528,8 +520,6 @@
     var at = S.atC(state.concurrency, state.res, config.images);
     var resp = sliderToResp(parseInt(container.querySelector("#bt-max-resp").value, 10));
     container.querySelector("#bt-max-resp-val").textContent = (resp === null ? S.noLimit : resp + " s") + at;
-    container.querySelector("#bt-min-cams-val").textContent =
-      container.querySelector("#bt-min-cams").value + " " + S.cameras;
     var pIdx = parseInt(container.querySelector("#bt-min-params").value, 10);
     container.querySelector("#bt-min-params-val").textContent =
       pIdx <= 0 ? S.paramsAll : "≥ " + formatThreshold(sliderToParams(pIdx));
@@ -673,7 +663,6 @@
     container.querySelectorAll(".bt-model-option").forEach(function (l) { l.style.display = ""; });
 
     container.querySelector("#bt-max-resp").value = RESP_SLIDER_MAX;
-    container.querySelector("#bt-min-cams").value = 0;
     container.querySelector("#bt-min-params").value = 0;
 
     resetConfig();
@@ -759,12 +748,11 @@
 
   /* ── Filtering ── */
 
-  var SLIDERS = ["#bt-max-resp", "#bt-min-cams", "#bt-min-params"];
+  var SLIDERS = ["#bt-max-resp", "#bt-min-params"];
 
   function getFilteredEntries(container) {
     if (only) return rawData.benchmarks.filter(function (e) { return e.id === only; });
     var maxResp = sliderToResp(parseInt(container.querySelector("#bt-max-resp").value, 10));
-    var minCams = parseInt(container.querySelector("#bt-min-cams").value, 10);
     var minParams = sliderToParams(parseInt(container.querySelector("#bt-min-params").value, 10));
 
     var allCb = container.querySelector("#bt-model-all");
@@ -787,7 +775,6 @@
       var p = current(entry);
       if (!p) return false;
       if (maxResp !== null && responseOf(p) > maxResp) return false;
-      if (maxCams(entry) < minCams) return false;
       return true;
     });
   }

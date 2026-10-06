@@ -38,8 +38,8 @@ olduğunu bilmek gerekir.
 ### Filtreler ve hedef farklı işler görür {#filtreler-ve-hedef}
 
 **Filtreler hangi satırları gördüğünüzü belirler.** Cihaz, model, parametre
-sayısı, kuantizasyon ve engine filtreleri ile yanıt süresi ve kamera
-kaydırıcıları yalnızca satırları gösterir ya da gizler.
+sayısı, kuantizasyon ve engine filtreleri ile yanıt süresi kaydırıcısı yalnızca
+satırları gösterir ya da gizler.
 
 **Hedef ve varsayım sayıların ne söylediğini belirler.** Bunlar *Performans
 Hedefi ve Varsayımlar* altındadır. Birini değiştirdiğinizde satırlar yerinde
@@ -50,10 +50,10 @@ renklendirmesi yeniden hesaplanır.
 
 İş yükünü iki seçici tanımlar ve tablodaki her sayı bu seçimlerde okunur:
 
-- **Görüntü Boyutu** — bir kameranın gönderdiği her görüntünün boyutu: 480p,
-  720p, 1080p ya da 2K.
 - **Kamera** — aynı anda istek gönderen kamera sayısı. Bu, sistemin ölçüldüğü
   eşzamanlılıktır (concurrency).
+- **Görüntü Boyutu** — bir kameranın gönderdiği her görüntünün boyutu: 480p,
+  720p, 1080p ya da 2K.
 
 Seçili birleşimde ölçülmemiş satırlar gizlenir; soluk düğmeler ölçümü olmayan
 birleşimleri gösterir. Birden fazla kamera 480p, 720p ve 1080p'de ölçüldü; 2K
@@ -103,8 +103,8 @@ Grafik, rapor ve sunumlar için PNG olarak indirilebilir.
 
 **"Tek bir Jetson AGX Orin kaç kamerayı izleyebilir?"** Cihazı seçin,
 kameralarınızın gönderdiği görüntü boyutunu belirleyin ve Maks. kamera değerini
-okuyun. Yalnızca yetişen yapılandırmaları görmek için minimum kamera
-kaydırıcısını ihtiyacınız olan sayıya getirin.
+okuyun. Yalnızca yetişen yapılandırmaları görmek için ihtiyacınız olan kamera
+sayısını seçin ve Maks. Yanıt Süresi'ni hedefinize ayarlayın.
 
 **"1080p'ye değer mi?"** Görüntü boyutunu değiştirip Maks. kamera değerini
 izleyin ya da bir satırı açın: grafiğinde her görüntü boyutu için bir çizgi
