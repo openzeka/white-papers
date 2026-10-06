@@ -98,111 +98,111 @@
   },
   "devices": [
     {
-      "name": "Jetson Orin NX",
-      "slug": "jetson-orin-nx",
-      "path": "jetson-orin-nx/device.json",
+      "name": "Jetson Orin NX 16GB",
+      "slug": "jetson-orin-nx-16gb",
+      "path": "jetson-orin-nx-16gb/device.json",
       "runs": [
         {
           "id": "cosmos-reason1-7b_orinnx_q4km_llamacpp",
           "model": "Cosmos-Reason1-7B",
-          "path": "jetson-orin-nx/cosmos-reason1-7b_orinnx_q4km_llamacpp.json"
+          "path": "jetson-orin-nx-16gb/cosmos-reason1-7b_orinnx_q4km_llamacpp.json"
         },
         {
           "id": "cosmos-reason2-2b_orinnx_q80_llamacpp",
           "model": "Cosmos-Reason2-2B",
-          "path": "jetson-orin-nx/cosmos-reason2-2b_orinnx_q80_llamacpp.json"
+          "path": "jetson-orin-nx-16gb/cosmos-reason2-2b_orinnx_q80_llamacpp.json"
         },
         {
           "id": "cosmos-reason2-8b_orinnx_q4km_llamacpp",
           "model": "Cosmos-Reason2-8B",
-          "path": "jetson-orin-nx/cosmos-reason2-8b_orinnx_q4km_llamacpp.json"
+          "path": "jetson-orin-nx-16gb/cosmos-reason2-8b_orinnx_q4km_llamacpp.json"
         },
         {
           "id": "gemma-4-e2b-it_orinnx_q40_llamacpp",
           "model": "Gemma-4-E2B-it",
-          "path": "jetson-orin-nx/gemma-4-e2b-it_orinnx_q40_llamacpp.json"
+          "path": "jetson-orin-nx-16gb/gemma-4-e2b-it_orinnx_q40_llamacpp.json"
         },
         {
           "id": "gemma-4-e4b-it_orinnx_q40_llamacpp",
           "model": "Gemma-4-E4B-it",
-          "path": "jetson-orin-nx/gemma-4-e4b-it_orinnx_q40_llamacpp.json"
+          "path": "jetson-orin-nx-16gb/gemma-4-e4b-it_orinnx_q40_llamacpp.json"
         },
         {
           "id": "qwen3-vl-4b-instruct_orinnx_fp8_vllm",
           "model": "Qwen3-VL-4B-Instruct",
-          "path": "jetson-orin-nx/qwen3-vl-4b-instruct_orinnx_fp8_vllm.json"
+          "path": "jetson-orin-nx-16gb/qwen3-vl-4b-instruct_orinnx_fp8_vllm.json"
         },
         {
           "id": "qwen3-vl-4b-instruct_orinnx_q80_llamacpp",
           "model": "Qwen3-VL-4B-Instruct",
-          "path": "jetson-orin-nx/qwen3-vl-4b-instruct_orinnx_q80_llamacpp.json"
+          "path": "jetson-orin-nx-16gb/qwen3-vl-4b-instruct_orinnx_q80_llamacpp.json"
         },
         {
           "id": "qwen3-vl-8b-instruct_orinnx_q4km_llamacpp",
           "model": "Qwen3-VL-8B-Instruct",
-          "path": "jetson-orin-nx/qwen3-vl-8b-instruct_orinnx_q4km_llamacpp.json"
+          "path": "jetson-orin-nx-16gb/qwen3-vl-8b-instruct_orinnx_q4km_llamacpp.json"
         },
         {
           "id": "qwen3.5-4b_orinnx_q4km_llamacpp",
           "model": "Qwen3.5-4B",
-          "path": "jetson-orin-nx/qwen3.5-4b_orinnx_q4km_llamacpp.json"
+          "path": "jetson-orin-nx-16gb/qwen3.5-4b_orinnx_q4km_llamacpp.json"
         }
       ]
     },
     {
-      "name": "Jetson AGX Orin",
-      "slug": "jetson-agx-orin",
-      "path": "jetson-agx-orin/device.json",
+      "name": "Jetson AGX Orin 32GB",
+      "slug": "jetson-agx-orin-32gb",
+      "path": "jetson-agx-orin-32gb/device.json",
       "runs": [
         {
           "id": "cosmos-reason1-7b_agxorin_q4km_llamacpp",
           "model": "Cosmos-Reason1-7B",
-          "path": "jetson-agx-orin/cosmos-reason1-7b_agxorin_q4km_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/cosmos-reason1-7b_agxorin_q4km_llamacpp.json"
         },
         {
           "id": "cosmos-reason2-2b_agxorin_q80_llamacpp",
           "model": "Cosmos-Reason2-2B",
-          "path": "jetson-agx-orin/cosmos-reason2-2b_agxorin_q80_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/cosmos-reason2-2b_agxorin_q80_llamacpp.json"
         },
         {
           "id": "cosmos-reason2-8b_agxorin_q4km_llamacpp",
           "model": "Cosmos-Reason2-8B",
-          "path": "jetson-agx-orin/cosmos-reason2-8b_agxorin_q4km_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/cosmos-reason2-8b_agxorin_q4km_llamacpp.json"
         },
         {
           "id": "cosmos3-edge_agxorin_bf16_vllm",
           "model": "Cosmos3-Edge",
-          "path": "jetson-agx-orin/cosmos3-edge_agxorin_bf16_vllm.json"
+          "path": "jetson-agx-orin-32gb/cosmos3-edge_agxorin_bf16_vllm.json"
         },
         {
           "id": "gemma-4-26b-a4b-it_agxorin_q40_llamacpp",
           "model": "Gemma-4-26B-A4B-it",
-          "path": "jetson-agx-orin/gemma-4-26b-a4b-it_agxorin_q40_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/gemma-4-26b-a4b-it_agxorin_q40_llamacpp.json"
         },
         {
           "id": "gemma-4-e4b-it_agxorin_q40_llamacpp",
           "model": "Gemma-4-E4B-it",
-          "path": "jetson-agx-orin/gemma-4-e4b-it_agxorin_q40_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/gemma-4-e4b-it_agxorin_q40_llamacpp.json"
         },
         {
           "id": "qwen3-vl-4b-instruct_agxorin_q80_llamacpp",
           "model": "Qwen3-VL-4B-Instruct",
-          "path": "jetson-agx-orin/qwen3-vl-4b-instruct_agxorin_q80_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/qwen3-vl-4b-instruct_agxorin_q80_llamacpp.json"
         },
         {
           "id": "qwen3-vl-8b-instruct_agxorin_q4km_llamacpp",
           "model": "Qwen3-VL-8B-Instruct",
-          "path": "jetson-agx-orin/qwen3-vl-8b-instruct_agxorin_q4km_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/qwen3-vl-8b-instruct_agxorin_q4km_llamacpp.json"
         },
         {
           "id": "qwen3-vl-8b-instruct_agxorin_q80_llamacpp",
           "model": "Qwen3-VL-8B-Instruct",
-          "path": "jetson-agx-orin/qwen3-vl-8b-instruct_agxorin_q80_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/qwen3-vl-8b-instruct_agxorin_q80_llamacpp.json"
         },
         {
           "id": "qwen3.5-4b_agxorin_q4km_llamacpp",
           "model": "Qwen3.5-4B",
-          "path": "jetson-agx-orin/qwen3.5-4b_agxorin_q4km_llamacpp.json"
+          "path": "jetson-agx-orin-32gb/qwen3.5-4b_agxorin_q4km_llamacpp.json"
         }
       ]
     },

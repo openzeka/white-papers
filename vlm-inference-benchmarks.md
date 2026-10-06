@@ -7,7 +7,7 @@ date: 2026-10-06 12:00:00 +0300
 card_tag: "VLM Benchmark"
 description: >-
   Explore vision-language model inference benchmarks on RTX PRO 6000 Blackwell,
-  Jetson AGX Orin and Jetson Orin NX. Pick the image size, set how long a camera
+  Jetson AGX Orin 32GB and Jetson Orin NX 16GB. Pick the image size, set how long a camera
   may wait for its answer, and see how many cameras each configuration keeps up
   with.
 permalink: /vlm-inference-benchmarks/
@@ -101,7 +101,7 @@ The chart downloads as a PNG for reports and presentations.
 
 ### Where to start
 
-**"How many cameras can one Jetson AGX Orin watch?"** Select the device, set the
+**"How many cameras can one Jetson AGX Orin 32GB watch?"** Select the device, set the
 image size your cameras send, and read Max Cameras. To see only the
 configurations that keep up, select the number of cameras you need and set Max
 Response Time to your target.
@@ -111,7 +111,7 @@ row: its chart has one line per image size.
 
 **"What do quantization and the engine change?"** Hold the model and the device
 fixed and compare the rows that differ in that one setting: Qwen3-VL-8B-Instruct
-at Q8_0 and Q4_K_M on Jetson AGX Orin, or Qwen3-VL-4B-Instruct under llama.cpp
+at Q8_0 and Q4_K_M on Jetson AGX Orin 32GB, or Qwen3-VL-4B-Instruct under llama.cpp
 and vLLM on RTX PRO 6000. Changing the number of cameras shows how the gap
 develops under load.
 
@@ -141,8 +141,8 @@ means of the requests that completed; a request that failed during the
 benchmark is left out of the mean and does not count against a configuration.
 
 - **Several cameras** were measured with one image per request at 480p, 720p
-  and 1080p: 1, 2 and 4 cameras on Jetson Orin NX (up to 8 for one
-  configuration), up to 8 on Jetson AGX Orin and up to 16 on RTX PRO 6000, with
+  and 1080p: 1, 2 and 4 cameras on Jetson Orin NX 16GB (up to 8 for one
+  configuration), up to 8 on Jetson AGX Orin 32GB and up to 16 on RTX PRO 6000, with
   8 requests per level on a Jetson and 24 on RTX PRO 6000, never more cameras'
   requests in flight than the level.
 - **One camera** was measured at all four sizes with one, three and five images
@@ -177,7 +177,7 @@ Max Cameras is the highest **measured** number of cameras at which the response
 time meets your target. Only measured numbers count,
 nothing is interpolated, and if none passes it is 0. It depends on your target
 and moves with it: at 720p with one image per camera, Cosmos3-Edge on Jetson AGX
-Orin keeps up with 2 cameras at 1 second and 8 — the highest number measured,
+Orin 32GB keeps up with 2 cameras at 1 second and 8 — the highest number measured,
 so 8+ — at 3 seconds.
 
 ### The columns that describe the setup
@@ -197,8 +197,9 @@ It affects speed as much as the hardware does. Qwen3-VL-4B-Instruct on RTX PRO
 (Q8_0) and 0.16 s under vLLM (BF16); at 16 cameras the gap is 1.09 s against
 0.46 s.
 
-**Device** — Jetson Orin NX (16 GB) and Jetson AGX Orin (32 GB) are embedded
-modules whose CPU and GPU share one memory; RTX PRO 6000 Blackwell is a
+**Device** — Jetson Orin NX 16GB and Jetson AGX Orin 32GB are embedded modules
+whose CPU and GPU share one memory. Both modules also come in other memory
+sizes, so the name states the one measured. RTX PRO 6000 Blackwell is a
 workstation GPU with 96 GB, measured in its 600 W Workstation and 300 W Max-Q
 editions.
 

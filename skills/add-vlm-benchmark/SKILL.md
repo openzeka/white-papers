@@ -13,7 +13,7 @@ It is laid out like the CV store:
 ```
 assets/data/vlm-benchmarks/
 ├── index.json                 default target, workload, models, devices and their runs
-├── jetson-agx-orin/
+├── jetson-agx-orin-32gb/
 │   ├── device.json            name, product, memory, unified or not
 │   └── <run id>.json          one run = one row of the Explorer
 └── rtx-pro-6000/ …
@@ -89,10 +89,13 @@ params, served)`:
 | `served` | The repo of the checkpoint that was actually served when it is a repackaging (`nvidia/…-NVFP4`), else `None`. Ask if unclear. |
 
 **A new device** — a line in `DEVICES`: the prefix the export's device string
-starts with, the short name shown in the explorer (no memory size in it, as in
-the LLM explorer: `Jetson AGX Orin`, `RTX PRO 6000 Max-Q`), a short code for the
-id, and the full product name, memory and whether the memory is shared by CPU
-and GPU. Add the device to `DEVICE_ORDER` in the three
+starts with, the short name shown in the explorer, a short code for the id
+(unique per device), and the full product name, memory and whether the memory
+is shared by CPU and GPU. The short name carries the memory size when the
+product is sold in more than one (`Jetson AGX Orin 32GB`, `Jetson Orin NX
+16GB`), and none when it is not (`RTX PRO 6000 Max-Q`). The name is part of
+every run page's URL, so settle it before the first publish. Add the device to
+`DEVICE_ORDER` in the three
 `assets/js/vlm-benchmark-table*.js` files (identical in all three, below the
 `/* ═══` line) so it sorts in its place.
 
@@ -155,7 +158,7 @@ home page, in every language, linked to the run's own page:
   type: vlm
   vlm: <the run's id — its file name in the store, without .json>
   text:
-    en: "Qwen3-VL-8B-Instruct on Jetson AGX Orin: Q4_K_M weights served with llama.cpp, measured with up to 8 cameras."
+    en: "Qwen3-VL-8B-Instruct on Jetson AGX Orin 32GB: Q4_K_M weights served with llama.cpp, measured with up to 8 cameras."
     tr: "…"
     nl: "…"
 ```

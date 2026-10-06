@@ -1,5 +1,5 @@
 {
-  "name": "Jetson AGX Orin",
+  "name": "Jetson AGX Orin 32GB",
   "product": "Jetson AGX Orin Developer Kit",
   "memory_gb": 32,
   "unified": true

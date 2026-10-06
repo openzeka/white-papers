@@ -1,7 +1,7 @@
 {
   "id": "cosmos-reason2-2b_orinnx_q80_llamacpp",
   "model": "Cosmos-Reason2-2B",
-  "device": "Jetson Orin NX",
+  "device": "Jetson Orin NX 16GB",
   "quantization": "Q8_0",
   "engine": "llama.cpp",
   "engine_version": "6d78fb0",

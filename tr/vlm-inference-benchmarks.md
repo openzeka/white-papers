@@ -6,7 +6,7 @@ page_id: vlm-inference-benchmarks
 date: 2026-10-06 12:00:00 +0300
 card_tag: "VLM Benchmark"
 description: >-
-  RTX PRO 6000 Blackwell, Jetson AGX Orin ve Jetson Orin NX üzerindeki
+  RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB ve Jetson Orin NX 16GB üzerindeki
   görüntü-dil modeli çıkarım benchmark'larını keşfedin. Görüntü boyutunu seçin,
   bir kameranın yanıtı için ne kadar bekleyebileceğini belirleyin ve her
   yapılandırmanın kaç kameraya yetiştiğini görün.
@@ -101,7 +101,7 @@ Grafik, rapor ve sunumlar için PNG olarak indirilebilir.
 
 ### Nereden başlamalı {#nereden-baslamali}
 
-**"Tek bir Jetson AGX Orin kaç kamerayı izleyebilir?"** Cihazı seçin,
+**"Tek bir Jetson AGX Orin 32GB kaç kamerayı izleyebilir?"** Cihazı seçin,
 kameralarınızın gönderdiği görüntü boyutunu belirleyin ve Maks. kamera değerini
 okuyun. Yalnızca yetişen yapılandırmaları görmek için ihtiyacınız olan kamera
 sayısını seçin ve Maks. Yanıt Süresi'ni hedefinize ayarlayın.
@@ -111,7 +111,7 @@ izleyin ya da bir satırı açın: grafiğinde her görüntü boyutu için bir �
 vardır.
 
 **"Kuantizasyon ve engine neyi değiştirir?"** Modeli ve cihazı sabit tutup
-yalnızca o ayarda farklılaşan satırları karşılaştırın: Jetson AGX Orin'de Q8_0 ve
+yalnızca o ayarda farklılaşan satırları karşılaştırın: Jetson AGX Orin 32GB'de Q8_0 ve
 Q4_K_M ile Qwen3-VL-8B-Instruct ya da RTX PRO 6000'de llama.cpp ve vLLM ile
 Qwen3-VL-4B-Instruct. Kamera sayısını değiştirmek, farkın yük altında nasıl
 geliştiğini gösterir.
@@ -142,8 +142,8 @@ ortalamasıdır; benchmark sırasında başarısız olan bir istek ortalamaya
 katılmaz ve yapılandırmanın aleyhine sayılmaz.
 
 - **Birden fazla kamera**, 480p, 720p ve 1080p'de istek başına bir görüntüyle
-  ölçüldü: Jetson Orin NX'te 1, 2 ve 4 kamera (bir yapılandırmada 8'e kadar),
-  Jetson AGX Orin'de 8'e, RTX PRO 6000'de 16'ya kadar; her seviyede bir
+  ölçüldü: Jetson Orin NX 16GB'de 1, 2 ve 4 kamera (bir yapılandırmada 8'e kadar),
+  Jetson AGX Orin 32GB'de 8'e, RTX PRO 6000'de 16'ya kadar; her seviyede bir
   Jetson'da 8, RTX PRO 6000'de 24 istek gönderildi ve aynı anda hiçbir zaman
   seviyedekinden fazla kameranın isteği işlenmedi.
 - **Tek kamera**, dört boyutun hepsinde istek başına bir, üç ve beş görüntüyle,
@@ -179,7 +179,7 @@ Maks. kamera, yanıt süresinin hedefinizi karşıladığı en yüksek **ölçü
 kamera sayısıdır. Yalnızca ölçülen sayılar
 sayılır, ara değer üretilmez; hiçbiri geçmezse değer 0'dır. Hedefinize bağlıdır
 ve onunla birlikte değişir: 720p'de ve kamera başına bir görüntüyle, Jetson AGX
-Orin üzerindeki Cosmos3-Edge 1 saniyede 2 kameraya, 3 saniyede 8 kameraya —
+Orin 32GB üzerindeki Cosmos3-Edge 1 saniyede 2 kameraya, 3 saniyede 8 kameraya —
 ölçülen en yüksek sayı, yani 8+ — yetişir.
 
 ### Kurulumu tanımlayan sütunlar {#kurulumu-tanimlayan-sutunlar}
@@ -198,9 +198,10 @@ kadar etki eder. RTX PRO 6000 üzerinde 720p'de Qwen3-VL-4B-Instruct, tek bir
 kameraya llama.cpp (Q8_0) ile 0.25 sn, vLLM (BF16) ile 0.16 sn sonra yanıt
 vermeye başlar; 16 kamerada fark 1.09 sn'ye karşı 0.46 sn'dir.
 
-**Cihaz** — Jetson Orin NX (16 GB) ve Jetson AGX Orin (32 GB), CPU ile GPU'nun
-tek bir belleği paylaştığı gömülü modüllerdir; RTX PRO 6000 Blackwell, 96 GB'lık
-bir iş istasyonu GPU'sudur ve 600 W'lık Workstation ile 300 W'lık Max-Q
+**Cihaz** — Jetson Orin NX 16GB ve Jetson AGX Orin 32GB, CPU ile GPU'nun tek
+bir belleği paylaştığı gömülü modüllerdir. İki modülün başka bellek
+kapasitelerinde sürümleri de vardır; bu yüzden adda ölçülen kapasite yer alır.
+RTX PRO 6000 Blackwell, 96 GB'lık bir iş istasyonu GPU'sudur ve 600 W'lık Workstation ile 300 W'lık Max-Q
 sürümlerinde ölçüldü.
 
 ### Sayıların söylemedikleri {#sayilarin-soylemedikleri}
