@@ -72,7 +72,7 @@ docker compose run --rm site bundle update           # update gems
 docker compose run --rm site bundle exec jekyll build  # one-off build
 ```
 
-The image is `ruby:3.1` rather than `jekyll/jekyll`: the latter is Alpine-based
+The image is `ruby:3.3` rather than `jekyll/jekyll`: the latter is Alpine-based
 and the dart-sass binary shipped with `sass-embedded` does not run on musl, so
 the theme fails to compile.
 

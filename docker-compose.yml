@@ -10,12 +10,14 @@
 #   docker compose run --rm site bundle update   → gem'leri güncelle
 #
 # Alpine tabanlı jekyll/jekyll imajı kullanılmıyor: oradaki sass-embedded'in
-# dart-sass ikilisi musl ile çalışmıyor ve tema derlenmiyor. ruby:3.1 (Debian)
-# glibc olduğu için sorun çıkmıyor.
+# dart-sass ikilisi musl ile çalışmıyor ve tema derlenmiyor. ruby:3.3 (Debian)
+# glibc olduğu için sorun çıkmıyor. Sürüm, DEVELOPMENT.md'nin "Ruby 3.3"
+# gereksinimiyle aynı — Gemfile.lock `bundler 4.0.17` istiyor ve bu bundler
+# Ruby >= 3.2 istiyor, ruby:3.1 ile `bundle install` hata veriyor.
 
 services:
   site:
-    image: ruby:3.1
+    image: ruby:3.3
     working_dir: /srv
     # Container'ı senin kullanıcınla çalıştırır, yoksa _site/ ve .jekyll-cache/
     # root'a ait olur ve silmek için sudo gerekir.
