@@ -32,7 +32,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [Kimi K3 Inference Benchmark on DGX-B300](https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/) | vLLM vs SGLang and direct vs speculative decoding | NVIDIA DGX-B300, 8× Blackwell Ultra, TP=8 |
 | [LLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/llm-inference-benchmarks/) | Interactive table of every LLM configuration we have measured: filter, set your own latency and speed targets, read the supported concurrency and estimated user capacity | DGX Spark (1–8 nodes), DGX B300, RTX PRO 6000, Jetson Thor |
 | [CV Inference Benchmark Explorer](https://whitepapers.openzeka.com/cv-inference-benchmarks/) | Interactive computer-vision benchmark: sustained FPS per device and model, and how many cameras it carries at your target FPS | DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060, RTX 3090 |
-| [VLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/vlm-inference-benchmarks/) | Interactive vision-language model benchmark: how many cameras each configuration keeps up with at your target response time, by image size | RTX PRO 6000 Blackwell, Jetson AGX Orin, Jetson Orin NX |
+| [VLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/vlm-inference-benchmarks/) | Interactive vision-language model benchmark: how many cameras each configuration keeps up with at your target response time, by image size | RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB, Jetson Orin NX 16GB |
 
 ---
 
@@ -125,7 +125,7 @@ answer to start, and the table shows the response time (time to first token)
 and the per-camera speed for every measured configuration, and how many cameras
 it keeps up with. Each camera has one request in flight, so concurrency is the
 number of cameras. Measured with llama.cpp and vLLM on RTX PRO 6000 Blackwell,
-Jetson AGX Orin and Jetson Orin NX, with one to five images per request from
+Jetson AGX Orin 32GB and Jetson Orin NX 16GB, with one to five images per request from
 480p to 2K.
 
 **[Open the VLM Inference Benchmark Explorer →](https://whitepapers.openzeka.com/vlm-inference-benchmarks/)**

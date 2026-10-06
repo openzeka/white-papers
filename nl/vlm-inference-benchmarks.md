@@ -7,7 +7,7 @@ date: 2026-10-06 12:00:00 +0300
 card_tag: "VLM-benchmark"
 description: >-
   Verken inferentiebenchmarks van vision-languagemodellen op RTX PRO 6000
-  Blackwell, Jetson AGX Orin en Jetson Orin NX. Kies het beeldformaat, stel in
+  Blackwell, Jetson AGX Orin 32GB en Jetson Orin NX 16GB. Kies het beeldformaat, stel in
   hoe lang een camera op zijn antwoord mag wachten, en zie hoeveel camera's elke
   configuratie bijhoudt.
 permalink: /vlm-inference-benchmarks/
@@ -101,7 +101,7 @@ De grafiek kan als PNG worden gedownload voor rapporten en presentaties.
 
 ### Waar te beginnen
 
-**"Hoeveel camera's kan één Jetson AGX Orin volgen?"** Kies het apparaat, stel
+**"Hoeveel camera's kan één Jetson AGX Orin 32GB volgen?"** Kies het apparaat, stel
 het beeldformaat in dat uw camera's sturen en lees Max. camera's af. Om alleen
 de configuraties te zien die het bijhouden, kiest u het aantal camera's dat u
 nodig hebt en zet u Max. responstijd op uw doel.
@@ -111,7 +111,7 @@ camera's, of open een rij: de grafiek heeft één lijn per beeldformaat.
 
 **"Wat veranderen kwantisatie en de engine?"** Houd model en apparaat vast en
 vergelijk de rijen die in die ene instelling verschillen: Qwen3-VL-8B-Instruct in
-Q8_0 en Q4_K_M op Jetson AGX Orin, of Qwen3-VL-4B-Instruct onder llama.cpp en
+Q8_0 en Q4_K_M op Jetson AGX Orin 32GB, of Qwen3-VL-4B-Instruct onder llama.cpp en
 vLLM op RTX PRO 6000. Door het aantal camera's te wijzigen, ziet u hoe het
 verschil zich onder belasting ontwikkelt.
 
@@ -141,8 +141,8 @@ gemiddelden van de voltooide verzoeken; een verzoek dat tijdens de benchmark
 mislukte, telt niet mee in het gemiddelde en niet tegen een configuratie.
 
 - **Meerdere camera's** zijn gemeten met één beeld per verzoek bij 480p, 720p
-  en 1080p: 1, 2 en 4 camera's op Jetson Orin NX (tot 8 voor één configuratie),
-  tot 8 op Jetson AGX Orin en tot 16 op RTX PRO 6000, met 8 verzoeken per niveau
+  en 1080p: 1, 2 en 4 camera's op Jetson Orin NX 16GB (tot 8 voor één configuratie),
+  tot 8 op Jetson AGX Orin 32GB en tot 16 op RTX PRO 6000, met 8 verzoeken per niveau
   op een Jetson en 24 op RTX PRO 6000, en nooit meer camera's tegelijk in
   behandeling dan het niveau.
 - **Eén camera** is gemeten bij alle vier formaten met één, drie en vijf beelden
@@ -178,7 +178,7 @@ Max. camera's is het hoogste **gemeten** aantal camera's waarbij de responstijd
 uw doel haalt. Alleen gemeten aantallen tellen, er
 wordt niets geïnterpoleerd, en als geen enkel aantal slaagt, is de waarde 0.
 Ze hangt af van uw doel en beweegt mee: bij 720p met één beeld per camera houdt
-Cosmos3-Edge op Jetson AGX Orin 2 camera's bij bij 1 seconde en 8 — het hoogste
+Cosmos3-Edge op Jetson AGX Orin 32GB bij 1 seconde 2 camera's bij en 8 — het hoogste
 gemeten aantal, dus 8+ — bij 3 seconden.
 
 ### De kolommen die de opzet beschrijven
@@ -200,8 +200,10 @@ PRO 6000 begint bij 720p een enkele camera te antwoorden na 0.25 s onder
 llama.cpp (Q8_0) en na 0.16 s onder vLLM (BF16); bij 16 camera's is het
 verschil 1.09 s tegen 0.46 s.
 
-**Apparaat** — Jetson Orin NX (16 GB) en Jetson AGX Orin (32 GB) zijn embedded
-modules waarvan CPU en GPU één geheugen delen; RTX PRO 6000 Blackwell is een
+**Apparaat** — Jetson Orin NX 16GB en Jetson AGX Orin 32GB zijn embedded
+modules waarvan CPU en GPU één geheugen delen. Beide modules bestaan ook met
+andere geheugengroottes, daarom staat de gemeten grootte in de naam. RTX PRO
+6000 Blackwell is een
 werkstation-GPU met 96 GB, gemeten in de Workstation-editie van 600 W en de
 Max-Q-editie van 300 W.
 

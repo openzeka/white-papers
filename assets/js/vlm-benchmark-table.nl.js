@@ -81,7 +81,7 @@
     tip: {
       model: "<strong>Model</strong><p>Het vision-languagemodel dat wordt geserveerd.</p><p>Een rij is een volledige deployment, dus hetzelfde model staat in meerdere rijen met andere hardware, een ander formaat of een andere engine.</p>",
       params: "<strong>Parameters</strong><p>Het gepubliceerde totale aantal gewichten van het model, inclusief de beeldencoder.</p><p>Bij mixture-of-expertsmodellen is dit het totaal, niet het deel dat per token actief is, omdat alles in het geheugen wordt gehouden.</p>",
-      device: "<strong>Apparaat</strong><p>De hardware van de run: een Jetson-module, of een RTX PRO 6000 Blackwell-werkstation-GPU. De Max-Q-editie is de 300 W-versie van dezelfde chip.</p><p>Jetson Orin NX heeft 16 GB en Jetson AGX Orin 32 GB, gedeeld door CPU en GPU; RTX PRO 6000 heeft 96 GB.</p>",
+      device: "<strong>Apparaat</strong><p>De hardware van de run: een Jetson-module, of een RTX PRO 6000 Blackwell-werkstation-GPU. De Max-Q-editie is de 300 W-versie van dezelfde chip.</p><p>De naam van een Jetson vermeldt het gemeten geheugen, dat CPU en GPU delen; beide modules bestaan ook met andere geheugengroottes. RTX PRO 6000 heeft 96 GB.</p>",
       quant: "<strong>Kwantisatie</strong><p>Het getalformaat waarin de gewichten zijn opgeslagen.</p><p>BF16 is volledige precisie, FP8 gebruikt 8 bits en NVFP4 4 bits. Q8_0, Q4_K_M en Q4_0 zijn GGUF-formaten voor llama.cpp met ongeveer 8 en 4 bits per gewicht. Minder bits betekent minder geheugen en meestal meer snelheid, met enig risico voor de kwaliteit.</p>",
       engine: "<strong>Inferentie-engine</strong><p>De serversoftware die het model laadt en verzoeken inplant: vLLM voor Hugging Face-checkpoints, llama.cpp voor GGUF-bestanden.</p><p>Ze beïnvloedt de snelheid net zoveel als de hardware: hetzelfde model op hetzelfde apparaat kan tussen engines meetbaar verschillen.</p>",
       tps: "<strong>TPS — tokens per seconde</strong><p>Hoe snel het antwoord van één camera wordt geschreven zodra het begonnen is, bij het gekozen aantal camera's. Een token is ongeveer driekwart woord.</p><p>Per camera, niet in totaal. Max. camera's wordt bepaald door de responstijd; TPS laat zien hoe lang een langer antwoord daarna duurt. Hoger is beter.</p>",
@@ -121,8 +121,8 @@
   var TARGET_COLOR = "#c8102e";
 
   var DEVICE_ORDER = {
-    "Jetson Orin NX": 0,
-    "Jetson AGX Orin": 1,
+    "Jetson Orin NX 16GB": 0,
+    "Jetson AGX Orin 32GB": 1,
     "RTX PRO 6000 Max-Q": 2,
     "RTX PRO 6000": 3
   };

@@ -81,7 +81,7 @@
     tip: {
       model: "<strong>Model</strong><p>The vision-language model being served.</p><p>A row is a whole deployment, so the same model appears in several rows with different hardware, format or engine.</p>",
       params: "<strong>Parameters</strong><p>The model's total number of weights, vision encoder included, as published.</p><p>For mixture-of-experts models this is the total, not the part active for each token, because all of it is held in memory.</p>",
-      device: "<strong>Device</strong><p>The hardware the run used: a Jetson module, or an RTX PRO 6000 Blackwell workstation GPU. The Max-Q edition is the 300 W version of the same chip.</p><p>Jetson Orin NX has 16 GB and Jetson AGX Orin 32 GB, shared by CPU and GPU; RTX PRO 6000 has 96 GB.</p>",
+      device: "<strong>Device</strong><p>The hardware the run used: a Jetson module, or an RTX PRO 6000 Blackwell workstation GPU. The Max-Q edition is the 300 W version of the same chip.</p><p>A Jetson's name carries the memory measured, which CPU and GPU share; both modules also come in other memory sizes. RTX PRO 6000 has 96 GB.</p>",
       quant: "<strong>Quantization</strong><p>The number format the weights are stored in.</p><p>BF16 is full precision, FP8 uses 8 bits and NVFP4 4 bits. Q8_0, Q4_K_M and Q4_0 are GGUF formats for llama.cpp with about 8 and 4 bits per weight. Fewer bits means less memory and usually more speed, at some risk to quality.</p>",
       engine: "<strong>Inference Engine</strong><p>The server software that loads the model and schedules requests: vLLM for Hugging Face checkpoints, llama.cpp for GGUF files.</p><p>It affects speed as much as the hardware does: the same model on the same device can differ measurably between engines.</p>",
       tps: "<strong>TPS — tokens per second</strong><p>How fast one camera's answer is written once it has started, at the selected number of cameras. A token is about three quarters of a word.</p><p>Per camera, not in total. Max Cameras is decided by the response time; TPS tells you how long a longer answer then takes. Higher is better.</p>",
@@ -121,8 +121,8 @@
   var TARGET_COLOR = "#c8102e";
 
   var DEVICE_ORDER = {
-    "Jetson Orin NX": 0,
-    "Jetson AGX Orin": 1,
+    "Jetson Orin NX 16GB": 0,
+    "Jetson AGX Orin 32GB": 1,
     "RTX PRO 6000 Max-Q": 2,
     "RTX PRO 6000": 3
   };

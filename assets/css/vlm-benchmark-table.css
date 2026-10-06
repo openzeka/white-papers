@@ -56,3 +56,9 @@
   padding-top: 12px;
   border-top: 1px solid var(--bt-border);
 }
+
+/* Max Response Time opens its row, so its label lines up with Cameras and
+   Image Size instead of keeping the inline indent. */
+.vlmbt-container .bt-filter-row-perf > .bt-perf-item:first-child .bt-inline-label {
+  margin-left: 0;
+}

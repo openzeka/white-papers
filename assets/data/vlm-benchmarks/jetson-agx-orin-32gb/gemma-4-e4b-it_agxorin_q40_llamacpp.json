@@ -1,7 +1,7 @@
 {
   "id": "gemma-4-e4b-it_agxorin_q40_llamacpp",
   "model": "Gemma-4-E4B-it",
-  "device": "Jetson AGX Orin",
+  "device": "Jetson AGX Orin 32GB",
   "quantization": "Q4_0",
   "engine": "llama.cpp",
   "engine_version": "6d78fb0",

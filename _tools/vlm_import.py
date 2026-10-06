@@ -34,9 +34,9 @@ SIZES = ["480p", "720p", "1080p", "2K"]
 # The export's device string starts with the product; the rest (address, GPU
 # slot) is lab detail. name = shown in the explorer; full = the product.
 DEVICES = [
-    ("Jetson Orin NX 16 GB", "Jetson Orin NX", "orinnx",
+    ("Jetson Orin NX 16 GB", "Jetson Orin NX 16GB", "orinnx",
      {"name": "Jetson Orin NX 16GB", "memory_gb": 16, "unified": True}),
-    ("Jetson AGX Orin 32 GB", "Jetson AGX Orin", "agxorin",
+    ("Jetson AGX Orin 32 GB", "Jetson AGX Orin 32GB", "agxorin",
      {"name": "Jetson AGX Orin Developer Kit", "memory_gb": 32, "unified": True}),
     ("RTX PRO 6000 Blackwell Max-Q", "RTX PRO 6000 Max-Q", "rtxpro6000maxq",
      {"name": "RTX PRO 6000 Blackwell Max-Q Workstation Edition", "memory_gb": 96, "unified": False}),

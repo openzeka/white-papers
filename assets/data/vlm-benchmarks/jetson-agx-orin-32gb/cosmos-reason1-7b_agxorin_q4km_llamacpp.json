@@ -1,7 +1,7 @@
 {
   "id": "cosmos-reason1-7b_agxorin_q4km_llamacpp",
   "model": "Cosmos-Reason1-7B",
-  "device": "Jetson AGX Orin",
+  "device": "Jetson AGX Orin 32GB",
   "quantization": "Q4_K_M",
   "engine": "llama.cpp",
   "engine_version": "6d78fb0",

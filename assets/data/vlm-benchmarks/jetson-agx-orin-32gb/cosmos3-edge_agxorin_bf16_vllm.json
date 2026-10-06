@@ -1,7 +1,7 @@
 {
   "id": "cosmos3-edge_agxorin_bf16_vllm",
   "model": "Cosmos3-Edge",
-  "device": "Jetson AGX Orin",
+  "device": "Jetson AGX Orin 32GB",
   "quantization": "BF16",
   "engine": "vLLM",
   "engine_version": "0.30.0",

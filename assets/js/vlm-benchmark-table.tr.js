@@ -81,7 +81,7 @@
     tip: {
       model: "<strong>Model</strong><p>Sunulan görüntü-dil modeli.</p><p>Bir satır bir kurulumun tamamıdır; bu yüzden aynı model farklı donanım, biçim ya da engine ile birkaç satırda görünür.</p>",
       params: "<strong>Parametre</strong><p>Görüntü kodlayıcı dahil, modelin yayımlanmış toplam ağırlık sayısı.</p><p>Mixture-of-experts modellerde bu, her token için etkin olan kısım değil toplamdır; çünkü tamamı bellekte tutulur.</p>",
-      device: "<strong>Cihaz</strong><p>Çalıştırmanın kullandığı donanım: bir Jetson modülü ya da bir RTX PRO 6000 Blackwell iş istasyonu GPU'su. Max-Q sürümü aynı çipin 300 W'lık sürümüdür.</p><p>Jetson Orin NX'te 16 GB, Jetson AGX Orin'de 32 GB bellek vardır ve CPU ile GPU tarafından paylaşılır; RTX PRO 6000'de 96 GB vardır.</p>",
+      device: "<strong>Cihaz</strong><p>Çalıştırmanın kullandığı donanım: bir Jetson modülü ya da bir RTX PRO 6000 Blackwell iş istasyonu GPU'su. Max-Q sürümü aynı çipin 300 W'lık sürümüdür.</p><p>Jetson adlarında ölçülen bellek kapasitesi yer alır; bu bellek CPU ile GPU tarafından paylaşılır. İki modülün başka bellek kapasitelerinde sürümleri de vardır. RTX PRO 6000'de 96 GB vardır.</p>",
       quant: "<strong>Kuantizasyon</strong><p>Ağırlıkların saklandığı sayı biçimi.</p><p>BF16 tam hassasiyettir, FP8 8 bit, NVFP4 4 bit kullanır. Q8_0, Q4_K_M ve Q4_0, llama.cpp için ağırlık başına yaklaşık 8 ve 4 bitlik GGUF biçimleridir. Daha az bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar risk taşır.</p>",
       engine: "<strong>Inference Engine</strong><p>Modeli yükleyip istekleri zamanlayan sunucu yazılımı: Hugging Face checkpoint'leri için vLLM, GGUF dosyaları için llama.cpp.</p><p>Hıza donanım kadar etki eder: aynı model aynı cihazda engine'ler arasında ölçülebilir biçimde farklılaşabilir.</p>",
       tps: "<strong>TPS — saniyedeki token</strong><p>Seçili kamera sayısında, başladıktan sonra bir kameranın yanıtının yazılma hızı. Bir token kabaca bir kelimenin dörtte üçüdür.</p><p>Toplam değil, kamera başınadır. Maks. kamera yanıt süresine göre belirlenir; TPS ise daha uzun bir yanıtın ardından ne kadar süreceğini gösterir. Yüksek olması iyidir.</p>",
@@ -121,8 +121,8 @@
   var TARGET_COLOR = "#c8102e";
 
   var DEVICE_ORDER = {
-    "Jetson Orin NX": 0,
-    "Jetson AGX Orin": 1,
+    "Jetson Orin NX 16GB": 0,
+    "Jetson AGX Orin 32GB": 1,
     "RTX PRO 6000 Max-Q": 2,
     "RTX PRO 6000": 3
   };
