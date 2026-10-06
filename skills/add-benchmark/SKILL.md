@@ -344,7 +344,34 @@ the user what you decided:
   cannot hold a 64K session, so its agentic capacity shows a dash. Correct if
   the config says so; tell the user.
 
-## 7. Report back
+## 7. Add a changelog entry
+
+Each new run gets **its own** entry at the top of `_data/changelog.yml`
+(newest first). It appears on `/changelog/` and in "Latest changes" on the
+home page, in every language, linked to the run's own page:
+
+```yaml
+- date: 2026-10-01          # the day the run goes live (the merge day)
+  type: benchmarks
+  run: <the run's id in benchmarks.json>
+  text:
+    en: "Qwen3.8-27B on a single RTX PRO 6000: FP8 weights served with vLLM, with MTP speculative decoding (k=3), measured up to 128 concurrent requests."
+    tr: "…"
+    nl: "…"
+```
+
+One sentence, from the entry's own fields: model (and size), device,
+precision, engine, parallelism, speculative decoding, context length — and
+anything notable from `notes`. Translate it (terms:
+`skills/add-white-paper/TERMINOLOGY.md`). **Show the user the three sentences
+and add them only once they approve.** A re-import or a correction of an
+existing row gets no entry: the changelog lists additions, not fixes. Then:
+
+```bash
+python3 _tools/check_changelog.py   # exit 0 = every id resolves, all languages present
+```
+
+## 8. Report back
 
 The run's page address is built from its fields — model, device, then
 quantization, engine, `tp`/`dp`/`pp` and speculative decoding (for example

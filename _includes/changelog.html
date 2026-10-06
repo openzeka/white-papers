@@ -1,0 +1,79 @@
+{%- comment -%}
+  The changelog, from site.data.oz_changelog (_plugins/changelog.rb resolves
+  the links of _data/changelog.yml for the language being built).
+
+    {% include changelog.html %}            /changelog/: every entry, by month, with type filters
+    {% include changelog.html limit=5 %}    home page: the newest five, and a link to the rest
+
+  Links are permalinks; relative_url adds the /tr or /nl prefix. No heading
+  inside a link (see _includes/paper-grid.html for why).
+{%- endcomment -%}
+{%- assign t = site.data[page.lang].strings.changelog -%}
+{%- assign months = site.data[page.lang].strings.months -%}
+{%- assign list = site.data.oz_changelog -%}
+{%- if include.limit -%}
+<div class="oz-changelog oz-changelog--short">
+<ol class="oz-cl-list">
+{%- for e in list limit: include.limit %}
+{%- assign m = e.date | date: "%-m" | minus: 1 %}
+<li class="oz-cl-entry" data-type="{{ e.type }}"><span class="oz-cl-date">{{ e.date | date: "%-d" }} {{ months[m] }} {{ e.date | date: "%Y" }}</span><span class="oz-cl-tag oz-cl-tag--{{ e.type }}">{% assign tk = "type_" | append: e.type %}{{ t[tk] }}</span><span class="oz-cl-body">{% if e.link %}<a class="oz-cl-title" href="{{ e.link.url | relative_url }}">{{ e.link.title }}</a>{% endif %}<span class="oz-cl-text">{{ e.text }}</span></span></li>
+{%- endfor %}
+</ol>
+<p class="oz-cl-more"><a href="{{ '/changelog/' | relative_url }}">{{ t.all }} →</a></p>
+</div>
+{%- else -%}
+<div class="oz-changelog" data-oz-changelog>
+<div class="oz-cl-filters" role="group">
+<button type="button" class="oz-cl-filter is-active" data-filter="">{{ t.filter_all }}</button>
+{%- assign kinds = "paper,benchmarks,cv" | split: "," %}
+{%- for k in kinds %}
+<button type="button" class="oz-cl-filter oz-cl-tag--{{ k }}" data-filter="{{ k }}">{% assign tk = "type_" | append: k %}{{ t[tk] }}</button>
+{%- endfor %}
+</div>
+{%- assign cur = "" %}
+{%- for e in list %}
+{%- assign ym = e.date | date: "%Y-%m" %}
+{%- if ym != cur %}
+{%- unless forloop.first %}
+</ol>
+</section>
+{%- endunless %}
+{%- assign m = e.date | date: "%-m" | minus: 1 %}
+<section class="oz-cl-month" data-month="{{ ym }}">
+<h2 id="m-{{ ym }}">{{ months[m] }} {{ e.date | date: "%Y" }}</h2>
+<ol class="oz-cl-list">
+{%- assign cur = ym %}
+{%- endif %}
+{%- assign m = e.date | date: "%-m" | minus: 1 %}
+<li class="oz-cl-entry" id="{{ e.anchor }}" data-type="{{ e.type }}"><span class="oz-cl-date">{{ e.date | date: "%-d" }} {{ months[m] }}</span><span class="oz-cl-tag oz-cl-tag--{{ e.type }}">{% assign tk = "type_" | append: e.type %}{{ t[tk] }}</span><span class="oz-cl-body">{% if e.link %}<a class="oz-cl-title" href="{{ e.link.url | relative_url }}">{{ e.link.title }}</a>{% endif %}<span class="oz-cl-text">{{ e.text }}</span></span></li>
+{%- if forloop.last %}
+</ol>
+</section>
+{%- endif %}
+{%- endfor %}
+</div>
+<script>
+(function () {
+  var root = document.querySelector("[data-oz-changelog]");
+  if (!root) return;
+  var buttons = root.querySelectorAll(".oz-cl-filter");
+  function apply(type) {
+    buttons.forEach(function (b) { b.classList.toggle("is-active", b.getAttribute("data-filter") === type); });
+    root.querySelectorAll(".oz-cl-entry").forEach(function (li) {
+      li.hidden = !!type && li.getAttribute("data-type") !== type;
+    });
+    root.querySelectorAll(".oz-cl-month").forEach(function (s) {
+      s.hidden = !s.querySelector(".oz-cl-entry:not([hidden])");
+    });
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () { apply(b.getAttribute("data-filter")); });
+  });
+  // A link to one entry (#c-…) shows it even if a filter was active.
+  if (location.hash) {
+    var el = document.getElementById(location.hash.slice(1));
+    if (el && el.classList.contains("oz-cl-entry")) el.classList.add("is-target");
+  }
+})();
+</script>
+{%- endif -%}

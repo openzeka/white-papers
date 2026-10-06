@@ -82,3 +82,12 @@ bench_page:
   cv_status: "Status"
   cv_pass: "PASS"
   cv_fail: "FAIL"
+
+# The changelog: /changelog/ and the home-page block (_includes/changelog.html).
+changelog:
+  latest: "Latest changes"
+  all: "All changes"
+  filter_all: "All"
+  type_paper: "New white paper"
+  type_benchmarks: "New LLM benchmark"
+  type_cv: "New CV benchmark"

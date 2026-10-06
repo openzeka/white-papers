@@ -41,6 +41,10 @@ permalink: /
 
 {% include paper-grid.html %}
 
+## Laatste wijzigingen
+
+{% include changelog.html limit=5 %}
+
 ## Expertisegebieden
 
 <div class="expertise-grid" markdown="1">

@@ -41,6 +41,10 @@ permalink: /
 
 {% include paper-grid.html %}
 
+## Latest changes
+
+{% include changelog.html limit=5 %}
+
 ## Areas of Expertise
 
 <div class="expertise-grid" markdown="1">
