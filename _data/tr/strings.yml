@@ -82,3 +82,12 @@ bench_page:
   cv_status: "Sonuç"
   cv_pass: "GEÇTİ"
   cv_fail: "KALDI"
+
+# The changelog: /changelog/ and the home-page block (_includes/changelog.html).
+changelog:
+  latest: "Son değişiklikler"
+  all: "Tüm değişiklikler"
+  filter_all: "Tümü"
+  type_paper: "Yeni white paper"
+  type_benchmarks: "Yeni LLM benchmark"
+  type_cv: "Yeni CV benchmark"

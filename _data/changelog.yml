@@ -1,0 +1,334 @@
+# What is new on the site, for readers — the /changelog/ page and the
+# "Latest changes" block on the home page (_includes/changelog.html; links
+# resolved by _plugins/changelog.rb). Newest first; entries on the same day
+# keep this file's order.
+#
+# One entry per addition — three kinds only:
+#   paper       a new white paper            page: <page_id>
+#   benchmarks  a new LLM benchmark run      run:  <id in assets/data/benchmarks.json>
+#   cv          a new CV benchmark result    cv:   <device>-<model> (the store's file path)
+# Every entry has `date` (YYYY-MM-DD, the day it went live) and one sentence
+# of `text` in en, tr and nl. The link (title and URL in the reader's
+# language) comes from page/run/cv. Not in the changelog: paper revisions,
+# site features, fixes and corrections, renames, tooling. Running text names no company.
+# Check with: python3 _tools/check_changelog.py
+
+- date: 2026-10-01
+  type: benchmarks
+  run: gemma-4-31b_thor_nvfp4_vllm
+  text:
+    en: "Gemma-4-31B-it on Jetson AGX Thor: NVFP4 weights served with vLLM, with MTP speculative decoding (k=3) and a 256K context."
+    tr: "Gemma-4-31B-it, Jetson AGX Thor üzerinde: NVFP4 ağırlıklar vLLM ile sunuldu; MTP ile spekülatif kod çözme (k=3), 256K bağlam."
+    nl: "Gemma-4-31B-it op Jetson AGX Thor: NVFP4-gewichten geserveerd met vLLM, met MTP voor speculatieve decodering (k=3) en een context van 256K."
+
+- date: 2026-10-01
+  type: benchmarks
+  run: qwen3-vl-30b-a3b-instruct_thor_fp8_vllm
+  text:
+    en: "Qwen3-VL-30B-A3B-Instruct, a vision-language model, on Jetson AGX Thor: FP8 weights served with vLLM, with speculative decoding and a 256K context."
+    tr: "Görüntü-dil modeli Qwen3-VL-30B-A3B-Instruct, Jetson AGX Thor üzerinde: FP8 ağırlıklar vLLM ile sunuldu; spekülatif kod çözme, 256K bağlam."
+    nl: "Qwen3-VL-30B-A3B-Instruct, een vision-languagemodel, op Jetson AGX Thor: FP8-gewichten geserveerd met vLLM, met speculatieve decodering en een context van 256K."
+
+- date: 2026-10-01
+  type: benchmarks
+  run: qwen3.8-27b_rtxpro6000_fp8_vllm
+  text:
+    en: "Qwen3.8-27B on a single RTX PRO 6000: FP8 weights served with vLLM, with MTP speculative decoding (k=3), measured up to 128 concurrent requests."
+    tr: "Qwen3.8-27B, tek bir RTX PRO 6000 üzerinde: FP8 ağırlıklar vLLM ile sunuldu; MTP ile spekülatif kod çözme (k=3), 128 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Qwen3.8-27B op één RTX PRO 6000: FP8-gewichten geserveerd met vLLM, met MTP voor speculatieve decodering (k=3), gemeten tot 128 gelijktijdige verzoeken."
+
+- date: 2026-10-01
+  type: benchmarks
+  run: mimo-v2.6-pro-mopd_b300_fp4_vllm_tp4
+  text:
+    en: "MiMo-V2.6-Pro-MOPD (1.02T) on DGX B300: FP4 weights served with vLLM on four GPUs (TP4), with DFlash speculative decoding (k=7) and a 1M-token context, measured up to 256 concurrent requests."
+    tr: "MiMo-V2.6-Pro-MOPD (1.02T), DGX B300 üzerinde: FP4 ağırlıklar vLLM ile dört GPU'da sunuldu (TP4); DFlash spekülatif kod çözme (k=7), 1M token bağlam, 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "MiMo-V2.6-Pro-MOPD (1.02T) op DGX B300: FP4-gewichten geserveerd met vLLM op vier GPU's (TP4), met DFlash speculatieve decodering (k=7) en een context van 1M tokens, gemeten tot 256 gelijktijdige verzoeken."
+
+- date: 2026-10-01
+  type: benchmarks
+  run: mimo-v2.6-flash-rl_2spark_fp4_vllm_256k
+  text:
+    en: "MiMo-V2.6-Flash-RL (310B) on 2× DGX Spark: FP4 weights served with vLLM across both nodes (TP2), with DFlash speculative decoding (k=7) and a 256K context."
+    tr: "MiMo-V2.6-Flash-RL (310B), 2× DGX Spark üzerinde: FP4 ağırlıklar vLLM ile iki düğüme dağıtıldı (TP2); DFlash spekülatif kod çözme (k=7), 256K bağlam."
+    nl: "MiMo-V2.6-Flash-RL (310B) op 2× DGX Spark: FP4-gewichten geserveerd met vLLM over beide nodes (TP2), met DFlash speculatieve decodering (k=7) en een context van 256K."
+
+- date: 2026-10-01
+  type: benchmarks
+  run: mimo-v2.6-flash-rl_4spark_fp4_vllm_500k
+  text:
+    en: "MiMo-V2.6-Flash-RL (310B) on 4× DGX Spark: FP4 weights served with vLLM across four nodes (TP4), with DFlash speculative decoding (k=7) and a 500K context."
+    tr: "MiMo-V2.6-Flash-RL (310B), 4× DGX Spark üzerinde: FP4 ağırlıklar vLLM ile dört düğüme dağıtıldı (TP4); DFlash spekülatif kod çözme (k=7), 500K bağlam."
+    nl: "MiMo-V2.6-Flash-RL (310B) op 4× DGX Spark: FP4-gewichten geserveerd met vLLM over vier nodes (TP4), met DFlash speculatieve decodering (k=7) en een context van 500K."
+
+- date: 2026-09-29
+  type: paper
+  page: conditional-memory-offloading
+  text:
+    en: "Engram tables are large but read only a few rows per token, so they can move from GPU memory to host RAM or NVMe. What that means on DGX Spark, RTX PRO 6000 and DGX B300, and measured results with DeepSeek-V4.1-Flash and Qwen3.8-Flash-Next."
+    tr: "Engram tabloları büyüktür, ancak her token için yalnızca birkaç satırı okunur; bu nedenle GPU belleğinden sistem RAM'ine veya NVMe'ye taşınabilirler. Bunun DGX Spark, RTX PRO 6000 ve DGX B300 için anlamı ve DeepSeek-V4.1-Flash ile Qwen3.8-Flash-Next ölçüm sonuçları."
+    nl: "Engram-tabellen zijn groot, maar per token worden er maar een paar rijen uit gelezen; daarom kunnen ze van het GPU-geheugen naar systeem-RAM of NVMe. Wat dat betekent op DGX Spark, RTX PRO 6000 en DGX B300, en meetresultaten met DeepSeek-V4.1-Flash en Qwen3.8-Flash-Next."
+
+- date: 2026-09-28
+  type: benchmarks
+  run: qwen3.8-flash-next_1spark_nvfp4_sglang
+  text:
+    en: "Qwen3.8-Flash-Next (176B) on a single DGX Spark: NVFP4 weights served with SGLang, with MTP speculative decoding (k=3) and its 47.7 GiB n-gram embedding table read from NVMe."
+    tr: "Qwen3.8-Flash-Next (176B), tek bir DGX Spark üzerinde: NVFP4 ağırlıklar SGLang ile sunuldu; MTP ile spekülatif kod çözme (k=3), 47.7 GiB'lık n-gram embedding tablosu NVMe'den okunuyor."
+    nl: "Qwen3.8-Flash-Next (176B) op één DGX Spark: NVFP4-gewichten geserveerd met SGLang, met MTP voor speculatieve decodering (k=3) en de n-gram-embeddingtabel van 47.7 GiB gelezen vanaf NVMe."
+
+- date: 2026-09-28
+  type: benchmarks
+  run: qwen3.8-flash-next_rtxpro6000_nvfp4_sglang
+  text:
+    en: "Qwen3.8-Flash-Next (176B) on a single RTX PRO 6000: NVFP4 weights served with SGLang, with MTP speculative decoding (k=3) and its 47.7 GiB n-gram embedding table held in host RAM."
+    tr: "Qwen3.8-Flash-Next (176B), tek bir RTX PRO 6000 üzerinde: NVFP4 ağırlıklar SGLang ile sunuldu; MTP ile spekülatif kod çözme (k=3), 47.7 GiB'lık n-gram embedding tablosu sistem RAM'inde."
+    nl: "Qwen3.8-Flash-Next (176B) op één RTX PRO 6000: NVFP4-gewichten geserveerd met SGLang, met MTP voor speculatieve decodering (k=3) en de n-gram-embeddingtabel van 47.7 GiB in systeem-RAM."
+
+- date: 2026-09-28
+  type: benchmarks
+  run: mimo-v2.6-pro-rl_b300_fp4_vllm_tp4
+  text:
+    en: "MiMo-V2.6-Pro-RL (1.02T) on DGX B300: FP4 weights served with vLLM on four GPUs (TP4), with DFlash speculative decoding (k=7) and a 1M-token context."
+    tr: "MiMo-V2.6-Pro-RL (1.02T), DGX B300 üzerinde: FP4 ağırlıklar vLLM ile dört GPU'da sunuldu (TP4); DFlash spekülatif kod çözme (k=7), 1M token bağlam."
+    nl: "MiMo-V2.6-Pro-RL (1.02T) op DGX B300: FP4-gewichten geserveerd met vLLM op vier GPU's (TP4), met DFlash speculatieve decodering (k=7) en een context van 1M tokens."
+
+- date: 2026-09-18
+  type: cv
+  cv: jetson-agx-thor-peoplenet-int8
+  text:
+    en: "PeopleNet person detection (INT8, 960×544 input) on Jetson AGX Thor: frames per second per camera, measured from 1 to 32 simultaneous cameras."
+    tr: "PeopleNet kişi algılama (INT8, 960×544 giriş), Jetson AGX Thor üzerinde: 1 ile 32 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "PeopleNet-persoonsdetectie (INT8, invoer 960×544) op Jetson AGX Thor: frames per seconde per camera, gemeten van 1 tot 32 gelijktijdige camera's."
+
+- date: 2026-09-18
+  type: cv
+  cv: jetson-agx-thor-yolo11-n
+  text:
+    en: "YOLO11-N object detection (640×640 input) on Jetson AGX Thor: frames per second per camera, measured from 1 to 30 simultaneous cameras."
+    tr: "YOLO11-N nesne algılama (640×640 giriş), Jetson AGX Thor üzerinde: 1 ile 30 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "YOLO11-N-objectdetectie (invoer 640×640) op Jetson AGX Thor: frames per seconde per camera, gemeten van 1 tot 30 gelijktijdige camera's."
+
+- date: 2026-09-18
+  type: cv
+  cv: jetson-agx-thor-yolo11s
+  text:
+    en: "YOLO11S object detection (640×640 input) on Jetson AGX Thor: frames per second per camera, measured from 1 to 32 simultaneous cameras."
+    tr: "YOLO11S nesne algılama (640×640 giriş), Jetson AGX Thor üzerinde: 1 ile 32 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "YOLO11S-objectdetectie (invoer 640×640) op Jetson AGX Thor: frames per seconde per camera, gemeten van 1 tot 32 gelijktijdige camera's."
+
+- date: 2026-09-18
+  type: cv
+  cv: jetson-agx-thor-yolo11m
+  text:
+    en: "YOLO11M object detection (640×640 input) on Jetson AGX Thor: frames per second per camera, measured from 1 to 32 simultaneous cameras."
+    tr: "YOLO11M nesne algılama (640×640 giriş), Jetson AGX Thor üzerinde: 1 ile 32 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "YOLO11M-objectdetectie (invoer 640×640) op Jetson AGX Thor: frames per seconde per camera, gemeten van 1 tot 32 gelijktijdige camera's."
+
+- date: 2026-09-18
+  type: cv
+  cv: jetson-agx-thor-yolo11l
+  text:
+    en: "YOLO11L object detection (640×640 input) on Jetson AGX Thor: frames per second per camera, measured from 1 to 32 simultaneous cameras."
+    tr: "YOLO11L nesne algılama (640×640 giriş), Jetson AGX Thor üzerinde: 1 ile 32 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "YOLO11L-objectdetectie (invoer 640×640) op Jetson AGX Thor: frames per seconde per camera, gemeten van 1 tot 32 gelijktijdige camera's."
+
+- date: 2026-09-17
+  type: paper
+  page: deepseek-v4.1-flash-8spark-deployment
+  text:
+    en: "Deployment of DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) on 8× NVIDIA DGX Spark (GB10) with TP8: two configurations (300K Engram-in-memory, 1M Engram-on-disk), NCCL optimization, benchmark results and TP4 comparison."
+    tr: "DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) modelinin 8× NVIDIA DGX Spark (GB10) üzerinde TP8 dağıtımı: iki yapılandırma (300K Engram-bellekte, 1M Engram-diskte), NCCL optimizasyonu, benchmark sonuçları ve TP4 karşılaştırması."
+    nl: "Deployment van DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) op 8× NVIDIA DGX Spark (GB10) met TP8: twee configuraties (300K met Engram in het geheugen, 1M met Engram-on-disk), NCCL-optimalisatie, benchmarkresultaten en vergelijking met TP4."
+
+- date: 2026-09-17
+  type: benchmarks
+  run: deepseek-v4.1-flash_8spark_fp8_vllm_tp8
+  text:
+    en: "DeepSeek-V4.1-Flash (763B) on 8× DGX Spark: FP8 weights served with vLLM across eight nodes (TP8), with DSpark speculative decoding (k=5) and a 300K context, the Engram table kept in memory."
+    tr: "DeepSeek-V4.1-Flash (763B), 8× DGX Spark üzerinde: FP8 ağırlıklar vLLM ile sekiz düğüme dağıtıldı (TP8); DSpark spekülatif kod çözme (k=5), 300K bağlam, Engram tablosu bellekte."
+    nl: "DeepSeek-V4.1-Flash (763B) op 8× DGX Spark: FP8-gewichten geserveerd met vLLM over acht nodes (TP8), met DSpark speculatieve decodering (k=5) en een context van 300K, de Engram-tabel in het geheugen."
+
+- date: 2026-09-17
+  type: benchmarks
+  run: deepseek-v4.1-flash_8spark_fp8_vllm_tp8_1m
+  text:
+    en: "DeepSeek-V4.1-Flash (763B) on 8× DGX Spark: the same TP8 setup with a 1M-token context, the Engram table moved to disk."
+    tr: "DeepSeek-V4.1-Flash (763B), 8× DGX Spark üzerinde: aynı TP8 kurulumu 1M token bağlamla; Engram tablosu diske taşındı."
+    nl: "DeepSeek-V4.1-Flash (763B) op 8× DGX Spark: dezelfde TP8-opstelling met een context van 1M tokens, de Engram-tabel verplaatst naar schijf."
+
+- date: 2026-09-16
+  type: paper
+  page: deepseek-v4.1-flash-4spark-deployment
+  text:
+    en: "Deployment of DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) on 4× NVIDIA DGX Spark (GB10) with tensor parallelism: vLLM build chain, 7 SM 12.1a patches, Engram-on-disk, benchmark results and B300 comparison."
+    tr: "DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) modelinin 4× NVIDIA DGX Spark (GB10) üzerinde tensor-parallel dağıtımı: vLLM build zinciri, 7 SM 12.1a patch'i, Engram-on-disk, benchmark sonuçları ve B300 karşılaştırması."
+    nl: "Deployment van DeepSeek-V4.1-Flash (763B MoE, FP8, DSpark k=5) op 4× NVIDIA DGX Spark (GB10) met tensorparallellisme: vLLM-buildketen, 7 patches voor SM 12.1a, Engram-on-disk, benchmarkresultaten en vergelijking met B300."
+
+- date: 2026-09-16
+  type: benchmarks
+  run: deepseek-v4.1-flash_4spark_fp8_vllm_tp4
+  text:
+    en: "DeepSeek-V4.1-Flash (763B) on 4× DGX Spark: FP8 weights served with vLLM across four nodes (TP4), with DSpark speculative decoding (k=5) and a 300K context."
+    tr: "DeepSeek-V4.1-Flash (763B), 4× DGX Spark üzerinde: FP8 ağırlıklar vLLM ile dört düğüme dağıtıldı (TP4); DSpark spekülatif kod çözme (k=5), 300K bağlam."
+    nl: "DeepSeek-V4.1-Flash (763B) op 4× DGX Spark: FP8-gewichten geserveerd met vLLM over vier nodes (TP4), met DSpark speculatieve decodering (k=5) en een context van 300K."
+
+- date: 2026-09-16
+  type: cv
+  cv: gb10-peoplenet-int8
+  text:
+    en: "PeopleNet person detection (INT8, 960×544 input) on GB10 (DGX Spark): frames per second per camera, measured from 1 to 32 simultaneous cameras."
+    tr: "PeopleNet kişi algılama (INT8, 960×544 giriş), GB10 (DGX Spark) üzerinde: 1 ile 32 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "PeopleNet-persoonsdetectie (INT8, invoer 960×544) op GB10 (DGX Spark): frames per seconde per camera, gemeten van 1 tot 32 gelijktijdige camera's."
+
+- date: 2026-09-16
+  type: cv
+  cv: jetson-orin-nano-peoplenet-int8
+  text:
+    en: "PeopleNet person detection (INT8, 960×544 input) on Jetson Orin Nano: frames per second per camera, measured from 1 to 8 simultaneous cameras."
+    tr: "PeopleNet kişi algılama (INT8, 960×544 giriş), Jetson Orin Nano üzerinde: 1 ile 8 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "PeopleNet-persoonsdetectie (INT8, invoer 960×544) op Jetson Orin Nano: frames per seconde per camera, gemeten van 1 tot 8 gelijktijdige camera's."
+
+- date: 2026-09-16
+  type: cv
+  cv: rtx-3060-peoplenet-int8
+  text:
+    en: "PeopleNet person detection (INT8, 960×544 input) on RTX 3060: frames per second per camera, measured from 1 to 16 simultaneous cameras."
+    tr: "PeopleNet kişi algılama (INT8, 960×544 giriş), RTX 3060 üzerinde: 1 ile 16 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "PeopleNet-persoonsdetectie (INT8, invoer 960×544) op RTX 3060: frames per seconde per camera, gemeten van 1 tot 16 gelijktijdige camera's."
+
+- date: 2026-09-16
+  type: cv
+  cv: rtx-3090-peoplenet-int8
+  text:
+    en: "PeopleNet person detection (INT8, 960×544 input) on RTX 3090: frames per second per camera, measured from 1 to 30 simultaneous cameras."
+    tr: "PeopleNet kişi algılama (INT8, 960×544 giriş), RTX 3090 üzerinde: 1 ile 30 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "PeopleNet-persoonsdetectie (INT8, invoer 960×544) op RTX 3090: frames per seconde per camera, gemeten van 1 tot 30 gelijktijdige camera's."
+
+- date: 2026-09-16
+  type: cv
+  cv: rtx-3090-yolo11-n
+  text:
+    en: "YOLO11-N object detection (640×640 input) on RTX 3090: frames per second per camera, measured from 1 to 28 simultaneous cameras."
+    tr: "YOLO11-N nesne algılama (640×640 giriş), RTX 3090 üzerinde: 1 ile 28 arasında eşzamanlı kamerada kamera başına saniyedeki kare sayısı ölçüldü."
+    nl: "YOLO11-N-objectdetectie (invoer 640×640) op RTX 3090: frames per seconde per camera, gemeten van 1 tot 28 gelijktijdige camera's."
+
+- date: 2026-09-14
+  type: benchmarks
+  run: deepseek-v4.1-flash_b300_fp8_vllm_tp4
+  text:
+    en: "DeepSeek-V4.1-Flash (763B) on DGX B300: FP8 weights served with vLLM on four GPUs (TP4), with DSpark speculative decoding (k=3) and a 1M-token context."
+    tr: "DeepSeek-V4.1-Flash (763B), DGX B300 üzerinde: FP8 ağırlıklar vLLM ile dört GPU'da sunuldu (TP4); DSpark spekülatif kod çözme (k=3), 1M token bağlam."
+    nl: "DeepSeek-V4.1-Flash (763B) op DGX B300: FP8-gewichten geserveerd met vLLM op vier GPU's (TP4), met DSpark speculatieve decodering (k=3) en een context van 1M tokens."
+
+- date: 2026-09-14
+  type: benchmarks
+  run: tencent-hy4-preview_b300_bf16_vllm_tp8
+  text:
+    en: "Tencent-Hy4-preview (780B) on DGX B300: BF16 weights served with vLLM on all eight GPUs (TP8), with MTP speculative decoding (k=3) and a 512K context."
+    tr: "Tencent-Hy4-preview (780B), DGX B300 üzerinde: BF16 ağırlıklar vLLM ile sekiz GPU'nun tamamında sunuldu (TP8); MTP ile spekülatif kod çözme (k=3), 512K bağlam."
+    nl: "Tencent-Hy4-preview (780B) op DGX B300: BF16-gewichten geserveerd met vLLM op alle acht GPU's (TP8), met MTP voor speculatieve decodering (k=3) en een context van 512K."
+
+- date: 2026-09-14
+  type: benchmarks
+  run: deepseek-v4-flash-vision-exp_2spark_fp8_vllm_tp2
+  text:
+    en: "DeepSeek-V4-Flash-Vision-Exp (305B) on 2× DGX Spark: FP8 weights served with vLLM across both nodes (TP2), with DSpark speculative decoding (k=3) and a 131K context."
+    tr: "DeepSeek-V4-Flash-Vision-Exp (305B), 2× DGX Spark üzerinde: FP8 ağırlıklar vLLM ile iki düğüme dağıtıldı (TP2); DSpark spekülatif kod çözme (k=3), 131K bağlam."
+    nl: "DeepSeek-V4-Flash-Vision-Exp (305B) op 2× DGX Spark: FP8-gewichten geserveerd met vLLM over beide nodes (TP2), met DSpark speculatieve decodering (k=3) en een context van 131K."
+
+- date: 2026-09-04
+  type: benchmarks
+  run: glm-5.3_8spark_nvfp4_vllm_mtp4
+  text:
+    en: "GLM-5.3 (753B) on 8× DGX Spark: NVFP4 weights served with vLLM across eight nodes (TP8), with the model's built-in MTP speculative decoding (k=4) and a 256K context."
+    tr: "GLM-5.3 (753B), 8× DGX Spark üzerinde: NVFP4 ağırlıklar vLLM ile sekiz düğüme dağıtıldı (TP8); modelin yerleşik MTP'siyle spekülatif kod çözme (k=4), 256K bağlam."
+    nl: "GLM-5.3 (753B) op 8× DGX Spark: NVFP4-gewichten geserveerd met vLLM over acht nodes (TP8), met de ingebouwde MTP van het model voor speculatieve decodering (k=4) en een context van 256K."
+
+- date: 2026-09-04
+  type: benchmarks
+  run: muse-glimmer-30b_rtxpro6000_bf16_vllm_mtp
+  text:
+    en: "Muse-Glimmer-30B on a single RTX PRO 6000: BF16 weights served with vLLM, with DFlash speculative decoding through the model's native MTP (k=15)."
+    tr: "Muse-Glimmer-30B, tek bir RTX PRO 6000 üzerinde: BF16 ağırlıklar vLLM ile sunuldu; modelin yerleşik MTP'siyle DFlash spekülatif kod çözme (k=15)."
+    nl: "Muse-Glimmer-30B op één RTX PRO 6000: BF16-gewichten geserveerd met vLLM, met DFlash speculatieve decodering via de ingebouwde MTP van het model (k=15)."
+
+- date: 2026-09-01
+  type: benchmarks
+  run: glm-5.3_b300_default_sglang_tp4
+  text:
+    en: "GLM-5.3 (753B) on DGX B300: FP8 weights served with SGLang on four GPUs (TP4), with a 1M-token context."
+    tr: "GLM-5.3 (753B), DGX B300 üzerinde: FP8 ağırlıklar SGLang ile dört GPU'da sunuldu (TP4), 1M token bağlam."
+    nl: "GLM-5.3 (753B) op DGX B300: FP8-gewichten geserveerd met SGLang op vier GPU's (TP4), met een context van 1M tokens."
+
+- date: 2026-08-03
+  type: paper
+  page: b300-gb300-cluster-architecture
+  text:
+    en: "Technical comparison of two NVIDIA Blackwell Ultra architectures, DGX B300 and GB300 NVL72: system design, scaling approach, network fabric, power and cooling, and which workloads suit which platform."
+    tr: "NVIDIA Blackwell Ultra tabanlı iki mimarinin karşılaştırması, DGX B300 ve GB300 NVL72: sistem tasarımı, ölçekleme yaklaşımı, ağ mimarisi, güç ve soğutma, hangi iş yükünün hangi platforma uyduğu."
+    nl: "Technische vergelijking van twee NVIDIA Blackwell Ultra-architecturen, DGX B300 en GB300 NVL72: systeemontwerp, schaalaanpak, netwerkfabric, stroom en koeling, en welke workloads bij welk platform passen."
+
+- date: 2026-07-30
+  type: paper
+  page: kimi-k3-dgx-b300-inference-benchmark
+  text:
+    en: "Performance evaluation of Moonshot AI Kimi K3 (2.8T MoE, MXFP4) on NVIDIA DGX-B300 (8x Blackwell Ultra, TP=8): vLLM vs SGLang, direct vs DSpark speculative decoding, with SLO-driven capacity planning."
+    tr: "Moonshot AI Kimi K3 (2.8T MoE, MXFP4) modelinin NVIDIA DGX-B300 (8x Blackwell Ultra, TP=8) üzerinde performans değerlendirmesi: vLLM vs SGLang, direct vs DSpark speculative decoding, SLO temelli kapasite planlama."
+    nl: "Prestatie-evaluatie van Moonshot AI Kimi K3 (2.8T MoE, MXFP4) op NVIDIA DGX-B300 (8x Blackwell Ultra, TP=8): vLLM versus SGLang, direct versus DSpark speculatieve decodering, met capaciteitsplanning op basis van SLO's."
+
+- date: 2026-07-30
+  type: paper
+  page: dgx-spark-3node-cluster-setup
+  text:
+    en: "Ring (mesh) topology AI cluster setup with 3 NVIDIA DGX Spark nodes: management and compute networks, RoCEv2/RDMA, sparkrun configuration."
+    tr: "3 NVIDIA DGX Spark node'undan oluşan ring (mesh) topolojisine sahip AI cluster kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun yapılandırması."
+    nl: "Installatie van een AI-cluster in ringtopologie (mesh) met 3 NVIDIA DGX Spark-nodes: management- en compute-netwerk, RoCEv2/RDMA, sparkrun-configuratie."
+
+- date: 2026-07-30
+  type: paper
+  page: dgx-spark-2node-cluster-setup
+  text:
+    en: "Point-to-point topology AI cluster setup with 2 NVIDIA DGX Spark nodes: management and compute networks, RoCEv2/RDMA, sparkrun configuration."
+    tr: "2 NVIDIA DGX Spark node'undan oluşan point-to-point topolojisine sahip AI cluster kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun yapılandırması."
+    nl: "Installatie van een AI-cluster in point-to-point-topologie met 2 NVIDIA DGX Spark-nodes: management- en compute-netwerk, RoCEv2/RDMA, sparkrun-configuratie."
+
+- date: 2026-07-24
+  type: paper
+  page: dgx-spark-8node-cluster-setup
+  text:
+    en: "Switch-based AI cluster setup with 8 NVIDIA DGX Spark nodes over a MikroTik CRS804 with 200G breakout: management and compute networks, RoCEv2/RDMA, sparkrun and NAS."
+    tr: "200G breakout'lu MikroTik CRS804 üzerinden 8 NVIDIA DGX Spark node'u ile switch tabanlı AI cluster kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun ve NAS."
+    nl: "Installatie van een switchgebaseerd AI-cluster met 8 NVIDIA DGX Spark-nodes via een MikroTik CRS804 met 200G-breakout: management- en compute-netwerk, RoCEv2/RDMA, sparkrun en NAS."
+
+- date: 2026-07-24
+  type: paper
+  page: dgx-spark-4node-cluster-setup
+  text:
+    en: "Switch-based AI cluster setup with 4 NVIDIA DGX Spark nodes over a MikroTik CRS812: management and compute networks, RoCEv2/RDMA, sparkrun and NAS."
+    tr: "MikroTik CRS812 üzerinden 4 NVIDIA DGX Spark node'u ile switch tabanlı AI cluster kurulumu: management ve compute ağları, RoCEv2/RDMA, sparkrun ve NAS."
+    nl: "Installatie van een switchgebaseerd AI-cluster met 4 NVIDIA DGX Spark-nodes via een MikroTik CRS812: management- en compute-netwerk, RoCEv2/RDMA, sparkrun en NAS."
+
+- date: 2026-07-06
+  type: paper
+  page: qwen3.6-27b-dgx-spark-scaling
+  text:
+    en: "Multi-node scaling study of Qwen3.6-27B-NVFP4 on 1x, 2x, and 4x NVIDIA DGX Spark (GB10): tensor parallelism over 200GbE, SLO-driven capacity planning, and TP-vs-replication deployment guidance."
+    tr: "Qwen3.6-27B-NVFP4 modelinin 1x, 2x ve 4x NVIDIA DGX Spark (GB10) üzerinde multi-node ölçekleme çalışması: 200GbE üzerinden tensor parallelism, SLO temelli kapasite planlama ve TP-vs-replikasyon deployment rehberi."
+    nl: "Schalingsstudie over meerdere nodes van Qwen3.6-27B-NVFP4 op 1x, 2x en 4x NVIDIA DGX Spark (GB10): tensorparallellisme over 200GbE, capaciteitsplanning op basis van SLO's en advies voor de keuze tussen TP en replicatie bij deployment."
+
+- date: 2026-07-03
+  type: paper
+  page: qwen3.6-27b-dgx-spark-benchmark
+  text:
+    en: "Performance evaluation of the Qwen3.6-27B model on the NVIDIA DGX Spark (GB10) platform with FP8, FP8-MTP, AWQ-MTP, NVFP4, and NVFP4-MTP quantization variants."
+    tr: "Qwen3.6-27B modelinin NVIDIA DGX Spark (GB10) platformunda FP8, FP8-MTP, AWQ-MTP, NVFP4 ve NVFP4-MTP quantization varyantları ile performans değerlendirmesi."
+    nl: "Prestatie-evaluatie van het Qwen3.6-27B-model op het NVIDIA DGX Spark (GB10)-platform met de kwantisatievarianten FP8, FP8-MTP, AWQ-MTP, NVFP4 en NVFP4-MTP."
+
+- date: 2026-06-30
+  type: paper
+  page: local-llm-guide
+  text:
+    en: "End-to-end decision guide for local LLM usage: hardware (NVIDIA Jetson, RTX PRO, DGX Spark, DGX/HGX), model selection, software stack and scenario mapping."
+    tr: "Yerel (local) LLM kullanımı için uçtan uca karar rehberi: donanım (NVIDIA Jetson, RTX PRO, DGX Spark, DGX/HGX), model seçimi, yazılım stack ve senaryo eşlemesi."
+    nl: "Integrale beslisgids voor lokaal LLM-gebruik: hardware (NVIDIA Jetson, RTX PRO, DGX Spark, DGX/HGX), modelkeuze, softwarestack en koppeling aan scenario's."

@@ -41,6 +41,10 @@ permalink: /
 
 {% include paper-grid.html %}
 
+## Son değişiklikler
+
+{% include changelog.html limit=5 %}
+
 ## Uzmanlık Alanları
 
 <div class="expertise-grid" markdown="1">

@@ -6,8 +6,8 @@ description: Add a new white paper to whitepapers.openzeka.com, in English, Turk
 # Add a white paper
 
 Every paper exists **three times**: `papers/<slug>.md` (English, the source),
-`tr/papers/<slug>.md` (Turkish) and `nl/papers/<slug>.md` (Dutch). Four lists
-show the papers, and all four must pick the new one up correctly:
+`tr/papers/<slug>.md` (Turkish) and `nl/papers/<slug>.md` (Dutch). Five lists
+show the papers, and all five must pick the new one up correctly:
 
 | List | Ordered by | Automatic? |
 |---|---|---|
@@ -15,6 +15,7 @@ show the papers, and all four must pick the new one up correctly:
 | Sidebar under White Papers | `nav_order`, by topic | No — you choose the position |
 | Table on `/papers/` | same order as the sidebar | No — you add the row, in all three languages |
 | `README.md` "Research & Engineering Library" table (the GitHub front page) | same order as the sidebar | No — you add the row |
+| `/changelog/` and "Latest changes" on the home page | entries in `_data/changelog.yml`, newest first | No — you add the entry (step 6) |
 
 ## 1. Confirm the details with the user — before writing any file
 
@@ -210,6 +211,27 @@ Then look at it in a browser, all three languages:
 - `/papers/`, `/tr/papers/` and `/nl/papers/` — the row and the sidebar entry
   sit in the same place.
 - The paper page itself, in all three languages — images load, links work.
+
+### Changelog entry
+
+Add one entry at the top of `_data/changelog.yml` (newest first), dated the
+day the paper goes live:
+
+```yaml
+- date: 2026-10-05
+  type: paper
+  page: <page_id>           # links to the paper, with its title, in each language
+  text:
+    en: "<the paper's description>"
+    tr: "<its Turkish description>"
+    nl: "<its Dutch description>"
+```
+
+The text is normally the `description` of each language's page. Show it to the
+user and add it once they approve. Check with
+`python3 _tools/check_changelog.py`, and look at `/changelog/`, `/tr/changelog/`
+and `/nl/changelog/`: the paper is first, linked in each language. Revisions
+of an existing paper get no changelog entry.
 
 ## 7. Report back
 

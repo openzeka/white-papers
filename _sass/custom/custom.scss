@@ -699,3 +699,74 @@ a.bt-inline-help {
   font-size: 0.9rem;
   font-weight: 500;
 }
+
+// ===== Changelog (_includes/changelog.html) =====
+.oz-cl-list {
+  list-style: none;
+  margin: 0.5rem 0 1.5rem;
+  padding: 0;
+}
+.oz-cl-entry {
+  display: grid;
+  grid-template-columns: 7.5rem 9rem 1fr;
+  gap: 0.25rem 0.9rem;
+  align-items: baseline;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  margin: 0 !important;
+}
+.oz-cl-entry::before { content: none !important; }
+// The filter hides with the hidden attribute; display: grid above would
+// otherwise override it and nothing would disappear.
+.oz-cl-entry[hidden],
+.oz-cl-month[hidden] { display: none !important; }
+.oz-changelog--short .oz-cl-entry { grid-template-columns: 9.5rem 9rem 1fr; }
+.oz-cl-entry.is-target { background: rgba(118, 185, 0, 0.08); }
+.oz-cl-date {
+  font-size: 0.82rem;
+  color: #8a94a3;
+  white-space: nowrap;
+}
+.oz-cl-tag {
+  justify-self: start;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  color: var(--openzeka-green-darker);
+  background: rgba(118, 185, 0, 0.14);
+}
+.oz-cl-tag--benchmarks { color: #1d4f91; background: rgba(40, 110, 210, 0.12); }
+.oz-cl-tag--cv { color: #5b2f91; background: rgba(120, 60, 200, 0.12); }
+.oz-cl-body { line-height: 1.5; }
+.oz-cl-text { display: block; }
+.oz-cl-title { display: block; font-weight: 600; }
+.oz-cl-more { margin-top: -0.5rem; font-weight: 600; }
+.oz-cl-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1rem 0 0.5rem;
+}
+.oz-cl-filter {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: #fff;
+  color: var(--openzeka-ink);
+  cursor: pointer;
+}
+.oz-cl-filter.is-active {
+  border-color: var(--openzeka-green);
+  box-shadow: inset 0 0 0 1px var(--openzeka-green);
+}
+@media (max-width: 40rem) {
+  .oz-cl-entry { grid-template-columns: auto 1fr; }
+  .oz-cl-body { grid-column: 1 / -1; }
+}
