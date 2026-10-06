@@ -1,7 +1,7 @@
 ---
 title: DeepSeek-V4.1-Flash 4× DGX Spark Dağıtımı
 parent: White Papers
-nav_order: 10
+nav_order: 11
 lang: tr
 page_id: deepseek-v4.1-flash-4spark-deployment
 date: 2026-09-16 11:17:32 +0300

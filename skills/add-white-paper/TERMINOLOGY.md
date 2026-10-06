@@ -128,6 +128,22 @@ that language's technical writing keeps the English word; write it as shown
 | fine-tuning | fine-tuning | fine-tuning |
 | open-weight model | açık ağırlıklı model | open-weight model |
 | white paper | white paper | whitepaper |
+| typed decision | typed decision | typed decision |
+| calibration, calibrated | kalibrasyon, kalibre | kalibratie, gekalibreerd |
+| primitive (`noul` / `choice` / `score`) | primitif | primitief |
+| decision head | karar başlığı | besliskop |
+| ordinal level score / index | sıralı seviye indeksi | ordinale niveauscore |
+| rubric (level rubric) | rubrik | rubric |
+| option-order sensitivity | şık sırasına duyarlılık | gevoeligheid voor de optievolgorde |
+| flip rate | flip oranı | flippercentage |
+| smoke test / smoke set | smoke test / smoke seti | smoketest / smoketestset |
+| chain-of-thought | chain-of-thought | chain-of-thought |
+| wire format, adapter, shim | *(English)* | *(English)* |
+| calibration shim | kalibrasyon shim'i | kalibratieshim |
+| licence (model / component licence) | lisans | licentie |
+| ambiguous sentence; human-in-the-loop | belirsiz cümle; insan onayı | dubbelzinnige zin; mens in de lus |
+| label, expected label | etiket, beklenen etiket | label, verwacht label |
+| metric names (ECE, MAE, accuracy, flip, p50/p95) | *(English)* | *(English)* |
 
 ### More Dutch terms
 

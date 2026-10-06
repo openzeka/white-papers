@@ -1,7 +1,7 @@
 ---
 title: DeepSeek-V4.1-Flash-deployment op 8× DGX Spark met TP8
 parent: White Papers
-nav_order: 11
+nav_order: 12
 lang: nl
 page_id: deepseek-v4.1-flash-8spark-deployment
 date: 2026-09-17 08:34:11 +0300

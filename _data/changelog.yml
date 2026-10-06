@@ -16,6 +16,14 @@
 
 - date: 2026-10-06
   type: paper
+  page: jev-open-weight-alternatives
+  text:
+    en: "Six open-weight typed-decision models compared on one NVIDIA DGX Spark (GB10) through a shared state + questions interface and one 25-question set: accuracy, calibration, option-order sensitivity and latency — and which model fits which job."
+    tr: "Altı açık ağırlıklı typed-decision modeli, tek bir NVIDIA DGX Spark (GB10) üzerinde ortak bir state + questions arayüzü ve 25 soruluk tek bir setle karşılaştırıldı: doğruluk, kalibrasyon, şık sırasına duyarlılık ve gecikme — ve hangi işe hangi modelin uyduğu."
+    nl: "Zes open-weight typed-decision-modellen, vergeleken op één NVIDIA DGX Spark (GB10) via één gedeelde state + questions-interface en één set van 25 vragen: nauwkeurigheid, kalibratie, gevoeligheid voor de optievolgorde en latentie — plus welk model bij welke taak past."
+
+- date: 2026-10-06
+  type: paper
   page: vlm-inference-benchmarks
   text:
     en: "Explore vision-language model inference benchmarks on RTX PRO 6000 Blackwell, Jetson AGX Orin and Jetson Orin NX. Pick the image size, set how long a camera may wait for its answer, and see how many cameras each configuration keeps up with."

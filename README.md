@@ -26,6 +26,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [DGX Spark 8-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-setup/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 8× NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Benchmark](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/) | LLM quantization comparison: FP8, AWQ, NVFP4 and MTP | NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Cluster Scaling](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-scaling/) | Multi-node scaling (TP1/TP2/TP4) and SLO-driven capacity planning | 1× / 2× / 4× NVIDIA DGX Spark (GB10) |
+| [The First Open-Weight Alternatives to Jev](https://whitepapers.openzeka.com/papers/jev-open-weight-alternatives/) | Six open-weight typed-decision models compared: accuracy, calibration, option-order sensitivity and latency | NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 4× DGX Spark Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/) | 763B MoE model with TP4: vLLM build chain, SM121 patches, Engram-on-disk, DSpark speculative decoding | 4× NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 8× DGX Spark TP8 Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-8spark-deployment/) | 763B MoE model with TP8: 300K Engram-in-memory vs 1M Engram-on-disk, NCCL optimization, TP4 comparison | 8× NVIDIA DGX Spark (GB10) |
 | [Kimi K3 Inference Benchmark on DGX-B300](https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/) | vLLM vs SGLang and direct vs speculative decoding | NVIDIA DGX-B300, 8× Blackwell Ultra, TP=8 |
@@ -249,6 +250,29 @@ papers/qwen3.6-27b-dgx-spark-benchmark/
 ```
 
 **[Read the Qwen3.6-27B DGX Spark benchmark →](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/)**
+
+---
+
+## The First Open-Weight Alternatives to Jev
+
+**Six typed-decision models · One shared `state + questions` interface · 25 questions · NVIDIA DGX Spark (GB10)**
+
+A typed-decision model does not chat: it answers a fixed set of questions about
+a `state` with calibrated probabilities in a single forward pass — no
+chain-of-thought, no free text to parse. TypeSafe Jev is the closed reference;
+this paper measures where the first open-weight models that follow the same
+approach currently stand.
+
+Six of them were run head-to-head on one NVIDIA DGX Spark behind one adapter
+(`predict(state, questions)`) and one 25-question set: 10 `noul`, 10 `choice`,
+5 `score`. `openjev` (27B) finishes 20/20 with the best calibration (ECE 0.008)
+but carries a CC BY-NC licence; `NeoHorse-Jev-4B` matches that accuracy at 44 ms
+under Apache 2.0 with a ready-made runtime; `Jev-Omni` is the only open-weight
+multimodal option. Two patterns hold across every model: `score` is the weakest
+primitive everywhere, and the models that fail a deliberately ambiguous question
+fail it in exactly the same way.
+
+**[Read the typed-decision model comparison →](https://whitepapers.openzeka.com/papers/jev-open-weight-alternatives/)**
 
 ---
 
