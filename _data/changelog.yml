@@ -16,6 +16,14 @@
 
 - date: 2026-10-08
   type: benchmarks
+  run: glm-5.3-flash_4spark_fp8_sglang
+  text:
+    en: "GLM-5.3-Flash (321B) on 4× DGX Spark: FP8 weights served with SGLang across four nodes (TP4), with DFlash speculative decoding (k=7) and a 256K context."
+    tr: "GLM-5.3-Flash (321B), 4× DGX Spark üzerinde: FP8 ağırlıklar SGLang ile dört düğüme dağıtıldı (TP4); DFlash spekülatif kod çözme (k=7), 256K bağlam."
+    nl: "GLM-5.3-Flash (321B) op 4× DGX Spark: FP8-gewichten geserveerd met SGLang over vier nodes (TP4), met DFlash speculatieve decodering (k=7) en een context van 256K."
+
+- date: 2026-10-08
+  type: benchmarks
   run: mimo-v2.6-pro-rl_8spark_fp4_sglang
   text:
     en: "MiMo-V2.6-Pro-RL (1.02T) on 8× DGX Spark: FP4 weights served with SGLang across eight nodes (TP8), with DFlash speculative decoding (k=7) and a 256K context."

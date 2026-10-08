@@ -318,6 +318,11 @@
           "id": "mimo-v2.6-flash-rl_4spark_fp4_vllm_500k",
           "model": "MiMo-V2.6-Flash-RL",
           "path": "4x-dgx-spark/mimo-v2.6-flash-rl_4spark_fp4_vllm_500k.json"
+        },
+        {
+          "id": "glm-5.3-flash_4spark_fp8_sglang",
+          "model": "GLM-5.3-Flash",
+          "path": "4x-dgx-spark/glm-5.3-flash_4spark_fp8_sglang.json"
         }
       ]
     },
