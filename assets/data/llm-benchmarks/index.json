@@ -365,6 +365,11 @@
           "id": "deepseek-v4.1-flash_8spark_fp8_vllm_tp8_1m",
           "model": "DeepSeek-V4.1-Flash",
           "path": "8x-dgx-spark/deepseek-v4.1-flash_8spark_fp8_vllm_tp8_1m.json"
+        },
+        {
+          "id": "mimo-v2.6-pro-rl_8spark_fp4_sglang",
+          "model": "MiMo-V2.6-Pro-RL",
+          "path": "8x-dgx-spark/mimo-v2.6-pro-rl_8spark_fp4_sglang.json"
         }
       ]
     },

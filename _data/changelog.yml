@@ -14,6 +14,14 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-10-08
+  type: benchmarks
+  run: mimo-v2.6-pro-rl_8spark_fp4_sglang
+  text:
+    en: "MiMo-V2.6-Pro-RL (1.02T) on 8× DGX Spark: FP4 weights served with SGLang across eight nodes (TP8), with DFlash speculative decoding (k=7) and a 256K context."
+    tr: "MiMo-V2.6-Pro-RL (1.02T), 8× DGX Spark üzerinde: FP4 ağırlıklar SGLang ile sekiz düğüme dağıtıldı (TP8); DFlash spekülatif kod çözme (k=7), 256K bağlam."
+    nl: "MiMo-V2.6-Pro-RL (1.02T) op 8× DGX Spark: FP4-gewichten geserveerd met SGLang over acht nodes (TP8), met DFlash speculatieve decodering (k=7) en een context van 256K."
+
 - date: 2026-10-07
   type: paper
   page: device-advisor
