@@ -1,6 +1,6 @@
 ---
 title: Changelog
-nav_order: 7
+nav_order: 8
 lang: en
 page_id: changelog
 description: >-

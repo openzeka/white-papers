@@ -14,6 +14,14 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-10-07
+  type: paper
+  page: device-advisor
+  text:
+    en: "Describe your cameras and pick a vision-language model: the page names the smallest measured device that answers every camera within your target, then plays the resulting stream back as a live timeline — how often each camera is answered, and how many of its frames the model ever sees."
+    tr: "Kameralarınızı tarif edin ve bir görüntü-dil modeli seçin: sayfa, her kamerayı hedefinizin içinde yanıtlayan en küçük ölçülmüş cihazı söyler, sonra ortaya çıkan akışı canlı bir zaman çizgisinde oynatır — her kamera ne sıklıkla yanıt alıyor ve yakaladığı karelerin kaçını model görüyor."
+    nl: "Beschrijf uw camera's en kies een vision-languagemodel: de pagina noemt het kleinste gemeten apparaat dat elke camera binnen uw doel antwoordt, en speelt de resulterende stroom daarna af als een live tijdlijn — hoe vaak elke camera antwoord krijgt en hoeveel van haar frames het model ooit ziet."
+
 - date: 2026-10-06
   type: benchmarks
   run: qwen3.8-27b_rtxpro6000_nvfp4_vllm

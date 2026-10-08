@@ -33,6 +33,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [LLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/llm-inference-benchmarks/) | Interactive table of every LLM configuration we have measured: filter, set your own latency and speed targets, read the supported concurrency and estimated user capacity | DGX Spark (1–8 nodes), DGX B300, RTX PRO 6000, Jetson Thor |
 | [CV Inference Benchmark Explorer](https://whitepapers.openzeka.com/cv-inference-benchmarks/) | Interactive computer-vision benchmark: sustained FPS per device and model, and how many cameras it carries at your target FPS | DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060, RTX 3090 |
 | [VLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/vlm-inference-benchmarks/) | Interactive vision-language model benchmark: how many cameras each configuration keeps up with at your target response time, by image size | RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB, Jetson Orin NX 16GB |
+| [Device Advisor](https://whitepapers.openzeka.com/device-advisor/) | Describe your cameras and pick a vision-language model: the smallest measured device that keeps up, and the resulting stream played back as a live timeline | RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB, Jetson Orin NX 16GB |
 
 ---
 
@@ -129,6 +130,26 @@ Jetson AGX Orin 32GB and Jetson Orin NX 16GB, with one to five images per reques
 480p to 2K.
 
 **[Open the VLM Inference Benchmark Explorer →](https://whitepapers.openzeka.com/vlm-inference-benchmarks/)**
+
+---
+
+## Device Advisor
+
+**Which device should I buy, and what will the stream actually look like?**
+
+The question the VLM explorer answers one row at a time, asked the other way
+round. Say how many cameras you have, how large their images are and which
+vision-language model you want to run; the page names the smallest device we
+have measured that answers every camera within your target, and then plays that
+answer back as a timeline — one lane per camera, a band for every request, and
+the frames piling up in between.
+
+It reads the same measurements as the VLM explorer, so nothing new is published
+for it: a figure between two measured camera counts is interpolated and marked
+as such, and nothing is extrapolated past the highest count a configuration was
+tested at. The timeline is a projection, not a running system.
+
+**[Open the Device Advisor →](https://whitepapers.openzeka.com/device-advisor/)**
 
 ---
 

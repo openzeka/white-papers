@@ -1,0 +1,580 @@
+/* ── Device Advisor — da- prefixed, self-contained ──
+   Two halves that share this file because they share a palette:
+
+     .da-panel   the question (model, image size, cameras) and the answer
+                 (ranked devices, the headline numbers). Built on the same
+                 --bt-* tokens as the benchmark explorers so the three pages
+                 read as one family.
+
+     .da-stage   the timeline, lifted from the Cordatus watch-room monitor
+                 (custom_engine_vlm/monitor). It keeps that screen's own token
+                 names (--panel, --ink, --rule …) rather than being rewritten
+                 onto --bt-*, so a fix made in either place still transplants
+                 across without a rename pass. The values are the site's.
+
+   Light only: the site ships one colour scheme, and the monitor's dark palette
+   on a white docs page would read as a bug rather than a theme. */
+
+:root {
+  --da-green: #76b900;
+  --da-green-dark: #5a8c00;
+  --da-border: #e3e6ea;
+  --da-bg: #ffffff;
+  --da-bg-alt: #f6f8fa;
+  --da-text: #1a1a1a;
+  --da-muted: #525f7a;
+  --da-faint: #8b93a1;
+  --da-radius: 6px;
+  --da-ok: #2f7d4f;
+  --da-ok-bg: #eaf6ee;
+  --da-warn: #a8631a;
+  --da-warn-bg: #fdf3e6;
+  --da-bad: #b3261e;
+  --da-bad-bg: #fbeceb;
+  --da-mono: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", Consolas, monospace;
+}
+
+.da-container {
+  font-family: inherit;
+  color: var(--da-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.da-loading, .da-error {
+  padding: 18px;
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius);
+  background: var(--da-bg-alt);
+  color: var(--da-muted);
+}
+.da-error { color: var(--da-bad); background: var(--da-bad-bg); border-color: var(--da-bad); }
+
+/* ─────────────────────────── the question ─────────────────────────── */
+
+.da-panel {
+  background: var(--da-bg-alt);
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius);
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.da-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--da-border);
+}
+.da-row:first-child { padding-top: 0; }
+.da-row:last-child { padding-bottom: 0; border-bottom: none; }
+
+.da-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--da-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 6px;
+  min-width: 108px;
+  flex: 0 0 auto;
+}
+
+.da-field { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; flex: 1 1 320px; min-width: 0; }
+
+.da-select {
+  padding: 6px 10px;
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius);
+  background: var(--da-bg);
+  color: var(--da-text);
+  font-family: inherit;
+  font-size: 13.5px;
+  max-width: 100%;
+}
+.da-select:focus-visible { outline: 2px solid var(--da-green); outline-offset: 1px; }
+
+.da-btn {
+  padding: 5px 12px;
+  border: 1px solid var(--da-border);
+  border-radius: var(--da-radius);
+  background: var(--da-bg);
+  color: var(--da-text);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.da-btn:hover { border-color: var(--da-green); }
+.da-btn.da-active { background: var(--da-green); border-color: var(--da-green); color: #fff; font-weight: 600; }
+/* A choice no run measured at the current selection: still clickable (picking
+   it tells you what it costs you), visibly empty. */
+.da-btn.da-na:not(.da-active) { opacity: .45; border-style: dashed; }
+
+.da-cams { display: flex; align-items: center; gap: 12px; flex: 1 1 260px; min-width: 200px; }
+.da-cams input[type="range"] { flex: 1 1 auto; min-width: 120px; accent-color: var(--da-green); }
+.da-cams-value {
+  font-family: var(--da-mono);
+  font-size: 15px;
+  font-weight: 700;
+  min-width: 2.5ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.da-note {
+  flex: 1 1 100%;
+  font-size: 12px;
+  color: var(--da-muted);
+  margin: 2px 0 0;
+}
+
+/* The unit after a number input. Not .da-note: that one takes a whole row, so
+   "s" and "FPS" were wrapping underneath the field they belong to. */
+.da-unit { flex: 0 0 auto; font-size: 12.5px; color: var(--da-muted); }
+.da-note.da-note-warn { color: var(--da-warn); }
+
+.da-adv-toggle {
+  background: none; border: none; padding: 0;
+  font: inherit; font-size: 12.5px; color: var(--da-muted);
+  cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;
+}
+.da-adv-toggle:hover { color: var(--da-text); }
+.da-adv[hidden] { display: none; }
+
+.da-num {
+  width: 72px; padding: 5px 8px;
+  border: 1px solid var(--da-border); border-radius: var(--da-radius);
+  background: var(--da-bg); color: var(--da-text);
+  font-family: var(--da-mono); font-size: 13px;
+}
+
+/* ─────────────────────────── the answer ─────────────────────────── */
+
+.da-verdict {
+  border: 1px solid var(--da-border);
+  border-left: 4px solid var(--da-green);
+  border-radius: var(--da-radius);
+  background: var(--da-bg);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+.da-verdict[data-ok="0"] { border-left-color: var(--da-bad); }
+
+.da-verdict-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px;
+  margin-bottom: 4px;
+}
+.da-verdict-kicker {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--da-muted);
+}
+.da-verdict-device { font-size: 19px; font-weight: 700; letter-spacing: -.01em; }
+.da-verdict-spec { font-family: var(--da-mono); font-size: 12px; color: var(--da-muted); }
+.da-verdict-line { font-size: 13.5px; color: var(--da-muted); margin: 0 0 12px; }
+
+/* The headline numbers — the whole point of the page: what this configuration
+   actually delivers per camera and in total. */
+.da-stats { display: flex; flex-wrap: wrap; gap: 10px; }
+.da-stat {
+  flex: 1 1 140px; min-width: 128px;
+  border: 1px solid var(--da-border); border-radius: var(--da-radius);
+  background: var(--da-bg-alt); padding: 9px 12px;
+}
+.da-stat-k {
+  display: block; font-size: 10px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--da-muted); margin-bottom: 3px;
+}
+.da-stat-v {
+  display: block; font-family: var(--da-mono); font-size: 17px; font-weight: 700;
+  font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+}
+.da-stat-sub { display: block; font-size: 11px; color: var(--da-faint); margin-top: 2px; }
+.da-stat[data-tone="ok"] { border-color: color-mix(in srgb, var(--da-ok) 45%, var(--da-border)); background: var(--da-ok-bg); }
+.da-stat[data-tone="ok"] .da-stat-v { color: var(--da-ok); }
+.da-stat[data-tone="bad"] { border-color: color-mix(in srgb, var(--da-bad) 45%, var(--da-border)); background: var(--da-bad-bg); }
+.da-stat[data-tone="bad"] .da-stat-v { color: var(--da-bad); }
+
+/* ── the ranked devices ── */
+
+.da-devices-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 8px; margin: 0 0 8px;
+}
+.da-devices-title { font-size: 13px; font-weight: 700; }
+.da-devices-hint { font-size: 12px; color: var(--da-muted); }
+
+.da-devices { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+
+.da-device {
+  flex: 1 1 215px; min-width: 200px; text-align: left;
+  border: 1px solid var(--da-border); border-radius: var(--da-radius);
+  background: var(--da-bg); padding: 11px 13px;
+  font: inherit; color: inherit; cursor: pointer;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.da-device:hover { border-color: var(--da-green); }
+.da-device[aria-pressed="true"] {
+  border-color: var(--da-green); border-width: 2px; padding: 10px 12px;
+  background: color-mix(in srgb, var(--da-green) 7%, var(--da-bg));
+}
+.da-device-name { font-size: 14px; font-weight: 700; display: flex; align-items: baseline; gap: 7px; }
+.da-device-rank {
+  font-family: var(--da-mono); font-size: 10.5px; font-weight: 700;
+  color: var(--da-faint); flex: none;
+}
+.da-device-spec { font-family: var(--da-mono); font-size: 11px; color: var(--da-muted); }
+.da-device-figure {
+  font-family: var(--da-mono); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.da-device[data-pass="1"] .da-device-figure { color: var(--da-ok); }
+.da-device[data-pass="0"] .da-device-figure { color: var(--da-bad); }
+.da-device-why { font-size: 11.5px; color: var(--da-muted); }
+
+.da-tag {
+  display: inline-block; font-family: var(--da-mono); font-size: 9.5px; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase; padding: 1px 5px; border-radius: 100px;
+  border: 1px solid currentColor;
+}
+.da-tag-est { color: var(--da-warn); }
+.da-tag-best { color: var(--da-green-dark); }
+
+.da-empty {
+  padding: 14px 16px; border: 1px dashed var(--da-border); border-radius: var(--da-radius);
+  color: var(--da-muted); background: var(--da-bg-alt);
+}
+
+/* ════════════════════ the timeline ════════════════════
+   From here down the rules are the watch-room monitor's, with its token names
+   kept. Scoped under .da-stage so nothing leaks onto the rest of the page. */
+
+.da-stage {
+  --panel: #ffffff;
+  --panel-2: #f6f8fa;
+  --ink: #1a1a1a;
+  --ink-dim: #525f7a;
+  --ink-faint: #8b93a1;
+  --border: #e3e6ea;
+  --border-strong: #c9cfd9;
+  --rule: #5a8c00;
+  --ok-fill: #76b900;
+  --late-fill: #d9662b;
+  --font-mono: var(--da-mono);
+
+  border: 1px solid var(--border);
+  border-radius: var(--da-radius);
+  background: var(--panel);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* A card that grows with the lanes it has — resetSim() caps the lane area
+     at eight lanes' worth and lets it scroll past that, so the stage is never
+     taller than its content and never taller than the screen. Fullscreen
+     overrides this with the app shell's own full height. */
+  height: auto;
+}
+.da-stage .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* In the page the stage is a card of fixed height; fullscreen it becomes the
+   app shell the monitor was written as. */
+.da-stage:fullscreen {
+  border-radius: 0; border: none; height: 100vh;
+  padding: 14px clamp(12px, 2.4vw, 28px);
+  background: var(--panel-2);
+}
+
+.da-stage-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--panel-2);
+  flex: none;
+}
+.da-stage-title { font-size: 13px; font-weight: 700; margin-right: auto; }
+.da-stage-title .da-stage-sub { font-weight: 400; color: var(--ink-dim); font-size: 12px; margin-left: 8px; }
+
+.da-ctl {
+  font-family: inherit; font-size: 12.5px; font-weight: 600;
+  color: var(--ink); background: var(--panel); border: 1px solid var(--border-strong);
+  padding: 6px 11px; border-radius: 7px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 7px; flex: none;
+}
+.da-ctl:hover { border-color: var(--rule); }
+.da-ctl:focus-visible { outline: 2px solid var(--rule); outline-offset: 2px; }
+.da-ctl .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok-fill); flex: none; }
+.da-ctl[data-paused="true"] .dot { background: var(--late-fill); }
+.da-ctl[data-on="0"] { color: var(--ink-faint); }
+.da-ctl[data-on="0"] .dot { background: var(--ink-faint); }
+/* Fixed width over the longest of the en/tr/nl labels, so the header row does
+   not reflow when the button toggles. */
+.da-stage .da-pause-label { display: inline-block; min-width: 8ch; }
+
+.da-zoom { display: flex; align-items: center; border: 1px solid var(--border-strong); border-radius: 7px; overflow: hidden; flex: none; }
+.da-zoom button {
+  font-family: var(--font-mono); font-size: 16px; font-weight: 700; line-height: 1; color: var(--ink);
+  background: var(--panel); border: none; width: 32px; height: 32px; cursor: pointer;
+}
+.da-zoom button:hover { background: var(--panel-2); }
+.da-zoom button:disabled { color: var(--ink-faint); cursor: default; }
+.da-zoom .da-zoom-label {
+  font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); width: 62px; text-align: center;
+  height: 32px; display: flex; align-items: center; justify-content: center;
+  background: var(--panel-2); border-left: 1px solid var(--border-strong); border-right: 1px solid var(--border-strong);
+}
+
+.da-health { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; padding: 9px 14px 10px; flex: none; }
+.da-hchip {
+  display: inline-flex; align-items: baseline; gap: 7px;
+  padding: 4px 10px; border: 1px solid var(--border); border-radius: 100px;
+  background: var(--panel); white-space: nowrap;
+}
+.da-hchip .k { font-size: 9.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-faint); }
+.da-hchip .v { font-family: var(--font-mono); font-size: 12.5px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+.da-hchip[data-tone="ok"] { border-color: color-mix(in srgb, var(--ok-fill) 50%, var(--border)); }
+.da-hchip[data-tone="ok"] .v { color: var(--rule); }
+.da-hchip[data-tone="late"] { border-color: color-mix(in srgb, var(--late-fill) 55%, var(--border)); }
+.da-hchip[data-tone="late"] .v { color: var(--late-fill); }
+
+.da-legend {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 7px 18px;
+  margin: 0 14px 10px; padding: 8px 11px;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--panel-2);
+  font-size: 12px; color: var(--ink-dim);
+}
+.da-legend .item { display: flex; align-items: center; gap: 8px; }
+.da-legend-label {
+  font-family: var(--font-mono); font-size: 9px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
+}
+.da-swatch { width: 34px; height: 22px; border-radius: 6px; flex: none; }
+.da-swatch.is-active { background: color-mix(in srgb, var(--ok-fill) 34%, transparent); border: 1.5px solid color-mix(in srgb, var(--ok-fill) 80%, transparent); }
+.da-swatch.is-writing { background: color-mix(in srgb, var(--ok-fill) 9%, transparent); border: 1.5px solid color-mix(in srgb, var(--ok-fill) 80%, transparent); }
+.da-swatch.is-done { background: color-mix(in srgb, var(--ink-faint) 12%, transparent); border: 1px dashed color-mix(in srgb, var(--ink-faint) 48%, transparent); }
+.da-swatch.is-late { background: color-mix(in srgb, var(--late-fill) 24%, transparent); border: 1.5px solid var(--late-fill); }
+.da-swatch.is-collect { height: 16px; background: color-mix(in srgb, var(--ink-dim) 16%, transparent); border: 1px dashed color-mix(in srgb, var(--ink-dim) 55%, transparent); }
+.da-legend-arrow { width: 34px; height: 22px; flex: none; color: var(--ink-dim); }
+.da-legend-arrow svg { display: block; width: 100%; height: 100%; }
+
+/* ── the timeline proper ── */
+
+.da-shell { position: relative; display: flex; flex: 1 1 auto; min-height: 0; border-top: 1px solid var(--border); }
+.da-timeline { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; }
+
+.da-lanes { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+.da-stage { --sidebar-w: 190px; --dock-w: 132px; }
+.da-row-grid { display: grid; grid-template-columns: var(--sidebar-w) 1fr; }
+
+.da-ruler { border-bottom: 1px solid var(--border); background: var(--panel-2); }
+.da-ruler-gutter { display: flex; align-items: center; padding: 0 14px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); }
+.da-ruler-viewport { position: relative; height: 36px; overflow: hidden; contain: layout paint; }
+.da-ruler-track { position: absolute; top: 0; left: 0; height: 100%; will-change: transform; }
+.da-tick { position: absolute; bottom: 6px; display: flex; flex-direction: column; align-items: center; }
+.da-tick .bar { width: 1px; height: 6px; background: var(--border-strong); margin-bottom: 3px; }
+.da-tick .sec { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); transform: translateX(-50%); white-space: nowrap; }
+.da-tick.minute .bar { height: 9px; background: var(--ink-faint); }
+
+.da-now-line { position: absolute; right: 56px; top: 0; bottom: 0; width: 0; border-left: 2px solid var(--rule); z-index: 6; }
+.da-now-clock {
+  position: absolute; right: 56px; top: 3px; transform: translateX(50%);
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; color: #fff;
+  background: var(--rule); padding: 2px 6px; border-radius: 4px; white-space: nowrap; z-index: 7;
+  box-shadow: 0 0 0 3px var(--panel-2); font-variant-numeric: tabular-nums;
+}
+
+/* Sixteen lanes is taller than the card, so most are scrolled out of view at
+   any moment. content-visibility lets the browser skip rendering those rows;
+   contain-intrinsic-size keeps the scroll height stable while it does. */
+.da-lane { border-bottom: 1px solid var(--border); content-visibility: auto; contain-intrinsic-size: auto 66px; }
+.da-lane:last-child { border-bottom: none; }
+.da-lane-sidebar {
+  padding: 6px 42px 6px 14px; display: flex; flex-direction: column; justify-content: center; gap: 2px;
+  border-right: 1px solid var(--border); background: var(--panel); min-width: 0; overflow: hidden;
+  position: relative;
+}
+.da-lane-name { font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.da-lane-meta { font-size: 11.5px; color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-mono); }
+/* One tag per sub-row, pinned at the same y as the row it names. The sidebar
+   and the viewport are two cells of one grid row, so they share a height and
+   these offsets line up with the geometry constants in the script. */
+.da-subrow-tag {
+  position: absolute; right: 8px; font-family: var(--font-mono); font-size: 8px;
+  font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--ink-faint); white-space: nowrap; opacity: .75;
+}
+.da-subrow-tag::before { content: ""; position: absolute; right: -9px; top: 50%; width: 6px; height: 1px; background: var(--border-strong); }
+.da-subrow-tag.is-vlm { top: 22px; }
+.da-subrow-tag.is-collect { top: 51px; }
+
+/* Two stacked sub-rows sharing one x-axis: batch N's processing and batch
+   N+1's collection genuinely happen over the same span of wall-clock time,
+   and that simultaneity is the reason they are two rows rather than one. */
+.da-lane-viewport { position: relative; height: 66px; overflow: hidden; contain: layout paint; }
+.da-lane-track { position: absolute; top: 0; left: 0; height: 100%; will-change: transform; }
+.da-culled { display: none !important; }
+.da-subrow-divider { position: absolute; left: 0; right: 0; top: 38px; border-top: 1px dashed var(--border); z-index: 0; }
+
+/* One band is one whole request, in two phases split at --wait-pct: the wait
+   for the first token on the left, the writing of the answer on the right. The
+   hard gradient stop is the boundary, and it is the instant the answer started
+   — the figure the stat panel leads with. The script moves it as the band grows,
+   so a band still being waited on is entirely the darker fill. */
+.da-band { position: absolute; top: 11px; height: 22px; border-radius: 6px; }
+/* Two layers: a hairline on the boundary, over the two fills. The line is what
+   makes "the answer started here" readable at a glance — the fills alone differ
+   too little to find without looking for them. While the band is still waiting
+   --wait-pct is 100% and the line sits under the right border, out of sight. */
+.da-band-wait {
+  background:
+    linear-gradient(to right,
+      transparent 0 calc(var(--wait-pct, 100%) - 1.5px),
+      color-mix(in srgb, var(--phase-color) 75%, transparent) calc(var(--wait-pct, 100%) - 1.5px) var(--wait-pct, 100%),
+      transparent var(--wait-pct, 100%) 100%),
+    linear-gradient(to right,
+      color-mix(in srgb, var(--phase-color) 34%, transparent) 0 var(--wait-pct, 100%),
+      color-mix(in srgb, var(--phase-color) 9%, transparent) var(--wait-pct, 100%) 100%);
+  border: 1.5px solid color-mix(in srgb, var(--phase-color) 80%, transparent);
+  animation: daBandLive 1.6s ease-in-out infinite;
+}
+.da-band-wait.da-band-done {
+  background:
+    linear-gradient(to right,
+      transparent 0 calc(var(--wait-pct, 100%) - 1px),
+      color-mix(in srgb, var(--phase-color) 45%, transparent) calc(var(--wait-pct, 100%) - 1px) var(--wait-pct, 100%),
+      transparent var(--wait-pct, 100%) 100%),
+    linear-gradient(to right,
+      color-mix(in srgb, var(--phase-color) 17%, transparent) 0 var(--wait-pct, 100%),
+      color-mix(in srgb, var(--phase-color) 4%, transparent) var(--wait-pct, 100%) 100%);
+  border: 1px dashed color-mix(in srgb, var(--phase-color) 42%, transparent);
+  animation: none;
+}
+/* Pulses on opacity rather than background-color: the fill is a gradient now,
+   and animating `background` would paint over the phase boundary. */
+@keyframes daBandLive {
+  0%, 100% { opacity: .8; }
+  50% { opacity: 1; }
+}
+
+/* The duration label has two homes, picked per band by placeTimer(): inside
+   the band where it fits, which is where you look anyway, and above it in the
+   small type where it does not. A band's pixel width follows its latency
+   rather than the zoom, so neighbouring bands can disagree about this. */
+.da-band-timer {
+  position: absolute; transform: translateX(-50%);
+  font-family: var(--font-mono); font-variant-numeric: tabular-nums;
+  pointer-events: none; white-space: nowrap; z-index: 3;
+}
+.da-band-timer[data-place="above"] {
+  top: 0; line-height: 10px; font-size: 9px; font-weight: 700; color: var(--ink-dim);
+}
+.da-band-timer[data-place="above"].is-done { color: var(--ink-faint); }
+/* Centred on the band's own vertical middle — the same 22px the batch icon and
+   the dispatch arrow's head are pinned to. */
+.da-band-timer[data-place="in"] {
+  top: 22px; transform: translate(-50%, -50%); line-height: 1;
+  font-size: 12.5px; font-weight: 800; letter-spacing: -0.015em; color: var(--ink);
+}
+.da-band-timer[data-place="in"].is-done { color: var(--ink-dim); }
+.da-band-timer[data-place="none"] { display: none; }
+
+/* Lower sub-row: the collection window. A region rather than a hairline, so
+   it carries the same visual weight as the band above it. The icons on it are
+   the frames actually picked for the batch out of everything captured. */
+.da-frame-track {
+  position: absolute; top: 42px; height: 17px; border-radius: 5px; z-index: 1;
+  background: color-mix(in srgb, var(--phase-color) 10%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--phase-color) 45%, transparent);
+}
+.da-frame-track.is-collecting {
+  background: color-mix(in srgb, var(--phase-color) 16%, transparent);
+  border-style: solid; animation: daCollectLive 1.6s ease-in-out infinite;
+}
+@keyframes daCollectLive {
+  0%, 100% { background: color-mix(in srgb, var(--phase-color) 12%, transparent); }
+  50% { background: color-mix(in srgb, var(--phase-color) 24%, transparent); }
+}
+
+/* The hand-off. An S-curve rather than a straight riser: it leaves the window
+   heading right, sweeps up, and enters the band heading right again, so the
+   arrowhead points INTO the band it feeds and both tangents run along the
+   direction time flows. */
+.da-arrow { position: absolute; top: 9px; width: 30px; height: 48px; z-index: 4; color: var(--phase-color); pointer-events: none; }
+.da-arrow svg { display: block; overflow: visible; }
+
+.da-frame-mini {
+  position: absolute; width: 14px; height: 14px; z-index: 2;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.15)); animation: daPopIn .22s ease-out;
+  transition: opacity .32s ease, filter .32s ease;
+}
+/* Already ridden the arrow up. It stays as a ghost rather than vanishing: the
+   window is a permanent record of which frames were picked out of it, and an
+   emptied one would read as "nothing was collected here". */
+.da-frame-mini.is-sent { opacity: .42; filter: none; }
+.da-frame-mini.is-bundle { animation: daBundleIn .34s ease-out both; }
+/* The only badge beside its icon instead of above-right: here it is the one
+   thing between the band and the latency readout above it, and vertical space
+   runs out first. Sideways it costs nothing — it grows into the band. */
+.da-frame-mini.is-bundle .da-icon-badge { top: 50%; right: auto; left: 100%; margin-left: 4px; transform: translateY(-50%); }
+@keyframes daBundleIn { from { opacity: 0; transform: scale(.72); } to { opacity: 1; transform: scale(1); } }
+.da-frame-mini svg { width: 100%; height: 100%; display: block; position: relative; z-index: 1; }
+@keyframes daPopIn { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+/* Several frames collapsed into one because they would otherwise overlap at
+   this zoom: two offset ghost cards read as "a stack", the badge says how many. */
+.da-frame-mini.is-group::before, .da-frame-mini.is-group::after {
+  content: ""; position: absolute; inset: 0; border-radius: 3px;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+}
+.da-frame-mini.is-group::before { transform: translate(2px,-2px); z-index: -1; }
+.da-frame-mini.is-group::after { transform: translate(4px,-4px); z-index: -2; }
+
+.da-icon-badge {
+  position: absolute; top: -7px; right: -9px; background: var(--panel); border: 1.5px solid currentColor;
+  border-radius: 100px; font-family: var(--font-mono); font-size: 9px; font-weight: 700; color: var(--ink);
+  padding: 0 4px; line-height: 12px; white-space: nowrap; z-index: 3;
+}
+
+/* ── docks ── */
+
+.da-dock {
+  width: var(--dock-w); flex: none; border-left: 1px solid var(--border); background: var(--panel-2);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: 6px; position: relative; padding-top: 52px;
+}
+.da-dock-chip {
+  width: 64px; height: 64px; border-radius: 13px; border: 2.5px solid var(--ink);
+  background: var(--panel); display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; color: var(--ink); position: relative; z-index: 2;
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.da-dock-chip svg { width: 28px; height: 28px; }
+.da-dock-name { font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); text-align: center; }
+.da-dock-state { font-size: 10.5px; font-weight: 600; color: var(--ink-faint); text-align: center; font-family: var(--font-mono); }
+.da-dock.active .da-dock-chip { border-color: var(--rule); animation: daEnginePulse 1.5s ease-in-out infinite; }
+.da-dock.active .da-dock-state { color: var(--rule); }
+@keyframes daEnginePulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--rule) 38%, transparent); }
+  50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--rule) 0%, transparent); }
+}
+.da-dock-chip.flash { border-color: var(--rule); animation: daClientFlash .55s ease-out; }
+@keyframes daClientFlash {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--rule) 45%, transparent); }
+  100% { box-shadow: 0 0 0 16px color-mix(in srgb, var(--rule) 0%, transparent); }
+}
+.da-pipes { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+.da-packets { position: fixed; inset: 0; pointer-events: none; z-index: 80; }
+.da-packet { position: fixed; left: 0; top: 0; }
+.da-packet svg { width: 100%; height: 100%; display: block; }
+
+/* Narrow screens: the docks are decorative, so they go first and the timeline
+   takes the full width. */
+@media (max-width: 1100px) { .da-dock, .da-pipes { display: none; } }
+@media (max-width: 760px) {
+  .da-stage { --sidebar-w: 130px; }
+  .da-lane-sidebar { padding-right: 20px; }
+  .da-subrow-tag { font-size: 0; right: 7px; }
+  .da-subrow-tag::before { right: -7px; width: 9px; }
+  .da-label { min-width: 100%; margin-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .da-band-wait, .da-frame-track.is-collecting, .da-dock.active .da-dock-chip { animation: none !important; }
+}

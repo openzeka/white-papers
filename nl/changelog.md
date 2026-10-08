@@ -1,6 +1,6 @@
 ---
 title: Wijzigingslogboek
-nav_order: 7
+nav_order: 8
 lang: nl
 page_id: changelog
 description: >-
