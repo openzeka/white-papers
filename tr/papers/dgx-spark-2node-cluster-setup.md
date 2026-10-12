@@ -1,7 +1,7 @@
 ---
 title: DGX Spark 2-Node AI Cluster Kurulum Rehberi
 parent: White Papers
-nav_order: 4
+nav_order: 5
 lang: tr
 page_id: dgx-spark-2node-cluster-setup
 date: 2026-07-30 08:21:43 +0300

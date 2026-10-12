@@ -14,6 +14,14 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-10-12
+  type: paper
+  page: llm-quantization-selection
+  text:
+    en: "Decision guide for LLM quantization: how workload, quantization format, GPU architecture and checkpoint reliability decide the choice — with the selection flow, frequent mistakes, case examples and a quick command reference."
+    tr: "LLM quantization için karar rehberi: iş yükü, quantization formatı, GPU mimarisi ve checkpoint güvenilirliği seçimi nasıl belirler — seçim akışı, sık yapılan hatalar, vaka örnekleri ve hızlı komut referansıyla."
+    nl: "Beslisgids voor LLM-kwantisatie: hoe workload, kwantisatieformaat, GPU-architectuur en betrouwbaarheid van checkpoints de keuze bepalen — met de keuzestroom, veelgemaakte fouten, voorbeelden en een snelle opdrachtenreferentie."
+
 - date: 2026-10-08
   type: benchmarks
   run: glm-5.3-flash_4spark_fp8_sglang

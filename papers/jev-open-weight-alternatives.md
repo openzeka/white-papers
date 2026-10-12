@@ -1,7 +1,7 @@
 ---
 title: The First Open-Weight Alternatives to Jev
 parent: White Papers
-nav_order: 10
+nav_order: 11
 lang: en
 page_id: jev-open-weight-alternatives
 date: 2026-10-06

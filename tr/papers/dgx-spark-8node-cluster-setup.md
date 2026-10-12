@@ -1,7 +1,7 @@
 ---
 title: DGX Spark 8-Node AI Cluster Kurulum Rehberi
 parent: White Papers
-nav_order: 7
+nav_order: 8
 lang: tr
 page_id: dgx-spark-8node-cluster-setup
 date: 2026-07-24 14:01:17 +0300

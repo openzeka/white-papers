@@ -18,6 +18,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | Title | Topic | Platform |
 |---|---|---|
 | [Local LLM Usage Guide](https://whitepapers.openzeka.com/papers/local-llm-guide/) | Hardware → model → software decision guide | Jetson, RTX PRO, DGX Spark, DGX/HGX |
+| [LLM Quantization Selection Guide](https://whitepapers.openzeka.com/papers/llm-quantization-selection/) | Quantization selection: workload × format × GPU architecture × checkpoint reliability, with the selection flow and case examples | NVIDIA Ampere → Blackwell (Jetson, RTX, DGX) |
 | [Engram Offloading in LLM Inference](https://whitepapers.openzeka.com/papers/conditional-memory-offloading/) | Large embedding tables read a few rows per token: offloading them to host RAM or NVMe, with measured results | DGX Spark, RTX PRO 6000; DGX B300 memory architecture |
 | [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](https://whitepapers.openzeka.com/papers/b300-gb300-cluster-architecture/) | Blackwell Ultra architecture comparison and workload-based platform selection | NVIDIA DGX B300 and GB300 NVL72 |
 | [DGX Spark 2-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-2node-cluster-setup/) | Point-to-point topology, RoCEv2/RDMA and sparkrun | 2× NVIDIA DGX Spark (GB10) |

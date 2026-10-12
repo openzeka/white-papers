@@ -1,7 +1,7 @@
 ---
 title: "NVIDIA DGX B300 vs GB300 NVL72: vergelijking van clusterarchitecturen"
 parent: White Papers
-nav_order: 3
+nav_order: 4
 lang: nl
 page_id: b300-gb300-cluster-architecture
 date: 2026-08-03 09:01:15 +0300

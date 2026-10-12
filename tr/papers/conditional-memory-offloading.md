@@ -1,7 +1,7 @@
 ---
 title: LLM Çıkarımında Engram Offloading
 parent: White Papers
-nav_order: 2
+nav_order: 3
 lang: tr
 page_id: conditional-memory-offloading
 date: 2026-09-29

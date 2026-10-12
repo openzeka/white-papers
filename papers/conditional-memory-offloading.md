@@ -1,7 +1,7 @@
 ---
 title: Engram Offloading in LLM Inference
 parent: White Papers
-nav_order: 2
+nav_order: 3
 lang: en
 page_id: conditional-memory-offloading
 date: 2026-09-29

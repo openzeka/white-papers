@@ -1,7 +1,7 @@
 ---
 title: Installatiehandleiding voor een DGX Spark AI-cluster met 8 nodes
 parent: White Papers
-nav_order: 7
+nav_order: 8
 lang: nl
 page_id: dgx-spark-8node-cluster-setup
 date: 2026-07-24 14:01:17 +0300

@@ -1,7 +1,7 @@
 ---
 title: Schaling van Qwen3.6-27B op een DGX Spark-cluster
 parent: White Papers
-nav_order: 9
+nav_order: 10
 lang: nl
 page_id: qwen3.6-27b-dgx-spark-scaling
 date: 2026-07-06 08:53:32 +0300

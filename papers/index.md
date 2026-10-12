@@ -15,6 +15,7 @@ The following technical white papers are published by {% include company/block.h
 | Title | Topic | Platform |
 | --- | --- | --- |
 | [Local LLM Usage Guide](local-llm-guide) | Hardware → model → software decision guide | Jetson, RTX PRO, DGX Spark, DGX/HGX |
+| [LLM Quantization Selection Guide](llm-quantization-selection) | Quantization selection: workload × format × GPU architecture × checkpoint reliability, with the selection flow and case examples | NVIDIA Ampere → Blackwell (Jetson, RTX, DGX) |
 | [Engram Offloading in LLM Inference](conditional-memory-offloading) | Large embedding tables read a few rows per token: offloading them to host RAM or NVMe, with measured results | DGX Spark, RTX PRO 6000; DGX B300 memory architecture |
 | [NVIDIA DGX B300 vs GB300 NVL72 Cluster Architecture Comparison](b300-gb300-cluster-architecture) | Technical comparison of two Blackwell Ultra architectures, workload-based platform selection guide | NVIDIA DGX B300, GB300 NVL72 (Blackwell Ultra) |
 | [DGX Spark 2-Node AI Cluster Setup Guide](dgx-spark-2node-cluster-setup) | Point-to-point topology cluster setup, RoCEv2/RDMA, sparkrun | 2x NVIDIA DGX Spark (GB10) |
