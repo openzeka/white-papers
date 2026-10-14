@@ -23,7 +23,8 @@ cihazlar arasından yetişebilen en küçüğünü söyler, sonra bu cevabı oyn
 kamera başına bir şerit, her istek için bir bant ve aralarda biriken kareler.
 
 Arkada çalışan bir sistem yok. Zaman çizgisi, bu sitede zaten yayımlanmış
-ölçümlerin gerçek zaman hızında çizilmiş bir izdüşümüdür.
+ölçümlerin gerçek zamanlı bir izdüşümüdür; üstündeki hız denetimi aynı zaman
+çizgisini 0,25× ile 4× arasında yavaşlatarak ya da hızlandırarak oynatır.
 
 <details class="bt-howto">
 <summary>Bu sayfa nasıl okunur</summary>

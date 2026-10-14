@@ -24,7 +24,8 @@ af: één baan per camera, een balk voor elk verzoek en de frames die zich
 daartussen opstapelen.
 
 Er draait niets achter. De tijdlijn is een projectie van metingen die al op
-deze site gepubliceerd zijn, getekend op kloksnelheid.
+deze site gepubliceerd zijn, getekend in realtime — en de snelheidsregelaar
+erboven speelt diezelfde tijdlijn langzamer of sneller af, van 0,25× tot 4×.
 
 <details class="bt-howto">
 <summary>Hoe u deze pagina leest</summary>

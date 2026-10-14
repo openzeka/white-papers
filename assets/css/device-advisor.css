@@ -308,15 +308,17 @@
    not reflow when the button toggles. */
 .da-stage .da-pause-label { display: inline-block; min-width: 8ch; }
 
-.da-zoom { display: flex; align-items: center; border: 1px solid var(--border-strong); border-radius: 7px; overflow: hidden; flex: none; }
-.da-zoom button {
+.da-speed { display: flex; align-items: center; border: 1px solid var(--border-strong); border-radius: 7px; overflow: hidden; flex: none; }
+.da-speed button {
   font-family: var(--font-mono); font-size: 16px; font-weight: 700; line-height: 1; color: var(--ink);
   background: var(--panel); border: none; width: 32px; height: 32px; cursor: pointer;
 }
-.da-zoom button:hover { background: var(--panel-2); }
-.da-zoom button:disabled { color: var(--ink-faint); cursor: default; }
-.da-zoom .da-zoom-label {
-  font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-dim); width: 62px; text-align: center;
+.da-speed button:hover { background: var(--panel-2); }
+.da-speed button:disabled { color: var(--ink-faint); cursor: default; }
+/* Wide enough for the longest rung ("0.25x") so the header does not reflow as
+   the reader steps through the speeds. */
+.da-speed .da-speed-label {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--ink); width: 58px; text-align: center;
   height: 32px; display: flex; align-items: center; justify-content: center;
   background: var(--panel-2); border-left: 1px solid var(--border-strong); border-right: 1px solid var(--border-strong);
 }
@@ -517,7 +519,7 @@
 .da-frame-mini svg { width: 100%; height: 100%; display: block; position: relative; z-index: 1; }
 @keyframes daPopIn { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 /* Several frames collapsed into one because they would otherwise overlap at
-   this zoom: two offset ghost cards read as "a stack", the badge says how many. */
+   this scale: two offset ghost cards read as "a stack", the badge says how many. */
 .da-frame-mini.is-group::before, .da-frame-mini.is-group::after {
   content: ""; position: absolute; inset: 0; border-radius: 3px;
   background: color-mix(in srgb, currentColor 14%, transparent);

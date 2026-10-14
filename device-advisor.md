@@ -23,7 +23,8 @@ device we have measured that keeps up, and then plays that answer back: one
 lane per camera, a band for every request, and the frames piling up in between.
 
 Nothing is running behind it. The timeline is a projection of measurements
-already published on this site, drawn at wall-clock speed.
+already published on this site, drawn in real time — and the speed control
+above it plays that same timeline back slower or faster, from 0.25× to 4×.
 
 <details class="bt-howto">
 <summary>How to read this page</summary>

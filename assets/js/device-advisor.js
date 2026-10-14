@@ -14,7 +14,8 @@
  *   timeline is the Cordatus watch-room monitor (custom_engine_vlm/monitor)
  *   with its event source replaced: instead of a live SSE feed it is driven by
  *   a scheduler built from the measurement. Nothing is running behind it — it
- *   is a projection of numbers already on this site, drawn at wall-clock speed.
+ *   is a projection of numbers already on this site, drawn in real time —
+ *   or at whatever multiple of it the speed control is set to.
  *
  * Unlike the explorers' three-file split, this file carries all three
  * languages in one I18N table. The timeline code it is built on already did,
@@ -88,6 +89,9 @@
       animLabel: "Animation",
       full: "Fullscreen",
       exitFull: "Exit fullscreen",
+      speedTitle: "Playback speed",
+      speedSlower: "Slower",
+      speedFaster: "Faster",
       colCamera: "Camera",
       camName: "Camera {n}",
       laneMeta: "{res} · {n}/req",
@@ -171,6 +175,9 @@
       animLabel: "Animasyon",
       full: "Tam ekran",
       exitFull: "Tam ekrandan çık",
+      speedTitle: "Oynatma hızı",
+      speedSlower: "Yavaşlat",
+      speedFaster: "Hızlandır",
       colCamera: "Kamera",
       camName: "Kamera {n}",
       laneMeta: "{res} · {n}/istek",
@@ -254,6 +261,9 @@
       animLabel: "Animatie",
       full: "Volledig scherm",
       exitFull: "Volledig scherm sluiten",
+      speedTitle: "Afspeelsnelheid",
+      speedSlower: "Langzamer",
+      speedFaster: "Sneller",
       colCamera: "Camera",
       camName: "Camera {n}",
       laneMeta: "{res} · {n}/verz.",
@@ -848,16 +858,38 @@
   var FRAME_SVG = '<svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/><circle cx="8" cy="10" r="1.6" fill="currentColor"/><path d="M4 17l5-5 3 3 4-4 4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var ANSWER_SVG = '<svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-4 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/><path d="M7 9h10M7 12.5h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
 
-  /* px per second. Geometric, and the starting rung is chosen per
+  /* px per simulated second. Geometric, and the rung is chosen per
      configuration rather than fixed: a cycle here can be 0.3 s (a small model
      on an RTX PRO 6000) or 50 s (a large one on a Jetson at 1080p), and no
-     single scale makes both legible. */
-  var ZOOM_LEVELS = [2, 4, 8, 16, 32, 64, 100, 160, 250];
-  var PX = 16, zoomIdx = 5;
+     single scale makes both legible. The reader never picks it — the speed
+     control below does, which is the whole point of that control. */
+  var SCALE_RUNGS = [2, 4, 8, 16, 32, 64, 100, 160, 250];
+  var MIN_PX = 2, MAX_PX = 250;
+  var basePX = 16, PX = 16;
+
+  /* Playback speed, the one handle the reader has on the stage, and a real
+     speed rather than the px/s zoom it replaced: the stage clock runs `speed()`
+     simulated seconds per wall-clock second, so at 2x a 1.7 s cycle really is
+     drawn in 0.85 s and the whole picture — bands, flights, the clock on the
+     ruler — moves with it.
+     The scale follows it, basePX ÷ speed, so the timeline keeps scrolling past
+     at the same pixel rate and simply fits more of itself on screen the faster
+     it runs. That is what fast-forward looks like, and it is why one control
+     can do the work the zoom stepper used to. */
+  var SPEED_LEVELS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
+  var SPEED_1X = 3;
+  var speedIdx = SPEED_1X;
+  function speed() { return SPEED_LEVELS[speedIdx]; }
+  /* A duration written in simulated ms, in the real ms that setTimeout and the
+     Web Animations API want. */
+  function realMs(ms) { return ms / speed(); }
 
   var FLIGHT_MS = 620, FLIGHT_LEAD_MS = 180;
   var FLIGHT_STAGGER_MS = 55, FLIGHT_STAGGER_TOTAL_MS = 340, FLIGHT_CURVE_STEPS = 10;
   var ENGINE_PACKET_DELAY_MS = 300;
+  /* Mirrors daBundleIn's duration in the stylesheet: it is set inline so the
+     entry animation shortens with the playback speed like everything else. */
+  var BUNDLE_IN_MS = 340;
   /* Above this many lanes the flights stop telling a story and become noise —
      and measurable work, since every dispatch spawns several. The in-flight cap
      is a second, finer budget: four lanes on a 1.7 s cycle put about fifteen
@@ -882,13 +914,14 @@
   var st = {
     built: false, rootEl: null, headSub: null, lanesEl: null,
     rulerTrack: null, rulerViewport: null, nowClock: null,
-    zoomLabel: null, zoomOut: null, zoomIn: null,
+    speedLabel: null, speedDown: null, speedUp: null,
     pauseBtn: null, pauseLabel: null, animBtn: null, fullBtn: null,
     engineDock: null, engineChip: null, engineState: null,
     clientChip: null, clientState: null, shellEl: null, pipeSvg: null,
     health: {}, overlay: null,
     vpWidth: 900, vpMeasuresLeft: 3,
     originMs: 0, frozenAt: null,
+    clkBase: 0, clkReal: 0,   // the stage clock's anchor, see virtualNowMs
     pruneBehindSec: 300,
     lanes: {},        // camId -> lane state
     camIds: [],
@@ -899,13 +932,30 @@
   };
   var TICK_STEP = 5;
 
-  function virtualNowMs() { return st.frozenAt !== null ? st.frozenAt : Date.now(); }
+  /* The stage's clock, affine in wall-clock time:
+       virtual = clkBase + (real − clkReal) × speed
+     Re-anchoring is the only operation it needs, which is why a speed change,
+     a pause and a hidden tab are all the same two lines. */
+  function virtualNowMs() {
+    if (st.frozenAt !== null) return st.frozenAt;
+    return st.clkBase + (Date.now() - st.clkReal) * speed();
+  }
+  function rebaseClock() { st.clkBase = virtualNowMs(); st.clkReal = Date.now(); }
+  function freezeClock() { if (st.frozenAt === null) st.frozenAt = virtualNowMs(); }
+  /* Resume where it stopped rather than jumping: the pause is simply not part
+     of the stage's time at all. */
+  function thawClock() {
+    if (st.frozenAt === null) return;
+    st.clkBase = st.frozenAt;
+    st.clkReal = Date.now();
+    st.frozenAt = null;
+  }
   function elapsedSec() { return (virtualNowMs() - st.originMs) / 1000; }
   function visibleSpanSec() { return Math.max(1, (st.vpWidth - RIGHT_MARGIN) / PX); }
   /* How much history to keep in the DOM.
    *
-   * The old rule — whatever the most zoomed-out rung could ever put on screen —
-   * was written when the zoom spanned 36 to 80 px/s. Against a 2 px/s rung it
+   * The old rule — whatever the widest scale could ever put on screen — was
+   * written when the scale spanned 36 to 80 px/s. Against a 2 px/s one it
    * asks for about forty minutes, which for a 1.7 s cycle is some thirty
    * thousand nodes that nothing ever paints.
    *
@@ -913,13 +963,13 @@
    * requests for one configuration and two thousand for another, and only the
    * second one fills the browser. Floor is whatever is on screen right now, so
    * zooming out never blanks the lane you are looking at. */
-  /* Thirty cycles is about ten times what the default zoom shows and still
-     covers three rungs of zooming out, which is as far as anyone goes before
+  /* Thirty cycles is about ten times what the stage shows at 1x and still
+     covers the fastest playback rung, which is as far as anyone goes before
      the bands stop being readable anyway. Sixty put sixteen lanes near eight
      thousand nodes for history nobody was going to look at. */
   var KEEP_CYCLES = 30;
   function historyWindowSec() {
-    var reachable = (st.vpWidth - RIGHT_MARGIN) / ZOOM_LEVELS[0] * 1.15;
+    var reachable = (st.vpWidth - RIGHT_MARGIN) / MIN_PX * 1.15;
     var cycle = st.sim && st.sim.proj ? st.sim.proj.cycle : 0;
     var byCycles = cycle > 0 ? KEEP_CYCLES * cycle : reachable;
     return Math.max(visibleSpanSec() * 1.3, Math.min(reachable, byCycles));
@@ -938,10 +988,12 @@
       '<div class="da-stage-head">' +
         '<span class="da-stage-title">' + escapeHTML(t("stageTitle")) +
           '<span class="da-stage-sub"></span></span>' +
-        '<div class="da-zoom">' +
-          '<button type="button" class="da-zoom-out" aria-label="−">−</button>' +
-          '<span class="da-zoom-label mono"></span>' +
-          '<button type="button" class="da-zoom-in" aria-label="+">+</button>' +
+        '<div class="da-speed" title="' + escapeHTML(t("speedTitle")) + '">' +
+          '<button type="button" class="da-speed-down" aria-label="' +
+            escapeHTML(t("speedSlower")) + '">−</button>' +
+          '<span class="da-speed-label mono"></span>' +
+          '<button type="button" class="da-speed-up" aria-label="' +
+            escapeHTML(t("speedFaster")) + '">+</button>' +
         '</div>' +
         '<button type="button" class="da-ctl da-anim" data-on="1"><span class="dot"></span>' +
           escapeHTML(t("animLabel")) + '</button>' +
@@ -1000,9 +1052,9 @@
     st.rulerTrack = q(".da-ruler-track");
     st.rulerViewport = q(".da-ruler-viewport");
     st.nowClock = q(".da-now-clock");
-    st.zoomLabel = q(".da-zoom-label");
-    st.zoomOut = q(".da-zoom-out");
-    st.zoomIn = q(".da-zoom-in");
+    st.speedLabel = q(".da-speed-label");
+    st.speedDown = q(".da-speed-down");
+    st.speedUp = q(".da-speed-up");
     st.pauseBtn = q(".da-pause");
     st.pauseLabel = q(".da-pause-label");
     st.animBtn = q(".da-anim");
@@ -1023,22 +1075,19 @@
       document.body.appendChild(st.overlay);
     }
 
-    st.zoomOut.addEventListener("click", function () { zoomIdx = Math.max(0, zoomIdx - 1); applyZoom(); });
-    st.zoomIn.addEventListener("click", function () { zoomIdx = Math.min(ZOOM_LEVELS.length - 1, zoomIdx + 1); applyZoom(); });
+    st.speedDown.addEventListener("click", function () { setSpeed(speedIdx - 1); });
+    st.speedUp.addEventListener("click", function () { setSpeed(speedIdx + 1); });
 
-    /* Pause freezes elapsedSec() only. Every element is anchored to a real
-       instant, so nothing needs shifting on resume. */
+    /* Pause freezes the stage clock only. Every element is anchored to an
+       instant on that clock, so nothing needs shifting on resume. */
     st.pauseBtn.addEventListener("click", function () {
       if (st.frozenAt === null) {
-        st.frozenAt = Date.now();
+        freezeClock();
         st.hiddenFreeze = false;   // theirs now, not the tab's
         st.pauseBtn.setAttribute("data-paused", "true");
         st.pauseLabel.textContent = t("pausePaused");
       } else {
-        /* Carry the origin forward by however long the pause lasted, so the
-           timeline resumes where it stopped rather than jumping. */
-        st.originMs += Date.now() - st.frozenAt;
-        st.frozenAt = null;
+        thawClock();
         st.hiddenFreeze = false;
         st.pauseBtn.setAttribute("data-paused", "false");
         st.pauseLabel.textContent = t("pauseLive");
@@ -1073,8 +1122,8 @@
        cutoff past every element in the lane and you come back to a timeline
        that has been emptied and has no history to rebuild from.
        So hidden is treated exactly as paused: the clock freezes (which the
-       prune timer already skips over), and the origin carries forward on
-       return so each lane continues where it stopped instead of jumping. */
+       prune timer already skips over) and is re-anchored on return, so each
+       lane continues where it stopped instead of jumping. */
     document.addEventListener("visibilitychange", syncVisibility);
     /* Called once here too, not only on the event: a page opened in a
        background tab — a middle-click, a restored session — is hidden from the
@@ -1101,13 +1150,10 @@
 
   function syncVisibility() {
     if (document.hidden) {
-      if (st.frozenAt === null) { st.frozenAt = Date.now(); st.hiddenFreeze = true; }
+      if (st.frozenAt === null) { freezeClock(); st.hiddenFreeze = true; }
     } else if (st.hiddenFreeze) {
       st.hiddenFreeze = false;
-      if (st.frozenAt !== null) {
-        st.originMs += Date.now() - st.frozenAt;
-        st.frozenAt = null;
-      }
+      thawClock();
     }
   }
 
@@ -1243,16 +1289,17 @@
   }
   /* The batch at rest in the upper row. Offset by a fixed pixel inset rather
      than by time: the whole batch entered the model at one instant, so it
-     stays welded to the band's left edge at every zoom level. */
+     stays welded to the band's left edge at every scale. */
   function makeBandBundle(camId, tSec, color, count, seq, delayMs) {
     var isGroup = count > 1;
     var size = isGroup ? 16 : 14;
-    /* applyZoom repositions by left = t × PX − anchor, so folding the inset
+    /* applyScale repositions by left = t × PX − anchor, so folding the inset
        into the anchor keeps this element on the same code path as the rest. */
     var anchor = size / 2 - BUNDLE_INSET;
     var w = makeEl(camId, "da-frame-mini is-bundle" + (isGroup ? " is-group" : ""), {
       left: (tSec * PX - anchor) + "px", top: (Y_BAND_CENTER - size / 2) + "px",
-      width: size + "px", height: size + "px", color: color, animationDelay: delayMs + "ms"
+      width: size + "px", height: size + "px", color: color,
+      animationDelay: delayMs + "ms", animationDuration: realMs(BUNDLE_IN_MS) + "ms"
     });
     w.dataset.anchor = anchor;
     w.dataset.seq = seq;
@@ -1262,8 +1309,8 @@
 
   /* pending = this batch is about to fly up the arrow, so its icons start
      solid and dim as they depart. Every other caller is redrawing history
-     (a zoom rebuild), where the flight already happened — those are ghosts
-     from birth, with no animation replayed. */
+     (a rescale), where the flight already happened — those are ghosts from
+     birth, with no animation replayed. */
   function renderFrameBatch(s, camId, seq, ws, we, n, color, pending) {
     var els = groupFrameTimestamps(ws, we, n, PX).map(function (g) {
       var m = makeFrameMini(camId, g.t, color, g.count, seq);
@@ -1275,7 +1322,7 @@
   }
 
   /* Retire the in-progress collection window, and drop it from s.elements so
-     neither prune() nor applyZoom() keeps walking a detached node. */
+     neither prune() nor applyScale() keeps walking a detached node. */
   function dropCollect(s) {
     if (!s.elCollect) return;
     var gone = s.elCollect;
@@ -1290,7 +1337,7 @@
    * Inside the band, big enough to read, whenever the band is wide enough to
    * hold it; above it in the small type when it is not; gone when even that
    * would collide with the neighbouring band's label. A band's width follows
-   * its latency rather than the zoom — a 0.3 s request is narrow at every
+   * its latency rather than the scale — a 0.3 s request is narrow at every
    * rung — so this is decided per band, on every reposition.
    *
    * `reserve` is the strip at the band's left edge the resting batch icon and
@@ -1328,7 +1375,7 @@
   }
 
   /* The two elements per lane that grow with the clock. Split out of the frame
-     loop because applyZoom needs it too: neither carries a data-dur for the
+     loop because applyScale needs it too: neither carries a data-dur for the
      generic pass to resize them from. */
   function sizeLiveElements() {
     var now = elapsedSec();
@@ -1531,15 +1578,19 @@
 
     /* The stagger total is capped, not the per-icon step: a five-frame batch
        must not take five times longer to hand over than a one-frame one. */
-    var stagger = Math.min(FLIGHT_STAGGER_MS, FLIGHT_STAGGER_TOTAL_MS / iconEls.length);
-    var drift = st.frozenAt !== null ? 0 : PX;
+    var stagger = realMs(Math.min(FLIGHT_STAGGER_MS, FLIGHT_STAGGER_TOTAL_MS / iconEls.length));
+    var flightMs = realMs(FLIGHT_MS), leadMs = realMs(FLIGHT_LEAD_MS);
+    /* Real px per real second, which is what the keyframes are measured in:
+       the track advances PX px per simulated second and the clock runs `speed`
+       of those per wall-clock second. */
+    var drift = st.frozenAt !== null ? 0 : PX * speed();
     iconEls.forEach(function (icon, idx) {
       var start = pointFor(icon);
       if (!inViewport(start)) return;
       var pts = [start];
       if (tail.x - start.x > 4) pts.push(tail);
-      var delay = FLIGHT_LEAD_MS + idx * stagger;
-      animateAlongPoints(pts.concat(curve), icon.innerHTML, color, icon.offsetWidth || 14, FLIGHT_MS, delay, drift);
+      var delay = leadMs + idx * stagger;
+      animateAlongPoints(pts.concat(curve), icon.innerHTML, color, icon.offsetWidth || 14, flightMs, delay, drift);
       /* Ghost the original just after its copy leaves, not before, or the icon
          dims while it is still visibly sitting there. */
       setTimeout(function () { icon.classList.add("is-sent"); }, delay + 60);
@@ -1639,10 +1690,10 @@
     arrow.innerHTML = ARROW_SVG;
     s.elements.push({ el: arrow, t: at });
 
-    /* Deliberately NOT part of batch.els: applyZoom tears those down and
+    /* Deliberately NOT part of batch.els: applyScale tears those down and
        rebuilds them, which would replay this element's entry animation on
-       every zoom click. This one only ever needs repositioning. */
-    var bundle = makeBandBundle(camId, at, color, nFrames, seq, FLIGHT_LEAD_MS + FLIGHT_MS - 150);
+       every speed change. This one only ever needs repositioning. */
+    var bundle = makeBandBundle(camId, at, color, nFrames, seq, realMs(FLIGHT_LEAD_MS + FLIGHT_MS - 150));
     s.elements.push({ el: bundle, t: at });
 
     if (live && animEnabled() && animSlotFree() && laneOnScreen(camId)) {
@@ -1662,8 +1713,8 @@
       setTimeout(function () {
         if (!animEnabled() || !animSlotFree() || !laneOnScreen(camId)) { pulseChip(); return; }
         spawnIconPacketOnCurve(launchPoint(camId), pointFor(st.engineChip), FRAME_SVG,
-          color, nFrames, 680, pulseChip);
-      }, ENGINE_PACKET_DELAY_MS);
+          color, nFrames, realMs(680), pulseChip);
+      }, realMs(ENGINE_PACKET_DELAY_MS));
     }
   }
 
@@ -1690,18 +1741,30 @@
       setEngineBusy(-1);
       if (animEnabled() && animSlotFree()) {
         spawnIconPacketOnCurve(pointFor(st.engineChip), pointFor(st.clientChip),
-          ANSWER_SVG, "var(--rule)", null, 560, pulseClient);
+          ANSWER_SVG, "var(--rule)", null, realMs(560), pulseClient);
       } else pulseClient();
     }
   }
 
-  /* ── zoom, culling, pruning, the frame loop ── */
+  /* ── speed, scale, culling, pruning, the frame loop ── */
 
-  function applyZoom() {
-    PX = ZOOM_LEVELS[zoomIdx];
-    st.zoomLabel.textContent = (PX < 1 ? PX.toFixed(1) : PX) + "px/s";
-    st.zoomOut.disabled = zoomIdx === 0;
-    st.zoomIn.disabled = zoomIdx === ZOOM_LEVELS.length - 1;
+  function setSpeed(idx) {
+    idx = Math.max(0, Math.min(SPEED_LEVELS.length - 1, idx));
+    if (idx === speedIdx) return;
+    /* Re-anchor BEFORE the rate changes, or every second already elapsed is
+       recounted at the new one and the whole timeline jumps. */
+    rebaseClock();
+    speedIdx = idx;
+    applyScale();
+  }
+
+  /* Lay the stage out for the current speed: the scale, every element already
+     drawn at the old one, and how much history is worth keeping. */
+  function applyScale() {
+    PX = Math.max(MIN_PX, Math.min(MAX_PX, basePX / speed()));
+    st.speedLabel.textContent = speed() + "\u00d7";
+    st.speedDown.disabled = speedIdx === 0;
+    st.speedUp.disabled = speedIdx === SPEED_LEVELS.length - 1;
     renderAnimBtn();
 
     ensureTickPool();
@@ -1710,7 +1773,7 @@
     for (var c = 0; c < st.camIds.length; c++) {
       var camId = st.camIds[c], s = st.lanes[camId];
       /* Grouping is a function of px-per-second — icons distinct at the old
-         zoom can start overlapping or vice versa — so rebuild each batch's
+         scale can start overlapping or vice versa — so rebuild each batch's
          icons from scratch rather than repositioning them. */
       var stale = [];
       s.frameBatches.forEach(function (b) { stale = stale.concat(b.els); });
@@ -1726,8 +1789,9 @@
       }
       s.elements.forEach(function (it) {
         if (it.el.dataset.center !== undefined) {
-          /* band timer: placed against its band, not anchored at t. A new zoom
-             is a new band width, so it can change sides as well as position. */
+          /* band timer: placed against its band, not anchored at t. A new
+             scale is a new band width, so it can change sides as well as
+             position. */
           placeTimer(it.el, it.t, parseFloat(it.el.dataset.dur) || 0);
           return;
         }
@@ -1785,7 +1849,7 @@
         }
         return true;
       });
-      /* A batch lives exactly as long as its icons do — otherwise a zoom change
+      /* A batch lives exactly as long as its icons do — otherwise a rescale
          would rebuild icons for cycles whose every other element is gone, and
          put back the nodes this just removed. */
       s.frameBatches = s.frameBatches.filter(function (b) {
@@ -1847,6 +1911,8 @@
     st.busyCount = 0;
     setEngineBusy(0);
     st.originMs = Date.now();
+    st.clkBase = st.originMs;
+    st.clkReal = st.originMs;
     st.frozenAt = null;
     st.hiddenFreeze = false;
     st.pauseBtn.setAttribute("data-paused", "false");
@@ -1854,13 +1920,14 @@
     syncVisibility();
     st.headSub.textContent = label;
 
-    /* Pick the rung that fits roughly three cycles across the viewport, so
-       both a 0.3 s and a 50 s cycle land somewhere readable. */
+    /* Pick the rung that fits roughly three cycles across the viewport at 1x,
+       so both a 0.3 s and a 50 s cycle land somewhere readable. The reader's
+       chosen speed survives a configuration change and divides into it. */
     measureViewport();
     var want = (st.vpWidth - RIGHT_MARGIN) / Math.max(0.2, proj.cycle * 3);
-    zoomIdx = 0;
-    for (var z = 0; z < ZOOM_LEVELS.length; z++) if (ZOOM_LEVELS[z] <= want) zoomIdx = z;
-    PX = ZOOM_LEVELS[zoomIdx];
+    basePX = SCALE_RUNGS[0];
+    for (var z = 0; z < SCALE_RUNGS.length; z++) if (SCALE_RUNGS[z] <= want) basePX = SCALE_RUNGS[z];
+    PX = Math.max(MIN_PX, Math.min(MAX_PX, basePX / speed()));
     st.pruneBehindSec = historyWindowSec();
 
     var color = proj.meets ? "var(--ok-fill)" : "var(--late-fill)";
@@ -1906,7 +1973,7 @@
     /* Fast-forward from the seed point to now with the animations suppressed:
        a hundred backfilled cycles must not all play their hand-off at once. */
     pump(elapsedSec(), false);
-    applyZoom();
+    applyScale();
     requestAnimationFrame(function () { requestAnimationFrame(drawPipes); });
   }
 
