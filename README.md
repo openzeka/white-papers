@@ -27,6 +27,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [DGX Spark 8-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-setup/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 8× NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Benchmark](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/) | LLM quantization comparison: FP8, AWQ, NVFP4 and MTP | NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Cluster Scaling](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-scaling/) | Multi-node scaling (TP1/TP2/TP4) and SLO-driven capacity planning | 1× / 2× / 4× NVIDIA DGX Spark (GB10) |
+| [Network Link Speed for Tensor-Parallel Inference on 8× DGX Spark (200G vs 100G)](https://whitepapers.openzeka.com/papers/dgx-spark-link-speed-tensor-parallel/) | What tensor parallelism sends over the network, the estimated 100G penalty, and a measured 200G vs emulated 100G comparison with GLM-5.3 at TP8 | 8× NVIDIA DGX Spark (GB10) |
 | [The First Open-Weight Alternatives to Jev](https://whitepapers.openzeka.com/papers/jev-open-weight-alternatives/) | Six open-weight typed-decision models compared: accuracy, calibration, option-order sensitivity and latency | NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 4× DGX Spark Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/) | 763B MoE model with TP4: vLLM build chain, SM121 patches, Engram-on-disk, DSpark speculative decoding | 4× NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 8× DGX Spark TP8 Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-8spark-deployment/) | 763B MoE model with TP8: 300K Engram-in-memory vs 1M Engram-on-disk, NCCL optimization, TP4 comparison | 8× NVIDIA DGX Spark (GB10) |
@@ -244,6 +245,30 @@ The study measures:
 The results show why raw throughput alone is not enough for infrastructure sizing: the best topology depends on whether the goal is **interactive latency, SLO compliance, high availability, or maximum batch throughput**.
 
 **[Read the DGX Spark scaling study →](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-scaling/)**
+
+---
+
+## Network Link Speed for Tensor Parallelism on 8× DGX Spark
+
+**GLM-5.3 NVFP4 · TP8 · 200 Gb/s vs emulated 100 Gb/s · RDMA traffic at 1 ms resolution**
+
+<p align="center">
+  <img src="papers/dgx-spark-link-speed-tensor-parallel/images/glm53-tp8-p2-8k-200g-vs-100g.png" width="950" alt="Network traffic of one DGX Spark during an 8K-token prompt at 200 Gb/s and emulated 100 Gb/s">
+</p>
+
+At 100 Gb/s per Spark, one switch connects twice as many DGX Sparks as at 200 Gb/s.
+This study measures what that costs a tensor-parallel cluster. It explains what
+tensor parallelism sends over the network, estimates the penalty from the model's
+architecture and the engine's settings, and compares the estimate with
+measurements on 8× DGX Spark serving GLM-5.3 at TP8.
+
+Prefill traffic reaches 150–200 Gb/s in bursts of a few milliseconds, but averages
+about 40 Gb/s over a second; decode stays at a few Gb/s. On the 100 Gb/s link, decode
+speed is unchanged, and time to first token grows by 12.6–13.9% for single long
+prompts and by up to 22.5% per request when four long prompts arrive together,
+close to the estimate of about 0.11 s per 1,000 prompt tokens.
+
+**[Read the link-speed study →](https://whitepapers.openzeka.com/papers/dgx-spark-link-speed-tensor-parallel/)**
 
 ---
 

@@ -223,6 +223,27 @@ Gezgini*, *CV Çıkarım Benchmark Gezgini*. Dutch keeps the English product
 names everywhere, titles included: *LLM Inference Benchmark Explorer*, *CV
 Inference Benchmark Explorer*.
 
+### Network and tensor-parallel terms
+
+Settled with the DGX Spark link-speed paper.
+
+| English | Türkçe | Nederlands |
+|---|---|---|
+| link speed; nominal link speed | bağlantı hızı; nominal bağlantı hızı | linksnelheid; nominale linksnelheid |
+| emulated (100 Gb/s) | emüle edilmiş | geëmuleerd |
+| network interface | ağ arayüzü | netwerkinterface |
+| forward pass | ileri yayılım | forward pass |
+| ring step; segment | halka adımı; segment | ringstap; segment |
+| prefill chunk | prefill parçası (chunk) | prefill-chunk |
+| burst (of traffic) | patlama | burst |
+| bandwidth-bound / latency-bound | bant genişliğiyle sınırlı / gecikmeyle sınırlı | bandbreedtegebonden / latentiegebonden |
+| network share (of prefill time) | ağ payı | netwerkaandeel |
+| averaging interval | ortalama alma aralığı | middelingsinterval |
+| activations; hidden dimension | aktivasyonlar; gizli boyut | activaties; verborgen dimensie |
+| decode speed | decode hızı | decodesnelheid |
+| projection (untested sizes) | öngörü | projectie |
+| all-reduce, prefill, decode, TTFT, RDMA, NCCL | *(English)* | *(English)* |
+
 **`card_tag`** — reuse an existing one:
 
 | English | Türkçe | Nederlands |
