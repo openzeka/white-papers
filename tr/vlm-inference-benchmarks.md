@@ -6,12 +6,13 @@ page_id: vlm-inference-benchmarks
 date: 2026-10-06 12:00:00 +0300
 card_tag: "VLM Benchmark"
 description: >-
-  RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB ve Jetson Orin NX 16GB üzerindeki
+  Jetson AGX Thor, DGX Spark, RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB ve
+  Jetson Orin NX 16GB üzerindeki
   görüntü-dil modeli çıkarım benchmark'larını keşfedin. Görüntü boyutunu seçin,
   bir kameranın yanıtı için ne kadar bekleyebileceğini belirleyin ve her
   yapılandırmanın kaç kameraya yetiştiğini görün.
 permalink: /vlm-inference-benchmarks/
-last_modified_date: 2026-10-06
+last_modified_date: 2026-10-13
 toc: false
 ---
 
@@ -80,9 +81,9 @@ yüzden üç ya da beş görüntüyle Maks. kamera 1'den yüksek olamaz.
 ### 4. Maks. kamera değerini okuyun {#maks-kamera-degerini-okuyun}
 
 **Maks. kamera**, her kameranın yanıtının hedefiniz içinde başladığı en yüksek
-ölçülmüş kamera sayısıdır. Artı işareti —
-**16+** — yapılandırmanın test edildiği en yüksek sayıda bile hedefi karşıladığı,
-yani gerçek üst sınırına ulaşılmadığı anlamına gelir. 0, tek bir kameranın bile
+ölçülmüş kamera sayısıdır. Artı işareti — **16+** — yapılandırmanın test
+edildiği en yüksek sayıda bile hedefi karşıladığı, yani gerçek üst sınırına
+ulaşılmadığı anlamına gelir. “>3 sn” — hedefiniz — tek bir kameranın bile
 zamanında yanıt almadığı demektir.
 
 ### 5. Bir satırı açın {#bir-satiri-acin}
@@ -90,8 +91,9 @@ zamanında yanıt almadığı demektir.
 Bir satıra tıkladığınızda şunları görürsünüz:
 
 - solda, görüntü boyutunuzda ve görüntü sayınızda test edilen her kamera
-  sayısının ölçümleri, hedefinize göre BAŞARILI ya da BAŞARISIZ olarak
-  işaretlenmiş;
+  sayısının ölçümleri, hedefinize göre “≤3 sn” ya da “>3 sn” olarak
+  işaretlenmiş, kamera sınırının ölçüldüğü yerde en altta başarısız olan kamera
+  sayısıyla; altında da tek kamerayla, tek istekteki görüntü sayısı için aynısı;
 - sağda, varsayılan ayarlarda sonuçların sade bir dille açıklaması;
 - altta, kamera eklendikçe yanıt süresinin grafiği; her görüntü boyutu için bir
   çizgi, hedefiniz kesikli çizgiyle. Grafik, birden fazla kameranın ölçüldüğü
@@ -143,12 +145,25 @@ katılmaz ve yapılandırmanın aleyhine sayılmaz.
 
 - **Birden fazla kamera**, 480p, 720p ve 1080p'de istek başına bir görüntüyle
   ölçüldü: Jetson Orin NX 16GB'de 1, 2 ve 4 kamera (bir yapılandırmada 8'e kadar),
-  Jetson AGX Orin 32GB'de 8'e, RTX PRO 6000'de 16'ya kadar; her seviyede bir
-  Jetson'da 8, RTX PRO 6000'de 24 istek gönderildi ve aynı anda hiçbir zaman
-  seviyedekinden fazla kameranın isteği işlenmedi.
-- **Tek kamera**, dört boyutun hepsinde istek başına bir, üç ve beş görüntüyle,
-  her birinde 5 istekle (bir yapılandırmada 3) ölçüldü. 2K ve istek başına
-  birden fazla görüntü yalnızca bu şekilde ölçüldü.
+  Jetson AGX Orin 32GB ile Developer Kit'inde 8'e, RTX PRO 6000, Jetson AGX Thor
+  ve DGX Spark'ta 16'ya kadar; her seviyede bir Jetson Orin'de 8, diğerlerinde 24
+  istek gönderildi ve aynı anda hiçbir zaman seviyedekinden fazla kameranın isteği
+  işlenmedi.
+- **Tek kamera**, dört boyutun hepsinde istek başına bir, üç ve beş görüntüyle
+  (Jetson AGX Thor ve DGX Spark'ta 1, 2, 4, 8, 16 ve 32), her birinde 5 istekle
+  (bir yapılandırmada 3) ölçüldü. 2K ve istek başına birden fazla görüntü yalnızca
+  bu şekilde ölçüldü.
+- **Kamera sınırı** Jetson AGX Thor ve DGX Spark'ta, 720p'de kamera başına bir
+  görüntüyle ölçüldü: 16, 32, 64 ve daha fazla kamera, kamera başına iki istekle,
+  bir isteğin yanıtı 30 saniye içinde başlamayana kadar denendi; ardından geçen
+  son sayı ile başarısız olan ilk sayı arasındaki aralık, geçen sayının en fazla
+  sekizde biri (en az 4 kamera) olana kadar ikiye bölündü. Sunucu her kameranın
+  isteğini aynı anda alacak şekilde ayarlandı. Boş yanıt dönen bir istek başarısız
+  sayılmadı.
+- **Görüntü sınırı** Jetson AGX Thor ve DGX Spark'ta, 720p'de tek kamerayla
+  ölçüldü: istek başına 64, 128, 256, 512 ve 1024 görüntü, her birinde 3 istekle,
+  bir istek başarısız olana kadar denendi — model için fazla uzun ya da 600 s
+  içinde yanıt yok.
 
 **Token**, bir modelin okuduğu ve yazdığı birimdir; kabaca bir İngilizce
 kelimenin dörtte üçü. Bir görüntü de token olarak okunur ve büyük bir görüntü
@@ -176,11 +191,20 @@ yani her zaman tam olarak bir isteği işlenmektedir. Bu yüzden eşzamanlı ist
 sayısı kamera sayısıdır.
 
 Maks. kamera, yanıt süresinin hedefinizi karşıladığı en yüksek **ölçülmüş**
-kamera sayısıdır. Yalnızca ölçülen sayılar
-sayılır, ara değer üretilmez; hiçbiri geçmezse değer 0'dır. Hedefinize bağlıdır
-ve onunla birlikte değişir: 720p'de ve kamera başına bir görüntüyle, Jetson AGX
-Orin 32GB üzerindeki Cosmos3-Edge 1 saniyede 2 kameraya, 3 saniyede 8 kameraya —
-ölçülen en yüksek sayı, yani 8+ — yetişir.
+kamera sayısıdır. Yalnızca ölçülen sayılar sayılır, ara değer üretilmez; hiçbiri
+geçmezse hücrede hedefiniz, “>3 sn” yazar. Hedefinize bağlıdır ve onunla
+birlikte değişir: 720p'de ve kamera başına bir görüntüyle, Jetson AGX Orin 32GB
+üzerindeki Cosmos3-Edge 1 saniyede 2 kameraya, 3 saniyede 8 kameraya — ölçülen
+en yüksek sayı, yani 8+ — yetişir.
+
+**Tek istekte maks. görüntü** de bir kameranın tek istekte gönderdiği görüntüler
+için aynı şekilde okunur: hedefinizi hâlâ karşılayan en yüksek sayı. Bir satırı
+açtığınızda, hedeften bağımsız olarak yapılandırmanın sınırları da yazar —
+yukarıda anlatılan kamera ve görüntü sınırları: bir istek başarısız olmadan önce
+hâlâ çalışan en yüksek kamera sayısı ve tek istekteki en yüksek görüntü sayısı,
+ve başarısız olan sayı. Sınırın aranmadığı yerde ölçümün nereye kadar gittiği
+yazar. Jetson AGX Thor ve DGX Spark'ta Maks. kamera da 16'yı geçer, kamera
+sınırına kadar gider.
 
 ### Kurulumu tanımlayan sütunlar {#kurulumu-tanimlayan-sutunlar}
 
@@ -198,11 +222,14 @@ kadar etki eder. RTX PRO 6000 üzerinde 720p'de Qwen3-VL-4B-Instruct, tek bir
 kameraya llama.cpp (Q8_0) ile 0.25 sn, vLLM (BF16) ile 0.16 sn sonra yanıt
 vermeye başlar; 16 kamerada fark 1.09 sn'ye karşı 0.46 sn'dir.
 
-**Cihaz** — Jetson Orin NX 16GB ve Jetson AGX Orin 32GB, CPU ile GPU'nun tek
-bir belleği paylaştığı gömülü modüllerdir. İki modülün başka bellek
-kapasitelerinde sürümleri de vardır; bu yüzden adda ölçülen kapasite yer alır.
-RTX PRO 6000 Blackwell, 96 GB'lık bir iş istasyonu GPU'sudur ve 600 W'lık Workstation ile 300 W'lık Max-Q
-sürümlerinde ölçüldü.
+**Cihaz** — Jetson Orin NX 16GB ve Jetson AGX Orin 32GB, CPU ile GPU'nun tek bir
+belleği paylaştığı gömülü modüllerdir. İki modülün başka bellek kapasitelerinde
+sürümleri de vardır; bu yüzden adda ölçülen kapasite yer alır. Jetson AGX Orin
+32GB Developer Kit, kendi 32 GB modülüyle gelen geliştirici kitidir ve üretim
+modülünden ayrı listelenir. Jetson AGX Thor (geliştirici kiti) ve DGX Spark'ta
+da CPU ile GPU tek bir belleği paylaşır; ikisinde de 128 GB. RTX PRO 6000
+Blackwell, 96 GB'lık bir iş istasyonu GPU'sudur ve 600 W'lık Workstation ile 300
+W'lık Max-Q sürümlerinde ölçüldü.
 
 ### Sayıların söylemedikleri {#sayilarin-soylemedikleri}
 

@@ -1,0 +1,6 @@
+{
+  "name": "Jetson AGX Thor",
+  "product": "Jetson AGX Thor Developer Kit",
+  "memory_gb": 128,
+  "unified": true
+}

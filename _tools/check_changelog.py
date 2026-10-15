@@ -5,7 +5,8 @@
 
 Every entry: a valid date, entries newest first, one of the four types, text
 in every language (en, tr, nl), and the reference its type needs — paper:
-page, benchmarks: run, vlm: vlm, cv: cv. Every page id exists in every
+page, benchmarks: run, vlm: vlm (or page, for a batch of runs announced
+together), cv: cv. Every page id exists in every
 language, every run id is in the LLM store (assets/data/llm-benchmarks/), every
 VLM run id in the VLM store (assets/data/vlm-benchmarks/), every CV id in
 assets/data/cv-benchmarks/index.json, and each run or CV result is listed
@@ -54,7 +55,7 @@ for i, e in enumerate(entries, 1):
     typ = e.get("type")
     if typ not in TYPES:
         errors.append(f"{where}: type must be one of {sorted(TYPES)}")
-    elif typ in NEEDS and not e.get(NEEDS[typ]):
+    elif typ in NEEDS and not e.get(NEEDS[typ]) and not (typ == "vlm" and e.get("page")):
         errors.append(f"{where}: a {typ} entry needs `{NEEDS[typ]}:`")
     text = e.get("text") or {}
     for l in LANGS:

@@ -6,12 +6,12 @@ page_id: vlm-inference-benchmarks
 date: 2026-10-06 12:00:00 +0300
 card_tag: "VLM-benchmark"
 description: >-
-  Verken inferentiebenchmarks van vision-languagemodellen op RTX PRO 6000
-  Blackwell, Jetson AGX Orin 32GB en Jetson Orin NX 16GB. Kies het beeldformaat, stel in
+  Verken inferentiebenchmarks van vision-languagemodellen op Jetson AGX Thor, DGX
+  Spark, RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB en Jetson Orin NX 16GB. Kies het beeldformaat, stel in
   hoe lang een camera op zijn antwoord mag wachten, en zie hoeveel camera's elke
   configuratie bijhoudt.
 permalink: /vlm-inference-benchmarks/
-last_modified_date: 2026-10-06
+last_modified_date: 2026-10-13
 toc: false
 ---
 
@@ -80,18 +80,21 @@ Max. camera's niet hoger zijn dan 1.
 
 ### 4. Lees Max. camera's af
 
-**Max. camera's** is het hoogste gemeten aantal camera's waarbij het antwoord van
-elke camera binnen uw doel begint. Een plus —
-**16+** — betekent dat de configuratie het doel haalde, zelfs bij het hoogste
-aantal waarmee ze is getest, dus het werkelijke maximum is niet bereikt. 0
-betekent dat zelfs één camera niet op tijd antwoord krijgt.
+**Max. camera's** is het hoogste gemeten aantal camera's waarbij het antwoord
+van elke camera binnen uw doel begint. Een plus — **16+** — betekent dat de
+configuratie het doel haalde, zelfs bij het hoogste aantal waarmee ze is getest,
+dus het werkelijke maximum is niet bereikt. “>3 s” — uw doel — betekent dat
+zelfs één camera niet op tijd antwoord krijgt.
 
 ### 5. Open een rij
 
 Klik op een rij om het volgende te zien:
 
 - links, de metingen bij uw beeldformaat en aantal beelden voor elk getest
-  aantal camera's, gemarkeerd als PASS of FAIL ten opzichte van uw doel;
+  aantal camera's, gemarkeerd als “≤3 s” of “>3 s” ten opzichte van uw doel, en
+  waar de cameralimiet is gemeten afgesloten met het aantal camera's dat
+  mislukte, en daaronder hetzelfde voor het aantal beelden in één verzoek, met
+  één camera;
 - rechts, de resultaten in gewone taal toegelicht, bij de standaardinstellingen;
 - daaronder, een grafiek van de responstijd naarmate er camera's bijkomen, één
   lijn per beeldformaat, met uw doel als stippellijn. Die verschijnt waar
@@ -140,14 +143,26 @@ afzonderlijk gemeten, na een opwarmronde die wordt weggegooid. De waarden zijn
 gemiddelden van de voltooide verzoeken; een verzoek dat tijdens de benchmark
 mislukte, telt niet mee in het gemiddelde en niet tegen een configuratie.
 
-- **Meerdere camera's** zijn gemeten met één beeld per verzoek bij 480p, 720p
-  en 1080p: 1, 2 en 4 camera's op Jetson Orin NX 16GB (tot 8 voor één configuratie),
-  tot 8 op Jetson AGX Orin 32GB en tot 16 op RTX PRO 6000, met 8 verzoeken per niveau
-  op een Jetson en 24 op RTX PRO 6000, en nooit meer camera's tegelijk in
-  behandeling dan het niveau.
+- **Meerdere camera's** zijn gemeten met één beeld per verzoek bij 480p, 720p en
+  1080p: 1, 2 en 4 camera's op Jetson Orin NX 16GB (tot 8 voor één configuratie),
+  tot 8 op Jetson AGX Orin 32GB en de Developer Kit daarvan, en tot 16 op RTX PRO
+  6000, Jetson AGX Thor en DGX Spark, met 8 verzoeken per niveau op een Jetson
+  Orin en 24 op de andere, en nooit meer camera's tegelijk in behandeling dan het
+  niveau.
 - **Eén camera** is gemeten bij alle vier formaten met één, drie en vijf beelden
-  per verzoek, telkens 5 verzoeken (3 voor één configuratie). 2K en meerdere
-  beelden per verzoek zijn alleen zo gemeten.
+  per verzoek (1, 2, 4, 8, 16 en 32 op Jetson AGX Thor en DGX Spark), telkens 5
+  verzoeken (3 voor één configuratie). 2K en meerdere beelden per verzoek zijn
+  alleen zo gemeten.
+- **De cameralimiet** is gemeten op Jetson AGX Thor en DGX Spark, bij 720p met één
+  beeld per camera: 16, 32, 64 en meer camera's, twee verzoeken per camera, tot
+  een verzoek binnen 30 seconden geen begonnen antwoord had; daarna is het bereik
+  tussen het laatste geslaagde en het eerste mislukte aantal gehalveerd tot het
+  hoogstens een achtste van het geslaagde aantal was (minstens 4 camera's). De
+  server was zo ingesteld dat hij het verzoek van elke camera tegelijk aannam. Een
+  verzoek met een leeg antwoord telde niet als mislukt.
+- **De beeldlimiet** is gemeten op Jetson AGX Thor en DGX Spark, bij 720p met één
+  camera: 64, 128, 256, 512 en 1024 beelden per verzoek, telkens 3 verzoeken, tot
+  een verzoek mislukte — te lang voor het model, of geen antwoord binnen 600 s.
 
 Een **token** is de eenheid die een model leest en schrijft, ongeveer driekwart
 van een Engels woord. Ook een beeld wordt als tokens gelezen, en een groter beeld
@@ -175,11 +190,20 @@ heeft altijd precies één verzoek in behandeling. Het aantal gelijktijdige
 verzoeken is daarom het aantal camera's.
 
 Max. camera's is het hoogste **gemeten** aantal camera's waarbij de responstijd
-uw doel haalt. Alleen gemeten aantallen tellen, er
-wordt niets geïnterpoleerd, en als geen enkel aantal slaagt, is de waarde 0.
-Ze hangt af van uw doel en beweegt mee: bij 720p met één beeld per camera houdt
-Cosmos3-Edge op Jetson AGX Orin 32GB bij 1 seconde 2 camera's bij en 8 — het hoogste
-gemeten aantal, dus 8+ — bij 3 seconden.
+uw doel haalt. Alleen gemeten aantallen tellen, er wordt niets geïnterpoleerd,
+en als geen enkel aantal slaagt, staat uw doel in de cel: “>3 s”. Ze hangt af
+van uw doel en beweegt mee: bij 720p met één beeld per camera houdt Cosmos3-Edge
+op Jetson AGX Orin 32GB bij 1 seconde 2 camera's bij en 8 — het hoogste gemeten
+aantal, dus 8+ — bij 3 seconden.
+
+**Max. beelden per verzoek** leest u op dezelfde manier voor de beelden die één
+camera in één verzoek stuurt: het hoogste aantal dat uw doel nog haalt. Een
+geopende rij geeft ook de limieten van de configuratie, los van uw doel — de
+hierboven beschreven camera- en beeldlimiet: het hoogste aantal camera's, en het
+hoogste aantal beelden in één verzoek, dat nog werkte voordat een verzoek
+mislukte, en het aantal dat mislukte. Waar niet naar een limiet is gezocht,
+staat tot hoever er is gemeten. Op Jetson AGX Thor en DGX Spark gaat ook Max.
+camera's voorbij 16, tot de cameralimiet.
 
 ### De kolommen die de opzet beschrijven
 
@@ -200,12 +224,14 @@ PRO 6000 begint bij 720p een enkele camera te antwoorden na 0.25 s onder
 llama.cpp (Q8_0) en na 0.16 s onder vLLM (BF16); bij 16 camera's is het
 verschil 1.09 s tegen 0.46 s.
 
-**Apparaat** — Jetson Orin NX 16GB en Jetson AGX Orin 32GB zijn embedded
-modules waarvan CPU en GPU één geheugen delen. Beide modules bestaan ook met
-andere geheugengroottes, daarom staat de gemeten grootte in de naam. RTX PRO
-6000 Blackwell is een
-werkstation-GPU met 96 GB, gemeten in de Workstation-editie van 600 W en de
-Max-Q-editie van 300 W.
+**Apparaat** — Jetson Orin NX 16GB en Jetson AGX Orin 32GB zijn embedded modules
+waarvan CPU en GPU één geheugen delen. Beide modules bestaan ook met andere
+geheugengroottes, daarom staat de gemeten grootte in de naam. Jetson AGX Orin
+32GB Developer Kit is de ontwikkelkit met een eigen module van 32 GB en staat
+los van de productiemodule. Ook Jetson AGX Thor (ontwikkelkit) en DGX Spark
+delen één geheugen tussen CPU en GPU, elk 128 GB. RTX PRO 6000 Blackwell is een
+werkstation-GPU met 96 GB, gemeten in de Workstation-editie van 600 W en de Max-
+Q-editie van 300 W.
 
 ### Wat de getallen u niet vertellen
 

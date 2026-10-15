@@ -49,6 +49,8 @@
     colTps: "TPS",
     colResponse: "Response",
     colMaxCams: "Max Cameras",
+    colMaxImages: "Max Images per Request",
+    withinTarget: function (t) { return " (≤\u00a0" + t + "\u00a0s)"; },  /* kept on one line */
     colEngine: "Engine",
     atCol: function (c) { return " @ " + c + (c === 1 ? " cam" : " cams"); },
     secUnit: " (s)",
@@ -62,10 +64,27 @@
     targetNotMet: "Target Not Met — the answer takes longer than your response time target to start.",
     viewDetails: "View Details — shows the measurements by number of cameras, the results explained and a chart for this configuration.",
     maxAtLeast: function (c) { return "At least " + c + ": every camera was still answered in time at " + c + (c === 1 ? " camera" : " cameras") + ", the highest number tested, so the real maximum was not reached."; },
+    imagesAtLeast: function (n) { return "At least " + n + ": even " + n + (n === 1 ? " image" : " images") + " per request, the highest count tested, was answered in time, so the real maximum was not reached."; },
+    imagesFailedAt: function (n) { return "A request with " + n + " images failed (too long for the model, or no answer within 600 s), so this is the most a request can carry."; },
+    camsFailedAt: function (c) { return "With " + c + " cameras a request had no answer started within 30 s, so this is as far as the device goes."; },
+    detailImages: "Images",
+    imagesSweepAt: function (res, dims) { return "Images per request, one camera, " + res + " (" + dims + ")"; },
+    imagesFailedRow: function (n) { return "A request with " + n + " images failed: too long for the model, or no answer within 600 s."; },
+    failedLevel: "Failed",
+    withinTargetText: function (t) { return "≤" + t + " s"; },
+    failedShort: function (f, n) { return f + "/" + n + " failed"; },
+    failedTitle: function (f, n) { return f + " of " + n + " requests failed: no answer, or an error from the server. The response time is the mean of the others."; },
+    overTargetText: function (t) { return ">" + t + " s"; },
+    camsOverTarget: function (r, t) { return "Even one camera waits " + r + " s for its answer to start, longer than your target of " + t + " s."; },
+    imagesOverTarget: function (r, t) { return "Even one image per request waits " + r + " s for the answer to start, longer than your target of " + t + " s."; },
+    limitsLead: function (res) { return "Before failure (" + res + "):"; },
+    camLimitAt: function (n, f) { return "The most cameras measured that still worked: " + n + ". With " + f + " cameras a request had no answer started within 30 s."; },
+    imgLimitAt: function (n, f) { return "The most images per request measured that still worked: " + n + ". A request with " + f + " images failed (too long for the model, or no answer within 600 s)."; },
+    camsNotSearched: function (n) { return "Measured up to " + n + (n === 1 ? " camera" : " cameras") + " only; the limit was not searched."; },
+    imgsNotSearched: function (n) { return "Measured up to " + n + (n === 1 ? " image" : " images") + " per request only; the limit was not searched."; },
 
     /* Expanded row */
-    detailC: "Cameras", detailTps: "TPS (tok/s)", detailResponse: "Response (s)", detailStatus: "Status",
-    pass: "PASS", fail: "FAIL",
+    detailC: "Cameras", detailTps: "TPS (tok/s)", detailResponse: "Response (s)", detailStatus: "Target",
     sweepAt: function (res, dims, n) { return (n === 1 ? "One " + res + " image" : n + " " + res + " images") + " (" + dims + ") per camera"; },
     explainedHeading: "Benchmark results explained",
     oneOnly: "Measured with one camera only, so the figure cannot be higher than 1 — the device may well serve more.",
@@ -86,7 +105,8 @@
       engine: "<strong>Inference Engine</strong><p>The server software that loads the model and schedules requests: vLLM for Hugging Face checkpoints, llama.cpp for GGUF files.</p><p>It affects speed as much as the hardware does: the same model on the same device can differ measurably between engines.</p>",
       tps: "<strong>TPS — tokens per second</strong><p>How fast one camera's answer is written once it has started, at the selected number of cameras. A token is about three quarters of a word.</p><p>Per camera, not in total. Max Cameras is decided by the response time; TPS tells you how long a longer answer then takes. Higher is better.</p>",
       response: "<strong>Response time</strong><p>How long a camera waits until its answer starts, at the selected number of cameras, image size and image count, in seconds. Measured as the time to first token (TTFT).</p><p>For a vision-language model this is mostly reading the images, so it grows with their size and number, and with the number of cameras sharing the device. Green is within your target. Lower is better.</p>",
-      maxCams: "<strong>Max Cameras</strong><p>The highest measured number of cameras at which the response time meets your target, at the selected image size and image count.</p><p>Each camera sends its next request as soon as the previous one is answered, so it always has one request in flight: the number of concurrent requests is the number of cameras.</p><p>A plus (16+) means even the highest number tested met the target, so the real maximum is higher. 0 means not even one camera is answered in time.</p>",
+      maxCams: "<strong>Max Cameras (≤ your target)</strong><p>The highest measured number of cameras at which the response time meets your target, at the selected image size and image count.</p><p>Each camera sends its next request as soon as the previous one is answered, so it always has one request in flight: the number of concurrent requests is the number of cameras.</p><p>A plus (16+) means even the highest number tested met the target, so the real maximum is higher. “>3 s” (your target) means not even one camera is answered in time; its title gives how long that one camera waits.</p>",
+      maxImages: "<strong>Max Images per Request (≤ your target)</strong><p>The most images one request can carry while its answer still starts within your target, at the selected image size, with one camera.</p><p>Several images per request were measured with one camera only. A plus (32+) means even the highest count tested met the target. Where the run went on until a request failed, the figure has no plus once that failure is the limit, and its title gives the count that failed. “>3 s” (your target) means even one image per request misses it.</p>",
 
       fConcurrency: "<strong>Cameras</strong><p>The number of cameras sending requests at the same moment — the concurrency the system was measured at.</p><p>Chooses which measurement the Response and TPS columns show. Rows not measured at this number are hidden.</p>",
       fResolution: "<strong>Image Size</strong><p>The size of each image a camera sends: 480p is 854×480, 720p 1280×720, 1080p 1920×1080, 2K 2560×1440.</p><p>Every number in the table, Max Cameras included, is read at this size. Larger images take longer to read. Rows not measured at this size are hidden.</p>",
@@ -123,8 +143,11 @@
   var DEVICE_ORDER = {
     "Jetson Orin NX 16GB": 0,
     "Jetson AGX Orin 32GB": 1,
-    "RTX PRO 6000 Max-Q": 2,
-    "RTX PRO 6000": 3
+    "Jetson AGX Orin 32GB Developer Kit": 2,
+    "Jetson AGX Thor": 3,
+    "DGX Spark": 4,
+    "RTX PRO 6000 Max-Q": 5,
+    "RTX PRO 6000": 6
   };
 
   var rawData = null;
@@ -333,6 +356,30 @@
     return pts.length ? pts[pts.length - 1].c : 0;
   }
 
+  /* The first image count, or number of cameras, at which a request failed —
+     recorded for runs that went on until one did. */
+  function failedAt(entry, kind, res) {
+    var l = entry.limits && entry.limits[kind];
+    return (l && l[res || state.res]) || null;
+  }
+
+  /* Several images per request are measured with one camera only. */
+  function maxImages(entry, res) {
+    var max = 0;
+    (entry.data_points || []).forEach(function (p) {
+      if (p.res === (res || state.res) && p.c === 1 && meetsTarget(p) && p.images > max) max = p.images;
+    });
+    return max;
+  }
+
+  function highestImages(entry, res) {
+    var top = 0;
+    (entry.data_points || []).forEach(function (p) {
+      if (p.res === (res || state.res) && p.c === 1 && p.images > top) top = p.images;
+    });
+    return top;
+  }
+
   function deriveFilterOptions() {
     var dSet = {}, mSet = {}, qSet = {}, eSet = {}, cSet = {}, rSet = {}, iSet = {};
     rawData.benchmarks.forEach(function (b) {
@@ -345,7 +392,10 @@
     allModels = Object.keys(mSet).sort(function (a, b) { return a.toLowerCase().localeCompare(b.toLowerCase()); });
     allQuants = Object.keys(qSet).sort();
     allEngines = Object.keys(eSet).sort();
-    allConcurrency = Object.keys(cSet).map(Number).sort(function (a, b) { return a - b; });
+    /* The selector offers the doubling levels; the levels measured in between while a camera limit was narrowed
+       down (88, 104, ...) still count for Max Cameras and show in each row's own table and chart. */
+    allConcurrency = Object.keys(cSet).map(Number).filter(function (c) { return (c & (c - 1)) === 0; })
+      .sort(function (a, b) { return a - b; });
     allImages = Object.keys(iSet).map(Number).sort(function (a, b) { return a - b; });
     allRes = RES_ORDER.filter(function (r) { return rSet[r]; });
   }
@@ -787,6 +837,7 @@
     if (col === "tps") return p ? p.tps : null;
     if (col === "response") return responseOf(p);
     if (col === "maxcams") return maxCams(entry);
+    if (col === "maximages") return maxImages(entry);
     if (col === "params") return parseParams(modelOf(entry).params);
     if (col === "device") return DEVICE_ORDER[entry.device] != null ? DEVICE_ORDER[entry.device] : 99;
     return undefined;
@@ -814,7 +865,8 @@
       { key: "device", label: S.colDevice, t: S.tip.device, left: true },
       { key: "quantization", label: S.colQuant, t: S.tip.quant },
       { key: "response", label: S.colResponse + c + S.secUnit, t: S.tip.response, num: true },
-      { key: "maxcams", label: S.colMaxCams, t: S.tip.maxCams, num: true },
+      { key: "maxcams", label: S.colMaxCams + S.withinTarget(config.response_target_s), t: S.tip.maxCams, num: true },
+      { key: "maximages", label: S.colMaxImages + S.withinTarget(config.response_target_s), t: S.tip.maxImages, num: true },
       { key: "tps", label: S.colTps + c, t: S.tip.tps, num: true },
       { key: "engine", label: S.colEngine, t: S.tip.engine, left: true },
       { key: "expand", label: "", t: null, nosort: true }
@@ -916,9 +968,55 @@
   function maxCell(entry, res, images) {
     var max = maxCams(entry, res, images);
     var top = highestTested(entry, res, images);
+    if (top && max === 0) {
+      var one = pointAt(entry, res || state.res, images || config.images, 1);
+      return { text: overTarget(), title: one ? S.camsOverTarget(fmtS(responseOf(one)), config.response_target_s) : "", over: true };
+    }
     if (top === 1) return { text: String(max), title: S.oneOnly, single: true };
+    var fail = (images || config.images) === 1 ? failedAt(entry, "cameras", res) : null;
+    if (fail && max === top) return { text: String(max), title: S.camsFailedAt(fail) };
     var open = max > 0 && max === top;
     return open ? { text: max + "+", title: S.maxAtLeast(max) } : { text: String(max), title: "" };
+  }
+
+  /* Max Images: a plus while the highest count tested still met the target,
+     none once a recorded failure is what stops it. */
+  function imagesCell(entry) {
+    var max = maxImages(entry), top = highestImages(entry), fail = failedAt(entry, "images");
+    if (!top) return { text: "—", title: "" };
+    if (max === 0) {
+      var one = pointAt(entry, state.res, 1, 1);
+      return { text: overTarget(), title: one ? S.imagesOverTarget(fmtS(responseOf(one)), config.response_target_s) : "", over: true };
+    }
+    if (fail && max === top) return { text: String(max), title: S.imagesFailedAt(fail) };
+    var open = max > 0 && max === top;
+    return open ? { text: max + "+", title: S.imagesAtLeast(max) } : { text: String(max), title: "" };
+  }
+
+  /* Not even one camera, or one image per request, within the target: the
+     target itself, ">3 s", rather than a 0 that reads as "does not run". */
+  function overTarget() {
+    return S.overTargetText(config.response_target_s);
+  }
+
+  /* The limits, whatever the target: the most measured that still worked, and
+     the first count that failed where the run went on until one did. Cameras
+     are read with one image each, images with one camera. */
+  function camLimit(entry) {
+    return { n: highestTested(entry, state.res, 1) || null, fail: failedAt(entry, "cameras") };
+  }
+
+  function imgLimit(entry) {
+    return { n: highestImages(entry) || null, fail: failedAt(entry, "images") };
+  }
+
+  /* The limits as a paragraph of the opened row: how far the configuration went
+     before a request failed, or how far it was measured where no limit was searched. */
+  function limitsText(entry) {
+    var c = camLimit(entry), i = imgLimit(entry), parts = [];
+    if (c.n) parts.push(c.fail ? S.camLimitAt(c.n, c.fail) : S.camsNotSearched(c.n));
+    if (i.n) parts.push(i.fail ? S.imgLimitAt(i.n, i.fail) : S.imgsNotSearched(i.n));
+    return parts.length ? "<p><strong>" + escapeHTML(S.limitsLead(state.res)) + "</strong> " + escapeHTML(parts.join(" ")) + "</p>" : "";
   }
 
   function entryRow(entry, cols) {
@@ -942,8 +1040,12 @@
           fmtS(responseOf(p)) + "</td>";
       } else if (k === "maxcams") {
         var mc = maxCell(entry);
-        html += '<td class="bt-num"' + (mc.title ? ' title="' + escapeHTML(mc.title) + '"' : "") + ">" +
-          (mc.text === "0" ? '<span class="bt-muted">0</span>' : mc.text) + (mc.single ? "*" : "") + "</td>";
+        html += '<td class="bt-num' + (mc.over ? " bt-bad" : "") + '"' + (mc.title ? ' title="' + escapeHTML(mc.title) + '"' : "") + ">" +
+          escapeHTML(mc.text) + (mc.single ? "*" : "") + "</td>";
+      } else if (k === "maximages") {
+        var mi = imagesCell(entry);
+        html += '<td class="bt-num' + (mi.over ? " bt-bad" : "") + '"' + (mi.title ? ' title="' + escapeHTML(mi.title) + '"' : "") + ">" +
+          escapeHTML(mi.text) + "</td>";
       } else if (k === "tps") html += '<td class="bt-num">' + (p ? fmt(p.tps, 1) : "—") + "</td>";
       else if (k === "engine") html += '<td class="bt-left">' + escapeHTML(entry.engine) + "</td>";
       else if (k === "expand") html += '<td class="bt-expand-cell">' + (only ? "" : isExpanded ? "&#9660;" : "&#9654;") + "</td>";
@@ -956,8 +1058,8 @@
   function detailRow(entry, span) {
     var html = '<tr class="bt-detail-row"><td colspan="' + span + '">';
     html += '<div class="bt-detail-content bt-visible">';
-    var expl = explanation(entry);
-    html += '<div class="bt-detail-pair vlmbt-pair"><div class="bt-detail-pair-col">' + sweepTable(entry) + "</div>" +
+    var expl = explanation(entry) + limitsText(entry);
+    html += '<div class="bt-detail-pair vlmbt-pair"><div class="bt-detail-pair-col">' + sweepTable(entry) + imagesSweepTable(entry) + "</div>" +
       '<div class="bt-detail-pair-col">' + (expl ? '<div class="bt-explained">' +
       '<div class="bt-capacity-title">' + escapeHTML(S.explainedHeading) + "</div>" + expl + "</div>" : "") + "</div></div>";
     html += chartCard(entry);
@@ -966,22 +1068,52 @@
     return html + "</div></td></tr>";
   }
 
+  /* The opened row's measurements: by number of cameras at the selected image
+     size and image count, then, where more than one count was measured, by
+     number of images in one request with one camera. Each is marked against
+     the target, not "failed" — a level over the target was still answered —
+     and requests that did fail are named on their own. Where the run went on
+     until a request failed, the count that failed closes the table, with no
+     figures: no level is measured once one of its requests failed. */
+  function sweepHead(title, first) {
+    return '<div class="vlmbt-sweep"><div class="vlmbt-pane-title">' + escapeHTML(title) + "</div>" +
+      '<table class="bt-detail-table"><thead><tr>' + "<th>" + escapeHTML(first) + "</th><th>" +
+      escapeHTML(S.detailResponse) + "</th><th>" + escapeHTML(S.detailTps) + "</th><th>" +
+      escapeHTML(S.detailStatus) + "</th></tr></thead><tbody>";
+  }
+
+  function sweepRow(n, p) {
+    var ok = meetsTarget(p), t = config.response_target_s;
+    return "<tr><td>" + n + "</td>" +
+      '<td class="' + (ok ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtS(responseOf(p)) + "</td>" +
+      "<td>" + fmt(p.tps, 1) + "</td>" +
+      '<td class="' + (ok ? "bt-detail-pass" : "bt-detail-fail") + '" title="' + escapeHTML(ok ? S.targetMet : S.targetNotMet) + '">' +
+      escapeHTML(ok ? S.withinTargetText(t) : S.overTargetText(t)) +
+      (p.failed ? ' <span class="bt-dp-bad" title="' + escapeHTML(S.failedTitle(p.failed, p.requests)) + '">· ' +
+        escapeHTML(S.failedShort(p.failed, p.requests)) + "</span>" : "") + "</td></tr>";
+  }
+
+  function failedRow(n, title) {
+    return "<tr><td>" + n + "</td><td>—</td><td>—</td>" +
+      '<td class="bt-detail-fail" title="' + escapeHTML(title) + '">' + escapeHTML(S.failedLevel) + "</td></tr>";
+  }
+
   function sweepTable(entry) {
-    var html = '<div class="vlmbt-sweep"><div class="vlmbt-pane-title">' +
-      escapeHTML(S.sweepAt(state.res, dims(state.res), config.images)) + "</div>";
-    html += '<table class="bt-detail-table"><thead><tr>' +
-      "<th>" + escapeHTML(S.detailC) + "</th><th>" + escapeHTML(S.detailResponse) + "</th><th>" +
-      escapeHTML(S.detailTps) + "</th><th>" + escapeHTML(S.detailStatus) + "</th></tr></thead><tbody>";
-    pointsAt(entry, state.res, config.images).forEach(function (p) {
-      var ok = meetsTarget(p);
-      var why = ok ? S.targetMet : S.targetNotMet;
-      html += "<tr>";
-      html += "<td>" + p.c + "</td>";
-      html += '<td class="' + (responseMeets(responseOf(p)) ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtS(responseOf(p)) + "</td>";
-      html += "<td>" + fmt(p.tps, 1) + "</td>";
-      html += '<td class="' + (ok ? "bt-detail-pass" : "bt-detail-fail") + '" title="' + escapeHTML(why) + '">' +
-        escapeHTML(ok ? S.pass : S.fail) + "</td></tr>";
-    });
+    var html = sweepHead(S.sweepAt(state.res, dims(state.res), config.images), S.detailC);
+    pointsAt(entry, state.res, config.images).forEach(function (p) { html += sweepRow(p.c, p); });
+    var fail = config.images === 1 ? failedAt(entry, "cameras", state.res) : null;
+    if (fail) html += failedRow(fail, S.camsFailedAt(fail));
+    return html + "</tbody></table></div>";
+  }
+
+  function imagesSweepTable(entry) {
+    var pts = (entry.data_points || []).filter(function (p) { return p.res === state.res && p.c === 1; })
+      .sort(function (a, b) { return a.images - b.images; });
+    if (pts.length < 2) return "";
+    var html = sweepHead(S.imagesSweepAt(state.res, dims(state.res)), S.detailImages);
+    pts.forEach(function (p) { html += sweepRow(p.images, p); });
+    var fail = failedAt(entry, "images", state.res);
+    if (fail) html += failedRow(fail, S.imagesFailedRow(fail));
     return html + "</tbody></table></div>";
   }
 

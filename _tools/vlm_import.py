@@ -33,11 +33,18 @@ SIZES = ["480p", "720p", "1080p", "2K"]
 
 # The export's device string starts with the product; the rest (address, GPU
 # slot) is lab detail. name = shown in the explorer; full = the product.
+# The first matching prefix wins, so a longer prefix goes before a shorter one.
 DEVICES = [
     ("Jetson Orin NX 16 GB", "Jetson Orin NX 16GB", "orinnx",
      {"name": "Jetson Orin NX 16GB", "memory_gb": 16, "unified": True}),
-    ("Jetson AGX Orin 32 GB", "Jetson AGX Orin 32GB", "agxorin",
+    ("Jetson AGX Orin 32 GB module", "Jetson AGX Orin 32GB", "agxorin32",
+     {"name": "Jetson AGX Orin 32GB", "memory_gb": 32, "unified": True}),
+    ("Jetson AGX Orin 32 GB", "Jetson AGX Orin 32GB Developer Kit", "agxorin",
      {"name": "Jetson AGX Orin Developer Kit", "memory_gb": 32, "unified": True}),
+    ("Jetson AGX Thor Developer Kit", "Jetson AGX Thor", "agxthor",
+     {"name": "Jetson AGX Thor Developer Kit", "memory_gb": 128, "unified": True}),
+    ("NVIDIA DGX Spark", "DGX Spark", "dgxspark",
+     {"name": "NVIDIA DGX Spark", "memory_gb": 128, "unified": True}),
     ("RTX PRO 6000 Blackwell Max-Q", "RTX PRO 6000 Max-Q", "rtxpro6000maxq",
      {"name": "RTX PRO 6000 Blackwell Max-Q Workstation Edition", "memory_gb": 96, "unified": False}),
     ("RTX PRO 6000 Blackwell Workstation", "RTX PRO 6000", "rtxpro6000",
@@ -117,6 +124,10 @@ def settings_of(run, conc):
     m = re.search(r"max-num-seqs (\d+)", text)
     if m:
         notes.append(f"max-num-seqs {m.group(1)}")
+        # the camera-limit levels ran on a server restarted with room for every camera
+        cl = ((conc or {}).get("perf_settings") or {}).get("camera_limit") or {}
+        if cl.get("max_num_seqs") and cl.get("levels"):
+            notes[-1] += f" ({cl['resolution']}, {min(cl['levels'])} or more cameras: {cl['max_num_seqs']})"
     if "vllm-omni" in text:
         notes.append("vLLM-Omni image")
     if "cuda-compat-orin" in text or "compat driver" in text:
@@ -136,6 +147,20 @@ def cells(run):
                     "ttft_s": round(p["TTFT Mean (ms)"] / 1000, 3), "tps": p["TPS Mean"],
                     "requests": p["Valid"] + p["Failed"], "failed": p["Failed"]}
     return out
+
+
+def limits_of(run, conc):
+    """Where a run went on until a request failed: the first image count per
+    image size (one camera) and the first number of cameras (one image) that
+    failed. {"images": {"720p": 512}, "cameras": {"720p": 128}}, or None."""
+    out = {}
+    fa = (run.get("perf_settings") or {}).get("failed_at") or {}
+    if fa:
+        out["images"] = {res: fa[res] for res in SIZES if res in fa}
+    cl = ((conc or {}).get("perf_settings") or {}).get("camera_limit") or {}
+    if cl.get("failed_at"):
+        out["cameras"] = {cl["resolution"]: cl["failed_at"]}
+    return out or None
 
 
 def slug(s):
@@ -159,13 +184,17 @@ def build(doc):
         engine, version = engine_of(run["engine"])
         pts = cells(run)
         pts.update(cells(conc) if conc else {})  # the camera sweep wins where both measured a cell
-        rows.append({
+        row = {
             "id": f"{slug(name)}_{code}_{quant.lower().replace('_', '')}_{engine.replace('.', '').lower()}",
             "model": name, "device": dev, "quantization": quant, "engine": engine,
             "engine_version": version, "platform": platform_of(run["device"]),
             "served_repo": served, "notes": settings_of(run, conc),
             "data_points": [pts[k] for k in sorted(pts, key=lambda k: (SIZES.index(k[0]), k[1], k[2]))],
-        })
+        }
+        limits = limits_of(run, conc)
+        if limits:
+            row["limits"] = limits
+        rows.append(row)
     ids = [r["id"] for r in rows]
     dup = sorted({i for i in ids if ids.count(i) > 1})
     if dup:

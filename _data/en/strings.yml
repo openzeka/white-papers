@@ -101,6 +101,11 @@ bench_page:
   vlm_tps: "TPS (tok/s)"
   vlm_resp: "Response (s)"
   vlm_maxcams: "Max Cameras (response ≤ %target% s)"
+  vlm_over: ">%target% s"
+  vlm_within: "≤%target% s"
+  vlm_status: "Target"
+  vlm_failed: "Failed"
+  vlm_imgs: "Images per request"
 
 # The changelog: /changelog/ and the home-page block (_includes/changelog.html).
 changelog:
