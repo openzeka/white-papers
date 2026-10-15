@@ -195,18 +195,36 @@ module OzBenchPages
     facts = [[b["model"], r["model"]], [b["params"], m["params"] || "—"]]
     facts += [[b["device"], r["device"]], [b["quant"], r["quantization"]], [b["vlm_res"], res],
               [b["vlm_images"], cfg["images"]],
-              [OzVisibility.fill(b["vlm_maxcams"], "target" => t), "#{r['oz_max_c']}#{r['oz_max_c_open'] ? '+' : ''}"],
+              [OzVisibility.fill(b["vlm_maxcams"], "target" => t),
+               r["oz_max_c"].zero? ? OzVisibility.fill(b["vlm_over"], "target" => t) : "#{r['oz_max_c']}#{r['oz_max_c_open'] ? '+' : ''}"],
               [b["engine"], r["engine"]]]
     out = +%(<div class="bt-static">\n<table>\n<tbody>\n)
     facts.each { |k, v| out << "<tr><th scope=\"row\">#{h k}</th><td>#{h v}</td></tr>\n" }
     out << "</tbody>\n</table>\n<table>\n<thead><tr>"
-    [b["vlm_cams"], b["vlm_resp"], b["vlm_tps"], b["col_status"]].each { |k| out << "<th>#{h k}</th>" }
+    [b["vlm_cams"], b["vlm_resp"], b["vlm_tps"], b["vlm_status"]].each { |k| out << "<th>#{h k}</th>" }
     out << "</tr></thead>\n<tbody>\n"
     (r["oz_default_points"] || []).each do |p|
       out << "<tr><td>#{p['c']}</td><td>#{sec(p['ttft_s'])}</td><td>#{format('%.1f', p['tps'].to_f)}</td>" \
-             "<td>#{OzVisibility.vlm_meets(p, cfg) ? 'PASS' : 'FAIL'}</td></tr>\n"
+             "<td>#{h OzVisibility.fill(b[OzVisibility.vlm_meets(p, cfg) ? 'vlm_within' : 'vlm_over'], 'target' => t)}</td></tr>\n"
     end
+    # the level at which a request failed closes the sweep, as in the widget
+    fail = ((r["limits"] || {})["cameras"] || {})[res]
+    out << "<tr><td>#{fail}</td><td>—</td><td>—</td><td>#{h b['vlm_failed']}</td></tr>\n" if fail && cfg["images"].to_i == 1
     out << "</tbody>\n</table>\n"
+    # then images per request with one camera, closed by the count that failed, as in the widget
+    imgs = (r["data_points"] || []).select { |p| p["res"] == res && p["c"].to_i == 1 }.sort_by { |p| p["images"].to_i }
+    if imgs.size > 1
+      out << "<table>\n<thead><tr>"
+      [b["vlm_imgs"], b["vlm_resp"], b["vlm_tps"], b["vlm_status"]].each { |k| out << "<th>#{h k}</th>" }
+      out << "</tr></thead>\n<tbody>\n"
+      imgs.each do |p|
+        out << "<tr><td>#{p['images']}</td><td>#{sec(p['ttft_s'])}</td><td>#{format('%.1f', p['tps'].to_f)}</td>" \
+               "<td>#{h OzVisibility.fill(b[OzVisibility.vlm_meets(p, cfg) ? 'vlm_within' : 'vlm_over'], 'target' => t)}</td></tr>\n"
+      end
+      ifail = ((r["limits"] || {})["images"] || {})[res]
+      out << "<tr><td>#{ifail}</td><td>—</td><td>—</td><td>#{h b['vlm_failed']}</td></tr>\n" if ifail
+      out << "</tbody>\n</table>\n"
+    end
     (r["oz_parts"] || {})[lang].to_a.each { |p| out << "<p>#{h p}</p>\n" }
     out << "</div>\n"
   end

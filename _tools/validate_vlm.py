@@ -59,8 +59,18 @@ def main():
     open_rows, zero_rows = 0, 0
     for i, r in enumerate(d.get("benchmarks") or []):
         rid = r.get("id", f"#{i}")
-        if list(r.keys()) != ROW_KEYS:
-            err(f"{rid}: keys must be exactly, in order, {ROW_KEYS}; got {list(r.keys())}")
+        if list(r.keys()) not in (ROW_KEYS, ROW_KEYS + ["limits"]):
+            err(f"{rid}: keys must be exactly, in order, {ROW_KEYS} (then optionally limits); got {list(r.keys())}")
+        for kind, by_res in (r.get("limits") or {}).items():
+            # the first image count (one camera) or number of cameras (one image) at which a request failed
+            if kind not in ("images", "cameras") or not isinstance(by_res, dict):
+                err(f"{rid}: limits.{kind} must be images or cameras, each {{size: first failing count}}")
+                continue
+            for res, n in by_res.items():
+                top = max((p["c"] if kind == "cameras" else p["images"] for p in r.get("data_points") or []
+                           if p["res"] == res and (p["images"] if kind == "cameras" else p["c"]) == 1), default=0)
+                if res not in SIZES or not isinstance(n, int) or n <= top:
+                    err(f"{rid}: limits.{kind}.{res} = {n!r} must be a count above the highest measured ({top})")
         if not ID_RE.match(str(r.get("id", ""))):
             err(f"{rid}: id must be <model>_<device>_<quantization>_<engine>, lower case")
         if rid in ids:

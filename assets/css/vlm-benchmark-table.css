@@ -9,6 +9,15 @@
   margin-bottom: 0;
 }
 
+/* The images-per-request table under the cameras one, as wide. */
+.vlmbt-sweep + .vlmbt-sweep {
+  margin-top: 16px;
+}
+
+.vlmbt-sweep .bt-detail-table {
+  width: 100%;
+}
+
 .vlmbt-pane-title {
   font-size: 12px;
   font-weight: 700;

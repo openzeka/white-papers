@@ -101,6 +101,11 @@ bench_page:
   vlm_tps: "TPS (tok/s)"
   vlm_resp: "Yanıt (sn)"
   vlm_maxcams: "Maks. kamera (yanıt ≤ %target% sn)"
+  vlm_over: ">%target% sn"
+  vlm_within: "≤%target% sn"
+  vlm_status: "Hedef"
+  vlm_failed: "Başarısız"
+  vlm_imgs: "İstek başına görüntü"
 
 # The changelog: /changelog/ and the home-page block (_includes/changelog.html).
 changelog:

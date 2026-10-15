@@ -1,0 +1,6 @@
+{
+  "name": "DGX Spark",
+  "product": "NVIDIA DGX Spark",
+  "memory_gb": 128,
+  "unified": true
+}

@@ -14,6 +14,358 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason1-7b_agxorin32_q4km_llamacpp
+  text:
+    en: "Cosmos-Reason1-7B on Jetson AGX Orin 32GB: Q4_K_M weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Cosmos-Reason1-7B, Jetson AGX Orin 32GB üzerinde: Q4_K_M ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Cosmos-Reason1-7B op Jetson AGX Orin 32GB: Q4_K_M-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason2-2b_agxorin32_q80_llamacpp
+  text:
+    en: "Cosmos-Reason2-2B on Jetson AGX Orin 32GB: Q8_0 weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Cosmos-Reason2-2B, Jetson AGX Orin 32GB üzerinde: Q8_0 ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Cosmos-Reason2-2B op Jetson AGX Orin 32GB: Q8_0-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason2-8b_agxorin32_q4km_llamacpp
+  text:
+    en: "Cosmos-Reason2-8B on Jetson AGX Orin 32GB: Q4_K_M weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Cosmos-Reason2-8B, Jetson AGX Orin 32GB üzerinde: Q4_K_M ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Cosmos-Reason2-8B op Jetson AGX Orin 32GB: Q4_K_M-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos3-edge_agxorin32_bf16_vllm
+  text:
+    en: "Cosmos3-Edge on Jetson AGX Orin 32GB: BF16 weights served with vLLM, measured with up to 8 cameras."
+    tr: "Cosmos3-Edge, Jetson AGX Orin 32GB üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Cosmos3-Edge op Jetson AGX Orin 32GB: BF16-gewichten geserveerd met vLLM, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: gemma-4-26b-a4b-it_agxorin32_q40_llamacpp
+  text:
+    en: "Gemma-4-26B-A4B-it on Jetson AGX Orin 32GB: Q4_0 weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Gemma-4-26B-A4B-it, Jetson AGX Orin 32GB üzerinde: Q4_0 ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Gemma-4-26B-A4B-it op Jetson AGX Orin 32GB: Q4_0-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: gemma-4-e4b-it_agxorin32_q40_llamacpp
+  text:
+    en: "Gemma-4-E4B-it on Jetson AGX Orin 32GB: Q4_0 weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Gemma-4-E4B-it, Jetson AGX Orin 32GB üzerinde: Q4_0 ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Gemma-4-E4B-it op Jetson AGX Orin 32GB: Q4_0-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-4b-instruct_agxorin32_q80_llamacpp
+  text:
+    en: "Qwen3-VL-4B-Instruct on Jetson AGX Orin 32GB: Q8_0 weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Qwen3-VL-4B-Instruct, Jetson AGX Orin 32GB üzerinde: Q8_0 ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Qwen3-VL-4B-Instruct op Jetson AGX Orin 32GB: Q8_0-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-8b-instruct_agxorin32_q4km_llamacpp
+  text:
+    en: "Qwen3-VL-8B-Instruct on Jetson AGX Orin 32GB: Q4_K_M weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Qwen3-VL-8B-Instruct, Jetson AGX Orin 32GB üzerinde: Q4_K_M ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Qwen3-VL-8B-Instruct op Jetson AGX Orin 32GB: Q4_K_M-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-8b-instruct_agxorin32_q80_llamacpp
+  text:
+    en: "Qwen3-VL-8B-Instruct on Jetson AGX Orin 32GB: Q8_0 weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Qwen3-VL-8B-Instruct, Jetson AGX Orin 32GB üzerinde: Q8_0 ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Qwen3-VL-8B-Instruct op Jetson AGX Orin 32GB: Q8_0-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3.5-4b_agxorin32_q4km_llamacpp
+  text:
+    en: "Qwen3.5-4B on Jetson AGX Orin 32GB: Q4_K_M weights served with llama.cpp, measured with up to 8 cameras."
+    tr: "Qwen3.5-4B, Jetson AGX Orin 32GB üzerinde: Q4_K_M ağırlıklar llama.cpp ile sunuldu; en fazla 8 kamerayla ölçüldü."
+    nl: "Qwen3.5-4B op Jetson AGX Orin 32GB: Q4_K_M-gewichten geserveerd met llama.cpp, gemeten met tot 8 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason1-7b_agxthor_bf16_vllm
+  text:
+    en: "Cosmos-Reason1-7B on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 16 cameras."
+    tr: "Cosmos-Reason1-7B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 16 kamerayla ölçüldü."
+    nl: "Cosmos-Reason1-7B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 16 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason2-2b_agxthor_bf16_vllm
+  text:
+    en: "Cosmos-Reason2-2B on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 256 cameras."
+    tr: "Cosmos-Reason2-2B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 256 kamerayla ölçüldü."
+    nl: "Cosmos-Reason2-2B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 256 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason2-8b_agxthor_bf16_vllm
+  text:
+    en: "Cosmos-Reason2-8B on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 112 cameras."
+    tr: "Cosmos-Reason2-8B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 112 kamerayla ölçüldü."
+    nl: "Cosmos-Reason2-8B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 112 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos3-edge_agxthor_bf16_vllm
+  text:
+    en: "Cosmos3-Edge on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 208 cameras."
+    tr: "Cosmos3-Edge, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 208 kamerayla ölçüldü."
+    nl: "Cosmos3-Edge op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 208 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos3-nano_agxthor_bf16_vllm
+  text:
+    en: "Cosmos3-Nano on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 112 cameras."
+    tr: "Cosmos3-Nano, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 112 kamerayla ölçüldü."
+    nl: "Cosmos3-Nano op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 112 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: eagle2.5-8b_agxthor_bf16_vllm
+  text:
+    en: "Eagle2.5-8B on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 52 cameras."
+    tr: "Eagle2.5-8B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 52 kamerayla ölçüldü."
+    nl: "Eagle2.5-8B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 52 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: gemma-4-31b-it_agxthor_bf16_vllm
+  text:
+    en: "Gemma-4-31B-it on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 60 cameras."
+    tr: "Gemma-4-31B-it, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 60 kamerayla ölçüldü."
+    nl: "Gemma-4-31B-it op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 60 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: gemma-4-31b-it_agxthor_nvfp4_vllm
+  text:
+    en: "Gemma-4-31B-it on Jetson AGX Thor: NVFP4 weights served with vLLM, measured with up to 80 cameras."
+    tr: "Gemma-4-31B-it, Jetson AGX Thor üzerinde: NVFP4 ağırlıklar vLLM ile sunuldu; en fazla 80 kamerayla ölçüldü."
+    nl: "Gemma-4-31B-it op Jetson AGX Thor: NVFP4-gewichten geserveerd met vLLM, gemeten met tot 80 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: llama-3.1-nemotron-nano-vl-8b_agxthor_bf16_vllm
+  text:
+    en: "Llama-3.1-Nemotron-Nano-VL-8B on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 40 cameras."
+    tr: "Llama-3.1-Nemotron-Nano-VL-8B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 40 kamerayla ölçüldü."
+    nl: "Llama-3.1-Nemotron-Nano-VL-8B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 40 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: medgemma-1.5-4b-it_agxthor_bf16_vllm
+  text:
+    en: "MedGemma-1.5-4B-it on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 192 cameras."
+    tr: "MedGemma-1.5-4B-it, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 192 kamerayla ölçüldü."
+    nl: "MedGemma-1.5-4B-it op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 192 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: nemotron-nano-12b-v2-vl_agxthor_bf16_vllm
+  text:
+    en: "Nemotron-Nano-12B-v2-VL on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 88 cameras."
+    tr: "Nemotron-Nano-12B-v2-VL, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 88 kamerayla ölçüldü."
+    nl: "Nemotron-Nano-12B-v2-VL op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 88 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-30b-a3b-instruct_agxthor_fp8_vllm
+  text:
+    en: "Qwen3-VL-30B-A3B-Instruct on Jetson AGX Thor: FP8 weights served with vLLM, measured with up to 96 cameras."
+    tr: "Qwen3-VL-30B-A3B-Instruct, Jetson AGX Thor üzerinde: FP8 ağırlıklar vLLM ile sunuldu; en fazla 96 kamerayla ölçüldü."
+    nl: "Qwen3-VL-30B-A3B-Instruct op Jetson AGX Thor: FP8-gewichten geserveerd met vLLM, gemeten met tot 96 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-4b-instruct_agxthor_bf16_vllm
+  text:
+    en: "Qwen3-VL-4B-Instruct on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 160 cameras."
+    tr: "Qwen3-VL-4B-Instruct, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 160 kamerayla ölçüldü."
+    nl: "Qwen3-VL-4B-Instruct op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 160 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-8b-instruct_agxthor_bf16_vllm
+  text:
+    en: "Qwen3-VL-8B-Instruct on Jetson AGX Thor: BF16 weights served with vLLM, measured with up to 104 cameras."
+    tr: "Qwen3-VL-8B-Instruct, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 104 kamerayla ölçüldü."
+    nl: "Qwen3-VL-8B-Instruct op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, gemeten met tot 104 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3.6-35b-a3b_agxthor_fp8_vllm
+  text:
+    en: "Qwen3.6-35B-A3B on Jetson AGX Thor: FP8 weights served with vLLM, measured with up to 104 cameras."
+    tr: "Qwen3.6-35B-A3B, Jetson AGX Thor üzerinde: FP8 ağırlıklar vLLM ile sunuldu; en fazla 104 kamerayla ölçüldü."
+    nl: "Qwen3.6-35B-A3B op Jetson AGX Thor: FP8-gewichten geserveerd met vLLM, gemeten met tot 104 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3.6-35b-a3b_agxthor_nvfp4_vllm
+  text:
+    en: "Qwen3.6-35B-A3B on Jetson AGX Thor: NVFP4 weights served with vLLM, measured with up to 104 cameras."
+    tr: "Qwen3.6-35B-A3B, Jetson AGX Thor üzerinde: NVFP4 ağırlıklar vLLM ile sunuldu; en fazla 104 kamerayla ölçüldü."
+    nl: "Qwen3.6-35B-A3B op Jetson AGX Thor: NVFP4-gewichten geserveerd met vLLM, gemeten met tot 104 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3.8-27b_agxthor_fp8_vllm
+  text:
+    en: "Qwen3.8-27B on Jetson AGX Thor: FP8 weights served with vLLM, measured with up to 44 cameras."
+    tr: "Qwen3.8-27B, Jetson AGX Thor üzerinde: FP8 ağırlıklar vLLM ile sunuldu; en fazla 44 kamerayla ölçüldü."
+    nl: "Qwen3.8-27B op Jetson AGX Thor: FP8-gewichten geserveerd met vLLM, gemeten met tot 44 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason1-7b_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos-Reason1-7B on DGX Spark: BF16 weights served with vLLM, measured with up to 16 cameras."
+    tr: "Cosmos-Reason1-7B, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 16 kamerayla ölçüldü."
+    nl: "Cosmos-Reason1-7B op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 16 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason2-2b_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos-Reason2-2B on DGX Spark: BF16 weights served with vLLM, measured with up to 224 cameras."
+    tr: "Cosmos-Reason2-2B, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 224 kamerayla ölçüldü."
+    nl: "Cosmos-Reason2-2B op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 224 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos-reason2-8b_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos-Reason2-8B on DGX Spark: BF16 weights served with vLLM, measured with up to 96 cameras."
+    tr: "Cosmos-Reason2-8B, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 96 kamerayla ölçüldü."
+    nl: "Cosmos-Reason2-8B op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 96 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos3-edge_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos3-Edge on DGX Spark: BF16 weights served with vLLM, measured with up to 16 cameras."
+    tr: "Cosmos3-Edge, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 16 kamerayla ölçüldü."
+    nl: "Cosmos3-Edge op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 16 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: cosmos3-nano_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos3-Nano on DGX Spark: BF16 weights served with vLLM, measured with up to 96 cameras."
+    tr: "Cosmos3-Nano, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 96 kamerayla ölçüldü."
+    nl: "Cosmos3-Nano op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 96 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: eagle2.5-8b_dgxspark_bf16_vllm
+  text:
+    en: "Eagle2.5-8B on DGX Spark: BF16 weights served with vLLM, measured with up to 44 cameras."
+    tr: "Eagle2.5-8B, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 44 kamerayla ölçüldü."
+    nl: "Eagle2.5-8B op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 44 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: gemma-4-31b-it_dgxspark_bf16_vllm
+  text:
+    en: "Gemma-4-31B-it on DGX Spark: BF16 weights served with vLLM, measured with up to 64 cameras."
+    tr: "Gemma-4-31B-it, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 64 kamerayla ölçüldü."
+    nl: "Gemma-4-31B-it op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 64 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: gemma-4-31b-it_dgxspark_nvfp4_vllm
+  text:
+    en: "Gemma-4-31B-it on DGX Spark: NVFP4 weights served with vLLM, measured with up to 96 cameras."
+    tr: "Gemma-4-31B-it, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM ile sunuldu; en fazla 96 kamerayla ölçüldü."
+    nl: "Gemma-4-31B-it op DGX Spark: NVFP4-gewichten geserveerd met vLLM, gemeten met tot 96 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: llama-3.1-nemotron-nano-vl-8b_dgxspark_bf16_vllm
+  text:
+    en: "Llama-3.1-Nemotron-Nano-VL-8B on DGX Spark: BF16 weights served with vLLM, measured with up to 32 cameras."
+    tr: "Llama-3.1-Nemotron-Nano-VL-8B, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 32 kamerayla ölçüldü."
+    nl: "Llama-3.1-Nemotron-Nano-VL-8B op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 32 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: medgemma-1.5-4b-it_dgxspark_bf16_vllm
+  text:
+    en: "MedGemma-1.5-4B-it on DGX Spark: BF16 weights served with vLLM, measured with up to 240 cameras."
+    tr: "MedGemma-1.5-4B-it, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 240 kamerayla ölçüldü."
+    nl: "MedGemma-1.5-4B-it op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 240 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: nemotron-nano-12b-v2-vl_dgxspark_bf16_vllm
+  text:
+    en: "Nemotron-Nano-12B-v2-VL on DGX Spark: BF16 weights served with vLLM, measured with up to 72 cameras."
+    tr: "Nemotron-Nano-12B-v2-VL, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 72 kamerayla ölçüldü."
+    nl: "Nemotron-Nano-12B-v2-VL op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 72 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-30b-a3b-instruct_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3-VL-30B-A3B-Instruct on DGX Spark: FP8 weights served with vLLM, measured with up to 104 cameras."
+    tr: "Qwen3-VL-30B-A3B-Instruct, DGX Spark üzerinde: FP8 ağırlıklar vLLM ile sunuldu; en fazla 104 kamerayla ölçüldü."
+    nl: "Qwen3-VL-30B-A3B-Instruct op DGX Spark: FP8-gewichten geserveerd met vLLM, gemeten met tot 104 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-4b-instruct_dgxspark_bf16_vllm
+  text:
+    en: "Qwen3-VL-4B-Instruct on DGX Spark: BF16 weights served with vLLM, measured with up to 128 cameras."
+    tr: "Qwen3-VL-4B-Instruct, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 128 kamerayla ölçüldü."
+    nl: "Qwen3-VL-4B-Instruct op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 128 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3-vl-8b-instruct_dgxspark_bf16_vllm
+  text:
+    en: "Qwen3-VL-8B-Instruct on DGX Spark: BF16 weights served with vLLM, measured with up to 88 cameras."
+    tr: "Qwen3-VL-8B-Instruct, DGX Spark üzerinde: BF16 ağırlıklar vLLM ile sunuldu; en fazla 88 kamerayla ölçüldü."
+    nl: "Qwen3-VL-8B-Instruct op DGX Spark: BF16-gewichten geserveerd met vLLM, gemeten met tot 88 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3.6-35b-a3b_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3.6-35B-A3B on DGX Spark: FP8 weights served with vLLM, measured with up to 104 cameras."
+    tr: "Qwen3.6-35B-A3B, DGX Spark üzerinde: FP8 ağırlıklar vLLM ile sunuldu; en fazla 104 kamerayla ölçüldü."
+    nl: "Qwen3.6-35B-A3B op DGX Spark: FP8-gewichten geserveerd met vLLM, gemeten met tot 104 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3.6-35b-a3b_dgxspark_nvfp4_vllm
+  text:
+    en: "Qwen3.6-35B-A3B on DGX Spark: NVFP4 weights served with vLLM, measured with up to 120 cameras."
+    tr: "Qwen3.6-35B-A3B, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM ile sunuldu; en fazla 120 kamerayla ölçüldü."
+    nl: "Qwen3.6-35B-A3B op DGX Spark: NVFP4-gewichten geserveerd met vLLM, gemeten met tot 120 camera's."
+
+- date: 2026-10-13
+  type: vlm
+  vlm: qwen3.8-27b_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3.8-27B on DGX Spark: FP8 weights served with vLLM, measured with up to 48 cameras."
+    tr: "Qwen3.8-27B, DGX Spark üzerinde: FP8 ağırlıklar vLLM ile sunuldu; en fazla 48 kamerayla ölçüldü."
+    nl: "Qwen3.8-27B op DGX Spark: FP8-gewichten geserveerd met vLLM, gemeten met tot 48 camera's."
+
 - date: 2026-10-12
   type: paper
   page: llm-quantization-selection
