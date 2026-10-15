@@ -16,6 +16,14 @@
 # Check with: python3 _tools/check_changelog.py
 
 - date: 2026-10-15
+  type: paper
+  page: dgx-spark-link-speed-tensor-parallel
+  text:
+    en: "How much network bandwidth an 8-Spark tensor-parallel cluster really uses, and what running each DGX Spark at 100G instead of 200G costs: the mechanism, an estimate from the model's architecture, and measurements with GLM-5.3 at TP8."
+    tr: "8 Spark'lık bir tensör paralel cluster'ın ağ bant genişliğini gerçekte ne kadar kullandığı ve her DGX Spark'ı 200G yerine 100G ile çalıştırmanın neye mal olduğu: mekanizma, modelin mimarisinden yapılan tahmin ve GLM-5.3 ile TP8'de yapılan ölçümler."
+    nl: "Hoeveel netwerkbandbreedte een tensorparallel cluster van 8 Sparks werkelijk gebruikt, en wat het kost om elke DGX Spark op 100G in plaats van 200G te laten draaien: het mechanisme, een schatting op basis van de architectuur van het model, en metingen met GLM-5.3 op TP8."
+
+- date: 2026-10-15
   type: vlm
   page: vlm-inference-benchmarks
   text:
