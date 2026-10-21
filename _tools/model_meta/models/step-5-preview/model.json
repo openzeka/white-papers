@@ -1,0 +1,22 @@
+{
+  "model": "Step-5-Preview",
+  "repo": "stepfun-ai/Step-5-Preview",
+  "revision": "364b3b03fed2477aa0953fe855a2c4c8c48ee3cc",
+  "config_sha256": "e535c5c9e6385e5c39d55daf346fc0b42dd93496bf5e540ea442168b2524bb63",
+  "fetched": "2026-10-21",
+  "hf": {
+    "created": "2026-09-20T03:15:06.000Z",
+    "last_modified": "2026-10-15T01:28:10.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": null,
+    "pipeline_tag": null,
+    "safetensors_parameters": 604339504832,
+    "parameters_by_dtype": {
+      "F32": 2433984,
+      "BF16": 39615980288,
+      "F8_E4M3": 564721090560
+    }
+  }
+}

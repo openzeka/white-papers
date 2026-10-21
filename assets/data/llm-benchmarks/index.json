@@ -649,6 +649,31 @@
           "id": "mimo-v2.6-pro-mopd_b300_fp4_vllm_tp4",
           "model": "MiMo-V2.6-Pro-MOPD",
           "path": "dgx-b300/mimo-v2.6-pro-mopd_b300_fp4_vllm_tp4.json"
+        },
+        {
+          "id": "muse-spark-open-816b-a42b_b300_nvfp4_vllm_tp4",
+          "model": "Muse-Spark-Open-816B-A42B",
+          "path": "dgx-b300/muse-spark-open-816b-a42b_b300_nvfp4_vllm_tp4.json"
+        },
+        {
+          "id": "nemotron-3.5-super-vl-120b-a12b_b300_bf16_vllm_tp2",
+          "model": "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B",
+          "path": "dgx-b300/nemotron-3.5-super-vl-120b-a12b_b300_bf16_vllm_tp2.json"
+        },
+        {
+          "id": "step-5-preview_b300_fp8_vllm_tp4",
+          "model": "Step-5-Preview",
+          "path": "dgx-b300/step-5-preview_b300_fp8_vllm_tp4.json"
+        },
+        {
+          "id": "step-5-preview_b300_fp8_vllm_tp4_ep4",
+          "model": "Step-5-Preview",
+          "path": "dgx-b300/step-5-preview_b300_fp8_vllm_tp4_ep4.json"
+        },
+        {
+          "id": "step-5-preview_b300_fp8_vllm_dp4",
+          "model": "Step-5-Preview",
+          "path": "dgx-b300/step-5-preview_b300_fp8_vllm_dp4.json"
         }
       ]
     }

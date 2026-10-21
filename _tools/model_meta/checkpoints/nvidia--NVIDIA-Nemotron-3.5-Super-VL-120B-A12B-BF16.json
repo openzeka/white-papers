@@ -1,0 +1,283 @@
+{
+  "repo": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+  "revision": "1f8953f7f0935358e3605150d22bc15df062061c",
+  "fetched": "2026-10-21",
+  "safetensors_bytes": 248913061416,
+  "quantization": {
+    "method": null,
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-10-12T15:32:06.000Z",
+    "last_modified": "2026-10-16T23:39:54.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 124453395976,
+    "parameters_by_dtype": {
+      "BF16": 124453374976,
+      "F32": 20998,
+      "I64": 2
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00063.safetensors",
+      "size": 3979553376
+    },
+    {
+      "path": "model-00002-of-00063.safetensors",
+      "size": 3983776296
+    },
+    {
+      "path": "model-00003-of-00063.safetensors",
+      "size": 3980236632
+    },
+    {
+      "path": "model-00004-of-00063.safetensors",
+      "size": 3983775736
+    },
+    {
+      "path": "model-00005-of-00063.safetensors",
+      "size": 3983521112
+    },
+    {
+      "path": "model-00006-of-00063.safetensors",
+      "size": 3980236616
+    },
+    {
+      "path": "model-00007-of-00063.safetensors",
+      "size": 3983776224
+    },
+    {
+      "path": "model-00008-of-00063.safetensors",
+      "size": 3983776976
+    },
+    {
+      "path": "model-00009-of-00063.safetensors",
+      "size": 3980237344
+    },
+    {
+      "path": "model-00010-of-00063.safetensors",
+      "size": 3983776416
+    },
+    {
+      "path": "model-00011-of-00063.safetensors",
+      "size": 3983521784
+    },
+    {
+      "path": "model-00012-of-00063.safetensors",
+      "size": 3980237328
+    },
+    {
+      "path": "model-00013-of-00063.safetensors",
+      "size": 3983776440
+    },
+    {
+      "path": "model-00014-of-00063.safetensors",
+      "size": 3983776976
+    },
+    {
+      "path": "model-00015-of-00063.safetensors",
+      "size": 3980237328
+    },
+    {
+      "path": "model-00016-of-00063.safetensors",
+      "size": 3983776432
+    },
+    {
+      "path": "model-00017-of-00063.safetensors",
+      "size": 3983521784
+    },
+    {
+      "path": "model-00018-of-00063.safetensors",
+      "size": 3980237312
+    },
+    {
+      "path": "model-00019-of-00063.safetensors",
+      "size": 3983776456
+    },
+    {
+      "path": "model-00020-of-00063.safetensors",
+      "size": 3983776976
+    },
+    {
+      "path": "model-00021-of-00063.safetensors",
+      "size": 3980237320
+    },
+    {
+      "path": "model-00022-of-00063.safetensors",
+      "size": 3983776448
+    },
+    {
+      "path": "model-00023-of-00063.safetensors",
+      "size": 3983776976
+    },
+    {
+      "path": "model-00024-of-00063.safetensors",
+      "size": 3980237320
+    },
+    {
+      "path": "model-00025-of-00063.safetensors",
+      "size": 3983521248
+    },
+    {
+      "path": "model-00026-of-00063.safetensors",
+      "size": 3983776976
+    },
+    {
+      "path": "model-00027-of-00063.safetensors",
+      "size": 3980237304
+    },
+    {
+      "path": "model-00028-of-00063.safetensors",
+      "size": 3983776464
+    },
+    {
+      "path": "model-00029-of-00063.safetensors",
+      "size": 3983776976
+    },
+    {
+      "path": "model-00030-of-00063.safetensors",
+      "size": 3980237312
+    },
+    {
+      "path": "model-00031-of-00063.safetensors",
+      "size": 3983776456
+    },
+    {
+      "path": "model-00032-of-00063.safetensors",
+      "size": 3983521792
+    },
+    {
+      "path": "model-00033-of-00063.safetensors",
+      "size": 3980237280
+    },
+    {
+      "path": "model-00034-of-00063.safetensors",
+      "size": 3983776472
+    },
+    {
+      "path": "model-00035-of-00063.safetensors",
+      "size": 3983776976
+    },
+    {
+      "path": "model-00036-of-00063.safetensors",
+      "size": 3980237288
+    },
+    {
+      "path": "model-00037-of-00063.safetensors",
+      "size": 3983776472
+    },
+    {
+      "path": "model-00038-of-00063.safetensors",
+      "size": 3983776976
+    },
+    {
+      "path": "model-00039-of-00063.safetensors",
+      "size": 3980237296
+    },
+    {
+      "path": "model-00040-of-00063.safetensors",
+      "size": 3983521272
+    },
+    {
+      "path": "model-00041-of-00063.safetensors",
+      "size": 3983776984
+    },
+    {
+      "path": "model-00042-of-00063.safetensors",
+      "size": 3980237272
+    },
+    {
+      "path": "model-00043-of-00063.safetensors",
+      "size": 3983776480
+    },
+    {
+      "path": "model-00044-of-00063.safetensors",
+      "size": 3983776984
+    },
+    {
+      "path": "model-00045-of-00063.safetensors",
+      "size": 3980237280
+    },
+    {
+      "path": "model-00046-of-00063.safetensors",
+      "size": 3983776480
+    },
+    {
+      "path": "model-00047-of-00063.safetensors",
+      "size": 3983521800
+    },
+    {
+      "path": "model-00048-of-00063.safetensors",
+      "size": 3980237248
+    },
+    {
+      "path": "model-00049-of-00063.safetensors",
+      "size": 3983776496
+    },
+    {
+      "path": "model-00050-of-00063.safetensors",
+      "size": 3983776992
+    },
+    {
+      "path": "model-00051-of-00063.safetensors",
+      "size": 3980237256
+    },
+    {
+      "path": "model-00052-of-00063.safetensors",
+      "size": 3983776488
+    },
+    {
+      "path": "model-00053-of-00063.safetensors",
+      "size": 3983521808
+    },
+    {
+      "path": "model-00054-of-00063.safetensors",
+      "size": 3980237224
+    },
+    {
+      "path": "model-00055-of-00063.safetensors",
+      "size": 3983776512
+    },
+    {
+      "path": "model-00056-of-00063.safetensors",
+      "size": 3983776992
+    },
+    {
+      "path": "model-00057-of-00063.safetensors",
+      "size": 3980237240
+    },
+    {
+      "path": "model-00058-of-00063.safetensors",
+      "size": 3983776504
+    },
+    {
+      "path": "model-00059-of-00063.safetensors",
+      "size": 3983776992
+    },
+    {
+      "path": "model-00060-of-00063.safetensors",
+      "size": 3980237248
+    },
+    {
+      "path": "model-00061-of-00063.safetensors",
+      "size": 3910941080
+    },
+    {
+      "path": "model-00062-of-00063.safetensors",
+      "size": 3982620808
+    },
+    {
+      "path": "model-00063-of-00063.safetensors",
+      "size": 2069952976
+    },
+    {
+      "path": "model-summary-idxs.safetensors",
+      "size": 104
+    }
+  ]
+}

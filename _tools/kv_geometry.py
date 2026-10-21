@@ -268,7 +268,9 @@ def cmd_verify(a):
 # -------------------------------------------------------------- the geometry
 
 def _text(cfg):
-    return cfg.get("text_config", cfg)
+    # Multimodal releases nest the language backbone under one of these; every
+    # field the geometry reads lives inside it.
+    return cfg.get("text_config") or cfg.get("llm_config") or cfg
 
 
 def _num(x):
@@ -405,6 +407,26 @@ def geometry(cfg):
         return out
 
     kinds = layer_kinds(c)
+
+    if c.get("num_attention_groups") or c.get("head_dim_full_attention"):
+        # StepFun Step-5 family: GQA whose KV heads are called "attention
+        # groups", with one head size per layer kind. Checked against the served
+        # checkpoint's tensor shapes: k_proj and v_proj are [groups × head_dim,
+        # hidden], so a group stores one key and one value of head_dim each.
+        fg = c.get("num_attention_groups_full_attention", c.get("num_attention_groups"))
+        sg = c.get("num_attention_groups_sliding_attention", c.get("num_attention_groups"))
+        fk = c.get("head_dim_full_attention") or c["head_dim"]
+        sk = c.get("head_dim_sliding_attention") or c["head_dim"]
+        nfull, nswa = kinds.count("full"), kinds.count("sliding")
+        if nswa and not window:
+            raise Unsupported("sliding layers without a window size")
+        out["kv_bytes_per_token"] = _num(nfull * fg * (fk + fk))
+        out["kv_window_bytes"] = nswa * sg * (sk + sk) * (window or 0)
+        out["kv_heads"] = fg
+        out["kv_state_bytes"] = state_bytes(c, kinds)
+        out["model_context_length"] = c.get("max_position_embeddings") or c.get("model_max_length")
+        return out
+
     if c.get("kv_lora_rank"):
         # MLA: one compressed latent per token per layer, copied to every TP rank,
         # plus sparse-attention index keys on the layers that own an indexer.

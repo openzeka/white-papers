@@ -1,0 +1,22 @@
+{
+  "model": "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B",
+  "repo": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+  "revision": "1f8953f7f0935358e3605150d22bc15df062061c",
+  "config_sha256": "be121eafe4c174c8bc7204da2cd063baa0392c0adfd41dd82fc9e0bba5b0f9a0",
+  "fetched": "2026-10-21",
+  "hf": {
+    "created": "2026-10-12T15:32:06.000Z",
+    "last_modified": "2026-10-16T23:39:54.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 124453395976,
+    "parameters_by_dtype": {
+      "BF16": 124453374976,
+      "F32": 20998,
+      "I64": 2
+    }
+  }
+}

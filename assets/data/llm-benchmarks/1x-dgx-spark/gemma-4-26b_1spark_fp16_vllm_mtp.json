@@ -3,7 +3,7 @@
   "model": "Gemma-4-26B-A4B-it",
   "params": "26B",
   "intelligence_index": 16.7,
-  "agentic_index": null,
+  "agentic_index": 2.9,
   "device": "1× DGX Spark",
   "quantization": "FP16",
   "engine": "vLLM",

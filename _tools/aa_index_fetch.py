@@ -33,7 +33,9 @@ INTEL, AGENTIC = "artificial_analysis_intelligence_index", "artificial_analysis_
 PINNED = {
     "Tencent-Hy3": "hy3",                                  # not hy3-preview, an older build
     "Nemotron-3-Ultra": "nvidia-nemotron-3-ultra-550b-a55b",
+    "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B": "nemotron-3-5-super-vl",  # AA's name carries no size
     "Muse-Glimmer-30B": "muse-glimmer",                    # AA's name carries no size; 30B is our assumption
+    "Muse-Spark-Open-816B-A42B": "muse-spark-open",        # AA's name carries no size ("Muse Spark Open")
     "DeepSeek-V4-Pro": "deepseek-v4-pro-0424",             # AA now dates it; 0813 is a separate row
     "DeepSeek-V4-Flash-Vision-Exp": "deepseek-v4-flash-vision",  # AA dropped the "Exp"
     "MiMo-V2.6-Pro-RL": "mimo-v2-6-pro",                   # same model; AA lists it without "-RL"

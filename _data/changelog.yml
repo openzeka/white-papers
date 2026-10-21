@@ -16,6 +16,46 @@
 # Check with: python3 _tools/check_changelog.py
 
 - date: 2026-10-21
+  type: benchmarks
+  run: muse-spark-open-816b-a42b_b300_nvfp4_vllm_tp4
+  text:
+    en: "Muse-Spark-Open-816B-A42B on a DGX B300: NVFP4 weights served with vLLM at TP=4, with DSpark speculative decoding, measured up to 64 concurrent requests."
+    tr: "Muse-Spark-Open-816B-A42B, DGX B300 üzerinde: NVFP4 ağırlıklar TP=4 ile vLLM üzerinden sunuldu, DSpark Spekülatif Kod Çözme ile 64 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Muse-Spark-Open-816B-A42B op een DGX B300: NVFP4-gewichten geserveerd met vLLM op TP=4, met DSpark speculatieve decodering, gemeten tot 64 gelijktijdige verzoeken."
+
+- date: 2026-10-21
+  type: benchmarks
+  run: nemotron-3.5-super-vl-120b-a12b_b300_bf16_vllm_tp2
+  text:
+    en: "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B on a DGX B300: BF16 weights served with vLLM at TP=2, with native MTP speculative decoding (k=3), measured up to 256 concurrent requests."
+    tr: "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B, DGX B300 üzerinde: BF16 ağırlıklar TP=2 ile vLLM üzerinden sunuldu, yerel MTP Spekülatif Kod Çözme (k=3) ile 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B op een DGX B300: BF16-gewichten geserveerd met vLLM op TP=2, met de ingebouwde MTP speculatieve decodering (k=3), gemeten tot 256 gelijktijdige verzoeken."
+
+- date: 2026-10-21
+  type: benchmarks
+  run: step-5-preview_b300_fp8_vllm_tp4
+  text:
+    en: "Step-5-Preview on a DGX B300: FP8 weights served with vLLM at TP=4, with MTP speculative decoding (k=3), measured up to 256 concurrent requests."
+    tr: "Step-5-Preview, DGX B300 üzerinde: FP8 ağırlıklar TP=4 ile vLLM üzerinden sunuldu, MTP Spekülatif Kod Çözme (k=3) ile 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Step-5-Preview op een DGX B300: FP8-gewichten geserveerd met vLLM op TP=4, met MTP speculatieve decodering (k=3), gemeten tot 256 gelijktijdige verzoeken."
+
+- date: 2026-10-21
+  type: benchmarks
+  run: step-5-preview_b300_fp8_vllm_tp4_ep4
+  text:
+    en: "Step-5-Preview on a DGX B300 with expert parallelism: FP8 weights served with vLLM at EP=4 over TP=4, with MTP speculative decoding (k=3), measured up to 256 concurrent requests."
+    tr: "Step-5-Preview, DGX B300 üzerinde uzman paralelliği ile: FP8 ağırlıklar TP=4 üzerinde EP=4 ile vLLM üzerinden sunuldu, MTP Spekülatif Kod Çözme (k=3) ile 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Step-5-Preview op een DGX B300 met expertparallelisme: FP8-gewichten geserveerd met vLLM met EP=4 over TP=4, met MTP speculatieve decodering (k=3), gemeten tot 256 gelijktijdige verzoeken."
+
+- date: 2026-10-21
+  type: benchmarks
+  run: step-5-preview_b300_fp8_vllm_dp4
+  text:
+    en: "Step-5-Preview on a DGX B300 with data parallelism: FP8 weights served with vLLM at DP=4, with MTP speculative decoding (k=3), measured up to 256 concurrent requests."
+    tr: "Step-5-Preview, DGX B300 üzerinde veri paralelliği ile: FP8 ağırlıklar DP=4 ile vLLM üzerinden sunuldu, MTP Spekülatif Kod Çözme (k=3) ile 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Step-5-Preview op een DGX B300 met dataparallellisme: FP8-gewichten geserveerd met vLLM op DP=4, met MTP speculatieve decodering (k=3), gemeten tot 256 gelijktijdige verzoeken."
+
+- date: 2026-10-21
   type: paper
   page: kv-cache-offloading-lmcache
   text:

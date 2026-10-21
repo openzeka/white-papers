@@ -1,0 +1,62 @@
+{
+  "id": "muse-spark-open-816b-a42b_b300_nvfp4_vllm_tp4",
+  "model": "Muse-Spark-Open-816B-A42B",
+  "params": "816B",
+  "intelligence_index": 38.9,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": null,
+  "tp": 4,
+  "notes": "DSpark speculative.",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 45.6,
+      "tps": 306.72
+    },
+    {
+      "c": 2,
+      "ttft_ms": 61.37,
+      "tps": 256.43
+    },
+    {
+      "c": 4,
+      "ttft_ms": 75.68,
+      "tps": 218.71
+    },
+    {
+      "c": 8,
+      "ttft_ms": 91.25,
+      "tps": 175.69
+    },
+    {
+      "c": 16,
+      "ttft_ms": 115.0,
+      "tps": 141.94
+    },
+    {
+      "c": 32,
+      "ttft_ms": 429.91,
+      "tps": 103.57
+    },
+    {
+      "c": 64,
+      "ttft_ms": 1606.13,
+      "tps": 54.68
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 32768,
+  "kv_window_bytes": 192937984,
+  "kv_heads": 16,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "meta-models/Muse-Spark-Open-816B-A42B-NVFP4",
+  "weights_gb": 533.01
+}

@@ -1,0 +1,139 @@
+{
+  "repo": "stepfun-ai/Step-5-Preview",
+  "revision": "364b3b03fed2477aa0953fe855a2c4c8c48ee3cc",
+  "fetched": "2026-10-21",
+  "safetensors_bytes": 650309242208,
+  "quantization": {
+    "method": "fp8",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-09-20T03:15:06.000Z",
+    "last_modified": "2026-10-15T01:28:10.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": null,
+    "pipeline_tag": null,
+    "safetensors_parameters": 604339504832,
+    "parameters_by_dtype": {
+      "F32": 2433984,
+      "BF16": 39615980288,
+      "F8_E4M3": 564721090560
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001.safetensors",
+      "size": 9657059160
+    },
+    {
+      "path": "model-00002.safetensors",
+      "size": 27640029784
+    },
+    {
+      "path": "model-00003.safetensors",
+      "size": 27640029832
+    },
+    {
+      "path": "model-00004.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00005.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00006.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00007.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00008.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00009.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00010.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00011.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00012.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00013.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00014.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00015.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00016.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00017.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00018.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00019.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00020.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00021.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00022.safetensors",
+      "size": 27640029872
+    },
+    {
+      "path": "model-00023.safetensors",
+      "size": 41220199832
+    },
+    {
+      "path": "model-00024.safetensors",
+      "size": 3789131416
+    },
+    {
+      "path": "model-mtp3-00001.safetensors",
+      "size": 2246149176
+    },
+    {
+      "path": "model-mtp3-full-00001.safetensors",
+      "size": 5031847968
+    },
+    {
+      "path": "model-vit-00001.safetensors",
+      "size": 3962113720
+    },
+    {
+      "path": "vit.safetensors",
+      "size": 3962113752
+    }
+  ]
+}

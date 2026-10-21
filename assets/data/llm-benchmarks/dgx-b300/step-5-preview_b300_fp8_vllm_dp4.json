@@ -1,0 +1,72 @@
+{
+  "id": "step-5-preview_b300_fp8_vllm_dp4",
+  "model": "Step-5-Preview",
+  "params": "604B",
+  "intelligence_index": 43.7,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": 3,
+  "tp": 1,
+  "notes": "Served as stepfun-ai/Step-5-Preview-data (same checkpoint). Speculative MTP k=3.",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 91.97,
+      "tps": 132.46
+    },
+    {
+      "c": 2,
+      "ttft_ms": 293.99,
+      "tps": 91.04
+    },
+    {
+      "c": 4,
+      "ttft_ms": 252.26,
+      "tps": 76.18
+    },
+    {
+      "c": 8,
+      "ttft_ms": 259.25,
+      "tps": 59.02
+    },
+    {
+      "c": 16,
+      "ttft_ms": 401.34,
+      "tps": 43.44
+    },
+    {
+      "c": 32,
+      "ttft_ms": 378.36,
+      "tps": 34.85
+    },
+    {
+      "c": 64,
+      "ttft_ms": 357.83,
+      "tps": 29.72
+    },
+    {
+      "c": 128,
+      "ttft_ms": 609.62,
+      "tps": 19.27
+    },
+    {
+      "c": 256,
+      "ttft_ms": 778.6,
+      "tps": 12.08
+    }
+  ],
+  "dp": 4,
+  "pp": null,
+  "kv_bytes_per_token": 35328,
+  "kv_window_bytes": 54263808,
+  "kv_heads": 4,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "stepfun-ai/Step-5-Preview",
+  "weights_gb": 650.31
+}

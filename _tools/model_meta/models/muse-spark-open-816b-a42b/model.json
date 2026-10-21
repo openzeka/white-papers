@@ -1,0 +1,21 @@
+{
+  "model": "Muse-Spark-Open-816B-A42B",
+  "repo": "meta-models/Muse-Spark-Open-816B-A42B",
+  "revision": "0fb02478b02565b2ce7fc57e6051c91172774ac9",
+  "config_sha256": "4e91fd887cd1f61e59d717f1ec5dea5fa82f4c01f3dca8d7d96b5b29b7b25ea3",
+  "fetched": "2026-10-21",
+  "hf": {
+    "created": "2026-09-15T19:23:19.000Z",
+    "last_modified": "2026-10-15T15:46:43.000Z",
+    "gated": "manual",
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 822036529664,
+    "parameters_by_dtype": {
+      "BF16": 821906490368,
+      "F32": 130039296
+    }
+  }
+}
