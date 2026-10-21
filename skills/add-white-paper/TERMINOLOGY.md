@@ -218,6 +218,29 @@ names when quoted (*Throughput (RPS)*), PASS/FAIL, and the Artificial Analysis
 dangling hyphen (*Systeem- en firmware-updates*): the site turns it into a
 double hyphen in the anchor. Reword (*Updates van systeem en firmware*).
 
+### KV cache tiering terms (LMCache)
+
+Settled with the KV cache offloading paper.
+
+| English | Türkçe | Nederlands |
+|---|---|---|
+| cache tier; cache layer | önbellek katmanı | cachelaag |
+| cache record | önbellek kaydı; kayıt | cacherecord; record |
+| cache hit; hit rate | önbellek isabeti; isabet oranı (hit rate) | cache-hit; cachetrefkans (hit rate) |
+| eviction; to evict | tahliye (eviction); tahliye etmek | eviction; evicten |
+| eviction threshold; eviction ratio | tahliye eşiği; tahliye oranı | evictiondrempel; evictionratio |
+| prefix cache | ön-ek önbelleği (prefix cache) | prefix-cache |
+| chunk, chunk size | chunk, chunk boyutu | chunk, chunkgrootte |
+| cold start; warm cache | soğuk başlangıç (cold start); sıcak önbellek | koude start; warme cache |
+| health check | sağlık kontrolü | statuscontrole |
+| worker pool | işçi havuzu | workerpool |
+| transfer mode | aktarım modu | overdrachtsmodus |
+| store / retrieve (KV data) | kaydetme / geri yükleme | opslaan / opnieuw inladen |
+| acceptance test | kabul testi | acceptatietest |
+
+Keep the protocol verbs STORE/RETRIEVE, PREPARE/COMMIT and the layer names
+L0/L1/L2 in English.
+
 **The explorers:** Turkish translates their names — *LLM Çıkarım Benchmark
 Gezgini*, *CV Çıkarım Benchmark Gezgini*. Dutch keeps the English product
 names everywhere, titles included: *LLM Inference Benchmark Explorer*, *CV

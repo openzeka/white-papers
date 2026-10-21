@@ -1,7 +1,7 @@
 ---
 title: De eerste open-gewichtsalternatieven voor Jev
 parent: White Papers
-nav_order: 12
+nav_order: 13
 lang: nl
 page_id: jev-open-weight-alternatives
 date: 2026-10-06

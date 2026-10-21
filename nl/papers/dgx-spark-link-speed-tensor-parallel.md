@@ -1,7 +1,7 @@
 ---
 title: Netwerklinksnelheid voor tensorparallelle inferentie op 8× DGX Spark (200G vs 100G)
 parent: White Papers
-nav_order: 11
+nav_order: 12
 lang: nl
 page_id: dgx-spark-link-speed-tensor-parallel
 date: 2026-10-15

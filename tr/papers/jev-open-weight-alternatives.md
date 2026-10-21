@@ -1,7 +1,7 @@
 ---
 title: Jev'e Açık Ağırlıklı İlk Alternatifler
 parent: White Papers
-nav_order: 12
+nav_order: 13
 lang: tr
 page_id: jev-open-weight-alternatives
 date: 2026-10-06

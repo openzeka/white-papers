@@ -15,6 +15,14 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-10-21
+  type: paper
+  page: kv-cache-offloading-lmcache
+  text:
+    en: "What LMCache adds to vLLM when the same contexts come back: a three-tier KV cache (GPU, CPU, NVMe) on DGX Spark, measured TTFT — 1.95× on repeated access, 3.3× after a service restart — and the settings and limits that come with it."
+    tr: "Aynı bağlamların geri geldiği iş yükünde LMCache'in vLLM'e kattığı değer: DGX Spark'te üç katmanlı KV cache (GPU, CPU, NVMe), ölçülen TTFT — tekrar erişimde 1.95×, servis yeniden başlatmasında 3.3× — ve bununla birlikte gelen ayarlar ve sınırlar."
+    nl: "Wat LMCache aan vLLM toevoegt wanneer dezelfde contexten terugkomen: een drietraps KV-cache (GPU, CPU, NVMe) op DGX Spark, gemeten TTFT — 1.95× bij hergebruik, 3.3× na een herstart van de service — en de instellingen en grenzen die daarbij horen."
+
 - date: 2026-10-15
   type: paper
   page: dgx-spark-link-speed-tensor-parallel

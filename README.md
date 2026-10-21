@@ -27,6 +27,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [DGX Spark 8-Node AI Cluster Setup Guide](https://whitepapers.openzeka.com/papers/dgx-spark-8node-cluster-setup/) | Switch-based cluster, RoCEv2/RDMA, sparkrun and NAS | 8× NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Benchmark](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/) | LLM quantization comparison: FP8, AWQ, NVFP4 and MTP | NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Cluster Scaling](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-scaling/) | Multi-node scaling (TP1/TP2/TP4) and SLO-driven capacity planning | 1× / 2× / 4× NVIDIA DGX Spark (GB10) |
+| [KV Cache Offloading with LMCache in LLM Inference](https://whitepapers.openzeka.com/papers/kv-cache-offloading-lmcache/) | Repeated contexts and a KV cache bigger than GPU memory: three cache tiers (GPU, CPU, NVMe), measured TTFT and the settings to verify before production | NVIDIA DGX Spark (GB10) |
 | [Network Link Speed for Tensor-Parallel Inference on 8× DGX Spark (200G vs 100G)](https://whitepapers.openzeka.com/papers/dgx-spark-link-speed-tensor-parallel/) | What tensor parallelism sends over the network, the estimated 100G penalty, and a measured 200G vs emulated 100G comparison with GLM-5.3 at TP8 | 8× NVIDIA DGX Spark (GB10) |
 | [The First Open-Weight Alternatives to Jev](https://whitepapers.openzeka.com/papers/jev-open-weight-alternatives/) | Six open-weight typed-decision models compared: accuracy, calibration, option-order sensitivity and latency | NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 4× DGX Spark Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/) | 763B MoE model with TP4: vLLM build chain, SM121 patches, Engram-on-disk, DSpark speculative decoding | 4× NVIDIA DGX Spark (GB10) |
@@ -173,6 +174,32 @@ show useful inference from checkpoints that exceed the available model-weight
 memory; each is evaluated on its own results.
 
 **[Read the Engram Offloading Guide →](https://whitepapers.openzeka.com/papers/conditional-memory-offloading/)**
+
+---
+
+## KV Cache Offloading with LMCache in LLM Inference
+
+**665 × 8K contexts on one DGX Spark · 63 GB working set vs a 55.31 GiB GPU KV cache · vLLM 0.25.1 + LMCache 0.5.1**
+
+**1.95× faster TTFT on repeated contexts — 3.3× across a service restart**
+
+A workload in which the same contexts come back — agent turns, repeated code
+review, shared prompts — pays for its prompt processing twice unless the KV
+cache survives outside GPU memory. This study measures what LMCache's three
+tiers (GPU, CPU cache, NVMe) do to TTFT on one DGX Spark serving
+`nvidia/Qwen3.6-35B-A3B-NVFP4`, and separates the measured gains from what is
+architectural potential only.
+
+With the working set larger than the GPU KV cache, median TTFT over three runs
+falls from 1,279.1 ms to 655.2 ms when LMCache reloads previously computed KV
+data instead of recomputing it. After a service restart, workloads that match
+the surviving disk records run in 2.61 s instead of the 8.51 s of a cold start.
+The paper also documents what differs between the experiment and a production
+setup — eviction ratio, the hybrid Mamba/GDN recipe's `--separate-object-groups`,
+disk record accumulation on the `fs` adapter — and the acceptance test that
+shows records are really stored and reloaded.
+
+**[Read the KV cache offloading study →](https://whitepapers.openzeka.com/papers/kv-cache-offloading-lmcache/)**
 
 ---
 
