@@ -473,11 +473,355 @@
 
 - date: 2026-10-15
   type: vlm
-  page: vlm-inference-benchmarks
+  vlm: cosmos-reason1-7b_agxthor_bf16_vllm
   text:
-    en: "Vision-language model benchmarks on Jetson AGX Thor and DGX Spark, plus the Jetson AGX Orin 32GB production module: 44 new configurations, with the camera and image limits measured until a request fails."
-    tr: "Jetson AGX Thor ve DGX Spark ile Jetson AGX Orin 32GB üretim modülü üzerinde görüntü-dil modeli benchmark'ları: 44 yeni yapılandırma; kamera ve görüntü sınırları bir istek başarısız olana kadar ölçüldü."
-    nl: "Benchmarks van vision-languagemodellen op Jetson AGX Thor en DGX Spark, plus de Jetson AGX Orin 32GB-productiemodule: 44 nieuwe configuraties, met camera- en beeldlimieten gemeten tot een verzoek mislukt."
+    en: "Cosmos-Reason1-7B on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 16 simultaneous cameras and up to 64 images per request."
+    tr: "Cosmos-Reason1-7B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 16 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason1-7B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 16 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos-reason2-2b_agxthor_bf16_vllm
+  text:
+    en: "Cosmos-Reason2-2B on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 256 simultaneous cameras and up to 256 images per request."
+    tr: "Cosmos-Reason2-2B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 256 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason2-2B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 256 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos-reason2-8b_agxthor_bf16_vllm
+  text:
+    en: "Cosmos-Reason2-8B on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 112 simultaneous cameras and up to 256 images per request."
+    tr: "Cosmos-Reason2-8B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 112 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason2-8B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 112 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos3-edge_agxthor_bf16_vllm
+  text:
+    en: "Cosmos3-Edge on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 208 simultaneous cameras and up to 128 images per request."
+    tr: "Cosmos3-Edge, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 208 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Cosmos3-Edge op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 208 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos3-nano_agxthor_bf16_vllm
+  text:
+    en: "Cosmos3-Nano on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 112 simultaneous cameras and up to 256 images per request."
+    tr: "Cosmos3-Nano, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 112 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Cosmos3-Nano op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 112 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: eagle2.5-8b_agxthor_bf16_vllm
+  text:
+    en: "Eagle2.5-8B on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 52 simultaneous cameras and up to 64 images per request."
+    tr: "Eagle2.5-8B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 52 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "Eagle2.5-8B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 52 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: gemma-4-31b-it_agxthor_bf16_vllm
+  text:
+    en: "Gemma-4-31B-it on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 60 simultaneous cameras and up to 64 images per request."
+    tr: "Gemma-4-31B-it, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 60 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "Gemma-4-31B-it op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 60 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: gemma-4-31b-it_agxthor_nvfp4_vllm
+  text:
+    en: "Gemma-4-31B-it on Jetson AGX Thor: NVFP4 weights served with vLLM, response time measured from 1 to 80 simultaneous cameras and up to 64 images per request."
+    tr: "Gemma-4-31B-it, Jetson AGX Thor üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 80 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "Gemma-4-31B-it op Jetson AGX Thor: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 80 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: llama-3.1-nemotron-nano-vl-8b_agxthor_bf16_vllm
+  text:
+    en: "Llama-3.1-Nemotron-Nano-VL-8B on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 40 simultaneous cameras and up to 32 images per request."
+    tr: "Llama-3.1-Nemotron-Nano-VL-8B, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 40 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Llama-3.1-Nemotron-Nano-VL-8B op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 40 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: medgemma-1.5-4b-it_agxthor_bf16_vllm
+  text:
+    en: "MedGemma-1.5-4B-it on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 192 simultaneous cameras and up to 256 images per request."
+    tr: "MedGemma-1.5-4B-it, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 192 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "MedGemma-1.5-4B-it op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 192 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: nemotron-nano-12b-v2-vl_agxthor_bf16_vllm
+  text:
+    en: "Nemotron-Nano-12B-v2-VL on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 88 simultaneous cameras and up to 128 images per request."
+    tr: "Nemotron-Nano-12B-v2-VL, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 88 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Nemotron-Nano-12B-v2-VL op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 88 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-30b-a3b-instruct_agxthor_fp8_vllm
+  text:
+    en: "Qwen3-VL-30B-A3B-Instruct on Jetson AGX Thor: FP8 weights served with vLLM, response time measured from 1 to 96 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3-VL-30B-A3B-Instruct, Jetson AGX Thor üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 96 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-30B-A3B-Instruct op Jetson AGX Thor: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 96 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-4b-instruct_agxthor_bf16_vllm
+  text:
+    en: "Qwen3-VL-4B-Instruct on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 160 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3-VL-4B-Instruct, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 160 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-4B-Instruct op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 160 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-8b-instruct_agxthor_bf16_vllm
+  text:
+    en: "Qwen3-VL-8B-Instruct on Jetson AGX Thor: BF16 weights served with vLLM, response time measured from 1 to 104 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3-VL-8B-Instruct, Jetson AGX Thor üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 104 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-8B-Instruct op Jetson AGX Thor: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 104 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3.6-35b-a3b_agxthor_fp8_vllm
+  text:
+    en: "Qwen3.6-35B-A3B on Jetson AGX Thor: FP8 weights served with vLLM, response time measured from 1 to 104 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3.6-35B-A3B, Jetson AGX Thor üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 104 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3.6-35B-A3B op Jetson AGX Thor: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 104 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3.6-35b-a3b_agxthor_nvfp4_vllm
+  text:
+    en: "Qwen3.6-35B-A3B on Jetson AGX Thor: NVFP4 weights served with vLLM, response time measured from 1 to 104 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3.6-35B-A3B, Jetson AGX Thor üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 104 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3.6-35B-A3B op Jetson AGX Thor: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 104 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3.8-27b_agxthor_fp8_vllm
+  text:
+    en: "Qwen3.8-27B on Jetson AGX Thor: FP8 weights served with vLLM, response time measured from 1 to 44 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3.8-27B, Jetson AGX Thor üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 44 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3.8-27B op Jetson AGX Thor: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 44 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos-reason1-7b_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos-Reason1-7B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 16 simultaneous cameras and up to 64 images per request."
+    tr: "Cosmos-Reason1-7B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 16 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason1-7B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 16 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos-reason2-2b_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos-Reason2-2B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 224 simultaneous cameras and up to 256 images per request."
+    tr: "Cosmos-Reason2-2B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 224 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason2-2B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 224 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos-reason2-8b_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos-Reason2-8B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 96 simultaneous cameras and up to 256 images per request."
+    tr: "Cosmos-Reason2-8B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 96 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason2-8B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 96 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos3-edge_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos3-Edge on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 16 simultaneous cameras and up to 128 images per request."
+    tr: "Cosmos3-Edge, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 16 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Cosmos3-Edge op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 16 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos3-nano_dgxspark_bf16_vllm
+  text:
+    en: "Cosmos3-Nano on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 96 simultaneous cameras and up to 256 images per request."
+    tr: "Cosmos3-Nano, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 96 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Cosmos3-Nano op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 96 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: eagle2.5-8b_dgxspark_bf16_vllm
+  text:
+    en: "Eagle2.5-8B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 44 simultaneous cameras and up to 64 images per request."
+    tr: "Eagle2.5-8B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 44 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "Eagle2.5-8B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 44 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: gemma-4-31b-it_dgxspark_bf16_vllm
+  text:
+    en: "Gemma-4-31B-it on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 64 simultaneous cameras and up to 128 images per request."
+    tr: "Gemma-4-31B-it, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 64 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Gemma-4-31B-it op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 64 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: gemma-4-31b-it_dgxspark_nvfp4_vllm
+  text:
+    en: "Gemma-4-31B-it on DGX Spark: NVFP4 weights served with vLLM, response time measured from 1 to 96 simultaneous cameras and up to 128 images per request."
+    tr: "Gemma-4-31B-it, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 96 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Gemma-4-31B-it op DGX Spark: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 96 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: llama-3.1-nemotron-nano-vl-8b_dgxspark_bf16_vllm
+  text:
+    en: "Llama-3.1-Nemotron-Nano-VL-8B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 32 simultaneous cameras and up to 32 images per request."
+    tr: "Llama-3.1-Nemotron-Nano-VL-8B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 32 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Llama-3.1-Nemotron-Nano-VL-8B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 32 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: medgemma-1.5-4b-it_dgxspark_bf16_vllm
+  text:
+    en: "MedGemma-1.5-4B-it on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 240 simultaneous cameras and up to 256 images per request."
+    tr: "MedGemma-1.5-4B-it, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 240 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "MedGemma-1.5-4B-it op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 240 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: nemotron-nano-12b-v2-vl_dgxspark_bf16_vllm
+  text:
+    en: "Nemotron-Nano-12B-v2-VL on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 72 simultaneous cameras and up to 128 images per request."
+    tr: "Nemotron-Nano-12B-v2-VL, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 72 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Nemotron-Nano-12B-v2-VL op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 72 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-30b-a3b-instruct_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3-VL-30B-A3B-Instruct on DGX Spark: FP8 weights served with vLLM, response time measured from 1 to 104 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3-VL-30B-A3B-Instruct, DGX Spark üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 104 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-30B-A3B-Instruct op DGX Spark: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 104 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-4b-instruct_dgxspark_bf16_vllm
+  text:
+    en: "Qwen3-VL-4B-Instruct on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 128 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3-VL-4B-Instruct, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 128 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-4B-Instruct op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 128 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-8b-instruct_dgxspark_bf16_vllm
+  text:
+    en: "Qwen3-VL-8B-Instruct on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 88 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3-VL-8B-Instruct, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 88 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-8B-Instruct op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 88 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3.6-35b-a3b_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3.6-35B-A3B on DGX Spark: FP8 weights served with vLLM, response time measured from 1 to 104 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3.6-35B-A3B, DGX Spark üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 104 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3.6-35B-A3B op DGX Spark: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 104 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3.6-35b-a3b_dgxspark_nvfp4_vllm
+  text:
+    en: "Qwen3.6-35B-A3B on DGX Spark: NVFP4 weights served with vLLM, response time measured from 1 to 120 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3.6-35B-A3B, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 120 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3.6-35B-A3B op DGX Spark: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 120 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3.8-27b_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3.8-27B on DGX Spark: FP8 weights served with vLLM, response time measured from 1 to 48 simultaneous cameras and up to 256 images per request."
+    tr: "Qwen3.8-27B, DGX Spark üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 48 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü."
+    nl: "Qwen3.8-27B op DGX Spark: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 48 gelijktijdige camera's en tot 256 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos-reason1-7b_agxorin32_q4km_llamacpp
+  text:
+    en: "Cosmos-Reason1-7B on Jetson AGX Orin 32GB: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Cosmos-Reason1-7B, Jetson AGX Orin 32GB üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason1-7B op Jetson AGX Orin 32GB: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos-reason2-2b_agxorin32_q80_llamacpp
+  text:
+    en: "Cosmos-Reason2-2B on Jetson AGX Orin 32GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Cosmos-Reason2-2B, Jetson AGX Orin 32GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason2-2B op Jetson AGX Orin 32GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos-reason2-8b_agxorin32_q4km_llamacpp
+  text:
+    en: "Cosmos-Reason2-8B on Jetson AGX Orin 32GB: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Cosmos-Reason2-8B, Jetson AGX Orin 32GB üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Cosmos-Reason2-8B op Jetson AGX Orin 32GB: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: cosmos3-edge_agxorin32_bf16_vllm
+  text:
+    en: "Cosmos3-Edge on Jetson AGX Orin 32GB: BF16 weights served with vLLM, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Cosmos3-Edge, Jetson AGX Orin 32GB üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Cosmos3-Edge op Jetson AGX Orin 32GB: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: gemma-4-26b-a4b-it_agxorin32_q40_llamacpp
+  text:
+    en: "Gemma-4-26B-A4B-it on Jetson AGX Orin 32GB: Q4_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Gemma-4-26B-A4B-it, Jetson AGX Orin 32GB üzerinde: Q4_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Gemma-4-26B-A4B-it op Jetson AGX Orin 32GB: Q4_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: gemma-4-e4b-it_agxorin32_q40_llamacpp
+  text:
+    en: "Gemma-4-E4B-it on Jetson AGX Orin 32GB: Q4_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Gemma-4-E4B-it, Jetson AGX Orin 32GB üzerinde: Q4_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Gemma-4-E4B-it op Jetson AGX Orin 32GB: Q4_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-4b-instruct_agxorin32_q80_llamacpp
+  text:
+    en: "Qwen3-VL-4B-Instruct on Jetson AGX Orin 32GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Qwen3-VL-4B-Instruct, Jetson AGX Orin 32GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-4B-Instruct op Jetson AGX Orin 32GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-8b-instruct_agxorin32_q4km_llamacpp
+  text:
+    en: "Qwen3-VL-8B-Instruct on Jetson AGX Orin 32GB: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Qwen3-VL-8B-Instruct, Jetson AGX Orin 32GB üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-8B-Instruct op Jetson AGX Orin 32GB: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3-vl-8b-instruct_agxorin32_q80_llamacpp
+  text:
+    en: "Qwen3-VL-8B-Instruct on Jetson AGX Orin 32GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Qwen3-VL-8B-Instruct, Jetson AGX Orin 32GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Qwen3-VL-8B-Instruct op Jetson AGX Orin 32GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
+
+- date: 2026-10-15
+  type: vlm
+  vlm: qwen3.5-4b_agxorin32_q4km_llamacpp
+  text:
+    en: "Qwen3.5-4B on Jetson AGX Orin 32GB: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 5 images per request."
+    tr: "Qwen3.5-4B, Jetson AGX Orin 32GB üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 5 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-4B op Jetson AGX Orin 32GB: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 5 beelden per verzoek."
 
 - date: 2026-10-12
   type: paper
