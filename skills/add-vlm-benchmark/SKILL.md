@@ -46,9 +46,16 @@ numbers without any error.
   Benchmark Tool, both with the prompt *Describe the scene.* and up to 128
   output tokens:
   - `<tag>`: **one camera**, all image sizes (480p, 720p, 1080p, 2K) × 1, 3 and
-    5 images per request;
+    5 images per request — or, in the newer runs (Jetson AGX Thor, DGX Spark and
+    the llama.cpp b11690 Jetson Orin runs), 1, 2, 4, 8, 16 and 32;
   - `<tag>_conc`: **several cameras**, one image per request, 480p / 720p /
-    1080p × 1, 2, 4, 8 (and 16 on a GPU workstation) concurrent requests.
+    1080p × 1, 2, 4, 8 (and 16 on a GPU workstation, Jetson AGX Thor and DGX
+    Spark) concurrent requests — 8 requests per level on the older Jetson Orin
+    runs, 24 on the others.
+
+  Jetson AGX Thor and DGX Spark runs also carry the camera and image limits
+  (more cameras or images until a request fails); the explorer shows them in the
+  opened row.
 
   The importer merges the two into one row with one entry per measured cell.
   A run with other sizes, image counts or levels still imports, but the
