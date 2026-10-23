@@ -1,0 +1,49 @@
+{
+  "id": "qwen3.5-0.8b_orinnx_q80_llamacpp",
+  "model": "Qwen3.5-0.8B",
+  "device": "Jetson Orin NX 16GB",
+  "quantization": "Q8_0",
+  "engine": "llama.cpp",
+  "engine_version": "b11690",
+  "platform": "L4T R36.5",
+  "served_repo": null,
+  "notes": "GGUF weights; thinking off; 2 parallel slots",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 0.444, "tps": 43.48, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 2, "ttft_s": 0.712, "tps": 47.73, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 4, "ttft_s": 3.908, "tps": 51.13, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 8, "ttft_s": 9.231, "tps": 50.96, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 2, "c": 1, "ttft_s": 0.837, "tps": 43.29, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 4, "c": 1, "ttft_s": 1.586, "tps": 42.82, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 8, "c": 1, "ttft_s": 3.119, "tps": 41.82, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 16, "c": 1, "ttft_s": 6.284, "tps": 40.39, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 32, "c": 1, "ttft_s": 12.808, "tps": 37.37, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 0.97, "tps": 43.16, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 2, "ttft_s": 1.5, "tps": 44.33, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 4, "ttft_s": 5.913, "tps": 49.99, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 8, "ttft_s": 12.901, "tps": 50.09, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 2, "c": 1, "ttft_s": 1.896, "tps": 42.71, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 4, "c": 1, "ttft_s": 3.721, "tps": 41.82, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 8, "c": 1, "ttft_s": 7.427, "tps": 39.72, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 16, "c": 1, "ttft_s": 15.191, "tps": 36.69, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 32, "c": 1, "ttft_s": 31.751, "tps": 31.76, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 1, "ttft_s": 2.438, "tps": 42.51, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 2, "ttft_s": 3.728, "tps": 38.14, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 4, "ttft_s": 10.344, "tps": 36.9, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 8, "ttft_s": 22.646, "tps": 49.14, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 2, "c": 1, "ttft_s": 4.845, "tps": 41.43, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 4, "c": 1, "ttft_s": 9.719, "tps": 39.54, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 8, "c": 1, "ttft_s": 19.681, "tps": 36.2, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 16, "c": 1, "ttft_s": 41.06, "tps": 31.15, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 1, "c": 1, "ttft_s": 6.497, "tps": 41.8, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 2, "c": 1, "ttft_s": 13.015, "tps": 40.13, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 4, "c": 1, "ttft_s": 26.257, "tps": 37.02, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 8, "c": 1, "ttft_s": 53.632, "tps": 32.12, "requests": 5, "failed": 0}
+  ],
+  "limits": {
+    "images": {
+      "1080p": 32,
+      "2K": 16
+    }
+  }
+}

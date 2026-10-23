@@ -74,7 +74,7 @@ default 3 seconds. A response time exactly on the target passes.
 Beside it, **Images per Camera** sets how many images each request carries:
 one snapshot by default, or several frames of the same camera sent together, as
 video is often sent to a vision-language model. Several images per request were
-measured with one camera only, so with three or five images Max Cameras cannot
+measured with one camera only, so with more than one image Max Cameras cannot
 be higher than 1.
 
 ### 4. Read Max Cameras
@@ -148,10 +148,11 @@ benchmark is left out of the mean and does not count against a configuration.
   configuration), up to 8 on Jetson AGX Orin 32GB and its Developer Kit, and up to
   16 on RTX PRO 6000, Jetson AGX Thor and DGX Spark, with 8 requests per level on
   a Jetson Orin and 24 on the others, never more cameras' requests in flight than
-  the level.
+  the level. The Jetson Orin configurations served with llama.cpp b11690 were
+  measured at 1, 2, 4 and 8 cameras with 24 requests per level.
 - **One camera** was measured at all four sizes with one, three and five images
-  per request (1, 2, 4, 8, 16 and 32 on Jetson AGX Thor and DGX Spark), 5 requests
-  each (3 for one configuration). 2K and several images per request were measured
+  per request (1, 2, 4, 8, 16 and 32 on Jetson AGX Thor and DGX Spark, and for the
+  Jetson Orin configurations served with llama.cpp b11690), 5 requests each (3 for one configuration). 2K and several images per request were measured
   this way only.
 - **The camera limit** was measured on Jetson AGX Thor and DGX Spark, at 720p with
   one image per camera: 16, 32, 64 and more cameras, two requests per camera,

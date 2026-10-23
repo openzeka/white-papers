@@ -1,7 +1,7 @@
 {
   "source": {
     "tool": "VLM Benchmark Tool",
-    "exported": "2026-10-12T15:59:51"
+    "exported": "2026-10-23T14:14:51"
   },
   "config": {
     "response_target_s": 3,
@@ -39,9 +39,17 @@
       "repo": "nvidia/Cosmos3-Nano",
       "params": "16B"
     },
+    "d1-3B": {
+      "repo": "LiquidAI/d1-3B",
+      "params": "3.1B"
+    },
     "Eagle2.5-8B": {
       "repo": "nvidia/Eagle2.5-8B",
       "params": "8.1B"
+    },
+    "Fara1.5-27B": {
+      "repo": "microsoft/Fara1.5-27B",
+      "params": "27B"
     },
     "Gemma-4-26B-A4B-it": {
       "repo": "google/gemma-4-26B-A4B-it",
@@ -59,17 +67,73 @@
       "repo": "google/gemma-4-E4B-it",
       "params": "8.0B"
     },
+    "GLM-4.6V-Flash": {
+      "repo": "zai-org/GLM-4.6V-Flash",
+      "params": "10B"
+    },
+    "Granite-Vision-4.1-4B": {
+      "repo": "ibm-granite/granite-vision-4.1-4b",
+      "params": "4.0B"
+    },
+    "H2O-Lightning-4B": {
+      "repo": "h2oai/h2o-lightning-4b",
+      "params": "4.7B"
+    },
+    "LensVLM-9B": {
+      "repo": "apple/LensVLM-9B",
+      "params": "9.4B"
+    },
+    "LFM2.5-VL-3B": {
+      "repo": "LiquidAI/LFM2.5-VL-3B",
+      "params": "3.1B"
+    },
     "Llama-3.1-Nemotron-Nano-VL-8B": {
       "repo": "nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1",
       "params": "8.7B"
+    },
+    "Llama-4-Scout-17B-16E-Instruct": {
+      "repo": "meta-llama/Llama-4-Scout-17B-16E-Instruct",
+      "params": "109B"
     },
     "MedGemma-1.5-4B-it": {
       "repo": "google/medgemma-1.5-4b-it",
       "params": "4.3B"
     },
+    "MiMo-V2.6-Distill-Qwen-9B": {
+      "repo": "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B",
+      "params": "9.4B"
+    },
+    "MiniCPM-V-4.6": {
+      "repo": "openbmb/MiniCPM-V-4.6",
+      "params": "1.3B"
+    },
+    "MiniCPM-V-4.7-1B": {
+      "repo": "openbmb/MiniCPM-V-4.7-1B",
+      "params": "1.6B"
+    },
+    "MiniCPM-V-4.7-35B-A3B": {
+      "repo": "openbmb/MiniCPM-V-4.7-35B-A3B",
+      "params": "35B"
+    },
+    "Mistral-Small-4-119B-2603": {
+      "repo": "mistralai/Mistral-Small-4-119B-2603",
+      "params": "119B"
+    },
     "Nemotron-Nano-12B-v2-VL": {
       "repo": "nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16",
       "params": "13B"
+    },
+    "NVIDIA-Nemotron-3.5-Bolt-74B-A9B": {
+      "repo": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+      "params": "74B"
+    },
+    "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B": {
+      "repo": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+      "params": "120B"
+    },
+    "Qwen-Drive-1.0-4B": {
+      "repo": "Qwen/Qwen-Drive-1.0-4B",
+      "params": "4.5B"
     },
     "Qwen3-VL-30B-A3B-Instruct": {
       "repo": "Qwen/Qwen3-VL-30B-A3B-Instruct",
@@ -83,9 +147,37 @@
       "repo": "Qwen/Qwen3-VL-8B-Instruct",
       "params": "8.8B"
     },
+    "Qwen3.5-0.8B": {
+      "repo": "Qwen/Qwen3.5-0.8B",
+      "params": "0.9B"
+    },
+    "Qwen3.5-122B-A10B": {
+      "repo": "Qwen/Qwen3.5-122B-A10B",
+      "params": "122B"
+    },
+    "Qwen3.5-27B": {
+      "repo": "Qwen/Qwen3.5-27B",
+      "params": "27B"
+    },
+    "Qwen3.5-2B": {
+      "repo": "Qwen/Qwen3.5-2B",
+      "params": "2.3B"
+    },
+    "Qwen3.5-35B-A3B": {
+      "repo": "Qwen/Qwen3.5-35B-A3B",
+      "params": "35B"
+    },
     "Qwen3.5-4B": {
       "repo": "Qwen/Qwen3.5-4B",
       "params": "4.7B"
+    },
+    "Qwen3.5-9B": {
+      "repo": "Qwen/Qwen3.5-9B",
+      "params": "9.7B"
+    },
+    "Qwen3.6-27B": {
+      "repo": "Qwen/Qwen3.6-27B",
+      "params": "27B"
     },
     "Qwen3.6-35B-A3B": {
       "repo": "Qwen/Qwen3.6-35B-A3B",
@@ -118,6 +210,11 @@
           "path": "jetson-orin-nx-16gb/cosmos-reason2-8b_orinnx_q4km_llamacpp.json"
         },
         {
+          "id": "d1-3b_orinnx_q80_llamacpp",
+          "model": "d1-3B",
+          "path": "jetson-orin-nx-16gb/d1-3b_orinnx_q80_llamacpp.json"
+        },
+        {
           "id": "gemma-4-e2b-it_orinnx_q40_llamacpp",
           "model": "Gemma-4-E2B-it",
           "path": "jetson-orin-nx-16gb/gemma-4-e2b-it_orinnx_q40_llamacpp.json"
@@ -126,6 +223,46 @@
           "id": "gemma-4-e4b-it_orinnx_q40_llamacpp",
           "model": "Gemma-4-E4B-it",
           "path": "jetson-orin-nx-16gb/gemma-4-e4b-it_orinnx_q40_llamacpp.json"
+        },
+        {
+          "id": "glm-4.6v-flash_orinnx_q4km_llamacpp",
+          "model": "GLM-4.6V-Flash",
+          "path": "jetson-orin-nx-16gb/glm-4.6v-flash_orinnx_q4km_llamacpp.json"
+        },
+        {
+          "id": "granite-vision-4.1-4b_orinnx_q80_llamacpp",
+          "model": "Granite-Vision-4.1-4B",
+          "path": "jetson-orin-nx-16gb/granite-vision-4.1-4b_orinnx_q80_llamacpp.json"
+        },
+        {
+          "id": "lensvlm-9b_orinnx_q4km_llamacpp",
+          "model": "LensVLM-9B",
+          "path": "jetson-orin-nx-16gb/lensvlm-9b_orinnx_q4km_llamacpp.json"
+        },
+        {
+          "id": "lfm2.5-vl-3b_orinnx_q80_llamacpp",
+          "model": "LFM2.5-VL-3B",
+          "path": "jetson-orin-nx-16gb/lfm2.5-vl-3b_orinnx_q80_llamacpp.json"
+        },
+        {
+          "id": "mimo-v2.6-distill-qwen-9b_orinnx_q4km_llamacpp",
+          "model": "MiMo-V2.6-Distill-Qwen-9B",
+          "path": "jetson-orin-nx-16gb/mimo-v2.6-distill-qwen-9b_orinnx_q4km_llamacpp.json"
+        },
+        {
+          "id": "minicpm-v-4.6_orinnx_q80_llamacpp",
+          "model": "MiniCPM-V-4.6",
+          "path": "jetson-orin-nx-16gb/minicpm-v-4.6_orinnx_q80_llamacpp.json"
+        },
+        {
+          "id": "minicpm-v-4.7-1b_orinnx_q80_llamacpp",
+          "model": "MiniCPM-V-4.7-1B",
+          "path": "jetson-orin-nx-16gb/minicpm-v-4.7-1b_orinnx_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen-drive-1.0-4b_orinnx_q80_llamacpp",
+          "model": "Qwen-Drive-1.0-4B",
+          "path": "jetson-orin-nx-16gb/qwen-drive-1.0-4b_orinnx_q80_llamacpp.json"
         },
         {
           "id": "qwen3-vl-4b-instruct_orinnx_fp8_vllm",
@@ -143,9 +280,24 @@
           "path": "jetson-orin-nx-16gb/qwen3-vl-8b-instruct_orinnx_q4km_llamacpp.json"
         },
         {
+          "id": "qwen3.5-0.8b_orinnx_q80_llamacpp",
+          "model": "Qwen3.5-0.8B",
+          "path": "jetson-orin-nx-16gb/qwen3.5-0.8b_orinnx_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3.5-2b_orinnx_q80_llamacpp",
+          "model": "Qwen3.5-2B",
+          "path": "jetson-orin-nx-16gb/qwen3.5-2b_orinnx_q80_llamacpp.json"
+        },
+        {
           "id": "qwen3.5-4b_orinnx_q4km_llamacpp",
           "model": "Qwen3.5-4B",
           "path": "jetson-orin-nx-16gb/qwen3.5-4b_orinnx_q4km_llamacpp.json"
+        },
+        {
+          "id": "qwen3.5-9b_orinnx_q4km_llamacpp",
+          "model": "Qwen3.5-9B",
+          "path": "jetson-orin-nx-16gb/qwen3.5-9b_orinnx_q4km_llamacpp.json"
         }
       ]
     },
@@ -175,6 +327,11 @@
           "path": "jetson-agx-orin-32gb-developer-kit/cosmos3-edge_agxorin_bf16_vllm.json"
         },
         {
+          "id": "d1-3b_agxorin_q80_llamacpp",
+          "model": "d1-3B",
+          "path": "jetson-agx-orin-32gb-developer-kit/d1-3b_agxorin_q80_llamacpp.json"
+        },
+        {
           "id": "gemma-4-26b-a4b-it_agxorin_q40_llamacpp",
           "model": "Gemma-4-26B-A4B-it",
           "path": "jetson-agx-orin-32gb-developer-kit/gemma-4-26b-a4b-it_agxorin_q40_llamacpp.json"
@@ -183,6 +340,51 @@
           "id": "gemma-4-e4b-it_agxorin_q40_llamacpp",
           "model": "Gemma-4-E4B-it",
           "path": "jetson-agx-orin-32gb-developer-kit/gemma-4-e4b-it_agxorin_q40_llamacpp.json"
+        },
+        {
+          "id": "glm-4.6v-flash_agxorin_q80_llamacpp",
+          "model": "GLM-4.6V-Flash",
+          "path": "jetson-agx-orin-32gb-developer-kit/glm-4.6v-flash_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "granite-vision-4.1-4b_agxorin_q80_llamacpp",
+          "model": "Granite-Vision-4.1-4B",
+          "path": "jetson-agx-orin-32gb-developer-kit/granite-vision-4.1-4b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "lensvlm-9b_agxorin_q80_llamacpp",
+          "model": "LensVLM-9B",
+          "path": "jetson-agx-orin-32gb-developer-kit/lensvlm-9b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "lfm2.5-vl-3b_agxorin_q80_llamacpp",
+          "model": "LFM2.5-VL-3B",
+          "path": "jetson-agx-orin-32gb-developer-kit/lfm2.5-vl-3b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "mimo-v2.6-distill-qwen-9b_agxorin_q80_llamacpp",
+          "model": "MiMo-V2.6-Distill-Qwen-9B",
+          "path": "jetson-agx-orin-32gb-developer-kit/mimo-v2.6-distill-qwen-9b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "minicpm-v-4.6_agxorin_q80_llamacpp",
+          "model": "MiniCPM-V-4.6",
+          "path": "jetson-agx-orin-32gb-developer-kit/minicpm-v-4.6_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "minicpm-v-4.7-1b_agxorin_q80_llamacpp",
+          "model": "MiniCPM-V-4.7-1B",
+          "path": "jetson-agx-orin-32gb-developer-kit/minicpm-v-4.7-1b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "minicpm-v-4.7-35b-a3b_agxorin_q4km_llamacpp",
+          "model": "MiniCPM-V-4.7-35B-A3B",
+          "path": "jetson-agx-orin-32gb-developer-kit/minicpm-v-4.7-35b-a3b_agxorin_q4km_llamacpp.json"
+        },
+        {
+          "id": "qwen-drive-1.0-4b_agxorin_q80_llamacpp",
+          "model": "Qwen-Drive-1.0-4B",
+          "path": "jetson-agx-orin-32gb-developer-kit/qwen-drive-1.0-4b_agxorin_q80_llamacpp.json"
         },
         {
           "id": "qwen3-vl-4b-instruct_agxorin_q80_llamacpp",
@@ -200,9 +402,39 @@
           "path": "jetson-agx-orin-32gb-developer-kit/qwen3-vl-8b-instruct_agxorin_q80_llamacpp.json"
         },
         {
+          "id": "qwen3.5-0.8b_agxorin_q80_llamacpp",
+          "model": "Qwen3.5-0.8B",
+          "path": "jetson-agx-orin-32gb-developer-kit/qwen3.5-0.8b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3.5-27b_agxorin_q4km_llamacpp",
+          "model": "Qwen3.5-27B",
+          "path": "jetson-agx-orin-32gb-developer-kit/qwen3.5-27b_agxorin_q4km_llamacpp.json"
+        },
+        {
+          "id": "qwen3.5-2b_agxorin_q80_llamacpp",
+          "model": "Qwen3.5-2B",
+          "path": "jetson-agx-orin-32gb-developer-kit/qwen3.5-2b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3.5-35b-a3b_agxorin_q4km_llamacpp",
+          "model": "Qwen3.5-35B-A3B",
+          "path": "jetson-agx-orin-32gb-developer-kit/qwen3.5-35b-a3b_agxorin_q4km_llamacpp.json"
+        },
+        {
           "id": "qwen3.5-4b_agxorin_q4km_llamacpp",
           "model": "Qwen3.5-4B",
           "path": "jetson-agx-orin-32gb-developer-kit/qwen3.5-4b_agxorin_q4km_llamacpp.json"
+        },
+        {
+          "id": "qwen3.5-9b_agxorin_q80_llamacpp",
+          "model": "Qwen3.5-9B",
+          "path": "jetson-agx-orin-32gb-developer-kit/qwen3.5-9b_agxorin_q80_llamacpp.json"
+        },
+        {
+          "id": "qwen3.6-27b_agxorin_q4km_llamacpp",
+          "model": "Qwen3.6-27B",
+          "path": "jetson-agx-orin-32gb-developer-kit/qwen3.6-27b_agxorin_q4km_llamacpp.json"
         }
       ]
     },
@@ -495,9 +727,24 @@
           "path": "dgx-spark/cosmos3-nano_dgxspark_bf16_vllm.json"
         },
         {
+          "id": "d1-3b_dgxspark_bf16_vllm",
+          "model": "d1-3B",
+          "path": "dgx-spark/d1-3b_dgxspark_bf16_vllm.json"
+        },
+        {
           "id": "eagle2.5-8b_dgxspark_bf16_vllm",
           "model": "Eagle2.5-8B",
           "path": "dgx-spark/eagle2.5-8b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "fara1.5-27b_dgxspark_bf16_vllm",
+          "model": "Fara1.5-27B",
+          "path": "dgx-spark/fara1.5-27b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "gemma-4-26b-a4b-it_dgxspark_bf16_vllm",
+          "model": "Gemma-4-26B-A4B-it",
+          "path": "dgx-spark/gemma-4-26b-a4b-it_dgxspark_bf16_vllm.json"
         },
         {
           "id": "gemma-4-31b-it_dgxspark_bf16_vllm",
@@ -510,9 +757,39 @@
           "path": "dgx-spark/gemma-4-31b-it_dgxspark_nvfp4_vllm.json"
         },
         {
+          "id": "glm-4.6v-flash_dgxspark_bf16_vllm",
+          "model": "GLM-4.6V-Flash",
+          "path": "dgx-spark/glm-4.6v-flash_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "granite-vision-4.1-4b_dgxspark_bf16_vllm",
+          "model": "Granite-Vision-4.1-4B",
+          "path": "dgx-spark/granite-vision-4.1-4b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "h2o-lightning-4b_dgxspark_bf16_vllm",
+          "model": "H2O-Lightning-4B",
+          "path": "dgx-spark/h2o-lightning-4b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "lensvlm-9b_dgxspark_bf16_vllm",
+          "model": "LensVLM-9B",
+          "path": "dgx-spark/lensvlm-9b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "lfm2.5-vl-3b_dgxspark_bf16_vllm",
+          "model": "LFM2.5-VL-3B",
+          "path": "dgx-spark/lfm2.5-vl-3b_dgxspark_bf16_vllm.json"
+        },
+        {
           "id": "llama-3.1-nemotron-nano-vl-8b_dgxspark_bf16_vllm",
           "model": "Llama-3.1-Nemotron-Nano-VL-8B",
           "path": "dgx-spark/llama-3.1-nemotron-nano-vl-8b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "llama-4-scout-17b-16e-instruct_dgxspark_nvfp4_vllm",
+          "model": "Llama-4-Scout-17B-16E-Instruct",
+          "path": "dgx-spark/llama-4-scout-17b-16e-instruct_dgxspark_nvfp4_vllm.json"
         },
         {
           "id": "medgemma-1.5-4b-it_dgxspark_bf16_vllm",
@@ -520,9 +797,39 @@
           "path": "dgx-spark/medgemma-1.5-4b-it_dgxspark_bf16_vllm.json"
         },
         {
+          "id": "mimo-v2.6-distill-qwen-9b_dgxspark_bf16_vllm",
+          "model": "MiMo-V2.6-Distill-Qwen-9B",
+          "path": "dgx-spark/mimo-v2.6-distill-qwen-9b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "minicpm-v-4.6_dgxspark_bf16_vllm",
+          "model": "MiniCPM-V-4.6",
+          "path": "dgx-spark/minicpm-v-4.6_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "minicpm-v-4.7-1b_dgxspark_bf16_vllm",
+          "model": "MiniCPM-V-4.7-1B",
+          "path": "dgx-spark/minicpm-v-4.7-1b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "mistral-small-4-119b-2603_dgxspark_nvfp4_vllm",
+          "model": "Mistral-Small-4-119B-2603",
+          "path": "dgx-spark/mistral-small-4-119b-2603_dgxspark_nvfp4_vllm.json"
+        },
+        {
           "id": "nemotron-nano-12b-v2-vl_dgxspark_bf16_vllm",
           "model": "Nemotron-Nano-12B-v2-VL",
           "path": "dgx-spark/nemotron-nano-12b-v2-vl_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "nvidia-nemotron-3.5-bolt-74b-a9b_dgxspark_nvfp4_vllm",
+          "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+          "path": "dgx-spark/nvidia-nemotron-3.5-bolt-74b-a9b_dgxspark_nvfp4_vllm.json"
+        },
+        {
+          "id": "nvidia-nemotron-3.5-super-vl-120b-a12b_dgxspark_nvfp4_vllm",
+          "model": "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B",
+          "path": "dgx-spark/nvidia-nemotron-3.5-super-vl-120b-a12b_dgxspark_nvfp4_vllm.json"
         },
         {
           "id": "qwen3-vl-30b-a3b-instruct_dgxspark_fp8_vllm",
@@ -538,6 +845,41 @@
           "id": "qwen3-vl-8b-instruct_dgxspark_bf16_vllm",
           "model": "Qwen3-VL-8B-Instruct",
           "path": "dgx-spark/qwen3-vl-8b-instruct_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "qwen3.5-0.8b_dgxspark_bf16_vllm",
+          "model": "Qwen3.5-0.8B",
+          "path": "dgx-spark/qwen3.5-0.8b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "qwen3.5-122b-a10b_dgxspark_nvfp4_vllm",
+          "model": "Qwen3.5-122B-A10B",
+          "path": "dgx-spark/qwen3.5-122b-a10b_dgxspark_nvfp4_vllm.json"
+        },
+        {
+          "id": "qwen3.5-27b_dgxspark_fp8_vllm",
+          "model": "Qwen3.5-27B",
+          "path": "dgx-spark/qwen3.5-27b_dgxspark_fp8_vllm.json"
+        },
+        {
+          "id": "qwen3.5-2b_dgxspark_bf16_vllm",
+          "model": "Qwen3.5-2B",
+          "path": "dgx-spark/qwen3.5-2b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "qwen3.5-35b-a3b_dgxspark_fp8_vllm",
+          "model": "Qwen3.5-35B-A3B",
+          "path": "dgx-spark/qwen3.5-35b-a3b_dgxspark_fp8_vllm.json"
+        },
+        {
+          "id": "qwen3.5-9b_dgxspark_bf16_vllm",
+          "model": "Qwen3.5-9B",
+          "path": "dgx-spark/qwen3.5-9b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "qwen3.6-27b_dgxspark_fp8_vllm",
+          "model": "Qwen3.6-27B",
+          "path": "dgx-spark/qwen3.6-27b_dgxspark_fp8_vllm.json"
         },
         {
           "id": "qwen3.6-35b-a3b_dgxspark_fp8_vllm",

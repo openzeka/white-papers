@@ -77,6 +77,37 @@ MODELS = {
     "nvidia/Eagle2.5-8B": ("Eagle2.5-8B", "nvidia/Eagle2.5-8B", "8.1B", None),
     "nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1": ("Llama-3.1-Nemotron-Nano-VL-8B", "nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1", "8.7B", None),
     "nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL": ("Nemotron-Nano-12B-v2-VL", "nvidia/NVIDIA-Nemotron-Nano-12B-v2-VL-BF16", "13B", None),
+    "google/gemma-4-26B-A4B-it": ("Gemma-4-26B-A4B-it", "google/gemma-4-26B-A4B-it", "26B", None),
+    "Qwen/Qwen3.5-0.8B": ("Qwen3.5-0.8B", "Qwen/Qwen3.5-0.8B", "0.9B", None),
+    "Qwen/Qwen3.5-2B": ("Qwen3.5-2B", "Qwen/Qwen3.5-2B", "2.3B", None),
+    "Qwen/Qwen3.5-9B": ("Qwen3.5-9B", "Qwen/Qwen3.5-9B", "9.7B", None),
+    "Qwen/Qwen3.5-27B": ("Qwen3.5-27B", "Qwen/Qwen3.5-27B", "27B", None),
+    "Qwen/Qwen3.5-27B-FP8": ("Qwen3.5-27B", "Qwen/Qwen3.5-27B", "27B", "Qwen/Qwen3.5-27B-FP8"),
+    "Qwen/Qwen3.5-35B-A3B-FP8": ("Qwen3.5-35B-A3B", "Qwen/Qwen3.5-35B-A3B", "35B", "Qwen/Qwen3.5-35B-A3B-FP8"),
+    "nvidia/Qwen3.5-122B-A10B-NVFP4": ("Qwen3.5-122B-A10B", "Qwen/Qwen3.5-122B-A10B", "122B", "nvidia/Qwen3.5-122B-A10B-NVFP4"),
+    "Qwen/Qwen3.6-27B-FP8": ("Qwen3.6-27B", "Qwen/Qwen3.6-27B", "27B", "Qwen/Qwen3.6-27B-FP8"),
+    "Qwen/Qwen3.6-27B": ("Qwen3.6-27B", "Qwen/Qwen3.6-27B", "27B", None),
+    "Qwen/Qwen3.5-35B-A3B": ("Qwen3.5-35B-A3B", "Qwen/Qwen3.5-35B-A3B", "35B", None),
+    "Qwen/Qwen-Drive-1.0-4B": ("Qwen-Drive-1.0-4B", "Qwen/Qwen-Drive-1.0-4B", "4.5B", None),
+    "nvidia/Llama-4-Scout-17B-16E-Instruct-NVFP4": ("Llama-4-Scout-17B-16E-Instruct", "meta-llama/Llama-4-Scout-17B-16E-Instruct", "109B",
+                                                    "nvidia/Llama-4-Scout-17B-16E-Instruct-NVFP4"),
+    "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4": ("NVIDIA-Nemotron-3.5-Super-VL-120B-A12B", "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+                                                            "120B", "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-NVFP4"),
+    "cloudnathan5/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-NVFP4": ("NVIDIA-Nemotron-3.5-Bolt-74B-A9B", "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+                                                            "74B", "cloudnathan5/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-NVFP4"),
+    "mistralai/Mistral-Small-4-119B-2603-NVFP4": ("Mistral-Small-4-119B-2603", "mistralai/Mistral-Small-4-119B-2603", "119B",
+                                                  "mistralai/Mistral-Small-4-119B-2603-NVFP4"),
+    "microsoft/Fara1.5-27B": ("Fara1.5-27B", "microsoft/Fara1.5-27B", "27B", None),
+    "zai-org/GLM-4.6V-Flash": ("GLM-4.6V-Flash", "zai-org/GLM-4.6V-Flash", "10B", None),
+    "apple/LensVLM-9B": ("LensVLM-9B", "apple/LensVLM-9B", "9.4B", None),
+    "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B": ("MiMo-V2.6-Distill-Qwen-9B", "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B", "9.4B", None),
+    "h2oai/h2o-lightning-4b": ("H2O-Lightning-4B", "h2oai/h2o-lightning-4b", "4.7B", None),
+    "ibm-granite/granite-vision-4.1-4b": ("Granite-Vision-4.1-4B", "ibm-granite/granite-vision-4.1-4b", "4.0B", None),
+    "LiquidAI/LFM2.5-VL-3B": ("LFM2.5-VL-3B", "LiquidAI/LFM2.5-VL-3B", "3.1B", None),
+    "LiquidAI/d1-3B": ("d1-3B", "LiquidAI/d1-3B", "3.1B", None),
+    "openbmb/MiniCPM-V-4.6": ("MiniCPM-V-4.6", "openbmb/MiniCPM-V-4.6", "1.3B", None),
+    "openbmb/MiniCPM-V-4.7-1B": ("MiniCPM-V-4.7-1B", "openbmb/MiniCPM-V-4.7-1B", "1.6B", None),
+    "openbmb/MiniCPM-V-4.7-35B-A3B": ("MiniCPM-V-4.7-35B-A3B", "openbmb/MiniCPM-V-4.7-35B-A3B", "35B", None),
 }
 
 ADDRESS = re.compile(r"\b\d{1,3}(?:\.\d{1,3}){3}(?::\d+)?\b")
@@ -100,7 +131,7 @@ def engine_of(s):
     if s.startswith("llama.cpp"):
         name, m = "llama.cpp", re.match(r"llama\.cpp (\S+)", s)
     elif s.startswith("vLLM"):
-        name, m = "vLLM", re.match(r"vLLM (\d[\d.]*)", s)
+        name, m = "vLLM", re.match(r"vLLM (\d[\w.+]*)", s)  # 0.28.0, or a nightly's 0.32.0rc1.dev190+g3f1bcfd82
     else:
         sys.exit(f"unknown engine {s!r}")
     return name, m.group(1) if m else None
@@ -125,8 +156,9 @@ def settings_of(run, conc):
     if m:
         notes.append(f"max-num-seqs {m.group(1)}")
         # the camera-limit levels ran on a server restarted with room for every camera
+        # (runs that kept one server for every phase record the same figure: nothing to add)
         cl = ((conc or {}).get("perf_settings") or {}).get("camera_limit") or {}
-        if cl.get("max_num_seqs") and cl.get("levels"):
+        if cl.get("max_num_seqs") and cl.get("levels") and str(cl["max_num_seqs"]) != m.group(1):
             notes[-1] += f" ({cl['resolution']}, {min(cl['levels'])} or more cameras: {cl['max_num_seqs']})"
     if "vllm-omni" in text:
         notes.append("vLLM-Omni image")

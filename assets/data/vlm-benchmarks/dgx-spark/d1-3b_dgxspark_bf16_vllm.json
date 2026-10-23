@@ -1,0 +1,47 @@
+{
+  "id": "d1-3b_dgxspark_bf16_vllm",
+  "model": "d1-3B",
+  "device": "DGX Spark",
+  "quantization": "BF16",
+  "engine": "vLLM",
+  "engine_version": "0.32.0rc1.dev190+g3f1bcfd82",
+  "platform": null,
+  "served_repo": null,
+  "notes": "prompt cache off; thinking off; max-num-seqs 256",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 0.089, "tps": 34.77, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 2, "ttft_s": 0.132, "tps": 40.77, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 4, "ttft_s": 0.141, "tps": 40.32, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 8, "ttft_s": 0.213, "tps": 39.34, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 16, "ttft_s": 0.399, "tps": 37.1, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 2, "c": 1, "ttft_s": 0.161, "tps": 34.04, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 4, "c": 1, "ttft_s": 0.228, "tps": 37.36, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 8, "c": 1, "ttft_s": 0.388, "tps": 34.34, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 16, "c": 1, "ttft_s": 0.76, "tps": 34.3, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 32, "c": 1, "ttft_s": 1.509, "tps": 34.6, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 0.175, "tps": 34.46, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 2, "ttft_s": 0.247, "tps": 40.54, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 4, "ttft_s": 0.258, "tps": 36.76, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 8, "ttft_s": 0.414, "tps": 33.82, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 16, "ttft_s": 0.778, "tps": 27.17, "requests": 32, "failed": 0},
+    {"res": "720p", "images": 1, "c": 32, "ttft_s": 1.329, "tps": 20.94, "requests": 64, "failed": 0},
+    {"res": "720p", "images": 1, "c": 64, "ttft_s": 2.675, "tps": 14.12, "requests": 128, "failed": 0},
+    {"res": "720p", "images": 1, "c": 128, "ttft_s": 7.365, "tps": 10.2, "requests": 256, "failed": 0},
+    {"res": "720p", "images": 1, "c": 256, "ttft_s": 20.307, "tps": 8.73, "requests": 512, "failed": 0},
+    {"res": "720p", "images": 2, "c": 1, "ttft_s": 0.316, "tps": 34.27, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 4, "c": 1, "ttft_s": 0.609, "tps": 34.76, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 8, "c": 1, "ttft_s": 1.201, "tps": 33.94, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 16, "c": 1, "ttft_s": 2.433, "tps": 33.75, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 32, "c": 1, "ttft_s": 4.972, "tps": 34.0, "requests": 5, "failed": 0}
+  ],
+  "limits": {
+    "images": {
+      "720p": 64,
+      "1080p": 1,
+      "2K": 1
+    },
+    "cameras": {
+      "720p": 288
+    }
+  }
+}

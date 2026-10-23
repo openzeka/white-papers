@@ -15,6 +15,406 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-10-23
+  type: vlm
+  vlm: d1-3b_dgxspark_bf16_vllm
+  text:
+    en: "d1-3B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 256 simultaneous cameras and up to 32 images per request."
+    tr: "d1-3B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 256 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "d1-3B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 256 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: fara1.5-27b_dgxspark_bf16_vllm
+  text:
+    en: "Fara1.5-27B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 40 simultaneous cameras and up to 128 images per request."
+    tr: "Fara1.5-27B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 40 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Fara1.5-27B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 40 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: gemma-4-26b-a4b-it_dgxspark_bf16_vllm
+  text:
+    en: "Gemma-4-26B-A4B-it on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 120 simultaneous cameras and up to 128 images per request."
+    tr: "Gemma-4-26B-A4B-it, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 120 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Gemma-4-26B-A4B-it op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 120 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: glm-4.6v-flash_dgxspark_bf16_vllm
+  text:
+    en: "GLM-4.6V-Flash on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 48 simultaneous cameras and up to 64 images per request."
+    tr: "GLM-4.6V-Flash, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 48 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "GLM-4.6V-Flash op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 48 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: granite-vision-4.1-4b_dgxspark_bf16_vllm
+  text:
+    en: "Granite-Vision-4.1-4B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 96 simultaneous cameras and up to 32 images per request."
+    tr: "Granite-Vision-4.1-4B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 96 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Granite-Vision-4.1-4B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 96 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: h2o-lightning-4b_dgxspark_bf16_vllm
+  text:
+    en: "H2O-Lightning-4B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 144 simultaneous cameras and up to 128 images per request."
+    tr: "H2O-Lightning-4B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 144 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "H2O-Lightning-4B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 144 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: lensvlm-9b_dgxspark_bf16_vllm
+  text:
+    en: "LensVLM-9B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 80 simultaneous cameras and up to 128 images per request."
+    tr: "LensVLM-9B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 80 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "LensVLM-9B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 80 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: lfm2.5-vl-3b_dgxspark_bf16_vllm
+  text:
+    en: "LFM2.5-VL-3B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 256 simultaneous cameras and up to 32 images per request."
+    tr: "LFM2.5-VL-3B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 256 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "LFM2.5-VL-3B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 256 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: llama-4-scout-17b-16e-instruct_dgxspark_nvfp4_vllm
+  text:
+    en: "Llama-4-Scout-17B-16E-Instruct on DGX Spark: NVFP4 weights served with vLLM, response time measured from 1 to 28 simultaneous cameras and up to 64 images per request."
+    tr: "Llama-4-Scout-17B-16E-Instruct, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 28 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "Llama-4-Scout-17B-16E-Instruct op DGX Spark: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 28 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: mimo-v2.6-distill-qwen-9b_dgxspark_bf16_vllm
+  text:
+    en: "MiMo-V2.6-Distill-Qwen-9B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 96 simultaneous cameras and up to 128 images per request."
+    tr: "MiMo-V2.6-Distill-Qwen-9B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 96 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "MiMo-V2.6-Distill-Qwen-9B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 96 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: minicpm-v-4.6_dgxspark_bf16_vllm
+  text:
+    en: "MiniCPM-V-4.6 on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 384 simultaneous cameras and up to 128 images per request."
+    tr: "MiniCPM-V-4.6, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 384 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "MiniCPM-V-4.6 op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 384 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: minicpm-v-4.7-1b_dgxspark_bf16_vllm
+  text:
+    en: "MiniCPM-V-4.7-1B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 352 simultaneous cameras and up to 128 images per request."
+    tr: "MiniCPM-V-4.7-1B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 352 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "MiniCPM-V-4.7-1B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 352 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: mistral-small-4-119b-2603_dgxspark_nvfp4_vllm
+  text:
+    en: "Mistral-Small-4-119B-2603 on DGX Spark: NVFP4 weights served with vLLM, response time measured from 1 to 88 simultaneous cameras and up to 64 images per request."
+    tr: "Mistral-Small-4-119B-2603, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 88 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "Mistral-Small-4-119B-2603 op DGX Spark: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 88 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: nvidia-nemotron-3.5-bolt-74b-a9b_dgxspark_nvfp4_vllm
+  text:
+    en: "NVIDIA-Nemotron-3.5-Bolt-74B-A9B on DGX Spark: NVFP4 weights served with vLLM, response time measured from 1 to 64 simultaneous cameras and up to 32 images per request."
+    tr: "NVIDIA-Nemotron-3.5-Bolt-74B-A9B, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 64 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "NVIDIA-Nemotron-3.5-Bolt-74B-A9B op DGX Spark: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 64 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: nvidia-nemotron-3.5-super-vl-120b-a12b_dgxspark_nvfp4_vllm
+  text:
+    en: "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B on DGX Spark: NVFP4 weights served with vLLM, response time measured from 1 to 56 simultaneous cameras and up to 64 images per request."
+    tr: "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 56 arasında eşzamanlı kamerada ve istek başına 64 görüntüye kadar ölçüldü."
+    nl: "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B op DGX Spark: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 56 gelijktijdige camera's en tot 64 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-0.8b_dgxspark_bf16_vllm
+  text:
+    en: "Qwen3.5-0.8B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 416 simultaneous cameras and up to 128 images per request."
+    tr: "Qwen3.5-0.8B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 416 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-0.8B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 416 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-122b-a10b_dgxspark_nvfp4_vllm
+  text:
+    en: "Qwen3.5-122B-A10B on DGX Spark: NVFP4 weights served with vLLM, response time measured from 1 to 20 simultaneous cameras and up to 128 images per request."
+    tr: "Qwen3.5-122B-A10B, DGX Spark üzerinde: NVFP4 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 20 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-122B-A10B op DGX Spark: NVFP4-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 20 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-27b_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3.5-27B on DGX Spark: FP8 weights served with vLLM, response time measured from 1 to 56 simultaneous cameras and up to 128 images per request."
+    tr: "Qwen3.5-27B, DGX Spark üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 56 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-27B op DGX Spark: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 56 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-2b_dgxspark_bf16_vllm
+  text:
+    en: "Qwen3.5-2B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 240 simultaneous cameras and up to 128 images per request."
+    tr: "Qwen3.5-2B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 240 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-2B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 240 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-35b-a3b_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3.5-35B-A3B on DGX Spark: FP8 weights served with vLLM, response time measured from 1 to 112 simultaneous cameras and up to 128 images per request."
+    tr: "Qwen3.5-35B-A3B, DGX Spark üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 112 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-35B-A3B op DGX Spark: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 112 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-9b_dgxspark_bf16_vllm
+  text:
+    en: "Qwen3.5-9B on DGX Spark: BF16 weights served with vLLM, response time measured from 1 to 96 simultaneous cameras and up to 128 images per request."
+    tr: "Qwen3.5-9B, DGX Spark üzerinde: BF16 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 96 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-9B op DGX Spark: BF16-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 96 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.6-27b_dgxspark_fp8_vllm
+  text:
+    en: "Qwen3.6-27B on DGX Spark: FP8 weights served with vLLM, response time measured from 1 to 56 simultaneous cameras and up to 128 images per request."
+    tr: "Qwen3.6-27B, DGX Spark üzerinde: FP8 ağırlıklar vLLM üzerinden sunuldu, yanıt süresi 1 ile 56 arasında eşzamanlı kamerada ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Qwen3.6-27B op DGX Spark: FP8-gewichten geserveerd met vLLM, responstijd gemeten van 1 tot 56 gelijktijdige camera's en tot 128 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: d1-3b_orinnx_q80_llamacpp
+  text:
+    en: "d1-3B on Jetson Orin NX 16GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "d1-3B, Jetson Orin NX 16GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "d1-3B op Jetson Orin NX 16GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: glm-4.6v-flash_orinnx_q4km_llamacpp
+  text:
+    en: "GLM-4.6V-Flash on Jetson Orin NX 16GB: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "GLM-4.6V-Flash, Jetson Orin NX 16GB üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "GLM-4.6V-Flash op Jetson Orin NX 16GB: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: granite-vision-4.1-4b_orinnx_q80_llamacpp
+  text:
+    en: "Granite-Vision-4.1-4B on Jetson Orin NX 16GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Granite-Vision-4.1-4B, Jetson Orin NX 16GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Granite-Vision-4.1-4B op Jetson Orin NX 16GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: lensvlm-9b_orinnx_q4km_llamacpp
+  text:
+    en: "LensVLM-9B on Jetson Orin NX 16GB: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "LensVLM-9B, Jetson Orin NX 16GB üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "LensVLM-9B op Jetson Orin NX 16GB: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: lfm2.5-vl-3b_orinnx_q80_llamacpp
+  text:
+    en: "LFM2.5-VL-3B on Jetson Orin NX 16GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "LFM2.5-VL-3B, Jetson Orin NX 16GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "LFM2.5-VL-3B op Jetson Orin NX 16GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: mimo-v2.6-distill-qwen-9b_orinnx_q4km_llamacpp
+  text:
+    en: "MiMo-V2.6-Distill-Qwen-9B on Jetson Orin NX 16GB: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "MiMo-V2.6-Distill-Qwen-9B, Jetson Orin NX 16GB üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "MiMo-V2.6-Distill-Qwen-9B op Jetson Orin NX 16GB: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: minicpm-v-4.6_orinnx_q80_llamacpp
+  text:
+    en: "MiniCPM-V-4.6 on Jetson Orin NX 16GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "MiniCPM-V-4.6, Jetson Orin NX 16GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "MiniCPM-V-4.6 op Jetson Orin NX 16GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: minicpm-v-4.7-1b_orinnx_q80_llamacpp
+  text:
+    en: "MiniCPM-V-4.7-1B on Jetson Orin NX 16GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "MiniCPM-V-4.7-1B, Jetson Orin NX 16GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "MiniCPM-V-4.7-1B op Jetson Orin NX 16GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen-drive-1.0-4b_orinnx_q80_llamacpp
+  text:
+    en: "Qwen-Drive-1.0-4B on Jetson Orin NX 16GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen-Drive-1.0-4B, Jetson Orin NX 16GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen-Drive-1.0-4B op Jetson Orin NX 16GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-0.8b_orinnx_q80_llamacpp
+  text:
+    en: "Qwen3.5-0.8B on Jetson Orin NX 16GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.5-0.8B, Jetson Orin NX 16GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-0.8B op Jetson Orin NX 16GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-2b_orinnx_q80_llamacpp
+  text:
+    en: "Qwen3.5-2B on Jetson Orin NX 16GB: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.5-2B, Jetson Orin NX 16GB üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-2B op Jetson Orin NX 16GB: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-9b_orinnx_q4km_llamacpp
+  text:
+    en: "Qwen3.5-9B on Jetson Orin NX 16GB: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.5-9B, Jetson Orin NX 16GB üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-9B op Jetson Orin NX 16GB: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: d1-3b_agxorin_q80_llamacpp
+  text:
+    en: "d1-3B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "d1-3B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "d1-3B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: glm-4.6v-flash_agxorin_q80_llamacpp
+  text:
+    en: "GLM-4.6V-Flash on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "GLM-4.6V-Flash, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "GLM-4.6V-Flash op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: granite-vision-4.1-4b_agxorin_q80_llamacpp
+  text:
+    en: "Granite-Vision-4.1-4B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Granite-Vision-4.1-4B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Granite-Vision-4.1-4B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: lensvlm-9b_agxorin_q80_llamacpp
+  text:
+    en: "LensVLM-9B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "LensVLM-9B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "LensVLM-9B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: lfm2.5-vl-3b_agxorin_q80_llamacpp
+  text:
+    en: "LFM2.5-VL-3B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "LFM2.5-VL-3B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "LFM2.5-VL-3B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: mimo-v2.6-distill-qwen-9b_agxorin_q80_llamacpp
+  text:
+    en: "MiMo-V2.6-Distill-Qwen-9B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "MiMo-V2.6-Distill-Qwen-9B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "MiMo-V2.6-Distill-Qwen-9B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: minicpm-v-4.6_agxorin_q80_llamacpp
+  text:
+    en: "MiniCPM-V-4.6 on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "MiniCPM-V-4.6, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "MiniCPM-V-4.6 op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: minicpm-v-4.7-1b_agxorin_q80_llamacpp
+  text:
+    en: "MiniCPM-V-4.7-1B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "MiniCPM-V-4.7-1B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "MiniCPM-V-4.7-1B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: minicpm-v-4.7-35b-a3b_agxorin_q4km_llamacpp
+  text:
+    en: "MiniCPM-V-4.7-35B-A3B on Jetson AGX Orin 32GB Developer Kit: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "MiniCPM-V-4.7-35B-A3B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "MiniCPM-V-4.7-35B-A3B op Jetson AGX Orin 32GB Developer Kit: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen-drive-1.0-4b_agxorin_q80_llamacpp
+  text:
+    en: "Qwen-Drive-1.0-4B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen-Drive-1.0-4B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen-Drive-1.0-4B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-0.8b_agxorin_q80_llamacpp
+  text:
+    en: "Qwen3.5-0.8B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.5-0.8B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-0.8B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-27b_agxorin_q4km_llamacpp
+  text:
+    en: "Qwen3.5-27B on Jetson AGX Orin 32GB Developer Kit: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.5-27B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-27B op Jetson AGX Orin 32GB Developer Kit: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-2b_agxorin_q80_llamacpp
+  text:
+    en: "Qwen3.5-2B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.5-2B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-2B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-35b-a3b_agxorin_q4km_llamacpp
+  text:
+    en: "Qwen3.5-35B-A3B on Jetson AGX Orin 32GB Developer Kit: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.5-35B-A3B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-35B-A3B op Jetson AGX Orin 32GB Developer Kit: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.5-9b_agxorin_q80_llamacpp
+  text:
+    en: "Qwen3.5-9B on Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.5-9B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q8_0 GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.5-9B op Jetson AGX Orin 32GB Developer Kit: Q8_0 GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
+- date: 2026-10-23
+  type: vlm
+  vlm: qwen3.6-27b_agxorin_q4km_llamacpp
+  text:
+    en: "Qwen3.6-27B on Jetson AGX Orin 32GB Developer Kit: Q4_K_M GGUF weights served with llama.cpp, response time measured from 1 to 8 simultaneous cameras and up to 32 images per request."
+    tr: "Qwen3.6-27B, Jetson AGX Orin 32GB Developer Kit üzerinde: Q4_K_M GGUF ağırlıklar llama.cpp üzerinden sunuldu, yanıt süresi 1 ile 8 arasında eşzamanlı kamerada ve istek başına 32 görüntüye kadar ölçüldü."
+    nl: "Qwen3.6-27B op Jetson AGX Orin 32GB Developer Kit: Q4_K_M GGUF-gewichten geserveerd met llama.cpp, responstijd gemeten van 1 tot 8 gelijktijdige camera's en tot 32 beelden per verzoek."
+
 - date: 2026-10-21
   type: benchmarks
   run: muse-spark-open-816b-a42b_b300_nvfp4_vllm_tp4

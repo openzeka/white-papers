@@ -76,7 +76,7 @@ Yanındaki **Kamera Başına Görüntü**, her isteğin kaç görüntü taşıd�
 belirler: varsayılan olarak tek bir anlık görüntü ya da aynı kameranın birlikte
 gönderilen birkaç karesi; video, görüntü-dil modellerine çoğu zaman böyle
 gönderilir. İstek başına birden fazla görüntü yalnızca tek kamerayla ölçüldü; bu
-yüzden üç ya da beş görüntüyle Maks. kamera 1'den yüksek olamaz.
+yüzden birden fazla görüntüyle Maks. kamera 1'den yüksek olamaz.
 
 ### 4. Maks. kamera değerini okuyun {#maks-kamera-degerini-okuyun}
 
@@ -148,9 +148,11 @@ katılmaz ve yapılandırmanın aleyhine sayılmaz.
   Jetson AGX Orin 32GB ile Developer Kit'inde 8'e, RTX PRO 6000, Jetson AGX Thor
   ve DGX Spark'ta 16'ya kadar; her seviyede bir Jetson Orin'de 8, diğerlerinde 24
   istek gönderildi ve aynı anda hiçbir zaman seviyedekinden fazla kameranın isteği
-  işlenmedi.
+  işlenmedi. llama.cpp b11690 ile sunulan Jetson Orin yapılandırmaları 1, 2, 4 ve
+  8 kamerada, her seviyede 24 istekle ölçüldü.
 - **Tek kamera**, dört boyutun hepsinde istek başına bir, üç ve beş görüntüyle
-  (Jetson AGX Thor ve DGX Spark'ta 1, 2, 4, 8, 16 ve 32), her birinde 5 istekle
+  (Jetson AGX Thor, DGX Spark ve llama.cpp b11690 ile sunulan Jetson Orin
+  yapılandırmalarında 1, 2, 4, 8, 16 ve 32), her birinde 5 istekle
   (bir yapılandırmada 3) ölçüldü. 2K ve istek başına birden fazla görüntü yalnızca
   bu şekilde ölçüldü.
 - **Kamera sınırı** Jetson AGX Thor ve DGX Spark'ta, 720p'de kamera başına bir

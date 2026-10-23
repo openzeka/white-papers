@@ -75,7 +75,7 @@ slaagt.
 Ernaast bepaalt **Beelden per camera** hoeveel beelden elk verzoek meestuurt:
 standaard één momentopname, of meerdere frames van dezelfde camera samen, zoals
 video vaak naar een vision-languagemodel wordt gestuurd. Meerdere beelden per
-verzoek zijn alleen met één camera gemeten, dus met drie of vijf beelden kan
+verzoek zijn alleen met één camera gemeten, dus met meer dan één beeld kan
 Max. camera's niet hoger zijn dan 1.
 
 ### 4. Lees Max. camera's af
@@ -148,9 +148,11 @@ mislukte, telt niet mee in het gemiddelde en niet tegen een configuratie.
   tot 8 op Jetson AGX Orin 32GB en de Developer Kit daarvan, en tot 16 op RTX PRO
   6000, Jetson AGX Thor en DGX Spark, met 8 verzoeken per niveau op een Jetson
   Orin en 24 op de andere, en nooit meer camera's tegelijk in behandeling dan het
-  niveau.
+  niveau. De Jetson Orin-configuraties die met llama.cpp b11690 zijn geserveerd,
+  zijn gemeten bij 1, 2, 4 en 8 camera's met 24 verzoeken per niveau.
 - **Eén camera** is gemeten bij alle vier formaten met één, drie en vijf beelden
-  per verzoek (1, 2, 4, 8, 16 en 32 op Jetson AGX Thor en DGX Spark), telkens 5
+  per verzoek (1, 2, 4, 8, 16 en 32 op Jetson AGX Thor en DGX Spark, en voor de
+  Jetson Orin-configuraties die met llama.cpp b11690 zijn geserveerd), telkens 5
   verzoeken (3 voor één configuratie). 2K en meerdere beelden per verzoek zijn
   alleen zo gemeten.
 - **De cameralimiet** is gemeten op Jetson AGX Thor en DGX Spark, bij 720p met één

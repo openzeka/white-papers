@@ -1,0 +1,60 @@
+{
+  "id": "llama-4-scout-17b-16e-instruct_dgxspark_nvfp4_vllm",
+  "model": "Llama-4-Scout-17B-16E-Instruct",
+  "device": "DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "engine_version": "0.32.0rc1.dev190+g3f1bcfd82",
+  "platform": null,
+  "served_repo": "nvidia/Llama-4-Scout-17B-16E-Instruct-NVFP4",
+  "notes": "prompt cache off; thinking off; max-num-seqs 256",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 0.744, "tps": 18.53, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 2, "ttft_s": 0.861, "tps": 14.79, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 4, "ttft_s": 1.571, "tps": 11.07, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 8, "ttft_s": 2.302, "tps": 7.87, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 16, "ttft_s": 4.43, "tps": 6.45, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 2, "c": 1, "ttft_s": 1.748, "tps": 17.38, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 4, "c": 1, "ttft_s": 3.264, "tps": 17.42, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 8, "c": 1, "ttft_s": 5.645, "tps": 17.59, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 16, "c": 1, "ttft_s": 12.368, "tps": 16.74, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 32, "c": 1, "ttft_s": 18.32, "tps": 16.45, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 0.937, "tps": 18.42, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 2, "ttft_s": 1.329, "tps": 14.7, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 4, "ttft_s": 1.54, "tps": 10.14, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 8, "ttft_s": 2.561, "tps": 7.03, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 16, "ttft_s": 5.022, "tps": 4.81, "requests": 32, "failed": 0},
+    {"res": "720p", "images": 1, "c": 24, "ttft_s": 7.34, "tps": 3.88, "requests": 48, "failed": 0},
+    {"res": "720p", "images": 1, "c": 28, "ttft_s": 8.435, "tps": 3.37, "requests": 56, "failed": 0},
+    {"res": "720p", "images": 2, "c": 1, "ttft_s": 1.886, "tps": 18.13, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 4, "c": 1, "ttft_s": 3.933, "tps": 17.63, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 8, "c": 1, "ttft_s": 8.034, "tps": 17.42, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 16, "c": 1, "ttft_s": 16.98, "tps": 17.07, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 32, "c": 1, "ttft_s": 37.292, "tps": 16.39, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 64, "c": 1, "ttft_s": 89.062, "tps": 14.43, "requests": 3, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 1, "ttft_s": 1.377, "tps": 18.39, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 2, "ttft_s": 2.327, "tps": 14.99, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 4, "ttft_s": 2.614, "tps": 9.85, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 8, "ttft_s": 3.828, "tps": 6.49, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 16, "ttft_s": 8.785, "tps": 5.02, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 2, "c": 1, "ttft_s": 2.803, "tps": 17.97, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 4, "c": 1, "ttft_s": 5.694, "tps": 18.24, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 8, "c": 1, "ttft_s": 11.645, "tps": 17.82, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 16, "c": 1, "ttft_s": 24.609, "tps": 16.89, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 32, "c": 1, "ttft_s": 54.576, "tps": 16.14, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 1, "c": 1, "ttft_s": 1.392, "tps": 18.38, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 2, "c": 1, "ttft_s": 2.828, "tps": 18.02, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 4, "c": 1, "ttft_s": 5.794, "tps": 18.22, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 8, "c": 1, "ttft_s": 11.782, "tps": 17.75, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 16, "c": 1, "ttft_s": 24.986, "tps": 16.85, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 32, "c": 1, "ttft_s": 55.202, "tps": 16.08, "requests": 5, "failed": 0}
+  ],
+  "limits": {
+    "images": {
+      "720p": 128
+    },
+    "cameras": {
+      "720p": 32
+    }
+  }
+}
