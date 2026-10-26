@@ -15,6 +15,14 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-10-26
+  type: benchmarks
+  run: muse-spark-open-816b-a42b_8spark_nvfp4_vllm
+  text:
+    en: "Muse-Spark-Open-816B-A42B on 8× DGX Spark: NVFP4 weights served with vLLM at TP=8, with DSpark speculative decoding and a 128K context, measured up to 8 concurrent requests."
+    tr: "Muse-Spark-Open-816B-A42B, 8× DGX Spark üzerinde: NVFP4 ağırlıklar TP=8 ile vLLM üzerinden sunuldu, DSpark spekülatif kod çözme ve 128K bağlam ile 8 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Muse-Spark-Open-816B-A42B op 8× DGX Spark: NVFP4-gewichten geserveerd met vLLM op TP=8, met DSpark speculatieve decodering en een context van 128K, gemeten tot 8 gelijktijdige verzoeken."
+
 - date: 2026-10-23
   type: vlm
   vlm: d1-3b_dgxspark_bf16_vllm

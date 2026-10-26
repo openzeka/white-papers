@@ -1,0 +1,47 @@
+{
+  "id": "muse-spark-open-816b-a42b_8spark_nvfp4_vllm",
+  "model": "Muse-Spark-Open-816B-A42B",
+  "params": "816B",
+  "intelligence_index": 38.9,
+  "agentic_index": null,
+  "device": "8× DGX Spark",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": null,
+  "tp": 8,
+  "notes": "DSpark speculative. 128K context.",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 507.76,
+      "tps": 24.2
+    },
+    {
+      "c": 2,
+      "ttft_ms": 694.89,
+      "tps": 18.44
+    },
+    {
+      "c": 4,
+      "ttft_ms": 815.29,
+      "tps": 15.23
+    },
+    {
+      "c": 8,
+      "ttft_ms": 989.92,
+      "tps": 12.77
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 32768,
+  "kv_window_bytes": 192937984,
+  "kv_heads": 16,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "meta-models/Muse-Spark-Open-816B-A42B-NVFP4",
+  "weights_gb": 533.01
+}

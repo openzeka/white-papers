@@ -1,0 +1,14 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "meta-models/Muse-Spark-Open-816B-A42B-NVFP4",
+      "object": "model",
+      "created": 1792748506,
+      "owned_by": "vllm-frontend-rs",
+      "root": "meta-models/Muse-Spark-Open-816B-A42B-NVFP4",
+      "parent": null,
+      "max_model_len": 131000
+    }
+  ]
+}

@@ -375,6 +375,11 @@
           "id": "mimo-v2.6-pro-rl_8spark_fp4_sglang",
           "model": "MiMo-V2.6-Pro-RL",
           "path": "8x-dgx-spark/mimo-v2.6-pro-rl_8spark_fp4_sglang.json"
+        },
+        {
+          "id": "muse-spark-open-816b-a42b_8spark_nvfp4_vllm",
+          "model": "Muse-Spark-Open-816B-A42B",
+          "path": "8x-dgx-spark/muse-spark-open-816b-a42b_8spark_nvfp4_vllm.json"
         }
       ]
     },
