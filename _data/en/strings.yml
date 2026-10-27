@@ -47,6 +47,17 @@ sentences:
   vlm_cams_one: "At the default target of an answer starting within %target% s (%res%, one image per camera), it keeps up with one camera at a time."
   vlm_cams_open: "At the default target of an answer starting within %target% s (%res%, one image per camera), it keeps up with at least %max% cameras at once: it still met the target at the highest number measured, so the real limit is higher."
   vlm_cams_none: "At the default target of an answer starting within %target% s (%res%, one image per camera), not even one camera is answered in time."
+  cevlm_intro: "Each entry below describes one device running the camera side of a vision-language pipeline — Cordatus Stream Engine with custom_engine_vlm, decoding every camera on the CPU and taking four frames per second from each — and the VLM server it asks, which runs on a separate GPU server. Every camera is the same 720p H.264 clip at 15 FPS, replayed over RTSP from the device; the prompt is “Describe the scene in one sentence.”, alarms are off, and each camera keeps one question in flight. The interval is how long a camera waits between two answers on average, read for the slowest camera; Max cameras is the highest measured camera count at which it meets the 3 s target with no failed request, with the engine choosing how many frames to send. Nothing is extrapolated."
+  cevlm_run: "%device%, running Cordatus Stream Engine %se% with custom_engine_vlm and asking %model% (%params% parameters, %quant%, %engine% on %server%), answered a single camera every %one% s with %frames%."
+  cevlm_frames_auto: "the engine choosing how many frames to send"
+  cevlm_frames_1: "one frame per question"
+  cevlm_frames_n: "%n% frames per question"
+  cevlm_cams: "At the default target of an answer at least every %target% s for every camera, it keeps up with %max% cameras at once (the slowest camera waits %interval% s)."
+  cevlm_cams_one: "At the default target of an answer at least every %target% s for every camera, it keeps up with one camera at a time."
+  cevlm_cams_open: "At the default target of an answer at least every %target% s for every camera, it keeps up with at least %max% cameras at once: it still met the target at the highest number measured, so the real limit is higher."
+  cevlm_cams_none: "At the default target of an answer at least every %target% s for every camera, not even one camera is answered in time."
+  cevlm_fail: "At %n% cameras only %started% came up within %timeout% s."
+  cevlm_frames_list: "With a fixed number of frames per question (frames → Max cameras at %target% s): %list%."
 
 # Permanent benchmark pages: one per run and one per model, generated at build
 # time by _plugins/benchmark-pages.rb. %name% placeholders.
@@ -106,6 +117,25 @@ bench_page:
   vlm_status: "Target"
   vlm_failed: "Failed"
   vlm_imgs: "Images per request"
+  # Custom Engine VLM explorer result pages
+  cevlm_title: "%device% with %model% — Custom Engine VLM benchmark"
+  cevlm_crumb: "Cordatus Custom Engine VLM Benchmark Explorer"
+  cevlm_open_explorer: "Open this configuration in the Cordatus Custom Engine VLM Benchmark Explorer"
+  cevlm_permalink: "Permanent page for this configuration"
+  cevlm_device: "Device"
+  cevlm_vlm: "VLM server"
+  cevlm_frames: "Frames per request"
+  cevlm_auto: "Auto"
+  cevlm_cams: "Cameras"
+  cevlm_interval: "Interval (s)"
+  cevlm_slowest: "Slowest camera (s)"
+  cevlm_answers: "Answers / min"
+  cevlm_cpu: "Engine CPU (cores)"
+  cevlm_maxcams: "Max cameras (≤ %target% s)"
+  cevlm_status: "Target"
+  cevlm_within: "≤%target% s"
+  cevlm_over: ">%target% s"
+  cevlm_failed: "Failed: %started% of %n% cameras started"
 
 # The changelog: /changelog/ and the home-page block (_includes/changelog.html).
 changelog:
@@ -116,3 +146,4 @@ changelog:
   type_benchmarks: "New LLM benchmark"
   type_vlm: "New VLM benchmark"
   type_cv: "New CV benchmark"
+  type_cevlm: "New Custom Engine benchmark"

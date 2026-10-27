@@ -11,6 +11,7 @@ permalink: /llms.txt
 {%- assign llm = site.data.oz_llm.benchmarks -%}
 {%- assign cv = site.data.oz_cv.oz_rows -%}
 {%- assign vlm = site.data.oz_vlm.benchmarks -%}
+{%- assign cevlm = site.data.oz_cevlm.oz_rows -%}
 # {{ site.title }}
 
 > {{ site.description | strip }} English at the root, Turkish under /tr/, Dutch under /nl/.
@@ -25,16 +26,18 @@ to them wherever they are shown.
 - [LLM Inference Benchmark Explorer]({{ site.url }}/llm-inference-benchmarks/): {{ llm.size }} runs — time to first token and per-request tokens/s at concurrency 1–64, with Max C (concurrent requests meeting TTFT ≤ 1 s and ≥ 20 tok/s by default) and estimated chat / agentic user capacity per model × device — how many people a model on a given device can serve. Each run's plain-language explanation is in the page HTML and in llms-full.txt. Turkish: {{ site.url }}/tr/llm-inference-benchmarks/ · Dutch: {{ site.url }}/nl/llm-inference-benchmarks/
 - [CV Inference Benchmark Explorer]({{ site.url }}/cv-inference-benchmarks/): {{ cv.size }} device × model results — FPS per camera and frame drop by camera count. Turkish: {{ site.url }}/tr/cv-inference-benchmarks/ · Dutch: {{ site.url }}/nl/cv-inference-benchmarks/
 - [VLM Inference Benchmark Explorer]({{ site.url }}/vlm-inference-benchmarks/): {{ vlm.size }} vision-language model runs — response time (time to first token) and per-request tokens/s by image size, images per camera and number of cameras, and Max Cameras: the highest measured number of cameras (one request in flight per camera) whose answer starts within the target ({{ site.data.oz_vlm.oz_config.response_target_s }} s by default). Turkish: {{ site.url }}/tr/vlm-inference-benchmarks/ · Dutch: {{ site.url }}/nl/vlm-inference-benchmarks/
+- [Cordatus Custom Engine VLM Benchmark Explorer]({{ site.url }}/custom-engine-vlm-benchmarks/): {{ cevlm.size }} device × VLM server configurations — the camera side of a vision-language pipeline (Cordatus Stream Engine with custom_engine_vlm) on the device, the VLM on a separate GPU server: the interval between two answers per camera, answers per minute, engine CPU and memory, and the VLM server's tokens, TTFT and queue, by camera count and frames per request, with Max cameras: the highest measured camera count at which the slowest camera gets an answer at least every {{ site.data.oz_cevlm.oz_config.target_s }} s by default. Turkish: {{ site.url }}/tr/custom-engine-vlm-benchmarks/ · Dutch: {{ site.url }}/nl/custom-engine-vlm-benchmarks/
 
 ## Results as sentences
 
-- [All results, explained (Turkish, English and Dutch)]({{ site.url }}/llms-full.txt): one paragraph per benchmark run — measured speed, Max C, estimated chat and agentic user capacity and what limits it; for VLM, response time and Max Cameras; for CV, FPS per camera and max cameras. Turkish first: OpenZeka's primary audience is in Türkiye, and the Turkish pages are under /tr/; Dutch pages are under /nl/.
+- [All results, explained (Turkish, English and Dutch)]({{ site.url }}/llms-full.txt): one paragraph per benchmark run — measured speed, Max C, estimated chat and agentic user capacity and what limits it; for VLM, response time and Max Cameras; for CV, FPS per camera and max cameras; for the Custom Engine VLM explorer, the interval per camera and max cameras. Turkish first: OpenZeka's primary audience is in Türkiye, and the Turkish pages are under /tr/; Dutch pages are under /nl/.
 
 ## Raw data
 
 - [LLM benchmarks (JSON)]({{ site.url }}/assets/data/benchmarks.json): one entry per run; `data_points` holds `c` (concurrent requests), `ttft_ms` and `tps` (per-request output tokens/s). 128 input / 128 output tokens, ten rounds per level, mean values.
 - [CV benchmarks index (JSON)]({{ site.url }}/assets/data/cv-benchmarks/index.json): devices and models; each model's measurements are in the file named by its `path`.
 - [VLM benchmarks (JSON)]({{ site.url }}/assets/data/vlm-benchmarks.json): one entry per run; `data_points` holds one entry per measured cell — `res` (image size), `images` (per request), `c` (concurrent requests = cameras), `ttft_s` (the response time), `tps` (per-request output tokens/s), `requests` and `failed`; `models` holds each model's publisher repository and parameters.
+- [Custom Engine VLM benchmarks index (JSON)]({{ site.url }}/assets/data/custom-engine-vlm-benchmarks/index.json): devices and the VLM servers measured on them; each configuration's file, named by its `path`, holds `sweeps` keyed by frames per request (`auto`, `1`, `2` …), each with `points` keyed by camera count — `interval_s` (mean time between two answers per camera), `interval_slowest_s` (the slowest camera's, held against the target), `answers_per_min`, `engine_cpu_pct` (100 = one core), `engine_ram_mb_per_camera` and the VLM server's `vlm_*` — and `failures`: camera counts at which not every camera came up.
 
 LLM models benchmarked: {{ llm | map: "model" | uniq | sort | join: ", " }}
 
@@ -47,6 +50,8 @@ VLM devices: {{ vlm | map: "device" | uniq | sort | join: ", " }}
 CV models benchmarked: {{ cv | map: "model" | uniq | sort | join: ", " }}
 
 CV devices: {{ cv | map: "device" | uniq | sort | join: ", " }}
+
+Custom Engine VLM devices: {{ cevlm | map: "device" | uniq | sort | join: ", " }}; VLM servers: {{ cevlm | map: "model" | uniq | sort | join: ", " }}
 
 ## White papers
 {% for p in pages %}{% if p.parent %}

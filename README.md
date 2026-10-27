@@ -37,6 +37,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [CV Inference Benchmark Explorer](https://whitepapers.openzeka.com/cv-inference-benchmarks/) | Interactive computer-vision benchmark: sustained FPS per device and model, and how many cameras it carries at your target FPS | DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060, RTX 3090 |
 | [VLM Inference Benchmark Explorer](https://whitepapers.openzeka.com/vlm-inference-benchmarks/) | Interactive vision-language model benchmark: how many cameras each configuration keeps up with at your target response time, by image size | Jetson AGX Thor, DGX Spark, RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB, Jetson Orin NX 16GB |
 | [Device Advisor](https://whitepapers.openzeka.com/device-advisor/) | Describe your cameras and pick a vision-language model: the smallest measured device that keeps up, and the resulting stream played back as a live timeline | Jetson AGX Thor, DGX Spark, RTX PRO 6000 Blackwell, Jetson AGX Orin 32GB, Jetson Orin NX 16GB |
+| [Cordatus Custom Engine VLM Benchmark Explorer](https://whitepapers.openzeka.com/custom-engine-vlm-benchmarks/) | Interactive benchmark of the camera side of a vision-language pipeline: how many cameras a device runs through the Cordatus custom engine, and how often each gets an answer, by frames per request, with the VLM on a GPU server | Jetson AGX Thor, Jetson AGX Orin 32GB Developer Kit, ASUS Ascent GX10 |
 
 ---
 
@@ -153,6 +154,26 @@ as such, and nothing is extrapolated past the highest count a configuration was
 tested at. The timeline is a projection, not a running system.
 
 **[Open the Device Advisor →](https://whitepapers.openzeka.com/device-advisor/)**
+
+---
+
+## Cordatus Custom Engine VLM Benchmark Explorer
+
+**How many cameras can this device take through the custom engine, and how often does each get an answer?**
+
+The VLM explorer measures the model; this one measures the device in front of
+it. Each camera runs the Cordatus Stream Engine with `custom_engine_vlm` on the
+device, which decodes it, picks its frames and asks a vision-language model on
+a separate GPU server, one question in flight per camera. Pick how many frames
+go with each question and how long a camera may wait between two answers, and
+the table shows the interval for the slowest camera, the answers per minute,
+the engine's CPU and memory and the VLM server's side of every measurement, and
+how many cameras each device keeps up with. Measured on Jetson AGX Thor, a
+Jetson AGX Orin 32GB Developer Kit and an ASUS Ascent GX10, all asking
+Qwen3-VL-30B-A3B-Instruct (FP8, vLLM) on an RTX PRO 6000 Blackwell, with 1 to
+32 frames per question.
+
+**[Open the Cordatus Custom Engine VLM Benchmark Explorer →](https://whitepapers.openzeka.com/custom-engine-vlm-benchmarks/)**
 
 ---
 

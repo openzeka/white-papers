@@ -1,0 +1,13 @@
+{
+  "name": "Jetson AGX Orin 32GB Developer Kit",
+  "slug": "jetson-agx-orin-32gb-developer-kit",
+  "product": "Jetson AGX Orin Developer Kit",
+  "kind": "Jetson",
+  "gpu": "Orin",
+  "ram_gb": 30.0,
+  "l4t": "39.2.1",
+  "jetpack": "7.x",
+  "jetson_module": "p3701-0000",
+  "cuda": "13.2.2",
+  "driver": "595.78"
+}

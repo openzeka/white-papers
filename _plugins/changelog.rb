@@ -5,7 +5,7 @@
 # The entries are written by hand; this only turns each entry's reference into
 # a link in the reader's language: page (a page_id) → that page's title and
 # permalink, run → the LLM run's permanent page, vlm → the VLM run's page, cv →
-# the CV result's page. An
+# the CV result's page, cevlm → the Custom Engine VLM configuration's page. An
 # id that does not resolve fails the build, so no link can point nowhere.
 #
 # Runs at :site, :pre_render — after every generator, so the run pages
@@ -13,9 +13,9 @@
 # language, because polyglot builds each language as its own pass.
 
 module OzChangelog
-  TYPES = %w[paper benchmarks vlm cv].freeze
+  TYPES = %w[paper benchmarks vlm cv cevlm].freeze
   # The reference each type needs.
-  NEEDS = { "paper" => "page", "benchmarks" => "run", "vlm" => "vlm", "cv" => "cv" }.freeze
+  NEEDS = { "paper" => "page", "benchmarks" => "run", "vlm" => "vlm", "cv" => "cv", "cevlm" => "cevlm" }.freeze
 
   def self.build(site)
     lang = site.active_lang || site.config["default_lang"]
@@ -27,6 +27,7 @@ module OzChangelog
     llm = ((site.data["oz_llm"] || {})["benchmarks"] || []).to_h { |r| [r["id"], r] }
     cv = ((site.data["oz_cv"] || {})["oz_rows"] || []).to_h { |r| [r["id"], r] }
     vlm = ((site.data["oz_vlm"] || {})["benchmarks"] || []).to_h { |r| [r["id"], r] }
+    cevlm = ((site.data["oz_cevlm"] || {})["oz_rows"] || []).to_h { |r| [r["id"], r] }
 
     seen = Hash.new(0)
     (site.data["changelog"] || []).each_with_index.map do |e, i|
@@ -44,6 +45,9 @@ module OzChangelog
         elsif e["cv"]
           r = cv[e["cv"]] or raise "#{where}: CV result #{e['cv'].inspect} is not in assets/data/cv-benchmarks/"
           { "title" => "#{[r['model'], r['precision']].compact.join(' ')} — #{r['device']}", "url" => r["oz_permalink"] }
+        elsif e["cevlm"]
+          r = cevlm[e["cevlm"]] or raise "#{where}: Custom Engine VLM configuration #{e['cevlm'].inspect} is not in assets/data/custom-engine-vlm-benchmarks/"
+          { "title" => "#{r['device']} — #{r['model']} #{r['quantization']}", "url" => r["oz_permalink"] }
         elsif e["page"]
           p = pages[e["page"]] or raise "#{where}: page_id #{e['page'].inspect} has no #{lang} page"
           { "title" => p.data["title"], "url" => p.data["permalink"] }

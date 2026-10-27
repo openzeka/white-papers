@@ -102,7 +102,7 @@
         pos: position(),
         boxes: boxes(),
         details: Array.prototype.map.call(main().querySelectorAll("details"), function (d) { return d.open; }),
-        widgets: { bt: snapshot("BenchmarkTable"), cvbt: snapshot("CvBenchmarkTable"), vlmbt: snapshot("VlmBenchmarkTable") }
+        widgets: { bt: snapshot("BenchmarkTable"), cvbt: snapshot("CvBenchmarkTable"), vlmbt: snapshot("VlmBenchmarkTable"), cevbt: snapshot("CevlmBenchmarkTable") }
       }));
     } catch (err) { /* storage unavailable: switch without carrying anything */ }
   });

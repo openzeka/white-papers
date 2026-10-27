@@ -1,0 +1,87 @@
+/* Cordatus Custom Engine VLM Benchmark Explorer — the few rules the shared
+   stylesheets do not already provide. The widget is laid out like the CV
+   explorer (filters beside the table), so it is loaded after
+   benchmark-table.css and cv-benchmark-table.css and reuses their classes. */
+
+/* The opened row's tables, each under a small caption, full width. They carry
+   more columns than the CV sweep, so they scroll on their own on a narrow
+   screen instead of widening the row. */
+.cevbt-block {
+  margin-bottom: 16px;
+}
+
+.cevbt-block-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bt-text-muted);
+  margin: 0 0 6px;
+}
+
+/* width 0 + min-width 100%: the scroller takes the row's width instead of
+   giving the table cell its content's width, which would widen the whole
+   table and push its last columns out of view. */
+.cevbt-scroll {
+  overflow-x: auto;
+  width: 0;
+  min-width: 100%;
+}
+
+.cevbt-block .bt-detail-table {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+/* The frames table and the explanation share the row half and half (the
+   shared .bt-detail-pair grid), stacking on narrow screens; the table fills its
+   half. */
+.cevbt-pair .cevbt-block {
+  margin-bottom: 0;
+}
+
+.cevbt-pair .bt-detail-table {
+  width: 100%;
+}
+
+/* The mean interval is drawn dashed under the slowest camera's line. */
+.bt-legend-swatch.cevbt-swatch-dash {
+  height: 0;
+  border-top: 2px dashed;
+  border-radius: 0;
+}
+
+/* The device and VLM names are long (Jetson AGX Orin 32GB Developer Kit; the
+   model, then its format, engine and GPU), so they wrap: the server's settings
+   go on their own line under the model name. Without this the table runs wider
+   than the column beside the filter panel and its last columns scroll out of
+   view. */
+.cevbt-container .bt-table tbody td.bt-left {
+  white-space: normal;
+  min-width: 140px;
+}
+
+.cevbt-container .bt-table tbody td.bt-left .cvbt-sub {
+  display: block;
+  margin-left: 0;
+}
+
+/* A device name can be longer than the 248px filter panel is wide. */
+.cevbt-container .cvbt-side .bt-btn {
+  white-space: normal;
+  text-align: left;
+}
+
+/* The opened row's tables carry more columns than the CV sweep: their headers
+   wrap and their cells are tighter, so they fit the width of the table above.
+   (The theme fixes the font size of every cell, so the room comes from the
+   padding.) They sit inside the main table, whose header and cell rules
+   (.cvbt-main .bt-table thead th …) would otherwise reach them, hence the
+   longer selectors. */
+.cevbt-container .bt-table .bt-detail-table thead th {
+  white-space: normal;
+  line-height: 1.25;
+}
+
+.cevbt-container .bt-table .bt-detail-table thead th,
+.cevbt-container .bt-table .bt-detail-table tbody td {
+  padding: 5px 3px;
+}

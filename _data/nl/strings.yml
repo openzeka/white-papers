@@ -47,6 +47,17 @@ sentences:
   vlm_cams_one: "Bij het standaarddoel van een antwoord dat binnen %target% s begint (%res%, één beeld per camera) houdt het één camera tegelijk bij."
   vlm_cams_open: "Bij het standaarddoel van een antwoord dat binnen %target% s begint (%res%, één beeld per camera) houdt het minstens %max% camera's tegelijk bij: ook bij het hoogste gemeten aantal haalde het het doel, dus de werkelijke grens ligt hoger."
   vlm_cams_none: "Bij het standaarddoel van een antwoord dat binnen %target% s begint (%res%, één beeld per camera) krijgt zelfs één camera niet op tijd antwoord."
+  cevlm_intro: "Elke vermelding hieronder beschrijft één apparaat dat de camerakant van een vision-languagepijplijn draait — Cordatus Stream Engine met custom_engine_vlm, die elke camera op de CPU decodeert en van elke camera vier frames per seconde neemt — en de VLM-server die het bevraagt, die op een aparte GPU-server draait. Elke camera is dezelfde 720p H.264-clip op 15 FPS, via RTSP afgespeeld vanaf het apparaat zelf; de prompt is “Describe the scene in one sentence.”, alarmen staan uit en elke camera heeft één vraag in behandeling. Het interval is hoe lang een camera gemiddeld tussen twee antwoorden wacht, afgelezen voor de traagste camera; Max. camera's is het hoogste gemeten aantal camera's waarbij dat het doel van 3 s haalt zonder mislukt verzoek, terwijl de engine zelf kiest hoeveel frames hij stuurt. Er wordt niets geëxtrapoleerd."
+  cevlm_run: "%device%, met Cordatus Stream Engine %se% en custom_engine_vlm, bevroeg %model% (%params% parameters, %quant%, %engine% op %server%) en beantwoordde één camera elke %one% s, %frames%."
+  cevlm_frames_auto: "waarbij de engine zelf koos hoeveel frames hij stuurde"
+  cevlm_frames_1: "met één frame per vraag"
+  cevlm_frames_n: "met %n% frames per vraag"
+  cevlm_cams: "Bij het standaarddoel van minstens elke %target% s een antwoord voor elke camera houdt het %max% camera's tegelijk bij (de traagste camera wacht %interval% s)."
+  cevlm_cams_one: "Bij het standaarddoel van minstens elke %target% s een antwoord voor elke camera houdt het één camera tegelijk bij."
+  cevlm_cams_open: "Bij het standaarddoel van minstens elke %target% s een antwoord voor elke camera houdt het minstens %max% camera's tegelijk bij: ook bij het hoogste gemeten aantal haalde het het doel, dus de werkelijke grens ligt hoger."
+  cevlm_cams_none: "Bij het standaarddoel van minstens elke %target% s een antwoord voor elke camera krijgt zelfs één camera niet op tijd antwoord."
+  cevlm_fail: "Bij %n% camera's kwamen er binnen %timeout% s maar %started% op."
+  cevlm_frames_list: "Met een vast aantal frames per vraag (frames → Max. camera's bij %target% s): %list%."
 
 # Permanente benchmarkpagina's: één per meting en één per model, bij het bouwen
 # gegenereerd door _plugins/benchmark-pages.rb. %naam%-plaatshouders.
@@ -106,6 +117,25 @@ bench_page:
   vlm_status: "Doel"
   vlm_failed: "Mislukt"
   vlm_imgs: "Beelden per verzoek"
+  # Resultaatpagina's van de Custom Engine VLM-explorer
+  cevlm_title: "%device% met %model% — Custom Engine VLM-benchmark"
+  cevlm_crumb: "Cordatus Custom Engine VLM Benchmark Explorer"
+  cevlm_open_explorer: "Deze configuratie openen in de Cordatus Custom Engine VLM Benchmark Explorer"
+  cevlm_permalink: "Permanente pagina van deze configuratie"
+  cevlm_device: "Apparaat"
+  cevlm_vlm: "VLM-server"
+  cevlm_frames: "Frames per verzoek"
+  cevlm_auto: "Automatisch"
+  cevlm_cams: "Camera's"
+  cevlm_interval: "Interval (s)"
+  cevlm_slowest: "Traagste camera (s)"
+  cevlm_answers: "Antwoorden / min"
+  cevlm_cpu: "Engine-CPU (cores)"
+  cevlm_maxcams: "Max. camera's (≤ %target% s)"
+  cevlm_status: "Doel"
+  cevlm_within: "≤%target% s"
+  cevlm_over: ">%target% s"
+  cevlm_failed: "Mislukt: %started% van %n% camera's gestart"
 
 # The changelog: /changelog/ and the home-page block (_includes/changelog.html).
 changelog:
@@ -116,3 +146,4 @@ changelog:
   type_benchmarks: "Nieuwe LLM-benchmark"
   type_vlm: "Nieuwe VLM-benchmark"
   type_cv: "Nieuwe CV-benchmark"
+  type_cevlm: "Nieuwe Custom Engine-benchmark"

@@ -47,6 +47,17 @@ sentences:
   vlm_cams_one: "Yanıtın %target% sn içinde başlaması varsayılan hedefinde (%res%, kamera başına bir görüntü) yalnızca tek bir kameraya yetişir."
   vlm_cams_open: "Yanıtın %target% sn içinde başlaması varsayılan hedefinde (%res%, kamera başına bir görüntü) aynı anda en az %max% kameraya yetişir: ölçülen en yüksek kamera sayısında bile hedefi karşıladı, gerçek sınır daha yüksektir."
   vlm_cams_none: "Yanıtın %target% sn içinde başlaması varsayılan hedefinde (%res%, kamera başına bir görüntü) tek bir kamera bile zamanında yanıt almaz."
+  cevlm_intro: "Aşağıdaki her kayıt, bir görüntü-dil hattının kamera tarafını çalıştıran bir cihazı — custom_engine_vlm ile Cordatus Stream Engine; her kamerayı CPU'da çözer ve her birinden saniyede dört kare alır — ve bu cihazın soru sorduğu, ayrı bir GPU sunucusunda çalışan VLM sunucusunu anlatır. Her kamera aynı 720p H.264, 15 FPS klibidir ve cihazın kendisinden RTSP ile yeniden oynatılır; istem “Describe the scene in one sentence.”, alarmlar kapalı ve her kameranın aynı anda tek bir sorusu vardır. Aralık, bir kameranın iki yanıt arasında ortalama ne kadar beklediğidir ve en yavaş kamera için okunur; Maks. kamera, motor kaç kare göndereceğini kendisi seçerken bu aralığın 3 sn hedefini başarısız istek olmadan karşıladığı en yüksek ölçülmüş kamera sayısıdır. Hiçbir değer ekstrapole edilmez."
+  cevlm_run: "%device%, custom_engine_vlm ile Cordatus Stream Engine %se% çalıştırarak %model% modeline (%params% parametre, %quant%, %server% üzerinde %engine%) soru sordu; %frames% tek bir kameraya her %one% sn'de bir yanıt verdi."
+  cevlm_frames_auto: "kaç kare gönderileceğini motorun kendisi seçerken"
+  cevlm_frames_1: "her soruda bir kareyle"
+  cevlm_frames_n: "her soruda %n% kareyle"
+  cevlm_cams: "Her kameraya en az %target% sn'de bir yanıt varsayılan hedefinde aynı anda %max% kameraya yetişir (en yavaş kamera %interval% sn bekler)."
+  cevlm_cams_one: "Her kameraya en az %target% sn'de bir yanıt varsayılan hedefinde yalnızca tek bir kameraya yetişir."
+  cevlm_cams_open: "Her kameraya en az %target% sn'de bir yanıt varsayılan hedefinde aynı anda en az %max% kameraya yetişir: ölçülen en yüksek kamera sayısında bile hedefi karşıladı, gerçek sınır daha yüksektir."
+  cevlm_cams_none: "Her kameraya en az %target% sn'de bir yanıt varsayılan hedefinde tek bir kamera bile zamanında yanıt almaz."
+  cevlm_fail: "%n% kamerada yalnızca %started% kamera %timeout% sn içinde açıldı."
+  cevlm_frames_list: "Soru başına sabit kare sayısıyla (kare → %target% sn'de Maks. kamera): %list%."
 
 # Kalıcı benchmark sayfaları: her ölçüm ve her model için bir sayfa, derleme
 # sırasında _plugins/benchmark-pages.rb üretir. %ad% yer tutucuları.
@@ -106,6 +117,25 @@ bench_page:
   vlm_status: "Hedef"
   vlm_failed: "Başarısız"
   vlm_imgs: "İstek başına görüntü"
+  # Custom Engine VLM gezgini sonuç sayfaları
+  cevlm_title: "%device%, %model% ile — Custom Engine VLM benchmark'ı"
+  cevlm_crumb: "Cordatus Custom Engine VLM Benchmark Gezgini"
+  cevlm_open_explorer: "Bu yapılandırmayı Cordatus Custom Engine VLM Benchmark Gezgini'nde açın"
+  cevlm_permalink: "Bu yapılandırmanın kalıcı sayfası"
+  cevlm_device: "Cihaz"
+  cevlm_vlm: "VLM sunucusu"
+  cevlm_frames: "İstek başına kare"
+  cevlm_auto: "Otomatik"
+  cevlm_cams: "Kamera"
+  cevlm_interval: "Aralık (sn)"
+  cevlm_slowest: "En yavaş kamera (sn)"
+  cevlm_answers: "Yanıt / dk"
+  cevlm_cpu: "Motor CPU (çekirdek)"
+  cevlm_maxcams: "Maks. kamera (≤ %target% sn)"
+  cevlm_status: "Hedef"
+  cevlm_within: "≤%target% sn"
+  cevlm_over: ">%target% sn"
+  cevlm_failed: "Başarısız: %n% kameradan %started% kamera açıldı"
 
 # The changelog: /changelog/ and the home-page block (_includes/changelog.html).
 changelog:
@@ -116,3 +146,4 @@ changelog:
   type_benchmarks: "Yeni LLM benchmark"
   type_vlm: "Yeni VLM benchmark"
   type_cv: "Yeni CV benchmark"
+  type_cevlm: "Yeni Custom Engine benchmark"

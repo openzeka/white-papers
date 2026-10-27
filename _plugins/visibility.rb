@@ -2,7 +2,8 @@
 #
 # Nothing here needs editing when a paper or a benchmark run is added: every
 # value is read from front matter or from the benchmark data stores
-# (assets/data/llm-benchmarks/, vlm-benchmarks/, cv-benchmarks/), the LLM and
+# (assets/data/llm-benchmarks/, vlm-benchmarks/, cv-benchmarks/,
+# custom-engine-vlm-benchmarks/), the LLM and
 # VLM ones through _plugins/bench_store.rb. That plugin also writes the
 # combined files the explorers fetch — openzeka.com fetches
 # /assets/data/benchmarks.json by that exact URL.
@@ -13,6 +14,9 @@
 #                            device × model
 #   site.data["oz_vlm"]      the VLM store (combined), plus per row: Max
 #                            Cameras at the default target and its explanation
+#   site.data["oz_cevlm"]    assets/data/custom-engine-vlm-benchmarks/, one row
+#                            per device × VLM server, plus Max cameras at the
+#                            default target and frames, and its explanation
 #   site.data["oz_pages"]    every translated page (one entry per page_id) with
 #                            its permalink per language — sitemap, feed, llms.txt
 #   page.canonical_url       set on non-default-language pages, so og:url and the
@@ -218,6 +222,64 @@ module OzVisibility
     [out.join(" "), maxc]
   end
 
+  # ── Custom Engine VLM: Max cameras at the explorer's default target ──
+  # A port of intervalOf() / meets() / maxCameras() / closingFailure() /
+  # openEnded() in assets/js/custom-engine-vlm-benchmark-table.js, which stays
+  # the reference. The interval held against the target is the slowest
+  # camera's mean; a failed request fails the count whatever the interval.
+  CEVLM_DEFAULT_CONFIG = { "target_s" => 3.0, "frames" => "auto" }.freeze
+
+  def self.cevlm_interval(p) = p["interval_slowest_s"].nil? ? p["interval_s"] : p["interval_slowest_s"]
+
+  def self.cevlm_meets(p, target)
+    v = cevlm_interval(p)
+    !v.nil? && v.to_f <= target && !(p["failed_pct"].to_f > 0)
+  end
+
+  def self.cevlm_max(sweep, target)
+    sweep["points"].select { |p| cevlm_meets(p, target) }.map { |p| p["cameras"].to_i }.max || 0
+  end
+
+  # The count at which not every camera came up, closing the sweep.
+  def self.cevlm_failure(sweep)
+    top = (sweep["points"].last || {})["cameras"].to_i
+    sweep["failures"].select { |f| f["cameras"].to_i > top }.min_by { |f| f["cameras"].to_i }
+  end
+
+  def self.cevlm_open(sweep, target)
+    m = cevlm_max(sweep, target)
+    m.positive? && m == sweep["points"].last["cameras"].to_i && cevlm_failure(sweep).nil?
+  end
+
+  def self.frames_order(k) = k == "auto" ? [0, 0] : [1, k.to_i]
+
+  def self.cevlm_text(r, target, t, lang)
+    sw = r["sweeps"][r["oz_frames"]] or return []
+    one = sw["points"].find { |p| p["cameras"].to_i == 1 }
+    k = r["oz_frames"]
+    frames = k == "auto" ? t["cevlm_frames_auto"] : k == "1" ? t["cevlm_frames_1"] : fill(t["cevlm_frames_n"], "n" => k)
+    params = lang == "tr" ? r["params"].to_s.gsub(/(\d)\.(\d)/, '\1,\2') : r["params"]
+    out = []
+    if one
+      out << fill(t["cevlm_run"], "device" => r["device"], "se" => r["stream_engine"], "model" => r["model"],
+                  "params" => params, "quant" => r["quantization"], "engine" => r["engine"], "server" => r["server"],
+                  "one" => num(cevlm_interval(one), lang, 2), "frames" => frames)
+    end
+    mc = r["oz_max"]
+    at = sw["points"].find { |p| p["cameras"].to_i == mc }
+    key = mc.zero? ? "cevlm_cams_none" : r["oz_open"] ? "cevlm_cams_open" : mc == 1 ? "cevlm_cams_one" : "cevlm_cams"
+    out << fill(t[key], "target" => num(target, lang, 1), "max" => mc, "interval" => at ? num(cevlm_interval(at), lang, 2) : "")
+    if (f = cevlm_failure(sw))
+      out << fill(t["cevlm_fail"], "n" => f["cameras"], "started" => f["started"], "timeout" => num(f["ready_timeout_s"], lang))
+    end
+    fixed = r["oz_frames_max"].reject { |fk, _| fk == "auto" }
+    unless fixed.empty?
+      list = fixed.map { |fk, (m, open)| "#{fk} → #{m}#{open ? '+' : ''}" }.join(", ")
+      out << fill(t["cevlm_frames_list"], "target" => num(target, lang, 1), "list" => list)
+    end
+    out
+  end
+
   class DataGenerator < Jekyll::Generator
     # :low, not :lowest — _plugins/benchmark-pages.rb (:lowest) reads site.data["oz_llm"].
     priority :low
@@ -302,6 +364,59 @@ module OzVisibility
         end
         cv["oz_rows"] = rows
         site.data["oz_cv"] = cv
+      end
+
+      ce_dir = File.join(base, "custom-engine-vlm-benchmarks")
+      ce = OzVisibility.read_json(File.join(ce_dir, "index.json"))
+      if ce
+        cfg = OzVisibility::CEVLM_DEFAULT_CONFIG.merge(ce["config"] || {})
+        target = cfg["target_s"].to_f
+        rows = []
+        (ce["devices"] || []).each do |d|
+          dev = OzVisibility.read_json(File.join(ce_dir, d["path"].to_s)) || {}
+          (d["configs"] || []).each do |c|
+            cf = OzVisibility.read_json(File.join(ce_dir, c["path"].to_s)) or next
+            by_cams = ->(h) { (h || {}).values.sort_by { |x| x["cameras"].to_i } }
+            sweeps = (cf["sweeps"] || {}).to_h { |k, v| [k, { "points" => by_cams.(v["points"]), "failures" => by_cams.(v["failures"]) }] }
+                                        .reject { |_, v| v["points"].empty? }
+                                        .sort_by { |k, _| OzVisibility.frames_order(k) }.to_h
+            next if sweeps.empty?
+            v = cf["vlm"] || {}
+            frames = sweeps.key?(cfg["frames"].to_s) ? cfg["frames"].to_s : sweeps.keys.first
+            row = {
+              # The widget's own id (entryFrom() in custom-engine-vlm-benchmark-table.js):
+              # the file's path in the store, "/" → "-". _plugins/benchmark-pages.rb
+              # builds each configuration's permanent page from "path".
+              "id" => c["path"].to_s.sub(/\.json\z/, "").tr("/", "-"), "path" => c["path"].to_s.sub(/\.json\z/, ""),
+              "device" => d["name"], "device_product" => dev["product"], "model" => v["model"],
+              "params" => v["params"] || ((ce["models"] || {})[v["model"]] || {})["params"],
+              "quantization" => v["quantization"], "engine" => v["engine"], "engine_version" => v["engine_version"],
+              "server" => v["server"], "stream_engine" => cf["stream_engine"], "workload" => cf["workload"] || {},
+              "sweeps" => sweeps, "oz_frames" => frames,
+            }
+            sw = sweeps[frames]
+            row["oz_max"] = OzVisibility.cevlm_max(sw, target)
+            row["oz_open"] = OzVisibility.cevlm_open(sw, target)
+            row["oz_failure"] = OzVisibility.cevlm_failure(sw)
+            row["oz_frames_max"] = sweeps.to_h { |k, x| [k, [OzVisibility.cevlm_max(x, target), OzVisibility.cevlm_open(x, target)]] }
+            row["oz_sweep"] = sweeps.map do |k, x|
+              "#{k == 'auto' ? 'auto' : k == '1' ? '1 frame' : "#{k} frames"}: " + x["points"].map { |p| "#{p['cameras']} cam #{p['interval_slowest_s'] || p['interval_s']} s (mean #{p['interval_s']} s, #{p['answers_per_min'].to_f.round} answers/min, engine CPU #{p['engine_cpu_pct']}%)" }.join("; ") +
+                (x["failures"].empty? ? "" : "; " + x["failures"].map { |f| "#{f['cameras']} cam: #{f['started']} started within #{f['ready_timeout_s']} s" }.join("; "))
+            end.join(" | ")
+            rows << row
+          end
+        end
+        rows.sort_by! { |r| [r["device"].to_s, r["model"].to_s] }
+        OzVisibility.each_lang(site) do |lang, t|
+          rows.each do |r|
+            parts = OzVisibility.cevlm_text(r, target, t, lang)
+            (r["oz_parts"] ||= {})[lang] = parts
+            (r["oz_text"] ||= {})[lang] = parts.join(" ")
+          end
+        end
+        ce["oz_config"] = cfg
+        ce["oz_rows"] = rows
+        site.data["oz_cevlm"] = ce
       end
 
       site.data["oz_pages"] = OzVisibility.translated_pages(site)

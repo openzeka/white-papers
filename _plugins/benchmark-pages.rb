@@ -3,10 +3,13 @@
 #   /llm-inference-benchmarks/<model>/<device>/<config>/    every LLM run
 #   /cv-inference-benchmarks/<device>/<model>/              every CV result
 #   /vlm-inference-benchmarks/<model>/<device>/<quant>-<engine>/   every VLM run
+#   /custom-engine-vlm-benchmarks/<device>/<vlm>/   every Custom Engine VLM configuration
 #
 # (in every language). The CV URL is the result's file in the data store,
 # assets/data/cv-benchmarks/<device>/<model>.json, which the benchmark tool's
-# export names; the page then carries the widget's data-cvbt-only instead.
+# export names; the page then carries the widget's data-cvbt-only instead. The
+# Custom Engine VLM URL is built the same way from its store
+# (assets/data/custom-engine-vlm-benchmarks/<device>/<vlm>.json, data-cevbt-only).
 #
 # The explorer addresses a run only by a #fragment, which search engines and AI
 # agents do not treat as a page of its own; this gives every run its own URL,
@@ -246,6 +249,82 @@ module OzBenchPages
     out << %(<script src="/assets/js/#{js}"></script>\n)
   end
 
+  CEVLM_BASE = "/custom-engine-vlm-benchmarks".freeze
+
+  def self.cevlm_permalink(row)
+    "#{CEVLM_BASE}/#{row['path'].split('/').map { |x| slug(x) }.join('/')}/"
+  end
+
+  def self.cevlm_title(row, b)
+    OzVisibility.fill(b["cevlm_title"], "device" => row["device"], "model" => "#{row['model']} #{row['quantization']}")
+  end
+
+  def self.cevlm_frames(k, b) = k == "auto" ? b["cevlm_auto"] : k
+
+  # Half up on the value as the store writes it, as fmt() in the widget does:
+  # 2.295 is 2.30 on both.
+  def self.cevlm_num(x, d)
+    return "—" if x.nil?
+    format("%.#{d}f", (x.to_f * 10**d + (x.to_f.negative? ? -1e-7 : 1e-7)).round / 10.0**d)
+  end
+
+  def self.cevlm_sec(x) = x.nil? ? "—" : cevlm_num(x, x.to_f < 10 ? 2 : 1)
+
+  # The explorer's row and its opened sweep at the default frames, then Max
+  # cameras for every frames count, as plain HTML (see fallback()).
+  def self.cevlm_fallback(row, target, b, lang)
+    t = target == target.round ? target.round : target
+    over = OzVisibility.fill(b["cevlm_over"], "target" => t)
+    maxc = ->(m, open) { m.zero? ? over : "#{m}#{open ? '+' : ''}" }
+    sw = row["sweeps"][row["oz_frames"]]
+    last = sw["points"].last || {}
+    facts = [[b["cevlm_device"], row["device"]],
+             [b["cevlm_vlm"], "#{row['model']} · #{row['quantization']} · #{row['engine']} · #{row['server']}"],
+             [b["cevlm_frames"], cevlm_frames(row["oz_frames"], b)], [b["cevlm_cams"], last["cameras"]],
+             [b["cevlm_interval"], cevlm_sec(OzVisibility.cevlm_interval(last))],
+             [b["cevlm_answers"], cevlm_num(last["answers_per_min"], 0)],
+             [b["cevlm_cpu"], cevlm_num(last["engine_cpu_pct"].to_f / 100, 1)],
+             [OzVisibility.fill(b["cevlm_maxcams"], "target" => t), maxc.(row["oz_max"], row["oz_open"])]]
+    out = +%(<div class="bt-static">\n<table>\n<tbody>\n)
+    facts.each { |k, v| out << "<tr><th scope=\"row\">#{h k}</th><td>#{h v}</td></tr>\n" }
+    out << "</tbody>\n</table>\n<table>\n<thead><tr>"
+    %w[cevlm_cams cevlm_interval cevlm_slowest cevlm_answers cevlm_cpu cevlm_status].each { |k| out << "<th>#{h b[k]}</th>" }
+    out << "</tr></thead>\n<tbody>\n"
+    sw["points"].each do |p|
+      ok = OzVisibility.cevlm_meets(p, target)
+      out << "<tr><td>#{p['cameras']}</td><td>#{cevlm_sec(p['interval_s'])}</td><td>#{cevlm_sec(p['interval_slowest_s'])}</td>" \
+             "<td>#{cevlm_num(p['answers_per_min'], 0)}</td><td>#{cevlm_num(p['engine_cpu_pct'].to_f / 100, 1)}</td>" \
+             "<td>#{h OzVisibility.fill(b[ok ? 'cevlm_within' : 'cevlm_over'], 'target' => t)}</td></tr>\n"
+    end
+    # the count at which not every camera came up closes the sweep, as in the widget
+    if (f = row["oz_failure"])
+      out << "<tr><td>#{f['cameras']}</td><td>—</td><td>—</td><td>—</td><td>—</td>" \
+             "<td>#{h OzVisibility.fill(b['cevlm_failed'], 'started' => f['started'], 'n' => f['cameras'])}</td></tr>\n"
+    end
+    out << "</tbody>\n</table>\n<table>\n<thead><tr><th>#{h b['cevlm_frames']}</th>" \
+           "<th>#{h OzVisibility.fill(b['cevlm_maxcams'], 'target' => t)}</th></tr></thead>\n<tbody>\n"
+    row["oz_frames_max"].each { |k, (m, open)| out << "<tr><td>#{h cevlm_frames(k, b)}</td><td>#{h maxc.(m, open)}</td></tr>\n" }
+    out << "</tbody>\n</table>\n"
+    (row["oz_parts"] || {})[lang].to_a.each { |x| out << "<p>#{h x}</p>\n" }
+    out << "</div>\n"
+  end
+
+  def self.cevlm_page_html(row, target, b, lang)
+    js = lang == "en" ? "custom-engine-vlm-benchmark-table.js" : "custom-engine-vlm-benchmark-table.#{lang}.js"
+    out = +%(<p class="oz-crumb"><a href="#{CEVLM_BASE}/">#{h b['cevlm_crumb']}</a></p>\n)
+    out << "<h1>#{h cevlm_title(row, b)}</h1>\n"
+    out << %(<p><a href="#{CEVLM_BASE}/##{h row['id']}">#{h b['cevlm_open_explorer']}</a></p>\n)
+    out << %(<link rel="stylesheet" href="/assets/css/benchmark-table.css">\n<link rel="stylesheet" href="/assets/css/cv-benchmark-table.css">\n)
+    out << %(<link rel="stylesheet" href="/assets/css/custom-engine-vlm-benchmark-table.css">\n)
+    out << %(<div data-cevbt-src="/assets/data/custom-engine-vlm-benchmarks/index.json" data-cevbt-only="#{h row['id']}">\n)
+    out << cevlm_fallback(row, target, b, lang) << "</div>\n"
+    # The widget reads the explanation from here, as on the explorer page.
+    out << %(<div class="bt-explained-src" hidden><div data-cevbt-explained="#{h row['id']}">)
+    (row["oz_parts"] || {})[lang].to_a.each { |x| out << "<p>#{h x}</p>" }
+    out << "</div></div>\n"
+    out << %(<script src="/assets/js/#{js}"></script>\n)
+  end
+
   class Generator < Jekyll::Generator
     priority :lowest
 
@@ -261,8 +340,12 @@ module OzBenchPages
       vlm = site.data["oz_vlm"] || {}
       vlm_rows = vlm["benchmarks"] || []
       OzBenchPages.vlm_slugs(vlm_rows)
+      ce = site.data["oz_cevlm"] || {}
+      ce_rows = ce["oz_rows"] || []
+      ce_rows.each { |row| row["oz_permalink"] = OzBenchPages.cevlm_permalink(row) }
+      ce_target = ((ce["oz_config"] || {})["target_s"] || 3).to_f
       # For sitemap.xml: every result page, built in every language.
-      site.data["oz_bench_pages"] = (rows + cv_rows + vlm_rows).map { |r| { "permalink" => r["oz_permalink"], "langs" => langs } }
+      site.data["oz_bench_pages"] = (rows + cv_rows + vlm_rows + ce_rows).map { |r| { "permalink" => r["oz_permalink"], "langs" => langs } }
 
       lang = site.config["active_lang"] || site.config["default_lang"]
       b = (site.data[lang] || {}).dig("strings", "bench_page") or return
@@ -278,6 +361,10 @@ module OzBenchPages
       vlm_rows.each do |r|
         add(site, r["oz_permalink"], OzBenchPages.vlm_title(r, b), ((r["oz_parts"] || {})[lang] || []).first.to_s,
             lang, langs, OzBenchPages.vlm_page_html(r, vlm, b, lang))
+      end
+      ce_rows.each do |row|
+        add(site, row["oz_permalink"], OzBenchPages.cevlm_title(row, b), ((row["oz_parts"] || {})[lang] || []).first.to_s,
+            lang, langs, OzBenchPages.cevlm_page_html(row, ce_target, b, lang))
       end
     end
 
