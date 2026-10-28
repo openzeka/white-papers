@@ -1,0 +1,23 @@
+{
+  "model": "DeepSeek-V4.1-Flash-1017",
+  "repo": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+  "revision": "1bae0e1088993b9b82de08f59de5be5a34e42170",
+  "config_sha256": "8be45ce0476004a3f529fd896115a4a2e800a129ad2d3ec05b16050f52e21879",
+  "fetched": "2026-10-28",
+  "hf": {
+    "created": "2026-10-17T02:40:38.000Z",
+    "last_modified": "2026-10-17T05:46:55.000Z",
+    "gated": false,
+    "license": "mit",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 763205315794,
+    "parameters_by_dtype": {
+      "BF16": 1976441856,
+      "F32": 42307282,
+      "F8_E4M3": 204015223296,
+      "I8": 557171343360
+    }
+  }
+}

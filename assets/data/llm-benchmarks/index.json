@@ -679,6 +679,11 @@
           "id": "step-5-preview_b300_fp8_vllm_dp4",
           "model": "Step-5-Preview",
           "path": "dgx-b300/step-5-preview_b300_fp8_vllm_dp4.json"
+        },
+        {
+          "id": "deepseek-v4.1-flash-1017_b300_fp8_vllm_tp2",
+          "model": "DeepSeek-V4.1-Flash-1017",
+          "path": "dgx-b300/deepseek-v4.1-flash-1017_b300_fp8_vllm_tp2.json"
         }
       ]
     }

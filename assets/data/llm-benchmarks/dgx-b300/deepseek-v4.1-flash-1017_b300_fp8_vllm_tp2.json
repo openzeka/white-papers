@@ -1,0 +1,72 @@
+{
+  "id": "deepseek-v4.1-flash-1017_b300_fp8_vllm_tp2",
+  "model": "DeepSeek-V4.1-Flash-1017",
+  "params": "763B",
+  "intelligence_index": null,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "FP8",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": 3,
+  "tp": 2,
+  "notes": "DSpark k=3, 1M context. Model: deepseek-ai/DeepSeek-V4.1-Flash-1017",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 36.86,
+      "tps": 402.97
+    },
+    {
+      "c": 2,
+      "ttft_ms": 46.93,
+      "tps": 326.75
+    },
+    {
+      "c": 4,
+      "ttft_ms": 54.88,
+      "tps": 280.68
+    },
+    {
+      "c": 8,
+      "ttft_ms": 68.33,
+      "tps": 223.49
+    },
+    {
+      "c": 16,
+      "ttft_ms": 87.19,
+      "tps": 161.57
+    },
+    {
+      "c": 32,
+      "ttft_ms": 109.8,
+      "tps": 132.71
+    },
+    {
+      "c": 64,
+      "ttft_ms": 115.4,
+      "tps": 101.1
+    },
+    {
+      "c": 128,
+      "ttft_ms": 189.08,
+      "tps": 69.49
+    },
+    {
+      "c": 256,
+      "ttft_ms": 490.39,
+      "tps": 45.68
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 1600,
+  "kv_window_bytes": 2621440,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "deepseek-ai/DeepSeek-V4.1-Flash-1017",
+  "weights_gb": 510.3
+}

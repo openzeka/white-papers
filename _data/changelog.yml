@@ -15,6 +15,14 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-10-28
+  type: benchmarks
+  run: deepseek-v4.1-flash-1017_b300_fp8_vllm_tp2
+  text:
+    en: "DeepSeek-V4.1-Flash-1017 on DGX B300: FP8 weights served with vLLM at TP=2, with DSpark speculative decoding (k=3) and a 1M context, measured up to 256 concurrent requests."
+    tr: "DeepSeek-V4.1-Flash-1017, DGX B300 üzerinde: FP8 ağırlıklar TP=2 ile vLLM üzerinden sunuldu, DSpark spekülatif kod çözme (k=3) ve 1M bağlam ile 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "DeepSeek-V4.1-Flash-1017 op DGX B300: FP8-gewichten geserveerd met vLLM op TP=2, met DSpark speculatieve decodering (k=3) en een context van 1M, gemeten tot 256 gelijktijdige verzoeken."
+
 - date: 2026-10-26
   type: benchmarks
   run: muse-spark-open-816b-a42b_8spark_nvfp4_vllm
