@@ -17,6 +17,30 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-11-02
+  type: cevlm
+  cevlm: jetson-agx-orin-64gb-qwen3-vl-30b-a3b-instruct-nvfp4-vllm-jetson-agx-orin-64gb
+  text:
+    en: "Jetson AGX Orin 64GB running the custom engine and Qwen3-VL-30B-A3B-Instruct (NVFP4, vLLM) on the same board: the interval between answers per camera, measured from 1 to 16 simultaneous cameras and from 1 to 8 frames per question."
+    tr: "Jetson AGX Orin 64GB, custom engine'i ve Qwen3-VL-30B-A3B-Instruct'ı (NVFP4, vLLM) aynı kartta çalıştırırken: kamera başına iki yanıt arasındaki aralık 1 ile 16 arasında eşzamanlı kamerada ve soru başına 1 ile 8 kare arasında ölçüldü."
+    nl: "Jetson AGX Orin 64GB met de custom engine en Qwen3-VL-30B-A3B-Instruct (NVFP4, vLLM) op hetzelfde bord: het interval tussen antwoorden per camera, gemeten van 1 tot 16 gelijktijdige camera's en van 1 tot 8 frames per vraag."
+
+- date: 2026-11-02
+  type: cevlm
+  cevlm: jetson-agx-orin-64gb-nemotron-3-nano-omni-30b-a3b-reasoning-nvfp4-vllm-jetson-agx-orin-64gb
+  text:
+    en: "Jetson AGX Orin 64GB running the custom engine and Nemotron 3 Nano Omni 30B-A3B (NVFP4, vLLM) on the same board: the interval between answers per camera, measured from 1 to 4 simultaneous cameras and from 1 to 8 frames per question."
+    tr: "Jetson AGX Orin 64GB, custom engine'i ve Nemotron 3 Nano Omni 30B-A3B'yi (NVFP4, vLLM) aynı kartta çalıştırırken: kamera başına iki yanıt arasındaki aralık 1 ile 4 arasında eşzamanlı kamerada ve soru başına 1 ile 8 kare arasında ölçüldü."
+    nl: "Jetson AGX Orin 64GB met de custom engine en Nemotron 3 Nano Omni 30B-A3B (NVFP4, vLLM) op hetzelfde bord: het interval tussen antwoorden per camera, gemeten van 1 tot 4 gelijktijdige camera's en van 1 tot 8 frames per vraag."
+
+- date: 2026-11-02
+  type: cevlm
+  cevlm: jetson-agx-orin-64gb-cosmos3-nano-fp8-vllm-jetson-agx-orin-64gb
+  text:
+    en: "Jetson AGX Orin 64GB running the custom engine and Cosmos3-Nano (FP8, vLLM) on the same board: the interval between answers per camera, measured from 1 to 16 simultaneous cameras and from 1 to 4 frames per question."
+    tr: "Jetson AGX Orin 64GB, custom engine'i ve Cosmos3-Nano'yu (FP8, vLLM) aynı kartta çalıştırırken: kamera başına iki yanıt arasındaki aralık 1 ile 16 arasında eşzamanlı kamerada ve soru başına 1 ile 4 kare arasında ölçüldü."
+    nl: "Jetson AGX Orin 64GB met de custom engine en Cosmos3-Nano (FP8, vLLM) op hetzelfde bord: het interval tussen antwoorden per camera, gemeten van 1 tot 16 gelijktijdige camera's en van 1 tot 4 frames per vraag."
+
 - date: 2026-10-27
   type: cevlm
   cevlm: jetson-agx-thor-qwen3-vl-30b-a3b-instruct-fp8-vllm-rtx-pro-6000

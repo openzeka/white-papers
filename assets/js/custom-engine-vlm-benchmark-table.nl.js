@@ -114,11 +114,12 @@
     },
     measuredFor: function (s) { return "Gemeten gedurende " + s + " s per aantal camera's."; },
     runs: "Runs:",
+    notes: "Notities:",
 
     /* Tooltips */
     tip: {
-      device: "<strong>Apparaat</strong><p>Het bord waarop de camera's en de custom engine draaiden — de stream engine decodeert hier elke camera en de engine stuurt zijn frames van hieruit naar de VLM-server.</p><p>De VLM zelf draait niet op dit apparaat.</p>",
-      vlm: "<strong>VLM-server</strong><p>Het vision-languagemodel dat de engine bevraagt, het getalformaat en de serving-engine, en de GPU waarop het draaide.</p><p>Alle apparaten op deze pagina bevroegen dezelfde server, dus tussen hun rijen verandert alleen het apparaat.</p>",
+      device: "<strong>Apparaat</strong><p>Het bord waarop de camera's en de custom engine draaiden — de stream engine decodeert hier elke camera en de engine stuurt zijn frames van hieruit naar de VLM-server.</p><p>De VLM zelf draait elders, behalve op de Jetson AGX Orin 64GB, waar hij op het bord naast de engine draait.</p>",
+      vlm: "<strong>VLM-server</strong><p>Het vision-languagemodel dat de engine bevraagt, het getalformaat en de serving-engine, en de GPU waarop het draaide.</p><p>Thor, de Orin 32GB en de GX10 bevroegen dezelfde RTX PRO 6000-server, dus tussen hun rijen verandert alleen het apparaat. Op de Orin 64GB-rijen wordt de VLM op het bord zelf geserveerd.</p>",
       atCameras: "<strong>Camera's</strong><p>Het aantal gelijktijdige camera's waarbij de cijfers van deze rij zijn gemeten.</p><p>Elke rij toont de zwaarste belasting die bij of onder de cameragrens in het filterpaneel is gemeten, dus rijen kunnen hier verschillen.</p>",
       interval: "<strong>Interval</strong><p>Hoe lang een camera gemiddeld tussen twee antwoorden wacht — voor de <em>traagste</em> camera bij dat aantal. Zo oud kan het nieuwste antwoord over een camera worden.</p><p>Groen haalt uw doelinterval, rood niet.</p><p><em>Lager is beter.</em></p>",
       answers: "<strong>Antwoorden / min</strong><p>Antwoorden die de engine per minuut ontving, alle camera's samen — de doorvoer van de hele keten.</p><p>Waar dit niet meer groeit als er camera's bijkomen, heeft de keten zijn grens bereikt.</p>",
@@ -793,6 +794,7 @@
     html += "<br><strong>" + escapeHTML(S.pipeline) + "</strong> " +
       escapeHTML(S.pipelineText(entry.stream_engine, entry.workload));
     html += "<br><strong>" + escapeHTML(S.server) + "</strong> " + escapeHTML(S.serverText(entry.vlm));
+    if (entry.notes) html += "<br><strong>" + escapeHTML(S.notes) + "</strong> " + escapeHTML(entry.notes);
     var m = measureOf(entry);
     if (m) html += "<br>" + escapeHTML(S.measuredFor(m));
     if (entry.runs && entry.runs.length) {

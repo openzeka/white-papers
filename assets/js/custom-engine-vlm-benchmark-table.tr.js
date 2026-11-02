@@ -112,11 +112,12 @@
     },
     measuredFor: function (s) { return "Her kamera sayısında " + s + " sn ölçüldü."; },
     runs: "Koşular:",
+    notes: "Notlar:",
 
     /* Tooltips */
     tip: {
-      device: "<strong>Cihaz</strong><p>Kameraların ve custom engine'in çalıştığı kart — stream engine her kamerayı burada çözer ve motor karelerini buradan VLM sunucusuna gönderir.</p><p>VLM'in kendisi bu cihazda çalışmaz.</p>",
-      vlm: "<strong>VLM sunucusu</strong><p>Motorun soru sorduğu görüntü-dil modeli, sayı biçimi ve sunum motoru, ve çalıştığı GPU.</p><p>Bu sayfadaki bütün cihazlar aynı sunucuya sordu; bu yüzden satırları arasında değişen tek şey cihazdır.</p>",
+      device: "<strong>Cihaz</strong><p>Kameraların ve custom engine'in çalıştığı kart — stream engine her kamerayı burada çözer ve motor karelerini buradan VLM sunucusuna gönderir.</p><p>VLM'in kendisi başka yerde çalışır; tek istisna Jetson AGX Orin 64GB'dir, orada motorun yanında kartın üzerinde çalışır.</p>",
+      vlm: "<strong>VLM sunucusu</strong><p>Motorun soru sorduğu görüntü-dil modeli, sayı biçimi ve sunum motoru, ve çalıştığı GPU.</p><p>Thor, Orin 32GB ve GX10 aynı RTX PRO 6000 sunucusuna sordu; bu yüzden onların satırları arasında değişen tek şey cihazdır. Orin 64GB satırlarında VLM kartın kendisinde sunulur.</p>",
       atCameras: "<strong>Kamera</strong><p>Bu satırdaki değerlerin ölçüldüğü eşzamanlı kamera sayısı.</p><p>Her satır, filtre panelindeki kamera sınırında veya altında ölçüldüğü en ağır yükü gösterir; bu yüzden satırlar burada farklılık gösterebilir.</p>",
       interval: "<strong>Aralık</strong><p>Bir kameranın iki yanıt arasında ortalama ne kadar beklediği — o kamera sayısındaki <em>en yavaş</em> kamera için. Bir kamera hakkındaki en yeni yanıtın ne kadar eskiyebileceğini gösterir.</p><p>Yeşil hedef aralığınızı karşılıyor, kırmızı karşılamıyor.</p><p><em>Düşük olması iyidir.</em></p>",
       answers: "<strong>Yanıt / dk</strong><p>Motorun dakikada aldığı yanıt sayısı, bütün kameralar birlikte — bütün zincirin verimi.</p><p>Kamera eklendikçe artmayı bıraktığı noktada zincir sınırına ulaşmıştır.</p>",
@@ -791,6 +792,7 @@
     html += "<br><strong>" + escapeHTML(S.pipeline) + "</strong> " +
       escapeHTML(S.pipelineText(entry.stream_engine, entry.workload));
     html += "<br><strong>" + escapeHTML(S.server) + "</strong> " + escapeHTML(S.serverText(entry.vlm));
+    if (entry.notes) html += "<br><strong>" + escapeHTML(S.notes) + "</strong> " + escapeHTML(entry.notes);
     var m = measureOf(entry);
     if (m) html += "<br>" + escapeHTML(S.measuredFor(m));
     if (entry.runs && entry.runs.length) {

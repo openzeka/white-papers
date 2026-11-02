@@ -1,5 +1,5 @@
 {
-  "generated_at": 1793078787.0240035,
+  "generated_at": 1793605584.561069,
   "config": {
     "target_s": 3.0,
     "frames": "auto"
@@ -16,6 +16,14 @@
     "note": "Every figure is OpenZeka's own measurement, taken with the Custom Engine VLM Benchmark tool against Cordatus Stream Engine 3 running custom_engine_vlm."
   },
   "models": {
+    "Cosmos3-Nano": {
+      "repo": "nvidia/Cosmos3-Nano",
+      "params": ""
+    },
+    "Nemotron-3-Nano-Omni-30B-A3B-Reasoning": {
+      "repo": "nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning",
+      "params": "30B"
+    },
     "Qwen3-VL-30B-A3B-Instruct": {
       "repo": "Qwen/Qwen3-VL-30B-A3B-Instruct",
       "params": "30B"
@@ -153,6 +161,98 @@
             "32": [
               1,
               4
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Jetson AGX Orin 64GB",
+      "slug": "jetson-agx-orin-64gb",
+      "kind": "Jetson",
+      "path": "jetson-agx-orin-64gb/device.json",
+      "configs": [
+        {
+          "model": "Cosmos3-Nano",
+          "quantization": "FP8",
+          "engine": "vLLM",
+          "server": "Jetson AGX Orin 64GB",
+          "path": "jetson-agx-orin-64gb/cosmos3-nano-fp8-vllm-jetson-agx-orin-64gb.json",
+          "frames": {
+            "auto": [
+              1
+            ],
+            "1": [
+              1,
+              4,
+              8,
+              16
+            ],
+            "2": [
+              1,
+              4
+            ],
+            "4": [
+              1
+            ]
+          }
+        },
+        {
+          "model": "Nemotron-3-Nano-Omni-30B-A3B-Reasoning",
+          "quantization": "NVFP4",
+          "engine": "vLLM",
+          "server": "Jetson AGX Orin 64GB",
+          "path": "jetson-agx-orin-64gb/nemotron-3-nano-omni-30b-a3b-reasoning-nvfp4-vllm-jetson-agx-orin-64gb.json",
+          "frames": {
+            "auto": [
+              1,
+              4
+            ],
+            "1": [
+              1,
+              4
+            ],
+            "2": [
+              1,
+              4
+            ],
+            "4": [
+              1,
+              4
+            ],
+            "8": [
+              1
+            ]
+          }
+        },
+        {
+          "model": "Qwen3-VL-30B-A3B-Instruct",
+          "quantization": "NVFP4",
+          "engine": "vLLM",
+          "server": "Jetson AGX Orin 64GB",
+          "path": "jetson-agx-orin-64gb/qwen3-vl-30b-a3b-instruct-nvfp4-vllm-jetson-agx-orin-64gb.json",
+          "frames": {
+            "auto": [
+              1,
+              4,
+              8
+            ],
+            "1": [
+              1,
+              4,
+              8,
+              16
+            ],
+            "2": [
+              1,
+              4
+            ],
+            "4": [
+              1,
+              4
+            ],
+            "8": [
+              1
             ]
           }
         }

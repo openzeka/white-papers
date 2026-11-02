@@ -114,11 +114,12 @@
     },
     measuredFor: function (s) { return "Measured for " + s + " s per camera count."; },
     runs: "Runs:",
+    notes: "Notes:",
 
     /* Tooltips */
     tip: {
-      device: "<strong>Device</strong><p>The board the cameras and the custom engine ran on — the stream engine decodes every camera here and the engine sends its frames to the VLM server from here.</p><p>The VLM itself does not run on this device.</p>",
-      vlm: "<strong>VLM server</strong><p>The vision-language model the engine asks, its number format and serving engine, and the GPU it ran on.</p><p>All the devices on this page asked the same server, so the device is the only thing that changes between their rows.</p>",
+      device: "<strong>Device</strong><p>The board the cameras and the custom engine ran on — the stream engine decodes every camera here and the engine sends its frames to the VLM server from here.</p><p>The VLM itself runs elsewhere, except on the Jetson AGX Orin 64GB, where it runs on the board next to the engine.</p>",
+      vlm: "<strong>VLM server</strong><p>The vision-language model the engine asks, its number format and serving engine, and the GPU it ran on.</p><p>Thor, the Orin 32GB and the GX10 all asked the same RTX PRO 6000 server, so between their rows the device is the only thing that changes. The Orin 64GB rows serve the VLM on the board itself.</p>",
       atCameras: "<strong>Cameras</strong><p>The number of simultaneous cameras this row’s numbers were measured at.</p><p>Each row reports the heaviest load it was measured under at or below the camera limit in the filter panel, so rows can differ here.</p>",
       interval: "<strong>Interval</strong><p>How long a camera waits between two answers, on average — for the <em>slowest</em> camera at that count. This is how stale the newest answer about a camera can get.</p><p>Green meets your target interval, red does not.</p><p><em>Lower is better.</em></p>",
       answers: "<strong>Answers / min</strong><p>Answers the engine received per minute, all cameras together — the throughput of the whole chain.</p><p>Where it stops growing as cameras are added, the chain has reached its limit.</p>",
@@ -793,6 +794,7 @@
     html += "<br><strong>" + escapeHTML(S.pipeline) + "</strong> " +
       escapeHTML(S.pipelineText(entry.stream_engine, entry.workload));
     html += "<br><strong>" + escapeHTML(S.server) + "</strong> " + escapeHTML(S.serverText(entry.vlm));
+    if (entry.notes) html += "<br><strong>" + escapeHTML(S.notes) + "</strong> " + escapeHTML(entry.notes);
     var m = measureOf(entry);
     if (m) html += "<br>" + escapeHTML(S.measuredFor(m));
     if (entry.runs && entry.runs.length) {

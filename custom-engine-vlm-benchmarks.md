@@ -35,17 +35,23 @@ was doing and the curve.
 A row is a **device running the whole camera side of the pipeline** — the
 Cordatus Stream Engine decoding every camera and `custom_engine_vlm` turning
 its frames into questions — together with the **VLM server** it asks: one
-model, in one number format, served by one engine on one GPU. The VLM does not
-run on the device. Every device on this page asked the same server, so between
-their rows the device is the only thing that changes.
+model, in one number format, served by one engine on one GPU. On Jetson AGX
+Thor, the Jetson AGX Orin 32GB Developer Kit and the ASUS Ascent GX10 the VLM
+does not run on the device: they all asked the same server, so between their
+rows the device is the only thing that changes. On the Jetson AGX Orin 64GB the
+VLM runs on the board itself, next to the engine, so those rows measure the
+whole pipeline on one Jetson.
 
 ### How the numbers were measured
 
 Every figure is an OpenZeka measurement, taken with the Custom Engine VLM
 Benchmark tool against Cordatus Stream Engine 3.0.12 running
 `custom_engine_vlm`, on Jetson AGX Thor, a Jetson AGX Orin 32GB Developer Kit
-and an ASUS Ascent GX10 (GB10). The VLM server was Qwen3-VL-30B-A3B-Instruct in
-FP8, served with vLLM on an RTX PRO 6000 Blackwell Workstation Edition.
+and an ASUS Ascent GX10 (GB10). For those devices the VLM server was
+Qwen3-VL-30B-A3B-Instruct in FP8, served with vLLM on an RTX PRO 6000 Blackwell
+Workstation Edition. On the Jetson AGX Orin 64GB three VLMs were served on the
+board with vLLM 0.30: Qwen3-VL-30B-A3B-Instruct in NVFP4, Nemotron 3 Nano Omni
+30B-A3B in NVFP4 and Cosmos3-Nano in FP8; each row's notes say how it was run.
 
 Every camera is the **same 720p H.264 street clip at 15 FPS**, replayed over
 RTSP from the device itself, one stream per camera. The engine takes four

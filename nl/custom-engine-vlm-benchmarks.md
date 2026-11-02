@@ -35,17 +35,23 @@ camerareeks, wat de VLM-server deed en de curve.
 Een rij is een **apparaat dat de hele camerakant van de pijplijn draait** — de
 Cordatus Stream Engine die elke camera decodeert en `custom_engine_vlm` die de
 frames in vragen omzet — samen met de **VLM-server** die het bevraagt: één
-model, in één getalformaat, geserveerd door één engine op één GPU. De VLM
-draait niet op het apparaat. Alle apparaten op deze pagina bevroegen dezelfde
-server, dus tussen hun rijen verandert alleen het apparaat.
+model, in één getalformaat, geserveerd door één engine op één GPU. Op Jetson
+AGX Thor, de Jetson AGX Orin 32GB Developer Kit en de ASUS Ascent GX10 draait
+de VLM niet op het apparaat: ze bevroegen allemaal dezelfde server, dus tussen
+hun rijen verandert alleen het apparaat. Op de Jetson AGX Orin 64GB draait de
+VLM op het bord zelf, naast de engine; die rijen meten de hele pijplijn op één
+Jetson.
 
 ### Hoe de cijfers zijn gemeten
 
 Elk cijfer is een meting van OpenZeka, gedaan met de Custom Engine VLM
 Benchmark-tool tegen Cordatus Stream Engine 3.0.12 met `custom_engine_vlm`, op
 Jetson AGX Thor, een Jetson AGX Orin 32GB Developer Kit en een ASUS Ascent
-GX10 (GB10). De VLM-server was Qwen3-VL-30B-A3B-Instruct in FP8, geserveerd met
-vLLM op een RTX PRO 6000 Blackwell Workstation Edition.
+GX10 (GB10). Voor die apparaten was de VLM-server Qwen3-VL-30B-A3B-Instruct in
+FP8, geserveerd met vLLM op een RTX PRO 6000 Blackwell Workstation Edition. Op
+de Jetson AGX Orin 64GB werden drie VLM's op het bord geserveerd met vLLM 0.30:
+Qwen3-VL-30B-A3B-Instruct in NVFP4, Nemotron 3 Nano Omni 30B-A3B in NVFP4 en
+Cosmos3-Nano in FP8; de notities van elke rij vertellen hoe ze draaiden.
 
 Elke camera is **dezelfde 720p H.264-straatclip op 15 FPS**, via RTSP
 afgespeeld vanaf het apparaat zelf, één stream per camera. De engine neemt van
