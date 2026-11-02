@@ -2,7 +2,7 @@
   "id": "minimax-m3.1-flash_4spark_nvfp4_vllm_tp4",
   "model": "MiniMax-M3.1-Flash",
   "params": "428B",
-  "intelligence_index": 28.9,
+  "intelligence_index": null,
   "agentic_index": null,
   "device": "4× DGX Spark",
   "quantization": "NVFP4",

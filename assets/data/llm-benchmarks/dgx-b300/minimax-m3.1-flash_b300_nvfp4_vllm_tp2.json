@@ -2,7 +2,7 @@
   "id": "minimax-m3.1-flash_b300_nvfp4_vllm_tp2",
   "model": "MiniMax-M3.1-Flash",
   "params": "428B",
-  "intelligence_index": 28.9,
+  "intelligence_index": null,
   "agentic_index": null,
   "device": "DGX B300",
   "quantization": "NVFP4",
