@@ -49,9 +49,10 @@ Benchmark-tool tegen Cordatus Stream Engine 3.0.12 met `custom_engine_vlm`, op
 Jetson AGX Thor, een Jetson AGX Orin 32GB Developer Kit en een ASUS Ascent
 GX10 (GB10). Voor die apparaten was de VLM-server Qwen3-VL-30B-A3B-Instruct in
 FP8, geserveerd met vLLM op een RTX PRO 6000 Blackwell Workstation Edition. Op
-de Jetson AGX Orin 64GB werden drie VLM's op het bord geserveerd met vLLM 0.30:
-Qwen3-VL-30B-A3B-Instruct in NVFP4, Nemotron 3 Nano Omni 30B-A3B in NVFP4 en
-Cosmos3-Nano in FP8; de notities van elke rij vertellen hoe ze draaiden.
+de Jetson AGX Orin 64GB werden drie VLM's op het bord geserveerd met vLLM 0.30,
+elk in twee formaten: Qwen3-VL-30B-A3B-Instruct in NVFP4 en FP8, Nemotron 3 Nano
+Omni 30B-A3B in NVFP4 en FP8, en Cosmos3-Nano in FP8 en BF16; de notities van
+elke rij vertellen hoe ze draaiden.
 
 Elke camera is **dezelfde 720p H.264-straatclip op 15 FPS**, via RTSP
 afgespeeld vanaf het apparaat zelf, één stream per camera. De engine neemt van

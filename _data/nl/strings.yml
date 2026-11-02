@@ -146,4 +146,4 @@ changelog:
   type_benchmarks: "Nieuwe LLM-benchmark"
   type_vlm: "Nieuwe VLM-benchmark"
   type_cv: "Nieuwe CV-benchmark"
-  type_cevlm: "Nieuwe Custom Engine-benchmark"
+  type_cevlm: "Nieuwe CE-benchmark"

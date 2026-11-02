@@ -48,10 +48,10 @@ Cordatus Stream Engine 3.0.12'ye karşı Jetson AGX Thor, bir Jetson AGX Orin
 32GB Developer Kit ve bir ASUS Ascent GX10 (GB10) üzerinde alınmış bir OpenZeka
 ölçümüdür. Bu cihazlar için VLM sunucusu, RTX PRO 6000 Blackwell Workstation
 Edition üzerinde vLLM ile sunulan FP8 biçiminde Qwen3-VL-30B-A3B-Instruct'tı.
-Jetson AGX Orin 64GB'de üç VLM kartın üzerinde vLLM 0.30 ile sunuldu: NVFP4
-biçiminde Qwen3-VL-30B-A3B-Instruct, NVFP4 biçiminde Nemotron 3 Nano Omni
-30B-A3B ve FP8 biçiminde Cosmos3-Nano; her satırın notu nasıl çalıştırıldığını
-anlatır.
+Jetson AGX Orin 64GB'de üç VLM kartın üzerinde vLLM 0.30 ile, her biri iki
+biçimde sunuldu: Qwen3-VL-30B-A3B-Instruct NVFP4 ve FP8, Nemotron 3 Nano Omni
+30B-A3B NVFP4 ve FP8, Cosmos3-Nano FP8 ve BF16; her satırın notu nasıl
+çalıştırıldığını anlatır.
 
 Her kamera **aynı 720p H.264, 15 FPS sokak klibidir**; cihazın kendisinden RTSP
 ile yeniden oynatılır, kamera başına bir yayın. Motor her kameradan saniyede

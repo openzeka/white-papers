@@ -50,8 +50,9 @@ Benchmark tool against Cordatus Stream Engine 3.0.12 running
 and an ASUS Ascent GX10 (GB10). For those devices the VLM server was
 Qwen3-VL-30B-A3B-Instruct in FP8, served with vLLM on an RTX PRO 6000 Blackwell
 Workstation Edition. On the Jetson AGX Orin 64GB three VLMs were served on the
-board with vLLM 0.30: Qwen3-VL-30B-A3B-Instruct in NVFP4, Nemotron 3 Nano Omni
-30B-A3B in NVFP4 and Cosmos3-Nano in FP8; each row's notes say how it was run.
+board with vLLM 0.30, each in two formats: Qwen3-VL-30B-A3B-Instruct in NVFP4
+and FP8, Nemotron 3 Nano Omni 30B-A3B in NVFP4 and FP8, and Cosmos3-Nano in FP8
+and BF16; each row's notes say how it was run.
 
 Every camera is the **same 720p H.264 street clip at 15 FPS**, replayed over
 RTSP from the device itself, one stream per camera. The engine takes four

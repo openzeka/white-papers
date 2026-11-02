@@ -1,5 +1,5 @@
 {
-  "generated_at": 1793605584.561069,
+  "generated_at": 1793611011.934857,
   "config": {
     "target_s": 3.0,
     "frames": "auto"
@@ -174,6 +174,25 @@
       "configs": [
         {
           "model": "Cosmos3-Nano",
+          "quantization": "BF16",
+          "engine": "vLLM",
+          "server": "Jetson AGX Orin 64GB",
+          "path": "jetson-agx-orin-64gb/cosmos3-nano-bf16-vllm-jetson-agx-orin-64gb.json",
+          "frames": {
+            "auto": [
+              1
+            ],
+            "1": [
+              1,
+              4
+            ],
+            "2": [
+              1
+            ]
+          }
+        },
+        {
+          "model": "Cosmos3-Nano",
           "quantization": "FP8",
           "engine": "vLLM",
           "server": "Jetson AGX Orin 64GB",
@@ -199,6 +218,30 @@
         },
         {
           "model": "Nemotron-3-Nano-Omni-30B-A3B-Reasoning",
+          "quantization": "FP8",
+          "engine": "vLLM",
+          "server": "Jetson AGX Orin 64GB",
+          "path": "jetson-agx-orin-64gb/nemotron-3-nano-omni-30b-a3b-reasoning-fp8-vllm-jetson-agx-orin-64gb.json",
+          "frames": {
+            "auto": [
+              1,
+              4
+            ],
+            "1": [
+              1,
+              4
+            ],
+            "2": [
+              1,
+              4
+            ],
+            "4": [
+              1
+            ]
+          }
+        },
+        {
+          "model": "Nemotron-3-Nano-Omni-30B-A3B-Reasoning",
           "quantization": "NVFP4",
           "engine": "vLLM",
           "server": "Jetson AGX Orin 64GB",
@@ -211,6 +254,35 @@
             "1": [
               1,
               4
+            ],
+            "2": [
+              1,
+              4
+            ],
+            "4": [
+              1,
+              4
+            ],
+            "8": [
+              1
+            ]
+          }
+        },
+        {
+          "model": "Qwen3-VL-30B-A3B-Instruct",
+          "quantization": "FP8",
+          "engine": "vLLM",
+          "server": "Jetson AGX Orin 64GB",
+          "path": "jetson-agx-orin-64gb/qwen3-vl-30b-a3b-instruct-fp8-vllm-jetson-agx-orin-64gb.json",
+          "frames": {
+            "auto": [
+              1,
+              4
+            ],
+            "1": [
+              1,
+              4,
+              8
             ],
             "2": [
               1,

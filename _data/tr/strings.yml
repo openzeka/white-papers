@@ -146,4 +146,4 @@ changelog:
   type_benchmarks: "Yeni LLM benchmark"
   type_vlm: "Yeni VLM benchmark"
   type_cv: "Yeni CV benchmark"
-  type_cevlm: "Yeni Custom Engine benchmark"
+  type_cevlm: "Yeni CE benchmark"
