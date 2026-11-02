@@ -1,7 +1,26 @@
 /* Cordatus Custom Engine VLM Benchmark Explorer — the few rules the shared
-   stylesheets do not already provide. The widget is laid out like the CV
-   explorer (filters beside the table), so it is loaded after
-   benchmark-table.css and cv-benchmark-table.css and reuses their classes. */
+   stylesheets do not already provide. The filters sit above the table as in
+   the VLM explorer; the table keeps the CV explorer's cell rules, so this is
+   loaded after benchmark-table.css and cv-benchmark-table.css. */
+
+/* Frames per request and the camera limit are one group, as Cameras, Image
+   Size and the response time are in the VLM explorer: a rule above Frames,
+   none between the two, and the slider row's rule below. */
+.cevbt-container .bt-filter-row-perf.cevbt-no-rule {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.cevbt-container .bt-filter-row-perf.cevbt-group-start {
+  padding-top: 12px;
+  border-top: 1px solid var(--bt-border);
+}
+
+/* The camera limit opens its row, so its label lines up with Frames instead
+   of keeping the inline indent. */
+.cevbt-container .bt-filter-row-perf > .bt-perf-item:first-child .bt-inline-label {
+  margin-left: 0;
+}
 
 /* The opened row's tables, each under a small caption, full width. They carry
    more columns than the CV sweep, so they scroll on their own on a narrow
@@ -52,8 +71,7 @@
 /* The device and VLM names are long (Jetson AGX Orin 32GB Developer Kit; the
    model, then its format, engine and GPU), so they wrap: the server's settings
    go on their own line under the model name. Without this the table runs wider
-   than the column beside the filter panel and its last columns scroll out of
-   view. */
+   than the content column and its last columns scroll out of view. */
 .cevbt-container .bt-table tbody td.bt-left {
   white-space: normal;
   min-width: 140px;
@@ -62,12 +80,6 @@
 .cevbt-container .bt-table tbody td.bt-left .cvbt-sub {
   display: block;
   margin-left: 0;
-}
-
-/* A device name can be longer than the 248px filter panel is wide. */
-.cevbt-container .cvbt-side .bt-btn {
-  white-space: normal;
-  text-align: left;
 }
 
 /* The opened row's tables carry more columns than the CV sweep: their headers

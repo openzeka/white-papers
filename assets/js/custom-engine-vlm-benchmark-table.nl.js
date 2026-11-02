@@ -16,16 +16,10 @@
     noMatch: "Geen configuraties komen overeen met de huidige filters.",
 
     cameras: "Tot hoeveel camera's",
-    camerasHint: function (max) {
-      return "Verbergt metingen boven dit aantal; de schuifregelaar stopt bij " + max +
-        ", het hoogste aantal camera's dat tot nu toe is gemeten.";
-    },
     camerasValue: function (n) { return n + (n === 1 ? " camera" : " camera's"); },
     frames: "Frames per verzoek",
-    framesHint: "Bij Automatisch kiest de engine; een getal legt het vast voor elk verzoek.",
     framesAuto: "Automatisch",
     framesValue: function (k) { return k === "auto" ? "Automatisch" : k + (k === "1" ? " frame" : " frames"); },
-    filters: "Filters",
     searchVlms: "VLM-servers zoeken…",
     device: "Apparaat",
     vlm: "VLM-server",
@@ -299,35 +293,34 @@
     var cameras = allCameraCounts();
     var maxCams = cameras.length ? cameras[cameras.length - 1] : 1;
 
-    /* The same layout as the CV explorer: filters beside the table, sticking
-       while it scrolls (cv-benchmark-table.css). */
-    var html = '<div class="cvbt-layout">';
+    /* The same layout as the VLM explorer: the filters above the table, one
+       row each - what is shown (device, VLM server) first, then the group that
+       frames every number in the table (frames per request, camera limit). */
+    var html = '<div class="bt-controls"><div class="bt-filters" id="cevbt-filters">';
+    html += filterRow(S.device, S.tip.fDevice, deviceButtons());
+    html += filterRow(S.vlm, S.tip.fVlm, '<div class="bt-model-row">' + vlmList() + "</div>");
+    html += filterRow(S.frames, S.tip.fFrames, frameButtons(),
+      "bt-filter-row-perf cevbt-no-rule cevbt-group-start");
+    html += '<div class="bt-filter-row bt-filter-row-perf">' +
+      '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.cameras) + tip(S.tip.fCameras) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf">' +
+      '<span class="bt-slider-value" id="cevbt-cameras-value">' +
+      escapeHTML(S.camerasValue(state.camerasMax)) + "</span>" +
+      '<input type="range" id="cevbt-cameras" min="' + cameras[0] + '" max="' + maxCams +
+      '" step="1" value="' + state.camerasMax + '" aria-label="' + escapeHTML(S.cameras) + '">' +
+      "</div></div></div>";
+    html += '<div class="bt-filter-row bt-reset-row">' +
+      '<button type="button" class="bt-reset" id="cevbt-reset">' +
+      escapeHTML(S.resetFilters) + "</button>" + tip(S.tip.reset) + "</div>";
+    html += "</div></div>";
+
+    /* cvbt-main keeps the CV explorer's table rules (tighter cells, wrapping
+       headers) that this table was laid out with. */
     html += '<div class="cvbt-main">';
     html += '<div class="bt-results-count" id="cevbt-count"></div>';
     html += '<div class="bt-table-wrap" id="cevbt-table"></div>';
     html += "</div>";
-
-    html += '<aside class="cvbt-side"><div class="cvbt-side-inner">';
-    html += '<div class="cvbt-side-title">' + escapeHTML(S.filters) + "</div>";
-    html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.cameras) + tip(S.tip.fCameras) + "</span>" +
-      '<div class="bt-slider-group cvbt-slider">' +
-      '<input type="range" id="cevbt-cameras" min="' + cameras[0] + '" max="' + maxCams +
-      '" step="1" value="' + state.camerasMax + '" aria-label="' + escapeHTML(S.cameras) + '">' +
-      '<span class="bt-slider-value" id="cevbt-cameras-value">' +
-      escapeHTML(S.camerasValue(state.camerasMax)) + "</span></div>" +
-      '<p class="cvbt-side-hint">' + escapeHTML(S.camerasHint(maxCams)) + "</p></div>";
-    html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.frames) + tip(S.tip.fFrames) + "</span>" + frameButtons() +
-      '<p class="cvbt-side-hint">' + escapeHTML(S.framesHint) + "</p></div>";
-    html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.device) + tip(S.tip.fDevice) + "</span>" + deviceButtons() + "</div>";
-    html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.vlm) + tip(S.tip.fVlm) + "</span>" + vlmList() + "</div>";
-    html += '<div class="cvbt-reset-row">' +
-      '<button type="button" class="bt-btn cvbt-reset" id="cevbt-reset">' +
-      escapeHTML(S.resetFilters) + "</button>" + tip(S.tip.reset) + "</div>";
-    html += "</div></aside></div>";
     /* Outside the table and the panel, both of which are redrawn: the bubble
        is position:fixed and follows whichever icon opened it. */
     html += '<div class="bt-tooltip" id="cevbt-tooltip" role="tooltip" hidden></div>';
@@ -342,6 +335,13 @@
     }
     wireCameras(container);
     renderTable(container);
+  }
+
+  /* A labelled filter row, as in the VLM explorer. */
+  function filterRow(label, tipHtml, body, extraClass) {
+    return '<div class="bt-filter-row' + (extraClass ? " " + extraClass : "") + '">' +
+      '<span class="bt-filter-label">' + escapeHTML(label) + tip(tipHtml) + "</span>" +
+      body + "</div>";
   }
 
   /* A permanent result page: the table with its one row, opened. */
@@ -426,8 +426,7 @@
          one must not also sort the column or toggle anything. */
       if (e.target.closest(".bt-tip")) return;
 
-      var btn = e.target.closest(".bt-btn");
-      if (btn && btn.id === "cevbt-reset") { reset(container); return; }
+      if (e.target.closest("#cevbt-reset")) { reset(container); return; }
 
       var fr = e.target.closest("[data-frames]");
       if (fr) {
