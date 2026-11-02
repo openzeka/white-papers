@@ -1,0 +1,72 @@
+{
+  "id": "minimax-m3.1-flash_b300_nvfp4_vllm_tp2",
+  "model": "MiniMax-M3.1-Flash",
+  "params": "428B",
+  "intelligence_index": 28.9,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "NVFP4",
+  "engine": "vLLM",
+  "mtp": true,
+  "mtp_k": 8,
+  "tp": 2,
+  "notes": "DSpark k=8, 1M context. MXFP8 dense layers, NVFP4 experts. Model: MiniMaxAI/MiniMax-M3.1-Flash",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 41.62,
+      "tps": 299.7
+    },
+    {
+      "c": 2,
+      "ttft_ms": 69.6,
+      "tps": 228.68
+    },
+    {
+      "c": 4,
+      "ttft_ms": 81.06,
+      "tps": 182.17
+    },
+    {
+      "c": 8,
+      "ttft_ms": 104.49,
+      "tps": 137.59
+    },
+    {
+      "c": 16,
+      "ttft_ms": 141.36,
+      "tps": 106.64
+    },
+    {
+      "c": 32,
+      "ttft_ms": 201.25,
+      "tps": 79.62
+    },
+    {
+      "c": 64,
+      "ttft_ms": 293.15,
+      "tps": 44.2
+    },
+    {
+      "c": 128,
+      "ttft_ms": 528.44,
+      "tps": 20.62
+    },
+    {
+      "c": 256,
+      "ttft_ms": 632.91,
+      "tps": 14.12
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 61440,
+  "kv_window_bytes": 0,
+  "kv_heads": 4,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 7680,
+  "kv_state_bytes": 0,
+  "served_repo": "MiniMaxAI/MiniMax-M3.1-Flash",
+  "weights_gb": 250.12
+}

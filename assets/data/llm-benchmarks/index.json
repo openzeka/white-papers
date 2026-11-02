@@ -323,6 +323,11 @@
           "id": "glm-5.3-flash_4spark_fp8_sglang",
           "model": "GLM-5.3-Flash",
           "path": "4x-dgx-spark/glm-5.3-flash_4spark_fp8_sglang.json"
+        },
+        {
+          "id": "minimax-m3.1-flash_4spark_nvfp4_vllm_tp4",
+          "model": "MiniMax-M3.1-Flash",
+          "path": "4x-dgx-spark/minimax-m3.1-flash_4spark_nvfp4_vllm_tp4.json"
         }
       ]
     },
@@ -684,6 +689,16 @@
           "id": "deepseek-v4.1-flash-1017_b300_fp8_vllm_tp2",
           "model": "DeepSeek-V4.1-Flash-1017",
           "path": "dgx-b300/deepseek-v4.1-flash-1017_b300_fp8_vllm_tp2.json"
+        },
+        {
+          "id": "minimax-m3.1-flash_b300_nvfp4_vllm_tp2",
+          "model": "MiniMax-M3.1-Flash",
+          "path": "dgx-b300/minimax-m3.1-flash_b300_nvfp4_vllm_tp2.json"
+        },
+        {
+          "id": "nemotron-3.5-bolt-74b-a9b_b300_bf16_vllm_tp1",
+          "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+          "path": "dgx-b300/nemotron-3.5-bolt-74b-a9b_b300_bf16_vllm_tp1.json"
         }
       ]
     }

@@ -1,0 +1,23 @@
+{
+  "model": "MiniMax-M3.1-Flash",
+  "repo": "MiniMaxAI/MiniMax-M3.1-Flash",
+  "revision": "2f33a8b9ae49ce7b51c994df97166a7fd059bc2e",
+  "config_sha256": "df6a3668e2de5b8dc0e883e3767495ad17af7e4d69fabe9683088be015fda9ab",
+  "fetched": "2026-11-02",
+  "hf": {
+    "created": "2026-10-17T06:37:50.000Z",
+    "last_modified": "2026-10-30T08:44:16.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 220490854016,
+    "parameters_by_dtype": {
+      "F32": 46339200,
+      "BF16": 3323222528,
+      "F8_E4M3": 10560208896,
+      "U8": 206561083392
+    }
+  }
+}

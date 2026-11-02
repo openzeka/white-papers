@@ -1,0 +1,22 @@
+{
+  "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+  "repo": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-BF16",
+  "revision": "e09a4cedb1787db1760375ee5539f222cae0c672",
+  "config_sha256": "ccd28f87d7c5c405dcd82271e20492a2beddcfa446acbbd7b9f8c48eab890820",
+  "fetched": "2026-11-02",
+  "hf": {
+    "created": "2026-10-09T12:45:14.000Z",
+    "last_modified": "2026-10-23T11:14:26.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": "nvidia/NVIDIA-Nemotron-3.5-Super-VL-120B-A12B-BF16",
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 74885081096,
+    "parameters_by_dtype": {
+      "F32": 13830,
+      "BF16": 74885067264,
+      "I64": 2
+    }
+  }
+}

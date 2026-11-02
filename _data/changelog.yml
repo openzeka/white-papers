@@ -15,6 +15,30 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-11-02
+  type: benchmarks
+  run: minimax-m3.1-flash_b300_nvfp4_vllm_tp2
+  text:
+    en: "MiniMax-M3.1-Flash on DGX B300: MXFP8 dense layers and NVFP4 expert weights served with vLLM at TP=2, with DSpark speculative decoding (k=8) and a 1M context, measured up to 256 concurrent requests."
+    tr: "MiniMax-M3.1-Flash, DGX B300 üzerinde: MXFP8 yoğun katmanlar ve NVFP4 uzman ağırlıkları TP=2 ile vLLM üzerinden sunuldu, DSpark spekülatif kod çözme (k=8) ve 1M bağlam ile 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "MiniMax-M3.1-Flash op DGX B300: MXFP8 dense lagen en NVFP4-expertgewichten geserveerd met vLLM op TP=2, met DSpark speculatieve decodering (k=8) en een context van 1M, gemeten tot 256 gelijktijdige verzoeken."
+
+- date: 2026-11-02
+  type: benchmarks
+  run: minimax-m3.1-flash_4spark_nvfp4_vllm_tp4
+  text:
+    en: "MiniMax-M3.1-Flash on 4× DGX Spark: MXFP8 dense layers and NVFP4 expert weights served with vLLM at TP=4, with DSpark speculative decoding (k=8) and a 1M context, measured up to 8 concurrent requests."
+    tr: "MiniMax-M3.1-Flash, 4× DGX Spark üzerinde: MXFP8 yoğun katmanlar ve NVFP4 uzman ağırlıkları TP=4 ile vLLM üzerinden sunuldu, DSpark spekülatif kod çözme (k=8) ve 1M bağlam ile 8 eşzamanlı isteğe kadar ölçüldü."
+    nl: "MiniMax-M3.1-Flash op 4× DGX Spark: MXFP8 dense lagen en NVFP4-expertgewichten geserveerd met vLLM op TP=4, met DSpark speculatieve decodering (k=8) en een context van 1M, gemeten tot 8 gelijktijdige verzoeken."
+
+- date: 2026-11-02
+  type: benchmarks
+  run: nemotron-3.5-bolt-74b-a9b_b300_bf16_vllm_tp1
+  text:
+    en: "NVIDIA-Nemotron-3.5-Bolt-74B-A9B on DGX B300: BF16 weights served with vLLM at TP=1, with a 256K context, measured up to 256 concurrent requests."
+    tr: "NVIDIA-Nemotron-3.5-Bolt-74B-A9B, DGX B300 üzerinde: BF16 ağırlıklar TP=1 ile vLLM üzerinden sunuldu, 256K bağlam ile 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "NVIDIA-Nemotron-3.5-Bolt-74B-A9B op DGX B300: BF16-gewichten geserveerd met vLLM op TP=1, met een context van 256K, gemeten tot 256 gelijktijdige verzoeken."
+
 - date: 2026-10-28
   type: benchmarks
   run: deepseek-v4.1-flash-1017_b300_fp8_vllm_tp2
