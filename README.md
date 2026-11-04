@@ -30,6 +30,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [KV Cache Offloading with LMCache in LLM Inference](https://whitepapers.openzeka.com/papers/kv-cache-offloading-lmcache/) | Repeated contexts and a KV cache bigger than GPU memory: three cache tiers (GPU, CPU, NVMe), measured TTFT and the settings to verify before production | NVIDIA DGX Spark (GB10) |
 | [Network Link Speed for Tensor-Parallel Inference on 8× DGX Spark (200G vs 100G)](https://whitepapers.openzeka.com/papers/dgx-spark-link-speed-tensor-parallel/) | What tensor parallelism sends over the network, the estimated 100G penalty, and a measured 200G vs emulated 100G comparison with GLM-5.3 at TP8 | 8× NVIDIA DGX Spark (GB10) |
 | [The First Open-Weight Alternatives to Jev](https://whitepapers.openzeka.com/papers/jev-open-weight-alternatives/) | Six open-weight typed-decision models compared: accuracy, calibration, option-order sensitivity and latency | NVIDIA DGX Spark (GB10) |
+| [System One in Production](https://whitepapers.openzeka.com/papers/system-one-production-readiness/) | Six typed-decision models from 0.6B to 27B with vLLM and SGLang: Turkish accuracy, confidence calibration, paraphrase consistency, multimodal limits, engine portability and production thresholds | NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 4× DGX Spark Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/) | 763B MoE model with TP4: vLLM build chain, SM121 patches, Engram-on-disk, DSpark speculative decoding | 4× NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 8× DGX Spark TP8 Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-8spark-deployment/) | 763B MoE model with TP8: 300K Engram-in-memory vs 1M Engram-on-disk, NCCL optimization, TP4 comparison | 8× NVIDIA DGX Spark (GB10) |
 | [Kimi K3 Inference Benchmark on DGX-B300](https://whitepapers.openzeka.com/papers/kimi-k3-dgx-b300-inference-benchmark/) | vLLM vs SGLang and direct vs speculative decoding | NVIDIA DGX-B300, 8× Blackwell Ultra, TP=8 |
@@ -348,6 +349,26 @@ primitive everywhere, and the models that fail a deliberately ambiguous question
 fail it in exactly the same way.
 
 **[Read the typed-decision model comparison →](https://whitepapers.openzeka.com/papers/jev-open-weight-alternatives/)**
+
+---
+
+## System One in Production on DGX Spark
+
+**Six typed-decision models · 0.6B to 27B · vLLM and SGLang · Turkish decision quality · Confidence thresholds**
+
+A typed-decision model returns a probability for each option instead of free
+text. This study asks whether that approach is ready for production: six models,
+one NVIDIA DGX Spark (GB10), two inference engines and the same client,
+datasets and request bodies on both.
+
+It measures Turkish accuracy against hard labels and a reviewer-panel
+distribution, the coverage–risk trade-off behind a `confidence ≥ 0.90`
+threshold, paraphrase consistency, image and video behaviour, and engine
+portability. The results separate what the models reliably do from what needs
+human review, and show why every model–engine–version combination needs its own
+acceptance test.
+
+**[Read the System One production study →](https://whitepapers.openzeka.com/papers/system-one-production-readiness/)**
 
 ---
 

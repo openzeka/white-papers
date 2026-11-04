@@ -16,6 +16,14 @@
 # Check with: python3 _tools/check_changelog.py
 
 - date: 2026-11-04
+  type: paper
+  page: system-one-production-readiness
+  text:
+    en: "Six typed-decision models from 0.6B to 27B evaluated on one NVIDIA DGX Spark with vLLM and SGLang: Turkish accuracy, confidence calibration, paraphrase consistency, multimodal limits, engine portability, and the confidence thresholds a production decision policy needs."
+    tr: "0,6B'den 27B'ye altı tipli karar (typed decision) modeli, tek bir NVIDIA DGX Spark üzerinde vLLM ve SGLang ile değerlendirildi: Türkçe doğruluk, güven kalibrasyonu, paraphrase tutarlılığı, çok kipli sınırlar, motor taşınabilirliği ve üretim karar politikasının ihtiyaç duyduğu güven eşikleri."
+    nl: "Zes typed-decision-modellen van 0.6B tot 27B geëvalueerd op één NVIDIA DGX Spark met vLLM en SGLang: Turkse nauwkeurigheid, kalibratie van het vertrouwen, parafraseconsistentie, multimodale grenzen, overdraagbaarheid tussen engines en de vertrouwensdrempels die een productiebeleid nodig heeft."
+
+- date: 2026-11-04
   type: cv
   cv: jetson-orin-nano-yolov5-x
   text:
