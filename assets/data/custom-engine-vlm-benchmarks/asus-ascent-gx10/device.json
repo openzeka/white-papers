@@ -1,0 +1,10 @@
+{
+  "name": "ASUS Ascent GX10",
+  "slug": "asus-ascent-gx10",
+  "product": "ASUS Ascent GX10 (NVIDIA GB10)",
+  "kind": "GB10",
+  "gpu": "NVIDIA GB10",
+  "ram_gb": 121.6,
+  "cuda": "13.0.3",
+  "driver": "580.173.02"
+}

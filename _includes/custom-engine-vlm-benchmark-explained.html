@@ -1,0 +1,18 @@
+{%- comment -%}
+  Each Custom Engine VLM configuration's explanation at the explorer's default
+  settings, written into the page at build time from _plugins/visibility.rb, so
+  search engines and AI agents find it in the HTML. Hidden here; the widget
+  shows a row's text beside its frames table when the row is opened (detailRow()
+  in assets/js/custom-engine-vlm-benchmark-table.js), ending in a link to the
+  configuration's permanent page (_plugins/benchmark-pages.rb). Must sit
+  outside the [data-cevbt-src] element, whose content the widget replaces.
+
+  Include as: {% include custom-engine-vlm-benchmark-explained.html %}
+{%- endcomment -%}
+{%- if site.data.oz_cevlm -%}
+<div class="bt-explained-src" hidden>
+{%- for r in site.data.oz_cevlm.oz_rows %}
+<div data-cevbt-explained="{{ r.id }}">{% for p in r.oz_parts[site.active_lang] %}<p>{{ p }}</p>{% endfor %}{% if r.oz_permalink %}<p><a href="{{ r.oz_permalink | relative_url }}">{{ site.data[site.active_lang].strings.bench_page.cevlm_permalink }}</a></p>{% endif %}</div>
+{%- endfor %}
+</div>
+{%- endif -%}

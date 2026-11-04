@@ -1,0 +1,147 @@
+{
+  "vlm": {
+    "model": "Cosmos3-Nano",
+    "repo": "nvidia/Cosmos3-Nano",
+    "served_repo": "nvidia/Cosmos3-Nano",
+    "params": "",
+    "quantization": "BF16",
+    "engine": "vLLM",
+    "engine_version": "0.30.0",
+    "server": "Jetson AGX Orin 64GB"
+  },
+  "stream_engine": "3.0.12",
+  "workload": {
+    "mode": "normal",
+    "prompt": "Describe the scene in one sentence.",
+    "image_quality": "medium",
+    "tap_fps": 4,
+    "tap_width": 960,
+    "decoder": "sw",
+    "alarms": "suppressed"
+  },
+  "notes": "The VLM runs on this same Jetson, next to the stream engine and the custom engine (vLLM 0.30, vllm-omni aarch64 image, CUDA 13 through cuda-compat-orin, gpu-memory-utilization 0.7, MAXN). 16B parameters. The official BF16 checkpoint served as is, without quantization.",
+  "runs": [
+    "20261102_110702"
+  ],
+  "sweeps": {
+    "auto": {
+      "points": {
+        "1": {
+          "cameras": 1,
+          "interval_s": 4.71,
+          "interval_p90_s": 5.357,
+          "interval_slowest_s": 4.71,
+          "request_s": 4.674,
+          "answers_per_min": 13.0,
+          "frames_per_request": 3.0,
+          "failed_pct": 0.0,
+          "tap_fps": 3.76,
+          "engine_cpu_pct": 28.2,
+          "engine_ram_mb_per_camera": 597.0,
+          "device_cpu_pct": 8.3,
+          "ready_s": 2.6,
+          "vlm_prompt_tokens": 1551.0,
+          "vlm_output_tokens": 28.3,
+          "vlm_ttft_s": 2.074,
+          "vlm_queue_s": 0.0,
+          "vlm_kv_pct": 0.9,
+          "vlm_running_max": 1,
+          "vlm_waiting_max": 0,
+          "vlm_other_traffic_pct": 0.0,
+          "measure_s": 60,
+          "measured_at": 1793606910.379,
+          "run": "20261102_110702"
+        }
+      },
+      "failures": {}
+    },
+    "1": {
+      "points": {
+        "1": {
+          "cameras": 1,
+          "interval_s": 2.651,
+          "interval_p90_s": 3.047,
+          "interval_slowest_s": 2.651,
+          "request_s": 2.663,
+          "answers_per_min": 23.0,
+          "frames_per_request": 1.0,
+          "failed_pct": 0.0,
+          "tap_fps": 3.76,
+          "engine_cpu_pct": 31.4,
+          "engine_ram_mb_per_camera": 588.0,
+          "device_cpu_pct": 9.1,
+          "ready_s": 2.6,
+          "vlm_prompt_tokens": 527.0,
+          "vlm_output_tokens": 21.1,
+          "vlm_ttft_s": 0.777,
+          "vlm_queue_s": 0.0,
+          "vlm_kv_pct": 0.3,
+          "vlm_running_max": 1,
+          "vlm_waiting_max": 0,
+          "vlm_other_traffic_pct": 0.0,
+          "measure_s": 60,
+          "measured_at": 1793606997.413,
+          "run": "20261102_110702"
+        },
+        "4": {
+          "cameras": 4,
+          "interval_s": 4.038,
+          "interval_p90_s": 4.841,
+          "interval_slowest_s": 4.24,
+          "request_s": 4.027,
+          "answers_per_min": 58.8,
+          "frames_per_request": 1.0,
+          "failed_pct": 0.0,
+          "tap_fps": 3.75,
+          "engine_cpu_pct": 114.7,
+          "engine_ram_mb_per_camera": 485.0,
+          "device_cpu_pct": 15.1,
+          "ready_s": 3.0,
+          "vlm_prompt_tokens": 536.0,
+          "vlm_output_tokens": 23.1,
+          "vlm_ttft_s": 0.928,
+          "vlm_queue_s": 0.0,
+          "vlm_kv_pct": 1.2,
+          "vlm_running_max": 4,
+          "vlm_waiting_max": 0,
+          "vlm_other_traffic_pct": 0.0,
+          "measure_s": 60,
+          "measured_at": 1793607171.693,
+          "run": "20261102_110702"
+        }
+      },
+      "failures": {}
+    },
+    "2": {
+      "points": {
+        "1": {
+          "cameras": 1,
+          "interval_s": 3.331,
+          "interval_p90_s": 4.123,
+          "interval_slowest_s": 3.331,
+          "request_s": 3.353,
+          "answers_per_min": 17.9,
+          "frames_per_request": 2.0,
+          "failed_pct": 0.0,
+          "tap_fps": 3.76,
+          "engine_cpu_pct": 32.4,
+          "engine_ram_mb_per_camera": 585.0,
+          "device_cpu_pct": 6.0,
+          "ready_s": 3.1,
+          "vlm_prompt_tokens": 1039.0,
+          "vlm_output_tokens": 25.9,
+          "vlm_ttft_s": 1.085,
+          "vlm_queue_s": 0.0,
+          "vlm_kv_pct": 0.6,
+          "vlm_running_max": 1,
+          "vlm_waiting_max": 0,
+          "vlm_other_traffic_pct": 0.0,
+          "measure_s": 60,
+          "measured_at": 1793607349.236,
+          "run": "20261102_110702"
+        }
+      },
+      "failures": {}
+    }
+  }
+}

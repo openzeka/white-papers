@@ -32,7 +32,10 @@ python3 _tools/check_translation.py  # every translation against its English sou
 Benchmark runs for the LLM Inference Benchmark Explorer have their own
 procedure: [`skills/add-benchmark/SKILL.md`](skills/add-benchmark/SKILL.md);
 runs for the VLM Inference Benchmark Explorer:
-[`skills/add-vlm-benchmark/SKILL.md`](skills/add-vlm-benchmark/SKILL.md).
+[`skills/add-vlm-benchmark/SKILL.md`](skills/add-vlm-benchmark/SKILL.md). The CV and
+Cordatus Custom Engine VLM explorers are written by their benchmark tools'
+exporters; see the README in `assets/data/cv-benchmarks/` and
+`assets/data/custom-engine-vlm-benchmarks/`.
 
 ## Local Development
 

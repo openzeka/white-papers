@@ -5,7 +5,7 @@
   Not visible on the page. The per-run explanations are written by
   benchmark-explained.html and published in /llms-full.txt.
 
-  Include as: {% include benchmark-jsonld.html kind="llm" %}  or  kind="cv"  or  kind="vlm"
+  Include as: {% include benchmark-jsonld.html kind="llm" %}  or  kind="cv"  or  kind="vlm"  or  kind="cevlm"
 {%- endcomment -%}
 {%- assign page_url = page.canonical_url | default: page.url | absolute_url -%}
 {%- assign company = site.data[site.active_lang].company -%}
@@ -71,6 +71,28 @@
   "keywords": {{ models | concat: devices | jsonify }},
   "measurementTechnique": "One or more photos per request (480p to 2K), prompt \"Describe the scene.\", up to 128 output tokens, one request in flight per camera, up to 4, 8 or 16 cameras depending on the device, mean values",
   "variableMeasured": ["Response time: time to first token (s)", "Per-request output tokens per second", "Concurrent cameras", "Max cameras meeting the response time target"],
+  "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": {{ data_url | jsonify }} }, { "@type": "DataDownload", "encodingFormat": "text/plain", "contentUrl": {{ "/llms-full.txt" | absolute_url | jsonify }} }]
+}
+</script>
+{%- elsif include.kind == "cevlm" and site.data.oz_cevlm -%}
+{%- assign rows = site.data.oz_cevlm.oz_rows -%}
+{%- assign data_url = "/assets/data/custom-engine-vlm-benchmarks/index.json" | absolute_url -%}
+{%- assign models = rows | map: "model" | uniq | sort -%}
+{%- assign devices = rows | map: "device" | uniq | sort -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": {{ page.title | jsonify }},
+  "description": {{ page.description | strip | jsonify }},
+  "url": {{ page_url | jsonify }},
+  "inLanguage": {{ site.active_lang | jsonify }},
+  "dateModified": {{ page.last_modified_date | default: page.date | date: "%Y-%m-%d" | jsonify }},
+  "creator": { "@type": "Organization", "name": {{ company.legal_name | jsonify }}, "url": {{ company.website | jsonify }} },
+  "isAccessibleForFree": true,
+  "keywords": {{ models | concat: devices | jsonify }},
+  "measurementTechnique": "Cordatus Stream Engine with custom_engine_vlm on the device, one 720p H.264 15 FPS clip replayed over RTSP per camera, four frames per second taken from each camera, prompt \"Describe the scene in one sentence.\", one question in flight per camera, VLM on a separate GPU server, 60 seconds per camera count",
+  "variableMeasured": ["Interval between two answers per camera (s)", "Answers per minute", "Engine CPU (cores)", "Engine memory per camera (MB)", "Frames per request", "Max cameras meeting the interval target"],
   "distribution": [{ "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": {{ data_url | jsonify }} }, { "@type": "DataDownload", "encodingFormat": "text/plain", "contentUrl": {{ "/llms-full.txt" | absolute_url | jsonify }} }]
 }
 </script>

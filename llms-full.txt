@@ -13,6 +13,8 @@ permalink: /llms-full.txt
 {%- assign cv = site.data.oz_cv.oz_rows -%}
 {%- assign vlm = site.data.oz_vlm.benchmarks -%}
 {%- assign vcfg = site.data.oz_vlm.oz_config -%}
+{%- assign cevlm = site.data.oz_cevlm.oz_rows -%}
+{%- assign cecfg = site.data.oz_cevlm.oz_config -%}
 {%- assign tr = site.data.tr.strings.sentences -%}
 {%- assign en = site.data.en.strings.sentences -%}
 {%- assign nl = site.data.nl.strings.sentences -%}
@@ -20,10 +22,10 @@ permalink: /llms-full.txt
 
 > OpenZeka Teknoloji A.Ş.'nin LLM ve CV çıkarım benchmark'ları: hangi model, hangi NVIDIA cihazında, hangi hızda ve kaç kullanıcıya ya da kameraya hizmet verebilir. / OpenZeka's LLM and CV inference benchmarks: which model runs on which NVIDIA device, how fast, and for how many users or cameras.
 
-Birincil kaynak (Türkçe) / Primary source (Turkish): {{ site.url }}/tr/llm-inference-benchmarks/ · {{ site.url }}/tr/cv-inference-benchmarks/ · {{ site.url }}/tr/vlm-inference-benchmarks/
-English: {{ site.url }}/llm-inference-benchmarks/ · {{ site.url }}/cv-inference-benchmarks/ · {{ site.url }}/vlm-inference-benchmarks/
-Nederlands / Dutch: {{ site.url }}/nl/llm-inference-benchmarks/ · {{ site.url }}/nl/cv-inference-benchmarks/ · {{ site.url }}/nl/vlm-inference-benchmarks/
-Ham veri / Raw data: {{ site.url }}/assets/data/benchmarks.json · {{ site.url }}/assets/data/cv-benchmarks/index.json · {{ site.url }}/assets/data/vlm-benchmarks.json
+Birincil kaynak (Türkçe) / Primary source (Turkish): {{ site.url }}/tr/llm-inference-benchmarks/ · {{ site.url }}/tr/cv-inference-benchmarks/ · {{ site.url }}/tr/vlm-inference-benchmarks/ · {{ site.url }}/tr/custom-engine-vlm-benchmarks/
+English: {{ site.url }}/llm-inference-benchmarks/ · {{ site.url }}/cv-inference-benchmarks/ · {{ site.url }}/vlm-inference-benchmarks/ · {{ site.url }}/custom-engine-vlm-benchmarks/
+Nederlands / Dutch: {{ site.url }}/nl/llm-inference-benchmarks/ · {{ site.url }}/nl/cv-inference-benchmarks/ · {{ site.url }}/nl/vlm-inference-benchmarks/ · {{ site.url }}/nl/custom-engine-vlm-benchmarks/
+Ham veri / Raw data: {{ site.url }}/assets/data/benchmarks.json · {{ site.url }}/assets/data/cv-benchmarks/index.json · {{ site.url }}/assets/data/vlm-benchmarks.json · {{ site.url }}/assets/data/custom-engine-vlm-benchmarks/index.json
 Please cite the explorer page, not this file. Each record's link opens that run in the interactive table.
 
 ## LLM çıkarım benchmark'ları / LLM inference benchmarks
@@ -88,4 +90,25 @@ Defaults used below / Aşağıdaki varsayılanlar: image size {{ vcfg.resolution
 - TR: {{ r.text.tr }}
 - EN: {{ r.text.en }}
 - NL: {{ r.text.nl }}
+{% endfor %}
+## Custom Engine VLM benchmark'ları / Custom Engine VLM benchmarks
+
+{{ tr.cevlm_intro }}
+
+{{ en.cevlm_intro }}
+
+{{ nl.cevlm_intro }}
+
+Defaults used below / Aşağıdaki varsayılanlar: frames per request {{ cecfg.frames }}, interval (slowest camera) ≤ {{ cecfg.target_s }} s with no failed request. Max cameras = highest measured camera count meeting it; "+" = the sweep met the target even at the highest count measured, so the figure is a minimum.
+{% for r in cevlm %}
+### {{ r.device }} · {{ r.model }} · {{ r.quantization }} · {{ r.engine }} on {{ r.server }}
+
+- link: {{ site.url }}/tr/custom-engine-vlm-benchmarks/#{{ r.id }} (EN: {{ site.url }}/custom-engine-vlm-benchmarks/#{{ r.id }})
+- device: {{ r.device }}{% if r.device_product %}; product: {{ r.device_product }}{% endif %}; pipeline: Cordatus Stream Engine {{ r.stream_engine }} with custom_engine_vlm
+- VLM server: {{ r.model }}; parameters: {{ r.params }}; {{ r.quantization }}, {{ r.engine }}{% if r.engine_version %} {{ r.engine_version }}{% endif %} on {{ r.server }}
+- measured (frames per request: cameras, interval for the slowest camera): {{ r.oz_sweep }}
+- Max cameras: {{ r.oz_max }}{% if r.oz_open %}+{% endif %}
+- TR: {{ r.oz_text.tr }}
+- EN: {{ r.oz_text.en }}
+- NL: {{ r.oz_text.nl }}
 {% endfor %}

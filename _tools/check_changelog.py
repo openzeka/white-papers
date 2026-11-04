@@ -6,11 +6,12 @@
 Every entry: a valid date, entries newest first, one of the four types, text
 in every language (en, tr, nl), and the reference its type needs — paper:
 page, benchmarks: run, vlm: vlm (or page, for a batch of runs announced
-together), cv: cv. Every page id exists in every
+together), cv: cv, cevlm: cevlm. Every page id exists in every
 language, every run id is in the LLM store (assets/data/llm-benchmarks/), every
 VLM run id in the VLM store (assets/data/vlm-benchmarks/), every CV id in
-assets/data/cv-benchmarks/index.json, and each run or CV result is listed
-once. No company name in the text. The build (_plugins/changelog.rb) also
+assets/data/cv-benchmarks/index.json, every Custom Engine VLM id in
+assets/data/custom-engine-vlm-benchmarks/index.json, and each run or result is
+listed once. No company name in the text. The build (_plugins/changelog.rb) also
 fails on an id it cannot resolve.
 """
 import datetime, glob, io, json, re, sys
@@ -21,8 +22,8 @@ except ImportError:
     sys.exit("needs PyYAML (pip install pyyaml)")
 
 LANGS = ["en", "tr", "nl"]
-TYPES = {"paper", "benchmarks", "vlm", "cv"}
-NEEDS = {"paper": "page", "benchmarks": "run", "vlm": "vlm", "cv": "cv"}
+TYPES = {"paper", "benchmarks", "vlm", "cv", "cevlm"}
+NEEDS = {"paper": "page", "benchmarks": "run", "vlm": "vlm", "cv": "cv", "cevlm": "cevlm"}
 COMPANY = re.compile(r"openzeka|cordatus", re.I)   # company details live in company.yml
 
 entries = yaml.safe_load(io.open("_data/changelog.yml", encoding="utf-8")) or []
@@ -32,6 +33,8 @@ runs = {r["id"] for r in bench_store.load_llm()["benchmarks"]}
 vlms = {r["id"] for r in bench_store.load_vlm()["benchmarks"]}
 cvidx = json.load(io.open("assets/data/cv-benchmarks/index.json", encoding="utf-8"))
 cvs = {m["path"][:-5].replace("/", "-") for d in cvidx["devices"] for m in d["models"]}
+ceidx = json.load(io.open("assets/data/custom-engine-vlm-benchmarks/index.json", encoding="utf-8"))
+cevlms = {c["path"][:-5].replace("/", "-") for d in ceidx["devices"] for c in d["configs"]}
 
 pages = {l: set() for l in LANGS}
 for path in glob.glob("**/*.md", recursive=True):
@@ -86,6 +89,12 @@ for i, e in enumerate(entries, 1):
         elif e["cv"] in listed:
             errors.append(f"{where}: CV result {e['cv']!r} is already listed")
         listed.add(e["cv"])
+    if e.get("cevlm"):
+        if e["cevlm"] not in cevlms:
+            errors.append(f"{where}: Custom Engine VLM configuration {e['cevlm']!r} not in custom-engine-vlm-benchmarks/index.json")
+        elif e["cevlm"] in listed:
+            errors.append(f"{where}: Custom Engine VLM configuration {e['cevlm']!r} is already listed")
+        listed.add(e["cevlm"])
 
 for x in errors:
     print("ERROR", x)
