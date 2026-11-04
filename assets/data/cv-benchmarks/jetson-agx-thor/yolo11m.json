@@ -4,7 +4,7 @@
   "task": "detector",
   "classes": 80,
   "input_resolution": "640x640",
-  "precision": "",
+  "precision": "FP16",
   "deepstream": "8.0.0",
   "source_profile": "live-1080p20",
   "measure_s": 30,
