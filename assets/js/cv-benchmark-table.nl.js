@@ -15,12 +15,7 @@
     noMatch: "Geen configuraties komen overeen met de huidige filters.",
 
     cameras: "Tot hoeveel camera's",
-    camerasHint: function (max) {
-      return "Verbergt metingen boven dit aantal; de schuifregelaar stopt bij " + max +
-        ", het hoogste aantal camera's dat tot nu toe is gemeten.";
-    },
     camerasValue: function (n) { return n + (n === 1 ? " camera" : " camera's"); },
-    filters: "Filters",
     searchModels: "Modellen zoeken…",
     device: "Apparaat",
     model: "Model",
@@ -53,6 +48,12 @@
     detailStatus: "Status",
     pass: "PASS",
     fail: "FAIL",
+    failReasons: {
+      engine_stopped: "de engine stopte nadat de taak startte",
+      not_ready: "niet elke camera kwam op tijd op",
+      error: "de run mislukte"
+    },
+    failedTip: "Een hoger aantal camera's mislukte volledig (zie de meting), dus dit is de grens voor deze opstelling, geen ondergrens.",
 
     notMeasured: "niets gemeten bij of onder dit aantal camera's",
     atCamerasTip: function (n, limit) {
@@ -92,17 +93,18 @@
     runs: "Runs:",
     measuredFor: function (s) { return "Gemeten gedurende " + s + " s per aantal camera's."; },
     hardware: "Hardware:",
+    notes: "Notities:",
 
     /* Tooltips */
     tip: {
       model: "<strong>Model</strong><p>Het detectiemodel dat wordt uitgevoerd, met de numerieke precisie waarmee de engine ervan is gebouwd (INT8, FP16…) naast de naam, waar die is vastgelegd.</p><p>Een rij is een volledige deploymentconfiguratie, geen model, dus hetzelfde model verschijnt één keer voor elk apparaat waarop het is gemeten.</p>",
       input: "<strong>Inputresolutie</strong><p>Het formaat in pixels waarnaar elk frame wordt geschaald voordat het model het ziet — breedte × hoogte.</p><p>Dit is de eigen input van het model, niet die van de camera: de camera's streamen in 1080p. Een grotere input kost meer rekenwerk per frame.</p>",
       device: "<strong>Apparaat</strong><p>De hardware waarop de pipeline draaide — een Jetson-module, een DGX Spark op basis van GB10 of een GeForce-desktop-GPU.</p><p>De details van hardware en software staan in de uitgeklapte rij.</p>",
-      atCameras: "<strong>Camera's</strong><p>Het aantal gelijktijdige camerastreams waarbij de cijfers van deze rij zijn gemeten.</p><p>Elke rij toont de zwaarste belasting waaronder ze is gemeten, bij of onder de cameralimiet in het filterpaneel, dus rijen kunnen hier verschillen. Lees de framerates samen met het aantal ernaast.</p>",
+      atCameras: "<strong>Camera's</strong><p>Het aantal gelijktijdige camerastreams waarbij de cijfers van deze rij zijn gemeten.</p><p>Elke rij toont de zwaarste belasting waaronder ze is gemeten, bij of onder de cameralimiet in de filters, dus rijen kunnen hier verschillen. Lees de framerates samen met het aantal ernaast.</p>",
       perCam: "<strong>FPS / camera</strong><p>Hoeveel frames per seconde er voor <em>elke</em> camera worden verwerkt, bij dat aantal camera's. Dit is het getal voor de vraag „houdt dit mijn camera's bij”.</p><p>De camera's zelf streamen met 20 FPS, dus 20 is het plafond. Groen haalt uw doel-FPS, rood niet.</p><p><em>Hoger is beter.</em></p>",
       total: "<strong>Totale FPS</strong><p>Frames per seconde die over alle camera's samen worden verwerkt — ongeveer FPS per camera × aantal camera's.</p><p>De totale doorvoer van de pipeline. Waar die niet meer groeit wanneer er camera's bijkomen, heeft het apparaat zijn limiet bereikt.</p>",
       drop: "<strong>Drop %</strong><p>Frames die de pipeline binnenkwamen maar er niet uitkwamen, als aandeel van de input, bij dat aantal camera's.</p><p>Kleine negatieve waarden betekenen dat er tijdens het meetvenster iets meer frames uit dan in zijn geteld; lees ze als nul. Drop % heeft geen invloed op PASS / FAIL of Max. camera's.</p><p><em>Bijna nul is gezond.</em></p>",
-      maxCams: "<strong>Max. camera's</strong><p>Het hoogste <em>gemeten</em> aantal camera's waarbij deze configuratie uw doel-FPS per camera nog haalt, tot de cameralimiet in het filterpaneel.</p><p>Alleen afgeleid uit de gemeten punten — er wordt niets geëxtrapoleerd — en de waarde is 0 als geen daarvan het doel haalt. Ze verandert wanneer u het doel wijzigt.</p><p>Een ≥ betekent dat het apparaat bij het hoogste getoonde aantal nog de eigen framerate van de camera's leverde, binnen 10%: de werkelijke limiet werd niet bereikt, dus het cijfer is een ondergrens.</p>",
+      maxCams: "<strong>Max. camera's</strong><p>Het hoogste <em>gemeten</em> aantal camera's waarbij deze configuratie uw doel-FPS per camera nog haalt, tot de cameralimiet in de filters.</p><p>Alleen afgeleid uit de gemeten punten — er wordt niets geëxtrapoleerd — en de waarde is 0 als geen daarvan het doel haalt. Ze verandert wanneer u het doel wijzigt.</p><p>Een ≥ betekent dat het apparaat bij het hoogste getoonde aantal nog de eigen framerate van de camera's leverde, binnen 10%: de werkelijke limiet werd niet bereikt, dus het cijfer is een ondergrens.</p>",
 
       fCameras: "<strong>Cameralimiet</strong><p>Een bovengrens voor het aantal camera's, geen selectie. Alles wat daarboven is gemeten, wordt verborgen.</p><p>Elke rij toont dan de zwaarste belasting waarbij ze tot dit aantal is gemeten, en de reeks, de grafiek en de preview volgen. Een configuratie zonder metingen zo laag verdwijnt uit de tabel totdat de limiet wordt verhoogd.</p>",
       fDevice: "<strong>Apparaatfilter</strong><p>De hardware waarop een configuratie draaide.</p><p>Kies er meerdere om apparaten direct te vergelijken.</p>",
@@ -162,6 +164,7 @@
     var seen = {};
     data.benchmarks.forEach(function (b) {
       b.data_points.forEach(function (p) { seen[p.cameras] = true; });
+      b.failures.forEach(function (p) { seen[p.cameras] = true; });
     });
     return Object.keys(seen).map(Number).sort(function (a, b) { return a - b; });
   }
@@ -202,6 +205,16 @@
     return best;
   }
 
+  /* A camera count above the row's headline that failed outright - the engine
+     stopped, the cameras never came up - so the headline is the limit. */
+  function failedAbove(entry) {
+    var point = shownPoint(entry);
+    var from = point ? point.cameras : 0;
+    return entry.failures.some(function (f) {
+      return f.cameras > from && f.cameras <= state.camerasMax;
+    });
+  }
+
   function sourceFps(entry) {
     return Number(entry.source_fps) || Number((data.source_profile || {}).fps) || 20;
   }
@@ -237,34 +250,32 @@
     var cameras = allCameraCounts();
     var maxCams = cameras.length ? cameras[cameras.length - 1] : 1;
 
-    /* Filters sit beside the table rather than above it, and stay put while
-       the table scrolls: with a sweep expanded the table runs several screens
-       long, and a control you have to scroll back up to find is a control you
-       stop using. */
-    var html = '<div class="cvbt-layout">';
+    /* The same layout as the LLM and VLM explorers: the filters above the
+       table, one row each - what is shown (device, model) first, then the
+       camera limit that frames every number in the table. */
+    var html = '<div class="bt-controls"><div class="bt-filters" id="cvbt-filters">';
+    html += filterRow(S.device, S.tip.fDevice, deviceButtons());
+    html += filterRow(S.model, S.tip.fModel, '<div class="bt-model-row">' + modelList() + "</div>");
+    html += '<div class="bt-filter-row bt-filter-row-perf cvbt-group-start">' +
+      '<div class="bt-perf-item"><span class="bt-filter-label bt-inline-label">' +
+      escapeHTML(S.cameras) + tip(S.tip.fCameras) + "</span>" +
+      '<div class="bt-slider-group bt-slider-perf">' +
+      '<span class="bt-slider-value" id="cvbt-cameras-value">' +
+      escapeHTML(S.camerasValue(state.camerasMax)) + "</span>" +
+      '<input type="range" id="cvbt-cameras" min="' + cameras[0] + '" max="' + maxCams +
+      '" step="1" value="' + state.camerasMax + '" aria-label="' + escapeHTML(S.cameras) + '">' +
+      "</div></div></div>";
+    html += '<div class="bt-filter-row bt-reset-row">' +
+      '<button type="button" class="bt-reset" id="cvbt-reset">' +
+      escapeHTML(S.resetFilters) + "</button>" + tip(S.tip.reset) + "</div>";
+    html += "</div></div>";
+
+    /* cvbt-main carries the table's own rules (tighter cells, wrapping
+       headers) in cv-benchmark-table.css. */
     html += '<div class="cvbt-main">';
     html += '<div class="bt-results-count" id="cvbt-count"></div>';
     html += '<div class="bt-table-wrap" id="cvbt-table"></div>';
     html += "</div>";
-
-    html += '<aside class="cvbt-side"><div class="cvbt-side-inner">';
-    html += '<div class="cvbt-side-title">' + escapeHTML(S.filters) + "</div>";
-    html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.cameras) + tip(S.tip.fCameras) + "</span>" +
-      '<div class="bt-slider-group cvbt-slider">' +
-      '<input type="range" id="cvbt-cameras" min="' + cameras[0] + '" max="' + maxCams +
-      '" step="1" value="' + state.camerasMax + '" aria-label="' + escapeHTML(S.cameras) + '">' +
-      '<span class="bt-slider-value" id="cvbt-cameras-value">' +
-      escapeHTML(S.camerasValue(state.camerasMax)) + "</span></div>" +
-      '<p class="cvbt-side-hint">' + escapeHTML(S.camerasHint(maxCams)) + "</p></div>";
-    html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.device) + tip(S.tip.fDevice) + "</span>" + deviceButtons() + "</div>";
-    html += '<div class="cvbt-side-group"><span class="bt-filter-label">' +
-      escapeHTML(S.model) + tip(S.tip.fModel) + "</span>" + modelList() + "</div>";
-    html += '<div class="cvbt-reset-row">' +
-      '<button type="button" class="bt-btn cvbt-reset" id="cvbt-reset">' +
-      escapeHTML(S.resetFilters) + "</button>" + tip(S.tip.reset) + "</div>";
-    html += "</div></aside></div>";
     /* Outside the table and the panel, both of which are redrawn: the bubble
        is position:fixed and follows whichever icon opened it. */
     html += '<div class="bt-tooltip" id="cvbt-tooltip" role="tooltip" hidden></div>';
@@ -302,6 +313,13 @@
   }
 
   /* A permanent result page: the table with its one row, opened. */
+  /* A labelled filter row, as in the VLM explorer. */
+  function filterRow(label, tipHtml, body, extraClass) {
+    return '<div class="bt-filter-row' + (extraClass ? " " + extraClass : "") + '">' +
+      '<span class="bt-filter-label">' + escapeHTML(label) + tip(tipHtml) + "</span>" +
+      body + "</div>";
+  }
+
   function buildSingle(container) {
     var html = '<div class="bt-table-wrap bt-single" id="cvbt-table"></div>' +
       '<div class="bt-tooltip" id="cvbt-tooltip" role="tooltip" hidden></div>';
@@ -381,8 +399,7 @@
          one must not also sort the column or toggle anything. */
       if (e.target.closest(".bt-tip")) return;
 
-      var btn = e.target.closest(".bt-btn");
-      if (btn && btn.id === "cvbt-reset") { reset(container); return; }
+      if (e.target.closest("#cvbt-reset")) { reset(container); return; }
 
       var dev = e.target.closest("[data-device]");
       if (dev) {
@@ -713,10 +730,11 @@
     }
 
     var max = maxCameras(entry);
-    var limited = !saturated(entry);
+    var failed = failedAbove(entry);
+    var limited = !saturated(entry) && !failed;
     html += '<td class="bt-num"' +
       (limited ? ' title="' + escapeHTML(S.sourceLimitedTip(sourceFps(entry))) + '"'
-               : ' title="' + escapeHTML(S.saturatedTip) + '"') + ">" +
+               : ' title="' + escapeHTML(failed ? S.failedTip : S.saturatedTip) + '"') + ">" +
       (max > 0 ? max : '<span class="bt-muted">0</span>') +
       (limited ? ' <span class="bt-muted">≥</span>' : "") + "</td>";
     html += '<td class="bt-expand-cell">' + (only ? "" : expanded ? "&#9660;" : "&#9654;") + "</td>";
@@ -742,7 +760,17 @@
       "<th>" + escapeHTML(S.detailTotal) + "</th>" +
       "<th>" + escapeHTML(S.detailDrop) + "</th>" +
       "<th>" + escapeHTML(S.detailStatus) + "</th></tr></thead><tbody>";
-    pointsWithin(entry).forEach(function (p) {
+    var failures = entry.failures.filter(function (f) { return f.cameras <= state.camerasMax; });
+    pointsWithin(entry).concat(failures).sort(function (a, b) { return a.cameras - b.cameras; })
+      .forEach(function (p) {
+      if (p.reason) {
+        /* No measurement to preview: the row says why instead. */
+        var why = S.failReasons[p.reason] || S.failReasons.error;
+        html += '<tr class="cvbt-fail-row" title="' + escapeHTML(why) + '"><td>' + p.cameras +
+          '</td><td class="cvbt-fail-why" colspan="3">' + escapeHTML(why) +
+          '</td><td class="bt-detail-fail">' + escapeHTML(S.fail) + "</td></tr>";
+        return;
+      }
       var ok = p.fps_per_camera >= state.targetFps;
       /* Each measurement drives the preview beside it, so the row is a
          control: focusable, Enter/Space-activated, and labelled with its own
@@ -774,6 +802,7 @@
     if (entry.cpu) facts.push(escapeHTML(entry.cpu));
     html += '<div class="bt-detail-notes"><strong>' + escapeHTML(S.hardware) + "</strong> " +
       facts.join(" · ");
+    if (entry.notes) html += "<br><strong>" + escapeHTML(S.notes) + "</strong> " + escapeHTML(entry.notes);
     if (entry.measure_s) html += "<br>" + escapeHTML(S.measuredFor(entry.measure_s));
     if (entry.runs && entry.runs.length) {
       html += "<br><strong>" + escapeHTML(S.runs) + "</strong> " +
@@ -1152,6 +1181,9 @@
       .map(function (k) { return model.points[k]; })
       .sort(function (a, b) { return a.cameras - b.cameras; });
     if (!points.length) return null;
+    var failures = Object.keys(model.failures || {})
+      .map(function (k) { return model.failures[k]; })
+      .sort(function (a, b) { return a.cameras - b.cameras; });
 
     var profiles = index.source_profiles || {};
     var profile = profiles[model.source_profile || index.default_source_profile] || {};
@@ -1177,6 +1209,7 @@
       runs: model.runs || [],
       source_fps: Number(profile.fps) || 20,
       data_points: points,
+      failures: failures,
     };
   }
 

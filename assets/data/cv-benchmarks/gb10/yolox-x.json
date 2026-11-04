@@ -1,0 +1,66 @@
+{
+  "name": "YOLOX-X",
+  "model_id": "M-9119",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "FP16",
+  "deepstream": "8.0.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames.",
+  "runs": [
+    "20261103_105046",
+    "20261103_105311",
+    "20261103_105416",
+    "20261103_105521",
+    "20261103_105626"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.9,
+      "fps_total": 19.9,
+      "drop_pct": 0.17,
+      "measured_at": 1793692246.36,
+      "run": "20261103_105046",
+      "run_id": "M-9119_1cam_689a4044"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 20.05,
+      "fps_total": 40.11,
+      "drop_pct": 0.02,
+      "measured_at": 1793692391.506,
+      "run": "20261103_105311",
+      "run_id": "M-9119_2cam_d7f0ccf8"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 19.91,
+      "fps_total": 79.64,
+      "drop_pct": 0.98,
+      "measured_at": 1793692456.526,
+      "run": "20261103_105416",
+      "run_id": "M-9119_4cam_69479969"
+    },
+    "6": {
+      "cameras": 6,
+      "fps_per_camera": 18.19,
+      "fps_total": 109.12,
+      "drop_pct": -0.31,
+      "measured_at": 1793692586.785,
+      "run": "20261103_105626",
+      "run_id": "M-9119_6cam_c00e08bf"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 14.12,
+      "fps_total": 112.95,
+      "drop_pct": -0.17,
+      "measured_at": 1793692521.645,
+      "run": "20261103_105521",
+      "run_id": "M-9119_8cam_62e0c06b"
+    }
+  }
+}

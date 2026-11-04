@@ -1,0 +1,66 @@
+{
+  "name": "YOLOV8-S",
+  "model_id": "M-9102",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "FP16",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Clocks locked at maximum with jetson_clocks and the VIC (video scaler) clock pinned to its maximum: left on its default governor the VIC stayed at 115 MHz and capped every Jetson pipeline near 100 FPS in total.",
+  "runs": [
+    "20261103_095543",
+    "20261103_102140",
+    "20261103_102255",
+    "20261103_102511",
+    "20261103_102726"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 20.14,
+      "fps_total": 20.14,
+      "drop_pct": -0.61,
+      "measured_at": 1793688943.879,
+      "run": "20261103_095543",
+      "run_id": "M-9102_1cam_8d1aff88"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.93,
+      "fps_total": 39.87,
+      "drop_pct": 0.07,
+      "measured_at": 1793690500.719,
+      "run": "20261103_102140",
+      "run_id": "M-9102_2cam_9c34c73a"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 15.55,
+      "fps_total": 62.2,
+      "drop_pct": -1.27,
+      "measured_at": 1793690575.832,
+      "run": "20261103_102255",
+      "run_id": "M-9102_4cam_54920e0a"
+    },
+    "6": {
+      "cameras": 6,
+      "fps_per_camera": 10.83,
+      "fps_total": 64.97,
+      "drop_pct": 0.52,
+      "measured_at": 1793690846.207,
+      "run": "20261103_102726",
+      "run_id": "M-9102_6cam_4cce1dc8"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 8.38,
+      "fps_total": 67.01,
+      "drop_pct": -0.07,
+      "measured_at": 1793690711.082,
+      "run": "20261103_102511",
+      "run_id": "M-9102_8cam_ba24b783"
+    }
+  }
+}

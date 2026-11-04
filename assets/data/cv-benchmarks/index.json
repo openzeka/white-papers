@@ -1,5 +1,5 @@
 {
-  "generated_at": 1789707461.269818,
+  "generated_at": 1793770338.7050755,
   "config": {
     "target_fps": 15.0,
     "max_drop_pct": 2.0
@@ -12,6 +12,14 @@
       "fps": 20,
       "codec": "H.264",
       "note": "live office IP cameras, fixed 20 FPS"
+    },
+    "replay-1080p20": {
+      "id": "replay-1080p20",
+      "kind": "replay-rtsp",
+      "resolution": "1920x1080",
+      "fps": 20,
+      "codec": "H.264",
+      "note": "one recorded office camera clip (1080p20 H.264) replayed over RTSP to every camera"
     }
   },
   "default_source_profile": "live-1080p20",
@@ -26,6 +34,43 @@
       "path": "gb10/device.json",
       "models": [
         {
+          "name": "DashCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "gb10/dashcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "LPDNet",
+          "precision": "INT8",
+          "input_resolution": "640x480",
+          "path": "gb10/lpdnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            48,
+            52,
+            54,
+            56,
+            64
+          ]
+        },
+        {
           "name": "PeopleNet",
           "precision": "INT8",
           "input_resolution": "960x544",
@@ -35,18 +80,987 @@
             2,
             4,
             8,
-            10,
+            16,
+            32,
+            34,
+            36,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "TrafficCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "gb10/trafficcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            36,
+            38,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "YOLO11-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolo11-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
             12,
             14,
+            16
+          ]
+        },
+        {
+          "name": "YOLO11-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolo11-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
             16,
-            18,
-            20,
-            22,
+            32,
+            36,
+            38,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "YOLO11-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolo11-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
             24,
-            26,
             28,
             30,
             32
+          ]
+        },
+        {
+          "name": "YOLO11-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolo11-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV10-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov10-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV10-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov10-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV10-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov10-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "YOLOV10-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov10-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            24,
+            28,
+            30,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV10-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov10-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            20,
+            22,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV5-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40,
+            44,
+            46,
+            48
+          ]
+        },
+        {
+          "name": "YOLOV5-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "YOLOV5-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5U-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5u-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5U-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5u-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV5U-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5u-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "YOLOV5U-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov5u-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV6-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov6-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV6-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov6-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV6-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov6-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "YOLOV6-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov6-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            24,
+            28,
+            30,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV8-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov8-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV8-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov8-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV8-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov8-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            36,
+            38,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "YOLOV8-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov8-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            24,
+            28,
+            30,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV8-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov8-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV9-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov9-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV9-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolov9-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            20,
+            22,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOX-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolox-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOX-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolox-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOX-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolox-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            24,
+            28,
+            30,
+            32
+          ]
+        },
+        {
+          "name": "YOLOX-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "gb10/yolox-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jetson AGX Orin 64GB",
+      "slug": "jetson-agx-orin-64gb",
+      "kind": "Jetson",
+      "path": "jetson-agx-orin-64gb/device.json",
+      "models": [
+        {
+          "name": "DashCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-agx-orin-64gb/dashcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            20,
+            22,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "LPDNet",
+          "precision": "INT8",
+          "input_resolution": "640x480",
+          "path": "jetson-agx-orin-64gb/lpdnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40,
+            48
+          ]
+        },
+        {
+          "name": "PeopleNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-agx-orin-64gb/peoplenet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "TrafficCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-agx-orin-64gb/trafficcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            20,
+            22,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLO11-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolo11-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLO11-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolo11-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLO11-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolo11-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV10-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov10-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV10-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov10-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV10-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov10-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            20,
+            22,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV10-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov10-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5U-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov5u-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV5U-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov5u-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5U-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov5u-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV6-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov6-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV6-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov6-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV6-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov6-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV6-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov6-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV8-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov8-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV8-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov8-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV8-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov8-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV8-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov8-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV9-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov9-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV9-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolov9-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOX-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolox-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOX-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolox-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOX-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolox-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOX-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-agx-orin-64gb/yolox-x.json",
+          "cameras": [
+            1,
+            2,
+            4
           ]
         }
       ]
@@ -173,6 +1187,34 @@
       "path": "jetson-orin-nano/device.json",
       "models": [
         {
+          "name": "DashCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-orin-nano/dashcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "LPDNet",
+          "precision": "INT8",
+          "input_resolution": "640x480",
+          "path": "jetson-orin-nano/lpdnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
           "name": "PeopleNet",
           "precision": "INT8",
           "input_resolution": "960x544",
@@ -181,7 +1223,821 @@
             1,
             2,
             4,
+            6,
             8
+          ]
+        },
+        {
+          "name": "TrafficCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-orin-nano/trafficcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLO11-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolo11-l.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLO11-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolo11-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLO11-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolo11-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLO11-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolo11-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV10-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov10-l.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV10-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov10-m.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV10-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov10-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV10-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov10-s.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV10-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov10-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV5-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5-l.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV5-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV5-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV5-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV5-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV5U-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5u-l.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV5U-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5u-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV5U-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5u-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV5U-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov5u-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV6-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov6-l.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV6-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov6-m.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV6-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov6-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV6-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov6-s.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV8-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov8-l.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV8-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov8-m.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV8-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov8-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV8-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov8-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV9-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov9-m.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV9-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolov9-s.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOX-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolox-l.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOX-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolox-m.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOX-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolox-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOX-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nano/yolox-x.json",
+          "cameras": [
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Jetson Orin NX 16GB",
+      "slug": "jetson-orin-nx-16gb",
+      "kind": "Jetson",
+      "path": "jetson-orin-nx-16gb/device.json",
+      "models": [
+        {
+          "name": "DashCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-orin-nx-16gb/dashcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "LPDNet",
+          "precision": "INT8",
+          "input_resolution": "640x480",
+          "path": "jetson-orin-nx-16gb/lpdnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            20,
+            22,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "PeopleNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-orin-nx-16gb/peoplenet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "TrafficCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "jetson-orin-nx-16gb/trafficcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLO11-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolo11-l.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLO11-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolo11-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLO11-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolo11-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLO11-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolo11-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV10-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov10-l.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV10-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov10-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV10-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov10-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV10-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov10-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV10-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov10-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV5-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5-l.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV5-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV5-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV5-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV5U-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5u-l.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV5U-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5u-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV5U-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5u-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV5U-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov5u-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV6-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov6-l.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV6-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov6-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV6-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov6-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV6-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov6-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV8-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov8-l.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOV8-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov8-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV8-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov8-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV8-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov8-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOV8-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov8-x.json",
+          "cameras": [
+            1
+          ]
+        },
+        {
+          "name": "YOLOV9-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov9-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOV9-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolov9-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOX-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolox-l.json",
+          "cameras": [
+            1,
+            2
+          ]
+        },
+        {
+          "name": "YOLOX-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolox-m.json",
+          "cameras": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "name": "YOLOX-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolox-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            6,
+            8
+          ]
+        },
+        {
+          "name": "YOLOX-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "jetson-orin-nx-16gb/yolox-x.json",
+          "cameras": [
+            1
           ]
         }
       ]
@@ -215,6 +2071,36 @@
       "path": "rtx-3090/device.json",
       "models": [
         {
+          "name": "DashCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "rtx-3090/dashcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
+          "name": "LPDNet",
+          "precision": "INT8",
+          "input_resolution": "640x480",
+          "path": "rtx-3090/lpdnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
           "name": "PeopleNet",
           "precision": "INT8",
           "input_resolution": "960x544",
@@ -224,22 +2110,45 @@
             2,
             4,
             8,
-            10,
+            16,
+            32,
+            40,
+            42
+          ]
+        },
+        {
+          "name": "TrafficCamNet",
+          "precision": "INT8",
+          "input_resolution": "960x544",
+          "path": "rtx-3090/trafficcamnet-int8.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
+          "name": "YOLO11-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolo11-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
             12,
             14,
-            16,
-            18,
-            20,
-            22,
-            24,
-            26,
-            28,
-            30
+            16
           ]
         },
         {
           "name": "YOLO11-N",
-          "precision": "",
+          "precision": "FP16",
           "input_resolution": "640x640",
           "path": "rtx-3090/yolo11-n.json",
           "cameras": [
@@ -247,13 +2156,500 @@
             2,
             4,
             8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
+          "name": "YOLO11-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolo11-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40
+          ]
+        },
+        {
+          "name": "YOLO11-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolo11-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
             10,
             12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV10-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov10-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
             14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV10-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov10-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV10-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov10-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
+          "name": "YOLOV10-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov10-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40
+          ]
+        },
+        {
+          "name": "YOLOV10-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov10-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            20,
+            22,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV5-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
+          "name": "YOLOV5-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
+          "name": "YOLOV5-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5U-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5u-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV5U-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5u-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV5U-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5u-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            36,
+            38,
+            40
+          ]
+        },
+        {
+          "name": "YOLOV5U-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov5u-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV6-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov6-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV6-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov6-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV6-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov6-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
+          "name": "YOLOV6-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov6-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40
+          ]
+        },
+        {
+          "name": "YOLOV8-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov8-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV8-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov8-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV8-N",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov8-n.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            40
+          ]
+        },
+        {
+          "name": "YOLOV8-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov8-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
             16,
             24,
-            26,
-            28
+            28,
+            30,
+            32
+          ]
+        },
+        {
+          "name": "YOLOV8-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov8-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV9-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov9-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            12,
+            14,
+            16
+          ]
+        },
+        {
+          "name": "YOLOV9-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolov9-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOX-L",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolox-l.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
+          ]
+        },
+        {
+          "name": "YOLOX-M",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolox-m.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            18,
+            20,
+            24,
+            32
+          ]
+        },
+        {
+          "name": "YOLOX-S",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolox-s.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            16,
+            32,
+            34,
+            36,
+            40
+          ]
+        },
+        {
+          "name": "YOLOX-X",
+          "precision": "FP16",
+          "input_resolution": "640x640",
+          "path": "rtx-3090/yolox-x.json",
+          "cameras": [
+            1,
+            2,
+            4,
+            8,
+            10,
+            12,
+            16
           ]
         }
       ]

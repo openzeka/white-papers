@@ -1,0 +1,106 @@
+{
+  "name": "LPDNet",
+  "model_id": "M-19",
+  "task": "detector",
+  "classes": 1,
+  "input_resolution": "640x480",
+  "precision": "INT8",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Clocks locked at maximum with jetson_clocks and the VIC (video scaler) clock pinned to its maximum: left on its default governor the VIC stayed at 115 MHz and capped every Jetson pipeline near 100 FPS in total.",
+  "runs": [
+    "20261103_090930",
+    "20261103_091035",
+    "20261103_091140",
+    "20261103_091245",
+    "20261103_091350",
+    "20261103_091755",
+    "20261103_092441",
+    "20261103_092556",
+    "20261103_092711"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 20.11,
+      "fps_total": 20.11,
+      "drop_pct": 0.03,
+      "measured_at": 1793686170.005,
+      "run": "20261103_090930",
+      "run_id": "M-19_1cam_9bab7190"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 20.06,
+      "fps_total": 40.12,
+      "drop_pct": -0.08,
+      "measured_at": 1793686235.091,
+      "run": "20261103_091035",
+      "run_id": "M-19_2cam_7f170b9a"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 19.73,
+      "fps_total": 78.93,
+      "drop_pct": 0.1,
+      "measured_at": 1793686300.16,
+      "run": "20261103_091140",
+      "run_id": "M-19_4cam_86977bfe"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 20.05,
+      "fps_total": 160.42,
+      "drop_pct": -0.31,
+      "measured_at": 1793686365.234,
+      "run": "20261103_091245",
+      "run_id": "M-19_8cam_80846d9f"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.89,
+      "fps_total": 318.26,
+      "drop_pct": -0.08,
+      "measured_at": 1793686430.385,
+      "run": "20261103_091350",
+      "run_id": "M-19_16cam_4e347e06"
+    },
+    "20": {
+      "cameras": 20,
+      "fps_per_camera": 16.83,
+      "fps_total": 336.59,
+      "drop_pct": -0.19,
+      "measured_at": 1793687156.283,
+      "run": "20261103_092556",
+      "run_id": "M-19_20cam_856b90b5"
+    },
+    "22": {
+      "cameras": 22,
+      "fps_per_camera": 15.08,
+      "fps_total": 331.75,
+      "drop_pct": 0.29,
+      "measured_at": 1793687231.344,
+      "run": "20261103_092711",
+      "run_id": "M-19_22cam_36ea18b9"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 13.85,
+      "fps_total": 332.39,
+      "drop_pct": 0.56,
+      "measured_at": 1793687081.357,
+      "run": "20261103_092441",
+      "run_id": "M-19_24cam_ff52982b"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 10.2,
+      "fps_total": 326.27,
+      "drop_pct": 0.33,
+      "measured_at": 1793686675.707,
+      "run": "20261103_091755",
+      "run_id": "M-19_32cam_2eebe0fa"
+    }
+  }
+}

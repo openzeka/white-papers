@@ -1,0 +1,66 @@
+{
+  "name": "YOLO11-X",
+  "model_id": "M-9025",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "FP16",
+  "deepstream": "8.0.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames.",
+  "runs": [
+    "20261103_091504",
+    "20261103_091729",
+    "20261103_091834",
+    "20261103_091939",
+    "20261103_092044"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 20.11,
+      "fps_total": 20.11,
+      "drop_pct": -1.36,
+      "measured_at": 1793686504.062,
+      "run": "20261103_091504",
+      "run_id": "M-9025_1cam_17914e46"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 20.09,
+      "fps_total": 40.19,
+      "drop_pct": 0.09,
+      "measured_at": 1793686649.109,
+      "run": "20261103_091729",
+      "run_id": "M-9025_2cam_04bc5d94"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.02,
+      "fps_total": 80.08,
+      "drop_pct": -0.33,
+      "measured_at": 1793686714.229,
+      "run": "20261103_091834",
+      "run_id": "M-9025_4cam_d72d3911"
+    },
+    "6": {
+      "cameras": 6,
+      "fps_per_camera": 18.73,
+      "fps_total": 112.37,
+      "drop_pct": 0.09,
+      "measured_at": 1793686844.396,
+      "run": "20261103_092044",
+      "run_id": "M-9025_6cam_36ffbbd6"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 14.53,
+      "fps_total": 116.21,
+      "drop_pct": 0.11,
+      "measured_at": 1793686779.368,
+      "run": "20261103_091939",
+      "run_id": "M-9025_8cam_75099d62"
+    }
+  }
+}

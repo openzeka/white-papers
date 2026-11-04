@@ -1,0 +1,86 @@
+{
+  "name": "YOLOV6-M",
+  "model_id": "M-9093",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "FP16",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Clocks locked at maximum with jetson_clocks and the VIC (video scaler) clock pinned to its maximum: left on its default governor the VIC stayed at 115 MHz and capped every Jetson pipeline near 100 FPS in total.",
+  "runs": [
+    "20261103_101508",
+    "20261103_103454",
+    "20261103_103559",
+    "20261103_103704",
+    "20261103_103819",
+    "20261103_105906",
+    "20261103_110031"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.67,
+      "fps_total": 19.67,
+      "drop_pct": 0.66,
+      "measured_at": 1793690108.012,
+      "run": "20261103_101508",
+      "run_id": "M-9093_1cam_172eb238"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.89,
+      "fps_total": 39.77,
+      "drop_pct": 0.17,
+      "measured_at": 1793691294.53,
+      "run": "20261103_103454",
+      "run_id": "M-9093_2cam_68468647"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.08,
+      "fps_total": 80.31,
+      "drop_pct": -0.92,
+      "measured_at": 1793691359.502,
+      "run": "20261103_103559",
+      "run_id": "M-9093_4cam_de5d18bb"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 15.35,
+      "fps_total": 122.83,
+      "drop_pct": -0.47,
+      "measured_at": 1793691424.669,
+      "run": "20261103_103704",
+      "run_id": "M-9093_8cam_85835e89"
+    },
+    "10": {
+      "cameras": 10,
+      "fps_per_camera": 12.2,
+      "fps_total": 122.0,
+      "drop_pct": 0.56,
+      "measured_at": 1793692831.271,
+      "run": "20261103_110031",
+      "run_id": "M-9093_10cam_ce2c01fc"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 10.05,
+      "fps_total": 120.64,
+      "drop_pct": 0.48,
+      "measured_at": 1793692746.289,
+      "run": "20261103_105906",
+      "run_id": "M-9093_12cam_d7aa6021"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 7.71,
+      "fps_total": 123.31,
+      "drop_pct": -0.66,
+      "measured_at": 1793691499.702,
+      "run": "20261103_103819",
+      "run_id": "M-9093_16cam_9b975ae3"
+    }
+  }
+}

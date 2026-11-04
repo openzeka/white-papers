@@ -1,0 +1,86 @@
+{
+  "name": "YOLOV5U-L",
+  "model_id": "M-9086",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "FP16",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames.",
+  "runs": [
+    "20261102_193220",
+    "20261102_193805",
+    "20261102_193910",
+    "20261102_194015",
+    "20261102_194120",
+    "20261102_194225",
+    "20261102_194331"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.79,
+      "fps_total": 19.79,
+      "drop_pct": 0.32,
+      "measured_at": 1793637140.398,
+      "run": "20261102_193220",
+      "run_id": "M-9086_1cam_1ea7b5a2"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.75,
+      "fps_total": 39.49,
+      "drop_pct": 0.17,
+      "measured_at": 1793637485.712,
+      "run": "20261102_193805",
+      "run_id": "M-9086_2cam_c182547c"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.02,
+      "fps_total": 80.09,
+      "drop_pct": -0.43,
+      "measured_at": 1793637550.814,
+      "run": "20261102_193910",
+      "run_id": "M-9086_4cam_678e1d6f"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 19.94,
+      "fps_total": 159.54,
+      "drop_pct": -0.96,
+      "measured_at": 1793637615.846,
+      "run": "20261102_194015",
+      "run_id": "M-9086_8cam_207b2a5f"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 15.01,
+      "fps_total": 180.08,
+      "drop_pct": 0.03,
+      "measured_at": 1793637745.977,
+      "run": "20261102_194225",
+      "run_id": "M-9086_12cam_47b6d8d6"
+    },
+    "14": {
+      "cameras": 14,
+      "fps_per_camera": 13.13,
+      "fps_total": 183.77,
+      "drop_pct": -1.85,
+      "measured_at": 1793637811.084,
+      "run": "20261102_194331",
+      "run_id": "M-9086_14cam_70024708"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 11.32,
+      "fps_total": 181.12,
+      "drop_pct": 2.06,
+      "measured_at": 1793637680.938,
+      "run": "20261102_194120",
+      "run_id": "M-9086_16cam_8aad8bc2"
+    }
+  }
+}

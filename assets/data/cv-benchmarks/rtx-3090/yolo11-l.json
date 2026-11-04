@@ -1,0 +1,86 @@
+{
+  "name": "YOLO11-L",
+  "model_id": "M-9022",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "FP16",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames.",
+  "runs": [
+    "20261102_140745",
+    "20261102_140900",
+    "20261102_141005",
+    "20261102_141110",
+    "20261102_141215",
+    "20261102_141320_2",
+    "20261102_141425"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.62,
+      "fps_total": 19.62,
+      "drop_pct": 0.84,
+      "measured_at": 1793617665.373,
+      "run": "20261102_140745",
+      "run_id": "M-9022_1cam_cd0be1bc"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 20.0,
+      "fps_total": 39.99,
+      "drop_pct": 0.34,
+      "measured_at": 1793617740.391,
+      "run": "20261102_140900",
+      "run_id": "M-9022_2cam_cb995932"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.14,
+      "fps_total": 80.57,
+      "drop_pct": -0.18,
+      "measured_at": 1793617805.462,
+      "run": "20261102_141005",
+      "run_id": "M-9022_4cam_160184c4"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 19.87,
+      "fps_total": 158.98,
+      "drop_pct": 0.21,
+      "measured_at": 1793617870.566,
+      "run": "20261102_141110",
+      "run_id": "M-9022_8cam_5e171ede"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 18.19,
+      "fps_total": 218.32,
+      "drop_pct": 0.22,
+      "measured_at": 1793618000.656,
+      "run": "20261102_141320_2",
+      "run_id": "M-9022_12cam_3482919e"
+    },
+    "14": {
+      "cameras": 14,
+      "fps_per_camera": 15.71,
+      "fps_total": 219.89,
+      "drop_pct": -0.07,
+      "measured_at": 1793618065.698,
+      "run": "20261102_141425",
+      "run_id": "M-9022_14cam_bada6c2c"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 13.97,
+      "fps_total": 223.48,
+      "drop_pct": -1.25,
+      "measured_at": 1793617935.588,
+      "run": "20261102_141215",
+      "run_id": "M-9022_16cam_1ad044ea"
+    }
+  }
+}

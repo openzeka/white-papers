@@ -39,15 +39,30 @@ pas zinvol als u weet welke van die kolommen tussen hen verschillen.
 
 Elk getal is een meting van OpenZeka, gemaakt met de tool
 [cordatus-benchmark](https://github.com/CordatusAI) tegen de Cordatus Inference
-Engine, op NVIDIA Jetson Orin Nano, Jetson AGX Thor, GB10 (DGX Spark) en GeForce
-RTX 3060 en RTX 3090. De verzameling groeit naarmate we meer apparaten en modellen
+Engine, op NVIDIA Jetson Orin Nano, Jetson Orin NX 16GB, Jetson AGX Orin 64GB,
+Jetson AGX Thor, GB10 (DGX Spark) en GeForce RTX 3060 en RTX 3090. De verzameling groeit naarmate we meer apparaten en modellen
 testen.
 
-Elke camera is een **live 1080p H.264 IP-camera die met een vaste 20 FPS streamt**.
+Elke camera is een **1080p H.264-stream op een vaste 20 FPS**: een live
+IP-camera, of, voor de rijen gemeten in november 2026, een opgenomen clip die via
+RTSP opnieuw wordt afgespeeld (zie hieronder).
 Elke configuratie wordt doorgemeten over een oplopend aantal camera's, doorgaans
 1, 2, 4 en 8 en daarna in stappen van twee, tot 32. Niet elke configuratie heeft
 elk aantal: een aantal dat niet is gemeten, of waarvan de meting is verworpen,
 ontbreekt simpelweg in de reeks van die rij.
+
+Rijen gemeten van 2 tot 4 november 2026 verschillen op twee punten, en hun notities
+zeggen dat. Ze draaiden op **Cordatus Inference Engine 2.7.2**, en elke camera
+was dezelfde opgenomen 1080p H.264-kantoorclip op 20 FPS, **via RTSP opnieuw
+afgespeeld** in plaats van een live camera, omdat de kantoorcamera's in totaal
+maar ongeveer 30 sessies aannemen. Hun aantallen camera's komen uit een
+limietzoektocht: 1, 2, 4, 8, 16 en 32 camera's en verder tot een camera onder
+15 FPS zakt of meer dan 2% van zijn frames verliest, daarna wordt het verschil
+gehalveerd. Op de RTX 3090 loopt de engine tussen 44 en 48 camera's vast,
+voordat de GPU op is, dus de meeste zoektochten stoppen daar bij 40 camera's. Op de Jetsons stonden
+de klokken met `jetson_clocks` op het maximum en was de VIC-klok (videoschaler)
+op zijn maximum vastgezet: met zijn standaard-governor bleef de VIC op 115 MHz
+en begrensde hij elke Jetson-pipeline op ongeveer 100 FPS in totaal.
 
 Voor elk aantal camera's start de tool een job, wacht tot elke camera de pipeline
 bereikt en er frames binnenkomen, laat de pipeline stabiliseren, en bemonstert
@@ -70,7 +85,7 @@ verwerkt.
 
 **Camera's** — het aantal camera's waarbij de getallen van de rij zijn gemeten.
 Elke rij rapporteert de zwaarste belasting waaronder ze is gemeten, op of onder de
-cameralimiet in het filterpaneel, dus rijen kunnen hierin verschillen; daarom
+cameralimiet in de filters, dus rijen kunnen hierin verschillen; daarom
 staat het aantal naast de getallen in plaats van in een kop.
 
 **FPS / camera** — de framerate waarmee elke camera wordt verwerkt, bij dat
@@ -97,7 +112,7 @@ activaties op in 8-bits gehele getallen; een lagere precisie betekent doorgaans
 snellere inferentie (inference), met enig risico voor de nauwkeurigheid.
 
 **Apparaat** — de hardware waarop de pipeline draaide: een Jetson-module (Orin
-Nano, AGX Thor), een op GB10 gebaseerde DGX Spark, of een GeForce-desktop-GPU. De
+Nano, Orin NX, AGX Orin, AGX Thor), een op GB10 gebaseerde DGX Spark, of een GeForce-desktop-GPU. De
 versies van DeepStream, CUDA en JetPack/L4T, en de CPU waar die is vastgelegd,
 staan in de uitgeklapte rij.
 
@@ -116,7 +131,7 @@ per camera voor "houdt het bij" en het totaal voor "hoe hard werkt het apparaat"
 
 ### 1. Stel de cameralimiet in
 
-De schuifregelaar boven in het filterpaneel is een bovengrens, geen selectie. Hij
+De schuifregelaar voor de cameralimiet in de filters is een bovengrens, geen selectie. Hij
 verbergt alles wat daarboven is gemeten en stopt bij het grootste aantal camera's
 dat tot nu toe is gemeten. Stel hem in op 12, en elke rij rapporteert de zwaarste
 belasting waarbij ze is gemeten tot 12 camera's — de reeks, de curve en de
@@ -161,12 +176,12 @@ Omdat u het doel zelf instelt, is Max. camera's geen vaste eigenschap van een
 configuratie, en evenmin een belofte over de aantallen tussen twee metingen.
 
 <div class="bt-howto-example" markdown="1">
-**Voorbeeld.** PeopleNet op GB10 levert 15.5 FPS per camera bij 30 camera's en
-14.1 bij 32, dus bij het standaarddoel van 15 FPS is Max. camera's 30. Verhoog het
-doel naar 18 FPS en het daalt naar 26, het laatste aantal dat nog op 19.0 staat.
-Intussen stopt de totale FPS met groeien: ongeveer 494 bij 26 en 28 camera's, 452
-bij 32 — de extra camera's delen dezelfde doorvoer in plaats van eraan bij te
-dragen.
+**Voorbeeld.** PeopleNet op GB10 levert 16.1 FPS per camera bij 32 camera's en
+12.9 bij 34, dus bij het standaarddoel van 15 FPS is Max. camera's 32. Verhoog het
+doel naar 18 FPS en het daalt naar 16, het volgende gemeten aantal, nog op 19.8.
+Intussen stopt de totale FPS met groeien: ongeveer 514 bij 32 camera's, tussen 418
+en 490 van 34 tot 48 — de extra camera's delen dezelfde doorvoer in plaats van
+eraan bij te dragen.
 </div>
 
 Een **≥** naast het getal betekent dat het apparaat zijn eigen limiet nog niet had
@@ -225,7 +240,7 @@ De tabel gebruikt bewust één vaste, vergelijkbare workload, zodat een eerste
 vergelijking mogelijk is zonder een locatieonderzoek. Ze is **geen vervanging
 voor een test op uw eigen camera's**.
 
-Elk getal komt van live 1080p H.264-camera's op 20 FPS. Camera's met een andere
+Elk getal komt van 1080p H.264-camera's op 20 FPS, live of opnieuw afgespeeld. Camera's met een andere
 resolutie, codec of framerate veranderen de decodeer- en schaalbelasting. Een
 productiepipeline voegt vaak tracking, secundaire classifiers, opname of analyse
 toe bovenop detectie, en wat de gemeten pipeline niet draaide, zit niet in deze
@@ -234,10 +249,11 @@ over het gedrag over uren — thermische limieten in een behuizing zonder
 ventilator, bijvoorbeeld. En dit zijn alleen snelheidsmetingen: niets hier meet
 hoe nauwkeurig een model detecteert.
 
-Hogere aantallen camera's op de desktop-GPU's, waar de RTX 3060 en RTX 3090 bij
-het hoogste geteste aantal nog bijhielden, vereisen een camerabron die niet eerder
-opraakt dan de GPU. Die runs staan nog gepland, en de tabel groeit wanneer ze
-binnen zijn.
+Hogere aantallen camera's op de RTX 3060, die bij het hoogste geteste aantal nog
+bijhield, vereisen een camerabron die niet eerder opraakt dan de GPU. Die runs
+staan nog gepland, en de tabel groeit wanneer ze binnen zijn. De RTX 3090 is in
+november 2026 opnieuw gemeten met opnieuw afgespeelde camera's; de zoektocht stopt
+daar waar de engine vastloopt, niet waar de GPU dat doet.
 
 </div>
 </details>

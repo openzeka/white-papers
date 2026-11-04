@@ -17,6 +17,10 @@ jetson-orin-nano/
 ```
 
 Dosya adı `<cihaz-slug>/<model-slug>[-<precision>].json`.
+`-<precision>` yalnızca model tanımı hassasiyeti kaydettiğinde eklenir. Tanımın boş
+bıraktığı ve motorun kendi varsayılanıyla doldurduğu değerler (Cordatus Inference
+Engine 2.7.2 registry YOLO modellerini 640x640 FP16 derler) satırda gösterilir ama
+dosya adına girmez; böylece yayımlanmış bir satırın adresi değişmez.
 
 Her sonucun kalıcı sayfası bu yoldan üretilir:
 `<cihaz-slug>/<model-slug>.json` → `/cv-inference-benchmarks/<cihaz-slug>/<model-slug>/`

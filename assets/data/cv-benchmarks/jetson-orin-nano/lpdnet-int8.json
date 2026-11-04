@@ -1,0 +1,86 @@
+{
+  "name": "LPDNet",
+  "model_id": "M-19",
+  "task": "detector",
+  "classes": 1,
+  "input_resolution": "640x480",
+  "precision": "INT8",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Clocks locked at maximum with jetson_clocks and the VIC (video scaler) clock pinned to its maximum: left on its default governor the VIC stayed at 115 MHz and capped every Jetson pipeline near 100 FPS in total.",
+  "runs": [
+    "20261103_090430",
+    "20261103_090545",
+    "20261103_090700",
+    "20261103_090915",
+    "20261103_091130",
+    "20261103_091345",
+    "20261103_091601"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.95,
+      "fps_total": 19.95,
+      "drop_pct": -0.08,
+      "measured_at": 1793685870.194,
+      "run": "20261103_090430",
+      "run_id": "M-19_1cam_6aa635b4"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 20.04,
+      "fps_total": 40.08,
+      "drop_pct": 0.35,
+      "measured_at": 1793685945.244,
+      "run": "20261103_090545",
+      "run_id": "M-19_2cam_3637f533"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.03,
+      "fps_total": 80.13,
+      "drop_pct": -0.8,
+      "measured_at": 1793686020.355,
+      "run": "20261103_090700",
+      "run_id": "M-19_4cam_33ec647e"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 19.8,
+      "fps_total": 158.42,
+      "drop_pct": 0.25,
+      "measured_at": 1793686155.451,
+      "run": "20261103_090915",
+      "run_id": "M-19_8cam_8c7f0aba"
+    },
+    "12": {
+      "cameras": 12,
+      "fps_per_camera": 18.24,
+      "fps_total": 218.89,
+      "drop_pct": -1.21,
+      "measured_at": 1793686425.844,
+      "run": "20261103_091345",
+      "run_id": "M-19_12cam_964cd20f"
+    },
+    "14": {
+      "cameras": 14,
+      "fps_per_camera": 15.84,
+      "fps_total": 221.75,
+      "drop_pct": -0.38,
+      "measured_at": 1793686561.081,
+      "run": "20261103_091601",
+      "run_id": "M-19_14cam_60f4900f"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 13.98,
+      "fps_total": 223.64,
+      "drop_pct": -0.39,
+      "measured_at": 1793686290.575,
+      "run": "20261103_091130",
+      "run_id": "M-19_16cam_a3d06686"
+    }
+  }
+}

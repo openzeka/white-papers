@@ -1,0 +1,106 @@
+{
+  "name": "YOLOV10-M",
+  "model_id": "M-9073",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "FP16",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames.",
+  "runs": [
+    "20261102_165650",
+    "20261102_170246",
+    "20261102_170351",
+    "20261102_170456",
+    "20261102_170601",
+    "20261102_170706",
+    "20261102_171311",
+    "20261102_171416",
+    "20261102_171521"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.99,
+      "fps_total": 19.99,
+      "drop_pct": -0.18,
+      "measured_at": 1793627810.689,
+      "run": "20261102_165650",
+      "run_id": "M-9073_1cam_1fd800f5"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 20.0,
+      "fps_total": 39.99,
+      "drop_pct": -0.27,
+      "measured_at": 1793628166.069,
+      "run": "20261102_170246",
+      "run_id": "M-9073_2cam_274b7555"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 19.78,
+      "fps_total": 79.11,
+      "drop_pct": 0.01,
+      "measured_at": 1793628231.13,
+      "run": "20261102_170351",
+      "run_id": "M-9073_4cam_367557c3"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 20.04,
+      "fps_total": 160.32,
+      "drop_pct": 0.68,
+      "measured_at": 1793628296.203,
+      "run": "20261102_170456",
+      "run_id": "M-9073_8cam_0868445a"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.11,
+      "fps_total": 305.71,
+      "drop_pct": -0.95,
+      "measured_at": 1793628361.266,
+      "run": "20261102_170601",
+      "run_id": "M-9073_16cam_5b49c38c"
+    },
+    "18": {
+      "cameras": 18,
+      "fps_per_camera": 16.22,
+      "fps_total": 291.92,
+      "drop_pct": -0.01,
+      "measured_at": 1793628921.857,
+      "run": "20261102_171521",
+      "run_id": "M-9073_18cam_465145cf"
+    },
+    "20": {
+      "cameras": 20,
+      "fps_per_camera": 14.64,
+      "fps_total": 292.81,
+      "drop_pct": 0.56,
+      "measured_at": 1793628856.774,
+      "run": "20261102_171416",
+      "run_id": "M-9073_20cam_445f1ca6"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 12.66,
+      "fps_total": 303.75,
+      "drop_pct": 0.34,
+      "measured_at": 1793628791.685,
+      "run": "20261102_171311",
+      "run_id": "M-9073_24cam_ae5d1c5b"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 9.56,
+      "fps_total": 305.95,
+      "drop_pct": 0.91,
+      "measured_at": 1793628426.329,
+      "run": "20261102_170706",
+      "run_id": "M-9073_32cam_6bb40ea7"
+    }
+  }
+}

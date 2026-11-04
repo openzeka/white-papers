@@ -1,0 +1,106 @@
+{
+  "name": "TrafficCamNet",
+  "model_id": "M-14",
+  "task": "detector",
+  "classes": 4,
+  "input_resolution": "960x544",
+  "precision": "INT8",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Clocks locked at maximum with jetson_clocks and the VIC (video scaler) clock pinned to its maximum: left on its default governor the VIC stayed at 115 MHz and capped every Jetson pipeline near 100 FPS in total.",
+  "runs": [
+    "20261102_174909",
+    "20261102_175014",
+    "20261102_175119_2",
+    "20261102_175224",
+    "20261102_175329",
+    "20261102_175954",
+    "20261102_181140",
+    "20261102_181255",
+    "20261102_181410"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 20.13,
+      "fps_total": 20.13,
+      "drop_pct": 0.0,
+      "measured_at": 1793630949.189,
+      "run": "20261102_174909",
+      "run_id": "M-14_1cam_6b5cb583"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 20.09,
+      "fps_total": 40.17,
+      "drop_pct": -0.02,
+      "measured_at": 1793631014.286,
+      "run": "20261102_175014",
+      "run_id": "M-14_2cam_3b008064"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.0,
+      "fps_total": 79.99,
+      "drop_pct": 0.31,
+      "measured_at": 1793631079.307,
+      "run": "20261102_175119_2",
+      "run_id": "M-14_4cam_96653692"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 20.11,
+      "fps_total": 160.85,
+      "drop_pct": -0.54,
+      "measured_at": 1793631144.457,
+      "run": "20261102_175224",
+      "run_id": "M-14_8cam_8b37e3fb"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.88,
+      "fps_total": 318.15,
+      "drop_pct": 0.56,
+      "measured_at": 1793631209.483,
+      "run": "20261102_175329",
+      "run_id": "M-14_16cam_c2f530d6"
+    },
+    "20": {
+      "cameras": 20,
+      "fps_per_camera": 17.18,
+      "fps_total": 343.61,
+      "drop_pct": 0.2,
+      "measured_at": 1793632375.617,
+      "run": "20261102_181255",
+      "run_id": "M-14_20cam_e9a9b290"
+    },
+    "22": {
+      "cameras": 22,
+      "fps_per_camera": 15.48,
+      "fps_total": 340.46,
+      "drop_pct": 1.09,
+      "measured_at": 1793632450.662,
+      "run": "20261102_181410",
+      "run_id": "M-14_22cam_83a0dc20"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 14.25,
+      "fps_total": 341.96,
+      "drop_pct": 0.44,
+      "measured_at": 1793632300.547,
+      "run": "20261102_181140",
+      "run_id": "M-14_24cam_c5f4e543"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 10.56,
+      "fps_total": 337.96,
+      "drop_pct": 1.15,
+      "measured_at": 1793631594.787,
+      "run": "20261102_175954",
+      "run_id": "M-14_32cam_a594f6d0"
+    }
+  }
+}

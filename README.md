@@ -114,7 +114,8 @@ Pick a device and a detection model, set the frame rate you consider acceptable,
 and the table shows the sustained FPS for every measured configuration, how it
 falls as cameras are added, and how many cameras the device carries at your
 target. Measured with the Cordatus Inference Engine on DeepStream, across
-DGX Spark (GB10), Jetson AGX Thor, Jetson Orin Nano, RTX 3060 and RTX 3090.
+DGX Spark (GB10), Jetson AGX Thor, Jetson AGX Orin 64GB, Jetson Orin NX 16GB,
+Jetson Orin Nano, RTX 3060 and RTX 3090.
 
 **[Open the CV Inference Benchmark Explorer →](https://whitepapers.openzeka.com/cv-inference-benchmarks/)**
 

@@ -1,0 +1,116 @@
+{
+  "name": "DashCamNet",
+  "model_id": "M-16",
+  "task": "detector",
+  "classes": 4,
+  "input_resolution": "960x544",
+  "precision": "INT8",
+  "deepstream": "8.0.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames.",
+  "runs": [
+    "20261102_171001",
+    "20261102_171116",
+    "20261102_171221",
+    "20261102_171326",
+    "20261102_171432",
+    "20261102_171537",
+    "20261102_171712",
+    "20261102_171857",
+    "20261102_172012_2",
+    "20261102_172127"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.97,
+      "fps_total": 19.97,
+      "drop_pct": -0.93,
+      "measured_at": 1793628601.751,
+      "run": "20261102_171001",
+      "run_id": "M-16_1cam_1ee473c5"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.86,
+      "fps_total": 39.72,
+      "drop_pct": 0.43,
+      "measured_at": 1793628676.888,
+      "run": "20261102_171116",
+      "run_id": "M-16_2cam_4686453c"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.0,
+      "fps_total": 80.0,
+      "drop_pct": -0.09,
+      "measured_at": 1793628741.958,
+      "run": "20261102_171221",
+      "run_id": "M-16_4cam_7e2f33fd"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 19.83,
+      "fps_total": 158.64,
+      "drop_pct": 0.63,
+      "measured_at": 1793628806.967,
+      "run": "20261102_171326",
+      "run_id": "M-16_8cam_3d87df85"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.72,
+      "fps_total": 315.56,
+      "drop_pct": 0.02,
+      "measured_at": 1793628872.115,
+      "run": "20261102_171432",
+      "run_id": "M-16_16cam_dabc2ed8"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 19.97,
+      "fps_total": 639.11,
+      "drop_pct": 0.25,
+      "measured_at": 1793628937.154,
+      "run": "20261102_171537",
+      "run_id": "M-16_32cam_c70fcd7c"
+    },
+    "34": {
+      "cameras": 34,
+      "fps_per_camera": 19.1,
+      "fps_total": 649.46,
+      "drop_pct": 0.37,
+      "measured_at": 1793629287.563,
+      "run": "20261102_172127",
+      "run_id": "M-16_34cam_ca52ca77"
+    },
+    "36": {
+      "cameras": 36,
+      "fps_per_camera": 14.85,
+      "fps_total": 534.71,
+      "drop_pct": 0.19,
+      "measured_at": 1793629212.475,
+      "run": "20261102_172012_2",
+      "run_id": "M-16_36cam_6d9d2c03"
+    },
+    "40": {
+      "cameras": 40,
+      "fps_per_camera": 13.51,
+      "fps_total": 540.49,
+      "drop_pct": 0.08,
+      "measured_at": 1793629137.403,
+      "run": "20261102_171857",
+      "run_id": "M-16_40cam_b52837d0"
+    },
+    "48": {
+      "cameras": 48,
+      "fps_per_camera": 12.43,
+      "fps_total": 596.48,
+      "drop_pct": 0.01,
+      "measured_at": 1793629032.263,
+      "run": "20261102_171712",
+      "run_id": "M-16_48cam_e0fea523"
+    }
+  }
+}

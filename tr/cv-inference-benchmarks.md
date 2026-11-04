@@ -38,14 +38,28 @@ ancak hangi sütunlarının farklı olduğunu bildiğinizde anlamlıdır.
 
 Her değer OpenZeka'nın kendi ölçümüdür; Cordatus Inference Engine'e karşı
 [cordatus-benchmark](https://github.com/CordatusAI) aracıyla NVIDIA Jetson Orin
-Nano, Jetson AGX Thor, GB10 (DGX Spark), GeForce RTX 3060 ve RTX 3090 üzerinde
-alınmıştır. Yeni cihaz ve modeller test edildikçe havuz büyüyor.
+Nano, Jetson Orin NX 16GB, Jetson AGX Orin 64GB, Jetson AGX Thor, GB10 (DGX
+Spark), GeForce RTX 3060 ve RTX 3090 üzerinde alınmıştır. Yeni cihaz ve modeller test edildikçe havuz büyüyor.
 
-Kameraların hepsi **sabit 20 FPS yayın yapan canlı 1080p H.264 IP
-kameralardır**. Her yapılandırma artan kamera sayılarında taranır; genellikle
+Kameraların hepsi **sabit 20 FPS'lik 1080p H.264 yayınlardır**: canlı bir IP
+kamera ya da Kasım 2026'da ölçülen satırlarda RTSP ile yeniden oynatılan kayıtlı
+bir klip (aşağıya bakın). Her yapılandırma artan kamera sayılarında taranır; genellikle
 1, 2, 4 ve 8, ardından ikişer ikişer 32'ye kadar. Her yapılandırmada her sayı
 bulunmaz: ölçülmemiş ya da ölçümü elenmiş bir kamera sayısı o satırın
 taramasında yer almaz.
+
+2-4 Kasım 2026'da ölçülen satırlar iki noktada farklıdır ve notları bunu söyler.
+**Cordatus Inference Engine 2.7.2** ile çalıştılar ve her kamera canlı bir kamera
+değil, **RTSP ile yeniden oynatılan** aynı kayıtlı 1080p H.264, 20 FPS ofis
+klibiydi; ofis kameraları toplamda yalnızca 30 kadar oturum kabul ediyor. Kamera
+sayıları bir limit aramasından gelir: 1, 2, 4, 8, 16 ve 32 kamera ve üstü, bir
+kamera 15 FPS'in altına düşene ya da karelerinin %2'sinden fazlasını kaybedene
+kadar; ardından aradaki fark yarıya bölünür. RTX 3090'da motor GPU tükenmeden
+önce 44 ile 48 kamera arasında kilitleniyor, bu yüzden oradaki aramaların çoğu 40
+kamerada durur. Jetson'larda
+saatler `jetson_clocks` ile en yükseğe sabitlendi ve VIC (video ölçekleyici) saati
+en yüksek değerine çekildi: varsayılan yönetecinde VIC 115 MHz'de kalıyor ve her
+Jetson'da hattı toplamda 100 FPS civarında sınırlıyordu.
 
 Araç her kamera sayısı için bir iş başlatır, bütün kameraların pipeline'a
 girmesini ve karelerin akmasını bekler, pipeline'ın oturmasına izin verir ve
@@ -65,8 +79,8 @@ işaretidir.
 
 **FPS (saniyedeki kare sayısı)** — her saniye işlenen video karesi sayısı.
 
-**Kamera** — satırdaki değerlerin ölçüldüğü kamera sayısı. Her satır, filtre
-panelindeki kamera sınırında veya altında ölçüldüğü en ağır yükü gösterir; bu
+**Kamera** — satırdaki değerlerin ölçüldüğü kamera sayısı. Her satır,
+filtrelerdeki kamera sınırında veya altında ölçüldüğü en ağır yükü gösterir; bu
 yüzden satırlar burada farklılık gösterebilir ve sayı başlıkta değil değerlerin
 yanında durur.
 
@@ -93,8 +107,8 @@ adının yanında gösterilir. INT8, ağırlıkları ve aktivasyonları 8 bitlik
 sayılarla tutar; düşük precision genellikle daha hızlı çıkarım demektir, ama
 doğruluktan bir miktar ödün verme riski taşır.
 
-**Cihaz** — pipeline'ın çalıştığı donanım: bir Jetson modülü (Orin Nano, AGX
-Thor), GB10 tabanlı bir DGX Spark ya da bir GeForce masaüstü GPU. DeepStream,
+**Cihaz** — pipeline'ın çalıştığı donanım: bir Jetson modülü (Orin Nano, Orin
+NX, AGX Orin, AGX Thor), GB10 tabanlı bir DGX Spark ya da bir GeForce masaüstü GPU. DeepStream,
 CUDA ve JetPack/L4T sürümleri ile kayıtlıysa CPU, açılan satırda listelenir.
 
 ### Önce oturması gereken iki ayrım
@@ -112,7 +126,7 @@ başına değeri, "cihaz ne kadar yükleniyor" sorusu için toplamı okuyun.
 
 ### 1. Kamera sınırını ayarlayın
 
-Filtre panelinin başındaki kaydırıcı bir seçim değil, üst sınırdır: üstündeki
+Filtrelerdeki kamera sınırı kaydırıcısı bir seçim değil, üst sınırdır: üstündeki
 bütün ölçümleri gizler ve şimdiye kadar ölçülmüş en yüksek kamera sayısında
 durur. 12'ye çektiğinizde her satır 12 kameraya kadar ölçüldüğü en ağır yükü
 gösterir; tarama tablosu, eğri ve yayın önizlemesi de ona uyar. O sınırın
@@ -158,11 +172,12 @@ Hedefi siz belirlediğiniz için Maks. kamera bir yapılandırmanın sabit bir
 değildir.
 
 <div class="bt-howto-example" markdown="1">
-**Örnek.** GB10 üzerinde PeopleNet, 30 kamerada kamera başına 15,5 FPS, 32
-kamerada 14,1 FPS veriyor; varsayılan 15 FPS hedefinde Maks. kamera 30'dur.
-Hedefi 18 FPS'e çıkarın, 26'ya düşer: hâlâ 19,0 FPS veren son sayı. Bu arada
-toplam FPS artmayı bırakır: 26 ve 28 kamerada yaklaşık 494, 32 kamerada 452 —
-eklenen kameralar işlem hacmine katkı yapmıyor, aynı hacmi paylaşıyor.
+**Örnek.** GB10 üzerinde PeopleNet, 32 kamerada kamera başına 16,1 FPS, 34
+kamerada 12,9 FPS veriyor; varsayılan 15 FPS hedefinde Maks. kamera 32'dir.
+Hedefi 18 FPS'e çıkarın, 16'ya düşer: ölçülmüş bir sonraki sayı, hâlâ 19,8 FPS.
+Bu arada toplam FPS artmayı bırakır: 32 kamerada yaklaşık 514, 34 ile 48 kamera
+arasında 418 ile 490 arası — eklenen kameralar işlem hacmine katkı yapmıyor, aynı
+hacmi paylaşıyor.
 </div>
 
 Değerin yanındaki **≥** işareti, cihazın kendi sınırına ulaşmadığını gösterir:
@@ -217,7 +232,7 @@ Tablo, saha keşfi gerektirmeden ilk bir karşılaştırma yapılabilsin diye bi
 tek, sabit ve karşılaştırılabilir bir iş yükü kullanır. **Kendi kameralarınızla
 yapılacak bir testin yerini tutmaz.**
 
-Bütün değerler 20 FPS yayın yapan canlı 1080p H.264 kameralardan gelir. Farklı
+Bütün değerler 20 FPS yayın yapan, canlı ya da yeniden oynatılan 1080p H.264 kameralardan gelir. Farklı
 çözünürlük, codec ya da kare hızındaki kameralar çözme ve ölçekleme yükünü
 değiştirir. Üretimdeki bir pipeline çoğu zaman tespitin üstüne takip, ikincil
 sınıflandırıcılar, kayıt ya da analitik ekler; ölçülen pipeline'ın çalıştırmadığı
@@ -226,9 +241,11 @@ yüzden saatler boyunca davranış hakkında bir şey söylemez — örneğin fa
 kasadaki ısıl sınırlar. Ve bunlar yalnızca hız ölçümleridir: bir modelin ne
 kadar doğru tespit yaptığı burada ölçülmez.
 
-Masaüstü GPU'larda daha yüksek kamera sayıları — RTX 3060 ve RTX 3090 test
-ettiğimiz en yüksek sayıda hâlâ yetişiyordu — GPU'dan önce tükenmeyen bir kamera
-kaynağı gerektiriyor. O koşular beklemede; tablo geldiklerinde büyüyecek.
+RTX 3060'ta daha yüksek kamera sayıları — test ettiğimiz en yüksek sayıda hâlâ
+yetişiyordu — GPU'dan önce tükenmeyen bir kamera kaynağı gerektiriyor. O koşular
+beklemede; tablo geldiklerinde büyüyecek. RTX 3090 Kasım 2026'da yeniden oynatılan
+kameralarla tekrar ölçüldü; oradaki arama GPU'nun değil motorun kilitlendiği yerde
+durur.
 
 </div>
 </details>
