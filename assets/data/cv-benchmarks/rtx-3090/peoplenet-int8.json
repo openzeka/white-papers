@@ -6,148 +6,109 @@
   "input_resolution": "960x544",
   "precision": "INT8",
   "deepstream": "7.1.0",
-  "source_profile": "live-1080p20",
+  "source_profile": "replay-1080p20",
   "measure_s": 30,
-  "notes": "",
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames.",
   "runs": [
-    "20260915_124900",
-    "20260916_112942"
+    "20261102_111508",
+    "20261102_111613",
+    "20261102_111718",
+    "20261102_111823",
+    "20261102_111938",
+    "20261102_112054",
+    "20261102_112209",
+    "20261102_114455",
+    "20261102_114610",
+    "20261102_121627"
   ],
   "points": {
     "1": {
       "cameras": 1,
-      "fps_per_camera": 19.85,
-      "fps_total": 19.85,
-      "drop_pct": 0.0,
-      "measured_at": 1789547382.735,
-      "run": "20260916_112942",
-      "run_id": "M-15_1cam_6cf92f3b"
+      "fps_per_camera": 19.79,
+      "fps_total": 19.79,
+      "drop_pct": 0.17,
+      "measured_at": 1793607308.691,
+      "run": "20261102_111508",
+      "run_id": "M-15_1cam_7f978df1"
     },
     "2": {
       "cameras": 2,
-      "fps_per_camera": 19.91,
-      "fps_total": 39.81,
-      "drop_pct": 0.17,
-      "measured_at": 1789547447.938,
-      "run": "20260916_112942",
-      "run_id": "M-15_2cam_e3f45f7d"
+      "fps_per_camera": 20.18,
+      "fps_total": 40.36,
+      "drop_pct": -0.2,
+      "measured_at": 1793607373.737,
+      "run": "20261102_111613",
+      "run_id": "M-15_2cam_55279ab3"
     },
     "4": {
       "cameras": 4,
-      "fps_per_camera": 19.92,
-      "fps_total": 79.69,
-      "drop_pct": -0.08,
-      "measured_at": 1789547513.981,
-      "run": "20260916_112942",
-      "run_id": "M-15_4cam_164c1761"
+      "fps_per_camera": 20.12,
+      "fps_total": 80.48,
+      "drop_pct": -0.3,
+      "measured_at": 1793607438.829,
+      "run": "20261102_111718",
+      "run_id": "M-15_4cam_9eef3dee"
     },
     "8": {
       "cameras": 8,
-      "fps_per_camera": 19.87,
-      "fps_total": 158.93,
-      "drop_pct": 0.38,
-      "measured_at": 1789547579.995,
-      "run": "20260916_112942",
-      "run_id": "M-15_8cam_5a8eb36d"
-    },
-    "10": {
-      "cameras": 10,
-      "fps_per_camera": 19.29,
-      "fps_total": 192.85,
-      "drop_pct": 0.34,
-      "measured_at": 1789547687.338,
-      "run": "20260916_112942",
-      "run_id": "M-15_10cam_825c462c"
-    },
-    "12": {
-      "cameras": 12,
-      "fps_per_camera": 19.48,
-      "fps_total": 233.79,
-      "drop_pct": 0.16,
-      "measured_at": 1789547780.38,
-      "run": "20260916_112942",
-      "run_id": "M-15_12cam_c92402c2"
-    },
-    "14": {
-      "cameras": 14,
-      "fps_per_camera": 19.47,
-      "fps_total": 272.63,
-      "drop_pct": 0.15,
-      "measured_at": 1789547983.567,
-      "run": "20260916_112942",
-      "run_id": "M-15_14cam_456b2d28"
+      "fps_per_camera": 19.97,
+      "fps_total": 159.77,
+      "drop_pct": 0.04,
+      "measured_at": 1793607503.872,
+      "run": "20261102_111823",
+      "run_id": "M-15_8cam_8493e51b"
     },
     "16": {
       "cameras": 16,
-      "fps_per_camera": 19.61,
-      "fps_total": 313.83,
-      "drop_pct": -0.03,
-      "measured_at": 1789548185.742,
-      "run": "20260916_112942",
-      "run_id": "M-15_16cam_94b2c56c"
+      "fps_per_camera": 19.84,
+      "fps_total": 317.49,
+      "drop_pct": 0.54,
+      "measured_at": 1793607578.957,
+      "run": "20261102_111938",
+      "run_id": "M-15_16cam_7f8ed90a"
     },
-    "18": {
-      "cameras": 18,
-      "fps_per_camera": 19.69,
-      "fps_total": 354.37,
-      "drop_pct": 0.19,
-      "measured_at": 1789548388.099,
-      "run": "20260916_112942",
-      "run_id": "M-15_18cam_7f3e90b5"
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 19.93,
+      "fps_total": 637.71,
+      "drop_pct": 0.6,
+      "measured_at": 1793607654.059,
+      "run": "20261102_112054",
+      "run_id": "M-15_32cam_873c114a"
     },
-    "20": {
-      "cameras": 20,
-      "fps_per_camera": 19.63,
-      "fps_total": 392.59,
-      "drop_pct": 0.03,
-      "measured_at": 1789548502.392,
-      "run": "20260916_112942",
-      "run_id": "M-15_20cam_822be7bb"
+    "40": {
+      "cameras": 40,
+      "fps_per_camera": 19.91,
+      "fps_total": 796.28,
+      "drop_pct": -0.05,
+      "measured_at": 1793609095.484,
+      "run": "20261102_114455",
+      "run_id": "M-15_40cam_ace9cc22"
     },
-    "22": {
-      "cameras": 22,
-      "fps_per_camera": 19.74,
-      "fps_total": 434.2,
-      "drop_pct": -0.21,
-      "measured_at": 1789548707.676,
-      "run": "20260916_112942",
-      "run_id": "M-15_22cam_670546e8"
+    "42": {
+      "cameras": 42,
+      "fps_per_camera": 19.34,
+      "fps_total": 812.33,
+      "drop_pct": 0.05,
+      "measured_at": 1793610987.367,
+      "run": "20261102_121627",
+      "run_id": "M-15_42cam_1d7e9f86"
+    }
+  },
+  "failures": {
+    "44": {
+      "cameras": 44,
+      "reason": "engine_stopped",
+      "measured_at": 1793609170.603,
+      "run": "20261102_114610",
+      "run_id": "M-15_44cam_b77ffe33"
     },
-    "24": {
-      "cameras": 24,
-      "fps_per_camera": 19.89,
-      "fps_total": 477.39,
-      "drop_pct": -0.08,
-      "measured_at": 1789548776.861,
-      "run": "20260916_112942",
-      "run_id": "M-15_24cam_cf696d12"
-    },
-    "26": {
-      "cameras": 26,
-      "fps_per_camera": 19.49,
-      "fps_total": 506.62,
-      "drop_pct": -0.28,
-      "measured_at": 1789548847.078,
-      "run": "20260916_112942",
-      "run_id": "M-15_26cam_fdfd9cf9"
-    },
-    "28": {
-      "cameras": 28,
-      "fps_per_camera": 19.58,
-      "fps_total": 548.14,
-      "drop_pct": 0.21,
-      "measured_at": 1789548917.64,
-      "run": "20260916_112942",
-      "run_id": "M-15_28cam_7a656500"
-    },
-    "30": {
-      "cameras": 30,
-      "fps_per_camera": 19.44,
-      "fps_total": 583.22,
-      "drop_pct": 0.21,
-      "measured_at": 1789548987.978,
-      "run": "20260916_112942",
-      "run_id": "M-15_30cam_624f04ac"
+    "48": {
+      "cameras": 48,
+      "reason": "engine_stopped",
+      "measured_at": 1793607729.131,
+      "run": "20261102_112209",
+      "run_id": "M-15_48cam_5daa6b03"
     }
   }
 }

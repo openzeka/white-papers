@@ -1,0 +1,66 @@
+{
+  "name": "DashCamNet",
+  "model_id": "M-16",
+  "task": "detector",
+  "classes": 4,
+  "input_resolution": "960x544",
+  "precision": "INT8",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Clocks locked at maximum with jetson_clocks and the VIC (video scaler) clock pinned to its maximum: left on its default governor the VIC stayed at 115 MHz and capped every Jetson pipeline near 100 FPS in total.",
+  "runs": [
+    "20261103_084143",
+    "20261103_084331",
+    "20261103_084654",
+    "20261103_085755",
+    "20261103_090215"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 20.11,
+      "fps_total": 20.11,
+      "drop_pct": 0.24,
+      "measured_at": 1793684503.719,
+      "run": "20261103_084143",
+      "run_id": "M-16_1cam_2912895f"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.61,
+      "fps_total": 39.22,
+      "drop_pct": 0.46,
+      "measured_at": 1793684611.083,
+      "run": "20261103_084331",
+      "run_id": "M-16_2cam_f29f1b04"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 19.61,
+      "fps_total": 78.46,
+      "drop_pct": 0.21,
+      "measured_at": 1793684814.449,
+      "run": "20261103_084654",
+      "run_id": "M-16_4cam_564b1ce0"
+    },
+    "6": {
+      "cameras": 6,
+      "fps_per_camera": 18.53,
+      "fps_total": 111.19,
+      "drop_pct": -0.51,
+      "measured_at": 1793685735.635,
+      "run": "20261103_090215",
+      "run_id": "M-16_6cam_92cfc9cd"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 14.39,
+      "fps_total": 115.15,
+      "drop_pct": 0.48,
+      "measured_at": 1793685475.151,
+      "run": "20261103_085755",
+      "run_id": "M-16_8cam_6533956c"
+    }
+  }
+}

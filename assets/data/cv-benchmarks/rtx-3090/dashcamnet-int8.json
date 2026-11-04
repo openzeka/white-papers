@@ -1,0 +1,86 @@
+{
+  "name": "DashCamNet",
+  "model_id": "M-16",
+  "task": "detector",
+  "classes": 4,
+  "input_resolution": "960x544",
+  "precision": "INT8",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Searched up to 40 cameras: on this machine the engine hangs between 44 and 48 cameras.",
+  "runs": [
+    "20261102_131722",
+    "20261102_131847",
+    "20261102_131952",
+    "20261102_132057",
+    "20261102_132202",
+    "20261102_132307",
+    "20261102_132502"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.71,
+      "fps_total": 19.71,
+      "drop_pct": 0.0,
+      "measured_at": 1793614642.211,
+      "run": "20261102_131722",
+      "run_id": "M-16_1cam_a3875456"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.82,
+      "fps_total": 39.63,
+      "drop_pct": 0.17,
+      "measured_at": 1793614727.275,
+      "run": "20261102_131847",
+      "run_id": "M-16_2cam_1e942fee"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 19.76,
+      "fps_total": 79.04,
+      "drop_pct": -0.44,
+      "measured_at": 1793614792.381,
+      "run": "20261102_131952",
+      "run_id": "M-16_4cam_e9368f48"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 19.9,
+      "fps_total": 159.22,
+      "drop_pct": 0.06,
+      "measured_at": 1793614857.418,
+      "run": "20261102_132057",
+      "run_id": "M-16_8cam_2ae721a3"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 20.08,
+      "fps_total": 321.35,
+      "drop_pct": 0.2,
+      "measured_at": 1793614922.481,
+      "run": "20261102_132202",
+      "run_id": "M-16_16cam_c9d5637e"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 19.85,
+      "fps_total": 635.32,
+      "drop_pct": 0.11,
+      "measured_at": 1793614987.544,
+      "run": "20261102_132307",
+      "run_id": "M-16_32cam_4033bd5b"
+    },
+    "40": {
+      "cameras": 40,
+      "fps_per_camera": 20.1,
+      "fps_total": 803.89,
+      "drop_pct": -0.4,
+      "measured_at": 1793615102.671,
+      "run": "20261102_132502",
+      "run_id": "M-16_40cam_61d16e8d"
+    }
+  }
+}

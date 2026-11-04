@@ -1,0 +1,13 @@
+{
+  "name": "Jetson Orin NX 16GB",
+  "slug": "jetson-orin-nx-16gb",
+  "kind": "Jetson",
+  "gpu": "Orin (nvgpu)",
+  "device_model": "NVIDIA Jetson Orin NX Engineering Reference Developer Kit",
+  "driver": "540.4.0",
+  "cpu": "ARMv8 Processor rev 1 (v8l)",
+  "ram_gb": 15.3,
+  "jetpack": "6.x",
+  "l4t": "36.4.4",
+  "jetson_module": "p3767-0000"
+}

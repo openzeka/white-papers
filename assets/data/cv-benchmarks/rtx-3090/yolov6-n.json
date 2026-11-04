@@ -1,0 +1,86 @@
+{
+  "name": "YOLOV6-N",
+  "model_id": "M-9094",
+  "task": "detector",
+  "classes": 80,
+  "input_resolution": "640x640",
+  "precision": "FP16",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Searched up to 40 cameras: on this machine the engine hangs between 44 and 48 cameras.",
+  "runs": [
+    "20261102_190528",
+    "20261102_190753",
+    "20261102_190858",
+    "20261102_191003",
+    "20261102_191109",
+    "20261102_191214",
+    "20261102_191439"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 20.02,
+      "fps_total": 20.02,
+      "drop_pct": 0.03,
+      "measured_at": 1793635528.654,
+      "run": "20261102_190528",
+      "run_id": "M-9094_1cam_bf66edfe"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.73,
+      "fps_total": 39.47,
+      "drop_pct": 0.36,
+      "measured_at": 1793635673.772,
+      "run": "20261102_190753",
+      "run_id": "M-9094_2cam_cc1a96ba"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 20.02,
+      "fps_total": 80.07,
+      "drop_pct": -0.0,
+      "measured_at": 1793635738.844,
+      "run": "20261102_190858",
+      "run_id": "M-9094_4cam_4c68db7b"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 20.08,
+      "fps_total": 160.63,
+      "drop_pct": -0.3,
+      "measured_at": 1793635803.948,
+      "run": "20261102_191003",
+      "run_id": "M-9094_8cam_5cd2332b"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 19.85,
+      "fps_total": 317.57,
+      "drop_pct": 0.13,
+      "measured_at": 1793635869.005,
+      "run": "20261102_191109",
+      "run_id": "M-9094_16cam_04684dbd"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 19.82,
+      "fps_total": 634.33,
+      "drop_pct": 0.64,
+      "measured_at": 1793635934.066,
+      "run": "20261102_191214",
+      "run_id": "M-9094_32cam_9884767e"
+    },
+    "40": {
+      "cameras": 40,
+      "fps_per_camera": 19.11,
+      "fps_total": 764.35,
+      "drop_pct": -0.18,
+      "measured_at": 1793636079.235,
+      "run": "20261102_191439",
+      "run_id": "M-9094_40cam_e935e60c"
+    }
+  }
+}

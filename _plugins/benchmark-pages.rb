@@ -142,7 +142,12 @@ module OzBenchPages
     out << "</tbody>\n</table>\n<table>\n<thead><tr>"
     %w[cv_cameras cv_percam cv_total cv_drop cv_status].each { |k| out << "<th>#{h b[k]}</th>" }
     out << "</tr></thead>\n<tbody>\n"
-    pts.each do |p|
+    (pts + (row["failures"] || [])).sort_by { |p| p["cameras"].to_i }.each do |p|
+      if p["reason"]
+        out << "<tr><td>#{p['cameras']}</td><td colspan=\"3\">#{h(b["cv_why_#{p['reason']}"] || b['cv_why_error'])}</td>" \
+               "<td>#{h b['cv_fail']}</td></tr>\n"
+        next
+      end
       ok = p["fps_per_camera"].to_f >= target
       out << "<tr><td>#{p['cameras']}</td><td>#{format('%.1f', p['fps_per_camera'].to_f)}</td>" \
              "<td>#{format('%.1f', p['fps_total'].to_f)}</td><td>#{format('%.2f', p['drop_pct'].to_f)}</td>" \

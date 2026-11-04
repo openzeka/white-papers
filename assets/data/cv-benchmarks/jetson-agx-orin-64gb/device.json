@@ -1,0 +1,14 @@
+{
+  "name": "Jetson AGX Orin 64GB",
+  "slug": "jetson-agx-orin-64gb",
+  "kind": "Jetson",
+  "gpu": "Orin (nvgpu)",
+  "device_model": "NVIDIA Jetson AGX Orin 64GB - AVerMedia D315",
+  "driver": "540.4.0",
+  "cuda": "12.6.11",
+  "cpu": "ARMv8 Processor rev 1 (v8l)",
+  "ram_gb": 61.4,
+  "jetpack": "6.x",
+  "l4t": "36.4.4",
+  "jetson_module": "p3701-0005"
+}

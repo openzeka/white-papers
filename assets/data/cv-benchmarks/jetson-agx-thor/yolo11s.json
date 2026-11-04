@@ -1,5 +1,5 @@
 {
-  "name": "YOLO11S",
+  "name": "YOLO11-S",
   "model_id": "M-448",
   "task": "detector",
   "classes": 80,

@@ -38,15 +38,30 @@ once you know which of those columns differ between them.
 
 Every figure is an OpenZeka measurement, produced with the
 [cordatus-benchmark](https://github.com/CordatusAI) tool against the Cordatus
-Inference Engine, on NVIDIA Jetson Orin Nano, Jetson AGX Thor, GB10 (DGX Spark)
-and GeForce RTX 3060 and RTX 3090. The pool grows as we test further devices and
+Inference Engine, on NVIDIA Jetson Orin Nano, Jetson Orin NX 16GB, Jetson AGX
+Orin 64GB, Jetson AGX Thor, GB10 (DGX Spark) and GeForce RTX 3060 and RTX 3090.
+The pool grows as we test further devices and
 models.
 
-Every camera is a **live 1080p H.264 IP camera streaming at a fixed 20 FPS**.
+Every camera is a **1080p H.264 stream at a fixed 20 FPS**: a live IP camera,
+or, for the rows measured in November 2026, a recorded clip replayed over RTSP
+(see below).
 Each configuration is swept across increasing camera counts, typically 1, 2, 4
 and 8 and then in steps of two, up to 32. Not every configuration has every
 count: a count that was not measured, or whose measurement was discarded, is
 simply missing from that row's sweep.
+
+Rows measured from 2 to 4 November 2026 differ in two ways, and their notes say so. They
+ran on **Cordatus Inference Engine 2.7.2**, and every camera was the same
+recorded 1080p H.264 office clip at 20 FPS, **replayed over RTSP** rather than a
+live camera, because the office cameras accept only about 30 sessions in total.
+Their camera counts come from a limit search: 1, 2, 4, 8, 16 and 32 cameras and
+upward until a camera falls under 15 FPS or drops more than 2% of its frames,
+then the gap is halved. On the RTX 3090 the engine hangs between 44 and 48
+cameras, before the GPU runs out, so most searches there stop at 40 cameras. On the
+Jetsons the clocks were locked at maximum with `jetson_clocks` and the VIC (video
+scaler) clock was pinned to its maximum: on its default governor the VIC stayed
+at 115 MHz and capped every Jetson pipeline near 100 FPS in total.
 
 For each camera count the tool starts a job, waits for every camera to reach the
 pipeline and frames to flow, lets the pipeline settle, then samples the engine's
@@ -66,7 +81,7 @@ than it streams, which is physically impossible and a sign of the same problem.
 
 **Cameras** — the camera count the row's numbers were measured at. Each row
 reports the heaviest load it was measured under at or below the camera limit in
-the filter panel, so rows can differ here, which is why the count sits beside
+the filters, so rows can differ here, which is why the count sits beside
 the numbers instead of in a heading.
 
 **FPS / camera** — the frame rate each camera is processed at, at that camera
@@ -92,8 +107,8 @@ the model name where it was recorded. INT8 stores weights and activations in
 8-bit integers; lower precision generally means faster inference, at some risk
 to accuracy.
 
-**Device** — the hardware the pipeline ran on: a Jetson module (Orin Nano, AGX
-Thor), a GB10-based DGX Spark, or a GeForce desktop GPU. The DeepStream,
+**Device** — the hardware the pipeline ran on: a Jetson module (Orin Nano, Orin
+NX, AGX Orin, AGX Thor), a GB10-based DGX Spark, or a GeForce desktop GPU. The DeepStream,
 CUDA and JetPack/L4T versions, and the CPU where recorded, are listed in the
 expanded row.
 
@@ -112,7 +127,7 @@ its cameras has fallen below what you need, so read the per-camera figure for
 
 ### 1. Set the camera limit
 
-The slider at the top of the filter panel is an upper bound, not a selection. It
+The camera-limit slider in the filters is an upper bound, not a selection. It
 hides everything measured above it and stops at the largest camera count anyone
 has measured so far. Set it to 12 and every row reports the heaviest load it was
 measured at up to 12 cameras — the sweep, the curve and the stream preview
@@ -157,11 +172,11 @@ configuration, and neither is it a promise about the counts between two
 measurements.
 
 <div class="bt-howto-example" markdown="1">
-**Example.** PeopleNet on GB10 delivers 15.5 FPS per camera at 30 cameras and
-14.1 at 32, so at the default 15 FPS target Max cameras is 30. Raise the target
-to 18 FPS and it falls to 26, the last count still at 19.0. Meanwhile total FPS
-stops growing: about 494 at 26 and 28 cameras, 452 at 32 — the extra cameras
-are sharing the same throughput rather than adding to it.
+**Example.** PeopleNet on GB10 delivers 16.1 FPS per camera at 32 cameras and
+12.9 at 34, so at the default 15 FPS target Max cameras is 32. Raise the target
+to 18 FPS and it falls to 16, the next measured count, still at 19.8. Meanwhile
+total FPS stops growing: about 514 at 32 cameras, between 418 and 490 from 34 to
+48 — the extra cameras are sharing the same throughput rather than adding to it.
 </div>
 
 A **≥** beside the figure means the device had not reached its own limit: at the
@@ -218,7 +233,7 @@ The table deliberately uses one fixed, comparable workload so that a first
 comparison is possible without a site survey. It is **not a substitute for a
 test on your own cameras**.
 
-Every figure comes from live 1080p H.264 cameras at 20 FPS. Cameras at a
+Every figure comes from 1080p H.264 cameras at 20 FPS, live or replayed. Cameras at a
 different resolution, codec or frame rate change the decode and scaling load. A
 production pipeline often adds tracking, secondary classifiers, recording or
 analytics on top of detection, and whatever the measured pipeline did not run is
@@ -227,10 +242,11 @@ nothing about behaviour over hours — thermal limits on a fanless enclosure, fo
 example. And these are speed measurements only: nothing here measures how
 accurately a model detects.
 
-Higher camera counts on the desktop GPUs, where the RTX 3060 and RTX 3090 were
-still keeping up at the largest count we tested, need a camera source that does
-not run out before the GPU does. Those runs are pending, and the table will grow
-when they land.
+Higher camera counts on the RTX 3060, which was still keeping up at the largest
+count we tested, need a camera source that does not run out before the GPU does.
+Those runs are pending, and the table will grow when they land. The RTX 3090 was
+measured again in November 2026 with replayed cameras; its search stops where
+the engine hangs, not where the GPU does.
 
 </div>
 </details>

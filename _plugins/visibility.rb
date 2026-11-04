@@ -214,7 +214,14 @@ module OzVisibility
                 "fps" => num(last["fps_per_camera"], lang, 1), "total" => num(last["fps_total"], lang, 1),
                 "drop" => num([last["drop_pct"].to_f, 0].max, lang, 1))]
     out << fill(maxc.zero? ? t["cv_max_zero"] : t["cv_max"], "target" => num(target, lang, 1), "max" => maxc)
-    out << fill(t["cv_open"], "src" => num(src, lang)) if last["fps_per_camera"].to_f >= src * 0.9
+    # A larger camera count that failed outright (fails[] in cv-benchmark-table.js)
+    # makes the last measurement the limit rather than a floor.
+    fail = (row["failures"] || []).find { |f| f["cameras"].to_i > last["cameras"].to_i }
+    if fail
+      out << fill(t["cv_failed"], "cams" => fail["cameras"], "why" => t["cv_why_#{fail['reason']}"] || t["cv_why_error"])
+    elsif last["fps_per_camera"].to_f >= src * 0.9
+      out << fill(t["cv_open"], "src" => num(src, lang))
+    end
     [out.join(" "), maxc]
   end
 
@@ -291,6 +298,7 @@ module OzVisibility
               "device" => d["name"], "kind" => d["kind"], "model" => m["name"],
               "precision" => m["precision"], "input_resolution" => m["input_resolution"],
               "points" => pts,
+              "failures" => (md["failures"] || {}).values.sort_by { |p| p["cameras"].to_i },
               "sweep" => pts.map { |p| "#{p['cameras']} cam: #{p['fps_per_camera']} FPS/cam, drop #{p['drop_pct']}%" }.join("; "),
             }
           end

@@ -1,0 +1,106 @@
+{
+  "name": "PeopleNet",
+  "model_id": "M-15",
+  "task": "detector",
+  "classes": 3,
+  "input_resolution": "960x544",
+  "precision": "INT8",
+  "deepstream": "7.1.0",
+  "source_profile": "replay-1080p20",
+  "measure_s": 30,
+  "notes": "Cordatus Inference Engine 2.7.2. One recorded 1080p20 office clip replayed over RTSP to every camera; the camera count was raised until a camera fell under 15 FPS or dropped more than 2% of its frames. Clocks locked at maximum with jetson_clocks and the VIC (video scaler) clock pinned to its maximum: left on its default governor the VIC stayed at 115 MHz and capped every Jetson pipeline near 100 FPS in total.",
+  "runs": [
+    "20261102_172252",
+    "20261102_172357",
+    "20261102_172502_2",
+    "20261102_172607",
+    "20261102_172713",
+    "20261102_172827",
+    "20261102_174524",
+    "20261102_174639",
+    "20261102_174754"
+  ],
+  "points": {
+    "1": {
+      "cameras": 1,
+      "fps_per_camera": 19.71,
+      "fps_total": 19.71,
+      "drop_pct": 0.8,
+      "measured_at": 1793629372.587,
+      "run": "20261102_172252",
+      "run_id": "M-15_1cam_58147e6b"
+    },
+    "2": {
+      "cameras": 2,
+      "fps_per_camera": 19.86,
+      "fps_total": 39.71,
+      "drop_pct": 0.45,
+      "measured_at": 1793629437.644,
+      "run": "20261102_172357",
+      "run_id": "M-15_2cam_158bd8e7"
+    },
+    "4": {
+      "cameras": 4,
+      "fps_per_camera": 19.75,
+      "fps_total": 78.99,
+      "drop_pct": -0.08,
+      "measured_at": 1793629502.773,
+      "run": "20261102_172502_2",
+      "run_id": "M-15_4cam_377c76cf"
+    },
+    "8": {
+      "cameras": 8,
+      "fps_per_camera": 20.13,
+      "fps_total": 161.02,
+      "drop_pct": -0.7,
+      "measured_at": 1793629567.776,
+      "run": "20261102_172607",
+      "run_id": "M-15_8cam_ea8a5952"
+    },
+    "16": {
+      "cameras": 16,
+      "fps_per_camera": 15.21,
+      "fps_total": 243.34,
+      "drop_pct": -0.23,
+      "measured_at": 1793629633.037,
+      "run": "20261102_172713",
+      "run_id": "M-15_16cam_26e91601"
+    },
+    "18": {
+      "cameras": 18,
+      "fps_per_camera": 14.92,
+      "fps_total": 268.54,
+      "drop_pct": -0.04,
+      "measured_at": 1793630874.128,
+      "run": "20261102_174754",
+      "run_id": "M-15_18cam_9ac6d19a"
+    },
+    "20": {
+      "cameras": 20,
+      "fps_per_camera": 13.48,
+      "fps_total": 269.53,
+      "drop_pct": 0.76,
+      "measured_at": 1793630799.033,
+      "run": "20261102_174639",
+      "run_id": "M-15_20cam_8f3f46b3"
+    },
+    "24": {
+      "cameras": 24,
+      "fps_per_camera": 11.32,
+      "fps_total": 271.72,
+      "drop_pct": 0.5,
+      "measured_at": 1793630724.121,
+      "run": "20261102_174524",
+      "run_id": "M-15_24cam_89fac6d7"
+    },
+    "32": {
+      "cameras": 32,
+      "fps_per_camera": 8.39,
+      "fps_total": 268.41,
+      "drop_pct": -1.25,
+      "measured_at": 1793629707.986,
+      "run": "20261102_172827",
+      "run_id": "M-15_32cam_d70bb119"
+    }
+  }
+}
