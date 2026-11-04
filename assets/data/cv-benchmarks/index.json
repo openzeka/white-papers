@@ -1,5 +1,5 @@
 {
-  "generated_at": 1793770338.7050755,
+  "generated_at": 1793771225.3800874,
   "config": {
     "target_fps": 15.0,
     "max_drop_pct": 2.0
@@ -1111,7 +1111,7 @@
           ]
         },
         {
-          "name": "YOLO11L",
+          "name": "YOLO11-L",
           "precision": "",
           "input_resolution": "640x640",
           "path": "jetson-agx-thor/yolo11l.json",
@@ -1132,7 +1132,7 @@
           ]
         },
         {
-          "name": "YOLO11M",
+          "name": "YOLO11-M",
           "precision": "",
           "input_resolution": "640x640",
           "path": "jetson-agx-thor/yolo11m.json",
@@ -1155,7 +1155,7 @@
           ]
         },
         {
-          "name": "YOLO11S",
+          "name": "YOLO11-S",
           "precision": "",
           "input_resolution": "640x640",
           "path": "jetson-agx-thor/yolo11s.json",
