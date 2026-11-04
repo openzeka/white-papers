@@ -1093,7 +1093,7 @@
         },
         {
           "name": "YOLO11-N",
-          "precision": "",
+          "precision": "FP16",
           "input_resolution": "640x640",
           "path": "jetson-agx-thor/yolo11-n.json",
           "cameras": [
@@ -1112,7 +1112,7 @@
         },
         {
           "name": "YOLO11-L",
-          "precision": "",
+          "precision": "FP16",
           "input_resolution": "640x640",
           "path": "jetson-agx-thor/yolo11l.json",
           "cameras": [
@@ -1133,7 +1133,7 @@
         },
         {
           "name": "YOLO11-M",
-          "precision": "",
+          "precision": "FP16",
           "input_resolution": "640x640",
           "path": "jetson-agx-thor/yolo11m.json",
           "cameras": [
@@ -1156,7 +1156,7 @@
         },
         {
           "name": "YOLO11-S",
-          "precision": "",
+          "precision": "FP16",
           "input_resolution": "640x640",
           "path": "jetson-agx-thor/yolo11s.json",
           "cameras": [
