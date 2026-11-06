@@ -15,6 +15,22 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-11-06
+  type: benchmarks
+  run: mistral-large-4-1t-a52b_b300_fp8_sglang_tp8
+  text:
+    en: "Mistral-Large-4-1T-A52B on DGX B300: FP8 weights served with SGLang across 8 GPUs, with DSpark speculative decoding (k=3) and a 1M context, measured up to 128 concurrent requests."
+    tr: "Mistral-Large-4-1T-A52B, DGX B300 üzerinde: FP8 ağırlıklar 8 GPU'da SGLang ile sunuldu, DSpark spekülatif kod çözme (k=3) ve 1M bağlam ile 128 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Mistral-Large-4-1T-A52B op DGX B300: FP8-gewichten geserveerd met SGLang over 8 GPU's, met DSpark speculatieve decodering (k=3) en een context van 1M, gemeten tot 128 gelijktijdige verzoeken."
+
+- date: 2026-11-06
+  type: benchmarks
+  run: ripple-65b-preview_b300_nvfp4_sglang_dflash2
+  text:
+    en: "Ripple-65B-Preview on DGX B300: NVFP4 weights served with SGLang on one GPU, with DFlash2 speculative decoding (k=16) and a 2M context, measured up to 256 concurrent requests."
+    tr: "Ripple-65B-Preview, DGX B300 üzerinde: NVFP4 ağırlıklar tek GPU'da SGLang ile sunuldu, DFlash2 spekülatif kod çözme (k=16) ve 2M bağlam ile 256 eşzamanlı isteğe kadar ölçüldü."
+    nl: "Ripple-65B-Preview op DGX B300: NVFP4-gewichten geserveerd met SGLang op één GPU, met DFlash2 speculatieve decodering (k=16) en een context van 2M, gemeten tot 256 gelijktijdige verzoeken."
+
 - date: 2026-11-04
   type: paper
   page: system-one-production-readiness

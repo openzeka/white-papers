@@ -1,0 +1,14 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "mistralai/Mistral-Large-4-1T-A52B",
+      "object": "model",
+      "created": 1793949910,
+      "owned_by": "sglang",
+      "root": "mistralai/Mistral-Large-4-1T-A52B",
+      "parent": null,
+      "max_model_len": 1048576
+    }
+  ]
+}
