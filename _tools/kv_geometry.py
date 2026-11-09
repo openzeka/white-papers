@@ -289,6 +289,7 @@ def layer_kinds(c):
     n = nlayers(c)
     if c.get("layer_types"):
         m = {"full_attention": "full", "deepseek_sparse_attention": "full", "attention": "full",
+             "indexed_attention": "full",
              "sliding_attention": "sliding", "linear_attention": "linear"}
         kinds = [m.get(t) for t in c["layer_types"][:n]]
         if None in kinds:

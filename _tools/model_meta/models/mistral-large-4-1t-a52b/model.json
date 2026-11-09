@@ -1,0 +1,18 @@
+{
+  "model": "Mistral-Large-4-1T-A52B",
+  "repo": "mistralai/Mistral-Large-4-1T-A52B",
+  "revision": "af26e7869af601441d5cdf75a1272469ddc3d059",
+  "config_sha256": "3081fb94f5001f34a21e08437df710bb0b6423beada9184b566a8f5b1ee46277",
+  "fetched": "2026-11-06",
+  "hf": {
+    "created": "2026-09-30T18:35:13.000Z",
+    "last_modified": "2026-11-02T18:30:59.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": null,
+    "parameters_by_dtype": null
+  }
+}

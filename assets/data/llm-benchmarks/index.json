@@ -699,6 +699,16 @@
           "id": "nemotron-3.5-bolt-74b-a9b_b300_bf16_vllm_tp1",
           "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
           "path": "dgx-b300/nemotron-3.5-bolt-74b-a9b_b300_bf16_vllm_tp1.json"
+        },
+        {
+          "id": "mistral-large-4-1t-a52b_b300_fp8_sglang_tp8",
+          "model": "Mistral-Large-4-1T-A52B",
+          "path": "dgx-b300/mistral-large-4-1t-a52b_b300_fp8_sglang_tp8.json"
+        },
+        {
+          "id": "ripple-65b-preview_b300_nvfp4_sglang_dflash2",
+          "model": "Ripple-65B-Preview",
+          "path": "dgx-b300/ripple-65b-preview_b300_nvfp4_sglang_dflash2.json"
         }
       ]
     }

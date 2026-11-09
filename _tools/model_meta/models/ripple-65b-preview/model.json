@@ -1,0 +1,20 @@
+{
+  "model": "Ripple-65B-Preview",
+  "repo": "ricursiveAI/Ripple-65B-Preview",
+  "revision": "4f872a1ef1376a1962c56bab6d874d017be7eb96",
+  "config_sha256": "9a5654b256ead01855f0d74cf7a70fa65294267e6b7b754b5e5737457a45e14a",
+  "fetched": "2026-11-06",
+  "hf": {
+    "created": "2026-11-04T02:41:21.000Z",
+    "last_modified": "2026-11-06T08:23:11.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": null,
+    "pipeline_tag": null,
+    "safetensors_parameters": 64782689360,
+    "parameters_by_dtype": {
+      "BF16": 64782689360
+    }
+  }
+}

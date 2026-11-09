@@ -1,0 +1,239 @@
+{
+  "repo": "mistralai/Mistral-Large-4-1T-A52B",
+  "revision": "af26e7869af601441d5cdf75a1272469ddc3d059",
+  "fetched": "2026-11-06",
+  "safetensors_bytes": 1060554587912,
+  "quantization": {
+    "method": "fp8",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-09-30T18:35:13.000Z",
+    "last_modified": "2026-11-02T18:30:59.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": null,
+    "parameters_by_dtype": null
+  },
+  "files": [
+    {
+      "path": "consolidated-00001-of-00054.safetensors",
+      "size": 19974069072
+    },
+    {
+      "path": "consolidated-00002-of-00054.safetensors",
+      "size": 19986657736
+    },
+    {
+      "path": "consolidated-00003-of-00054.safetensors",
+      "size": 19999243760
+    },
+    {
+      "path": "consolidated-00004-of-00054.safetensors",
+      "size": 19986657928
+    },
+    {
+      "path": "consolidated-00005-of-00054.safetensors",
+      "size": 19986657744
+    },
+    {
+      "path": "consolidated-00006-of-00054.safetensors",
+      "size": 19974071608
+    },
+    {
+      "path": "consolidated-00007-of-00054.safetensors",
+      "size": 19999243840
+    },
+    {
+      "path": "consolidated-00008-of-00054.safetensors",
+      "size": 19986657744
+    },
+    {
+      "path": "consolidated-00009-of-00054.safetensors",
+      "size": 19999243088
+    },
+    {
+      "path": "consolidated-00010-of-00054.safetensors",
+      "size": 19999243784
+    },
+    {
+      "path": "consolidated-00011-of-00054.safetensors",
+      "size": 19999243712
+    },
+    {
+      "path": "consolidated-00012-of-00054.safetensors",
+      "size": 19999243928
+    },
+    {
+      "path": "consolidated-00013-of-00054.safetensors",
+      "size": 19999243728
+    },
+    {
+      "path": "consolidated-00014-of-00054.safetensors",
+      "size": 19999243712
+    },
+    {
+      "path": "consolidated-00015-of-00054.safetensors",
+      "size": 19999243944
+    },
+    {
+      "path": "consolidated-00016-of-00054.safetensors",
+      "size": 19999243704
+    },
+    {
+      "path": "consolidated-00017-of-00054.safetensors",
+      "size": 19974070776
+    },
+    {
+      "path": "consolidated-00018-of-00054.safetensors",
+      "size": 19986657928
+    },
+    {
+      "path": "consolidated-00019-of-00054.safetensors",
+      "size": 19986657736
+    },
+    {
+      "path": "consolidated-00020-of-00054.safetensors",
+      "size": 19986657592
+    },
+    {
+      "path": "consolidated-00021-of-00054.safetensors",
+      "size": 19986657864
+    },
+    {
+      "path": "consolidated-00022-of-00054.safetensors",
+      "size": 19986657744
+    },
+    {
+      "path": "consolidated-00023-of-00054.safetensors",
+      "size": 19986657640
+    },
+    {
+      "path": "consolidated-00024-of-00054.safetensors",
+      "size": 19986657808
+    },
+    {
+      "path": "consolidated-00025-of-00054.safetensors",
+      "size": 19986657048
+    },
+    {
+      "path": "consolidated-00026-of-00054.safetensors",
+      "size": 19974071640
+    },
+    {
+      "path": "consolidated-00027-of-00054.safetensors",
+      "size": 19999243720
+    },
+    {
+      "path": "consolidated-00028-of-00054.safetensors",
+      "size": 19986657744
+    },
+    {
+      "path": "consolidated-00029-of-00054.safetensors",
+      "size": 19974071744
+    },
+    {
+      "path": "consolidated-00030-of-00054.safetensors",
+      "size": 19999243704
+    },
+    {
+      "path": "consolidated-00031-of-00054.safetensors",
+      "size": 19999243760
+    },
+    {
+      "path": "consolidated-00032-of-00054.safetensors",
+      "size": 19999243896
+    },
+    {
+      "path": "consolidated-00033-of-00054.safetensors",
+      "size": 19986657152
+    },
+    {
+      "path": "consolidated-00034-of-00054.safetensors",
+      "size": 19974071424
+    },
+    {
+      "path": "consolidated-00035-of-00054.safetensors",
+      "size": 19986657864
+    },
+    {
+      "path": "consolidated-00036-of-00054.safetensors",
+      "size": 19999243712
+    },
+    {
+      "path": "consolidated-00037-of-00054.safetensors",
+      "size": 19974071672
+    },
+    {
+      "path": "consolidated-00038-of-00054.safetensors",
+      "size": 19986657808
+    },
+    {
+      "path": "consolidated-00039-of-00054.safetensors",
+      "size": 19999243712
+    },
+    {
+      "path": "consolidated-00040-of-00054.safetensors",
+      "size": 19974071728
+    },
+    {
+      "path": "consolidated-00041-of-00054.safetensors",
+      "size": 19986657280
+    },
+    {
+      "path": "consolidated-00042-of-00054.safetensors",
+      "size": 19986657440
+    },
+    {
+      "path": "consolidated-00043-of-00054.safetensors",
+      "size": 19986657712
+    },
+    {
+      "path": "consolidated-00044-of-00054.safetensors",
+      "size": 19986657744
+    },
+    {
+      "path": "consolidated-00045-of-00054.safetensors",
+      "size": 19974071560
+    },
+    {
+      "path": "consolidated-00046-of-00054.safetensors",
+      "size": 19999243896
+    },
+    {
+      "path": "consolidated-00047-of-00054.safetensors",
+      "size": 19986657736
+    },
+    {
+      "path": "consolidated-00048-of-00054.safetensors",
+      "size": 19974071624
+    },
+    {
+      "path": "consolidated-00049-of-00054.safetensors",
+      "size": 19986657504
+    },
+    {
+      "path": "consolidated-00050-of-00054.safetensors",
+      "size": 19999243288
+    },
+    {
+      "path": "consolidated-00051-of-00054.safetensors",
+      "size": 19999243736
+    },
+    {
+      "path": "consolidated-00052-of-00054.safetensors",
+      "size": 19986656752
+    },
+    {
+      "path": "consolidated-00053-of-00054.safetensors",
+      "size": 16935176352
+    },
+    {
+      "path": "consolidated-00054-of-00054.safetensors",
+      "size": 4199942840
+    }
+  ]
+}

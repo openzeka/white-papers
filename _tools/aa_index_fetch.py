@@ -40,6 +40,7 @@ PINNED = {
     "DeepSeek-V4-Flash-Vision-Exp": "deepseek-v4-flash-vision",  # AA dropped the "Exp"
     "MiMo-V2.6-Pro-RL": "mimo-v2-6-pro",                   # same model; AA lists it without "-RL"
     "MiMo-V2.6-Pro-MOPD": "mimo-v2-6-pro",                 # same model; AA lists it without "-MOPD"
+    "Mistral-Large-4-1T-A52B": "mistral-large-4",          # AA names the 1T model by effort; (High) is the highest
 }
 # Not in AA's catalogue at all, so both fields stay null.
 # MiMo-V2.6-Flash-RL: "MiMo-V2.6-Flash" is a near miss, not this model — the
