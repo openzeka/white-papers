@@ -45,6 +45,8 @@ DEVICES = [
      {"name": "Jetson AGX Thor Developer Kit", "memory_gb": 128, "unified": True}),
     ("NVIDIA DGX Spark", "DGX Spark", "dgxspark",
      {"name": "NVIDIA DGX Spark", "memory_gb": 128, "unified": True}),
+    ("NVIDIA DGX B300", "DGX B300 (1 GPU)", "b300",
+     {"name": "NVIDIA DGX B300 (one of its eight B300 GPUs)", "memory_gb": 288, "unified": False}),
     ("RTX PRO 6000 Blackwell Max-Q", "RTX PRO 6000 Max-Q", "rtxpro6000maxq",
      {"name": "RTX PRO 6000 Blackwell Max-Q Workstation Edition", "memory_gb": 96, "unified": False}),
     ("RTX PRO 6000 Blackwell Workstation", "RTX PRO 6000", "rtxpro6000",
@@ -145,6 +147,12 @@ def settings_of(run, conc):
         notes.append("GGUF weights")
     if re.search(r"--no-cache-prompt|no prompt cache|prefix cache off", text):
         notes.append("prompt cache off")
+    if "unique images per request" in text:
+        # a shared server that kept prefix caching on: every request carried new images, so nothing was reused
+        notes.append("prefix cache on, unique images per request")
+    m = re.search(r"tensor-parallel-size (\d+)", text)
+    if m:
+        notes.append(f"{m.group(1)} GPU" + ("s" if m.group(1) != "1" else ""))
     if "enable_thinking false" in text:
         notes.append("thinking off")
     m = re.search(r"(\d+) parallel slots", (conc or {}).get("engine", ""))
@@ -160,6 +168,9 @@ def settings_of(run, conc):
         cl = ((conc or {}).get("perf_settings") or {}).get("camera_limit") or {}
         if cl.get("max_num_seqs") and cl.get("levels") and str(cl["max_num_seqs"]) != m.group(1):
             notes[-1] += f" ({cl['resolution']}, {min(cl['levels'])} or more cameras: {cl['max_num_seqs']})"
+    m = re.search(r"max-model-len (\d+)", text) if "shared server as deployed" in text else None
+    if m:
+        notes.append(f"max-model-len {m.group(1)}")
     if "vllm-omni" in text:
         notes.append("vLLM-Omni image")
     if "cuda-compat-orin" in text or "compat driver" in text:

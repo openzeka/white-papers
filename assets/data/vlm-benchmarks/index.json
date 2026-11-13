@@ -1,7 +1,7 @@
 {
   "source": {
     "tool": "VLM Benchmark Tool",
-    "exported": "2026-10-23T14:14:51"
+    "exported": "2026-11-13T08:05:30"
   },
   "config": {
     "response_target_s": 3,
@@ -895,6 +895,18 @@
           "id": "qwen3.8-27b_dgxspark_fp8_vllm",
           "model": "Qwen3.8-27B",
           "path": "dgx-spark/qwen3.8-27b_dgxspark_fp8_vllm.json"
+        }
+      ]
+    },
+    {
+      "name": "DGX B300 (1 GPU)",
+      "slug": "dgx-b300-1-gpu",
+      "path": "dgx-b300-1-gpu/device.json",
+      "runs": [
+        {
+          "id": "qwen3-vl-30b-a3b-instruct_b300_fp8_vllm",
+          "model": "Qwen3-VL-30B-A3B-Instruct",
+          "path": "dgx-b300-1-gpu/qwen3-vl-30b-a3b-instruct_b300_fp8_vllm.json"
         }
       ]
     }

@@ -147,7 +147,8 @@
     "Jetson AGX Thor": 3,
     "DGX Spark": 4,
     "RTX PRO 6000 Max-Q": 5,
-    "RTX PRO 6000": 6
+    "RTX PRO 6000": 6,
+    "DGX B300 (1 GPU)": 7
   };
 
   var rawData = null;

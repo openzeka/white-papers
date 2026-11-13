@@ -1,0 +1,6 @@
+{
+  "name": "DGX B300 (1 GPU)",
+  "product": "NVIDIA DGX B300 (one of its eight B300 GPUs)",
+  "memory_gb": 288,
+  "unified": false
+}
