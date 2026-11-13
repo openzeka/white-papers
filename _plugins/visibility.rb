@@ -189,18 +189,18 @@ module OzVisibility
     if c1
       out << fill(t["vlm_run"], "model" => r["model"], "params" => params, "quant" => r["quantization"],
                   "engine" => r["engine"], "device" => r["device"], "res" => res,
-                  "resp" => num(vlm_response(c1), lang, 2), "tps" => num(c1["tps"], lang, 1))
+                  "resp" => num(vlm_response(c1) * 1000, lang, 0), "tps" => num(c1["tps"], lang, 1))
     end
     singles = (r["data_points"] || []).select { |p| p["c"].to_i == 1 }
     many = singles.select { |p| p["res"] == res && p["images"].to_i > images }.max_by { |p| p["images"].to_i }
     big = singles.select { |p| p["images"].to_i == images }.max_by { |p| VLM_SIZES.index(p["res"]).to_i }
     parts = []
-    parts << fill(t["vlm_cost_many"], "n" => many["images"], "res" => res, "resp" => num(vlm_response(many), lang, 2)) if many
-    parts << fill(t["vlm_cost_big"], "res" => big["res"], "resp" => num(vlm_response(big), lang, 2)) if big && big["res"] != res
+    parts << fill(t["vlm_cost_many"], "n" => many["images"], "res" => res, "resp" => num(vlm_response(many) * 1000, lang, 0)) if many
+    parts << fill(t["vlm_cost_big"], "res" => big["res"], "resp" => num(vlm_response(big) * 1000, lang, 0)) if big && big["res"] != res
     out << parts.join(" ") unless parts.empty?
     mc = vlm_max_c(r, res, images, cfg)
     top = pts.map { |p| p["c"].to_i }.max || 0
-    tv = { "target" => num(cfg["response_target_s"], lang, 1), "res" => res, "max" => mc }
+    tv = { "target" => num(cfg["response_target_s"].to_f * 1000, lang, 0), "res" => res, "max" => mc }
     key = mc.zero? ? "vlm_cams_none" : mc == top ? "vlm_cams_open" : mc == 1 ? "vlm_cams_one" : "vlm_cams"
     out << fill(t[key], tv) unless pts.empty?
     out
@@ -264,7 +264,7 @@ module OzVisibility
           m = (vlm["models"] || {})[r["model"]] || {}
           r["oz_params"] = m["params"]
           r["oz_sweep"] = (r["data_points"] || []).group_by { |p| [p["res"], p["images"]] }.map do |(rs, n), pts|
-            "#{rs} × #{n}: " + pts.sort_by { |p| p["c"].to_i }.map { |p| "#{p['c']} cam #{p['ttft_s']} s / #{p['tps']} tok/s#{p['failed'].to_i.positive? ? " (#{p['failed']} of #{p['requests']} failed)" : ''}" }.join("; ")
+            "#{rs} × #{n}: " + pts.sort_by { |p| p["c"].to_i }.map { |p| "#{p['c']} cam #{(p['ttft_s'].to_f * 1000).round} ms / #{p['tps']} tok/s#{p['failed'].to_i.positive? ? " (#{p['failed']} of #{p['requests']} failed)" : ''}" }.join("; ")
           end.join(" | ")
           pts = OzVisibility.vlm_points(r, res, images)
           r["oz_default_points"] = pts

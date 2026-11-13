@@ -127,7 +127,7 @@ Jetson Orin Nano, RTX 3060 and RTX 3090.
 **How many cameras can this device watch with this vision-language model?**
 
 Pick the image size your cameras send and the longest a camera may wait for its
-answer to start, and the table shows the response time (time to first token)
+answer to start, and the table shows the mean TTFT (time to first token, in ms)
 and the per-camera speed for every measured configuration, and how many cameras
 it keeps up with. Each camera has one request in flight, so concurrency is the
 number of cameras. Measured with llama.cpp and vLLM on Jetson AGX Thor, DGX

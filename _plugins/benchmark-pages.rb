@@ -188,14 +188,15 @@ module OzBenchPages
                       "config" => "#{r['quantization']}, #{r['engine']}")
   end
 
-  def self.sec(x) = x.nil? ? "—" : format(x.to_f < 10 ? "%.2f" : "%.1f", x.to_f)
+  # TTFT in whole milliseconds, as in the widget (stored in seconds).
+  def self.ms(x) = x.nil? ? "—" : (x.to_f * 1000).round.to_s
 
   # The VLM explorer's row and its opened sweep at the default image size, as
   # plain HTML (see fallback()).
   def self.vlm_fallback(r, vlm, b, lang)
     cfg = vlm["oz_config"]
     res = cfg["resolution"]
-    t = cfg["response_target_s"] == cfg["response_target_s"].round ? cfg["response_target_s"].round : cfg["response_target_s"]
+    t = (cfg["response_target_s"].to_f * 1000).round
     m = (vlm["models"] || {})[r["model"]] || {}
     facts = [[b["model"], r["model"]], [b["params"], m["params"] || "—"]]
     facts += [[b["device"], r["device"]], [b["quant"], r["quantization"]], [b["vlm_res"], res],
@@ -209,7 +210,7 @@ module OzBenchPages
     [b["vlm_cams"], b["vlm_resp"], b["vlm_tps"], b["vlm_status"]].each { |k| out << "<th>#{h k}</th>" }
     out << "</tr></thead>\n<tbody>\n"
     (r["oz_default_points"] || []).each do |p|
-      out << "<tr><td>#{p['c']}</td><td>#{sec(p['ttft_s'])}</td><td>#{format('%.1f', p['tps'].to_f)}</td>" \
+      out << "<tr><td>#{p['c']}</td><td>#{ms(p['ttft_s'])}</td><td>#{format('%.1f', p['tps'].to_f)}</td>" \
              "<td>#{h OzVisibility.fill(b[OzVisibility.vlm_meets(p, cfg) ? 'vlm_within' : 'vlm_over'], 'target' => t)}</td></tr>\n"
     end
     # the level at which a request failed closes the sweep, as in the widget
@@ -223,7 +224,7 @@ module OzBenchPages
       [b["vlm_imgs"], b["vlm_resp"], b["vlm_tps"], b["vlm_status"]].each { |k| out << "<th>#{h k}</th>" }
       out << "</tr></thead>\n<tbody>\n"
       imgs.each do |p|
-        out << "<tr><td>#{p['images']}</td><td>#{sec(p['ttft_s'])}</td><td>#{format('%.1f', p['tps'].to_f)}</td>" \
+        out << "<tr><td>#{p['images']}</td><td>#{ms(p['ttft_s'])}</td><td>#{format('%.1f', p['tps'].to_f)}</td>" \
                "<td>#{h OzVisibility.fill(b[OzVisibility.vlm_meets(p, cfg) ? 'vlm_within' : 'vlm_over'], 'target' => t)}</td></tr>\n"
       end
       ifail = ((r["limits"] || {})["images"] || {})[res]
