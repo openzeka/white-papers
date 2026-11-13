@@ -28,17 +28,17 @@
     resetFilters: "Alle filters resetten",
 
     minParams: "Min. parameters",
-    maxResponse: "Max. responstijd",
+    maxResponse: "Max. TTFT",
     noLimit: "Geen limiet",
     paramsAll: "Alle groottes",
     atC: function (c, res, n) { return " bij " + c + (c === 1 ? " camera, " : " camera's, ") + res + ", " + n + (n === 1 ? " beeld" : " beelden"); },
 
     /* Performance target / assumptions */
     targetsHeading: "Prestatiedoel en aannames",
-    targetsIntro: "Deze waarden bepalen wat acceptabele prestaties zijn en wat elke camera stuurt. Ze verbergen geen rijen; ze berekenen voor elke rij de responstijd, Max. camera's en de groene en rode kleuring van Respons opnieuw.",
-    groupResponse: "Responstijd",
-    groupResponseIntro: "Elke camera stuurt zijn volgende verzoek zodra het vorige is beantwoord, dus het aantal camera's is het aantal verzoeken in behandeling. Max. camera's is het hoogste gemeten aantal camera's waarbij het antwoord van elke camera binnen het doel begint.",
-    responseTarget: "Doel maximale responstijd (s)",
+    targetsIntro: "Deze waarden bepalen wat acceptabele prestaties zijn en wat elke camera stuurt. Ze verbergen geen rijen; ze berekenen voor elke rij Max. camera's en de groene en rode kleuring van TTFT opnieuw.",
+    groupResponse: "TTFT — time to first token",
+    groupResponseIntro: "Elke camera stuurt zijn volgende verzoek zodra het vorige is beantwoord, dus het aantal camera's is het aantal verzoeken in behandeling. Max. camera's is het hoogste gemeten aantal camera's waarbij de gemiddelde TTFT van hun verzoeken binnen het doel blijft.",
+    responseTarget: "Doel maximale TTFT (ms)",
     imagesAssumption: "Beelden per camera",
 
     /* Table */
@@ -47,36 +47,36 @@
     colDevice: "Apparaat",
     colQuant: "Kwantisatie",
     colTps: "TPS",
-    colResponse: "Respons",
+    colResponse: "TTFT",
     colMaxCams: "Max. camera's",
     colMaxImages: "Max. beelden per verzoek",
-    withinTarget: function (t) { return " (≤\u00a0" + t + "\u00a0s)"; },  /* kept on one line */
+    withinTarget: function (t) { return " (≤\u00a0" + t + "\u00a0ms)"; },  /* kept on one line */
     colEngine: "Engine",
     atCol: function (c) { return " @ " + c + " cam."; },
-    secUnit: " (s)",
+    secUnit: " (ms)",
     matching: "Overeenkomende configuraties",
     matchingCount: function (shown, total) {
       return "<strong>" + shown + "</strong> van <strong>" + total + "</strong>";
     },
     noMatch: "Geen configuraties komen overeen met de huidige filters.",
     notMeasured: "Geen enkele configuratie is gemeten met deze combinatie van beeldformaat, aantal camera's en beelden per camera. Meerdere camera's zijn gemeten met één beeld per camera bij 480p, 720p en 1080p; 2K en meerdere beelden per camera alleen met één camera. Gedimde knoppen markeren de combinaties zonder meting.",
-    targetMet: "Doel gehaald — het antwoord begint binnen uw doel voor de responstijd.",
-    targetNotMet: "Doel niet gehaald — het duurt langer dan uw doel voor de responstijd voordat het antwoord begint.",
+    targetMet: "Doel gehaald — de gemiddelde TTFT valt binnen uw doel.",
+    targetNotMet: "Doel niet gehaald — de gemiddelde TTFT ligt boven uw doel.",
     viewDetails: "Details bekijken — toont de metingen per aantal camera's, de toelichting op de resultaten en een grafiek voor deze configuratie.",
-    maxAtLeast: function (c) { return "Minstens " + c + ": zelfs bij " + c + (c === 1 ? " camera" : " camera's") + ", het hoogste geteste aantal, kreeg elke camera op tijd antwoord, dus het werkelijke maximum is niet bereikt."; },
-    imagesAtLeast: function (n) { return "Minstens " + n + ": zelfs " + n + (n === 1 ? " beeld" : " beelden") + " per verzoek, het hoogste geteste aantal, kreeg op tijd antwoord, dus het werkelijke maximum is niet bereikt."; },
+    maxAtLeast: function (c) { return "Minstens " + c + ": zelfs bij " + c + (c === 1 ? " camera" : " camera's") + ", het hoogste geteste aantal, bleef de gemiddelde TTFT binnen het doel, dus het werkelijke maximum is niet bereikt."; },
+    imagesAtLeast: function (n) { return "Minstens " + n + ": zelfs " + n + (n === 1 ? " beeld" : " beelden") + " per verzoek, het hoogste geteste aantal, haalde het TTFT-doel, dus het werkelijke maximum is niet bereikt."; },
     imagesFailedAt: function (n) { return "Een verzoek met " + n + " beelden mislukte (te lang voor het model, of geen antwoord binnen 600 s), dus meer kan een verzoek niet dragen."; },
     camsFailedAt: function (c) { return "Bij " + c + " camera's begon het antwoord op een verzoek niet binnen 30 s, dus verder gaat het apparaat niet."; },
     detailImages: "Beelden",
     imagesSweepAt: function (res, dims) { return "Beelden per verzoek, één camera, " + res + " (" + dims + ")"; },
     imagesFailedRow: function (n) { return "Een verzoek met " + n + " beelden mislukte: te lang voor het model, of geen antwoord binnen 600 s."; },
     failedLevel: "Mislukt",
-    withinTargetText: function (t) { return "≤" + t + " s"; },
+    withinTargetText: function (t) { return "≤" + t + " ms"; },
     failedShort: function (f, n) { return f + "/" + n + " mislukt"; },
-    failedTitle: function (f, n) { return f + " van " + n + " verzoeken mislukten: geen antwoord, of een fout van de server. De responstijd is het gemiddelde van de andere."; },
-    overTargetText: function (t) { return ">" + t + " s"; },
-    camsOverTarget: function (r, t) { return "Zelfs één camera wacht " + r + " s tot het antwoord begint, langer dan uw doel van " + t + " s."; },
-    imagesOverTarget: function (r, t) { return "Zelfs met één beeld per verzoek begint het antwoord pas na " + r + " s, langer dan uw doel van " + t + " s."; },
+    failedTitle: function (f, n) { return f + " van " + n + " verzoeken mislukten: geen antwoord, of een fout van de server. De TTFT is het gemiddelde van de andere."; },
+    overTargetText: function (t) { return ">" + t + " ms"; },
+    camsOverTarget: function (r, t) { return "Zelfs één camera wacht " + r + " ms tot het antwoord begint, langer dan uw doel van " + t + " ms."; },
+    imagesOverTarget: function (r, t) { return "Zelfs met één beeld per verzoek begint het antwoord pas na " + r + " ms, langer dan uw doel van " + t + " ms."; },
     limitsLead: function (res) { return "Zonder fout (" + res + "):"; },
     camLimitAt: function (n, f) { return "Het hoogste gemeten aantal camera's dat nog werkte: " + n + ". Bij " + f + " camera's begon het antwoord op een verzoek niet binnen 30 s."; },
     imgLimitAt: function (n, f) { return "Het hoogste gemeten aantal beelden per verzoek dat nog werkte: " + n + ". Een verzoek met " + f + " beelden mislukte (te lang voor het model, of geen antwoord binnen 600 s)."; },
@@ -84,15 +84,15 @@
     imgsNotSearched: function (n) { return "Alleen gemeten tot " + n + (n === 1 ? " beeld" : " beelden") + " per verzoek; naar de limiet is niet gezocht."; },
 
     /* Expanded row */
-    detailC: "Camera's", detailTps: "TPS (tok/s)", detailResponse: "Respons (s)", detailStatus: "Doel",
+    detailC: "Camera's", detailTps: "TPS (tok/s)", detailResponse: "TTFT (ms)", detailStatus: "Doel",
     sweepAt: function (res, dims, n) { return (n === 1 ? "Eén " + res + "-beeld" : n + " " + res + "-beelden") + " (" + dims + ") per camera"; },
     explainedHeading: "Benchmarkresultaten toegelicht",
     oneOnly: "Alleen met één camera gemeten, dus de waarde kan niet hoger zijn dan 1 — het apparaat kan er best meer bedienen.",
     downloadChart: "Grafiek downloaden",
     chartFileSuffix: "-grafiek.png",
-    chartTitle: function (n) { return "Responstijd naarmate er camera's bijkomen · " + n + (n === 1 ? " beeld" : " beelden") + " per camera"; },
-    chartTarget: function (t) { return "Doel " + t + " s"; },
-    yTitle: "Responstijd (s)",
+    chartTitle: function (n) { return "TTFT naarmate er camera's bijkomen · " + n + (n === 1 ? " beeld" : " beelden") + " per camera"; },
+    chartTarget: function (t) { return "Doel " + t + " ms"; },
+    yTitle: "TTFT (ms)",
     xTitle: "Aantal camera's",
 
 
@@ -103,22 +103,22 @@
       device: "<strong>Apparaat</strong><p>De hardware van de run: een Jetson-module, of een RTX PRO 6000 Blackwell-werkstation-GPU. De Max-Q-editie is de 300 W-versie van dezelfde chip.</p><p>De naam van een Jetson vermeldt het gemeten geheugen, dat CPU en GPU delen; beide modules bestaan ook met andere geheugengroottes. RTX PRO 6000 heeft 96 GB.</p>",
       quant: "<strong>Kwantisatie</strong><p>Het getalformaat waarin de gewichten zijn opgeslagen.</p><p>BF16 is volledige precisie, FP8 gebruikt 8 bits en NVFP4 4 bits. Q8_0, Q4_K_M en Q4_0 zijn GGUF-formaten voor llama.cpp met ongeveer 8 en 4 bits per gewicht. Minder bits betekent minder geheugen en meestal meer snelheid, met enig risico voor de kwaliteit.</p>",
       engine: "<strong>Inferentie-engine</strong><p>De serversoftware die het model laadt en verzoeken inplant: vLLM voor Hugging Face-checkpoints, llama.cpp voor GGUF-bestanden.</p><p>Ze beïnvloedt de snelheid net zoveel als de hardware: hetzelfde model op hetzelfde apparaat kan tussen engines meetbaar verschillen.</p>",
-      tps: "<strong>TPS — tokens per seconde</strong><p>Hoe snel het antwoord van één camera wordt geschreven zodra het begonnen is, bij het gekozen aantal camera's. Een token is ongeveer driekwart woord.</p><p>Per camera, niet in totaal. Max. camera's wordt bepaald door de responstijd; TPS laat zien hoe lang een langer antwoord daarna duurt. Hoger is beter.</p>",
-      response: "<strong>Responstijd</strong><p>Hoe lang een camera wacht tot zijn antwoord begint, bij het gekozen aantal camera's, beeldformaat en aantal beelden, in seconden. Gemeten als de time to first token (TTFT).</p><p>Bij een vision-languagemodel is dat vooral het lezen van de beelden, dus het groeit met hun formaat en aantal, en met het aantal camera's dat het apparaat deelt. Groen is binnen uw doel. Lager is beter.</p>",
-      maxCams: "<strong>Max. camera's (≤ uw doel)</strong><p>Het hoogste gemeten aantal camera's waarbij de responstijd uw doel haalt, bij het gekozen beeldformaat en aantal beelden.</p><p>Elke camera stuurt zijn volgende verzoek zodra het vorige is beantwoord, dus hij heeft altijd één verzoek in behandeling: het aantal gelijktijdige verzoeken is het aantal camera's.</p><p>Een plus (16+) betekent dat zelfs het hoogste geteste aantal het doel haalde, dus het werkelijke maximum ligt hoger. “>3 s” (uw doel) betekent dat zelfs één camera niet op tijd antwoord krijgt; de titel noemt hoe lang die ene camera wacht.</p>",
-      maxImages: "<strong>Max. beelden per verzoek (≤ uw doel)</strong><p>Het hoogste aantal beelden dat één verzoek kan bevatten terwijl het antwoord nog binnen uw doel begint, bij het gekozen beeldformaat, met één camera.</p><p>Meerdere beelden per verzoek zijn alleen met één camera gemeten. Een plus (32+) betekent dat zelfs het hoogste geteste aantal het doel haalde. Liep de meting door tot een verzoek mislukte en is die fout de grens, dan staat er geen plus en noemt de titel het aantal dat mislukte. “>3 s” (uw doel) betekent dat zelfs één beeld per verzoek het mist.</p>",
+      tps: "<strong>TPS — tokens per seconde</strong><p>Hoe snel het antwoord van één camera wordt geschreven zodra het begonnen is, bij het gekozen aantal camera's. Een token is ongeveer driekwart woord.</p><p>Per camera, niet in totaal. Max. camera's wordt bepaald door de TTFT; TPS laat zien hoe lang een langer antwoord daarna duurt. Hoger is beter.</p>",
+      response: "<strong>TTFT — time to first token</strong><p>Hoe lang een camera wacht tot zijn antwoord begint, bij het gekozen aantal camera's, beeldformaat en aantal beelden, in milliseconden: het gemiddelde over de gemeten verzoeken.</p><p>Bij een vision-languagemodel is dat vooral het lezen van de beelden, dus het groeit met hun formaat en aantal, en met het aantal camera's dat het apparaat deelt. Groen is binnen uw doel. Lager is beter.</p>",
+      maxCams: "<strong>Max. camera's (≤ uw doel)</strong><p>Het hoogste gemeten aantal camera's waarbij de gemiddelde TTFT uw doel haalt, bij het gekozen beeldformaat en aantal beelden.</p><p>Elke camera stuurt zijn volgende verzoek zodra het vorige is beantwoord, dus hij heeft altijd één verzoek in behandeling: het aantal gelijktijdige verzoeken is het aantal camera's.</p><p>Een plus (16+) betekent dat zelfs het hoogste geteste aantal het doel haalde, dus het werkelijke maximum ligt hoger. “>3000 ms” (uw doel) betekent dat zelfs één camera niet op tijd antwoord krijgt; de titel noemt hoe lang die ene camera wacht.</p>",
+      maxImages: "<strong>Max. beelden per verzoek (≤ uw doel)</strong><p>Het hoogste aantal beelden dat één verzoek kan bevatten terwijl het antwoord nog binnen uw doel begint, bij het gekozen beeldformaat, met één camera.</p><p>Meerdere beelden per verzoek zijn alleen met één camera gemeten. Een plus (32+) betekent dat zelfs het hoogste geteste aantal het doel haalde. Liep de meting door tot een verzoek mislukte en is die fout de grens, dan staat er geen plus en noemt de titel het aantal dat mislukte. “>3000 ms” (uw doel) betekent dat zelfs één beeld per verzoek het mist.</p>",
 
-      fConcurrency: "<strong>Camera's</strong><p>Het aantal camera's dat op hetzelfde moment verzoeken stuurt — de gelijktijdigheid waarbij het systeem is gemeten.</p><p>Bepaalt welke meting de kolommen Respons en TPS tonen. Rijen die bij dit aantal niet zijn gemeten, worden verborgen.</p>",
+      fConcurrency: "<strong>Camera's</strong><p>Het aantal camera's dat op hetzelfde moment verzoeken stuurt — de gelijktijdigheid waarbij het systeem is gemeten.</p><p>Bepaalt welke meting de kolommen TTFT en TPS tonen. Rijen die bij dit aantal niet zijn gemeten, worden verborgen.</p>",
       fResolution: "<strong>Beeldformaat</strong><p>Het formaat van elk beeld dat een camera stuurt: 480p is 854×480, 720p 1280×720, 1080p 1920×1080, 2K 2560×1440.</p><p>Elk getal in de tabel, Max. camera's inbegrepen, wordt bij dit formaat afgelezen. Grotere beelden kosten meer leestijd. Rijen die bij dit formaat niet zijn gemeten, worden verborgen.</p>",
       fModel: "<strong>Modelfilter</strong><p>Toont alleen de gekozen modellen. Kies er meerdere om ze naast elkaar te vergelijken.</p>",
       fMinParams: "<strong>Minimum aantal parameters</strong><p>Verbergt modellen met minder parameters dan dit.</p><p>De schaal is logaritmisch, omdat de modellen hier van 2B tot 35B lopen.</p>",
       fDevice: "<strong>Apparaatfilter</strong><p>Toont alleen runs op de gekozen hardware. Kies er meerdere om apparaten direct te vergelijken.</p>",
       fQuant: "<strong>Kwantisatiefilter</strong><p>Toont alleen de gekozen gewichtsformaten. Kies er twee om ze te vergelijken.</p>",
       fEngine: "<strong>Enginefilter</strong><p>Toont alleen runs die met de gekozen engine zijn geserveerd.</p>",
-      fMaxResp: "<strong>Maximale responstijd</strong><p>Verbergt configuraties waarvan het antwoord later begint dan dit, bij het gekozen aantal camera's, beeldformaat en aantal beelden.</p><p>Werkt samen met de keuze Camera's: kies het aantal camera's dat u nodig hebt en zet dit op uw doel om alleen de configuraties te zien die zoveel camera's bijhouden.</p>",
+      fMaxResp: "<strong>Maximale TTFT</strong><p>Verbergt configuraties waarvan het antwoord later begint dan dit, bij het gekozen aantal camera's, beeldformaat en aantal beelden.</p><p>Werkt samen met de keuze Camera's: kies het aantal camera's dat u nodig hebt en zet dit op uw doel om alleen de configuraties te zien die zoveel camera's bijhouden.</p>",
 
-      aImages: "<strong>Beelden per camera</strong><p>Hoeveel beelden elk verzoek meestuurt — één momentopname, of meerdere frames van dezelfde camera samen, zoals video vaak naar een vision-languagemodel wordt gestuurd. Standaard 1.</p><p>Elk beeld wordt gelezen voordat het antwoord begint, dus meer beelden betekent een langere responstijd. Meerdere beelden per verzoek zijn alleen met één camera gemeten.</p>",
-      aResponse: "<strong>Doel maximale responstijd</strong><p>Hoe lang een camera maximaal mag wachten tot zijn antwoord begint, in seconden.</p><p>Verlagen kan Max. camera's verlagen.</p>",
+      aImages: "<strong>Beelden per camera</strong><p>Hoeveel beelden elk verzoek meestuurt — één momentopname, of meerdere frames van dezelfde camera samen, zoals video vaak naar een vision-languagemodel wordt gestuurd. Standaard 1.</p><p>Elk beeld wordt gelezen voordat het antwoord begint, dus meer beelden betekent een langere TTFT. Meerdere beelden per verzoek zijn alleen met één camera gemeten.</p>",
+      aResponse: "<strong>Doel maximale TTFT</strong><p>Hoe lang een camera maximaal mag wachten tot zijn antwoord begint, in milliseconden.</p><p>Verlagen kan Max. camera's verlagen.</p>",
       reset: "<strong>Alle filters resetten</strong><p>Wist alle filters en zet beeldformaat, aantal camera's, het doel en beelden per camera terug op hun standaardwaarden.</p>"
     }
   };
@@ -252,11 +252,12 @@
     return Number(n).toFixed(decimals);
   }
 
-  /* Seconds span 0.05 to 100 here: two decimals where they matter, one where
-     they would only be noise. */
-  function fmtS(v) {
+  /* TTFT is stored in seconds and shown in whole milliseconds, as in the LLM
+     explorer; the target stays in seconds inside (config, links). */
+  function msOf(s) { return Math.round(Number(s) * 1000); }
+  function fmtMs(v) {
     if (v === null || v === undefined) return "—";
-    return Number(v).toFixed(v < 10 ? 2 : 1);
+    return String(msOf(v));
   }
 
   /* As in the LLM explorer: the Parameters column prints the value verbatim;
@@ -517,8 +518,8 @@
     html += '<div class="bt-targets-grid">';
     html += '<div class="bt-target-item">' +
       '<label for="bt-assump-response_target_s">' + escapeHTML(S.responseTarget) + tip(S.tip.aResponse) + "</label>" +
-      '<input type="number" id="bt-assump-response_target_s" value="' + config.response_target_s +
-      '" step="0.5" min="0.5"></div>';
+      '<input type="number" id="bt-assump-response_target_s" value="' + msOf(config.response_target_s) +
+      '" step="100" min="100"></div>';
     html += '<div class="bt-target-item">' +
       '<label for="bt-assump-images">' + escapeHTML(S.imagesAssumption) + tip(S.tip.aImages) + "</label>" +
       '<select id="bt-assump-images">' + imageOptions() + "</select></div>";
@@ -549,13 +550,13 @@
     input.addEventListener("input", function () {
       var v = parseFloat(input.value);
       if (isNaN(v) || v <= 0) return;
-      config.response_target_s = v;
+      config.response_target_s = v / 1000;
       renderTable(container);
     });
     /* Snap back once the reader leaves the field, so it never shows a number
        the table is not using. */
     input.addEventListener("change", function () {
-      if (input.value !== String(config.response_target_s)) input.value = String(config.response_target_s);
+      if (input.value !== String(msOf(config.response_target_s))) input.value = String(msOf(config.response_target_s));
     });
 
     var images = container.querySelector("#bt-assump-images");
@@ -570,7 +571,7 @@
   function syncSliderLabels(container) {
     var at = S.atC(state.concurrency, state.res, config.images);
     var resp = sliderToResp(parseInt(container.querySelector("#bt-max-resp").value, 10));
-    container.querySelector("#bt-max-resp-val").textContent = (resp === null ? S.noLimit : resp + " s") + at;
+    container.querySelector("#bt-max-resp-val").textContent = (resp === null ? S.noLimit : msOf(resp) + " ms") + at;
     var pIdx = parseInt(container.querySelector("#bt-min-params").value, 10);
     container.querySelector("#bt-min-params-val").textContent =
       pIdx <= 0 ? S.paramsAll : "≥ " + formatThreshold(sliderToParams(pIdx));
@@ -717,7 +718,7 @@
     container.querySelector("#bt-min-params").value = 0;
 
     resetConfig();
-    container.querySelector("#bt-assump-response_target_s").value = String(config.response_target_s);
+    container.querySelector("#bt-assump-response_target_s").value = String(msOf(config.response_target_s));
     container.querySelector("#bt-assump-images").value = String(config.images);
     paintSingle(container);
 
@@ -866,8 +867,8 @@
       { key: "device", label: S.colDevice, t: S.tip.device, left: true },
       { key: "quantization", label: S.colQuant, t: S.tip.quant },
       { key: "response", label: S.colResponse + c + S.secUnit, t: S.tip.response, num: true },
-      { key: "maxcams", label: S.colMaxCams + S.withinTarget(config.response_target_s), t: S.tip.maxCams, num: true },
-      { key: "maximages", label: S.colMaxImages + S.withinTarget(config.response_target_s), t: S.tip.maxImages, num: true },
+      { key: "maxcams", label: S.colMaxCams + S.withinTarget(msOf(config.response_target_s)), t: S.tip.maxCams, num: true },
+      { key: "maximages", label: S.colMaxImages + S.withinTarget(msOf(config.response_target_s)), t: S.tip.maxImages, num: true },
       { key: "tps", label: S.colTps + c, t: S.tip.tps, num: true },
       { key: "engine", label: S.colEngine, t: S.tip.engine, left: true },
       { key: "expand", label: "", t: null, nosort: true }
@@ -971,7 +972,7 @@
     var top = highestTested(entry, res, images);
     if (top && max === 0) {
       var one = pointAt(entry, res || state.res, images || config.images, 1);
-      return { text: overTarget(), title: one ? S.camsOverTarget(fmtS(responseOf(one)), config.response_target_s) : "", over: true };
+      return { text: overTarget(), title: one ? S.camsOverTarget(fmtMs(responseOf(one)), msOf(config.response_target_s)) : "", over: true };
     }
     if (top === 1) return { text: String(max), title: S.oneOnly, single: true };
     var fail = (images || config.images) === 1 ? failedAt(entry, "cameras", res) : null;
@@ -987,7 +988,7 @@
     if (!top) return { text: "—", title: "" };
     if (max === 0) {
       var one = pointAt(entry, state.res, 1, 1);
-      return { text: overTarget(), title: one ? S.imagesOverTarget(fmtS(responseOf(one)), config.response_target_s) : "", over: true };
+      return { text: overTarget(), title: one ? S.imagesOverTarget(fmtMs(responseOf(one)), msOf(config.response_target_s)) : "", over: true };
     }
     if (fail && max === top) return { text: String(max), title: S.imagesFailedAt(fail) };
     var open = max > 0 && max === top;
@@ -997,7 +998,7 @@
   /* Not even one camera, or one image per request, within the target: the
      target itself, ">3 s", rather than a 0 that reads as "does not run". */
   function overTarget() {
-    return S.overTargetText(config.response_target_s);
+    return S.overTargetText(msOf(config.response_target_s));
   }
 
   /* The limits, whatever the target: the most measured that still worked, and
@@ -1038,7 +1039,7 @@
         var ok = p && meetsTarget(p);
         var title = ok ? S.targetMet : S.targetNotMet;
         html += '<td class="bt-num ' + (ok ? "bt-good" : "bt-bad") + '" title="' + escapeHTML(title) + '">' +
-          fmtS(responseOf(p)) + "</td>";
+          fmtMs(responseOf(p)) + "</td>";
       } else if (k === "maxcams") {
         var mc = maxCell(entry);
         html += '<td class="bt-num' + (mc.over ? " bt-bad" : "") + '"' + (mc.title ? ' title="' + escapeHTML(mc.title) + '"' : "") + ">" +
@@ -1084,9 +1085,9 @@
   }
 
   function sweepRow(n, p) {
-    var ok = meetsTarget(p), t = config.response_target_s;
+    var ok = meetsTarget(p), t = msOf(config.response_target_s);
     return "<tr><td>" + n + "</td>" +
-      '<td class="' + (ok ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtS(responseOf(p)) + "</td>" +
+      '<td class="' + (ok ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtMs(responseOf(p)) + "</td>" +
       "<td>" + fmt(p.tps, 1) + "</td>" +
       '<td class="' + (ok ? "bt-detail-pass" : "bt-detail-fail") + '" title="' + escapeHTML(ok ? S.targetMet : S.targetNotMet) + '">' +
       escapeHTML(ok ? S.withinTargetText(t) : S.overTargetText(t)) +
@@ -1146,7 +1147,7 @@
         escapeHTML(r) + "</span>";
     });
     html += '<span class="bt-legend-item"><span class="bt-legend-swatch" style="background:' + TARGET_COLOR + '"></span> ' +
-      escapeHTML(S.chartTarget(config.response_target_s)) + "</span>";
+      escapeHTML(S.chartTarget(msOf(config.response_target_s))) + "</span>";
     html += "</div>";
     html += '<div class="bt-chart-axis-titles"><span class="bt-axis-title-left">' + escapeHTML(S.yTitle) + "</span></div>";
     html += '<div class="bt-chart-canvas-wrap"><canvas id="bt-chart-' + escapeHTML(entry.id) + '"></canvas></div>';
@@ -1170,7 +1171,7 @@
       var sel = r === state.res;
       return {
         label: r, res: r,
-        data: cs.map(function (c) { var p = pointAt(entry, r, config.images, c); return p ? responseOf(p) : null; }),
+        data: cs.map(function (c) { var p = pointAt(entry, r, config.images, c); return p ? msOf(responseOf(p)) : null; }),
         borderColor: RES_COLORS[r], backgroundColor: RES_COLORS[r],
         borderWidth: sel ? 3 : 1.5, pointRadius: sel ? 5 : 3, pointHoverRadius: 7, tension: 0, spanGaps: true,
         /* PASS and FAIL on the points themselves: filled within the target. */
@@ -1181,7 +1182,7 @@
       };
     });
     datasets.push({
-      label: S.chartTarget(config.response_target_s), data: cs.map(function () { return config.response_target_s; }),
+      label: S.chartTarget(msOf(config.response_target_s)), data: cs.map(function () { return msOf(config.response_target_s); }),
       borderColor: TARGET_COLOR, borderDash: [6, 4], borderWidth: 1.5, pointRadius: 0, tension: 0
     });
     chartInstances[entry.id] = new Chart(canvas, {
@@ -1200,7 +1201,7 @@
           legend: { display: false },
           tooltip: {
             filter: function (item) { return item.dataset.res; },
-            callbacks: { label: function (ctx) { return ctx.dataset.label + ": " + fmtS(ctx.parsed.y) + " s"; } }
+            callbacks: { label: function (ctx) { return ctx.dataset.label + ": " + Math.round(ctx.parsed.y) + " ms"; } }
           },
           datalabels: {
             display: function (ctx) { return ctx.dataset.res === state.res; },
@@ -1208,7 +1209,7 @@
             anchor: "end",
             color: function (ctx) { return RES_COLORS[ctx.dataset.res] || "#333"; },
             font: { weight: "bold", size: 11 },
-            formatter: function (v) { return v == null ? "" : fmtS(v); }
+            formatter: function (v) { return v == null ? "" : String(Math.round(v)); }
           }
         }
       }
@@ -1284,7 +1285,7 @@
       search.value = s.search || "";
       search.dispatchEvent(new Event("input"));
       if (s.config) for (var k in s.config) if (config.hasOwnProperty(k)) config[k] = s.config[k];
-      container.querySelector("#bt-assump-response_target_s").value = String(config.response_target_s);
+      container.querySelector("#bt-assump-response_target_s").value = String(msOf(config.response_target_s));
       container.querySelector("#bt-assump-images").value = String(config.images);
       paintSingle(container);
       if (s.targetsOpen && container.querySelector("#bt-targets-body").hidden) {

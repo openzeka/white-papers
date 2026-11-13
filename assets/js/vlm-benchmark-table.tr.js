@@ -28,17 +28,17 @@
     resetFilters: "Tüm Filtreleri Sıfırla",
 
     minParams: "Min. Parametre",
-    maxResponse: "Maks. Yanıt Süresi",
+    maxResponse: "Maks. TTFT",
     noLimit: "Sınırsız",
     paramsAll: "Tüm boyutlar",
     atC: function (c, res, n) { return " (" + c + " kamera, " + res + ", " + n + " görüntü)"; },
 
     /* Performance target / assumptions */
     targetsHeading: "Performans Hedefi ve Varsayımlar",
-    targetsIntro: "Bu değerler kabul edilebilir performansı ve her kameranın ne gönderdiğini belirler. Satır gizlemezler; her satırın yanıt süresini, Maks. kamera değerini ve Yanıt sütununun yeşil ve kırmızı renklendirmesini yeniden hesaplarlar.",
-    groupResponse: "Yanıt süresi",
-    groupResponseIntro: "Her kamera, önceki isteği yanıtlanır yanıtlanmaz sıradaki isteğini gönderir; bu yüzden kamera sayısı, işlenmekte olan istek sayısıdır. Maks. kamera, her kameranın yanıtının hedef süre içinde başladığı en yüksek ölçülmüş kamera sayısıdır.",
-    responseTarget: "Maksimum Yanıt Süresi Hedefi (sn)",
+    targetsIntro: "Bu değerler kabul edilebilir performansı ve her kameranın ne gönderdiğini belirler. Satır gizlemezler; her satırın Maks. kamera değerini ve TTFT sütununun yeşil ve kırmızı renklendirmesini yeniden hesaplarlar.",
+    groupResponse: "TTFT — ilk token süresi",
+    groupResponseIntro: "Her kamera, önceki isteği yanıtlanır yanıtlanmaz sıradaki isteğini gönderir; bu yüzden kamera sayısı, işlenmekte olan istek sayısıdır. Maks. kamera, isteklerin ortalama TTFT'sinin hedef içinde kaldığı en yüksek ölçülmüş kamera sayısıdır.",
+    responseTarget: "Maksimum TTFT Hedefi (ms)",
     imagesAssumption: "Kamera Başına Görüntü",
 
     /* Table */
@@ -47,36 +47,36 @@
     colDevice: "Cihaz",
     colQuant: "Kuantizasyon",
     colTps: "TPS",
-    colResponse: "Yanıt",
+    colResponse: "TTFT",
     colMaxCams: "Maks. kamera",
     colMaxImages: "Tek istekte maks. görüntü",
-    withinTarget: function (t) { return " (≤\u00a0" + t + "\u00a0sn)"; },  /* kept on one line */
+    withinTarget: function (t) { return " (≤\u00a0" + t + "\u00a0ms)"; },  /* kept on one line */
     colEngine: "Inference Engine",
     atCol: function (c) { return " @ " + c + " kam."; },
-    secUnit: " (sn)",
+    secUnit: " (ms)",
     matching: "Eşleşen Yapılandırmalar",
     matchingCount: function (shown, total) {
       return "<strong>" + total + "</strong> yapılandırmadan <strong>" + shown + "</strong> tanesi";
     },
     noMatch: "Mevcut filtrelerle eşleşen yapılandırma yok.",
     notMeasured: "Bu görüntü boyutu, kamera sayısı ve kamera başına görüntü birleşimiyle ölçülmüş bir yapılandırma yok. Birden fazla kamera, 480p, 720p ve 1080p'de kamera başına bir görüntüyle ölçüldü; 2K ve kamera başına birden fazla görüntü yalnızca tek kamerayla. Soluk düğmeler ölçümü olmayan birleşimleri gösterir.",
-    targetMet: "Hedef Karşılandı — yanıt, yanıt süresi hedefiniz içinde başlar.",
-    targetNotMet: "Hedef Karşılanmadı — yanıtın başlaması, yanıt süresi hedefinizden uzun sürer.",
+    targetMet: "Hedef Karşılandı — ortalama TTFT hedefinizin içinde.",
+    targetNotMet: "Hedef Karşılanmadı — ortalama TTFT hedefinizin üzerinde.",
     viewDetails: "Ayrıntıları Görüntüle — bu yapılandırmanın kamera sayısına göre ölçümlerini, sonuçların açıklamasını ve grafiğini gösterir.",
-    maxAtLeast: function (c) { return "En az " + c + ": test edilen en yüksek sayı olan " + c + " kamerada bile her kamera zamanında yanıt aldı; gerçek üst sınıra ulaşılmadı."; },
-    imagesAtLeast: function (n) { return "En az " + n + ": test edilen en yüksek sayı olan " + n + " görüntülü istek bile zamanında yanıtlandı; gerçek üst sınıra ulaşılmadı."; },
+    maxAtLeast: function (c) { return "En az " + c + ": test edilen en yüksek sayı olan " + c + " kamerada bile ortalama TTFT hedef içindeydi; gerçek üst sınıra ulaşılmadı."; },
+    imagesAtLeast: function (n) { return "En az " + n + ": test edilen en yüksek sayı olan " + n + " görüntülü istek bile TTFT hedefini karşıladı; gerçek üst sınıra ulaşılmadı."; },
     imagesFailedAt: function (n) { return n + " görüntülü bir istek başarısız oldu (model için fazla uzun ya da 600 s içinde yanıt yok); bir istek en fazla bu kadar görüntü taşıyabiliyor."; },
     camsFailedAt: function (c) { return c + " kamerada bir isteğin yanıtı 30 s içinde başlamadı; cihazın sınırı bu."; },
     detailImages: "Görüntü",
     imagesSweepAt: function (res, dims) { return "İstek başına görüntü, tek kamera, " + res + " (" + dims + ")"; },
     imagesFailedRow: function (n) { return n + " görüntülü bir istek başarısız oldu: model için fazla uzun ya da 600 s içinde yanıt yok."; },
     failedLevel: "Başarısız",
-    withinTargetText: function (t) { return "≤" + t + " sn"; },
+    withinTargetText: function (t) { return "≤" + t + " ms"; },
     failedShort: function (f, n) { return f + "/" + n + " başarısız"; },
-    failedTitle: function (f, n) { return n + " istekten " + f + " tanesi başarısız oldu: yanıt yok ya da sunucudan hata. Yanıt süresi diğerlerinin ortalamasıdır."; },
-    overTargetText: function (t) { return ">" + t + " sn"; },
-    camsOverTarget: function (r, t) { return "Tek bir kamera bile yanıtının başlaması için " + r + " sn bekliyor; hedefiniz " + t + " sn."; },
-    imagesOverTarget: function (r, t) { return "İstek başına tek görüntüde bile yanıtın başlaması " + r + " sn sürüyor; hedefiniz " + t + " sn."; },
+    failedTitle: function (f, n) { return n + " istekten " + f + " tanesi başarısız oldu: yanıt yok ya da sunucudan hata. TTFT diğerlerinin ortalamasıdır."; },
+    overTargetText: function (t) { return ">" + t + " ms"; },
+    camsOverTarget: function (r, t) { return "Tek bir kamera bile yanıtının başlaması için " + r + " ms bekliyor; hedefiniz " + t + " ms."; },
+    imagesOverTarget: function (r, t) { return "İstek başına tek görüntüde bile yanıtın başlaması " + r + " ms sürüyor; hedefiniz " + t + " ms."; },
     limitsLead: function (res) { return "Hata vermeden (" + res + "):"; },
     camLimitAt: function (n, f) { return "Hâlâ çalışan en yüksek ölçülmüş kamera sayısı: " + n + ". " + f + " kamerada bir isteğin yanıtı 30 s içinde başlamadı."; },
     imgLimitAt: function (n, f) { return "Hâlâ çalışan en yüksek ölçülmüş istek başına görüntü sayısı: " + n + ". " + f + " görüntülü bir istek başarısız oldu (model için fazla uzun ya da 600 s içinde yanıt yok)."; },
@@ -84,15 +84,15 @@
     imgsNotSearched: function (n) { return "Yalnızca istek başına " + n + " görüntüye kadar ölçüldü; sınır aranmadı."; },
 
     /* Expanded row */
-    detailC: "Kamera", detailTps: "TPS (tok/s)", detailResponse: "Yanıt (sn)", detailStatus: "Hedef",
+    detailC: "Kamera", detailTps: "TPS (tok/s)", detailResponse: "TTFT (ms)", detailStatus: "Hedef",
     sweepAt: function (res, dims, n) { return "Kamera başına " + (n === 1 ? "bir " + res + " görüntü" : n + " adet " + res + " görüntü") + " (" + dims + ")"; },
     explainedHeading: "Benchmark sonuçlarının açıklaması",
     oneOnly: "Yalnızca tek kamerayla ölçüldü; bu yüzden değer 1'den yüksek olamaz — cihaz daha fazlasına hizmet edebilir.",
     downloadChart: "Grafiği İndir",
     chartFileSuffix: "-grafik.png",
-    chartTitle: function (n) { return "Kamera eklendikçe yanıt süresi · kamera başına " + n + " görüntü"; },
-    chartTarget: function (t) { return "Hedef " + t + " sn"; },
-    yTitle: "Yanıt süresi (sn)",
+    chartTitle: function (n) { return "Kamera eklendikçe TTFT · kamera başına " + n + " görüntü"; },
+    chartTarget: function (t) { return "Hedef " + t + " ms"; },
+    yTitle: "TTFT (ms)",
     xTitle: "Kamera sayısı",
 
 
@@ -103,22 +103,22 @@
       device: "<strong>Cihaz</strong><p>Çalıştırmanın kullandığı donanım: bir Jetson modülü ya da bir RTX PRO 6000 Blackwell iş istasyonu GPU'su. Max-Q sürümü aynı çipin 300 W'lık sürümüdür.</p><p>Jetson adlarında ölçülen bellek kapasitesi yer alır; bu bellek CPU ile GPU tarafından paylaşılır. İki modülün başka bellek kapasitelerinde sürümleri de vardır. RTX PRO 6000'de 96 GB vardır.</p>",
       quant: "<strong>Kuantizasyon</strong><p>Ağırlıkların saklandığı sayı biçimi.</p><p>BF16 tam hassasiyettir, FP8 8 bit, NVFP4 4 bit kullanır. Q8_0, Q4_K_M ve Q4_0, llama.cpp için ağırlık başına yaklaşık 8 ve 4 bitlik GGUF biçimleridir. Daha az bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar risk taşır.</p>",
       engine: "<strong>Inference Engine</strong><p>Modeli yükleyip istekleri zamanlayan sunucu yazılımı: Hugging Face checkpoint'leri için vLLM, GGUF dosyaları için llama.cpp.</p><p>Hıza donanım kadar etki eder: aynı model aynı cihazda engine'ler arasında ölçülebilir biçimde farklılaşabilir.</p>",
-      tps: "<strong>TPS — saniyedeki token</strong><p>Seçili kamera sayısında, başladıktan sonra bir kameranın yanıtının yazılma hızı. Bir token kabaca bir kelimenin dörtte üçüdür.</p><p>Toplam değil, kamera başınadır. Maks. kamera yanıt süresine göre belirlenir; TPS ise daha uzun bir yanıtın ardından ne kadar süreceğini gösterir. Yüksek olması iyidir.</p>",
-      response: "<strong>Yanıt süresi</strong><p>Seçili kamera sayısında, görüntü boyutunda ve görüntü sayısında bir kameranın yanıtı başlayana kadar beklediği süre, saniye cinsinden. İlk token süresi (TTFT) olarak ölçülür.</p><p>Bir görüntü-dil modelinde bu sürenin çoğu görüntüleri okumaktır; bu yüzden görüntülerin boyutu ve sayısıyla, cihazı paylaşan kamera sayısıyla birlikte artar. Yeşil, hedefinizin içinde demektir. Düşük olması iyidir.</p>",
-      maxCams: "<strong>Maks. kamera (≤ hedefiniz)</strong><p>Seçili görüntü boyutunda ve görüntü sayısında, yanıt süresinin hedefinizi karşıladığı en yüksek ölçülmüş kamera sayısı.</p><p>Her kamera, önceki isteği yanıtlanır yanıtlanmaz sıradaki isteğini gönderir; yani her zaman işlenmekte olan bir isteği vardır: eşzamanlı istek sayısı kamera sayısıdır.</p><p>Artı işareti (16+), test edilen en yüksek sayının bile hedefi karşıladığı, gerçek üst sınırın daha yüksek olduğu anlamına gelir. “>3 sn” (hedefiniz), tek bir kameranın bile zamanında yanıt almadığı demektir; başlığında o tek kameranın ne kadar beklediği yazar.</p>",
-      maxImages: "<strong>Tek istekte maks. görüntü (≤ hedefiniz)</strong><p>Seçili görüntü boyutunda, tek kamerayla, yanıtın hedefiniz içinde başladığı en yüksek istek başına görüntü sayısı.</p><p>Birden fazla görüntü yalnızca tek kamerayla ölçüldü. Artı (32+), test edilen en yüksek sayının bile hedefi karşıladığını gösterir. Ölçüm bir istek başarısız olana kadar sürdüyse ve sınırı bu hata belirliyorsa sayı artısız gösterilir; başlığında başarısız olan sayı yazar. “>3 sn” (hedefiniz), istek başına tek görüntünün bile hedefi kaçırdığı demektir.</p>",
+      tps: "<strong>TPS — saniyedeki token</strong><p>Seçili kamera sayısında, başladıktan sonra bir kameranın yanıtının yazılma hızı. Bir token kabaca bir kelimenin dörtte üçüdür.</p><p>Toplam değil, kamera başınadır. Maks. kamera TTFT'ye göre belirlenir; TPS ise daha uzun bir yanıtın ardından ne kadar süreceğini gösterir. Yüksek olması iyidir.</p>",
+      response: "<strong>TTFT — ilk token süresi</strong><p>Seçili kamera sayısında, görüntü boyutunda ve görüntü sayısında bir kameranın yanıtı başlayana kadar beklediği süre, milisaniye cinsinden: ölçülen isteklerin ortalaması.</p><p>Bir görüntü-dil modelinde bu sürenin çoğu görüntüleri okumaktır; bu yüzden görüntülerin boyutu ve sayısıyla, cihazı paylaşan kamera sayısıyla birlikte artar. Yeşil, hedefinizin içinde demektir. Düşük olması iyidir.</p>",
+      maxCams: "<strong>Maks. kamera (≤ hedefiniz)</strong><p>Seçili görüntü boyutunda ve görüntü sayısında, ortalama TTFT'nin hedefinizi karşıladığı en yüksek ölçülmüş kamera sayısı.</p><p>Her kamera, önceki isteği yanıtlanır yanıtlanmaz sıradaki isteğini gönderir; yani her zaman işlenmekte olan bir isteği vardır: eşzamanlı istek sayısı kamera sayısıdır.</p><p>Artı işareti (16+), test edilen en yüksek sayının bile hedefi karşıladığı, gerçek üst sınırın daha yüksek olduğu anlamına gelir. “>3000 ms” (hedefiniz), tek bir kameranın bile zamanında yanıt almadığı demektir; başlığında o tek kameranın ne kadar beklediği yazar.</p>",
+      maxImages: "<strong>Tek istekte maks. görüntü (≤ hedefiniz)</strong><p>Seçili görüntü boyutunda, tek kamerayla, yanıtın hedefiniz içinde başladığı en yüksek istek başına görüntü sayısı.</p><p>Birden fazla görüntü yalnızca tek kamerayla ölçüldü. Artı (32+), test edilen en yüksek sayının bile hedefi karşıladığını gösterir. Ölçüm bir istek başarısız olana kadar sürdüyse ve sınırı bu hata belirliyorsa sayı artısız gösterilir; başlığında başarısız olan sayı yazar. “>3000 ms” (hedefiniz), istek başına tek görüntünün bile hedefi kaçırdığı demektir.</p>",
 
-      fConcurrency: "<strong>Kamera</strong><p>Aynı anda istek gönderen kamera sayısı — sistemin ölçüldüğü eşzamanlılık.</p><p>Yanıt ve TPS sütunlarının hangi ölçümü göstereceğini seçer. Bu sayıda ölçülmemiş satırlar gizlenir.</p>",
+      fConcurrency: "<strong>Kamera</strong><p>Aynı anda istek gönderen kamera sayısı — sistemin ölçüldüğü eşzamanlılık.</p><p>TTFT ve TPS sütunlarının hangi ölçümü göstereceğini seçer. Bu sayıda ölçülmemiş satırlar gizlenir.</p>",
       fResolution: "<strong>Görüntü Boyutu</strong><p>Bir kameranın gönderdiği her görüntünün boyutu: 480p 854×480, 720p 1280×720, 1080p 1920×1080, 2K 2560×1440.</p><p>Maks. kamera dahil tablodaki her sayı bu boyutta okunur. Büyük görüntülerin okunması daha uzun sürer. Bu boyutta ölçülmemiş satırlar gizlenir.</p>",
       fModel: "<strong>Model filtresi</strong><p>Yalnızca seçilen modelleri gösterir. Yan yana karşılaştırmak için birkaçını seçin.</p>",
       fMinParams: "<strong>Minimum Parametre</strong><p>Toplam parametre sayısı bundan küçük olan modelleri gizler.</p><p>Buradaki modeller 2B ile 35B arasında değiştiği için ölçek logaritmiktir.</p>",
       fDevice: "<strong>Cihaz filtresi</strong><p>Yalnızca seçilen donanımdaki çalıştırmaları gösterir. Cihazları doğrudan karşılaştırmak için birkaçını seçin.</p>",
       fQuant: "<strong>Kuantizasyon filtresi</strong><p>Yalnızca seçilen ağırlık biçimlerini gösterir. Karşılaştırmak için ikisini seçin.</p>",
       fEngine: "<strong>Engine filtresi</strong><p>Yalnızca seçilen engine ile sunulan çalıştırmaları gösterir.</p>",
-      fMaxResp: "<strong>Maksimum Yanıt Süresi</strong><p>Seçili kamera sayısında, görüntü boyutunda ve görüntü sayısında yanıtı bundan geç başlayan yapılandırmaları gizler.</p><p>Kamera seçimiyle birlikte çalışır: ihtiyacınız olan kamera sayısını seçin ve bunu hedefinize ayarlayın; yalnızca o kadar kameraya yetişen yapılandırmalar kalır.</p>",
+      fMaxResp: "<strong>Maksimum TTFT</strong><p>Seçili kamera sayısında, görüntü boyutunda ve görüntü sayısında yanıtı bundan geç başlayan yapılandırmaları gizler.</p><p>Kamera seçimiyle birlikte çalışır: ihtiyacınız olan kamera sayısını seçin ve bunu hedefinize ayarlayın; yalnızca o kadar kameraya yetişen yapılandırmalar kalır.</p>",
 
-      aImages: "<strong>Kamera Başına Görüntü</strong><p>Her isteğin kaç görüntü taşıdığı — tek bir anlık görüntü ya da aynı kameranın birlikte gönderilen birkaç karesi; video, görüntü-dil modellerine çoğu zaman böyle gönderilir. Varsayılan 1.</p><p>Yanıt başlamadan önce her görüntü okunur; bu yüzden daha fazla görüntü daha uzun yanıt süresi demektir. İstek başına birden fazla görüntü yalnızca tek kamerayla ölçüldü.</p>",
-      aResponse: "<strong>Maksimum Yanıt Süresi Hedefi</strong><p>Bir kameranın yanıtının başlaması için bekleyebileceği en uzun süre, saniye cinsinden.</p><p>Düşürmek Maks. kamera değerini düşürebilir.</p>",
+      aImages: "<strong>Kamera Başına Görüntü</strong><p>Her isteğin kaç görüntü taşıdığı — tek bir anlık görüntü ya da aynı kameranın birlikte gönderilen birkaç karesi; video, görüntü-dil modellerine çoğu zaman böyle gönderilir. Varsayılan 1.</p><p>Yanıt başlamadan önce her görüntü okunur; bu yüzden daha fazla görüntü daha uzun TTFT demektir. İstek başına birden fazla görüntü yalnızca tek kamerayla ölçüldü.</p>",
+      aResponse: "<strong>Maksimum TTFT Hedefi</strong><p>Bir kameranın yanıtının başlaması için bekleyebileceği en uzun süre, milisaniye cinsinden.</p><p>Düşürmek Maks. kamera değerini düşürebilir.</p>",
       reset: "<strong>Tüm Filtreleri Sıfırla</strong><p>Bütün filtreleri temizler; görüntü boyutunu, kamera sayısını, hedefi ve kamera başına görüntü sayısını varsayılana döndürür.</p>"
     }
   };
@@ -252,11 +252,12 @@
     return Number(n).toFixed(decimals);
   }
 
-  /* Seconds span 0.05 to 100 here: two decimals where they matter, one where
-     they would only be noise. */
-  function fmtS(v) {
+  /* TTFT is stored in seconds and shown in whole milliseconds, as in the LLM
+     explorer; the target stays in seconds inside (config, links). */
+  function msOf(s) { return Math.round(Number(s) * 1000); }
+  function fmtMs(v) {
     if (v === null || v === undefined) return "—";
-    return Number(v).toFixed(v < 10 ? 2 : 1);
+    return String(msOf(v));
   }
 
   /* As in the LLM explorer: the Parameters column prints the value verbatim;
@@ -517,8 +518,8 @@
     html += '<div class="bt-targets-grid">';
     html += '<div class="bt-target-item">' +
       '<label for="bt-assump-response_target_s">' + escapeHTML(S.responseTarget) + tip(S.tip.aResponse) + "</label>" +
-      '<input type="number" id="bt-assump-response_target_s" value="' + config.response_target_s +
-      '" step="0.5" min="0.5"></div>';
+      '<input type="number" id="bt-assump-response_target_s" value="' + msOf(config.response_target_s) +
+      '" step="100" min="100"></div>';
     html += '<div class="bt-target-item">' +
       '<label for="bt-assump-images">' + escapeHTML(S.imagesAssumption) + tip(S.tip.aImages) + "</label>" +
       '<select id="bt-assump-images">' + imageOptions() + "</select></div>";
@@ -549,13 +550,13 @@
     input.addEventListener("input", function () {
       var v = parseFloat(input.value);
       if (isNaN(v) || v <= 0) return;
-      config.response_target_s = v;
+      config.response_target_s = v / 1000;
       renderTable(container);
     });
     /* Snap back once the reader leaves the field, so it never shows a number
        the table is not using. */
     input.addEventListener("change", function () {
-      if (input.value !== String(config.response_target_s)) input.value = String(config.response_target_s);
+      if (input.value !== String(msOf(config.response_target_s))) input.value = String(msOf(config.response_target_s));
     });
 
     var images = container.querySelector("#bt-assump-images");
@@ -570,7 +571,7 @@
   function syncSliderLabels(container) {
     var at = S.atC(state.concurrency, state.res, config.images);
     var resp = sliderToResp(parseInt(container.querySelector("#bt-max-resp").value, 10));
-    container.querySelector("#bt-max-resp-val").textContent = (resp === null ? S.noLimit : resp + " s") + at;
+    container.querySelector("#bt-max-resp-val").textContent = (resp === null ? S.noLimit : msOf(resp) + " ms") + at;
     var pIdx = parseInt(container.querySelector("#bt-min-params").value, 10);
     container.querySelector("#bt-min-params-val").textContent =
       pIdx <= 0 ? S.paramsAll : "≥ " + formatThreshold(sliderToParams(pIdx));
@@ -717,7 +718,7 @@
     container.querySelector("#bt-min-params").value = 0;
 
     resetConfig();
-    container.querySelector("#bt-assump-response_target_s").value = String(config.response_target_s);
+    container.querySelector("#bt-assump-response_target_s").value = String(msOf(config.response_target_s));
     container.querySelector("#bt-assump-images").value = String(config.images);
     paintSingle(container);
 
@@ -866,8 +867,8 @@
       { key: "device", label: S.colDevice, t: S.tip.device, left: true },
       { key: "quantization", label: S.colQuant, t: S.tip.quant },
       { key: "response", label: S.colResponse + c + S.secUnit, t: S.tip.response, num: true },
-      { key: "maxcams", label: S.colMaxCams + S.withinTarget(config.response_target_s), t: S.tip.maxCams, num: true },
-      { key: "maximages", label: S.colMaxImages + S.withinTarget(config.response_target_s), t: S.tip.maxImages, num: true },
+      { key: "maxcams", label: S.colMaxCams + S.withinTarget(msOf(config.response_target_s)), t: S.tip.maxCams, num: true },
+      { key: "maximages", label: S.colMaxImages + S.withinTarget(msOf(config.response_target_s)), t: S.tip.maxImages, num: true },
       { key: "tps", label: S.colTps + c, t: S.tip.tps, num: true },
       { key: "engine", label: S.colEngine, t: S.tip.engine, left: true },
       { key: "expand", label: "", t: null, nosort: true }
@@ -971,7 +972,7 @@
     var top = highestTested(entry, res, images);
     if (top && max === 0) {
       var one = pointAt(entry, res || state.res, images || config.images, 1);
-      return { text: overTarget(), title: one ? S.camsOverTarget(fmtS(responseOf(one)), config.response_target_s) : "", over: true };
+      return { text: overTarget(), title: one ? S.camsOverTarget(fmtMs(responseOf(one)), msOf(config.response_target_s)) : "", over: true };
     }
     if (top === 1) return { text: String(max), title: S.oneOnly, single: true };
     var fail = (images || config.images) === 1 ? failedAt(entry, "cameras", res) : null;
@@ -987,7 +988,7 @@
     if (!top) return { text: "—", title: "" };
     if (max === 0) {
       var one = pointAt(entry, state.res, 1, 1);
-      return { text: overTarget(), title: one ? S.imagesOverTarget(fmtS(responseOf(one)), config.response_target_s) : "", over: true };
+      return { text: overTarget(), title: one ? S.imagesOverTarget(fmtMs(responseOf(one)), msOf(config.response_target_s)) : "", over: true };
     }
     if (fail && max === top) return { text: String(max), title: S.imagesFailedAt(fail) };
     var open = max > 0 && max === top;
@@ -997,7 +998,7 @@
   /* Not even one camera, or one image per request, within the target: the
      target itself, ">3 s", rather than a 0 that reads as "does not run". */
   function overTarget() {
-    return S.overTargetText(config.response_target_s);
+    return S.overTargetText(msOf(config.response_target_s));
   }
 
   /* The limits, whatever the target: the most measured that still worked, and
@@ -1038,7 +1039,7 @@
         var ok = p && meetsTarget(p);
         var title = ok ? S.targetMet : S.targetNotMet;
         html += '<td class="bt-num ' + (ok ? "bt-good" : "bt-bad") + '" title="' + escapeHTML(title) + '">' +
-          fmtS(responseOf(p)) + "</td>";
+          fmtMs(responseOf(p)) + "</td>";
       } else if (k === "maxcams") {
         var mc = maxCell(entry);
         html += '<td class="bt-num' + (mc.over ? " bt-bad" : "") + '"' + (mc.title ? ' title="' + escapeHTML(mc.title) + '"' : "") + ">" +
@@ -1084,9 +1085,9 @@
   }
 
   function sweepRow(n, p) {
-    var ok = meetsTarget(p), t = config.response_target_s;
+    var ok = meetsTarget(p), t = msOf(config.response_target_s);
     return "<tr><td>" + n + "</td>" +
-      '<td class="' + (ok ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtS(responseOf(p)) + "</td>" +
+      '<td class="' + (ok ? "bt-dp-good" : "bt-dp-bad") + '">' + fmtMs(responseOf(p)) + "</td>" +
       "<td>" + fmt(p.tps, 1) + "</td>" +
       '<td class="' + (ok ? "bt-detail-pass" : "bt-detail-fail") + '" title="' + escapeHTML(ok ? S.targetMet : S.targetNotMet) + '">' +
       escapeHTML(ok ? S.withinTargetText(t) : S.overTargetText(t)) +
@@ -1146,7 +1147,7 @@
         escapeHTML(r) + "</span>";
     });
     html += '<span class="bt-legend-item"><span class="bt-legend-swatch" style="background:' + TARGET_COLOR + '"></span> ' +
-      escapeHTML(S.chartTarget(config.response_target_s)) + "</span>";
+      escapeHTML(S.chartTarget(msOf(config.response_target_s))) + "</span>";
     html += "</div>";
     html += '<div class="bt-chart-axis-titles"><span class="bt-axis-title-left">' + escapeHTML(S.yTitle) + "</span></div>";
     html += '<div class="bt-chart-canvas-wrap"><canvas id="bt-chart-' + escapeHTML(entry.id) + '"></canvas></div>';
@@ -1170,7 +1171,7 @@
       var sel = r === state.res;
       return {
         label: r, res: r,
-        data: cs.map(function (c) { var p = pointAt(entry, r, config.images, c); return p ? responseOf(p) : null; }),
+        data: cs.map(function (c) { var p = pointAt(entry, r, config.images, c); return p ? msOf(responseOf(p)) : null; }),
         borderColor: RES_COLORS[r], backgroundColor: RES_COLORS[r],
         borderWidth: sel ? 3 : 1.5, pointRadius: sel ? 5 : 3, pointHoverRadius: 7, tension: 0, spanGaps: true,
         /* PASS and FAIL on the points themselves: filled within the target. */
@@ -1181,7 +1182,7 @@
       };
     });
     datasets.push({
-      label: S.chartTarget(config.response_target_s), data: cs.map(function () { return config.response_target_s; }),
+      label: S.chartTarget(msOf(config.response_target_s)), data: cs.map(function () { return msOf(config.response_target_s); }),
       borderColor: TARGET_COLOR, borderDash: [6, 4], borderWidth: 1.5, pointRadius: 0, tension: 0
     });
     chartInstances[entry.id] = new Chart(canvas, {
@@ -1200,7 +1201,7 @@
           legend: { display: false },
           tooltip: {
             filter: function (item) { return item.dataset.res; },
-            callbacks: { label: function (ctx) { return ctx.dataset.label + ": " + fmtS(ctx.parsed.y) + " s"; } }
+            callbacks: { label: function (ctx) { return ctx.dataset.label + ": " + Math.round(ctx.parsed.y) + " ms"; } }
           },
           datalabels: {
             display: function (ctx) { return ctx.dataset.res === state.res; },
@@ -1208,7 +1209,7 @@
             anchor: "end",
             color: function (ctx) { return RES_COLORS[ctx.dataset.res] || "#333"; },
             font: { weight: "bold", size: 11 },
-            formatter: function (v) { return v == null ? "" : fmtS(v); }
+            formatter: function (v) { return v == null ? "" : String(Math.round(v)); }
           }
         }
       }
@@ -1284,7 +1285,7 @@
       search.value = s.search || "";
       search.dispatchEvent(new Event("input"));
       if (s.config) for (var k in s.config) if (config.hasOwnProperty(k)) config[k] = s.config[k];
-      container.querySelector("#bt-assump-response_target_s").value = String(config.response_target_s);
+      container.querySelector("#bt-assump-response_target_s").value = String(msOf(config.response_target_s));
       container.querySelector("#bt-assump-images").value = String(config.images);
       paintSingle(container);
       if (s.targetsOpen && container.querySelector("#bt-targets-body").hidden) {

@@ -38,13 +38,12 @@ them.
 ### Filters and the target do different jobs
 
 **Filters decide which rows you see.** The device, model, parameter-count,
-quantization and engine filters, and the response-time slider, only show or hide
+quantization and engine filters, and the TTFT slider, only show or hide
 rows.
 
 **The target and the assumption decide what the numbers say.** They sit under
 *Performance Target and Assumptions*. Changing one leaves the rows in place but
-recalculates the response time, Max Cameras and the green and red colouring of
-every row.
+recalculates Max Cameras and the green and red colouring of every row.
 
 ### 1. Describe your cameras
 
@@ -69,7 +68,7 @@ under llama.cpp and vLLM, or one model on two devices.
 ### 3. Set your target
 
 The target is the **longest a camera may wait for its answer to start** —
-default 3 seconds. A response time exactly on the target passes.
+default 3000 ms. A mean TTFT exactly on the target passes.
 
 Beside it, **Images per Camera** sets how many images each request carries:
 one snapshot by default, or several frames of the same camera sent together, as
@@ -79,10 +78,9 @@ be higher than 1.
 
 ### 4. Read Max Cameras
 
-**Max Cameras** is the highest measured number of cameras at which every
-camera's answer starts within your target. A plus — **16+** — means the
+**Max Cameras** is the highest measured number of cameras at which the mean TTFT of their requests is within your target. A plus — **16+** — means the
 configuration met the target even at the highest number it was tested with, so
-its real maximum was not reached. “>3 s” — your target — means not even a single
+its real maximum was not reached. “>3000 ms” — your target — means not even a single
 camera is answered in time.
 
 ### 5. Open a row
@@ -90,13 +88,13 @@ camera is answered in time.
 Click a row to see:
 
 - on the left, the measurements at your image size and image count for every
-  number of cameras tested, marked “≤3 s” or “>3 s” against your target, and
+  number of cameras tested, marked “≤3000 ms” or “>3000 ms” against your target, and
   closed by the number of cameras that failed where the camera limit was
   measured, and below them the same for the number of images in one request,
   with one camera;
 - on the right, the results explained in plain language, at the default
   settings;
-- below, a chart of response time as cameras are added, one line per image size,
+- below, a chart of TTFT as cameras are added, one line per image size,
   with your target as a dashed line. It appears where several cameras were
   measured, so with one image per camera.
 
@@ -106,8 +104,7 @@ The chart downloads as a PNG for reports and presentations.
 
 **"How many cameras can one Jetson AGX Orin 32GB watch?"** Select the device, set the
 image size your cameras send, and read Max Cameras. To see only the
-configurations that keep up, select the number of cameras you need and set Max
-Response Time to your target.
+configurations that keep up, select the number of cameras you need and set Max TTFT to your target.
 
 **"Is 1080p worth it?"** Switch the image size and watch Max Cameras, or open a
 row: its chart has one line per image size.
@@ -119,8 +116,7 @@ and vLLM on RTX PRO 6000. Changing the number of cameras shows how the gap
 develops under load.
 
 **"We already own this hardware; what can we run on it?"** Start with the device
-filter, sort the remaining models by size or by Max Cameras, and narrow with the
-response time or the number of cameras you need.
+filter, sort the remaining models by size or by Max Cameras, and narrow with the TTFT or the number of cameras you need.
 
 </div>
 </details>
@@ -169,18 +165,16 @@ A **token** is the unit a model reads and writes, about three quarters of an
 English word. An image is read as tokens too, and a larger image becomes more of
 them.
 
-### Response time
+### TTFT — time to first token
 
-**Response time** is how long a camera waits until its answer starts — the time
-to first token (TTFT), in seconds. For a vision-language model this is mostly
+**TTFT (time to first token)** is how long a camera waits until its answer starts, in milliseconds; the table shows the mean over the requests measured. For a vision-language model this is mostly
 reading the images, so it grows with their size and number, and with the number
 of cameras sharing the device. How much it grows with size depends on the model:
 some turn every image into a fixed number of tokens, others into more tokens the
 more pixels there are. Lower is better.
 
 **TPS (tokens per second)** is how fast the answer is then written, per camera.
-It barely depends on the image, and it is shown for reference: Max Cameras is
-decided by the response time. A long answer adds its writing time on top — 128
+It barely depends on the image, and it is shown for reference: Max Cameras is decided by the TTFT. A long answer adds its writing time on top — 128
 tokens at 25 tokens per second take about five more seconds.
 
 ### Max Cameras: the number of cameras is the concurrency
@@ -189,12 +183,10 @@ A camera sends its next request as soon as the previous one is answered, so it
 always has exactly one request in flight. The number of concurrent requests is
 therefore the number of cameras.
 
-Max Cameras is the highest **measured** number of cameras at which the response
-time meets your target. Only measured numbers count, nothing is interpolated,
-and if none passes the cell shows your target, “>3 s”. It depends on your target
+Max Cameras is the highest **measured** number of cameras at which the mean TTFT meets your target. Only measured numbers count, nothing is interpolated,
+and if none passes the cell shows your target, “>3000 ms”. It depends on your target
 and moves with it: at 720p with one image per camera, Cosmos3-Edge on Jetson AGX
-Orin 32GB keeps up with 2 cameras at 1 second and 8 — the highest number
-measured, so 8+ — at 3 seconds.
+Orin 32GB keeps up with 2 cameras at a 1000 ms target and 8 — the highest number measured, so 8+ — at 3000 ms.
 
 **Max Images per Request** reads the same way for the images one camera sends in
 a single request: the most that still meet your target. An opened row also gives
@@ -217,9 +209,7 @@ memory and usually more speed, at some risk to quality.
 
 **Engine** — the server software that loads the model and schedules requests.
 It affects speed as much as the hardware does. Qwen3-VL-4B-Instruct on RTX PRO
-6000 at 720p starts answering a single camera after 0.25 s under llama.cpp
-(Q8_0) and 0.16 s under vLLM (BF16); at 16 cameras the gap is 1.09 s against
-0.46 s.
+6000 at 720p starts answering a single camera after 247 ms under llama.cpp (Q8_0) and 164 ms under vLLM (BF16); at 16 cameras the gap is 1094 ms against 461 ms.
 
 **Device** — Jetson Orin NX 16GB and Jetson AGX Orin 32GB are embedded modules
 whose CPU and GPU share one memory. Both modules also come in other memory
@@ -235,8 +225,7 @@ The table uses one fixed workload — sample photos, a short prompt, answers of 
 to 128 tokens — and mean values, so that configurations can be compared without
 a site survey. It is **not a substitute for a test with your own cameras and
 prompts**: other image content, longer prompts or answers, other engine settings
-and the slowest requests rather than the mean all change real capacity. The
-response time is the wait until the answer starts; an application that needs
+and the slowest requests rather than the mean all change real capacity. The TTFT is the wait until the answer starts; an application that needs
 the whole answer waits for its writing time too, and a row measured with one
 camera only says nothing about how it behaves with several.
 

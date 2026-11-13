@@ -39,12 +39,12 @@ olduğunu bilmek gerekir.
 ### Filtreler ve hedef farklı işler görür {#filtreler-ve-hedef}
 
 **Filtreler hangi satırları gördüğünüzü belirler.** Cihaz, model, parametre
-sayısı, kuantizasyon ve engine filtreleri ile yanıt süresi kaydırıcısı yalnızca
+sayısı, kuantizasyon ve engine filtreleri ile TTFT kaydırıcısı yalnızca
 satırları gösterir ya da gizler.
 
 **Hedef ve varsayım sayıların ne söylediğini belirler.** Bunlar *Performans
 Hedefi ve Varsayımlar* altındadır. Birini değiştirdiğinizde satırlar yerinde
-kalır, ama yanıt süresi, Maks. kamera ve her satırın yeşil ve kırmızı
+kalır, ama Maks. kamera ve her satırın yeşil ve kırmızı
 renklendirmesi yeniden hesaplanır.
 
 ### 1. Kameralarınızı tanımlayın {#kameralarinizi-tanimlayin}
@@ -70,7 +70,7 @@ cihazda çalışması.
 ### 3. Hedefinizi belirleyin {#hedefinizi-belirleyin}
 
 Hedef, **bir kameranın yanıtının başlaması için bekleyebileceği en uzun
-süredir** — varsayılan 3 saniye. Hedefe tam eşit bir yanıt süresi geçer.
+süredir** — varsayılan 3000 ms. Hedefe tam eşit bir ortalama TTFT geçer.
 
 Yanındaki **Kamera Başına Görüntü**, her isteğin kaç görüntü taşıdığını
 belirler: varsayılan olarak tek bir anlık görüntü ya da aynı kameranın birlikte
@@ -80,10 +80,9 @@ yüzden birden fazla görüntüyle Maks. kamera 1'den yüksek olamaz.
 
 ### 4. Maks. kamera değerini okuyun {#maks-kamera-degerini-okuyun}
 
-**Maks. kamera**, her kameranın yanıtının hedefiniz içinde başladığı en yüksek
-ölçülmüş kamera sayısıdır. Artı işareti — **16+** — yapılandırmanın test
+**Maks. kamera**, isteklerin ortalama TTFT'sinin hedefiniz içinde kaldığı en yüksek ölçülmüş kamera sayısıdır. Artı işareti — **16+** — yapılandırmanın test
 edildiği en yüksek sayıda bile hedefi karşıladığı, yani gerçek üst sınırına
-ulaşılmadığı anlamına gelir. “>3 sn” — hedefiniz — tek bir kameranın bile
+ulaşılmadığı anlamına gelir. “>3000 ms” — hedefiniz — tek bir kameranın bile
 zamanında yanıt almadığı demektir.
 
 ### 5. Bir satırı açın {#bir-satiri-acin}
@@ -91,11 +90,11 @@ zamanında yanıt almadığı demektir.
 Bir satıra tıkladığınızda şunları görürsünüz:
 
 - solda, görüntü boyutunuzda ve görüntü sayınızda test edilen her kamera
-  sayısının ölçümleri, hedefinize göre “≤3 sn” ya da “>3 sn” olarak
+  sayısının ölçümleri, hedefinize göre “≤3000 ms” ya da “>3000 ms” olarak
   işaretlenmiş, kamera sınırının ölçüldüğü yerde en altta başarısız olan kamera
   sayısıyla; altında da tek kamerayla, tek istekteki görüntü sayısı için aynısı;
 - sağda, varsayılan ayarlarda sonuçların sade bir dille açıklaması;
-- altta, kamera eklendikçe yanıt süresinin grafiği; her görüntü boyutu için bir
+- altta, kamera eklendikçe TTFT'nin grafiği; her görüntü boyutu için bir
   çizgi, hedefiniz kesikli çizgiyle. Grafik, birden fazla kameranın ölçüldüğü
   yerde, yani kamera başına bir görüntüyle görünür.
 
@@ -106,7 +105,7 @@ Grafik, rapor ve sunumlar için PNG olarak indirilebilir.
 **"Tek bir Jetson AGX Orin 32GB kaç kamerayı izleyebilir?"** Cihazı seçin,
 kameralarınızın gönderdiği görüntü boyutunu belirleyin ve Maks. kamera değerini
 okuyun. Yalnızca yetişen yapılandırmaları görmek için ihtiyacınız olan kamera
-sayısını seçin ve Maks. Yanıt Süresi'ni hedefinize ayarlayın.
+sayısını seçin ve Maks. TTFT'yi hedefinize ayarlayın.
 
 **"1080p'ye değer mi?"** Görüntü boyutunu değiştirip Maks. kamera değerini
 izleyin ya da bir satırı açın: grafiğinde her görüntü boyutu için bir çizgi
@@ -120,7 +119,7 @@ geliştiğini gösterir.
 
 **"Bu donanıma zaten sahibiz; üzerinde ne çalıştırabiliriz?"** Cihaz filtresiyle
 başlayın, kalan modelleri boyuta ya da Maks. kamera değerine göre sıralayın ve
-ihtiyacınız olan yanıt süresi ya da kamera sayısıyla daraltın.
+ihtiyacınız olan TTFT ya da kamera sayısıyla daraltın.
 
 </div>
 </details>
@@ -171,10 +170,9 @@ katılmaz ve yapılandırmanın aleyhine sayılmaz.
 kelimenin dörtte üçü. Bir görüntü de token olarak okunur ve büyük bir görüntü
 daha çok token'a dönüşür.
 
-### Yanıt süresi {#yanit-suresi}
+### TTFT — ilk token süresi {#yanit-suresi}
 
-**Yanıt süresi**, bir kameranın yanıtı başlayana kadar beklediği süredir — ilk
-token süresi (TTFT, time to first token), saniye cinsinden. Bir görüntü-dil
+**TTFT (ilk token süresi, time to first token)**, bir kameranın yanıtı başlayana kadar beklediği süredir, milisaniye cinsinden; tabloda ölçülen isteklerin ortalaması gösterilir. Bir görüntü-dil
 modelinde bu sürenin çoğu görüntüleri okumaktır; bu yüzden görüntülerin boyutu ve
 sayısıyla, cihazı paylaşan kamera sayısıyla birlikte artar. Boyutla ne kadar
 arttığı modele bağlıdır: bazıları her görüntüyü sabit sayıda token'a, bazıları
@@ -182,7 +180,7 @@ piksel arttıkça daha çok token'a dönüştürür. Düşük olması iyidir.
 
 **TPS (saniyedeki token)**, yanıtın ardından kamera başına ne kadar hızlı
 yazıldığıdır. Görüntüye neredeyse hiç bağlı değildir ve bilgi için gösterilir:
-Maks. kamera yanıt süresine göre belirlenir. Uzun bir yanıt, yazılma süresini
+Maks. kamera TTFT'ye göre belirlenir. Uzun bir yanıt, yazılma süresini
 bunun üstüne ekler — saniyede 25 token hızla 128 token yaklaşık beş saniye daha
 sürer.
 
@@ -192,11 +190,11 @@ Bir kamera, önceki isteği yanıtlanır yanıtlanmaz sıradaki isteğini gönde
 yani her zaman tam olarak bir isteği işlenmektedir. Bu yüzden eşzamanlı istek
 sayısı kamera sayısıdır.
 
-Maks. kamera, yanıt süresinin hedefinizi karşıladığı en yüksek **ölçülmüş**
+Maks. kamera, ortalama TTFT'nin hedefinizi karşıladığı en yüksek **ölçülmüş**
 kamera sayısıdır. Yalnızca ölçülen sayılar sayılır, ara değer üretilmez; hiçbiri
-geçmezse hücrede hedefiniz, “>3 sn” yazar. Hedefinize bağlıdır ve onunla
+geçmezse hücrede hedefiniz, “>3000 ms” yazar. Hedefinize bağlıdır ve onunla
 birlikte değişir: 720p'de ve kamera başına bir görüntüyle, Jetson AGX Orin 32GB
-üzerindeki Cosmos3-Edge 1 saniyede 2 kameraya, 3 saniyede 8 kameraya — ölçülen
+üzerindeki Cosmos3-Edge 1000 ms hedefte 2 kameraya, 3000 ms hedefte 8 kameraya — ölçülen
 en yüksek sayı, yani 8+ — yetişir.
 
 **Tek istekte maks. görüntü** de bir kameranın tek istekte gönderdiği görüntüler
@@ -221,8 +219,7 @@ genellikle daha çok hız demektir; kalitede bir miktar risk taşır.
 
 **Engine** — modeli yükleyip istekleri zamanlayan sunucu yazılımı. Hıza donanım
 kadar etki eder. RTX PRO 6000 üzerinde 720p'de Qwen3-VL-4B-Instruct, tek bir
-kameraya llama.cpp (Q8_0) ile 0.25 sn, vLLM (BF16) ile 0.16 sn sonra yanıt
-vermeye başlar; 16 kamerada fark 1.09 sn'ye karşı 0.46 sn'dir.
+kameraya llama.cpp (Q8_0) ile 247 ms, vLLM (BF16) ile 164 ms sonra yanıt vermeye başlar; 16 kamerada fark 1094 ms'ye karşı 461 ms'dir.
 
 **Cihaz** — Jetson Orin NX 16GB ve Jetson AGX Orin 32GB, CPU ile GPU'nun tek bir
 belleği paylaştığı gömülü modüllerdir. İki modülün başka bellek kapasitelerinde
@@ -240,8 +237,7 @@ tek bir sabit iş yükü — örnek fotoğraflar, kısa bir istem, en fazla 128
 tokenlık yanıtlar — ve ortalama değerler kullanır. **Kendi kameralarınız ve
 istemlerinizle yapılacak bir testin yerini tutmaz**: farklı görüntü içeriği, daha
 uzun istemler ya da yanıtlar, farklı engine ayarları ve ortalama yerine en yavaş
-istekler gerçek kapasiteyi değiştirir. Yanıt süresi, yanıtın başlamasına kadar
-geçen beklemedir; yanıtın tamamına ihtiyaç duyan bir uygulama yazılma süresini
+istekler gerçek kapasiteyi değiştirir. TTFT, yanıtın başlamasına kadar geçen beklemedir; yanıtın tamamına ihtiyaç duyan bir uygulama yazılma süresini
 de bekler ve yalnızca tek kamerayla ölçülmüş bir satır, birden fazla kamerayla
 nasıl davrandığı hakkında bir şey söylemez.
 

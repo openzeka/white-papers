@@ -58,14 +58,14 @@ Defaults used below / Aşağıdaki varsayılanlar: TTFT ≤ {{ cfg.ttft_threshol
 
 {{ nl.vlm_intro }}
 
-Defaults used below / Aşağıdaki varsayılanlar: image size {{ vcfg.resolution }}, {{ vcfg.images }} image per camera, response time (time to first token) ≤ {{ vcfg.response_target_s }} s. Max Cameras = highest measured number of cameras meeting it (means over the requests that completed); "+" = the run met the target even at the highest level tested, so the figure is a minimum.
+Defaults used below / Aşağıdaki varsayılanlar: image size {{ vcfg.resolution }}, {{ vcfg.images }} image per camera, mean TTFT (time to first token) ≤ {{ vcfg.response_target_s | times: 1000 }} ms. Max Cameras = highest measured number of cameras meeting it (means over the requests that completed); "+" = the run met the target even at the highest level tested, so the figure is a minimum.
 {% for r in vlm %}
 ### {{ r.model }} · {{ r.device }} · {{ r.quantization }} · {{ r.engine }}
 
 - link: {{ site.url }}/tr/vlm-inference-benchmarks/#{{ r.id }} (EN: {{ site.url }}/vlm-inference-benchmarks/#{{ r.id }})
 - model: {{ r.model }}; parameters: {{ r.oz_params }}
 - setup: {{ r.device }}, {{ r.quantization }}, {{ r.engine }}{% if r.engine_version %} {{ r.engine_version }}{% endif %}{% if r.platform %}, {{ r.platform }}{% endif %}
-- measured (image size × images per camera: cameras, response time / per-request TPS): {{ r.oz_sweep }}
+- measured (image size × images per camera: cameras, TTFT / per-request TPS): {{ r.oz_sweep }}
 - Max Cameras: {{ r.oz_max_c }}{% if r.oz_max_c_open %}+{% endif %}
 - TR: {{ r.oz_text.tr }}
 - EN: {{ r.oz_text.en }}

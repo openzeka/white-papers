@@ -38,12 +38,12 @@ die instellingen tussen hen verschillen.
 ### Filters en het doel hebben een andere taak
 
 **Filters bepalen welke rijen u ziet.** De filters voor apparaat, model, aantal
-parameters, kwantisatie en engine, en de schuifregelaar voor de responstijd,
+parameters, kwantisatie en engine, en de schuifregelaar voor de TTFT,
 tonen of verbergen alleen rijen.
 
 **Het doel en de aanname bepalen wat de getallen zeggen.** Ze staan onder
 *Prestatiedoel en aannames*. Als u er een wijzigt, blijven de rijen staan, maar
-worden de responstijd, Max. camera's en de groene en rode kleuring van elke rij
+worden Max. camera's en de groene en rode kleuring van elke rij
 opnieuw berekend.
 
 ### 1. Beschrijf uw camera's
@@ -69,8 +69,7 @@ hetzelfde model onder llama.cpp en vLLM, of één model op twee apparaten.
 ### 3. Stel uw doel in
 
 Het doel is **hoe lang een camera maximaal mag wachten tot zijn antwoord
-begint** — standaard 3 seconden. Een responstijd die precies op het doel ligt,
-slaagt.
+begint** — standaard 3000 ms. Een gemiddelde TTFT die precies op het doel ligt, slaagt.
 
 Ernaast bepaalt **Beelden per camera** hoeveel beelden elk verzoek meestuurt:
 standaard één momentopname, of meerdere frames van dezelfde camera samen, zoals
@@ -80,10 +79,9 @@ Max. camera's niet hoger zijn dan 1.
 
 ### 4. Lees Max. camera's af
 
-**Max. camera's** is het hoogste gemeten aantal camera's waarbij het antwoord
-van elke camera binnen uw doel begint. Een plus — **16+** — betekent dat de
+**Max. camera's** is het hoogste gemeten aantal camera's waarbij de gemiddelde TTFT van hun verzoeken binnen uw doel blijft. Een plus — **16+** — betekent dat de
 configuratie het doel haalde, zelfs bij het hoogste aantal waarmee ze is getest,
-dus het werkelijke maximum is niet bereikt. “>3 s” — uw doel — betekent dat
+dus het werkelijke maximum is niet bereikt. “>3000 ms” — uw doel — betekent dat
 zelfs één camera niet op tijd antwoord krijgt.
 
 ### 5. Open een rij
@@ -91,12 +89,12 @@ zelfs één camera niet op tijd antwoord krijgt.
 Klik op een rij om het volgende te zien:
 
 - links, de metingen bij uw beeldformaat en aantal beelden voor elk getest
-  aantal camera's, gemarkeerd als “≤3 s” of “>3 s” ten opzichte van uw doel, en
+  aantal camera's, gemarkeerd als “≤3000 ms” of “>3000 ms” ten opzichte van uw doel, en
   waar de cameralimiet is gemeten afgesloten met het aantal camera's dat
   mislukte, en daaronder hetzelfde voor het aantal beelden in één verzoek, met
   één camera;
 - rechts, de resultaten in gewone taal toegelicht, bij de standaardinstellingen;
-- daaronder, een grafiek van de responstijd naarmate er camera's bijkomen, één
+- daaronder, een grafiek van de TTFT naarmate er camera's bijkomen, één
   lijn per beeldformaat, met uw doel als stippellijn. Die verschijnt waar
   meerdere camera's zijn gemeten, dus met één beeld per camera.
 
@@ -107,7 +105,7 @@ De grafiek kan als PNG worden gedownload voor rapporten en presentaties.
 **"Hoeveel camera's kan één Jetson AGX Orin 32GB volgen?"** Kies het apparaat, stel
 het beeldformaat in dat uw camera's sturen en lees Max. camera's af. Om alleen
 de configuraties te zien die het bijhouden, kiest u het aantal camera's dat u
-nodig hebt en zet u Max. responstijd op uw doel.
+nodig hebt en zet u Max. TTFT op uw doel.
 
 **"Is 1080p de moeite waard?"** Wissel van beeldformaat en kijk naar Max.
 camera's, of open een rij: de grafiek heeft één lijn per beeldformaat.
@@ -120,7 +118,7 @@ verschil zich onder belasting ontwikkelt.
 
 **"We hebben deze hardware al; wat kunnen we erop draaien?"** Begin met het
 apparaatfilter, sorteer de overgebleven modellen op grootte of op Max. camera's,
-en verfijn met de responstijd of het aantal camera's dat u nodig hebt.
+en verfijn met de TTFT of het aantal camera's dat u nodig hebt.
 
 </div>
 </details>
@@ -170,10 +168,9 @@ Een **token** is de eenheid die een model leest en schrijft, ongeveer driekwart
 van een Engels woord. Ook een beeld wordt als tokens gelezen, en een groter beeld
 wordt er meer.
 
-### Responstijd
+### TTFT — time to first token
 
-**Responstijd** is hoe lang een camera wacht tot zijn antwoord begint — de time
-to first token (TTFT), in seconden. Bij een vision-languagemodel is dat vooral
+**TTFT (time to first token)** is hoe lang een camera wacht tot zijn antwoord begint, in milliseconden; de tabel toont het gemiddelde over de gemeten verzoeken. Bij een vision-languagemodel is dat vooral
 het lezen van de beelden, dus het groeit met hun formaat en aantal, en met het
 aantal camera's dat het apparaat deelt. Hoeveel het met het formaat groeit,
 hangt af van het model: sommige zetten elk beeld om in een vast aantal tokens,
@@ -181,7 +178,7 @@ andere in meer tokens naarmate er meer pixels zijn. Lager is beter.
 
 **TPS (tokens per seconde)** is hoe snel het antwoord daarna per camera wordt
 geschreven. Het hangt nauwelijks van het beeld af en wordt ter informatie
-getoond: Max. camera's wordt bepaald door de responstijd. Een lang antwoord
+getoond: Max. camera's wordt bepaald door de TTFT. Een lang antwoord
 voegt zijn schrijftijd daar nog aan toe — 128 tokens bij 25 tokens per seconde
 duren ongeveer vijf seconden langer.
 
@@ -191,12 +188,10 @@ Een camera stuurt zijn volgende verzoek zodra het vorige is beantwoord, dus hij
 heeft altijd precies één verzoek in behandeling. Het aantal gelijktijdige
 verzoeken is daarom het aantal camera's.
 
-Max. camera's is het hoogste **gemeten** aantal camera's waarbij de responstijd
-uw doel haalt. Alleen gemeten aantallen tellen, er wordt niets geïnterpoleerd,
-en als geen enkel aantal slaagt, staat uw doel in de cel: “>3 s”. Ze hangt af
+Max. camera's is het hoogste **gemeten** aantal camera's waarbij de gemiddelde TTFT uw doel haalt. Alleen gemeten aantallen tellen, er wordt niets geïnterpoleerd,
+en als geen enkel aantal slaagt, staat uw doel in de cel: “>3000 ms”. Ze hangt af
 van uw doel en beweegt mee: bij 720p met één beeld per camera houdt Cosmos3-Edge
-op Jetson AGX Orin 32GB bij 1 seconde 2 camera's bij en 8 — het hoogste gemeten
-aantal, dus 8+ — bij 3 seconden.
+op Jetson AGX Orin 32GB bij een doel van 1000 ms 2 camera's bij en 8 — het hoogste gemeten aantal, dus 8+ — bij 3000 ms.
 
 **Max. beelden per verzoek** leest u op dezelfde manier voor de beelden die één
 camera in één verzoek stuurt: het hoogste aantal dat uw doel nog haalt. Een
@@ -222,9 +217,7 @@ kwaliteit.
 
 **Engine** — de serversoftware die het model laadt en verzoeken inplant. Ze
 beïnvloedt de snelheid net zoveel als de hardware. Qwen3-VL-4B-Instruct op RTX
-PRO 6000 begint bij 720p een enkele camera te antwoorden na 0.25 s onder
-llama.cpp (Q8_0) en na 0.16 s onder vLLM (BF16); bij 16 camera's is het
-verschil 1.09 s tegen 0.46 s.
+PRO 6000 begint bij 720p een enkele camera te antwoorden na 247 ms onder llama.cpp (Q8_0) en na 164 ms onder vLLM (BF16); bij 16 camera's is het verschil 1094 ms tegen 461 ms.
 
 **Apparaat** — Jetson Orin NX 16GB en Jetson AGX Orin 32GB zijn embedded modules
 waarvan CPU en GPU één geheugen delen. Beide modules bestaan ook met andere
@@ -242,8 +235,7 @@ antwoorden van maximaal 128 tokens — en gemiddelde waarden, zodat configuratie
 zonder locatieonderzoek kunnen worden vergeleken. Ze is **geen vervanging voor
 een test met uw eigen camera's en prompts**: andere beeldinhoud, langere prompts
 of antwoorden, andere engine-instellingen en de traagste verzoeken in plaats van
-het gemiddelde veranderen allemaal de werkelijke capaciteit. De responstijd is
-de wachttijd tot het antwoord begint; een toepassing die het hele antwoord nodig
+het gemiddelde veranderen allemaal de werkelijke capaciteit. De TTFT is de wachttijd tot het antwoord begint; een toepassing die het hele antwoord nodig
 heeft, wacht ook op de schrijftijd, en een rij die alleen met één camera is
 gemeten, zegt niets over hoe die zich met meerdere gedraagt.
 
