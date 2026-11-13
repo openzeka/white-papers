@@ -1,6 +1,6 @@
 ---
 title: Değişiklik Günlüğü
-nav_order: 9
+nav_order: 8
 lang: tr
 page_id: changelog
 description: >-
