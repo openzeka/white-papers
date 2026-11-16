@@ -71,3 +71,26 @@
 .vlmbt-container .bt-filter-row-perf > .bt-perf-item:first-child .bt-inline-label {
   margin-left: 0;
 }
+
+/* A row's own extra section (the run's "extra": measurements outside the
+   explorer's matrix), under its explanation and on its page. */
+.vlmbt-extra {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--bt-border);
+}
+.vlmbt-extra-table {
+  overflow-x: auto;
+  margin: 6px 0 10px;
+}
+.vlmbt-extra-caption {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.vlmbt-extra .bt-detail-table {
+  width: 100%;
+}
+.vlmbt-extra .bt-detail-table td:first-child,
+.vlmbt-extra .bt-detail-table th:first-child {
+  text-align: left;
+}

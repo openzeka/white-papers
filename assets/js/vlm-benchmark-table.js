@@ -1060,7 +1060,7 @@
   function detailRow(entry, span) {
     var html = '<tr class="bt-detail-row"><td colspan="' + span + '">';
     html += '<div class="bt-detail-content bt-visible">';
-    var expl = explanation(entry) + limitsText(entry);
+    var expl = withLimits(explanation(entry), limitsText(entry));
     html += '<div class="bt-detail-pair vlmbt-pair"><div class="bt-detail-pair-col">' + sweepTable(entry) + imagesSweepTable(entry) + "</div>" +
       '<div class="bt-detail-pair-col">' + (expl ? '<div class="bt-explained">' +
       '<div class="bt-capacity-title">' + escapeHTML(S.explainedHeading) + "</div>" + expl + "</div>" : "") + "</div></div>";
@@ -1126,6 +1126,14 @@
   function explanation(entry) {
     var el = document.querySelector('[data-vlmbt-explained="' + CSS.escape(entry.id) + '"]');
     return el ? el.innerHTML : "";
+  }
+
+  /* The limits paragraph closes the row's own explanation: it goes before a
+     row's extra section (measurements outside the matrix, _plugins/visibility.rb
+     vlm_extra_html), so it still reads as part of the matrix results. */
+  function withLimits(html, limits) {
+    var i = html.indexOf('<div class="vlmbt-extra"');
+    return i < 0 ? html + limits : html.slice(0, i) + limits + html.slice(i);
   }
 
   /* ── Chart: response time as cameras are added, one line per image size,

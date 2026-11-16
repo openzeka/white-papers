@@ -246,6 +246,7 @@ module OzBenchPages
     # The widget reads the explanation from here, as on the explorer page.
     out << %(<div class="bt-explained-src" hidden><div data-vlmbt-explained="#{h r['id']}">)
     (r["oz_parts"] || {})[lang].to_a.each { |p| out << "<p>#{h p}</p>" }
+    out << (r["oz_extra"] || {})[lang].to_s   # the row's own extra section, already escaped (visibility.rb)
     out << "</div></div>\n"
     %w[https://cdn.jsdelivr.net/npm/chart.js@4 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2
        https://cdn.jsdelivr.net/npm/html2canvas@1].each { |s| out << %(<script src="#{s}"></script>\n) }

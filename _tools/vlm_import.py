@@ -4,6 +4,7 @@
     python3 _tools/vlm_import.py <export.json>             # adds or updates its runs
     python3 _tools/vlm_import.py <export.json> --check     # reports, writes nothing
     python3 _tools/vlm_import.py <export.json> --replace   # rebuilds the file from this export only
+    python3 _tools/vlm_import.py <export.json> --extra <extra.json>   # with a row's own extra section
 
 <export.json> is the tool's results export: {"generated", "metrics", "runs":
 [...], "system_info"}. Every configuration is two runs: "<tag>" (one camera,
@@ -20,6 +21,14 @@ Only public facts are kept. The export also carries host addresses, GPU slots,
 container inventories and disk contents; none of it is copied. A device or
 model not in the tables below stops the import rather than being guessed:
 add it here first. Then run python3 _tools/validate_vlm.py.
+
+--extra <extra.json> gives a run measurements of its own that do not fit the
+explorer's matrix (Alpamayo2-Edge's driving test, say): {"<run id>": {"title",
+"before", "tables": [{"caption", "head", "rows"}], "after"}}, every text in
+en, tr and nl. It is stored as the row's "extra" and shown under the row's
+explanation and on its page. A re-import of that run needs the same file again,
+or the section is dropped. The file is made by a script from the measurement
+results, like the export; validate_vlm.py checks its shape.
 """
 import argparse
 import json
@@ -277,8 +286,17 @@ def main():
     ap.add_argument("export")
     ap.add_argument("--check", action="store_true", help="report only, write nothing")
     ap.add_argument("--replace", action="store_true", help="drop every row not in this export")
+    ap.add_argument("--extra", help="JSON {run id: extra section} for runs of this export")
     a = ap.parse_args()
     data = build(json.load(open(a.export, encoding="utf-8")))
+    if a.extra:
+        extras = json.load(open(a.extra, encoding="utf-8"))
+        unknown = sorted(set(extras) - {r["id"] for r in data["benchmarks"]})
+        if unknown:
+            sys.exit(f"--extra names runs that are not in the export: {unknown}")
+        for r in data["benchmarks"]:
+            if r["id"] in extras:
+                r["extra"] = extras[r["id"]]
     print(f"export: {len(data['benchmarks'])} runs, "
           f"{sum(len(r['data_points']) for r in data['benchmarks'])} measured cells")
     for r in data["benchmarks"]:

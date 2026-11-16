@@ -20,6 +20,7 @@
 #                            link does (polyglot rewrites href= only)
 #   page.oz_alternates       language → absolute URL, for the hreflang links
 
+require "cgi"
 require "json"
 
 module OzVisibility
@@ -180,6 +181,28 @@ module OzVisibility
     vlm_points(e, res, images).select { |p| vlm_meets(p, cfg) }.map { |p| p["c"].to_i }.max || 0
   end
 
+  # A row's own extra section (the run's "extra", from _tools/vlm_import.py --extra): measurements that do not
+  # fit the explorer's matrix, as a title, text, tables and text, in the reader's language. Written under the
+  # row's explanation (_includes/vlm-benchmark-explained.html) and on its page (_plugins/benchmark-pages.rb).
+  def self.vlm_extra_html(r, lang)
+    x = r["extra"] or return ""
+    pick = ->(v) { v.is_a?(Hash) ? (v[lang] || v["en"]) : v }
+    esc = ->(v) { CGI.escapeHTML(pick.(v).to_s) }
+    out = +%(<div class="vlmbt-extra"><div class="vlmbt-pane-title">#{esc.(x["title"])}</div>)
+    Array(pick.(x["before"])).each { |p| out << "<p>#{CGI.escapeHTML(p)}</p>" }
+    (x["tables"] || []).each do |tb|
+      out << %(<div class="vlmbt-extra-table">)
+      out << %(<div class="vlmbt-extra-caption">#{esc.(tb["caption"])}</div>) if tb["caption"]
+      out << %(<table class="bt-detail-table"><thead><tr>)
+      Array(pick.(tb["head"])).each { |c| out << "<th>#{CGI.escapeHTML(c)}</th>" }
+      out << "</tr></thead><tbody>"
+      (tb["rows"] || []).each { |row| out << "<tr>" << row.map { |c| "<td>#{esc.(c)}</td>" }.join << "</tr>" }
+      out << "</tbody></table></div>"
+    end
+    Array(pick.(x["after"])).each { |p| out << "<p>#{CGI.escapeHTML(p)}</p>" }
+    out << "</div>"
+  end
+
   def self.vlm_text(r, vlm, cfg, res, images, t, lang)
     m = (vlm["models"] || {})[r["model"]] || {}
     pts = vlm_points(r, res, images)
@@ -275,6 +298,7 @@ module OzVisibility
           vlm["benchmarks"].each do |r|
             parts = OzVisibility.vlm_text(r, vlm, cfg, res, images, t, lang)
             (r["oz_parts"] ||= {})[lang] = parts
+            (r["oz_extra"] ||= {})[lang] = OzVisibility.vlm_extra_html(r, lang)
             (r["oz_text"] ||= {})[lang] = parts.join(" ")
           end
         end
