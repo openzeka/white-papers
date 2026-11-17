@@ -1,7 +1,7 @@
 {
   "source": {
     "tool": "VLM Benchmark Tool",
-    "exported": "2026-11-16T14:43:30"
+    "exported": "2026-11-16T16:45:08"
   },
   "config": {
     "response_target_s": 3,
@@ -22,6 +22,10 @@
     "Alpamayo2-Edge": {
       "repo": "nvidia/Alpamayo2-Edge",
       "params": "2.7B"
+    },
+    "Alpamayo2-Super": {
+      "repo": "nvidia/Alpamayo2-Super",
+      "params": "34.3B"
     },
     "Cosmos-Reason1-7B": {
       "repo": "nvidia/Cosmos-Reason1-7B",
@@ -617,6 +621,11 @@
           "id": "alpamayo2-edge_agxthor_bf16_vllm",
           "model": "Alpamayo2-Edge",
           "path": "jetson-agx-thor/alpamayo2-edge_agxthor_bf16_vllm.json"
+        },
+        {
+          "id": "alpamayo2-super_agxthor_bf16_vllm",
+          "model": "Alpamayo2-Super",
+          "path": "jetson-agx-thor/alpamayo2-super_agxthor_bf16_vllm.json"
         },
         {
           "id": "cosmos-reason1-7b_agxthor_bf16_vllm",

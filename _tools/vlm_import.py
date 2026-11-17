@@ -86,6 +86,8 @@ MODELS = {
     "nvidia/Cosmos3-Edge": ("Cosmos3-Edge", "nvidia/Cosmos3-Edge", "3.9B", None),
     # the vision-language part (2.45B) is what vLLM serves; 2.7B = with the 0.2B trajectory expert, as published
     "nvidia/Alpamayo2-Edge": ("Alpamayo2-Edge", "nvidia/Alpamayo2-Edge", "2.7B", None),
+    # vLLM serves its 32B Qwen3-VL part; 34.3B = with the 2.3B diffusion expert, as published
+    "nvidia/Alpamayo2-Super": ("Alpamayo2-Super", "nvidia/Alpamayo2-Super", "34.3B", None),
     "nvidia/Cosmos3-Nano": ("Cosmos3-Nano", "nvidia/Cosmos3-Nano", "16B", None),
     "nvidia/Eagle2.5-8B": ("Eagle2.5-8B", "nvidia/Eagle2.5-8B", "8.1B", None),
     "nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1": ("Llama-3.1-Nemotron-Nano-VL-8B", "nvidia/Llama-3.1-Nemotron-Nano-VL-8B-V1", "8.7B", None),
