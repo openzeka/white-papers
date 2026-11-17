@@ -12,7 +12,7 @@
 {%- if site.data.oz_vlm -%}
 <div class="bt-explained-src" hidden>
 {%- for r in site.data.oz_vlm.benchmarks %}
-<div data-vlmbt-explained="{{ r.id }}">{% for p in r.oz_parts[site.active_lang] %}<p>{{ p }}</p>{% endfor %}{% if r.oz_permalink %}<p><a href="{{ r.oz_permalink | relative_url }}">{{ site.data[site.active_lang].strings.bench_page.vlm_permalink }}</a></p>{% endif %}</div>
+<div data-vlmbt-explained="{{ r.id }}">{% for p in r.oz_parts[site.active_lang] %}<p>{{ p }}</p>{% endfor %}{{ r.oz_extra[site.active_lang] }}{% if r.oz_permalink %}<p><a href="{{ r.oz_permalink | relative_url }}">{{ site.data[site.active_lang].strings.bench_page.vlm_permalink }}</a></p>{% endif %}</div>
 {%- endfor %}
 </div>
 {%- endif -%}

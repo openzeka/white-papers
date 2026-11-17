@@ -1,0 +1,158 @@
+{
+  "id": "alpamayo2-super_agxthor_bf16_vllm",
+  "model": "Alpamayo2-Super",
+  "device": "Jetson AGX Thor",
+  "quantization": "BF16",
+  "engine": "vLLM",
+  "engine_version": "0.29.0",
+  "platform": "L4T R39.2.1",
+  "served_repo": null,
+  "notes": "prompt cache off; thinking off; max-num-seqs 256",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 0.789, "tps": 4.83, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 2, "ttft_s": 1.016, "tps": 4.63, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 4, "ttft_s": 1.164, "tps": 4.56, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 8, "ttft_s": 1.356, "tps": 4.47, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 16, "ttft_s": 1.888, "tps": 3.44, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 2, "c": 1, "ttft_s": 0.792, "tps": 4.47, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 4, "c": 1, "ttft_s": 0.984, "tps": 4.53, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 8, "c": 1, "ttft_s": 1.684, "tps": 4.73, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 16, "c": 1, "ttft_s": 3.185, "tps": 5.54, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 32, "c": 1, "ttft_s": 6.03, "tps": 72.77, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 0.78, "tps": 4.64, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 2, "ttft_s": 1.061, "tps": 4.77, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 4, "ttft_s": 1.164, "tps": 4.64, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 8, "ttft_s": 1.534, "tps": 4.43, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 16, "ttft_s": 2.154, "tps": 3.91, "requests": 32, "failed": 0},
+    {"res": "720p", "images": 1, "c": 32, "ttft_s": 3.254, "tps": 2.86, "requests": 64, "failed": 0},
+    {"res": "720p", "images": 1, "c": 64, "ttft_s": 5.423, "tps": 1.71, "requests": 128, "failed": 0},
+    {"res": "720p", "images": 1, "c": 128, "ttft_s": 14.152, "tps": 1.48, "requests": 256, "failed": 0},
+    {"res": "720p", "images": 1, "c": 160, "ttft_s": 18.384, "tps": 1.33, "requests": 320, "failed": 0},
+    {"res": "720p", "images": 1, "c": 176, "ttft_s": 20.711, "tps": 1.42, "requests": 352, "failed": 0},
+    {"res": "720p", "images": 2, "c": 1, "ttft_s": 0.833, "tps": 4.61, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 4, "c": 1, "ttft_s": 1.064, "tps": 4.77, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 8, "c": 1, "ttft_s": 1.711, "tps": 5.24, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 16, "c": 1, "ttft_s": 3.364, "tps": 5.73, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 32, "c": 1, "ttft_s": 6.442, "tps": 217.82, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 64, "c": 1, "ttft_s": 14.952, "tps": 212.27, "requests": 3, "failed": 0},
+    {"res": "720p", "images": 128, "c": 1, "ttft_s": 35.365, "tps": 6.69, "requests": 3, "failed": 1},
+    {"res": "720p", "images": 256, "c": 1, "ttft_s": 135.664, "tps": 3.74, "requests": 3, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 1, "ttft_s": 0.922, "tps": 4.78, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 2, "ttft_s": 1.087, "tps": 4.75, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 4, "ttft_s": 1.134, "tps": 4.71, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 8, "ttft_s": 1.441, "tps": 4.45, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 16, "ttft_s": 2.117, "tps": 3.87, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 2, "c": 1, "ttft_s": 0.88, "tps": 4.48, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 4, "c": 1, "ttft_s": 1.107, "tps": 4.57, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 8, "c": 1, "ttft_s": 1.868, "tps": 4.45, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 16, "c": 1, "ttft_s": 3.744, "tps": 6.62, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 32, "c": 1, "ttft_s": 7.245, "tps": 131.16, "requests": 5, "failed": 1},
+    {"res": "2K", "images": 1, "c": 1, "ttft_s": 0.838, "tps": 5.3, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 2, "c": 1, "ttft_s": 0.962, "tps": 4.49, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 4, "c": 1, "ttft_s": 1.27, "tps": 4.58, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 8, "c": 1, "ttft_s": 2.206, "tps": 4.65, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 16, "c": 1, "ttft_s": 4.502, "tps": 120.3, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 32, "c": 1, "ttft_s": 8.309, "tps": 143.14, "requests": 5, "failed": 0}
+  ],
+  "limits": {
+    "images": {
+      "720p": 512
+    },
+    "cameras": {
+      "720p": 192
+    }
+  },
+  "extra": {
+    "title": {
+      "en": "Driving test: six cameras, official PyTorch inference",
+      "tr": "Sürüş testi: altı kamera, resmi PyTorch çıkarımı",
+      "nl": "Rijtest: zes camera's, officiële PyTorch-inferentie"
+    },
+    "before": {
+      "en": [
+        "Alpamayo2-Super (a 32B Qwen3-VL backbone and a 2.3B diffusion expert) writes a short chain of causation from six cameras (4 frames each) and the vehicle's recent motion, then plans a trajectory. The table above measures only its vision-language part, served with vLLM in BF16. To \"Describe the scene.\" that part mostly answers in a few tokens (2 to 34 on average per cell) that no scene description was provided, although it does describe the image when asked what it sees (\"The scene shows a road intersection\"); its tok/s figures therefore swing more than other rows'. This test runs the whole model with the official inference path of its repository (NVlabs/alpamayo2, inference_smoke.py: BF16, 10 diffusion steps, one trajectory, top-p 0.98, temperature 0.6) on the repository's 5 validation clips, 3 runs each, Jetson AGX Thor at MAXN.",
+        "In the table above 2 requests came back with an empty answer; as in the camera limit, an empty answer is not counted as a failure, so it does not end a series. There is no TensorRT recipe for this model; attention runs through PyTorch SDPA, because flash-attn has no build for this board."
+      ],
+      "tr": [
+        "Alpamayo2-Super (32B bir Qwen3-VL omurgası ve 2.3B bir difüzyon uzmanı) altı kameradan (her birinden 4 kare) ve aracın son hareketinden kısa bir nedensellik zinciri (chain of causation) yazar, ardından bir yörünge planlar. Yukarıdaki tablo yalnızca modelin görü-dil kısmını, vLLM ile BF16 olarak sunulduğunda ölçer. Bu kısım \"Describe the scene.\" sorusuna çoğunlukla birkaç token ile (hücre başına ortalama 2 ile 34) bir sahne açıklaması verilmediğini söyler; görüntüde ne gördüğü sorulduğunda ise görüntüyü anlatır (\"The scene shows a road intersection\"). Bu yüzden tok/s değerleri diğer satırlardan daha çok dalgalanır. Bu test ise modelin tamamını deposundaki resmi çıkarım yoluyla (NVlabs/alpamayo2, inference_smoke.py: BF16, 10 difüzyon adımı, tek yörünge, top-p 0.98, sıcaklık 0.6) deponun 5 doğrulama klibinde, her birinde 3 kez, MAXN modundaki Jetson AGX Thor üzerinde çalıştırır.",
+        "Yukarıdaki tabloda 2 istek boş cevapla döndü; kamera limitinde olduğu gibi boş cevap hata sayılmaz, bu yüzden bir seriyi bitirmez. Bu model için bir TensorRT tarifi yoktur; flash-attn'ın bu kart için bir derlemesi olmadığından dikkat (attention) PyTorch SDPA ile çalışır."
+      ],
+      "nl": [
+        "Alpamayo2-Super (een 32B Qwen3-VL-backbone en een 2.3B diffusie-expert) schrijft uit zes camera's (elk 4 frames) en de recente beweging van het voertuig een korte causaliteitsketen (chain of causation) en plant daarna een traject. De tabel hierboven meet alleen het vision-language-deel, geserveerd met vLLM in BF16. Op \"Describe the scene.\" antwoordt dat deel meestal in een paar tokens (gemiddeld 2 tot 34 per cel) dat er geen scènebeschrijving is gegeven, hoewel het het beeld wel beschrijft als gevraagd wordt wat het ziet (\"The scene shows a road intersection\"); de tok/s-waarden schommelen daardoor meer dan bij andere rijen. Deze test draait het hele model via het officiële inferentiepad van zijn repository (NVlabs/alpamayo2, inference_smoke.py: BF16, 10 diffusiestappen, één traject, top-p 0.98, temperatuur 0.6) op de 5 validatieclips van de repository, elk 3 keer, op een Jetson AGX Thor op MAXN.",
+        "In de tabel hierboven kwamen 2 verzoeken terug met een leeg antwoord; zoals bij de cameralimiet telt een leeg antwoord niet als fout en beëindigt het dus geen reeks. Voor dit model bestaat geen TensorRT-recept; attention draait via PyTorch SDPA, omdat flash-attn geen build voor dit bord heeft."
+      ]
+    },
+    "tables": [
+      {
+        "caption": {
+          "en": "One driving decision, 15 runs (s)",
+          "tr": "Bir sürüş kararı, 15 ölçüm (sn)",
+          "nl": "Eén rijbeslissing, 15 runs (s)"
+        },
+        "head": {
+          "en": [
+            "Step",
+            "Mean",
+            "p50",
+            "p90"
+          ],
+          "tr": [
+            "Adım",
+            "Ortalama",
+            "p50",
+            "p90"
+          ],
+          "nl": [
+            "Stap",
+            "Gemiddeld",
+            "p50",
+            "p90"
+          ]
+        },
+        "rows": [
+          [
+            {
+              "en": "Whole decision",
+              "tr": "Kararın tamamı",
+              "nl": "Hele beslissing"
+            },
+            "13.3",
+            "12.6",
+            "17.5"
+          ],
+          [
+            {
+              "en": "Input preparation",
+              "tr": "Girdi hazırlığı",
+              "nl": "Invoer voorbereiden"
+            },
+            "1.0",
+            "1.0",
+            "1.0"
+          ],
+          [
+            {
+              "en": "Model (chain of causation and trajectory)",
+              "tr": "Model (nedensellik zinciri ve yörünge)",
+              "nl": "Model (causaliteitsketen en traject)"
+            },
+            "12.3",
+            "11.7",
+            "16.5"
+          ]
+        ]
+      }
+    ],
+    "after": {
+      "en": [
+        "Each decision reads 24 images (4,580 prompt tokens) and writes about 18 tokens of chain of causation (10 to 32); the longer the chain, the longer the decision. The model takes 69 GiB of memory. Alpamayo2-Edge, with its TensorRT recipe on the same board, takes 331 ms per decision."
+      ],
+      "tr": [
+        "Her karar 24 görüntü (4,580 prompt token) okur ve yaklaşık 18 token (10 ile 32 arası) nedensellik zinciri yazar; zincir uzadıkça karar da uzar. Model 69 GiB bellek kullanır. Alpamayo2-Edge aynı kartta TensorRT tarifiyle bir kararı 331 ms'de verir."
+      ],
+      "nl": [
+        "Elke beslissing leest 24 beelden (4,580 prompttokens) en schrijft ongeveer 18 tokens causaliteitsketen (10 tot 32); hoe langer de keten, hoe langer de beslissing. Het model gebruikt 69 GiB geheugen. Alpamayo2-Edge doet er op hetzelfde bord met zijn TensorRT-recept 331 ms per beslissing over."
+      ]
+    }
+  }
+}

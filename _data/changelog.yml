@@ -15,6 +15,22 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-11-17
+  type: vlm
+  vlm: alpamayo2-super_agxthor_bf16_vllm
+  text:
+    en: "Alpamayo2-Super on Jetson AGX Thor: the vision-language part in BF16 served with vLLM, response time measured from 1 to 176 simultaneous cameras and up to 256 images per request, with a six-camera driving test of the whole model using its official PyTorch inference (13.3 s per decision)."
+    tr: "Alpamayo2-Super, Jetson AGX Thor üzerinde: görü-dil kısmı BF16 olarak vLLM ile sunuldu, yanıt süresi 1 ile 176 arasında eşzamanlı kamerada ve istek başına 256 görüntüye kadar ölçüldü; modelin tamamı resmi PyTorch çıkarımıyla altı kameralı bir sürüş testinde de çalıştırıldı (karar başına 13.3 sn)."
+    nl: "Alpamayo2-Super op Jetson AGX Thor: het vision-language-deel in BF16 geserveerd met vLLM, responstijd gemeten van 1 tot 176 gelijktijdige camera's en tot 256 beelden per verzoek, met een rijtest met zes camera's van het hele model via zijn officiële PyTorch-inferentie (13.3 s per beslissing)."
+
+- date: 2026-11-17
+  type: vlm
+  vlm: alpamayo2-edge_agxthor_bf16_vllm
+  text:
+    en: "Alpamayo2-Edge on Jetson AGX Thor: the vision-language part in BF16 served with vLLM, response time measured from 1 to 1,408 simultaneous cameras and up to 512 images per request, with a six-camera driving test of the whole model using its TensorRT Edge-LLM recipe (331 ms per decision)."
+    tr: "Alpamayo2-Edge, Jetson AGX Thor üzerinde: görü-dil kısmı BF16 olarak vLLM ile sunuldu, yanıt süresi 1 ile 1,408 arasında eşzamanlı kamerada ve istek başına 512 görüntüye kadar ölçüldü; modelin tamamı TensorRT Edge-LLM tarifiyle altı kameralı bir sürüş testinde de çalıştırıldı (karar başına 331 ms)."
+    nl: "Alpamayo2-Edge op Jetson AGX Thor: het vision-language-deel in BF16 geserveerd met vLLM, responstijd gemeten van 1 tot 1,408 gelijktijdige camera's en tot 512 beelden per verzoek, met een rijtest met zes camera's van het hele model via zijn TensorRT Edge-LLM-recept (331 ms per beslissing)."
+
 - date: 2026-11-13
   type: vlm
   vlm: qwen3-vl-30b-a3b-instruct_b300_fp8_vllm

@@ -133,6 +133,13 @@ also sets the run's permanent URL, which must never change** — so never rename
 a model, device or engine of a published row; ask the user first if it seems
 necessary.
 
+**A row's own extra measurements.** When a run comes with measurements that do
+not fit the matrix (a driving model's own test, say), pass them with
+`--extra <extra.json>`: `{"<run id>": {"title", "before", "tables": [{"caption",
+"head", "rows"}], "after"}}`, every text in en, tr and nl, made by a script
+from the result files — never typed by hand. A re-import of that run needs the
+same file again, or the section is dropped. The validator checks its shape.
+
 ## 4. Validate
 
 ```bash

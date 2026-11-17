@@ -1,0 +1,220 @@
+{
+  "id": "alpamayo2-edge_agxthor_bf16_vllm",
+  "model": "Alpamayo2-Edge",
+  "device": "Jetson AGX Thor",
+  "quantization": "BF16",
+  "engine": "vLLM",
+  "engine_version": "0.29.0",
+  "platform": "L4T R39.2.1",
+  "served_repo": null,
+  "notes": "prompt cache off; thinking off; max-num-seqs 512",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 0.107, "tps": 158.78, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 2, "ttft_s": 0.13, "tps": 157.02, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 4, "ttft_s": 0.143, "tps": 155.89, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 8, "ttft_s": 0.178, "tps": 58.29, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 16, "ttft_s": 0.329, "tps": 50.43, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 2, "c": 1, "ttft_s": 0.152, "tps": 463.94, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 4, "c": 1, "ttft_s": 0.201, "tps": 307.52, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 8, "c": 1, "ttft_s": 0.325, "tps": 72.64, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 16, "c": 1, "ttft_s": 0.627, "tps": 78.72, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 32, "c": 1, "ttft_s": 1.241, "tps": 62.74, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 0.136, "tps": 101.23, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 2, "ttft_s": 0.149, "tps": 95.33, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 4, "ttft_s": 0.162, "tps": 74.6, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 8, "ttft_s": 0.212, "tps": 138.84, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 16, "ttft_s": 0.355, "tps": 48.36, "requests": 32, "failed": 0},
+    {"res": "720p", "images": 1, "c": 32, "ttft_s": 0.551, "tps": 32.43, "requests": 64, "failed": 0},
+    {"res": "720p", "images": 1, "c": 64, "ttft_s": 0.948, "tps": 36.46, "requests": 128, "failed": 0},
+    {"res": "720p", "images": 1, "c": 128, "ttft_s": 1.895, "tps": 16.98, "requests": 256, "failed": 0},
+    {"res": "720p", "images": 1, "c": 256, "ttft_s": 4.248, "tps": 16.1, "requests": 512, "failed": 0},
+    {"res": "720p", "images": 1, "c": 512, "ttft_s": 8.647, "tps": 18.69, "requests": 1024, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1024, "ttft_s": 17.902, "tps": 14.37, "requests": 2048, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1280, "ttft_s": 21.003, "tps": 12.28, "requests": 2560, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1408, "ttft_s": 23.635, "tps": 11.61, "requests": 2816, "failed": 0},
+    {"res": "720p", "images": 2, "c": 1, "ttft_s": 0.185, "tps": 728.81, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 4, "c": 1, "ttft_s": 0.247, "tps": 297.78, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 8, "c": 1, "ttft_s": 0.41, "tps": 72.47, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 16, "c": 1, "ttft_s": 0.792, "tps": 69.08, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 32, "c": 1, "ttft_s": 1.485, "tps": 58.52, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 64, "c": 1, "ttft_s": 3.307, "tps": 51.16, "requests": 3, "failed": 0},
+    {"res": "720p", "images": 128, "c": 1, "ttft_s": 7.2, "tps": 45.77, "requests": 3, "failed": 0},
+    {"res": "720p", "images": 256, "c": 1, "ttft_s": 17.168, "tps": 34.98, "requests": 3, "failed": 0},
+    {"res": "720p", "images": 512, "c": 1, "ttft_s": 46.217, "tps": 148.73, "requests": 3, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 1, "ttft_s": 0.174, "tps": 129.84, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 2, "ttft_s": 0.191, "tps": 108.19, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 4, "ttft_s": 0.219, "tps": 129.26, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 8, "ttft_s": 0.242, "tps": 93.75, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 16, "ttft_s": 0.396, "tps": 50.67, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 2, "c": 1, "ttft_s": 0.245, "tps": 426.38, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 4, "c": 1, "ttft_s": 0.369, "tps": 311.29, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 8, "c": 1, "ttft_s": 0.575, "tps": 67.17, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 16, "c": 1, "ttft_s": 1.115, "tps": 62.84, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 32, "c": 1, "ttft_s": 2.21, "tps": 57.64, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 1, "c": 1, "ttft_s": 0.229, "tps": 152.61, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 2, "c": 1, "ttft_s": 0.307, "tps": 528.41, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 4, "c": 1, "ttft_s": 0.498, "tps": 471.11, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 8, "c": 1, "ttft_s": 0.777, "tps": 68.02, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 16, "c": 1, "ttft_s": 1.528, "tps": 63.35, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 32, "c": 1, "ttft_s": 2.995, "tps": 57.91, "requests": 5, "failed": 0}
+  ],
+  "limits": {
+    "images": {
+      "720p": 1024
+    },
+    "cameras": {
+      "720p": 1536
+    }
+  },
+  "extra": {
+    "title": {
+      "en": "Driving test: six cameras, TensorRT Edge-LLM recipe",
+      "tr": "Sürüş testi: altı kamera, TensorRT Edge-LLM tarifi",
+      "nl": "Rijtest: zes camera's, TensorRT Edge-LLM-recept"
+    },
+    "before": {
+      "en": [
+        "Alpamayo2-Edge is a driving model: from six cameras (22 frames), the vehicle's recent motion and a navigation instruction it writes a short chain of causation and plans six candidate trajectories. The table above measures only its vision-language part, served with vLLM in BF16 with greedy decoding, the way the model answers questions. Its answers to \"Describe the scene.\" are short (2 to 48 tokens on average per cell), so its tok/s figures swing more than other rows'. This test runs the whole model with its official FP8 TensorRT Edge-LLM recipe (TensorRT Edge-LLM v0.11.1, 5 diffusion steps, 6 candidates, greedy decoding of the chain of causation) on the recipe's 19 navigation demo clips, 3 runs each.",
+        "Jetson AGX Thor at MAXN with jetson_clocks and TensorRT 11.3; the recipe's own figures come from a DRIVE AGX Thor with TensorRT 11.3. As in the recipe, each decision encodes only the newest frame of every camera and reuses the earlier ones."
+      ],
+      "tr": [
+        "Alpamayo2-Edge bir sürüş modelidir: altı kameradan (22 kare), aracın son hareketinden ve bir navigasyon talimatından kısa bir nedensellik zinciri (chain of causation) yazar ve altı aday yörünge planlar. Yukarıdaki tablo yalnızca modelin görü-dil kısmını, vLLM ile BF16 olarak ve greedy decoding ile (model soruları böyle yanıtlar) sunulduğunda ölçer. \"Describe the scene.\" sorusuna cevapları kısadır (hücre başına ortalama 2 ile 48 token), bu yüzden tok/s değerleri diğer satırlardan daha çok dalgalanır. Bu test ise modelin tamamını resmi FP8 TensorRT Edge-LLM tarifiyle (TensorRT Edge-LLM v0.11.1, 5 difüzyon adımı, 6 aday, nedensellik zincirinin greedy decoding ile üretilmesi) tarifin 19 navigasyon demo klibinde, her birinde 3 kez çalıştırır.",
+        "Jetson AGX Thor MAXN modunda, jetson_clocks ve TensorRT 11.3 ile; tarifin kendi rakamları TensorRT 11.3 ile bir DRIVE AGX Thor üzerinde alınmıştır. Tarifte olduğu gibi her kararda her kameranın yalnızca en yeni karesi kodlanır, önceki kareler yeniden kullanılır."
+      ],
+      "nl": [
+        "Alpamayo2-Edge is een rijmodel: uit zes camera's (22 frames), de recente beweging van het voertuig en een navigatie-instructie schrijft het een korte causaliteitsketen (chain of causation) en plant het zes kandidaat-trajecten. De tabel hierboven meet alleen het vision-language-deel, geserveerd met vLLM in BF16 met greedy decodering, zoals het model vragen beantwoordt. De antwoorden op \"Describe the scene.\" zijn kort (gemiddeld 2 tot 48 tokens per cel), dus de tok/s-waarden schommelen meer dan bij andere rijen. Deze test draait het hele model met het officiële FP8 TensorRT Edge-LLM-recept (TensorRT Edge-LLM v0.11.1, 5 diffusiestappen, 6 kandidaten, greedy decodering van de causaliteitsketen) op de 19 navigatiedemoclips van het recept, elk 3 keer.",
+        "Jetson AGX Thor op MAXN met jetson_clocks en TensorRT 11.3; de eigen cijfers van het recept komen van een DRIVE AGX Thor met TensorRT 11.3. Zoals in het recept codeert elke beslissing alleen het nieuwste frame van elke camera en hergebruikt de eerdere."
+      ]
+    },
+    "tables": [
+      {
+        "caption": {
+          "en": "One driving decision, mean of 57 runs (ms)",
+          "tr": "Bir sürüş kararı, 57 ölçümün ortalaması (ms)",
+          "nl": "Eén rijbeslissing, gemiddelde van 57 runs (ms)"
+        },
+        "head": {
+          "en": [
+            "Stage",
+            "Jetson AGX Thor",
+            "DRIVE AGX Thor (recipe)"
+          ],
+          "tr": [
+            "Aşama",
+            "Jetson AGX Thor",
+            "DRIVE AGX Thor (tarif)"
+          ],
+          "nl": [
+            "Fase",
+            "Jetson AGX Thor",
+            "DRIVE AGX Thor (recept)"
+          ]
+        },
+        "rows": [
+          [
+            {
+              "en": "Vision encoder, 6 newest frames",
+              "tr": "Görüntü kodlayıcı, en yeni 6 kare",
+              "nl": "Vision-encoder, 6 nieuwste frames"
+            },
+            "21",
+            "20"
+          ],
+          [
+            {
+              "en": "Prefill, 3,261 tokens",
+              "tr": "Prefill, 3,261 token",
+              "nl": "Prefill, 3,261 tokens"
+            },
+            "67",
+            "75"
+          ],
+          [
+            {
+              "en": "Chain of causation, per token",
+              "tr": "Nedensellik zinciri, token başına",
+              "nl": "Causaliteitsketen, per token"
+            },
+            "7.8",
+            {
+              "en": "about 7",
+              "tr": "yaklaşık 7",
+              "nl": "ongeveer 7"
+            }
+          ],
+          [
+            {
+              "en": "Trajectory expert, 5 steps × 6 candidates",
+              "tr": "Yörünge uzmanı, 5 adım × 6 aday",
+              "nl": "Trajectexpert, 5 stappen × 6 kandidaten"
+            },
+            "70",
+            "70"
+          ],
+          [
+            {
+              "en": "Whole decision (22 tokens)",
+              "tr": "Kararın tamamı (22 token)",
+              "nl": "Hele beslissing (22 tokens)"
+            },
+            "331 (p90 341)",
+            {
+              "en": "about 320",
+              "tr": "yaklaşık 320",
+              "nl": "ongeveer 320"
+            }
+          ]
+        ]
+      },
+      {
+        "caption": {
+          "en": "Where the difference came from: whole decision, mean (ms)",
+          "tr": "Farkın kaynağı: kararın tamamı, ortalama (ms)",
+          "nl": "Waar het verschil vandaan kwam: hele beslissing, gemiddeld (ms)"
+        },
+        "head": {
+          "en": [
+            "Setting",
+            "ms"
+          ],
+          "tr": [
+            "Ayar",
+            "ms"
+          ],
+          "nl": [
+            "Instelling",
+            "ms"
+          ]
+        },
+        "rows": [
+          [
+            "120W, TensorRT 10.16 (JetPack)",
+            "439"
+          ],
+          [
+            "MAXN, TensorRT 10.16 (JetPack)",
+            "423"
+          ],
+          [
+            "MAXN + jetson_clocks, TensorRT 11.3",
+            "331"
+          ]
+        ]
+      }
+    ],
+    "after": {
+      "en": [
+        "With all 22 frames encoded inside the timed run a decision takes 402 ms. TensorRT 11.3 brought the trajectory expert from 99 to 70 ms; fixing the GPU and memory clocks with jetson_clocks (memory at 4266 MHz instead of about 2750) brought the rest.",
+        "The recipe gives about 7 ms per token for greedy decoding but no greedy total; about 320 ms is its stages plus 22 tokens × 7 ms. On the recipe's example clip the chain of causation matches the recipe's text word for word."
+      ],
+      "tr": [
+        "22 karenin tamamı ölçülen süre içinde kodlandığında bir karar 402 ms sürer. TensorRT 11.3 yörünge uzmanını 99 ms'den 70 ms'ye indirdi; GPU ve bellek saatlerinin jetson_clocks ile sabitlenmesi (bellek yaklaşık 2750 yerine 4266 MHz) farkın kalanını kapattı.",
+        "Tarif greedy decoding için token başına yaklaşık 7 ms verir, greedy toplamını vermez; yaklaşık 320 ms, tarifin aşamalarına 22 token × 7 ms eklenerek bulunur. Tarifin örnek klibinde nedensellik zinciri, tarifteki metinle kelimesi kelimesine aynıdır."
+      ],
+      "nl": [
+        "Met alle 22 frames gecodeerd binnen de gemeten tijd duurt een beslissing 402 ms. TensorRT 11.3 bracht de trajectexpert van 99 naar 70 ms; het vastzetten van de GPU- en geheugenklokken met jetson_clocks (geheugen op 4266 MHz in plaats van ongeveer 2750) deed de rest.",
+        "Het recept noemt ongeveer 7 ms per token voor greedy decodering, maar geen greedy totaal; ongeveer 320 ms is de som van zijn fasen plus 22 tokens × 7 ms. Op de voorbeeldclip van het recept komt de causaliteitsketen woord voor woord overeen met de tekst van het recept."
+      ]
+    }
+  }
+}

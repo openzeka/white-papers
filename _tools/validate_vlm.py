@@ -33,6 +33,52 @@ def err(msg): errors.append(msg)
 def warn(msg): warnings.append(msg)
 
 
+LANGS = ["en", "tr", "nl"]
+
+
+def check_extra(rid, x):
+    """A row's own extra section (vlm_import.py --extra): every text in every language, tables square."""
+    def texts(v, what, many=False):
+        if not isinstance(v, dict) or sorted(v) != sorted(LANGS):
+            err(f"{rid}: extra.{what} must have exactly {LANGS}")
+            return
+        for lang, t in v.items():
+            ok = isinstance(t, list) and t and all(isinstance(x, str) and x.strip() for x in t) if many else \
+                isinstance(t, str) and t.strip()
+            if not ok:
+                err(f"{rid}: extra.{what}.{lang} must be {'a list of texts' if many else 'a text'}")
+    if not isinstance(x, dict) or not set(x) <= {"title", "before", "tables", "after"} or "title" not in x:
+        err(f"{rid}: extra must have a title and only title, before, tables, after")
+        return
+    texts(x["title"], "title")
+    for k in ("before", "after"):
+        if k in x:
+            texts(x[k], k, many=True)
+    for i, tb in enumerate(x.get("tables") or []):
+        if not isinstance(tb, dict) or not set(tb) <= {"caption", "head", "rows"} or "head" not in tb:
+            err(f"{rid}: extra.tables[{i}] must have head, rows and optionally caption")
+            continue
+        if "caption" in tb:
+            texts(tb["caption"], f"tables[{i}].caption")
+        texts(tb["head"], f"tables[{i}].head", many=True)
+        width = {len(v) for v in tb["head"].values()} if isinstance(tb["head"], dict) else set()
+        if len(width) != 1:
+            err(f"{rid}: extra.tables[{i}].head has a different number of columns per language")
+            continue
+        n = next(iter(width))
+        if not tb.get("rows"):
+            err(f"{rid}: extra.tables[{i}] has no rows")
+        for j, row in enumerate(tb.get("rows") or []):
+            if not isinstance(row, list) or len(row) != n:
+                err(f"{rid}: extra.tables[{i}].rows[{j}] must have {n} cells")
+                continue
+            for c in row:
+                if isinstance(c, dict):
+                    texts(c, f"tables[{i}].rows[{j}] cell")
+                elif not isinstance(c, str):
+                    err(f"{rid}: extra.tables[{i}].rows[{j}] cells are texts, or one text per language")
+
+
 def meets(p, cfg):
     return p["ttft_s"] <= cfg["response_target_s"]
 
@@ -59,8 +105,10 @@ def main():
     open_rows, zero_rows = 0, 0
     for i, r in enumerate(d.get("benchmarks") or []):
         rid = r.get("id", f"#{i}")
-        if list(r.keys()) not in (ROW_KEYS, ROW_KEYS + ["limits"]):
-            err(f"{rid}: keys must be exactly, in order, {ROW_KEYS} (then optionally limits); got {list(r.keys())}")
+        if list(r.keys()) not in (ROW_KEYS, ROW_KEYS + ["limits"], ROW_KEYS + ["extra"], ROW_KEYS + ["limits", "extra"]):
+            err(f"{rid}: keys must be exactly, in order, {ROW_KEYS} (then optionally limits, extra); got {list(r.keys())}")
+        if "extra" in r:
+            check_extra(rid, r["extra"])
         for kind, by_res in (r.get("limits") or {}).items():
             # the first image count (one camera) or number of cameras (one image) at which a request failed
             if kind not in ("images", "cameras") or not isinstance(by_res, dict):

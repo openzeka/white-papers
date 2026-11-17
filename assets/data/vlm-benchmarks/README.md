@@ -21,4 +21,11 @@ export through `_tools/vlm_import.py` (procedure:
 (`/vlm-inference-benchmarks/<model>/<device>/<quantization>-<engine>/`) is
 built from its fields — renaming either breaks published links.
 
+A run may also carry an **`extra`** section: its own measurements that do not
+fit the Explorer's matrix (Alpamayo2-Edge's six-camera driving test, for one),
+as a title, text, tables and text in every language. It comes from a file
+made by a script from the measurement results and passed to the importer with
+`--extra`; the row's explanation and its page show it under the matrix
+results.
+
 Check with `python3 _tools/validate_vlm.py`.
