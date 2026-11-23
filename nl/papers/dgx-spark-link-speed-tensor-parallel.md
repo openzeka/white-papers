@@ -280,7 +280,7 @@ NCCL_IB_HCA=^roceP2p1s0f1
 
 (`ibdev2netdev` toont de namen van de RDMA-apparaten.) Er verandert niets fysiek, dus de kabels, switchpoorten en alle andere instellingen blijven gelijk, en het model opnieuw starten zonder deze instelling herstelt 200 Gb/s. De RDMA-tellers (Bijlage A) bevestigen dat al het verkeer over de ene overgebleven interface gaat; in elke geëmuleerde run van deze paper was dat zo.
 
-Zo kan een workload op een bestaand 200 Gb/s-cluster op 100 Gb/s worden getest: laat hem één keer op 200 Gb/s en één keer geëmuleerd draaien, reken het verschil om naar een echte link (Sectie 9), en stap over op 100G-kabels (Sectie 11) als het resultaat aanvaardbaar is. Deel II past dit toe op GLM-5.3 op TP8 met het testplan van Sectie 7.4.
+Zo kan een workload op een bestaand 200 Gb/s-cluster op 100 Gb/s worden getest: laat hem één keer op 200 Gb/s en één keer geëmuleerd draaien, reken het verschil om naar een echte link (Sectie 9), en stap over op 100G-kabels (Sectie 11) als het resultaat aanvaardbaar is. Deel II past dit toe op GLM-5.3 op TP8 met het testplan van Sectie 7.4. De opensourcetool [netinfermon](https://github.com/openzeka/netinfermon) voert zo'n vergelijking uit: hetzelfde testplan tegen de inferentie-engine op beide linksnelheden, met het RDMA-verkeer vastgelegd op dezelfde klok (Bijlage A).
 
 Eén interface draagt wat zijn PCIe Gen5 ×4-link toelaat: 4 lanes × 32 GT/s, door lijncodering (128b/130b) teruggebracht tot 126 Gb/s en door de overhead van PCIe-pakketten en flow control tot ongeveer **111 Gb/s**. Gemeten met `ib_write_bw` draagt één interface **109 Gb/s**. De geëmuleerde link is dus ongeveer 11% sneller dan een echte 100 Gb/s-link, die 98 Gb/s draagt (Sectie 12.3); Sectie 9 corrigeert voor het verschil.
 
@@ -790,13 +790,15 @@ De keuze van het middelingsinterval verandert de hoogste waarde die een meting r
 
 De meting zelf had geen invloed op het netwerk: bandbreedte- en latentietests (`ib_write_bw`, `ib_write_lat`) met de sampler actief en gestopt lieten dezelfde bandbreedte zien (109.07, 109.08 en 109.15 Gb/s) en ten hoogste ongeveer 1% verschil in latentie. De sampler en de benchmarkdriver gebruikten samen ruim minder dan één van de 20 CPU-cores van de Spark.
 
+De sampler en de testdriver van deze studie zijn beschikbaar als de opensourcetool [netinfermon](https://github.com/openzeka/netinfermon), die de RDMA-tellers van een ConnectX-7-adapter op milliseconderesolutie vastlegt terwijl hij een testplan tegen een inferentie-endpoint uitvoert.
+
 ---
 
 ## Bijlage B: Reproduceerbaarheid
 
 | Onderdeel | Waarde |
 |---|---|
-| Testdriver | verstuurt de testverzoeken als streamingverzoeken naar de engine, geeft het eerste en elk volgend token van elk antwoord een tijdstempel, en registreert daarnaast de RDMA-tellers op dezelfde klok (Secties 7.4–7.6, Bijlage A) |
+| Testdriver | verstuurt de testverzoeken als streamingverzoeken naar de engine, geeft het eerste en elk volgend token van elk antwoord een tijdstempel, en registreert daarnaast de RDMA-tellers op dezelfde klok (Secties 7.4–7.6, Bijlage A); de verzoeken worden gegenereerd met de open-source [CordatusAI LLM Benchmark Tool](https://github.com/CordatusAI/llm-benchmark) |
 | Model | `Inferact/GLM-5.3-NVFP4` |
 | Engine | vLLM `0.1.dev20133+gb5f995e73`, container `vllm-node-b12x`, NCCL 2.31.2 |
 | Serve-instellingen | `--tensor-parallel-size 8`, `--max-num-batched-tokens 4096`, `--long-prefill-token-threshold 2048`, `--max-num-seqs 8`, `--max-model-len 262144`, `--kv-cache-dtype fp8`, `--gpu-memory-utilization 0.726`, `--enable-chunked-prefill`, `--enable-prefix-caching`; speculatieve decodering: MTP, 4 tokens, draft niet verdeeld |
@@ -864,6 +866,8 @@ Voor de TP4-metingen van Deel III:
 - SGLang — <https://github.com/sgl-project/sglang>
 - NCCL — <https://github.com/NVIDIA/nccl>
 - perftest (`ib_write_bw`, `ib_write_lat`) — <https://github.com/linux-rdma/perftest>
+- CordatusAI LLM Benchmark Tool — <https://github.com/CordatusAI/llm-benchmark>
+- netinfermon (inferentiebenchmark met registratie van RDMA-verkeer) — <https://github.com/openzeka/netinfermon>
 
 **All-reduce-algoritmen:**
 

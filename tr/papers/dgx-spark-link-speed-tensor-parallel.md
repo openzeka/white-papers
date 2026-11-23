@@ -280,7 +280,7 @@ NCCL_IB_HCA=^roceP2p1s0f1
 
 (RDMA cihaz adlarını `ibdev2netdev` listeler.) Fiziksel olarak hiçbir şey değişmez; kablolar, switch portları ve diğer tüm ayarlar aynı kalır ve modeli bu ayar olmadan yeniden başlatmak 200 Gb/s'yi geri getirir. RDMA sayaçları (Ek A), tüm trafiğin kalan tek arayüz üzerinden geçtiğini doğrular; bu çalışmanın her emüle edilmiş koşusunda da öyle oldu.
 
-Bir iş yükü mevcut bir 200 Gb/s cluster'da 100 Gb/s'de böyle test edilebilir: bir kez 200 Gb/s'de, bir kez emüle edilmiş bağlantıda çalıştırın, farkı gerçek bir bağlantıya dönüştürün (Bölüm 9) ve sonuç kabul edilebilirse 100G kablolara geçin (Bölüm 11). II. Kısım bunu Bölüm 7.4'teki test planıyla GLM-5.3'e TP8'de uygular.
+Bir iş yükü mevcut bir 200 Gb/s cluster'da 100 Gb/s'de böyle test edilebilir: bir kez 200 Gb/s'de, bir kez emüle edilmiş bağlantıda çalıştırın, farkı gerçek bir bağlantıya dönüştürün (Bölüm 9) ve sonuç kabul edilebilirse 100G kablolara geçin (Bölüm 11). II. Kısım bunu Bölüm 7.4'teki test planıyla GLM-5.3'e TP8'de uygular. Açık kaynaklı [netinfermon](https://github.com/openzeka/netinfermon) aracı böyle bir karşılaştırmayı yürütür: aynı test planını her iki bağlantı hızında çıkarım motoruna karşı çalıştırır ve RDMA trafiğini aynı saatte kaydeder (Ek A).
 
 Tek bir arayüz, PCIe Gen5 ×4 bağlantısının izin verdiği kadarını taşır: 4 hat × 32 GT/s, hat kodlamasıyla (128b/130b) 126 Gb/s'ye, PCIe paket ve akış kontrolü ek yüküyle yaklaşık **111 Gb/s**'ye düşer. `ib_write_bw` ile ölçüldüğünde tek bir arayüz **109 Gb/s** taşır. Emüle edilmiş bağlantı bu yüzden 98 Gb/s taşıyan gerçek bir 100 Gb/s bağlantıdan (Bölüm 12.3) yaklaşık %11 daha hızlıdır; Bölüm 9 sonuçları bu farka göre dönüştürür.
 
@@ -790,13 +790,15 @@ Bölüm 8.1'in gösterdiği gibi, ortalama alma aralığının seçimi bir ölç
 
 Ölçümün kendisi ağı etkilemedi: örnekleyici çalışırken ve dururken yapılan bant genişliği (bandwidth) ve gecikme testleri (`ib_write_bw`, `ib_write_lat`) aynı bant genişliğini (109.07, 109.08 ve 109.15 Gb/s) ve gecikmede en fazla yaklaşık %1 fark gösterdi. Örnekleyici ve benchmark sürücüsü birlikte Spark'ın 20 CPU çekirdeğinden birinin çok altında kullandı.
 
+Bu çalışmanın örnekleyicisi ve test sürücüsü, açık kaynaklı [netinfermon](https://github.com/openzeka/netinfermon) aracı olarak kullanılabilir; araç, bir çıkarım uç noktasına karşı test planı çalıştırırken bir ConnectX-7 adaptörünün RDMA sayaçlarını milisaniye çözünürlükte kaydeder.
+
 ---
 
 ## Ek B: Tekrarlanabilirlik
 
 | Öğe | Değer |
 |---|---|
-| Test sürücüsü | test isteklerini motora akış (streaming) istekleri olarak gönderir, her cevabın ilk token'ını ve ardından gelen her token'ı zaman damgalar ve RDMA sayaçlarını aynı saatte yanında kaydeder (Bölüm 7.4–7.6, Ek A) |
+| Test sürücüsü | test isteklerini motora akış (streaming) istekleri olarak gönderir, her cevabın ilk token'ını ve ardından gelen her token'ı zaman damgalar ve RDMA sayaçlarını aynı saatte yanında kaydeder (Bölüm 7.4–7.6, Ek A); istekler açık kaynaklı [CordatusAI LLM Benchmark Tool](https://github.com/CordatusAI/llm-benchmark) ile üretilir |
 | Model | `Inferact/GLM-5.3-NVFP4` |
 | Motor | vLLM `0.1.dev20133+gb5f995e73`, container `vllm-node-b12x`, NCCL 2.31.2 |
 | Servis ayarları | `--tensor-parallel-size 8`, `--max-num-batched-tokens 4096`, `--long-prefill-token-threshold 2048`, `--max-num-seqs 8`, `--max-model-len 262144`, `--kv-cache-dtype fp8`, `--gpu-memory-utilization 0.726`, `--enable-chunked-prefill`, `--enable-prefix-caching`; spekülatif kod çözme: MTP, 4 token, taslak bölünmez |
@@ -864,6 +866,8 @@ III. Kısım'daki TP4 ölçümleri için:
 - SGLang — <https://github.com/sgl-project/sglang>
 - NCCL — <https://github.com/NVIDIA/nccl>
 - perftest (`ib_write_bw`, `ib_write_lat`) — <https://github.com/linux-rdma/perftest>
+- CordatusAI LLM Benchmark Tool — <https://github.com/CordatusAI/llm-benchmark>
+- netinfermon (RDMA trafiği kaydeden çıkarım benchmark'ı) — <https://github.com/openzeka/netinfermon>
 
 **All-reduce algoritmaları:**
 

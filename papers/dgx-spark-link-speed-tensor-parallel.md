@@ -280,7 +280,7 @@ NCCL_IB_HCA=^roceP2p1s0f1
 
 (`ibdev2netdev` lists the RDMA device names.) Nothing physical changes, so the cables, switch ports and every other setting stay the same, and relaunching the model without this setting restores 200 Gb/s. The RDMA counters (Appendix A) confirm that all traffic goes over the one remaining interface; in every emulated run of this paper, they did.
 
-This is how a workload can be tested at 100 Gb/s on an existing 200 Gb/s cluster: run it once at 200 Gb/s and once emulated, convert the difference to a real link (Section 9), and move to 100G cables (Section 11) if the result is acceptable. Part II applies it to GLM-5.3 at TP8 with the test plan of Section 7.4.
+This is how a workload can be tested at 100 Gb/s on an existing 200 Gb/s cluster: run it once at 200 Gb/s and once emulated, convert the difference to a real link (Section 9), and move to 100G cables (Section 11) if the result is acceptable. Part II applies it to GLM-5.3 at TP8 with the test plan of Section 7.4. The open-source tool [netinfermon](https://github.com/openzeka/netinfermon) runs such a comparison: the same test plan against the inference engine at both link speeds, with the RDMA traffic recorded on the same clock (Appendix A).
 
 One interface carries what its PCIe Gen5 ×4 link allows: 4 lanes × 32 GT/s, reduced by line encoding (128b/130b) to 126 Gb/s and by PCIe packet and flow-control overhead to about **111 Gb/s**. Measured with `ib_write_bw`, one interface carries **109 Gb/s**. The emulated link is therefore about 11% faster than a real 100 Gb/s link, which carries 98 Gb/s (Section 12.3); Section 9 converts for the difference.
 
@@ -790,13 +790,15 @@ The choice of averaging interval changes the highest value a measurement reports
 
 The measurement itself did not affect the network: bandwidth and latency tests (`ib_write_bw`, `ib_write_lat`) with the sampler running and stopped showed the same bandwidth (109.07, 109.08 and 109.15 Gb/s) and at most about 1% difference in latency. The sampler and the benchmark driver together used well under one of the Spark's 20 CPU cores.
 
+The sampler and the test driver of this study are available as the open-source tool [netinfermon](https://github.com/openzeka/netinfermon), which records the RDMA counters of a ConnectX-7 adapter at millisecond resolution while it runs a test plan against an inference endpoint.
+
 ---
 
 ## Appendix B: Reproducibility
 
 | Item | Value |
 |---|---|
-| Test driver | sends the test requests to the engine as streaming requests, timestamps the first and every following token of each answer, and records the RDMA counters alongside on the same clock (Sections 7.4–7.6, Appendix A) |
+| Test driver | sends the test requests to the engine as streaming requests, timestamps the first and every following token of each answer, and records the RDMA counters alongside on the same clock (Sections 7.4–7.6, Appendix A); requests are generated with the open-source [CordatusAI LLM Benchmark Tool](https://github.com/CordatusAI/llm-benchmark) |
 | Model | `Inferact/GLM-5.3-NVFP4` |
 | Engine | vLLM `0.1.dev20133+gb5f995e73`, container `vllm-node-b12x`, NCCL 2.31.2 |
 | Serve settings | `--tensor-parallel-size 8`, `--max-num-batched-tokens 4096`, `--long-prefill-token-threshold 2048`, `--max-num-seqs 8`, `--max-model-len 262144`, `--kv-cache-dtype fp8`, `--gpu-memory-utilization 0.726`, `--enable-chunked-prefill`, `--enable-prefix-caching`; speculative decoding: MTP, 4 tokens, draft not split |
@@ -864,6 +866,8 @@ For the TP4 measurements of Part III:
 - SGLang — <https://github.com/sgl-project/sglang>
 - NCCL — <https://github.com/NVIDIA/nccl>
 - perftest (`ib_write_bw`, `ib_write_lat`) — <https://github.com/linux-rdma/perftest>
+- CordatusAI LLM Benchmark Tool — <https://github.com/CordatusAI/llm-benchmark>
+- netinfermon (inference benchmark with RDMA traffic recording) — <https://github.com/openzeka/netinfermon>
 
 **All-reduce algorithms:**
 
