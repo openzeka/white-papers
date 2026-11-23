@@ -7,7 +7,7 @@ page_id: dgx-spark-link-speed-tensor-parallel
 date: 2026-10-15
 card_tag: "Technical Guide"
 description: >-
-  How much network bandwidth an 8-Spark tensor-parallel cluster really uses, and what
+  How much network bandwidth a tensor-parallel DGX Spark cluster really uses, and what
   running each DGX Spark at 100G instead of 200G costs: the mechanism, an estimate from
   the model's architecture, and measurements with GLM-5.3 at TP8 and with GLM-5.3-Flash
   at TP4 on real 100G links.
@@ -34,7 +34,7 @@ toc: true
 
 ## Executive Summary
 
-- **The question:** a DGX Spark cluster that serves one model with tensor parallelism across 8 systems needs fast switch ports. At 200 Gb/s per Spark, a MikroTik CRS812 connects 4 to 6 Sparks; at 100 Gb/s, it connects 8. A CRS804 connects 8 Sparks at 200 Gb/s or 16 at 100 Gb/s. This paper asks what 100 Gb/s per Spark costs in inference speed.
+- **The question:** a DGX Spark cluster that serves one model with tensor parallelism across several systems needs fast switch ports. At 200 Gb/s per Spark, a MikroTik CRS812 connects 4 to 6 Sparks; at 100 Gb/s, it connects 8. A CRS804 connects 8 Sparks at 200 Gb/s or 16 at 100 Gb/s. This paper asks what 100 Gb/s per Spark costs in inference speed.
 - **How tensor parallelism uses the network:** each Spark holds one eighth of every weight matrix, so each computes only part of every result. Twice per layer, the Sparks add their partial results together over the network in an operation called an *all-reduce*, which NCCL, the communication library, runs as a *ring* for the large transfers that matter here. While the prompt is processed (*prefill*), the data summed in each all-reduce is large; while the answer is generated (*decode*), it is small.
 - **The estimate:** prefill transfers are large enough to run at the full link speed, so halving the link lengthens them and delays the first token. For GLM-5.3 at TP8, the estimate from the model's architecture is at most **0.135 s of extra time to first token (TTFT) per 1,000 prompt tokens** at 100 Gb/s. Decode transfers are too small for link speed to matter.
 - **Does the cluster use the full 200 Gb/s? Yes and no.** Measured at millisecond resolution, prefill traffic reaches 150–200 Gb/s in bursts of a few milliseconds. Averaged over one second, the same traffic is about 40 Gb/s, and decode stays at a few Gb/s.
@@ -46,7 +46,7 @@ toc: true
 - **Trying 100 Gb/s before buying cables:** restricting NCCL to one of the two network interfaces of each Spark emulates a 100 Gb/s link on the existing 200 Gb/s cabling. A workload run this way, with the result converted to a real link, shows what 100 Gb/s would cost it before any hardware changes.
 - **A real 100 Gb/s link**, built with a 4 × 100G breakout cable, carries about 98 Gb/s and would add at most another 3–4 percentage points.
 - **Measured on real 100 Gb/s links** with GLM-5.3-Flash at TP4 on 4 Sparks, the first token of an 8K-token prompt arrived 0.39 s later, against an estimate of at most 0.38 s, and decode speed did not change. Moving Sparks to 100 Gb/s needs no change on the Sparks themselves, but they have to be rebooted after recabling.
-- **Verdict:** moving an 8-Spark TP8 cluster from 200 Gb/s to 100 Gb/s links, expect the first token to arrive **at most about 20% later for a very long prompt**, and **at most about 30% later when several very long prompts arrive at the same time**. Short to medium prompts see no change, and once the answer starts, **it streams at the same pace**. On 16 Sparks, run two TP8 clusters rather than one TP16 cluster: the penalty grows with TP size.
+- **Verdict:** 100 Gb/s is reasonable for tensor-parallel DGX Spark clusters up to TP8. Moving an 8-Spark TP8 cluster from 200 Gb/s to 100 Gb/s links, expect the first token to arrive **at most about 20% later for a very long prompt**, and **at most about 30% later when several very long prompts arrive at the same time**. At TP4 on four Sparks, the penalty measured on real links followed the same estimate. Short to medium prompts see no change, and once the answer starts, **it streams at the same pace**. On 16 Sparks, run two TP8 clusters rather than one TP16 cluster: the penalty grows with TP size.
 
 ---
 
@@ -54,9 +54,9 @@ toc: true
 
 A single DGX Spark holds 128 GB of unified memory. Models larger than that are served by splitting them across several Sparks connected through their ConnectX-7 network adapters and a switch. With **tensor parallelism**, every layer of the model is split across all the Sparks, so they exchange data many times for every token the model processes, and every step of inference waits for the network.
 
-That makes the switch a design decision. Running each Spark at 100 Gb/s instead of 200 Gb/s lets a smaller switch serve the same 8 Sparks, or the same switch serve twice as many. Whether that is acceptable depends on how much tensor-parallel inference slows down when the link between the Sparks is half as fast.
+That makes the switch a design decision. Running each Spark at 100 Gb/s instead of 200 Gb/s lets a smaller switch serve the same cluster, or the same switch serve twice as many Sparks. Whether that is acceptable depends on how much tensor-parallel inference slows down when the link between the Sparks is half as fast.
 
-Part I of this paper (Sections 2–6) describes what tensor parallelism sends over the network, why prompt processing and answer generation load the network very differently, and how to estimate the effect of halving the link speed from the model's architecture, the inference engine's settings and the link speed alone. Part II (Sections 7–10) shows how to emulate a 100 Gb/s link on the existing 200 Gb/s cabling, so that a workload can be tried at 100 Gb/s before any cable is bought; it applies the emulation to 8× DGX Spark serving GLM-5.3 at TP8, compares the results with the estimate, and converts them to a real 100 Gb/s cable. Part III (Sections 11–13) is the next step once the emulated result is acceptable: it builds real 100 Gb/s links for 4 Sparks and measures GLM-5.3-Flash at TP4 on them. Section 14 gives the sizing answer for 8- and 16-Spark clusters.
+Part I of this paper (Sections 2–6) describes what tensor parallelism sends over the network, why prompt processing and answer generation load the network very differently, and how to estimate the effect of halving the link speed from the model's architecture, the inference engine's settings and the link speed alone. Part II (Sections 7–10) shows how to emulate a 100 Gb/s link on the existing 200 Gb/s cabling, so that a workload can be tried at 100 Gb/s before any cable is bought; it applies the emulation to 8× DGX Spark serving GLM-5.3 at TP8, compares the results with the estimate, and converts them to a real 100 Gb/s cable. Part III (Sections 11–13) is the next step once the emulated result is acceptable: it builds real 100 Gb/s links for 4 Sparks and measures GLM-5.3-Flash at TP4 on them. Section 14 gives the sizing answer for clusters of 4, 8 and 16 Sparks.
 
 ---
 
@@ -715,9 +715,9 @@ Section 10 projected at most 8% at TP4 for an 8K prompt, for a model shaped like
 
 ---
 
-## 14. Is 8 Sparks at 100 Gb/s Reasonable?
+## 14. Is 100 Gb/s Reasonable?
 
-Yes. Moving an 8-Spark TP8 cluster from 200 Gb/s to 100 Gb/s links:
+Yes, for clusters up to TP8. Moving an 8-Spark TP8 cluster from 200 Gb/s to 100 Gb/s links:
 
 > **The first token arrives at most about 20% later for a very long prompt, and at most about 30% later when several very long prompts arrive at the same time. Short to medium prompts see no change. Once the answer starts, it streams at the same pace.**
 
@@ -731,6 +731,8 @@ Yes. Moving an 8-Spark TP8 cluster from 200 Gb/s to 100 Gb/s links:
 These are upper limits for the cases measured; in a mixed workload, most requests are shorter or arrive alone, and see less. On real 100 Gb/s links at TP4 (Section 13), the extra time to first token followed the same estimate, and decode speed did not change. For a specific workload, the emulated link of Section 7.3 gives the answer on the existing cluster, before any cable is bought.
 
 At 100 Gb/s, with one 4 × 100G breakout cable per four Sparks (Section 11), a **CRS812** connects 8 Sparks, enough for one TP8 cluster, at the cost of the longer wait for the first token on long prompts described above; the pace at which the answer streams does not change.
+
+At TP4, four Sparks share one 4 × 100G breakout cable on a single switch socket (Section 11). With GLM-5.3-Flash, the first token of an 8K-token prompt arrived 12.6% later on real 100 Gb/s links, as the estimate predicted, and decode speed did not change (Section 13).
 
 At 100 Gb/s, a **CRS804** connects 16 Sparks. Run as two TP8 clusters, each sees the per-Spark link measured in this paper, so the results above apply to each, provided the switch can forward traffic on all ports at full speed at the same time (to be verified). A single TP16 cluster would roughly double the penalty (Section 10) and is not recommended at 100 Gb/s.
 
@@ -752,9 +754,9 @@ The 4 × 100G breakout was verified on a CRS804 with FS QDD-400G-4QPC02 cables. 
 - ✗ **Spreading a model over more Sparks than necessary at 100 Gb/s:** the penalty grows with TP size.
 - ✗ **Recabling running Sparks without rebooting them:** the links come up at the right speed but can send only about 13 Gb/s.
 
-### Checklist for planning an 8- or 16-Spark cluster network
+### Checklist for planning a DGX Spark cluster network
 
-- ☐ Is the TP size per model instance decided (TP8, or two TP8 instances on 16 Sparks)?
+- ☐ Is the TP size per model instance decided (TP4, TP8, or two TP8 instances on 16 Sparks)?
 - ☐ Is the expected prompt length known (chat, RAG, long documents)?
 - ☐ Is there a TTFT target for long prompts?
 - ☐ Has the 100 Gb/s penalty been estimated (bytes per prompt token × prompt tokens ÷ 200 Gb/s, Section 5)?

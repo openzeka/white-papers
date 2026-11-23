@@ -7,7 +7,7 @@ page_id: dgx-spark-link-speed-tensor-parallel
 date: 2026-10-15
 card_tag: "Technische gids"
 description: >-
-  Hoeveel netwerkbandbreedte een tensorparallel cluster van 8 Sparks werkelijk gebruikt, en
+  Hoeveel netwerkbandbreedte een tensorparallel DGX Spark-cluster werkelijk gebruikt, en
   wat het kost om elke DGX Spark op 100G in plaats van 200G te laten draaien: het mechanisme,
   een schatting op basis van de architectuur van het model, en metingen met GLM-5.3 op TP8 en met
   GLM-5.3-Flash op TP4 over echte 100G-links.
@@ -34,7 +34,7 @@ toc: true
 
 ## Managementsamenvatting
 
-- **De vraag:** een DGX Spark-cluster dat één model met tensorparallellisme over 8 systemen bedient, heeft snelle switchpoorten nodig. Met 200 Gb/s per Spark verbindt een MikroTik CRS812 4 tot 6 Sparks; met 100 Gb/s verbindt hij er 8. Een CRS804 verbindt 8 Sparks op 200 Gb/s of 16 op 100 Gb/s. Deze paper onderzoekt wat 100 Gb/s per Spark kost aan inferentiesnelheid.
+- **De vraag:** een DGX Spark-cluster dat één model met tensorparallellisme over meerdere systemen bedient, heeft snelle switchpoorten nodig. Met 200 Gb/s per Spark verbindt een MikroTik CRS812 4 tot 6 Sparks; met 100 Gb/s verbindt hij er 8. Een CRS804 verbindt 8 Sparks op 200 Gb/s of 16 op 100 Gb/s. Deze paper onderzoekt wat 100 Gb/s per Spark kost aan inferentiesnelheid.
 - **Hoe tensorparallellisme het netwerk gebruikt:** elke Spark bevat een achtste van elke gewichtsmatrix en berekent dus maar een deel van elk resultaat. Twee keer per laag tellen de Sparks hun deelresultaten via het netwerk bij elkaar op, in een bewerking die *all-reduce* heet en die NCCL, de communicatiebibliotheek, voor de grote overdrachten waar het hier om gaat als *ring* uitvoert. Terwijl de prompt wordt verwerkt (*prefill*), zijn de gegevens die in elke all-reduce worden opgeteld groot; terwijl het antwoord wordt gegenereerd (*decode*), zijn ze klein.
 - **De schatting:** de overdrachten tijdens prefill zijn groot genoeg om op de volle linksnelheid te lopen, dus een gehalveerde link maakt ze langer en vertraagt het eerste token. Voor GLM-5.3 op TP8 geeft de schatting op basis van de architectuur van het model op 100 Gb/s ten hoogste **0.135 s extra tijd tot het eerste token (TTFT) per 1,000 prompttokens**. De overdrachten tijdens decode zijn te klein om de linksnelheid ertoe te laten doen.
 - **Gebruikt het cluster de volle 200 Gb/s? Ja en nee.** Gemeten met een resolutie van een milliseconde bereikt het prefill-verkeer 150–200 Gb/s in bursts van enkele milliseconden. Gemiddeld over één seconde is hetzelfde verkeer ongeveer 40 Gb/s, en decode blijft op enkele Gb/s.
@@ -46,7 +46,7 @@ toc: true
 - **100 Gb/s uitproberen voordat u kabels koopt:** door NCCL te beperken tot een van de twee netwerkinterfaces van elke Spark wordt een 100 Gb/s-link geëmuleerd op de bestaande 200 Gb/s-bekabeling. Een workload die zo draait, met het resultaat omgerekend naar een echte link, laat zien wat 100 Gb/s die workload zou kosten voordat er iets aan de hardware verandert.
 - **Een echte 100 Gb/s-link**, opgebouwd met een 4 × 100G-breakoutkabel, draagt ongeveer 98 Gb/s en zou er ten hoogste nog 3–4 procentpunt aan toevoegen.
 - **Gemeten op echte 100 Gb/s-links** met GLM-5.3-Flash op TP4 op 4 Sparks kwam het eerste token van een prompt van 8K tokens 0.39 s later, tegenover een schatting van ten hoogste 0.38 s, en veranderde de decodesnelheid niet. Om Sparks naar 100 Gb/s over te zetten hoeft er op de Sparks zelf niets te veranderen, maar na het omkabelen moeten ze opnieuw worden opgestart.
-- **Conclusie:** wie een TP8-cluster van 8 Sparks van 200 Gb/s- naar 100 Gb/s-links overzet, kan verwachten dat het eerste token **bij een zeer lange prompt ten hoogste ongeveer 20% later komt**, en **ten hoogste ongeveer 30% later wanneer meerdere zeer lange prompts tegelijk binnenkomen**. Korte tot middellange prompts merken geen verschil, en zodra het antwoord begint, **stroomt het in hetzelfde tempo**. Gebruik op 16 Sparks twee TP8-clusters in plaats van één TP16-cluster: de vertraging neemt toe met de TP-grootte.
+- **Conclusie:** 100 Gb/s is redelijk voor tensorparallelle DGX Spark-clusters tot en met TP8. Wie een TP8-cluster van 8 Sparks van 200 Gb/s- naar 100 Gb/s-links overzet, kan verwachten dat het eerste token **bij een zeer lange prompt ten hoogste ongeveer 20% later komt**, en **ten hoogste ongeveer 30% later wanneer meerdere zeer lange prompts tegelijk binnenkomen**. Op TP4 met vier Sparks volgde de op echte links gemeten vertraging dezelfde schatting. Korte tot middellange prompts merken geen verschil, en zodra het antwoord begint, **stroomt het in hetzelfde tempo**. Gebruik op 16 Sparks twee TP8-clusters in plaats van één TP16-cluster: de vertraging neemt toe met de TP-grootte.
 
 ---
 
@@ -54,9 +54,9 @@ toc: true
 
 Eén DGX Spark heeft 128 GB unified memory. Modellen die groter zijn, worden bediend door ze te verdelen over meerdere Sparks die via hun ConnectX-7-netwerkadapters en een switch met elkaar verbonden zijn. Bij **tensorparallellisme** wordt elke laag van het model over alle Sparks verdeeld, zodat ze voor elk token dat het model verwerkt vele malen gegevens uitwisselen, en elke stap van de inferentie op het netwerk wacht.
 
-Daarmee wordt de switch een ontwerpbeslissing. Door elke Spark op 100 Gb/s in plaats van 200 Gb/s te laten draaien, kan een kleinere switch dezelfde 8 Sparks bedienen, of dezelfde switch twee keer zoveel. Of dat aanvaardbaar is, hangt af van hoeveel tensorparallelle inferentie vertraagt wanneer de link tussen de Sparks half zo snel is.
+Daarmee wordt de switch een ontwerpbeslissing. Door elke Spark op 100 Gb/s in plaats van 200 Gb/s te laten draaien, kan een kleinere switch hetzelfde cluster bedienen, of dezelfde switch twee keer zoveel Sparks. Of dat aanvaardbaar is, hangt af van hoeveel tensorparallelle inferentie vertraagt wanneer de link tussen de Sparks half zo snel is.
 
-Deel I van deze paper (Secties 2–6) beschrijft wat tensorparallellisme over het netwerk stuurt, waarom het verwerken van de prompt en het genereren van het antwoord het netwerk heel verschillend belasten, en hoe u het effect van een gehalveerde linksnelheid schat op basis van alleen de architectuur van het model, de instellingen van de inferentie-engine en de linksnelheid. Deel II (Secties 7–10) laat zien hoe u een 100 Gb/s-link emuleert op de bestaande 200 Gb/s-bekabeling, zodat een workload op 100 Gb/s kan worden uitgeprobeerd voordat er een kabel wordt gekocht; het past de emulatie toe op 8× DGX Spark die GLM-5.3 op TP8 bedienen, vergelijkt de resultaten met de schatting en rekent ze om naar een echte 100 Gb/s-kabel. Deel III (Secties 11–13) is de volgende stap zodra het geëmuleerde resultaat aanvaardbaar is: het bouwt echte 100 Gb/s-links op voor 4 Sparks en meet daarop GLM-5.3-Flash op TP4. Sectie 14 geeft het dimensioneringsantwoord voor clusters van 8 en 16 Sparks.
+Deel I van deze paper (Secties 2–6) beschrijft wat tensorparallellisme over het netwerk stuurt, waarom het verwerken van de prompt en het genereren van het antwoord het netwerk heel verschillend belasten, en hoe u het effect van een gehalveerde linksnelheid schat op basis van alleen de architectuur van het model, de instellingen van de inferentie-engine en de linksnelheid. Deel II (Secties 7–10) laat zien hoe u een 100 Gb/s-link emuleert op de bestaande 200 Gb/s-bekabeling, zodat een workload op 100 Gb/s kan worden uitgeprobeerd voordat er een kabel wordt gekocht; het past de emulatie toe op 8× DGX Spark die GLM-5.3 op TP8 bedienen, vergelijkt de resultaten met de schatting en rekent ze om naar een echte 100 Gb/s-kabel. Deel III (Secties 11–13) is de volgende stap zodra het geëmuleerde resultaat aanvaardbaar is: het bouwt echte 100 Gb/s-links op voor 4 Sparks en meet daarop GLM-5.3-Flash op TP4. Sectie 14 geeft het dimensioneringsantwoord voor clusters van 4, 8 en 16 Sparks.
 
 ---
 
@@ -715,9 +715,9 @@ Sectie 10 projecteerde voor een prompt van 8K ten hoogste 8% op TP4, voor een mo
 
 ---
 
-## 14. Zijn 8 Sparks op 100 Gb/s redelijk?
+## 14. Is 100 Gb/s redelijk?
 
-Ja. Wie een TP8-cluster van 8 Sparks van 200 Gb/s- naar 100 Gb/s-links overzet:
+Ja, voor clusters tot en met TP8. Wie een TP8-cluster van 8 Sparks van 200 Gb/s- naar 100 Gb/s-links overzet:
 
 > **Het eerste token komt bij een zeer lange prompt ten hoogste ongeveer 20% later, en ten hoogste ongeveer 30% later wanneer meerdere zeer lange prompts tegelijk binnenkomen. Korte tot middellange prompts merken geen verschil. Zodra het antwoord begint, stroomt het in hetzelfde tempo.**
 
@@ -731,6 +731,8 @@ Ja. Wie een TP8-cluster van 8 Sparks van 200 Gb/s- naar 100 Gb/s-links overzet:
 Dit zijn bovengrenzen voor de gemeten gevallen; in een gemengde workload zijn de meeste verzoeken korter of komen ze alleen binnen, en merken ze minder. Op echte 100 Gb/s-links op TP4 (Sectie 13) volgde de extra tijd tot het eerste token dezelfde schatting, en veranderde de decodesnelheid niet. Voor een specifieke workload geeft de geëmuleerde link van Sectie 7.3 het antwoord op het bestaande cluster, voordat er een kabel wordt gekocht.
 
 Op 100 Gb/s, met één 4 × 100G-breakoutkabel per vier Sparks (Sectie 11), verbindt een **CRS812** 8 Sparks, genoeg voor één TP8-cluster, tegen de prijs van de langere wachttijd voor het eerste token bij lange prompts die hierboven is beschreven; het tempo waarin het antwoord stroomt, verandert niet.
+
+Op TP4 delen vier Sparks één 4 × 100G-breakoutkabel op één switchaansluiting (Sectie 11). Met GLM-5.3-Flash kwam het eerste token van een prompt van 8K tokens op echte 100 Gb/s-links 12.6% later, zoals de schatting voorspelde, en de decodesnelheid veranderde niet (Sectie 13).
 
 Op 100 Gb/s verbindt een **CRS804** 16 Sparks. Als twee TP8-clusters gebruikt, krijgt elk de link per Spark die in deze paper is gemeten, zodat de resultaten hierboven voor elk gelden, mits de switch op alle poorten tegelijk verkeer op volle snelheid kan doorsturen (nog te verifiëren). Eén TP16-cluster zou de vertraging ongeveer verdubbelen (Sectie 10) en wordt op 100 Gb/s niet aanbevolen.
 
@@ -752,9 +754,9 @@ De 4 × 100G-breakout is geverifieerd op een CRS804 met FS QDD-400G-4QPC02-kabel
 - ✗ **Een model op 100 Gb/s over meer Sparks verdelen dan nodig is:** de vertraging groeit met de TP-grootte.
 - ✗ **Draaiende Sparks omkabelen zonder ze opnieuw op te starten:** de links komen op de juiste snelheid op, maar kunnen maar ongeveer 13 Gb/s versturen.
 
-### Checklist voor het plannen van het netwerk van een cluster met 8 of 16 Sparks
+### Checklist voor het plannen van het netwerk van een DGX Spark-cluster
 
-- ☐ Is de TP-grootte per modelinstantie vastgesteld (TP8, of twee TP8-instanties op 16 Sparks)?
+- ☐ Is de TP-grootte per modelinstantie vastgesteld (TP4, TP8, of twee TP8-instanties op 16 Sparks)?
 - ☐ Is de verwachte promptlengte bekend (chat, RAG, lange documenten)?
 - ☐ Is er een TTFT-doel voor lange prompts?
 - ☐ Is de vertraging van 100 Gb/s geschat (bytes per prompttoken × prompttokens ÷ 200 Gb/s, Sectie 5)?

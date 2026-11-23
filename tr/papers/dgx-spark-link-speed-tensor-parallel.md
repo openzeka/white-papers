@@ -7,7 +7,7 @@ page_id: dgx-spark-link-speed-tensor-parallel
 date: 2026-10-15
 card_tag: "Teknik Rehber"
 description: >-
-  8 Spark'lık bir tensör paralel cluster'ın ağ bant genişliğini gerçekte ne kadar kullandığı ve
+  Tensör paralel bir DGX Spark cluster'ının ağ bant genişliğini gerçekte ne kadar kullandığı ve
   her DGX Spark'ı 200G yerine 100G ile çalıştırmanın neye mal olduğu: mekanizma, modelin
   mimarisinden yapılan tahmin ve GLM-5.3 ile TP8'de, GLM-5.3-Flash ile de gerçek 100G
   bağlantılarda TP4'te yapılan ölçümler.
@@ -34,7 +34,7 @@ toc: true
 
 ## Yönetici Özeti
 
-- **Soru:** bir modeli 8 sistem üzerinde tensör paralelliğiyle sunan bir DGX Spark cluster'ı hızlı switch portlarına ihtiyaç duyar. Spark başına 200 Gb/s'de bir MikroTik CRS812 4 ila 6 Spark bağlar; 100 Gb/s'de 8 Spark bağlar. Bir CRS804, 200 Gb/s'de 8 Spark'ı, 100 Gb/s'de 16 Spark'ı bağlar. Bu çalışma, Spark başına 100 Gb/s'nin çıkarım hızına neye mal olduğunu soruyor.
+- **Soru:** bir modeli birden fazla sistem üzerinde tensör paralelliğiyle sunan bir DGX Spark cluster'ı hızlı switch portlarına ihtiyaç duyar. Spark başına 200 Gb/s'de bir MikroTik CRS812 4 ila 6 Spark bağlar; 100 Gb/s'de 8 Spark bağlar. Bir CRS804, 200 Gb/s'de 8 Spark'ı, 100 Gb/s'de 16 Spark'ı bağlar. Bu çalışma, Spark başına 100 Gb/s'nin çıkarım hızına neye mal olduğunu soruyor.
 - **Tensör paralelliğinin ağı kullanma biçimi:** her Spark her ağırlık matrisinin sekizde birini tutar, bu yüzden her biri her sonucun yalnızca bir kısmını hesaplar. Spark'lar her katmanda iki kez, kısmi sonuçlarını ağ üzerinden *all-reduce* adı verilen bir işlemle toplar; iletişim kütüphanesi NCCL, burada önem taşıyan büyük aktarımlarda bu işlemi bir *halka* (ring) olarak çalıştırır. Prompt işlenirken (*prefill*) her all-reduce'ta toplanan veri büyüktür; cevap üretilirken (*decode*) küçüktür.
 - **Tahmin:** prefill aktarımları tam bağlantı hızında çalışacak kadar büyüktür; bu yüzden bağlantıyı yarıya indirmek bu aktarımları uzatır ve ilk token'ı geciktirir. GLM-5.3 ile TP8 için modelin mimarisinden yapılan tahmin, 100 Gb/s'de **1,000 prompt token'ı başına ilk token süresine (TTFT) en fazla 0.135 s ek süre** öngörür. Decode aktarımları ise bağlantı hızının önem taşıyamayacağı kadar küçüktür.
 - **Cluster 200 Gb/s'nin tamamını kullanıyor mu? Hem evet hem hayır.** Milisaniye çözünürlüğünde ölçüldüğünde prefill trafiği, birkaç milisaniyelik patlamalar halinde 150–200 Gb/s'ye ulaşır. Aynı trafiğin bir saniyelik ortalaması yaklaşık 40 Gb/s'dir; decode ise birkaç Gb/s düzeyinde kalır.
@@ -46,7 +46,7 @@ toc: true
 - **100 Gb/s'yi kablo almadan önce denemek:** NCCL'i her Spark'ın iki ağ arayüzünden birine sınırlamak, mevcut 200 Gb/s kablolama üzerinde 100 Gb/s'lik bir bağlantıyı emüle eder. Bu şekilde çalıştırılan bir iş yükü, sonucu gerçek bir bağlantıya dönüştürüldüğünde, 100 Gb/s'nin o iş yüküne neye mal olacağını donanımda herhangi bir değişiklik yapılmadan gösterir.
 - **Gerçek bir 100 Gb/s bağlantı**, 4 × 100G breakout kablosuyla kurulduğunda yaklaşık 98 Gb/s taşır ve buna en fazla 3–4 puan daha ekler.
 - **Gerçek 100 Gb/s bağlantılarda** 4 Spark üzerinde GLM-5.3-Flash ile TP4'te ölçüldüğünde, 8K token'lık bir prompt'un ilk token'ı en fazla 0.38 s'lik tahmine karşı 0.39 s daha geç geldi ve decode hızı değişmedi. Spark'ları 100 Gb/s'ye geçirmek Spark'ların kendisinde hiçbir değişiklik gerektirmez, ancak yeniden kablolamadan sonra Spark'ların yeniden başlatılması gerekir.
-- **Değerlendirme:** 8 Spark'lık bir TP8 cluster'ı 200 Gb/s'den 100 Gb/s bağlantılara geçirildiğinde, ilk token'ın **çok uzun bir prompt'ta en fazla yaklaşık %20**, **birkaç çok uzun prompt aynı anda geldiğinde ise en fazla yaklaşık %30 daha geç** gelmesi beklenmelidir. Kısa ve orta uzunluktaki prompt'larda değişiklik olmaz ve cevap bir kez başladığında **aynı hızda akar**. 16 Spark'ta tek bir TP16 cluster yerine iki TP8 cluster çalıştırın: kayıp, TP boyutuyla birlikte büyür.
+- **Değerlendirme:** 100 Gb/s, TP8'e kadar tensör paralel DGX Spark cluster'ları için makuldür. 8 Spark'lık bir TP8 cluster'ı 200 Gb/s'den 100 Gb/s bağlantılara geçirildiğinde, ilk token'ın **çok uzun bir prompt'ta en fazla yaklaşık %20**, **birkaç çok uzun prompt aynı anda geldiğinde ise en fazla yaklaşık %30 daha geç** gelmesi beklenmelidir. Dört Spark'ta TP4'te, gerçek bağlantılarda ölçülen kayıp aynı tahmini izledi. Kısa ve orta uzunluktaki prompt'larda değişiklik olmaz ve cevap bir kez başladığında **aynı hızda akar**. 16 Spark'ta tek bir TP16 cluster yerine iki TP8 cluster çalıştırın: kayıp, TP boyutuyla birlikte büyür.
 
 ---
 
@@ -54,9 +54,9 @@ toc: true
 
 Tek bir DGX Spark 128 GB birleşik bellek (unified memory) barındırır. Bundan büyük modeller, ConnectX-7 ağ adaptörleri ve bir switch üzerinden birbirine bağlanan birkaç Spark'a bölünerek sunulur. **Tensör paralelliği (tensor parallelism)** ile modelin her katmanı tüm Spark'lara bölünür; bu yüzden Spark'lar modelin işlediği her token için defalarca veri alışverişi yapar ve çıkarımın (inference) her adımı ağı bekler.
 
-Bu da switch'i bir tasarım kararı haline getirir. Her Spark'ı 200 Gb/s yerine 100 Gb/s ile çalıştırmak, aynı 8 Spark'a daha küçük bir switch'in hizmet etmesini ya da aynı switch'in iki katı Spark'a hizmet etmesini sağlar. Bunun kabul edilebilir olup olmadığı, Spark'lar arasındaki bağlantı yarı hızda olduğunda tensör paralel çıkarımın ne kadar yavaşladığına bağlıdır.
+Bu da switch'i bir tasarım kararı haline getirir. Her Spark'ı 200 Gb/s yerine 100 Gb/s ile çalıştırmak, aynı cluster'a daha küçük bir switch'in hizmet etmesini ya da aynı switch'in iki katı Spark'a hizmet etmesini sağlar. Bunun kabul edilebilir olup olmadığı, Spark'lar arasındaki bağlantı yarı hızda olduğunda tensör paralel çıkarımın ne kadar yavaşladığına bağlıdır.
 
-Bu çalışmanın I. Kısmı (Bölüm 2–6), tensör paralelliğinin ağ üzerinden ne gönderdiğini, prompt işlemenin ve cevap üretiminin ağı neden çok farklı yüklediğini ve bağlantı hızını yarıya indirmenin etkisinin yalnızca modelin mimarisi, çıkarım motorunun ayarları ve bağlantı hızından nasıl tahmin edileceğini anlatır. II. Kısım (Bölüm 7–10), bir iş yükünün herhangi bir kablo alınmadan önce 100 Gb/s'de denenebilmesi için mevcut 200 Gb/s kablolama üzerinde 100 Gb/s'lik bir bağlantının nasıl emüle edileceğini gösterir; emülasyonu GLM-5.3'ü TP8'de sunan 8× DGX Spark'a uygular, sonuçları tahminle kıyaslar ve gerçek bir 100 Gb/s kabloya dönüştürür. III. Kısım (Bölüm 11–13), emüle edilmiş sonuç kabul edilebilir olduğunda atılacak bir sonraki adımdır: 4 Spark için gerçek 100 Gb/s bağlantılar kurar ve GLM-5.3-Flash'ı bunlar üzerinde TP4'te ölçer. Bölüm 14, 8 ve 16 Spark'lık cluster'lar için boyutlandırma cevabını verir.
+Bu çalışmanın I. Kısmı (Bölüm 2–6), tensör paralelliğinin ağ üzerinden ne gönderdiğini, prompt işlemenin ve cevap üretiminin ağı neden çok farklı yüklediğini ve bağlantı hızını yarıya indirmenin etkisinin yalnızca modelin mimarisi, çıkarım motorunun ayarları ve bağlantı hızından nasıl tahmin edileceğini anlatır. II. Kısım (Bölüm 7–10), bir iş yükünün herhangi bir kablo alınmadan önce 100 Gb/s'de denenebilmesi için mevcut 200 Gb/s kablolama üzerinde 100 Gb/s'lik bir bağlantının nasıl emüle edileceğini gösterir; emülasyonu GLM-5.3'ü TP8'de sunan 8× DGX Spark'a uygular, sonuçları tahminle kıyaslar ve gerçek bir 100 Gb/s kabloya dönüştürür. III. Kısım (Bölüm 11–13), emüle edilmiş sonuç kabul edilebilir olduğunda atılacak bir sonraki adımdır: 4 Spark için gerçek 100 Gb/s bağlantılar kurar ve GLM-5.3-Flash'ı bunlar üzerinde TP4'te ölçer. Bölüm 14, 4, 8 ve 16 Spark'lık cluster'lar için boyutlandırma cevabını verir.
 
 ---
 
@@ -715,9 +715,9 @@ Bölüm 10, GLM-5.3'e benzer yapıda bir model için 8K'lık bir prompt'ta TP4't
 
 ---
 
-## 14. 100 Gb/s'de 8 Spark Makul mü?
+## 14. 100 Gb/s Makul mü?
 
-Evet. 8 Spark'lık bir TP8 cluster'ı 200 Gb/s'den 100 Gb/s bağlantılara geçirildiğinde:
+Evet, TP8'e kadar cluster'lar için. 8 Spark'lık bir TP8 cluster'ı 200 Gb/s'den 100 Gb/s bağlantılara geçirildiğinde:
 
 > **İlk token çok uzun bir prompt'ta en fazla yaklaşık %20, birkaç çok uzun prompt aynı anda geldiğinde en fazla yaklaşık %30 daha geç gelir. Kısa ve orta uzunluktaki prompt'larda değişiklik olmaz. Cevap bir kez başladığında aynı hızda akar.**
 
@@ -731,6 +731,8 @@ Evet. 8 Spark'lık bir TP8 cluster'ı 200 Gb/s'den 100 Gb/s bağlantılara geçi
 Bunlar ölçülen durumlar için üst sınırlardır; karma bir iş yükünde isteklerin çoğu daha kısadır ya da tek başına gelir ve daha az etkilenir. TP4'te gerçek 100 Gb/s bağlantılarda (Bölüm 13) ilk token'a kadar geçen ek süre aynı tahmini izledi ve decode hızı değişmedi. Belirli bir iş yükü için cevabı, herhangi bir kablo alınmadan önce, mevcut cluster'da Bölüm 7.3'teki emüle edilmiş bağlantı verir.
 
 100 Gb/s'de, her dört Spark için bir 4 × 100G breakout kablosuyla (Bölüm 11), bir **CRS812**, tek bir TP8 cluster'a yetecek kadar, 8 Spark bağlar; bedeli, yukarıda anlatılan uzun prompt'larda ilk token için daha uzun beklemedir; cevabın akış hızı değişmez.
+
+TP4'te dört Spark, tek bir switch yuvasındaki bir 4 × 100G breakout kablosunu paylaşır (Bölüm 11). GLM-5.3-Flash ile 8K token'lık bir prompt'un ilk token'ı gerçek 100 Gb/s bağlantılarda, tahminin öngördüğü gibi %12.6 daha geç geldi ve decode hızı değişmedi (Bölüm 13).
 
 100 Gb/s'de bir **CRS804** 16 Spark bağlar. İki TP8 cluster olarak çalıştırıldığında her biri bu çalışmada ölçülen Spark başına bağlantıyı görür; bu yüzden yukarıdaki sonuçlar her birine uygulanır, yeter ki switch tüm portlarda aynı anda tam hızda trafik iletebilsin (doğrulanmalıdır). Tek bir TP16 cluster kaybı kabaca ikiye katlar (Bölüm 10) ve 100 Gb/s'de önerilmez.
 
@@ -752,9 +754,9 @@ Sıkı TTFT hedefleri olan uzun prompt'ların iş yüküne hâkim olduğu, çok 
 - ✗ **100 Gb/s'de bir modeli gerekenden fazla Spark'a yaymak:** kayıp TP boyutuyla büyür.
 - ✗ **Çalışan Spark'ları yeniden başlatmadan yeniden kablolamak:** bağlantılar doğru hızda kurulur ama yalnızca yaklaşık 13 Gb/s gönderebilir.
 
-### 8 ya da 16 Spark'lık bir cluster ağı planlamak için kontrol listesi
+### Bir DGX Spark cluster ağı planlamak için kontrol listesi
 
-- ☐ Model örneği başına TP boyutu belirlendi mi (TP8 ya da 16 Spark'ta iki TP8 örneği)?
+- ☐ Model örneği başına TP boyutu belirlendi mi (TP4, TP8 ya da 16 Spark'ta iki TP8 örneği)?
 - ☐ Beklenen prompt uzunluğu biliniyor mu (sohbet, RAG, uzun belgeler)?
 - ☐ Uzun prompt'lar için bir TTFT hedefi var mı?
 - ☐ 100 Gb/s kaybı tahmin edildi mi (prompt token'ı başına bayt × prompt token'ı ÷ 200 Gb/s, Bölüm 5)?
