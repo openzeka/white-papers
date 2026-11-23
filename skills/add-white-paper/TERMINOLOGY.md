@@ -265,6 +265,11 @@ Settled with the DGX Spark link-speed paper.
 | activations; hidden dimension | aktivasyonlar; gizli boyut | activaties; verborgen dimensie |
 | decode speed | decode hızı | decodesnelheid |
 | projection (untested sizes) | öngörü | projectie |
+| ring; tree; double binary tree (all-reduce algorithms) | halka; ağaç; çift ikili ağaç | ring; boom; dubbele binaire boom |
+| socket (400G QSFP-DD); cable leg | yuva; kol | aansluiting; tak |
+| 2-way / 4-way breakout cable | 2 kollu / 4 kollu kablo | 2-wegkabel / 4-wegkabel |
+| recable; reboot | yeniden kablolamak; yeniden başlatmak | omkabelen; opnieuw opstarten |
+| FEC (forward error correction); QoS | ileri hata düzeltme; hizmet kalitesi | foutcorrectie; QoS |
 | all-reduce, prefill, decode, TTFT, RDMA, NCCL | *(English)* | *(English)* |
 
 **`card_tag`** — reuse an existing one:
