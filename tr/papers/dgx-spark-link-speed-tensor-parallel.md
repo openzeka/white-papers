@@ -1,5 +1,5 @@
 ---
-title: 8× DGX Spark Üzerinde Tensör Paralel Çıkarım İçin Ağ Bağlantı Hızı (200G ve 100G)
+title: DGX Spark'lar Üzerinde Tensör Paralel Çıkarım İçin Ağ Bağlantı Hızı (200G ve 100G)
 parent: White Papers
 nav_order: 12
 lang: tr

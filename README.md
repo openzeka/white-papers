@@ -28,7 +28,7 @@ Benchmarks, deployment guides, and architecture studies based on real AI infrast
 | [Qwen3.6-27B DGX Spark Benchmark](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-benchmark/) | LLM quantization comparison: FP8, AWQ, NVFP4 and MTP | NVIDIA DGX Spark (GB10) |
 | [Qwen3.6-27B DGX Spark Cluster Scaling](https://whitepapers.openzeka.com/papers/qwen3.6-27b-dgx-spark-scaling/) | Multi-node scaling (TP1/TP2/TP4) and SLO-driven capacity planning | 1× / 2× / 4× NVIDIA DGX Spark (GB10) |
 | [KV Cache Offloading with LMCache in LLM Inference](https://whitepapers.openzeka.com/papers/kv-cache-offloading-lmcache/) | Repeated contexts and a KV cache bigger than GPU memory: three cache tiers (GPU, CPU, NVMe), measured TTFT and the settings to verify before production | NVIDIA DGX Spark (GB10) |
-| [Network Link Speed for Tensor-Parallel Inference on 8× DGX Spark (200G vs 100G)](https://whitepapers.openzeka.com/papers/dgx-spark-link-speed-tensor-parallel/) | What tensor parallelism sends over the network, the estimated 100G penalty, a measured 200G vs emulated 100G comparison with GLM-5.3 at TP8, and real 100G links measured with GLM-5.3-Flash at TP4 | 8× / 4× NVIDIA DGX Spark (GB10) |
+| [Network Link Speed for Tensor-Parallel Inference on DGX Sparks (200G vs 100G)](https://whitepapers.openzeka.com/papers/dgx-spark-link-speed-tensor-parallel/) | What tensor parallelism sends over the network, the estimated 100G penalty, a measured 200G vs emulated 100G comparison with GLM-5.3 at TP8, and real 100G links measured with GLM-5.3-Flash at TP4 | 8× / 4× NVIDIA DGX Spark (GB10) |
 | [The First Open-Weight Alternatives to Jev](https://whitepapers.openzeka.com/papers/jev-open-weight-alternatives/) | Six open-weight typed-decision models compared: accuracy, calibration, option-order sensitivity and latency | NVIDIA DGX Spark (GB10) |
 | [System One in Production](https://whitepapers.openzeka.com/papers/system-one-production-readiness/) | Six typed-decision models from 0.6B to 27B with vLLM and SGLang: Turkish accuracy, confidence calibration, paraphrase consistency, multimodal limits, engine portability and production thresholds | NVIDIA DGX Spark (GB10) |
 | [DeepSeek-V4.1-Flash 4× DGX Spark Deployment](https://whitepapers.openzeka.com/papers/deepseek-v4.1-flash-4spark-deployment/) | 763B MoE model with TP4: vLLM build chain, SM121 patches, Engram-on-disk, DSpark speculative decoding | 4× NVIDIA DGX Spark (GB10) |
@@ -277,7 +277,7 @@ The results show why raw throughput alone is not enough for infrastructure sizin
 
 ---
 
-## Network Link Speed for Tensor Parallelism on 8× DGX Spark
+## Network Link Speed for Tensor Parallelism on DGX Sparks
 
 **GLM-5.3 NVFP4 · TP8 · 200 Gb/s vs emulated 100 Gb/s · GLM-5.3-Flash · TP4 · real 100 Gb/s · RDMA traffic at 1 ms resolution**
 

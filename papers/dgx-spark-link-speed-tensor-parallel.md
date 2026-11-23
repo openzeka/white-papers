@@ -1,5 +1,5 @@
 ---
-title: Network Link Speed for Tensor-Parallel Inference on 8× DGX Spark (200G vs 100G)
+title: Network Link Speed for Tensor-Parallel Inference on DGX Sparks (200G vs 100G)
 parent: White Papers
 nav_order: 12
 lang: en
