@@ -798,7 +798,7 @@ De sampler en de testdriver van deze studie zijn beschikbaar als de opensourceto
 
 | Onderdeel | Waarde |
 |---|---|
-| Testdriver | verstuurt de testverzoeken als streamingverzoeken naar de engine, geeft het eerste en elk volgend token van elk antwoord een tijdstempel, en registreert daarnaast de RDMA-tellers op dezelfde klok (Secties 7.4–7.6, Bijlage A); de verzoeken worden gegenereerd met de open-source [CordatusAI LLM Benchmark Tool](https://github.com/CordatusAI/llm-benchmark) |
+| Testdriver | verstuurt de testverzoeken als streamingverzoeken naar de engine, geeft het eerste en elk volgend token van elk antwoord een tijdstempel, en registreert daarnaast de RDMA-tellers op dezelfde klok (Secties 7.4–7.6, Bijlage A); de verzoeken worden gegenereerd met de open-source [LLM Benchmark Tool](https://github.com/openzeka/llm-benchmark) |
 | Model | `Inferact/GLM-5.3-NVFP4` |
 | Engine | vLLM `0.1.dev20133+gb5f995e73`, container `vllm-node-b12x`, NCCL 2.31.2 |
 | Serve-instellingen | `--tensor-parallel-size 8`, `--max-num-batched-tokens 4096`, `--long-prefill-token-threshold 2048`, `--max-num-seqs 8`, `--max-model-len 262144`, `--kv-cache-dtype fp8`, `--gpu-memory-utilization 0.726`, `--enable-chunked-prefill`, `--enable-prefix-caching`; speculatieve decodering: MTP, 4 tokens, draft niet verdeeld |
@@ -866,7 +866,7 @@ Voor de TP4-metingen van Deel III:
 - SGLang — <https://github.com/sgl-project/sglang>
 - NCCL — <https://github.com/NVIDIA/nccl>
 - perftest (`ib_write_bw`, `ib_write_lat`) — <https://github.com/linux-rdma/perftest>
-- CordatusAI LLM Benchmark Tool — <https://github.com/CordatusAI/llm-benchmark>
+- LLM Benchmark Tool — <https://github.com/openzeka/llm-benchmark>
 - netinfermon (inferentiebenchmark met registratie van RDMA-verkeer) — <https://github.com/openzeka/netinfermon>
 
 **All-reduce-algoritmen:**

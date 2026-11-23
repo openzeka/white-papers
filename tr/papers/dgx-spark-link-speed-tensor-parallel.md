@@ -798,7 +798,7 @@ Bu çalışmanın örnekleyicisi ve test sürücüsü, açık kaynaklı [netinfe
 
 | Öğe | Değer |
 |---|---|
-| Test sürücüsü | test isteklerini motora akış (streaming) istekleri olarak gönderir, her cevabın ilk token'ını ve ardından gelen her token'ı zaman damgalar ve RDMA sayaçlarını aynı saatte yanında kaydeder (Bölüm 7.4–7.6, Ek A); istekler açık kaynaklı [CordatusAI LLM Benchmark Tool](https://github.com/CordatusAI/llm-benchmark) ile üretilir |
+| Test sürücüsü | test isteklerini motora akış (streaming) istekleri olarak gönderir, her cevabın ilk token'ını ve ardından gelen her token'ı zaman damgalar ve RDMA sayaçlarını aynı saatte yanında kaydeder (Bölüm 7.4–7.6, Ek A); istekler açık kaynaklı [LLM Benchmark Tool](https://github.com/openzeka/llm-benchmark) ile üretilir |
 | Model | `Inferact/GLM-5.3-NVFP4` |
 | Motor | vLLM `0.1.dev20133+gb5f995e73`, container `vllm-node-b12x`, NCCL 2.31.2 |
 | Servis ayarları | `--tensor-parallel-size 8`, `--max-num-batched-tokens 4096`, `--long-prefill-token-threshold 2048`, `--max-num-seqs 8`, `--max-model-len 262144`, `--kv-cache-dtype fp8`, `--gpu-memory-utilization 0.726`, `--enable-chunked-prefill`, `--enable-prefix-caching`; spekülatif kod çözme: MTP, 4 token, taslak bölünmez |
@@ -866,7 +866,7 @@ III. Kısım'daki TP4 ölçümleri için:
 - SGLang — <https://github.com/sgl-project/sglang>
 - NCCL — <https://github.com/NVIDIA/nccl>
 - perftest (`ib_write_bw`, `ib_write_lat`) — <https://github.com/linux-rdma/perftest>
-- CordatusAI LLM Benchmark Tool — <https://github.com/CordatusAI/llm-benchmark>
+- LLM Benchmark Tool — <https://github.com/openzeka/llm-benchmark>
 - netinfermon (RDMA trafiği kaydeden çıkarım benchmark'ı) — <https://github.com/openzeka/netinfermon>
 
 **All-reduce algoritmaları:**
