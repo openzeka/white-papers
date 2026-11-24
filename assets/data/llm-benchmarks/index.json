@@ -172,6 +172,11 @@
           "id": "qwen3.8-27b_1spark_nvfp4_vllm_mtp_eugr_c1",
           "model": "Qwen3.8-27B",
           "path": "1x-dgx-spark/qwen3.8-27b_1spark_nvfp4_vllm_mtp_eugr_c1.json"
+        },
+        {
+          "id": "inkling-2-mini_1spark_mxfp8_vllm",
+          "model": "Inkling-2-Mini",
+          "path": "1x-dgx-spark/inkling-2-mini_1spark_mxfp8_vllm.json"
         }
       ]
     },
@@ -393,6 +398,11 @@
       "slug": "rtx-pro-6000",
       "path": "rtx-pro-6000/device.json",
       "runs": [
+        {
+          "id": "inkling-2-mini_rtxpro6000_mxfp8_vllm",
+          "model": "Inkling-2-Mini",
+          "path": "rtx-pro-6000/inkling-2-mini_rtxpro6000_mxfp8_vllm.json"
+        },
         {
           "id": "gpt-oss-120b_rtxpro6000_mxfp4_vllm",
           "model": "GPT-OSS 120B",

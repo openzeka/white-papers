@@ -1,0 +1,36 @@
+{
+  "repo": "thinkingmachines/Inkling-2-Mini",
+  "revision": "7a67ae2314b44ef05c87fd1d4d311c58aaeb18f6",
+  "fetched": "2026-11-24",
+  "safetensors_bytes": 20161820584,
+  "quantization": {
+    "method": "modelopt",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-11-17T00:26:57.000Z",
+    "last_modified": "2026-11-23T08:08:49.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 26388646440,
+    "parameters_by_dtype": {
+      "F32": 247848,
+      "BF16": 1927217664,
+      "F8_E4M3": 4076863488,
+      "U8": 20384317440
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00001.safetensors",
+      "size": 19526019168
+    },
+    {
+      "path": "mtp.safetensors",
+      "size": 635801416
+    }
+  ]
+}
