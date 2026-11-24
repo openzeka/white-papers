@@ -15,6 +15,22 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-11-24
+  type: benchmarks
+  run: inkling-2-mini_1spark_mxfp8_vllm
+  text:
+    en: "Inkling-2-Mini on a single DGX Spark: mixed NVFP4/MXFP8 weights served with vLLM and DSpark speculative decoding (k=7), measured from 1 to 32 concurrent requests with a 256K context."
+    tr: "Inkling-2-Mini, tek bir DGX Spark üzerinde: karma NVFP4/MXFP8 ağırlıklar vLLM ve DSpark spekülatif kod çözme (k=7) ile sunuldu, 256K bağlamla 1 ile 32 eşzamanlı istek arasında ölçüldü."
+    nl: "Inkling-2-Mini op één DGX Spark: gemengde NVFP4/MXFP8-gewichten geserveerd met vLLM en DSpark-speculatieve decodering (k=7), gemeten van 1 tot 32 gelijktijdige verzoeken met een context van 256K."
+
+- date: 2026-11-24
+  type: benchmarks
+  run: inkling-2-mini_rtxpro6000_mxfp8_vllm
+  text:
+    en: "Inkling-2-Mini on a single RTX PRO 6000: mixed NVFP4/MXFP8 weights served with vLLM and DSpark speculative decoding (k=7), measured from 1 to 64 concurrent requests with a 256K context."
+    tr: "Inkling-2-Mini, tek bir RTX PRO 6000 üzerinde: karma NVFP4/MXFP8 ağırlıklar vLLM ve DSpark spekülatif kod çözme (k=7) ile sunuldu, 256K bağlamla 1 ile 64 eşzamanlı istek arasında ölçüldü."
+    nl: "Inkling-2-Mini op één RTX PRO 6000: gemengde NVFP4/MXFP8-gewichten geserveerd met vLLM en DSpark-speculatieve decodering (k=7), gemeten van 1 tot 64 gelijktijdige verzoeken met een context van 256K."
+
 - date: 2026-11-17
   type: vlm
   vlm: alpamayo2-super_agxthor_bf16_vllm
