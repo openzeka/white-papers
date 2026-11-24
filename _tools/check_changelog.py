@@ -71,21 +71,21 @@ for i, e in enumerate(entries, 1):
     if e.get("run"):
         if e["run"] not in runs:
             errors.append(f"{where}: run {e['run']!r} not in the LLM store")
-        elif e["run"] in listed:
+        elif ("run", e["run"]) in listed:
             errors.append(f"{where}: run {e['run']!r} is already listed")
-        listed.add(e["run"])
+        listed.add(("run", e["run"]))
     if e.get("vlm"):
         if e["vlm"] not in vlms:
             errors.append(f"{where}: VLM run {e['vlm']!r} not in the VLM store")
-        elif e["vlm"] in listed:
+        elif ("vlm", e["vlm"]) in listed:
             errors.append(f"{where}: VLM run {e['vlm']!r} is already listed")
-        listed.add(e["vlm"])
+        listed.add(("vlm", e["vlm"]))  # an LLM run and a VLM run may share an id: separate stores
     if e.get("cv"):
         if e["cv"] not in cvs:
             errors.append(f"{where}: CV result {e['cv']!r} not in cv-benchmarks/index.json")
-        elif e["cv"] in listed:
+        elif ("cv", e["cv"]) in listed:
             errors.append(f"{where}: CV result {e['cv']!r} is already listed")
-        listed.add(e["cv"])
+        listed.add(("cv", e["cv"]))
 
 for x in errors:
     print("ERROR", x)
