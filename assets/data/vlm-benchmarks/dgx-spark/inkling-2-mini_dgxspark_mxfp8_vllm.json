@@ -1,0 +1,67 @@
+{
+  "id": "inkling-2-mini_dgxspark_mxfp8_vllm",
+  "model": "Inkling-2-Mini",
+  "device": "DGX Spark",
+  "quantization": "MXFP8",
+  "engine": "vLLM",
+  "engine_version": "0.34.0rc1.dev1163+geff4de9be",
+  "platform": null,
+  "served_repo": null,
+  "notes": "prefix cache on, unique images per request; thinking always on; DSpark speculative decoding (k=7); max-model-len 262144",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 0.278, "tps": 36.15, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 2, "c": 1, "ttft_s": 0.394, "tps": 38.02, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 4, "c": 1, "ttft_s": 0.62, "tps": 41.27, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 8, "c": 1, "ttft_s": 1.204, "tps": 41.52, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 16, "c": 1, "ttft_s": 2.193, "tps": 38.95, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 32, "c": 1, "ttft_s": 4.267, "tps": 43.62, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 0.399, "tps": 37.79, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 2, "c": 1, "ttft_s": 0.652, "tps": 40.11, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 4, "c": 1, "ttft_s": 1.261, "tps": 40.51, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 8, "c": 1, "ttft_s": 2.346, "tps": 39.43, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 16, "c": 1, "ttft_s": 4.625, "tps": 41.29, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 32, "c": 1, "ttft_s": 10.555, "tps": 29.43, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 1, "ttft_s": 0.693, "tps": 43.83, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 2, "c": 1, "ttft_s": 1.361, "tps": 40.87, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 4, "c": 1, "ttft_s": 2.875, "tps": 35.26, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 8, "c": 1, "ttft_s": 5.123, "tps": 43.12, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 16, "c": 1, "ttft_s": 10.404, "tps": 39.54, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 1, "c": 1, "ttft_s": 1.52, "tps": 40.18, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 2, "c": 1, "ttft_s": 2.976, "tps": 40.35, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 4, "c": 1, "ttft_s": 5.202, "tps": 38.02, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 8, "c": 1, "ttft_s": 10.421, "tps": 37.0, "requests": 5, "failed": 0}
+  ],
+  "limits": {
+    "images": {
+      "1080p": 32,
+      "2K": 16
+    }
+  },
+  "extra": {
+    "title": {
+      "en": "About this run",
+      "tr": "Bu ölçüm hakkında",
+      "nl": "Over deze meting"
+    },
+    "before": {
+      "en": [
+        "Inkling-2-Mini always reasons before it answers: its chat template has no switch to turn this off, and even the lowest reasoning effort writes a short reasoning first. Its time to first token is therefore the time to its first reasoning token — the images and the prompt are processed by then, as in the other rows — and the 128 output tokens include the reasoning.",
+        "Measured on a shared server as it was deployed: vLLM 0.34 nightly, DSpark speculative decoding (k=7), 256K context, prefix caching on; every request carried new image pixels, so nothing was reused between requests.",
+        "One request with 32 images at 1080p, and later one with 16 images at 2K, made the DGX Spark stop responding altogether: it dropped off the network and needed a power cycle, with no error in the kernel log. Those are the failure points shown here. For that reason the camera, concurrency and many-image tests were not run on this board; the RTX PRO 6000 row has them for the same model.",
+        "The server was restarted once during the run, with 75% of the memory for vLLM (gpu-memory-utilization 0.75); 480p and 720p were measured before, 1080p and 2K after."
+      ],
+      "tr": [
+        "Inkling-2-Mini cevap vermeden önce her zaman düşünür: sohbet şablonunda bunu kapatan bir ayar yoktur, en düşük düşünme seviyesinde bile önce kısa bir düşünme metni yazar. Bu yüzden ilk token süresi ilk düşünme token'ına kadar geçen süredir — diğer satırlarda olduğu gibi resimler ve istem o ana kadar işlenmiş olur — ve 128 çıktı token'ına düşünme metni de dahildir.",
+        "Paylaşılan bir sunucuda, kurulduğu haliyle ölçüldü: vLLM 0.34 nightly, DSpark spekülatif kod çözme (k=7), 256K bağlam, önek önbelleği açık; her istek yeni resim pikselleri taşıdı, bu yüzden istekler arasında hiçbir şey yeniden kullanılmadı.",
+        "1080p'de 32 resimli tek bir istek, sonra 2K'da 16 resimli tek bir istek DGX Spark'ı tamamen yanıt veremez hale getirdi: cihaz ağdan düştü ve kapatıp açılması gerekti; çekirdek logunda hata yoktu. Burada gösterilen hata noktaları bunlardır. Bu yüzden kamera, eşzamanlılık ve çok resim testleri bu cihazda koşulmadı; aynı model için RTX PRO 6000 satırında var.",
+        "Ölçüm sırasında sunucu bir kez, belleğin %75'i vLLM'e ayrılarak yeniden başlatıldı (gpu-memory-utilization 0.75); 480p ve 720p öncesinde, 1080p ve 2K sonrasında ölçüldü."
+      ],
+      "nl": [
+        "Inkling-2-Mini redeneert altijd voordat het antwoordt: het chatsjabloon heeft geen schakelaar om dit uit te zetten, en zelfs de laagste redeneerinspanning schrijft eerst een korte redenering. De tijd tot het eerste token is daarom de tijd tot het eerste redeneertoken — de afbeeldingen en de prompt zijn dan verwerkt, zoals in de andere rijen — en de 128 uitvoertokens omvatten de redenering.",
+        "Gemeten op een gedeelde server zoals die was ingericht: vLLM 0.34 nightly, DSpark-speculatieve decodering (k=7), 256K context, prefix-cache aan; elk verzoek bevatte nieuwe beeldpixels, dus er werd niets tussen verzoeken hergebruikt.",
+        "Eén verzoek met 32 afbeeldingen bij 1080p, en later één met 16 afbeeldingen bij 2K, liet de DGX Spark volledig stoppen met reageren: hij viel van het netwerk en moest uit en weer aan, zonder fout in het kernellog. Dat zijn de faalpunten die hier staan. Daarom zijn de camera-, gelijktijdigheids- en vele-afbeeldingentests op dit apparaat niet uitgevoerd; de RTX PRO 6000-rij heeft ze voor hetzelfde model.",
+        "De server werd tijdens de meting één keer herstart met 75% van het geheugen voor vLLM (gpu-memory-utilization 0.75); 480p en 720p zijn ervoor gemeten, 1080p en 2K erna."
+      ]
+    }
+  }
+}

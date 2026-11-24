@@ -66,6 +66,7 @@ DEVICES = [
 # published, served checkpoint when it is a repackaging). A model also in the
 # LLM explorer keeps that explorer's name and parameter figure.
 MODELS = {
+    "Inkling-2-Mini": ("Inkling-2-Mini", "thinkingmachines/Inkling-2-Mini", "26.4B", None),
     "Qwen3-VL-4B-Instruct": ("Qwen3-VL-4B-Instruct", "Qwen/Qwen3-VL-4B-Instruct", "4.4B", None),
     "Qwen3-VL-8B-Instruct": ("Qwen3-VL-8B-Instruct", "Qwen/Qwen3-VL-8B-Instruct", "8.8B", None),
     "Qwen3-VL-30B-A3B-Instruct": ("Qwen3-VL-30B-A3B-Instruct", "Qwen/Qwen3-VL-30B-A3B-Instruct", "30B", None),
@@ -168,6 +169,12 @@ def settings_of(run, conc):
         notes.append(f"{m.group(1)} GPU" + ("s" if m.group(1) != "1" else ""))
     if "enable_thinking false" in text:
         notes.append("thinking off")
+    if "thinking always on" in text:
+        # a model whose chat template has no switch: the first token is its first reasoning token
+        notes.append("thinking always on")
+    m = re.search(r"DSpark speculative decoding k=(\d+)", text)
+    if m:
+        notes.append(f"DSpark speculative decoding (k={m.group(1)})")
     m = re.search(r"(\d+) parallel slots", (conc or {}).get("engine", ""))
     if m:
         notes.append(f"{m.group(1)} parallel slots")

@@ -16,6 +16,22 @@
 # Check with: python3 _tools/check_changelog.py
 
 - date: 2026-11-24
+  type: vlm
+  vlm: inkling-2-mini_rtxpro6000_mxfp8_vllm
+  text:
+    en: "Inkling-2-Mini on RTX PRO 6000: MXFP8 weights served with vLLM, measured with up to 120 cameras and up to 128 images per request."
+    tr: "Inkling-2-Mini, RTX PRO 6000 üzerinde: MXFP8 ağırlıklar vLLM ile sunuldu, 120 kameraya ve istek başına 128 görüntüye kadar ölçüldü."
+    nl: "Inkling-2-Mini op RTX PRO 6000: MXFP8-gewichten geserveerd met vLLM, gemeten met tot 120 camera's en tot 128 beelden per verzoek."
+
+- date: 2026-11-24
+  type: vlm
+  vlm: inkling-2-mini_dgxspark_mxfp8_vllm
+  text:
+    en: "Inkling-2-Mini on DGX Spark: MXFP8 weights served with vLLM, measured with one camera and up to 32 images per request; larger requests froze the board."
+    tr: "Inkling-2-Mini, DGX Spark üzerinde: MXFP8 ağırlıklar vLLM ile sunuldu, tek kamerayla ve istek başına 32 görüntüye kadar ölçüldü; daha büyük istekler cihazı dondurdu."
+    nl: "Inkling-2-Mini op DGX Spark: MXFP8-gewichten geserveerd met vLLM, gemeten met één camera en tot 32 beelden per verzoek; grotere verzoeken lieten het apparaat vastlopen."
+
+- date: 2026-11-24
   type: benchmarks
   run: inkling-2-mini_1spark_mxfp8_vllm
   text:

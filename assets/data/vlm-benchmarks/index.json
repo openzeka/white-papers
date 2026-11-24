@@ -1,7 +1,7 @@
 {
   "source": {
     "tool": "VLM Benchmark Tool",
-    "exported": "2026-11-16T16:45:08"
+    "exported": "2026-11-24T13:06:26"
   },
   "config": {
     "response_target_s": 3,
@@ -86,6 +86,10 @@
     "H2O-Lightning-4B": {
       "repo": "h2oai/h2o-lightning-4b",
       "params": "4.7B"
+    },
+    "Inkling-2-Mini": {
+      "repo": "thinkingmachines/Inkling-2-Mini",
+      "params": "26.4B"
     },
     "LensVLM-9B": {
       "repo": "apple/LensVLM-9B",
@@ -499,6 +503,11 @@
           "path": "rtx-pro-6000/gemma-4-31b-it_rtxpro6000_nvfp4_vllm.json"
         },
         {
+          "id": "inkling-2-mini_rtxpro6000_mxfp8_vllm",
+          "model": "Inkling-2-Mini",
+          "path": "rtx-pro-6000/inkling-2-mini_rtxpro6000_mxfp8_vllm.json"
+        },
+        {
           "id": "llama-3.1-nemotron-nano-vl-8b_rtxpro6000_bf16_vllm",
           "model": "Llama-3.1-Nemotron-Nano-VL-8B",
           "path": "rtx-pro-6000/llama-3.1-nemotron-nano-vl-8b_rtxpro6000_bf16_vllm.json"
@@ -788,6 +797,11 @@
           "id": "h2o-lightning-4b_dgxspark_bf16_vllm",
           "model": "H2O-Lightning-4B",
           "path": "dgx-spark/h2o-lightning-4b_dgxspark_bf16_vllm.json"
+        },
+        {
+          "id": "inkling-2-mini_dgxspark_mxfp8_vllm",
+          "model": "Inkling-2-Mini",
+          "path": "dgx-spark/inkling-2-mini_dgxspark_mxfp8_vllm.json"
         },
         {
           "id": "lensvlm-9b_dgxspark_bf16_vllm",

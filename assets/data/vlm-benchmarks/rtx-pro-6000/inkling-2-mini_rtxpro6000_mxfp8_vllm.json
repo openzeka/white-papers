@@ -1,0 +1,88 @@
+{
+  "id": "inkling-2-mini_rtxpro6000_mxfp8_vllm",
+  "model": "Inkling-2-Mini",
+  "device": "RTX PRO 6000",
+  "quantization": "MXFP8",
+  "engine": "vLLM",
+  "engine_version": "0.34.0rc1.dev1163+geff4de9be",
+  "platform": null,
+  "served_repo": null,
+  "notes": "prefix cache on, unique images per request; thinking always on; DSpark speculative decoding (k=7); max-num-seqs 64; max-model-len 262144",
+  "data_points": [
+    {"res": "480p", "images": 1, "c": 1, "ttft_s": 0.072, "tps": 210.5, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 2, "ttft_s": 0.086, "tps": 184.88, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 4, "ttft_s": 0.118, "tps": 134.93, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 8, "ttft_s": 0.177, "tps": 110.8, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 1, "c": 16, "ttft_s": 4.248, "tps": 77.65, "requests": 24, "failed": 0},
+    {"res": "480p", "images": 2, "c": 1, "ttft_s": 0.118, "tps": 217.12, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 4, "c": 1, "ttft_s": 0.137, "tps": 227.79, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 8, "c": 1, "ttft_s": 0.212, "tps": 218.09, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 16, "c": 1, "ttft_s": 0.401, "tps": 221.23, "requests": 5, "failed": 0},
+    {"res": "480p", "images": 32, "c": 1, "ttft_s": 0.803, "tps": 221.39, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 1, "c": 1, "ttft_s": 0.117, "tps": 219.8, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 2, "ttft_s": 0.133, "tps": 169.57, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 4, "ttft_s": 0.194, "tps": 126.84, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 8, "ttft_s": 1.162, "tps": 94.18, "requests": 24, "failed": 0},
+    {"res": "720p", "images": 1, "c": 16, "ttft_s": 1.834, "tps": 77.29, "requests": 32, "failed": 0},
+    {"res": "720p", "images": 1, "c": 32, "ttft_s": 6.779, "tps": 43.07, "requests": 64, "failed": 0},
+    {"res": "720p", "images": 1, "c": 64, "ttft_s": 8.806, "tps": 11.95, "requests": 128, "failed": 0},
+    {"res": "720p", "images": 1, "c": 96, "ttft_s": 6.321, "tps": 29.81, "requests": 192, "failed": 0},
+    {"res": "720p", "images": 1, "c": 112, "ttft_s": 7.696, "tps": 32.38, "requests": 224, "failed": 0},
+    {"res": "720p", "images": 1, "c": 120, "ttft_s": 5.909, "tps": 35.45, "requests": 240, "failed": 0},
+    {"res": "720p", "images": 2, "c": 1, "ttft_s": 0.144, "tps": 210.87, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 4, "c": 1, "ttft_s": 0.232, "tps": 210.03, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 8, "c": 1, "ttft_s": 0.429, "tps": 201.01, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 16, "c": 1, "ttft_s": 0.846, "tps": 217.78, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 32, "c": 1, "ttft_s": 1.696, "tps": 218.63, "requests": 5, "failed": 0},
+    {"res": "720p", "images": 64, "c": 1, "ttft_s": 3.448, "tps": 202.29, "requests": 3, "failed": 0},
+    {"res": "720p", "images": 128, "c": 1, "ttft_s": 7.661, "tps": 183.16, "requests": 3, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 1, "ttft_s": 0.154, "tps": 206.96, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 2, "ttft_s": 0.191, "tps": 167.75, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 4, "ttft_s": 0.741, "tps": 98.71, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 8, "ttft_s": 1.609, "tps": 62.49, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 1, "c": 16, "ttft_s": 2.643, "tps": 46.07, "requests": 24, "failed": 0},
+    {"res": "1080p", "images": 2, "c": 1, "ttft_s": 0.272, "tps": 208.32, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 4, "c": 1, "ttft_s": 0.511, "tps": 209.98, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 8, "c": 1, "ttft_s": 0.969, "tps": 216.31, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 16, "c": 1, "ttft_s": 1.914, "tps": 226.15, "requests": 5, "failed": 0},
+    {"res": "1080p", "images": 32, "c": 1, "ttft_s": 3.977, "tps": 204.6, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 1, "c": 1, "ttft_s": 0.257, "tps": 219.97, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 2, "c": 1, "ttft_s": 0.485, "tps": 216.28, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 4, "c": 1, "ttft_s": 0.912, "tps": 206.04, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 8, "c": 1, "ttft_s": 1.787, "tps": 204.55, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 16, "c": 1, "ttft_s": 3.785, "tps": 209.07, "requests": 5, "failed": 0},
+    {"res": "2K", "images": 32, "c": 1, "ttft_s": 8.174, "tps": 186.28, "requests": 5, "failed": 0}
+  ],
+  "limits": {
+    "images": {
+      "720p": 256
+    },
+    "cameras": {
+      "720p": 128
+    }
+  },
+  "extra": {
+    "title": {
+      "en": "About this run",
+      "tr": "Bu ölçüm hakkında",
+      "nl": "Over deze meting"
+    },
+    "before": {
+      "en": [
+        "Inkling-2-Mini always reasons before it answers: its chat template has no switch to turn this off, and even the lowest reasoning effort writes a short reasoning first. Its time to first token is therefore the time to its first reasoning token — the images and the prompt are processed by then, as in the other rows — and the 128 output tokens include the reasoning.",
+        "Measured on a shared server as it was deployed: vLLM 0.34 nightly, DSpark speculative decoding (k=7), 256K context, prefix caching on; every request carried new image pixels, so nothing was reused between requests. The server takes at most 64 requests at once (max-num-seqs 64).",
+        "At 720p, 256 images in one request were refused by vLLM's own cap on decoded image data per request (about 716 MB; 256 images at 720p are 719 MB), not by GPU memory or context length. Cameras: 120 at 720p got their first token within 30 s; at 128, 36 of 256 requests waited longer — beyond 64 cameras, requests queue for a free slot."
+      ],
+      "tr": [
+        "Inkling-2-Mini cevap vermeden önce her zaman düşünür: sohbet şablonunda bunu kapatan bir ayar yoktur, en düşük düşünme seviyesinde bile önce kısa bir düşünme metni yazar. Bu yüzden ilk token süresi ilk düşünme token'ına kadar geçen süredir — diğer satırlarda olduğu gibi resimler ve istem o ana kadar işlenmiş olur — ve 128 çıktı token'ına düşünme metni de dahildir.",
+        "Paylaşılan bir sunucuda, kurulduğu haliyle ölçüldü: vLLM 0.34 nightly, DSpark spekülatif kod çözme (k=7), 256K bağlam, önek önbelleği açık; her istek yeni resim pikselleri taşıdı, bu yüzden istekler arasında hiçbir şey yeniden kullanılmadı. Sunucu aynı anda en fazla 64 istek işler (max-num-seqs 64).",
+        "720p'de tek istekte 256 resmi GPU belleği ya da bağlam uzunluğu değil, vLLM'in istek başına çözülen görüntü verisi sınırı reddetti (yaklaşık 716 MB; 720p'de 256 resim 719 MB eder). Kameralar: 720p'de 120 kamera ilk token'ını 30 saniye içinde aldı; 128 kamerada 256 isteğin 36 tanesi daha uzun bekledi — 64 kameranın üstünde istekler boş yer için sıraya girer."
+      ],
+      "nl": [
+        "Inkling-2-Mini redeneert altijd voordat het antwoordt: het chatsjabloon heeft geen schakelaar om dit uit te zetten, en zelfs de laagste redeneerinspanning schrijft eerst een korte redenering. De tijd tot het eerste token is daarom de tijd tot het eerste redeneertoken — de afbeeldingen en de prompt zijn dan verwerkt, zoals in de andere rijen — en de 128 uitvoertokens omvatten de redenering.",
+        "Gemeten op een gedeelde server zoals die was ingericht: vLLM 0.34 nightly, DSpark-speculatieve decodering (k=7), 256K context, prefix-cache aan; elk verzoek bevatte nieuwe beeldpixels, dus er werd niets tussen verzoeken hergebruikt. De server neemt maximaal 64 verzoeken tegelijk aan (max-num-seqs 64).",
+        "Bij 720p werden 256 afbeeldingen in één verzoek geweigerd door de eigen limiet van vLLM op gedecodeerde beelddata per verzoek (ongeveer 716 MB; 256 afbeeldingen bij 720p zijn 719 MB), niet door GPU-geheugen of contextlengte. Camera's: 120 camera's bij 720p kregen hun eerste token binnen 30 s; bij 128 wachtten 36 van de 256 verzoeken langer — boven 64 camera's wachten verzoeken op een vrije plek."
+      ]
+    }
+  }
+}
