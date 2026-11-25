@@ -266,6 +266,8 @@ Settled with the DGX Spark link-speed paper.
 | decode speed | decode hızı | decodesnelheid |
 | projection (untested sizes) | öngörü | projectie |
 | ring; tree; double binary tree (all-reduce algorithms) | halka; ağaç; çift ikili ağaç | ring; boom; dubbele binaire boom |
+| row-parallel output | satır yönünde bölünmüş çıkış | rijparallelle uitvoer |
+| advertised link modes | karşı uca bildirilen bağlantı modları | geadverteerde linkmodi |
 | socket (400G QSFP-DD); cable leg | yuva; kol | aansluiting; tak |
 | 2-way / 4-way breakout cable | 2 kollu / 4 kollu kablo | 2-wegkabel / 4-wegkabel |
 | recable; reboot | yeniden kablolamak; yeniden başlatmak | omkabelen; opnieuw opstarten |
