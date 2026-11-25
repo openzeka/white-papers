@@ -1,0 +1,62 @@
+{
+  "id": "tencent-hy4-flash_b300_bf16_sglang_tp2_dfly",
+  "model": "Tencent-Hy4-flash",
+  "params": "220B",
+  "intelligence_index": null,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "BF16",
+  "engine": "SGLang",
+  "mtp": true,
+  "mtp_k": 6,
+  "tp": 2,
+  "notes": "DFly2 k=6, 1M context. Multimodal checkpoint measured on text. Model: tencent/Hy4-flash",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 157.67,
+      "tps": 227.6
+    },
+    {
+      "c": 2,
+      "ttft_ms": 161.67,
+      "tps": 166.52
+    },
+    {
+      "c": 4,
+      "ttft_ms": 197.26,
+      "tps": 117.75
+    },
+    {
+      "c": 8,
+      "ttft_ms": 221.02,
+      "tps": 75.41
+    },
+    {
+      "c": 16,
+      "ttft_ms": 268.32,
+      "tps": 52.0
+    },
+    {
+      "c": 32,
+      "ttft_ms": 309.32,
+      "tps": 39.6
+    },
+    {
+      "c": 64,
+      "ttft_ms": 1750.57,
+      "tps": 22.02
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 8448,
+  "kv_window_bytes": 8847360,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "tencent/Hy4-flash",
+  "weights_gb": 440.52
+}

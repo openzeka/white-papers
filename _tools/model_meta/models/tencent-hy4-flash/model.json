@@ -1,0 +1,22 @@
+{
+  "model": "Tencent-Hy4-flash",
+  "repo": "tencent/Hy4-flash",
+  "revision": "eccd3123eec73f2040f4c9ed0de1883593470510",
+  "config_sha256": "1f56ac1a3063f926e91ec43842bfdc0fd6d4401ef91bcdecd1fc27dd506ea968",
+  "fetched": "2026-11-25",
+  "hf": {
+    "created": "2026-11-17T03:44:46.000Z",
+    "last_modified": "2026-11-23T06:53:19.000Z",
+    "gated": false,
+    "license": "other",
+    "base_model": null,
+    "library": "transformers",
+    "pipeline_tag": "image-text-to-text",
+    "safetensors_parameters": 220251201958,
+    "parameters_by_dtype": {
+      "BF16": 220241986961,
+      "F32": 8731725,
+      "I32": 483272
+    }
+  }
+}

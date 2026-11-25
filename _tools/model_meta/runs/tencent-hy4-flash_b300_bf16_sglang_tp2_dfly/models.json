@@ -1,0 +1,14 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "tencent/Hy4-flash",
+      "object": "model",
+      "created": 1795594335,
+      "owned_by": "sglang",
+      "root": "tencent/Hy4-flash",
+      "parent": null,
+      "max_model_len": 1048576
+    }
+  ]
+}

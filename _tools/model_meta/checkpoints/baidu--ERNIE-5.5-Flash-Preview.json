@@ -1,0 +1,542 @@
+{
+  "repo": "baidu/ERNIE-5.5-Flash-Preview",
+  "revision": "ace1100dcde7bf4eb06add6ae11ce4f43a11ddfe",
+  "fetched": "2026-11-25",
+  "safetensors_bytes": 165901394480,
+  "quantization": {
+    "method": "fp8",
+    "kv_cache": null
+  },
+  "hf": {
+    "created": "2026-11-23T09:00:29.000Z",
+    "last_modified": "2026-11-24T07:17:13.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "baidu/ERNIE-5.5-Flash-Base"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 299559241286,
+    "parameters_by_dtype": {
+      "BF16": 2100706952,
+      "F32": 38864830,
+      "F8_E4M3": 7509377024,
+      "I8": 289910292480
+    }
+  },
+  "files": [
+    {
+      "path": "model-00001-of-00128.safetensors",
+      "size": 1648361616
+    },
+    {
+      "path": "model-00002-of-00128.safetensors",
+      "size": 942980496
+    },
+    {
+      "path": "model-00003-of-00128.safetensors",
+      "size": 1296981768
+    },
+    {
+      "path": "model-00004-of-00128.safetensors",
+      "size": 1296981616
+    },
+    {
+      "path": "model-00005-of-00128.safetensors",
+      "size": 1294023008
+    },
+    {
+      "path": "model-00006-of-00128.safetensors",
+      "size": 1296981776
+    },
+    {
+      "path": "model-00007-of-00128.safetensors",
+      "size": 1305147088
+    },
+    {
+      "path": "model-00008-of-00128.safetensors",
+      "size": 1288086016
+    },
+    {
+      "path": "model-00009-of-00128.safetensors",
+      "size": 1294753272
+    },
+    {
+      "path": "model-00010-of-00128.safetensors",
+      "size": 1296251360
+    },
+    {
+      "path": "model-00011-of-00128.safetensors",
+      "size": 1296981760
+    },
+    {
+      "path": "model-00012-of-00128.safetensors",
+      "size": 1294753288
+    },
+    {
+      "path": "model-00013-of-00128.safetensors",
+      "size": 1296251360
+    },
+    {
+      "path": "model-00014-of-00128.safetensors",
+      "size": 1296981768
+    },
+    {
+      "path": "model-00015-of-00128.safetensors",
+      "size": 1296981752
+    },
+    {
+      "path": "model-00016-of-00128.safetensors",
+      "size": 1294022880
+    },
+    {
+      "path": "model-00017-of-00128.safetensors",
+      "size": 1296981776
+    },
+    {
+      "path": "model-00018-of-00128.safetensors",
+      "size": 1296981488
+    },
+    {
+      "path": "model-00019-of-00128.safetensors",
+      "size": 1296251632
+    },
+    {
+      "path": "model-00020-of-00128.safetensors",
+      "size": 1294753272
+    },
+    {
+      "path": "model-00021-of-00128.safetensors",
+      "size": 1297433520
+    },
+    {
+      "path": "model-00022-of-00128.safetensors",
+      "size": 1294753280
+    },
+    {
+      "path": "model-00023-of-00128.safetensors",
+      "size": 1296981768
+    },
+    {
+      "path": "model-00024-of-00128.safetensors",
+      "size": 1296251360
+    },
+    {
+      "path": "model-00025-of-00128.safetensors",
+      "size": 1294753272
+    },
+    {
+      "path": "model-00026-of-00128.safetensors",
+      "size": 1296981776
+    },
+    {
+      "path": "model-00027-of-00128.safetensors",
+      "size": 1296251928
+    },
+    {
+      "path": "model-00028-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00029-of-00128.safetensors",
+      "size": 1294754296
+    },
+    {
+      "path": "model-00030-of-00128.safetensors",
+      "size": 1296252544
+    },
+    {
+      "path": "model-00031-of-00128.safetensors",
+      "size": 1296982944
+    },
+    {
+      "path": "model-00032-of-00128.safetensors",
+      "size": 1280499272
+    },
+    {
+      "path": "model-00033-of-00128.safetensors",
+      "size": 1310507544
+    },
+    {
+      "path": "model-00034-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00035-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00036-of-00128.safetensors",
+      "size": 1294754440
+    },
+    {
+      "path": "model-00037-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00038-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00039-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00040-of-00128.safetensors",
+      "size": 1294754424
+    },
+    {
+      "path": "model-00041-of-00128.safetensors",
+      "size": 1297434576
+    },
+    {
+      "path": "model-00042-of-00128.safetensors",
+      "size": 1294754448
+    },
+    {
+      "path": "model-00043-of-00128.safetensors",
+      "size": 1296982672
+    },
+    {
+      "path": "model-00044-of-00128.safetensors",
+      "size": 1296252672
+    },
+    {
+      "path": "model-00045-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00046-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00047-of-00128.safetensors",
+      "size": 1296982944
+    },
+    {
+      "path": "model-00048-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00049-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00050-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00051-of-00128.safetensors",
+      "size": 1296982936
+    },
+    {
+      "path": "model-00052-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00053-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00054-of-00128.safetensors",
+      "size": 1296982800
+    },
+    {
+      "path": "model-00055-of-00128.safetensors",
+      "size": 1296252536
+    },
+    {
+      "path": "model-00056-of-00128.safetensors",
+      "size": 1294754448
+    },
+    {
+      "path": "model-00057-of-00128.safetensors",
+      "size": 1291641752
+    },
+    {
+      "path": "model-00058-of-00128.safetensors",
+      "size": 1301593568
+    },
+    {
+      "path": "model-00059-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00060-of-00128.safetensors",
+      "size": 1297434568
+    },
+    {
+      "path": "model-00061-of-00128.safetensors",
+      "size": 1294754448
+    },
+    {
+      "path": "model-00062-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00063-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00064-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00065-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00066-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00067-of-00128.safetensors",
+      "size": 1296982936
+    },
+    {
+      "path": "model-00068-of-00128.safetensors",
+      "size": 1294754192
+    },
+    {
+      "path": "model-00069-of-00128.safetensors",
+      "size": 1296252656
+    },
+    {
+      "path": "model-00070-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00071-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00072-of-00128.safetensors",
+      "size": 1294754448
+    },
+    {
+      "path": "model-00073-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00074-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00075-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00076-of-00128.safetensors",
+      "size": 1294754440
+    },
+    {
+      "path": "model-00077-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00078-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00079-of-00128.safetensors",
+      "size": 1294754320
+    },
+    {
+      "path": "model-00080-of-00128.safetensors",
+      "size": 1297434688
+    },
+    {
+      "path": "model-00081-of-00128.safetensors",
+      "size": 1294754440
+    },
+    {
+      "path": "model-00082-of-00128.safetensors",
+      "size": 1298978600
+    },
+    {
+      "path": "model-00083-of-00128.safetensors",
+      "size": 1294256704
+    },
+    {
+      "path": "model-00084-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00085-of-00128.safetensors",
+      "size": 1294023920
+    },
+    {
+      "path": "model-00086-of-00128.safetensors",
+      "size": 1296982944
+    },
+    {
+      "path": "model-00087-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00088-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00089-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00090-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00091-of-00128.safetensors",
+      "size": 1296252424
+    },
+    {
+      "path": "model-00092-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00093-of-00128.safetensors",
+      "size": 1296982696
+    },
+    {
+      "path": "model-00094-of-00128.safetensors",
+      "size": 1296252648
+    },
+    {
+      "path": "model-00095-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00096-of-00128.safetensors",
+      "size": 1294023920
+    },
+    {
+      "path": "model-00097-of-00128.safetensors",
+      "size": 1296982944
+    },
+    {
+      "path": "model-00098-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00099-of-00128.safetensors",
+      "size": 1295206080
+    },
+    {
+      "path": "model-00100-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00101-of-00128.safetensors",
+      "size": 1294754448
+    },
+    {
+      "path": "model-00102-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00103-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00104-of-00128.safetensors",
+      "size": 1294754336
+    },
+    {
+      "path": "model-00105-of-00128.safetensors",
+      "size": 1296252512
+    },
+    {
+      "path": "model-00106-of-00128.safetensors",
+      "size": 1296982936
+    },
+    {
+      "path": "model-00107-of-00128.safetensors",
+      "size": 1296077280
+    },
+    {
+      "path": "model-00108-of-00128.safetensors",
+      "size": 1297158184
+    },
+    {
+      "path": "model-00109-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00110-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00111-of-00128.safetensors",
+      "size": 1296982936
+    },
+    {
+      "path": "model-00112-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00113-of-00128.safetensors",
+      "size": 1296252416
+    },
+    {
+      "path": "model-00114-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00115-of-00128.safetensors",
+      "size": 1294754432
+    },
+    {
+      "path": "model-00116-of-00128.safetensors",
+      "size": 1296252424
+    },
+    {
+      "path": "model-00117-of-00128.safetensors",
+      "size": 1296982928
+    },
+    {
+      "path": "model-00118-of-00128.safetensors",
+      "size": 1296982704
+    },
+    {
+      "path": "model-00119-of-00128.safetensors",
+      "size": 1295202656
+    },
+    {
+      "path": "model-00120-of-00128.safetensors",
+      "size": 1296978272
+    },
+    {
+      "path": "model-00121-of-00128.safetensors",
+      "size": 1294281352
+    },
+    {
+      "path": "model-00122-of-00128.safetensors",
+      "size": 1296978280
+    },
+    {
+      "path": "model-00123-of-00128.safetensors",
+      "size": 1296978272
+    },
+    {
+      "path": "model-00124-of-00128.safetensors",
+      "size": 1294281352
+    },
+    {
+      "path": "model-00125-of-00128.safetensors",
+      "size": 1296978272
+    },
+    {
+      "path": "model-00126-of-00128.safetensors",
+      "size": 1296978280
+    },
+    {
+      "path": "model-00127-of-00128.safetensors",
+      "size": 685902568
+    },
+    {
+      "path": "model-00128-of-00128.safetensors",
+      "size": 1905309984
+    }
+  ]
+}

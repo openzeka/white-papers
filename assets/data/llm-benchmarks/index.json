@@ -724,6 +724,16 @@
           "id": "kimi-k3.1-pro_b300_mxfp4_sglang_tp8_dflash2",
           "model": "Kimi-K3.1-Pro",
           "path": "dgx-b300/kimi-k3.1-pro_b300_mxfp4_sglang_tp8_dflash2.json"
+        },
+        {
+          "id": "tencent-hy4-flash_b300_bf16_sglang_tp2_dfly",
+          "model": "Tencent-Hy4-flash",
+          "path": "dgx-b300/tencent-hy4-flash_b300_bf16_sglang_tp2_dfly.json"
+        },
+        {
+          "id": "ernie-5.5-flash-preview_b300_fp8_sglang_dspark",
+          "model": "ERNIE-5.5-Flash-Preview",
+          "path": "dgx-b300/ernie-5.5-flash-preview_b300_fp8_sglang_dspark.json"
         }
       ]
     }

@@ -15,6 +15,22 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-11-25
+  type: benchmarks
+  run: tencent-hy4-flash_b300_bf16_sglang_tp2_dfly
+  text:
+    en: "Hy4-flash on a DGX B300: 220B BF16 weights served with SGLang at TP2 and DFly2 speculative decoding (k=6), measured from 1 to 64 concurrent requests with a 1M context."
+    tr: "Hy4-flash, DGX B300 üzerinde: 220B BF16 ağırlıklar SGLang ile TP2 ve DFly2 spekülatif kod çözme (k=6) kullanılarak sunuldu, 1M bağlamla 1 ile 64 eşzamanlı istek arasında ölçüldü."
+    nl: "Hy4-flash op een DGX B300: 220B BF16-gewichten geserveerd met SGLang op TP2 en DFly2-speculatieve decodering (k=6), gemeten van 1 tot 64 gelijktijdige verzoeken met een context van 1M."
+
+- date: 2026-11-25
+  type: benchmarks
+  run: ernie-5.5-flash-preview_b300_fp8_sglang_dspark
+  text:
+    en: "ERNIE-5.5-Flash-Preview on a DGX B300: 300B FP8 weights with MXFP4 experts served with SGLang on one GPU and DSpark speculative decoding (k=7), measured from 1 to 256 concurrent requests."
+    tr: "ERNIE-5.5-Flash-Preview, DGX B300 üzerinde: MXFP4 uzmanlı 300B FP8 ağırlıklar tek GPU'da SGLang ve DSpark spekülatif kod çözme (k=7) ile sunuldu, 1 ile 256 eşzamanlı istek arasında ölçüldü."
+    nl: "ERNIE-5.5-Flash-Preview op een DGX B300: 300B FP8-gewichten met MXFP4-experts geserveerd met SGLang op één GPU en DSpark-speculatieve decodering (k=7), gemeten van 1 tot 256 gelijktijdige verzoeken."
+
 - date: 2026-11-24
   type: vlm
   vlm: inkling-2-mini_rtxpro6000_mxfp8_vllm

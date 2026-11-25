@@ -1,0 +1,72 @@
+{
+  "id": "ernie-5.5-flash-preview_b300_fp8_sglang_dspark",
+  "model": "ERNIE-5.5-Flash-Preview",
+  "params": "300B",
+  "intelligence_index": null,
+  "agentic_index": null,
+  "device": "DGX B300",
+  "quantization": "FP8",
+  "engine": "SGLang",
+  "mtp": true,
+  "mtp_k": 7,
+  "tp": 1,
+  "notes": "DSpark k=7, 128K served context (1M model window). Blockwise FP8 weights, MXFP4 routed experts, FP8 KV cache. Model: baidu/ERNIE-5.5-Flash-Preview",
+  "sources": [],
+  "data_points": [
+    {
+      "c": 1,
+      "ttft_ms": 199.11,
+      "tps": 210.92
+    },
+    {
+      "c": 2,
+      "ttft_ms": 223.22,
+      "tps": 156.82
+    },
+    {
+      "c": 4,
+      "ttft_ms": 252.37,
+      "tps": 115.3
+    },
+    {
+      "c": 8,
+      "ttft_ms": 312.6,
+      "tps": 76.67
+    },
+    {
+      "c": 16,
+      "ttft_ms": 393.89,
+      "tps": 54.55
+    },
+    {
+      "c": 32,
+      "ttft_ms": 396.88,
+      "tps": 34.69
+    },
+    {
+      "c": 64,
+      "ttft_ms": 433.47,
+      "tps": 24.28
+    },
+    {
+      "c": 128,
+      "ttft_ms": 475.92,
+      "tps": 19.52
+    },
+    {
+      "c": 256,
+      "ttft_ms": 547.22,
+      "tps": 15.59
+    }
+  ],
+  "dp": null,
+  "pp": null,
+  "kv_bytes_per_token": 4372,
+  "kv_window_bytes": 442368,
+  "kv_heads": null,
+  "model_context_length": 1048576,
+  "kv_replicated_bytes_per_token": 0,
+  "kv_state_bytes": 0,
+  "served_repo": "baidu/ERNIE-5.5-Flash-Preview",
+  "weights_gb": 165.9
+}

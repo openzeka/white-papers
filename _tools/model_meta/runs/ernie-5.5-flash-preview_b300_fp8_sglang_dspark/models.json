@@ -1,0 +1,14 @@
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "baidu/ERNIE-5.5-Flash-Preview",
+      "object": "model",
+      "created": 1795600449,
+      "owned_by": "sglang",
+      "root": "baidu/ERNIE-5.5-Flash-Preview",
+      "parent": null,
+      "max_model_len": 131072
+    }
+  ]
+}

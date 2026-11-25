@@ -378,9 +378,10 @@ def state_bytes(c, kinds):
     return nlin * k * STATE_PAGES
 
 
-def geometry(cfg):
+def _geometry(cfg):
     """The six model fields from a config.json. Raises Unsupported rather than
-    guess, which leaves the model on its speed limit alone."""
+    guess, which leaves the model on its speed limit alone. `geometry()` wraps
+    this with the check that no field came out negative."""
     c = _text(cfg)
     n = nlayers(c)
     out = OrderedDict(kv_bytes_per_token=0, kv_window_bytes=0, kv_heads=None,
@@ -395,6 +396,27 @@ def geometry(cfg):
         hd, ih = c["head_dim"], c["index_head_dim"]
         ratios = c["compress_ratios"][:n]
         sources = c.get("kv_source_layer_ids")
+        if any(r < 0 for r in ratios):
+            # ERNIE 5.5 Flash hybrid: most layers cache one entry per `ratio`
+            # tokens ("Heavily Compressed Attention", so head_dim/ratio values
+            # per token), and a negative ratio marks a token-level MLA layer.
+            # Those keep the full-context latent (kv_lora_rank + RoPE values)
+            # plus their own DSA index keys, and a sliding window of the latent.
+            # The compressed layers' 1-in-ratio block is the compression itself,
+            # not a window. Model card: 37 HCA + 6 MLA-DSA layers, "one in seven
+            # layers keeps full-context access through MLA".
+            latent = c["kv_lora_rank"] + (c.get("qk_rope_head_dim") or 0)
+            bpt, nmla = 0.0, 0
+            for r in ratios:
+                if r < 0:
+                    bpt += latent + ih
+                    nmla += 1
+                elif r:
+                    bpt += hd / r
+            out["kv_bytes_per_token"] = _num(bpt)
+            out["kv_window_bytes"] = nmla * (c.get("sliding_window") or 0) * latent
+            out["model_context_length"] = c.get("max_position_embeddings")
+            return out
         bpt = 0.0
         for i, r in enumerate(ratios):
             if sources is not None:
@@ -436,11 +458,17 @@ def geometry(cfg):
         if idx and c.get("index_kpool_compress"):
             idx /= c["index_kpool"]
         owners = indexer_owners(c, n) if idx else [False] * n
+        nfull, nswa = kinds.count("full"), kinds.count("sliding")
+        if nswa and not window:
+            raise Unsupported("sliding layers without a window size")
         bpt = sum(latent + (idx if own else 0)
                   for kind, own in zip(kinds, owners) if kind == "full")
-        if "sliding" in kinds:
-            raise Unsupported("MLA with sliding-window layers")
         out["kv_bytes_per_token"] = _num(bpt)
+        # Hybrid sparse/SWA layouts (Hy4-flash: 12 sparse + 30 sliding) keep
+        # the full latent only inside the window on a sliding layer, so its
+        # fixed cost per session is window × latent. Sliding layers do local
+        # attention only, so they store no sparse-attention index keys.
+        out["kv_window_bytes"] = nswa * (window or 0) * latent
     else:
         kvh = c["num_key_value_heads"]
         hd = c.get("head_dim") or c["hidden_size"] // c["num_attention_heads"]
@@ -468,6 +496,17 @@ def geometry(cfg):
                 * sa["sparse_index_dim"]
     out["kv_state_bytes"] = state_bytes(c, kinds)
     out["model_context_length"] = c.get("max_position_embeddings") or c.get("model_max_length")
+    return out
+
+
+def geometry(cfg):
+    """The six model fields from a config.json, with a sanity check on the
+    result: a negative size means a config value was read the wrong way, so it
+    is refused rather than published."""
+    out = _geometry(cfg)
+    bad = [k for k, v in out.items() if isinstance(v, (int, float)) and v < 0]
+    if bad:
+        raise Unsupported(f"a negative cache size for {', '.join(bad)}")
     return out
 
 

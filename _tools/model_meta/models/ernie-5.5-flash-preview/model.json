@@ -1,0 +1,23 @@
+{
+  "model": "ERNIE-5.5-Flash-Preview",
+  "repo": "baidu/ERNIE-5.5-Flash-Preview-BF16",
+  "revision": "33a9925b17506c5ff57accac2b31a6520c951c4e",
+  "config_sha256": "8c32ad48cecf14cb558ce8db3c00720031671af405bc6d91da9499935331a51f",
+  "fetched": "2026-11-25",
+  "hf": {
+    "created": "2026-11-23T09:01:08.000Z",
+    "last_modified": "2026-11-24T07:20:21.000Z",
+    "gated": false,
+    "license": "apache-2.0",
+    "base_model": [
+      "baidu/ERNIE-5.5-Flash-Base"
+    ],
+    "library": "transformers",
+    "pipeline_tag": "text-generation",
+    "safetensors_parameters": 299559159366,
+    "parameters_by_dtype": {
+      "F32": 227526590,
+      "BF16": 299331632776
+    }
+  }
+}
