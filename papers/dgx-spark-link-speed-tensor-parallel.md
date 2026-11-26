@@ -34,7 +34,7 @@ toc: true
 
 ## Executive Summary
 
-- **Switch capacity.** The two breakout ports on a CRS812 connect 4 Sparks at 200 Gb/s per Spark or 8 Sparks at 100 Gb/s per Spark. On a CRS804 the corresponding counts are 8 and 16. How does that change the time a user waits for an answer?
+- **Switch capacity.** The two 400G ports on a CRS812 connect 4 Sparks at 200 Gb/s per Spark or 8 Sparks at 100 Gb/s per Spark. On a CRS804 the corresponding counts are 8 and 16. How does that change the time a user waits for an answer?
 - **How tensor parallelism uses the network:** in the eight-Spark configuration, each Spark holds one eighth of the sharded weights and computes part of each layer’s output. Twice per layer, the Sparks add their partial results together over the network in an operation called an *all-reduce*, which the estimate models as a *ring* for large transfers. While the prompt is processed (*prefill*), the data summed in each all-reduce is large; while the answer is generated (*decode*), it is small.
 - **The estimate:** large prefill transfers can saturate the link, so halving the link lengthens them and delays the first token. For GLM-5.3 at TP8, the estimate from the model's architecture is at most **0.135 s of extra time to first token (TTFT) per 1,000 prompt tokens** at 100 Gb/s. Decode transfers are small enough that halving the link speed had no measurable cost to streaming speed in these tests.
 - **Peak and average traffic.** During prefill, traffic reaches 150–200 Gb/s in bursts lasting a few milliseconds. The highest one-second average for the example long prompt is about 40 Gb/s. Decode averages a few Gb/s.
@@ -80,14 +80,14 @@ The traffic between the Sparks uses RDMA (remote direct memory access): the adap
 
 ### 2.3. Switches and breakout options
 
-The CRS804 and CRS812 have 400 Gb/s QSFP-DD ports. A breakout cable splits each such port into several slower links, one per Spark:
+The CRS812 has two 400G QSFP-DD ports and two native 200G QSFP56 ports. The CRS804 has four 400G QSFP-DD ports. The table counts the Sparks connected through the 400G ports, with one breakout cable per port and one Spark per cable leg.
 
-| Switch | 400G QSFP-DD ports | Sparks at 200 Gb/s (2 × 200G per port) | Sparks at 100 Gb/s (4 × 100G per port) |
+| Switch | Number of 400G ports on the switch | Total Sparks with a 2 × 200G breakout cable per port | Total Sparks with a 4 × 100G breakout cable per port |
 |---|---|---|---|
 | MikroTik CRS812 | 2 | **4** | **8** |
 | MikroTik CRS804 | 4 | **8** | **16** |
 
-At 100 Gb/s per Spark, an 8-Spark cluster fits on a CRS812, and a CRS804 can serve 16 Sparks.
+For TP4 at 200 Gb/s per Spark on a CRS812, plug a 2 × 200G breakout cable into each of its two 400G ports. Each cable connects two Sparks. With a 4 × 100G cable in each port, the same switch connects eight Sparks at 100 Gb/s each.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/network-topology.png' | relative_url }}" alt="CRS812 with 8 Sparks at 100 Gb/s, CRS804 with 8 Sparks at 200 Gb/s and with 16 Sparks at 100 Gb/s" width="820"/></p>
 <sub><i>Figure 1: Breakout options, one link per DGX Spark.</i></sub>
@@ -730,7 +730,7 @@ Yes. For tensor-parallel DGX Spark clusters up to TP8, 100 Gb/s is a practical c
 
 The real-link column applies the measured payload rate to the TP8 workload with comparable scheduling. To assess another workload, run it on the existing cables with both interfaces and then with one interface (Section 7.3). Use its measured bytes and TTFT for the conversion in Section 9.
 
-With one 4 × 100G breakout cable per four Sparks, a **CRS812** can connect eight Sparks on its breakout ports. At 200 Gb/s the same ports connect four Sparks.
+With one 4 × 100G breakout cable per four Sparks, a **CRS812** can connect eight Sparks on its two 400G ports. At 200 Gb/s the same ports connect four Sparks.
 
 At TP4 the **measured increase was 0.39 s for one 8K prompt**, against an estimate of 0.38 s from the GLM-5.3-Flash architecture and the two link rates. Four Sparks share a breakout cable and only its switch socket needs new settings. The Spark network configuration stays the same. Reboot after recabling (Section 11).
 
@@ -773,7 +773,7 @@ On the DGX Sparks tested here, 100 Gb/s is feasible for tensor-parallel inferenc
 
 The model’s bytes per prompt token and the change in reciprocal link rate give an estimate before recabling. For GLM-5.3 at TP8, the nominal rates give at most 0.135 s of extra transfer time per 1,000 prompt tokens. At the emulated rate, TTFT rose 12.6–13.9% for single 8K–64K prompts and mean TTFT per request rose 17.9–22.5% for four long prompts arriving together. The 1K change was within round variation. At TP4 on real links, a single 8K prompt took 0.39 s longer, close to the 0.38 s estimate.
 
-For the TP8 cases, the real-link estimates reach about **18% extra TTFT for a single long prompt and 28% for mean per-request TTFT with four long prompts**, assuming comparable scheduling. Try the workload on existing 200 Gb/s cables before choosing a breakout. At 100 Gb/s, a CRS812 connects eight Sparks and a CRS804 connects sixteen. Use the sixteen as two TP8 clusters and verify simultaneous forwarding at full speed. The projected penalty is larger for a single TP16 model.
+For the TP8 cases, the real-link estimates reach about **18% extra TTFT for a single long prompt and 28% for mean per-request TTFT with four long prompts**, assuming comparable scheduling. Try the workload on existing 200 Gb/s cables before choosing a breakout. At 100 Gb/s per Spark, the two 400G ports on a CRS812 connect eight Sparks and the four 400G ports on a CRS804 connect sixteen. Use the sixteen as two TP8 clusters and verify simultaneous forwarding at full speed. The projected penalty is larger for a single TP16 model.
 
 ---
 
