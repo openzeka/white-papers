@@ -34,7 +34,7 @@ toc: true
 
 ## Yönetici Özeti
 
-- **Switch kapasitesi.** Spark başına 200 Gb/s hızda CRS812'nin iki breakout portuna toplam 4 Spark bağlanır. Switch'in kendi iki 200 Gb/s portu da kullanılırsa bu sayı 6'ya çıkar. 100 Gb/s hızda yalnızca breakout portlarıyla 8 Spark bağlanabilir. CRS804 için aynı iki hızda bu sayılar sırasıyla 8 ve 16'dır. Peki bağlantı hızını düşürünce kullanıcı yanıt için ne kadar daha bekler?
+- **Switch kapasitesi.** CRS812'nin iki breakout portuna Spark başına 200 Gb/s hızda 4 Spark, 100 Gb/s hızda 8 Spark bağlanır. CRS804 için aynı iki hızda bu sayılar sırasıyla 8 ve 16'dır. Peki bağlantı hızını düşürünce kullanıcı yanıt için ne kadar daha bekler?
 - **Tensör paralelliğinde ağ trafiği.** Sekiz Spark'lı yapılandırmada her Spark, bölünen ağırlıkların sekizde birini belleğinde tutar ve her katmanın çıktısına kısmi katkıda bulunur. Spark'lar her katmanda iki kez *all-reduce* işlemiyle kısmi sonuçlarını ağ üzerinden toplar. Tahminde, büyük aktarımlar için *halka* (ring) algoritması esas alınır. Prompt işlenirken (*prefill*) her all-reduce büyük miktarda veri taşır. Yanıt üretilirken (*decode*) aynı işlemde taşınan veri küçüktür.
 - **Tahmin.** Prefill sırasında büyük aktarımlar bağlantının tüm bant genişliğini (bandwidth) kullanabilir. Bağlantı hızı yarıya inince bu aktarımlar uzar ve ilk token daha geç gelir. GLM-5.3'ün mimarisine göre TP8'de 100 Gb/s'ye geçiş, **ilk token'a kadar geçen süreyi (time to first token, TTFT) 1,000 prompt token'ı başına en fazla 0.135 s uzatır**. Decode sırasında aktarımlar küçüktür. Bu testlerde bağlantı hızını yarıya indirmenin yanıtın üretim hızına ölçülebilir bir etkisi olmadı.
 - **Anlık trafik ve ortalama trafik.** Prefill sırasında trafik birkaç milisaniye süren patlamalarda 150–200 Gb/s'ye ulaşır. Örnek uzun prompt'ta bir saniyelik ortalamaların en yükseği yaklaşık 40 Gb/s'dir. Decode sırasında ortalama trafik birkaç Gb/s düzeyindedir.
@@ -84,7 +84,7 @@ CRS804 ve CRS812'de 400 Gb/s QSFP-DD portları bulunur. Breakout kablosu bir por
 
 | Switch | 400G QSFP-DD port sayısı | 200 Gb/s'de Spark sayısı (port başına 2 × 200G) | 100 Gb/s'de Spark sayısı (port başına 4 × 100G) |
 |---|---|---|---|
-| MikroTik CRS812 | 2 (artı 2 × 200G QSFP56) | 4 (QSFP56 portlarla 6) | **8** |
+| MikroTik CRS812 | 2 | **4** | **8** |
 | MikroTik CRS804 | 4 | **8** | **16** |
 
 Spark başına 100 Gb/s kullanıldığında tek bir CRS812'ye 8 Spark'lık bir cluster, bir CRS804'e ise 16 Spark bağlanabilir.
@@ -730,7 +730,7 @@ Evet. TP8'e kadar tensör paralel DGX Spark cluster'larında, ilk token için ek
 
 Tablonun gerçek bağlantı sütunu, ölçülen veri aktarım hızını ve benzer zamanlama varsayımını TP8 iş yüküne uygular. Kendi iş yükünüz için mevcut kablolarla önce her iki arayüzü, ardından tek arayüzü kullanarak ölçüm yapın (Bölüm 7.3). Bölüm 9'daki dönüşümde bu koşularda ölçtüğünüz veri miktarını ve TTFT'yi kullanın.
 
-Her dört Spark için bir 4 × 100G breakout kablosu kullanıldığında **CRS812** üzerindeki breakout portlarına sekiz Spark bağlanır. 200 Gb/s'de aynı portlara dört Spark, switch'in kendi iki portu da kullanılırsa toplam altı Spark bağlanabilir.
+Her dört Spark için bir 4 × 100G breakout kablosu kullanıldığında **CRS812** üzerindeki breakout portlarına sekiz Spark bağlanır. 200 Gb/s'de aynı portlara dört Spark bağlanır.
 
 TP4'te **tek bir 8K prompt için ölçülen ek süre 0.39 s** idi. GLM-5.3-Flash mimarisinden ve iki bağlantı hızından hesaplanan tahmin 0.38 s idi. Dört Spark bir breakout kablosunu paylaşır. Yalnızca kablonun takıldığı switch yuvasını yapılandırmak gerekir. Spark'ların ağ ayarları aynı kalır. Kabloları değiştirdikten sonra Spark'ları yeniden başlatın (Bölüm 11).
 

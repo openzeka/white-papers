@@ -34,7 +34,7 @@ toc: true
 
 ## Managementsamenvatting
 
-- **Capaciteit van de switch.** Bij 200 Gb/s per Spark kunt u op de twee breakoutpoorten van een CRS812 in totaal 4 Sparks aansluiten. Met de twee afzonderlijke 200 Gb/s-poorten erbij komt het totaal op 6. Bij 100 Gb/s bieden de breakoutpoorten alleen al plaats aan 8 Sparks. Voor een CRS804 zijn de aantallen respectievelijk 8 en 16. Wat betekent die keuze voor de tijd die een gebruiker op een antwoord wacht?
+- **Capaciteit van de switch.** Op de twee breakoutpoorten van een CRS812 kunt u 4 Sparks aansluiten bij 200 Gb/s per Spark of 8 Sparks bij 100 Gb/s per Spark. Voor een CRS804 zijn de aantallen respectievelijk 8 en 16. Wat betekent die keuze voor de tijd die een gebruiker op een antwoord wacht?
 - **Netwerkverkeer bij tensorparallellisme.** In de configuratie met acht Sparks bevat elke Spark een achtste van de verdeelde gewichten en berekent hij een deel van de uitvoer van elke laag. Twee keer per laag tellen de Sparks hun deelresultaten via het netwerk bij elkaar op met een *all-reduce*. Voor grote overdrachten gaat de schatting uit van een *ring*. Bij het verwerken van de prompt (*prefill*) telt elke all-reduce veel gegevens op. Bij het genereren van het antwoord (*decode*) gaat het om een kleine hoeveelheid.
 - **De schatting.** Grote prefill-overdrachten kunnen de link volledig benutten. Bij halvering van de linksnelheid duren ze langer en komt het eerste token later. Voor GLM-5.3 op TP8 geeft de modelarchitectuur bij 100 Gb/s een bovengrens van **0.135 s extra wachttijd tot het eerste token (TTFT) per 1,000 prompttokens**. De overdrachten tijdens decode zijn zo klein dat de halvering in deze tests geen meetbaar verlies aan streamingsnelheid opleverde.
 - **Piekverkeer en gemiddeld verkeer.** Tijdens prefill bereikt het verkeer 150–200 Gb/s in bursts van enkele milliseconden. Voor de lange prompt uit het voorbeeld is het hoogste gemiddelde over één seconde ongeveer 40 Gb/s. Tijdens decode bedraagt het verkeer gemiddeld enkele Gb/s.
@@ -84,7 +84,7 @@ De CRS804 en CRS812 hebben 400 Gb/s QSFP-DD-poorten. Een breakoutkabel splitst z
 
 | Switch | 400G QSFP-DD-poorten | Sparks op 200 Gb/s (2 × 200G per poort) | Sparks op 100 Gb/s (4 × 100G per poort) |
 |---|---|---|---|
-| MikroTik CRS812 | 2 (plus 2 × 200G QSFP56) | 4 (6 met de QSFP56-poorten) | **8** |
+| MikroTik CRS812 | 2 | **4** | **8** |
 | MikroTik CRS804 | 4 | **8** | **16** |
 
 Met 100 Gb/s per Spark past een cluster van 8 Sparks op een CRS812, en kan een CRS804 16 Sparks bedienen.
@@ -730,7 +730,7 @@ Ja. Voor tensorparallelle DGX Spark-clusters tot en met TP8 is 100 Gb/s een prak
 
 Voor de kolom met echte links is de gemeten netto-overdrachtssnelheid toegepast op de TP8-workload, uitgaande van vergelijkbare scheduling. Om een andere workload te beoordelen voert u die op de bestaande kabels eerst met beide interfaces en vervolgens met één interface uit (Sectie 7.3). Gebruik voor de omrekening in Sectie 9 het gemeten aantal bytes en de gemeten TTFT.
 
-Met één 4 × 100G-breakoutkabel per vier Sparks kunt u op de breakoutpoorten van een **CRS812** acht Sparks aansluiten. Bij 200 Gb/s bieden die poorten plaats aan vier Sparks, of zes als u ook de twee afzonderlijke poorten gebruikt.
+Met één 4 × 100G-breakoutkabel per vier Sparks kunt u op de breakoutpoorten van een **CRS812** acht Sparks aansluiten. Bij 200 Gb/s kunt u op dezelfde poorten vier Sparks aansluiten.
 
 Bij TP4 bedroeg de **gemeten toename 0.39 s voor één prompt van 8K**. De schatting op basis van de GLM-5.3-Flash-architectuur en beide linksnelheden was 0.38 s. Vier Sparks delen één breakoutkabel. Alleen de bijbehorende aansluiting op de switch heeft nieuwe instellingen nodig. De netwerkconfiguratie van de Sparks blijft gelijk. Start de Sparks na het omkabelen opnieuw op (Sectie 11).
 

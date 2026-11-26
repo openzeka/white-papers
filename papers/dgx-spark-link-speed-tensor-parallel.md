@@ -34,7 +34,7 @@ toc: true
 
 ## Executive Summary
 
-- **Switch capacity.** At 200 Gb/s per Spark, the two breakout ports on a CRS812 connect 4 Sparks. Using the two native 200 Gb/s ports as well brings the total to 6. At 100 Gb/s the breakout ports alone connect 8. On a CRS804 the corresponding counts are 8 and 16. How does that change the time a user waits for an answer?
+- **Switch capacity.** The two breakout ports on a CRS812 connect 4 Sparks at 200 Gb/s per Spark or 8 Sparks at 100 Gb/s per Spark. On a CRS804 the corresponding counts are 8 and 16. How does that change the time a user waits for an answer?
 - **How tensor parallelism uses the network:** in the eight-Spark configuration, each Spark holds one eighth of the sharded weights and computes part of each layer’s output. Twice per layer, the Sparks add their partial results together over the network in an operation called an *all-reduce*, which the estimate models as a *ring* for large transfers. While the prompt is processed (*prefill*), the data summed in each all-reduce is large; while the answer is generated (*decode*), it is small.
 - **The estimate:** large prefill transfers can saturate the link, so halving the link lengthens them and delays the first token. For GLM-5.3 at TP8, the estimate from the model's architecture is at most **0.135 s of extra time to first token (TTFT) per 1,000 prompt tokens** at 100 Gb/s. Decode transfers are small enough that halving the link speed had no measurable cost to streaming speed in these tests.
 - **Peak and average traffic.** During prefill, traffic reaches 150–200 Gb/s in bursts lasting a few milliseconds. The highest one-second average for the example long prompt is about 40 Gb/s. Decode averages a few Gb/s.
@@ -84,7 +84,7 @@ The CRS804 and CRS812 have 400 Gb/s QSFP-DD ports. A breakout cable splits each 
 
 | Switch | 400G QSFP-DD ports | Sparks at 200 Gb/s (2 × 200G per port) | Sparks at 100 Gb/s (4 × 100G per port) |
 |---|---|---|---|
-| MikroTik CRS812 | 2 (plus 2 × 200G QSFP56) | 4 (6 with the QSFP56 ports) | **8** |
+| MikroTik CRS812 | 2 | **4** | **8** |
 | MikroTik CRS804 | 4 | **8** | **16** |
 
 At 100 Gb/s per Spark, an 8-Spark cluster fits on a CRS812, and a CRS804 can serve 16 Sparks.
@@ -730,7 +730,7 @@ Yes. For tensor-parallel DGX Spark clusters up to TP8, 100 Gb/s is a practical c
 
 The real-link column applies the measured payload rate to the TP8 workload with comparable scheduling. To assess another workload, run it on the existing cables with both interfaces and then with one interface (Section 7.3). Use its measured bytes and TTFT for the conversion in Section 9.
 
-With one 4 × 100G breakout cable per four Sparks, a **CRS812** can connect eight Sparks on its breakout ports. At 200 Gb/s those ports connect four, or six including the two native ports.
+With one 4 × 100G breakout cable per four Sparks, a **CRS812** can connect eight Sparks on its breakout ports. At 200 Gb/s the same ports connect four Sparks.
 
 At TP4 the **measured increase was 0.39 s for one 8K prompt**, against an estimate of 0.38 s from the GLM-5.3-Flash architecture and the two link rates. Four Sparks share a breakout cable and only its switch socket needs new settings. The Spark network configuration stays the same. Reboot after recabling (Section 11).
 
