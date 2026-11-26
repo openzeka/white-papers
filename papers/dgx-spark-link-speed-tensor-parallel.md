@@ -34,19 +34,19 @@ toc: true
 
 ## Executive Summary
 
-- **The question:** a DGX Spark cluster that serves one model with tensor parallelism across several systems needs fast switch ports. At 200 Gb/s per Spark, a MikroTik CRS812 connects 4 to 6 Sparks; at 100 Gb/s, it connects 8. A CRS804 connects 8 Sparks at 200 Gb/s or 16 at 100 Gb/s. This paper asks what 100 Gb/s per Spark costs in inference speed.
-- **How tensor parallelism uses the network:** each Spark holds one eighth of every weight matrix, so each computes only part of every result. Twice per layer, the Sparks add their partial results together over the network in an operation called an *all-reduce*, which NCCL, the communication library, runs as a *ring* for the large transfers that matter here. While the prompt is processed (*prefill*), the data summed in each all-reduce is large; while the answer is generated (*decode*), it is small.
-- **The estimate:** prefill transfers are large enough to run at the full link speed, so halving the link lengthens them and delays the first token. For GLM-5.3 at TP8, the estimate from the model's architecture is at most **0.135 s of extra time to first token (TTFT) per 1,000 prompt tokens** at 100 Gb/s. Decode transfers are too small for link speed to matter.
-- **Does the cluster use the full 200 Gb/s? Yes and no.** Measured at millisecond resolution, prefill traffic reaches 150–200 Gb/s in bursts of a few milliseconds. Averaged over one second, the same traffic is about 40 Gb/s, and decode stays at a few Gb/s.
+- **Switch capacity.** The two 400G ports on a CRS812 connect 4 Sparks at 200 Gb/s per Spark or 8 Sparks at 100 Gb/s per Spark. On a CRS804 the corresponding counts are 8 and 16. How does that change the time a user waits for an answer?
+- **How tensor parallelism uses the network:** in the eight-Spark configuration, each Spark holds one eighth of the sharded weights and computes part of each layer’s output. Twice per layer, the Sparks add their partial results together over the network in an operation called an *all-reduce*, which the estimate models as a *ring* for large transfers. While the prompt is processed (*prefill*), the data summed in each all-reduce is large; while the answer is generated (*decode*), it is small.
+- **The estimate:** large prefill transfers can saturate the link, so halving the link lengthens them and delays the first token. For GLM-5.3 at TP8, the estimate from the model's architecture is at most **0.135 s of extra time to first token (TTFT) per 1,000 prompt tokens** at 100 Gb/s. Decode transfers are small enough that halving the link speed had no measurable cost to streaming speed in these tests.
+- **Peak and average traffic.** During prefill, traffic reaches 150–200 Gb/s in bursts lasting a few milliseconds. The highest one-second average for the example long prompt is about 40 Gb/s. Decode averages a few Gb/s.
 - **Measured** with GLM-5.3 at TP8, 200 Gb/s against an emulated 100 Gb/s link (which carries up to 109 Gb/s):
-  - **decode speed does not change** (−2.3% to +4.3%, within the variation between test rounds);
-  - **TTFT grows by 12.6–13.9%** for single prompts of 8K–64K tokens, about **0.11 s per 1,000 prompt tokens**, close to the estimate;
-  - with **four long prompts arriving together**, each request's TTFT grows by **17.9–22.5%**;
+  - **Decode speed was unchanged in practice** (−2.3% to +4.3% across tests).
+  - **TTFT grows by 12.6–13.9%** for single prompts of 8K–64K tokens, about **0.11 s per 1,000 prompt tokens**, close to the estimate.
+  - With **four long prompts arriving together**, mean TTFT per request grew by **17.9–22.5%**.
   - **short prompts are not affected** (+1% at 1K tokens).
-- **Trying 100 Gb/s before buying cables:** restricting NCCL to one of the two network interfaces of each Spark emulates a 100 Gb/s link on the existing 200 Gb/s cabling. A workload run this way, with the result converted to a real link, shows what 100 Gb/s would cost it before any hardware changes.
-- **A real 100 Gb/s link**, built with a 4 × 100G breakout cable, carries about 98 Gb/s and would add at most another 3–4 percentage points.
-- **Measured on real 100 Gb/s links** with GLM-5.3-Flash at TP4 on 4 Sparks, the first token of an 8K-token prompt arrived 0.39 s later, against an estimate of at most 0.38 s, and decode speed did not change. Moving Sparks to 100 Gb/s needs no change on the Sparks themselves, but they have to be rebooted after recabling.
-- **Verdict:** 100 Gb/s is reasonable for tensor-parallel DGX Spark clusters up to TP8. Moving an 8-Spark TP8 cluster from 200 Gb/s to 100 Gb/s links, expect the first token to arrive **at most about 20% later for a very long prompt**, and **at most about 30% later when several very long prompts arrive at the same time**. At TP4 on four Sparks, the penalty measured on real links followed the same estimate. Short to medium prompts see no change, and once the answer starts, **it streams at the same pace**. On 16 Sparks, run two TP8 clusters rather than one TP16 cluster: the penalty grows with TP size.
+- **Testing before recabling.** Limit NCCL to one network interface per Spark on the existing 200 Gb/s cabling. Compare the workload at both settings and use the measured prefill bytes to estimate the additional delay on a real link.
+- **Projection for real links.** At the measured payload rate of about 98 Gb/s, the model projects up to about 18% extra TTFT for a single long prompt at TP8 and about 28% for the mean request in a group of four, assuming comparable scheduling.
+- **Measured on real 100 Gb/s links** with GLM-5.3-Flash at TP4 on 4 Sparks, the first token of an 8K-token prompt arrived 0.39 s later, against an estimate of at most 0.38 s, and decode speed did not change. Four Sparks share one breakout cable. Only the settings of its switch socket change. Reboot the Sparks after recabling.
+- **Verdict.** 100 Gb/s is feasible for tensor-parallel inference on DGX Sparks up to TP8 when the workload can tolerate the extra wait for a long prompt. Once the answer starts, it streams at the same pace. The short TP8 prompt showed no measurable slowdown. At TP4 the estimate from the model’s architecture predicted the extra wait for an 8K prompt to within 0.01 s on real links. For 16 Sparks, use two TP8 clusters and verify that the switch can forward all ports at full speed simultaneously.
 
 ---
 
@@ -54,7 +54,7 @@ toc: true
 
 A single DGX Spark holds 128 GB of unified memory. Models larger than that are served by splitting them across several Sparks connected through their ConnectX-7 network adapters and a switch. With **tensor parallelism**, every layer of the model is split across all the Sparks, so they exchange data many times for every token the model processes, and every step of inference waits for the network.
 
-That makes the switch a design decision. Running each Spark at 100 Gb/s instead of 200 Gb/s lets a smaller switch serve the same cluster, or the same switch serve twice as many Sparks. Whether that is acceptable depends on how much tensor-parallel inference slows down when the link between the Sparks is half as fast.
+That makes the switch a design decision. Running each Spark at 100 Gb/s instead of 200 Gb/s lets a smaller switch serve the same cluster, or each breakout socket serve twice as many Sparks. Whether that is acceptable depends on how much tensor-parallel inference slows down when the link between the Sparks is half as fast.
 
 Part I of this paper (Sections 2–6) describes what tensor parallelism sends over the network, why prompt processing and answer generation load the network very differently, and how to estimate the effect of halving the link speed from the model's architecture, the inference engine's settings and the link speed alone. Part II (Sections 7–10) shows how to emulate a 100 Gb/s link on the existing 200 Gb/s cabling, so that a workload can be tried at 100 Gb/s before any cable is bought; it applies the emulation to 8× DGX Spark serving GLM-5.3 at TP8, compares the results with the estimate, and converts them to a real 100 Gb/s cable. Part III (Sections 11–13) is the next step once the emulated result is acceptable: it builds real 100 Gb/s links for 4 Sparks and measures GLM-5.3-Flash at TP4 on them. Section 14 gives the sizing answer for clusters of 4, 8 and 16 Sparks.
 
@@ -80,14 +80,14 @@ The traffic between the Sparks uses RDMA (remote direct memory access): the adap
 
 ### 2.3. Switches and breakout options
 
-The CRS804 and CRS812 have 400 Gb/s QSFP-DD ports. A breakout cable splits each such port into several slower links, one per Spark:
+The CRS812 has two 400G QSFP-DD ports and two native 200G QSFP56 ports. The CRS804 has four 400G QSFP-DD ports. The table counts the Sparks connected through the 400G ports, with one breakout cable per port and one Spark per cable leg.
 
-| Switch | 400G QSFP-DD ports | Sparks at 200 Gb/s (2 × 200G per port) | Sparks at 100 Gb/s (4 × 100G per port) |
+| Switch | Number of 400G ports on the switch | Total Sparks with a 2 × 200G breakout cable per port | Total Sparks with a 4 × 100G breakout cable per port |
 |---|---|---|---|
-| MikroTik CRS812 | 2 (plus 2 × 200G QSFP56) | 4 (6 with the QSFP56 ports) | **8** |
+| MikroTik CRS812 | 2 | **4** | **8** |
 | MikroTik CRS804 | 4 | **8** | **16** |
 
-At 100 Gb/s per Spark, an 8-Spark cluster fits on a CRS812, and a CRS804 can serve 16 Sparks.
+For TP4 at 200 Gb/s per Spark on a CRS812, plug a 2 × 200G breakout cable into each of its two 400G ports. Each cable connects two Sparks. With a 4 × 100G cable in each port, the same switch connects eight Sparks at 100 Gb/s each.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/network-topology.png' | relative_url }}" alt="CRS812 with 8 Sparks at 100 Gb/s, CRS804 with 8 Sparks at 200 Gb/s and with 16 Sparks at 100 Gb/s" width="820"/></p>
 <sub><i>Figure 1: Breakout options, one link per DGX Spark.</i></sub>
@@ -98,20 +98,20 @@ At 100 Gb/s per Spark, an 8-Spark cluster fits on a CRS812, and a CRS804 can ser
 
 ### 3.1. Splitting the model
 
-In tensor parallelism with 8 Sparks (TP8), every large weight matrix of the model is cut into 8 slices, and each Spark holds one slice. In the attention blocks, the attention heads are divided among the Sparks. In the feed-forward and Mixture-of-Experts (MoE) blocks, every expert's matrices are sliced as well, so each Spark holds a part of every expert. Each Spark reads only its own eighth of the weights from its own memory, which is what lets a model larger than one Spark fit, and run faster than it would if each Spark had to read everything.
+In tensor parallelism with 8 Sparks (TP8), each tensor-parallel weight matrix is cut into 8 slices, and each Spark holds one slice. In the attention blocks, the attention heads are divided among the Sparks. In the feed-forward and Mixture-of-Experts (MoE) blocks, every expert's matrices are sliced as well, so each Spark holds a part of every expert. Each Spark reads only its own eighth of the weights from its own memory, which is what lets a model larger than one Spark fit, and run faster than it would if each Spark had to read everything.
 
 ### 3.2. Partial results and the all-reduce
 
-Splitting a weight matrix this way means that no Spark can finish a multiplication on its own. Each output value of a layer is a long sum of products of weights and inputs; with the weights divided eight ways, each Spark computes one eighth of that sum. The values involved are the model's *activations*: the vectors that represent each token as it passes through the layers. GLM-5.3 represents each token as a vector of 6,144 values (its *hidden dimension*). For a prompt processed 4,096 tokens at a time, every Spark ends up holding 4,096 × 6,144 partial values, which is 50.3 MB at 2 bytes per value. The actual result is the sum of the eight Sparks' blocks, and every Spark needs that full sum before the model can continue.
+At the output of the attention and feed-forward blocks, each Spark holds the weights for a slice of the input dimension. It can compute a partial sum for every output value. Adding the eight partial sums gives the complete output. These values are *activations*, the vectors that represent tokens as they pass through the layers. For GLM-5.3, each vector contains 6,144 values (the *hidden dimension*). With 4,096 tokens in a pass, each Spark contributes 4,096 × 6,144 partial values, or 50.3 MB at 2 bytes per value.
 
-Producing it is the job of an **all-reduce**: *reduce* because the blocks are combined (here, added), *all* because every participant receives the result. A transformer layer needs two, one after the attention block and one after the feed-forward or MoE block, and one more is needed at the input embedding. Every Spark waits at each all-reduce until all eight have contributed, so the network sits on the path of every layer.
+Producing it is the job of an **all-reduce**: *reduce* because the blocks are combined (here, added), *all* because every participant receives the result. The parallel layout modelled here uses two, one after the attention block and one after the feed-forward or MoE block, and one more is needed at the input embedding. Every Spark waits at each all-reduce until all eight have contributed, so the network sits on the path of every layer.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/tp-layer-allreduce.png' | relative_url }}" alt="One transformer layer under TP8 with its two all-reduces, and the ring of 8 Sparks" width="820"/></p>
 <sub><i>Figure 2: One transformer layer under tensor parallelism, and the ring all-reduce among 8 Sparks.</i></sub>
 
 ### 3.3. How the ring all-reduce works
 
-The direct approach, every Spark sending its whole block to the other seven, would make each Spark send 7 × 50.3 MB, and the load would grow with every Spark added. For transfers of this size, NCCL uses a **ring** instead (Section 3.4). The Sparks are arranged in a circle, each sends only to the next one, and each block is cut into as many segments as there are Sparks. The work then runs in two phases, shown for four Sparks in Figure 3.
+The direct approach, every Spark sending its whole block to the other seven, would make each Spark send 7 × 50.3 MB, and the load would grow with every Spark added. For transfers of this size, the estimate assumes NCCL uses a **ring** (Section 3.4). In a logical ring the Sparks are arranged in a circle, each sends only to the next one, and each block is cut into as many segments as there are Sparks. The work then runs in two phases, shown for four Sparks in Figure 3.
 
 In the first phase, *reduce-scatter*, each Spark sends one segment to the next Spark in every ring step, and the receiving Spark adds it to its own copy of that segment. Every Spark works on a different segment at the same time, so after N − 1 ring steps each Spark holds the complete sum of exactly one segment. In the second phase, *all-gather*, the finished segments travel around the ring once more, copied rather than added, until after another N − 1 ring steps every Spark has the full sum.
 
@@ -135,13 +135,13 @@ NCCL's tree is a *double binary tree*. The data is split in half, and each half 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/allreduce-ring-vs-tree.png' | relative_url }}" alt="Ring and double binary tree all-reduce among four Sparks, with the amount each Spark sends" width="820"/></p>
 <sub><i>Figure 4: Ring and tree all-reduce among four Sparks, with the amount each Spark sends as a multiple of its block.</i></sub>
 
-The two trade time in different ways. A ring passes through 2 × (N − 1) steps in sequence, so the fixed delay of every step adds up in proportion to the number of Sparks; a tree needs only about log₂ N steps up and as many down. In bytes, the ring is the most economical all-reduce possible, and every Spark sends the same amount ([Patarasuk & Yuan, 2009](https://www.cs.fsu.edu/~xyuan/paper/09jpdc.pdf)); in a tree, Sparks in different positions send different amounts, and the busiest send more than in a ring. The tree is faster when fixed delays dominate, with small transfers or many Sparks; the ring is faster when moving the bytes dominates, with large transfers.
+The two trade time in different ways. A ring passes through 2 × (N − 1) steps in sequence, so the fixed delay of every step adds up in proportion to the number of Sparks; a tree needs only about log₂ N steps up and as many down. In bytes, the ring is the most economical all-reduce possible, and every Spark sends the same amount ([Patarasuk & Yuan, 2009](https://www.cs.fsu.edu/~xyuan/paper/09jpdc.pdf)); in a tree, Sparks in different positions send different amounts, and the busiest send more than in a ring. The tree tends to be faster when fixed delays dominate, with small transfers or many Sparks; the ring tends to be faster when moving the bytes dominates, with large transfers.
 
-NCCL makes this choice for every single all-reduce. It estimates the time of each algorithm and transfer protocol as a fixed latency plus the amount of data divided by an effective bandwidth, from the size of the transfer, the number of Sparks and the topology it detects, and runs the fastest ([Understanding NCCL tuning](https://developer.nvidia.com/blog/understanding-nccl-tuning-to-accelerate-gpu-to-gpu-communication); [Demystifying NCCL](https://arxiv.org/abs/2507.04786)). Unless an algorithm is forced with `NCCL_ALGO`, which none of the runs in this paper did, the choice changes during inference with the size of each all-reduce. The 50.3 MB blocks of prefill are large enough that moving bytes dominates, and NCCL runs them as a ring; the small all-reduces of decode (Section 4.2) may run as a tree. Link speed matters only for the first kind, so the ring formula of Section 3.3 describes exactly the transfers that a slower link delays. The choice can be read from NCCL's log (`NCCL_DEBUG=INFO` with `NCCL_DEBUG_SUBSYS=TUNING`), or from the traffic: under a ring, every Spark sends the same number of bytes (Section 13.2).
+NCCL makes this choice for every single all-reduce. It estimates the time of each algorithm and transfer protocol as a fixed latency plus the amount of data divided by an effective bandwidth, from the size of the transfer, the number of Sparks and the topology it detects, and selects the fastest option in its model ([Understanding NCCL tuning](https://developer.nvidia.com/blog/understanding-nccl-tuning-to-accelerate-gpu-to-gpu-communication); [Demystifying NCCL](https://arxiv.org/abs/2507.04786)). Unless an algorithm is forced with `NCCL_ALGO`, which none of the runs in this paper did, the choice can change during inference with the size of each all-reduce. For the 50.3 MB prefill blocks, the estimate assumes a ring. Small decode calls (Section 4.2) may use a tree. NCCL tuning diagnostics can be enabled with `NCCL_DEBUG=INFO` and `NCCL_DEBUG_SUBSYS=TUNING`. The traffic counters in Section 13.2 provide an aggregate check on the ring model.
 
 ### 3.5. What changes with the number of Sparks
 
-Adding Sparks divides the computation, but not the data that has to be summed. Only the weights are split: each Spark computes a part of the sum for every output value, so its block of partial values stays 4,096 × 6,144 values (50.3 MB) whether the model runs on two Sparks or sixteen. Each doubling of the TP size halves each Spark's computation, while the amount each Spark sends per all-reduce, 2 × (N − 1) / N times the block, grows slightly:
+Adding Sparks divides the computation, but not the data that has to be summed. At each row-parallel output, each Spark computes a part of the sum for every output value, so its block of partial values stays 4,096 × 6,144 values (50.3 MB) whether the model runs on two Sparks or sixteen. With even sharding, doubling TP size halves the arithmetic for the sharded matrices, while the amount each Spark sends per all-reduce, 2 × (N − 1) / N times the block, grows slightly:
 
 | TP size | Computation per Spark | Sent per Spark per all-reduce |
 |---|---|---|
@@ -150,17 +150,17 @@ Adding Sparks divides the computation, but not the data that has to be summed. O
 | TP8 | 1/8 | 1.75 × 50.3 MB = 88.1 MB |
 | TP16 | 1/16 | 1.875 × 50.3 MB = 94.3 MB |
 
-Going from TP8 to TP16 thus halves the time each Spark spends computing but leaves the time it spends sending almost unchanged, so the network takes a larger share of every forward pass. Section 6.3 works out what this means for link speed.
+Going from TP8 to TP16 thus halves the sharded arithmetic per Spark in this model but leaves the time it spends sending almost unchanged, so the network takes a larger share of every forward pass. Section 6.3 works out what this means for link speed.
 
 ---
 
 ## 4. Prefill and Decode: Two Different Loads on the Network
 
-Inference runs in two phases that use the network in opposite ways. How much data each all-reduce carries depends on how many tokens one forward pass through the model processes, which the inference engine's settings decide; the values below follow the vLLM configuration used in Part II.
+The amount of data in an all-reduce depends on how many tokens the engine processes in one forward pass. The examples below use the vLLM settings from Part II.
 
 ### 4.1. Prefill: large transfers at full link speed
 
-During prefill, vLLM processes the prompt in prefill chunks of up to 4,096 tokens per forward pass (`--max-num-batched-tokens 4096`), so each all-reduce sums the 50.3 MB block of Section 3.2 and each Spark sends 88.1 MB:
+During prefill, vLLM can batch up to 4,096 tokens per forward pass (`--max-num-batched-tokens 4096`), so in a full batch each all-reduce sums the 50.3 MB block of Section 3.2 and each Spark sends 88.1 MB:
 
 | Link speed | Time to send 88.1 MB |
 |---|---|
@@ -171,7 +171,7 @@ Every transfer also carries some fixed overhead in software, synchronisation and
 
 ### 4.2. Decode: small transfers dominated by fixed delays
 
-During decode, each forward pass processes only the newest token of each request. With speculative decoding by multi-token prediction (MTP), as configured in Part II, the model also checks 4 draft tokens in the same pass, so it processes 5 tokens per request. Each all-reduce then sums 5 × 6,144 × 2 bytes = **61 KB**, of which each Spark sends about **108 KB**. Per forward pass, including collecting the output layer's token scores, each Spark sends about **18 MB**.
+During decode, each forward pass processes only the newest token of each request. With speculative decoding by multi-token prediction (MTP), as configured in Part II, the model also checks 4 draft tokens in the same pass, so it processes 5 tokens per request. Each all-reduce then sums 5 × 6,144 × 2 bytes = **61 KB**, and under the ring model each Spark sends about **108 KB**. Per forward pass, including collecting the output layer's token scores, each Spark sends about **18 MB**.
 
 Sending 108 KB takes 4.3 µs at 200 Gb/s and 8.7 µs at 100 Gb/s. The all-reduce, however, passes through a series of steps, 14 in a ring of eight Sparks and fewer in a tree (Section 3.4), and each one carries a fixed delay of software, synchronisation and network hardware. RDMA transfers between two systems take on the order of microseconds even for tiny amounts of data, so these delays add up to more than the time spent sending bytes. Decode communication is therefore **latency-bound**, and its duration depends little on the link speed.
 
@@ -189,11 +189,11 @@ If every prefill transfer runs at the full link speed and none overlaps with com
 
 > **extra prefill time ≤ prefill bytes per Spark × (1 / B_new − 1 / B_old)**
 
-This is an upper bound: transfers that overlap with computation, or never reach full speed, add less. It needs only the bytes per prompt token from Section 3.3 and the prompt length, and nothing about how fast the Sparks compute.
+This bounds the additional transfer time in a model with fixed traffic volume, unchanged collective algorithms and scheduling, and the same non-network work. Overlap with computation can hide part of that time. Use bytes per prompt token from Section 3.3 and the prompt length, expressing the data volume and both rates in compatible units. Changes in scheduling or protocol efficiency can put the observed TTFT outside this estimate.
 
 From 200 to 100 Gb/s, (1/100 − 1/200) = 1/200, so the extra time equals the time the prefill bytes take to send at 200 Gb/s. For GLM-5.3 at TP8:
 
-> **extra TTFT ≤ 3.38 MB × 8 bits ÷ 200 Gb/s = 0.135 s per 1,000 prompt tokens**
+> **Extra transfer time per 1,000 prompt tokens ≤ (3.38 MB/token × 1,000 tokens × 8 bits/byte) ÷ 200 Gb/s ≈ 0.135 s.**
 
 ### 5.2. The six test cases
 
@@ -222,7 +222,7 @@ The prefill time itself cannot be derived reliably from the architecture. A calc
 
 ## 6. What Makes the Penalty Larger or Smaller
 
-Since the penalty is at most the network share of prefill time, anything that raises that share raises the penalty.
+For a halving of nominal link speed, a larger network share raises the estimated percentage penalty.
 
 ### 6.1. Prompt length
 
@@ -232,7 +232,7 @@ Short prompts are different. A 1K-token prompt fits in one small prefill chunk, 
 
 ### 6.2. Several requests at once
 
-When several prompts arrive together, their prefill chunks share the forward passes. The bytes per prompt token stay the same, but the computation per token falls, because each prompt attends over a shorter context and the work runs in fuller batches. More of the time is spent communicating, so the penalty is larger than for one prompt of the same total length. The order in which the engine processes the prompts, and when the first of them start generating, also affects each request's own TTFT.
+When several prompts arrive together, their prefill chunks share the forward passes. The bytes per prompt token stay the same, but each prompt has a shorter attention context than one prompt of the same combined length. Fuller batches can also reduce compute time per token. More of the time is spent communicating, so the penalty is larger than for one prompt of the same total length. The order in which the engine processes the prompts, and when the first of them start generating, also affects each request's own TTFT.
 
 ### 6.3. TP size
 
@@ -268,7 +268,7 @@ The comparison is useful only if the link speed is the single difference between
 | Parallelism | TP8: one model instance across all 8 Sparks |
 | Key settings | prefill chunks of up to 4,096 tokens, FP8 KV cache, speculative decoding with MTP (4 draft tokens; the draft model is not split across Sparks, so it adds no network traffic), CUDA graphs, up to 8 concurrent requests |
 
-GLM-5.3 is a large MoE model that needs all 8 Sparks, which is the case where the cluster network matters most.
+The GLM-5.3 configuration tested here uses all 8 Sparks. Its frequent collectives make it a useful workload for measuring the effect of link speed.
 
 ### 7.3. Emulating 100 Gb/s on the existing cables
 
@@ -278,7 +278,7 @@ A 100 Gb/s link can be tried before any 100G cable is bought. NCCL is configured
 NCCL_IB_HCA=^roceP2p1s0f1
 ```
 
-(`ibdev2netdev` lists the RDMA device names.) Nothing physical changes, so the cables, switch ports and every other setting stay the same, and relaunching the model without this setting restores 200 Gb/s. The RDMA counters (Appendix A) confirm that all traffic goes over the one remaining interface; in every emulated run of this paper, they did.
+(`ibdev2netdev` lists the RDMA device names. Apply the exclusion using each host’s actual second device name.) Nothing physical changes, so the cables, switch ports and every other setting stay the same, and relaunching the model without this setting restores 200 Gb/s. The RDMA counters (Appendix A) confirm that all traffic goes over the one remaining interface; in every emulated run of this paper, they did.
 
 This is how a workload can be tested at 100 Gb/s on an existing 200 Gb/s cluster: run it once at 200 Gb/s and once emulated, convert the difference to a real link (Section 9), and move to 100G cables (Section 11) if the result is acceptable. Part II applies it to GLM-5.3 at TP8 with the test plan of Section 7.4. The open-source tool [netinfermon](https://github.com/openzeka/netinfermon) runs such a comparison: the same test plan against the inference engine at both link speeds, with the RDMA traffic recorded on the same clock (Appendix A).
 
@@ -286,7 +286,7 @@ One interface carries what its PCIe Gen5 ×4 link allows: 4 lanes × 32 GT/s, re
 
 With B_new = 109 Gb/s instead of 100, the bound of Section 5.1 becomes
 
-> **extra prefill time ≤ prefill bytes × (1/109 − 1/200)**, about **0.11 s per 1,000 prompt tokens** for GLM-5.3 at TP8
+> **extra prefill time ≤ prefill gigabits per Spark × (1/109 − 1/200)**, about **0.11 s per 1,000 prompt tokens** for GLM-5.3 at TP8
 
 | Test | Estimate, 200 → 100 Gb/s (Section 5.2) | Estimate, 200 → 109 Gb/s (this experiment) |
 |---|---|---|
@@ -310,7 +310,7 @@ Section 9 converts the measured results back to a real 100 Gb/s cable, and Secti
 | P5 | 1 | 65,536 → 1,024 | a very long prompt |
 | P6 | 4, arriving together | 4 × 16,384 → 1,024 | several requests, same total prompt size as P5 |
 
-Each test ran one warm-up round, which is not counted, and three measured rounds. The output was fixed at exactly 1,024 tokens, so every request did the same amount of decoding and decode speeds are directly comparable.
+Each test ran one warm-up round, which is not counted, and three measured rounds. The prompt lengths in the table are targets. The output was fixed at exactly 1,024 tokens, so every request did the same amount of decoding and decode speeds are directly comparable.
 
 ### 7.5. What was measured
 
@@ -320,7 +320,7 @@ Each test ran one warm-up round, which is not counted, and three measured rounds
 
 ### 7.6. Keeping the runs comparable
 
-Prompts were taken from a fixed prompt set and padded to the target length with a fixed random seed, so both configurations received identical prompts. Each request's padding was ordered differently, so the engine could not reuse work cached from an earlier request. Services not needed for the test were stopped on all Sparks, and each run started only after the link had carried no traffic for 10 seconds. Requests and traffic samples were timestamped on the same Spark and clock, so the traffic of each request's prefill and decode can be separated exactly.
+Prompts were taken from a fixed prompt set and padded to the target length with a fixed random seed, so both configurations received identical prompts. Each request's padding was ordered differently, to limit prefix reuse across requests. Services not needed for the test were stopped on all Sparks, and each run started only after the link had carried no traffic for 10 seconds. Requests and traffic samples were timestamped on the same Spark and clock, so the counters can be aligned with each request’s first token. With overlapping requests they record the combined traffic.
 
 All measured rounds are used and reported as means, with the range across rounds. The rounds were consistent: within a test, prefill times varied by at most 0.6 s for single requests and 1.2 s for four requests.
 
@@ -337,7 +337,7 @@ Figure 5 shows the traffic one Spark sends during one 8K-token request on the 20
 
 Measured in 1 ms intervals, the bursts of single 8K–64K prompts reach about 150–180 Gb/s, and those of four prompts arriving together close to 200 Gb/s. Averaged over a whole 8K prefill, however, the traffic is 37 Gb/s, because the link carries nothing while the Sparks compute. Decode averages about **3 Gb/s** for one request and about **6 Gb/s** for four, within the limits estimated in Section 4.2. The cluster uses the full 200 Gb/s, but only for a few milliseconds at a time.
 
-The averaging interval decides which of these two pictures a measurement shows. The same 8K prefill gives these highest values:
+For the same 8K prefill, the peak reported by the sampler depends on the averaging interval.
 
 | Averaging interval | Highest value |
 |---|---|
@@ -351,7 +351,7 @@ A switch that reports one-second averages would show about 40 Gb/s and suggest a
 
 ### 8.2. The traffic in each test
 
-Figures 6–11 show the traffic one Spark sends during the three measured rounds of each test, with 200 Gb/s on top and the emulated 100 Gb/s below, on the same time axis. The grey band is prefill, ending at the first token.
+Figures 6–11 show the traffic one Spark sends during the three measured rounds of each test, with 200 Gb/s on top and the emulated 100 Gb/s below, on the same time axis. The grey band is prefill, ending at the last request’s first token in each round.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/glm53-tp8-p1-1k-200g-vs-100g.png' | relative_url }}" alt="1K-token prompt: network traffic at 200 Gb/s and emulated 100 Gb/s" width="820"/></p>
 <sub><i>Figure 6: P1, 1K-token prompt, 1 request.</i></sub>
@@ -371,25 +371,25 @@ The 32K prompt shows the same pattern over a longer prefill, with TTFT growing f
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/glm53-tp8-p4-4x8k-200g-vs-100g.png' | relative_url }}" alt="Four 8K-token prompts arriving together: network traffic at 200 Gb/s and emulated 100 Gb/s" width="820"/></p>
 <sub><i>Figure 9: P4, four 8K-token prompts arriving together.</i></sub>
 
-With four prompts arriving together, prefill keeps the 200 Gb/s link close to fully used, while the emulated link stays at 109 Gb/s throughout. The time until the last first token grows from 23.0 s to 26.4 s. Decode traffic is higher with four requests, but still far below either link speed.
+With four prompts arriving together, prefill bursts approach 200 Gb/s on both interfaces together and peak near 109 Gb/s in the emulation. The link carries less traffic between bursts. The time until the last first token grows from 23.0 s to 26.4 s. Decode traffic is higher with four requests, but still far below either link speed.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/glm53-tp8-p5-64k-200g-vs-100g.png' | relative_url }}" alt="64K-token prompt: network traffic at 200 Gb/s and emulated 100 Gb/s" width="820"/></p>
 <sub><i>Figure 10: P5, 64K-token prompt, 1 request.</i></sub>
 
-The 64K prompt behaves like the 32K prompt over twice the length: bursts of about 150–180 Gb/s at 200 Gb/s, held at 109 Gb/s on the emulated link, and TTFT growing from 55.5 s to 62.5 s. The three rounds agree within 0.2 s.
+The 64K prompt behaves like the 32K prompt over twice the length: bursts of about 150–180 Gb/s at 200 Gb/s, held at 109 Gb/s on the emulated link, and TTFT growing from 55.5 s to 62.5 s. The three rounds agree within about 0.2 s.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/glm53-tp8-p6-4x16k-200g-vs-100g.png' | relative_url }}" alt="Four 16K-token prompts arriving together: network traffic at 200 Gb/s and emulated 100 Gb/s" width="820"/></p>
 <sub><i>Figure 11: P6, four 16K-token prompts arriving together.</i></sub>
 
-With four 16K prompts, prefill keeps the 200 Gb/s link close to fully used for about 46 s, against about 54 s at 109 Gb/s on the emulated link. The engine processes the four prompts in pairs: the first two receive their first tokens at about 22 s (200 Gb/s) and 27 s (emulated), the last two at about 45 s and 54 s. While the second pair is still in prefill, the first pair is already decoding.
+With four 16K prompts, prefill bursts recur over about 46 s on the 200 Gb/s link and about 54 s on the emulated 109 Gb/s link. The engine processes the four prompts in pairs: the first two receive their first tokens at about 22 s (200 Gb/s) and 27 s (emulated), the last two at about 45 s and 54 s. While the second pair is still in prefill, the first pair is already decoding.
 
 ### 8.3. Traffic per prompt token
 
-The measured prefill traffic was **3.54–3.60 MB per prompt token** per Spark, 5–7% more than the 3.38 MB of Section 3.3. The difference is the headers of the network packets and a small amount of traffic per request. The bytes were the same at both link speeds, which confirms that only the link speed changed.
+Across both link settings, the measured transmit volume per Spark ranged from **3.53 to 3.60 MB per prompt token**, about 4–7% above the 3.38 MB ring payload in Section 3.3. The counters also include protocol and other traffic in the prefill interval. The similar volumes at both speeds are consistent with sending the same workload.
 
 ### 8.4. TTFT
 
-Means of three rounds, with the range across rounds in brackets; for P4 and P6, the time until the last of the four requests receives its first token. The estimate for the emulated link (Section 7.3) is given for comparison.
+The table gives the mean of three rounds and the range in brackets. For P4 and P6, the clock stops when the last of the four requests receives its first token. The estimates use the emulated link rate from Section 7.3.
 
 | Test | 200 Gb/s | 100 Gb/s (emulated, 109 Gb/s) | Increase |
 |---|---|---|---|
@@ -400,17 +400,17 @@ Means of three rounds, with the range across rounds in brackets; for P4 and P6, 
 | P5: 64K | 55.47 s (55.39–55.55) | 62.47 s (62.34–62.56) | **+6.99 s (+12.6%)** (estimate: ≤ +7.39 s) |
 | P6: 4 × 16K, last first token | 45.82 s (45.36–46.52) | 54.26 s (54.08–54.60) | **+8.44 s (+18.4%)** (estimate: ≤ +7.39 s) |
 
-Averaged over the four requests of each round, TTFT grew from 16.49 s to 20.21 s in P4 (**+22.5%**) and from 33.96 s to 40.03 s in P6 (**+17.9%**). These are the largest increases measured in any test.
+Averaged over the four requests of each round, TTFT grew from 16.49 s to 20.21 s in P4 (**+22.5%**) and from 33.96 s to 40.03 s in P6 (**+17.9%**). The four-prompt cases had larger mean per-request increases than the single-prompt cases.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/measured-vs-predicted.png' | relative_url }}" alt="Extra prefill time at 109 Gb/s: estimate against measurement, per test" width="820"/></p>
 <sub><i>Figure 12: Extra prefill time when the link drops from 200 to 109 Gb/s: estimate (Section 7.3) against measurement.</i></sub>
 
-For single prompts of 8K–64K tokens and for four 8K prompts arriving together, the measured increase came within a few percent of the estimate, slightly below it, as expected of an upper bound: a small part of the transfers overlaps with computation. The estimate from the model's architecture, the engine's prefill chunk size and the link speed therefore predicts the effect of a slower link well, without any measurement of the computation. In seconds, the increase is about **0.11 s per 1,000 prompt tokens**.
+For single prompts of 8K–64K tokens and for four simultaneous 8K prompts, the estimate predicted the extra wait for the first token to within about 7%, using only the architecture, prefill settings and link rates. For the four-prompt test, this comparison uses the last first token. Across the single long prompts, the measured increase was about **0.11 s per 1,000 prompt tokens**.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/ttft-increase-vs-prompt.png' | relative_url }}" alt="Increase in prefill time against prompt tokens per round, measured and estimated" width="820"/></p>
 <sub><i>Figure 13: Increase in prefill time against prompt size, measured and estimated.</i></sub>
 
-For a single prompt, the percentage stays nearly constant from 8K to 64K tokens (13.9%, 13.1% and 12.6%), as Section 6.1 expects for a model with sparse attention; the slight decline is the part of the attention work that still grows faster than the bytes. With several prompts arriving together, the percentage is higher for the same total prompt size, 15.0% for four 8K prompts and 18.4% for four 16K prompts, as Section 6.2 expects.
+For a single prompt, the percentage stays nearly constant from 8K to 64K tokens (13.9%, 13.1% and 12.6%), as Section 6.1 expects for a model with sparse attention; the measurements do not isolate the cause of the slight decline. With several prompts arriving together, the percentage is higher for the same total prompt size, 15.0% for four 8K prompts and 18.4% for four 16K prompts, as Section 6.2 expects.
 
 ### 8.5. Decode speed
 
@@ -423,7 +423,7 @@ For a single prompt, the percentage stays nearly constant from 8K to 64K tokens 
 | P5: 64K | 21.1 tokens/s | 21.0 tokens/s | −0.4% |
 | P6: 4 × 16K | 10.5 tokens/s per request | 10.2 tokens/s per request | −2.1% |
 
-The changes point in both directions and stay within the variation between rounds: decode speed does not depend on the link speed, as Section 4.2 expects.
+Halving the link speed left the streaming rate unchanged in practice. Across the six tests, mean decode speed ranged from 2.3% slower to 4.3% faster on the emulated link.
 
 ### 8.6. Where the measurement departs from the estimate
 
@@ -439,7 +439,7 @@ The changes point in both directions and stay within the variation between round
 
 The emulated link carries up to 109 Gb/s; a real 100 Gb/s link carries 98 Gb/s (Section 12.3). Applying the bound to this difference gives the most a real cable can add to the measured results:
 
-> **additional prefill time ≤ measured prefill bytes × (1/98 − 1/109)**
+> **Additional transfer time (s) ≤ measured prefill bytes × 8 bits/byte × (1/98 − 1/109) / 10⁹**, with rates in Gb/s.
 
 | Test | Emulated 100 Gb/s (measured) | Real 100 Gb/s cable, at most |
 |---|---|---|
@@ -450,13 +450,13 @@ The emulated link carries up to 109 Gb/s; a real 100 Gb/s link carries 98 Gb/s (
 | P5: 64K | +12.6% | +16.1% |
 | P6: 4 × 16K, last first token | +18.4% | +22.6% |
 
-A real 100 Gb/s cable would therefore be at most 3–4 percentage points worse than the measured results, and decode speed would still be unaffected. In seconds, the bound of Section 5.1 with 98 Gb/s gives at most 0.14 s per 1,000 prompt tokens. The same conversion applies to any workload tried on the emulated link: its measured prefill bytes × (1/98 − 1/109) is the most a real cable adds.
+For the single prompts and the last first token of a batch, the conversion adds about 3–4 percentage points. For mean TTFT per request, conservatively charge the whole batch’s additional transfer time to every request and divide by the mean request TTFT at 200 Gb/s. This gives about +28% for four 8K prompts and +23% for four 16K prompts if scheduling stays comparable. For a single long prompt, the architecture-based estimate at 98 Gb/s is at most about 0.14 s per 1,000 prompt tokens. Decode speed is expected to stay unchanged on the real link.
 
 ---
 
 ## 10. Projection: How the Penalty Changes with TP Size
 
-Taking the measured 8K prefill at TP8 and 200 Gb/s as the baseline, and assuming the computation splits evenly across Sparks, the bound of Section 5 projects the following for a real 100 Gb/s link:
+Taking the measured 8K prefill at TP8 and 200 Gb/s as the baseline, and assuming the computation splits evenly across Sparks, the bound of Section 5 projects the following for a nominal 100 Gb/s link. Section 9 separately uses the measured payload rate.
 
 | TP size | Projected TTFT increase at 100 Gb/s, 8K prompt |
 |---|---|
@@ -468,7 +468,7 @@ Taking the measured 8K prefill at TP8 and 200 Gb/s as the baseline, and assuming
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/tp-projection.png' | relative_url }}" alt="Projected 100 Gb/s TTFT penalty against TP size" width="820"/></p>
 <sub><i>Figure 14: Projected TTFT penalty of 100 Gb/s against TP size (illustrative).</i></sub>
 
-This is a projection, not a measurement: GLM-5.3 does not fit on 2 or 4 Sparks, and fixed overheads are ignored. It shows the direction and the rough size of the effect: at TP16, the penalty would be about twice that at TP8. Section 13.6 compares it with a measurement at TP4. On 16 Sparks at 100 Gb/s, two TP8 clusters each keep the penalty measured in this paper, while one TP16 cluster would roughly double it.
+This is a projection, not a measurement: GLM-5.3 was not tested on 2 or 4 Sparks and its weights exceed the four-node memory budget at the configured engine allocation, and fixed overheads are ignored. It shows the direction and the rough size of the effect: at TP16, the penalty would be about twice that at TP8. Section 13.6 compares it with a measurement at TP4. On 16 Sparks at 100 Gb/s, two TP8 clusters should behave like the measured cluster if the switch sustains both simultaneously, while one TP16 cluster would roughly double it.
 
 ---
 
@@ -476,7 +476,7 @@ This is a projection, not a measurement: GLM-5.3 does not fit on 2 or 4 Sparks, 
 
 ## 11. Building Real 100 Gb/s Links
 
-When a workload's result on the emulated link is acceptable, the next step is real 100 Gb/s links. This part builds them for four Sparks and measures them, which also tests the emulation and the estimate against real cables.
+Once a workload’s result on the emulated link is acceptable, the next step is to try real 100 Gb/s links. The four-Spark experiment tests how closely the same estimation method predicts the first-token delay on real cables.
 
 ### 11.1. The cable and the switch links
 
@@ -524,7 +524,7 @@ A 4-way cable connects four Sparks to one socket. In the test cluster, the four 
    /interface ethernet switch qos port set qsfp56-dd-3-3 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=100Gbps
    /interface ethernet switch qos port set qsfp56-dd-3-7 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=100Gbps
    ```
-   The first two lines move the existing links from four lanes to two. The next two switch on the links that are unused at 200 Gb/s, with the same fixed speed, MTU and L2 MTU as the existing links, so that 9,000-byte frames pass. The last four give all four links the QoS settings of the 200 Gb/s links of the [8-Node Cluster Setup]({{ '/papers/dgx-spark-8node-cluster-setup/' | relative_url }}), with the rate of the RoCE queue set to 100 Gbps; without them the two new links would treat RoCE traffic differently from the old ones. The change touches this socket only and does not restart the switch.
+   The first two lines move the existing links from four lanes to two. The next two switch on the links that are unused at 200 Gb/s, with the same fixed speed, MTU and L2 MTU as the existing links, so that 9,000-byte IP packets pass. The last four give all four links the QoS settings of the 200 Gb/s links of the [8-Node Cluster Setup]({{ '/papers/dgx-spark-8node-cluster-setup/' | relative_url }}), with the rate of the RoCE queue set to 100 Gbps; without them the two new links would treat RoCE traffic differently from the old ones. The change touches this socket only and does not restart the switch.
 7. **Reboot the four Sparks** (Section 11.4).
 8. **Verify the links** (Section 11.5).
 9. **Start the model** with its unchanged recipe, and check from the RDMA counters (Appendix A) that both network interfaces of every Spark carry traffic.
@@ -534,8 +534,8 @@ Going back to 200 Gb/s is the reverse: stop the model, put the 2-way cables back
 ```
 /interface ethernet set [find default-name=qsfp56-dd-3-1] auto-negotiation=no speed=200G-baseCR4 mtu=9000 l2mtu=9500
 /interface ethernet set [find default-name=qsfp56-dd-3-5] auto-negotiation=no speed=200G-baseCR4 mtu=9000 l2mtu=9500
-/interface ethernet set [find default-name=qsfp56-dd-3-3] auto-negotiation=yes mtu=1500 l2mtu=1584
-/interface ethernet set [find default-name=qsfp56-dd-3-7] auto-negotiation=yes mtu=1500 l2mtu=1584
+/interface ethernet set [find default-name=qsfp56-dd-3-3] auto-negotiation=yes mtu=1500 l2mtu=1584 advertise=10M-baseT-half,10M-baseT-full,100M-baseT-half,100M-baseT-full,1G-baseT-half,1G-baseT-full,1G-baseX,2.5G-baseT,2.5G-baseX,5G-baseT,10G-baseT,10G-baseSR-LR,10G-baseCR,25G-baseSR-LR,25G-baseCR,50G-baseSR2-LR2,50G-baseCR2,50G-baseSR-LR,50G-baseCR,100G-baseSR2-LR2,100G-baseCR2
+/interface ethernet set [find default-name=qsfp56-dd-3-7] auto-negotiation=yes mtu=1500 l2mtu=1584 advertise=10M-baseT-half,10M-baseT-full,100M-baseT-half,100M-baseT-full,1G-baseT-half,1G-baseT-full,1G-baseX,2.5G-baseT,2.5G-baseX,5G-baseT,10G-baseT,10G-baseSR-LR,10G-baseCR,25G-baseSR-LR,25G-baseCR,50G-baseSR2-LR2,50G-baseCR2,50G-baseSR-LR,50G-baseCR,100G-baseSR2-LR2,100G-baseCR2
 /interface ethernet switch qos port set qsfp56-dd-3-1 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 /interface ethernet switch qos port set qsfp56-dd-3-5 trust-l3=keep pfc=pfc-tc3 egress-rate-queue3=200Gbps
 /interface ethernet switch qos port set qsfp56-dd-3-3 trust-l3=ignore pfc=disabled
@@ -544,7 +544,7 @@ Going back to 200 Gb/s is the reverse: stop the model, put the 2-way cables back
 /interface ethernet switch qos port unset qsfp56-dd-3-7 egress-rate-queue3
 ```
 
-This returns `-3` and `-7` to their factory settings; after it, the switch's `/export terse` was identical to the export taken before the change. Both directions can be saved on the switch as scripts (`/system/script`) and run in one step. Switching this way changes one socket, whereas restoring the backup would replace the whole configuration and restart the switch, cutting off every Spark on it for several minutes. Each direction took about 15 minutes of hands-on work.
+The tested rollback also restored the advertised link modes on `-3` and `-7`. After that rollback, the switch’s `/export terse` matched the pre-change export apart from comments and blank lines. Both directions can be saved on the switch as scripts (`/system/script`) and run in one step. Switching this way changes one socket, whereas restoring the backup would replace the whole configuration and restart the switch, cutting off every Spark on it for several minutes. Each direction took about 15 minutes of hands-on work.
 
 For eight Sparks at 100 Gb/s, the same settings go on two sockets, each with a 4-way cable, which leaves the other two sockets free for eight more Sparks.
 
@@ -564,11 +564,11 @@ Rebooting the four Sparks restored the full speed. A cable change, in either dir
 | Switch, `/interface/ethernet/monitor` | `100Gbps`, `fec91`, the cable's part number |
 | Switch, log | `link up (speed 100G, full duplex)` for each link |
 | Each Spark, `ethtool` on both interfaces | `Speed: 100000Mb/s`, `Lanes: 2` |
-| Spark to Spark, `ping -M do -s 8972` | replies on both subnets: 9,000-byte frames pass end to end |
+| Spark to Spark, `ping -M do -s 8972` | replies on both subnets: 9,000-byte IPv4 packets pass end to end |
 | Spark to Spark, `ib_write_bw` | about 98 Gb/s (Section 12.3); about 13 Gb/s means a reboot is needed |
 | Switch, `/export terse` against the export of step 2 | differences only in the converted socket |
 
-In the test, 9,000-byte frames passed between every ordered pair of the four Sparks on both subnets, and no CRC, symbol, FEC or RoCE retransmission errors, pause frames or switch drops were counted.
+In the test, 9,000-byte IP packets passed between every ordered pair of the four Sparks on both subnets, and no CRC, symbol, FEC or RoCE retransmission errors, pause frames or switch drops were counted.
 
 ---
 
@@ -576,7 +576,7 @@ In the test, 9,000-byte frames passed between every ordered pair of the four Spa
 
 ### 12.1. Changing only the link
 
-GLM-5.3 does not fit on four Sparks, so the real 100 Gb/s links were measured with GLM-5.3-Flash at TP4. As in Section 7.1, the link speed was the only difference between the two configurations: the same Sparks, model, engine, recipe, prompts and test plan were used in both, and only the cable and the settings of one switch socket changed.
+The TP8 recipe’s memory allocation is too small to hold the GLM-5.3 weights on four Sparks, so the real 100 Gb/s links were measured with GLM-5.3-Flash at TP4. As in Section 7.1, link speed was the variable under test: the same Sparks, model, engine, recipe, prompts and test plan were used in both, and only the cable and the settings of one switch socket changed.
 
 ### 12.2. Setup
 
@@ -585,7 +585,7 @@ GLM-5.3 does not fit on four Sparks, so the real 100 Gb/s links were measured wi
 | Systems | 4× NVIDIA DGX Spark (GB10, 128 GB unified memory) |
 | Switch | MikroTik CRS804: 2 × 200G breakout cables (200 Gb/s); one 4 × 100G breakout cable (100 Gb/s) |
 | Model | GLM-5.3-Flash FP8 (`zai-org/GLM-5.3-Flash`): MoE; hidden dimension 4,096; 45 layers |
-| Engine | SGLang 0.5.22.dev7, PyTorch 2.13, NCCL 2.30.7 |
+| Engine | SGLang 0.5.22.dev7, PyTorch 2.13, NCCL 2.30.7 installed with PyTorch |
 | Parallelism | TP4: one model instance across the 4 Sparks |
 | Key settings | prefill chunks of 8,192 tokens, FP8 KV cache, speculative decoding with DFlash (`incoai/GLM-5.3-Flash-DFlash2`, blocks of 8 draft tokens), Triton attention, up to 8 concurrent requests |
 | NCCL | both RDMA devices of each Spark, RoCE v2, no algorithm forced |
@@ -594,7 +594,7 @@ With the ring formula of Section 3.3, each prompt token costs each Spark
 
 > (2 × 45 + 1) × 4,096 values × 2 bytes × 1.5 = **1.12 MB** of network traffic,
 
-a third of GLM-5.3's 3.38 MB at TP8: the model has a smaller hidden dimension and fewer layers, and at TP4 each Spark sends 1.5 times its block per all-reduce instead of 1.75 times. Each prefill all-reduce sums a block of 8,192 × 4,096 values, 67 MB at 2 bytes per value, large enough for NCCL to run it as a ring (Section 3.4).
+a third of GLM-5.3's 3.38 MB at TP8: the model has a smaller hidden dimension and fewer layers, and at TP4 each Spark sends 1.5 times its block per all-reduce instead of 1.75 times. For a full chunk, each prefill all-reduce sums a block of 8,192 × 4,096 values, 67 MB at 2 bytes per value, for which the estimate assumes a ring (Section 3.4).
 
 ### 12.3. The real 100 Gb/s link
 
@@ -607,11 +607,11 @@ RDMA write bandwidth (`ib_write_bw`, 64 KB messages) and latency (`ib_write_lat`
 | Latency, 2 bytes | 2.49 µs | | 2.47 µs |
 | Latency, 8 KB | 4.78 µs | | 5.02 µs |
 
-A real 100 Gb/s link carries about **98 Gb/s** of data, whether one interface or both are used, about 10% less than the emulated link. Latency for small messages does not change; an 8 KB message takes 0.24 µs longer, the extra time to send 8 KB at half the link speed.
+A real 100 Gb/s link carries about **98 Gb/s** of data, whether one interface or both are used, about 10% less than the emulated link. Latency for small messages does not change; an 8 KB message takes 0.24 µs longer, a measured latency difference that includes both transfer and fixed delays.
 
 With B_new = 98 Gb/s, the bound of Section 5.1 becomes
 
-> **extra prefill time ≤ prefill bytes × (1/98 − 1/200)**, about **0.047 s per 1,000 prompt tokens** for GLM-5.3-Flash at TP4
+> **extra prefill time ≤ prefill gigabits per Spark × (1/98 − 1/200)**, about **0.047 s per 1,000 prompt tokens** for GLM-5.3-Flash at TP4
 
 | Test | Estimate, 200 → 98 Gb/s |
 |---|---|
@@ -634,7 +634,7 @@ At both link speeds, NCCL spread its traffic evenly over the two network interfa
 
 ### 13.1. The traffic in each test
 
-Figures 16–20 show the traffic one Spark sends during the three measured rounds of each test, with 200 Gb/s on top and real 100 Gb/s below, on the same time axis. The grey band is prefill, ending at the first token.
+Figures 16–20 show the traffic one Spark sends during the three measured rounds of each test, with 200 Gb/s on top and real 100 Gb/s below, on the same time axis. The grey band is prefill, ending at the last request’s first token in each round.
 
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/glmflash-tp4-p1-1k-200g-vs-100g.png' | relative_url }}" alt="1K-token prompt at TP4: network traffic at 200 Gb/s and real 100 Gb/s" width="820"/></p>
 <sub><i>Figure 16: P1, 1K-token prompt, 1 request.</i></sub>
@@ -665,11 +665,11 @@ Averaged over 5 ms, the prefill bursts from P2 upwards reach 151–160 Gb/s at 2
 
 ### 13.2. Traffic per prompt token
 
-The measured prefill traffic was **1.14 MB per prompt token** per Spark, 2% more than the 1.12 MB of Section 12.2, and the same at both link speeds. The four Sparks sent the same amount: over the whole 100 Gb/s run, 1,294 GB each, equal to within 0.02%. Under a tree all-reduce, two of the four Sparks would have sent twice as much as the other two (Figure 4); the equal amounts confirm that the prefill all-reduces ran as a ring.
+For the long prompts, the measured prefill traffic was **1.14 MB per prompt token** per Spark, 2% more than the 1.12 MB of Section 12.2, and the same at both link speeds. The four Sparks sent the same amount: over the whole 100 Gb/s run, 1,294 GB each, equal to within 0.02%. Both the volume per token and the balance across the four Sparks support the ring model used to estimate prefill traffic.
 
 ### 13.3. TTFT
 
-Means of three rounds, with the range across rounds in brackets; for P4, the time until the last of the four requests receives its first token.
+Means of three rounds, with the range across rounds in brackets; for P4 and P6, the time until the last of the four requests receives its first token.
 
 | Test | 200 Gb/s | Real 100 Gb/s | Increase |
 |---|---|---|---|
@@ -683,7 +683,7 @@ Means of three rounds, with the range across rounds in brackets; for P4, the tim
 <p><img src="{{ '/papers/dgx-spark-link-speed-tensor-parallel/images/tp4-measured-vs-estimate.png' | relative_url }}" alt="Extra prefill time at real 100 Gb/s, TP4: estimate against measurement, per test" width="820"/></p>
 <sub><i>Figure 21: Extra prefill time when the link drops from 200 to real 100 Gb/s at TP4: estimate (Section 12.3) against measurement.</i></sub>
 
-For the single 8K prompt, the measured increase is the estimate: 0.39 s against at most 0.38 s, about 0.048 s per 1,000 prompt tokens. The estimate from the model's architecture, the engine's prefill chunk size and the link speed therefore holds on real 100 Gb/s links and at TP4, as it did on the emulated link at TP8.
+For the single 8K prompt, the architecture-based estimate predicted the extra wait on real links to within 0.01 s. The first token arrived 0.39 s later against an estimate of 0.38 s, or about 0.047 s of measured delay per 1,000 prompt tokens. Section 13.5 covers the other prompt lengths.
 
 In percent, the increase falls from 12.6% at 8K to 7.1% at 32K. The bytes grow in proportion to the prompt, but in this configuration the prefill time grows faster (3.1 s at 8K, 26.3 s at 32K, 86 s at 64K), so the network takes a smaller share of a longer prefill, as Section 6.1 describes for a model whose computation grows faster than its prompt.
 
@@ -697,11 +697,11 @@ In percent, the increase falls from 12.6% at 8K to 7.1% at 32K. The bytes grow i
 | P4: 4 × 8K | 11.4 tokens/s per request | 11.8 tokens/s per request | +3.7% |
 | P5: 64K | 12.0 tokens/s | 12.2 tokens/s | +2.2% |
 
-The changes point in both directions and stay within the variation between rounds, which is larger than at TP8 because the speed of speculative decoding depends on how many draft tokens are accepted (in P2 at 200 Gb/s, single rounds ranged from 21.9 to 25.8 tokens/s). Decode speed does not depend on the link speed, on the real link as on the emulated one.
+Decode speed stayed the same in practice on the real TP4 links, as it did in the TP8 emulation. The changes went in both directions. In P2 at 200 Gb/s, individual rounds alone ranged from 21.9 to 25.8 tokens/s.
 
 ### 13.5. Where the measurement departs from the estimate
 
-**The 1K prompt.** Two of the three rounds took 0.70–0.71 s on the real 100 Gb/s link against 0.66–0.67 s at 200 Gb/s, within the estimate; the third took 0.82 s. Since the bursts stay below 100 Gb/s at both link speeds (Figure 16), the link does not slow them, and the difference is within the variation between rounds.
+**The 1K prompt.** Two of the three rounds took 0.70–0.71 s on the real 100 Gb/s link against 0.66–0.67 s at 200 Gb/s, within the estimate; the third took 0.82 s. The bursts stayed below 100 Gb/s at both speeds (Figure 16). TTFT increased slightly between launches, but the traffic record gives no clear evidence of a link bottleneck.
 
 **The 32K prompt.** The increase is 0.35 s above the estimate, 1.3% of the TTFT. The rounds at each link speed agree within 0.2 s, so this is a real difference between the two runs, which used separate launches of the model on different days.
 
@@ -717,22 +717,22 @@ Section 10 projected at most 8% at TP4 for an 8K prompt, for a model shaped like
 
 ## 14. Is 100 Gb/s Reasonable?
 
-Yes, for clusters up to TP8. Moving an 8-Spark TP8 cluster from 200 Gb/s to 100 Gb/s links:
+Yes. For tensor-parallel DGX Spark clusters up to TP8, 100 Gb/s is a practical choice when the extra wait for the first token fits the workload’s TTFT target.
 
-> **The first token arrives at most about 20% later for a very long prompt, and at most about 30% later when several very long prompts arrive at the same time. Short to medium prompts see no change. Once the answer starts, it streams at the same pace.**
+> **On the emulated link, a single long prompt took about 13–14% longer to reach its first token. For four long prompts arriving together, mean TTFT per request increased by about 18–23%. On a real link the corresponding estimates reach about 18% and 28%. The short TP8 prompt showed no measurable slowdown. Once the answer started, it streamed at the same pace at both TP sizes.**
 
 | Workload | Measured (emulated 100 Gb/s) | Real 100 Gb/s cable, at most |
 |---|---|---|
-| Chat with short to medium prompts (around 1K tokens) | no measurable difference | about +4% |
+| Chat with a short prompt (around 1K tokens) | no measurable difference | about +4% |
 | A very long prompt: RAG, long documents (8K–64K tokens) | TTFT +12.6–13.9% | TTFT +18% (at most 0.14 s per 1,000 prompt tokens) |
 | Several very long prompts arriving together | TTFT per request +17.9–22.5% | TTFT per request +28% |
 | Decode speed, in every case | unchanged | unchanged |
 
-These are upper limits for the cases measured; in a mixed workload, most requests are shorter or arrive alone, and see less. On real 100 Gb/s links at TP4 (Section 13), the extra time to first token followed the same estimate, and decode speed did not change. For a specific workload, the emulated link of Section 7.3 gives the answer on the existing cluster, before any cable is bought.
+The real-link column applies the measured payload rate to the TP8 workload with comparable scheduling. To assess another workload, run it on the existing cables with both interfaces and then with one interface (Section 7.3). Use its measured bytes and TTFT for the conversion in Section 9.
 
-At 100 Gb/s, with one 4 × 100G breakout cable per four Sparks (Section 11), a **CRS812** connects 8 Sparks, enough for one TP8 cluster, at the cost of the longer wait for the first token on long prompts described above; the pace at which the answer streams does not change.
+With one 4 × 100G breakout cable per four Sparks, a **CRS812** can connect eight Sparks on its two 400G ports. At 200 Gb/s the same ports connect four Sparks.
 
-At TP4, four Sparks share one 4 × 100G breakout cable on a single switch socket (Section 11). With GLM-5.3-Flash, the first token of an 8K-token prompt arrived 12.6% later on real 100 Gb/s links, as the estimate predicted, and decode speed did not change (Section 13).
+At TP4 the **measured increase was 0.39 s for one 8K prompt**, against an estimate of 0.38 s from the GLM-5.3-Flash architecture and the two link rates. Four Sparks share a breakout cable and only its switch socket needs new settings. The Spark network configuration stays the same. Reboot after recabling (Section 11).
 
 At 100 Gb/s, a **CRS804** connects 16 Sparks. Run as two TP8 clusters, each sees the per-Spark link measured in this paper, so the results above apply to each, provided the switch can forward traffic on all ports at full speed at the same time (to be verified). A single TP16 cluster would roughly double the penalty (Section 10) and is not recommended at 100 Gb/s.
 
@@ -752,14 +752,14 @@ The 4 × 100G breakout was verified on a CRS804 with FS QDD-400G-4QPC02 cables. 
 - ✗ **Judging link use from averages:** one-second or switch-port averages hide the millisecond bursts that decide TTFT.
 - ✗ **Assuming half the link speed means half the inference speed:** only the bursts during prefill slow down; decode does not.
 - ✗ **Spreading a model over more Sparks than necessary at 100 Gb/s:** the penalty grows with TP size.
-- ✗ **Recabling running Sparks without rebooting them:** the links come up at the right speed but can send only about 13 Gb/s.
+- ✗ **Recabling running Sparks without rebooting them:** the links come up at the right speed but can send only about 13 Gb/s per interface.
 
 ### Checklist for planning a DGX Spark cluster network
 
 - ☐ Is the TP size per model instance decided (TP4, TP8, or two TP8 instances on 16 Sparks)?
 - ☐ Is the expected prompt length known (chat, RAG, long documents)?
 - ☐ Is there a TTFT target for long prompts?
-- ☐ Has the 100 Gb/s penalty been estimated (bytes per prompt token × prompt tokens ÷ 200 Gb/s, Section 5)?
+- ☐ Has the 100 Gb/s penalty been estimated (bits per prompt token × prompt tokens ÷ 200 Gb/s, Section 5)?
 - ☐ Has the workload been run on the emulated 100 Gb/s link (Section 7.3), and is the result, converted to a real link (Section 9), acceptable?
 - ☐ Are breakout support and ConnectX-7 link-up at the planned speed verified?
 - ☐ Were the Sparks rebooted after recabling, and does `ib_write_bw` show about 98 Gb/s per 100 Gb/s link?
@@ -769,11 +769,11 @@ The 4 × 100G breakout was verified on a CRS804 with FS QDD-400G-4QPC02 cables. 
 
 ## 16. Conclusion
 
-Tensor-parallel inference across DGX Spark systems uses the network in two very different ways. While a prompt is processed, every all-reduce sends tens of megabytes per Spark, as a ring, in bursts that fill a 200 Gb/s link for a few milliseconds at a time. While the answer is generated, the all-reduces are a few hundred kilobytes or less, and the traffic stays far below 100 Gb/s. Halving the link speed therefore leaves decode speed unchanged and adds a predictable amount to the wait for the first token.
+On the DGX Sparks tested here, 100 Gb/s is feasible for tensor-parallel inference. Large prefill collectives fill the link in short bursts, so lowering the link speed delays the first token of a long prompt. Once the answer starts, it streams at the same pace at TP4 and TP8.
 
-That amount can be estimated from the model's architecture, the engine's prefill chunk size and the link speed alone: for GLM-5.3 at TP8, at most 0.135 s per 1,000 prompt tokens at 100 Gb/s. Measured on 8 Sparks with an emulated 100 Gb/s link, single prompts of 8K–64K tokens reached their first token 12.6–13.9% later, close to the estimate; requests arriving together with other long prompts, 17.9–22.5% later; short prompts and decode speed were unaffected. A real 100 Gb/s link, which carries about 98 Gb/s, would add at most another 3–4 percentage points. Measured on real 100 Gb/s links with GLM-5.3-Flash at TP4, the extra time to first token followed the same estimate, and decode speed again did not change.
+The model’s bytes per prompt token and the change in reciprocal link rate give an estimate before recabling. For GLM-5.3 at TP8, the nominal rates give at most 0.135 s of extra transfer time per 1,000 prompt tokens. At the emulated rate, TTFT rose 12.6–13.9% for single 8K–64K prompts and mean TTFT per request rose 17.9–22.5% for four long prompts arriving together. The 1K change was within round variation. At TP4 on real links, a single 8K prompt took 0.39 s longer, close to the 0.38 s estimate.
 
-For an 8-Spark TP8 cluster with 100 Gb/s links, **expect the first token at most about 20% later for a very long prompt and at most about 30% later when several very long prompts arrive together, no change for short to medium prompts, and no change in how fast the answer streams.** Because the penalty grows with TP size, 16 Sparks at 100 Gb/s are best run as two TP8 clusters. For any other workload, the same comparison can be made on an existing 200 Gb/s cluster before buying cables, by emulating 100 Gb/s with one network interface per Spark and converting the result to a real link.
+For the TP8 cases, the real-link estimates reach about **18% extra TTFT for a single long prompt and 28% for mean per-request TTFT with four long prompts**, assuming comparable scheduling. Try the workload on existing 200 Gb/s cables before choosing a breakout. At 100 Gb/s per Spark, the two 400G ports on a CRS812 connect eight Sparks and the four 400G ports on a CRS804 connect sixteen. Use the sixteen as two TP8 clusters and verify simultaneous forwarding at full speed. The projected penalty is larger for a single TP16 model.
 
 ---
 
@@ -781,7 +781,7 @@ For an 8-Spark TP8 cluster with 100 Gb/s links, **expect the first token at most
 
 Because RDMA bypasses the operating system's network stack, the usual interface statistics do not count it. The traffic in this study was read from the ConnectX-7's RDMA port counters (`port_xmit_data` and `port_rcv_data` under `/sys/class/infiniband/`, in units of 4 bytes) for each of the two RDMA devices, and summed for the port. A cross-check against the adapter's own byte counters agreed within 0.2%.
 
-A small sampler read the counters every 1 ms on one Spark and timestamped each read individually, on the same clock the benchmark used for its requests. Rates over 1 ms and longer intervals were computed by spreading the bytes of each sampling interval over the averaging intervals it covers. The byte counts are exact, but the time of each read is known only to about ±0.1–0.2 ms, so a single 1 ms value is uncertain by about ±15–25%; this is why some 1 ms values in the figures appear slightly above the link speed. Averages over 5 ms or longer are accurate to a few percent.
+A small sampler read the counters every 1 ms on one Spark and timestamped each read individually, on the same clock the benchmark used for its requests. Rates over 1 ms and longer intervals were computed by spreading the bytes of each sampling interval over the averaging intervals it covers. The counter deltas count bytes over the sampling intervals. The time of each read is known only to about ±0.1–0.2 ms, so a single 1 ms value is uncertain by about ±15–25%; this is why some 1 ms values in the figures appear slightly above the link speed. Averages over 5 ms or longer are accurate to a few percent.
 
 The choice of averaging interval changes the highest value a measurement reports, as Section 8.1 shows: the same traffic peaks at 181 Gb/s in 1 ms intervals, 96 Gb/s in 5 ms intervals and 44 Gb/s in 100 ms intervals, while its average is the same in all of them. A peak value is meaningful only together with its averaging interval.
 
@@ -810,7 +810,7 @@ For the TP4 measurements of Part III:
 | Item | Value |
 |---|---|
 | Model | `zai-org/GLM-5.3-Flash` (FP8), speculative draft `incoai/GLM-5.3-Flash-DFlash2` |
-| Engine | SGLang 0.5.22.dev7 with pull request #36708, PyTorch 2.13, NCCL 2.30.7 |
+| Engine | SGLang 0.5.22.dev7 with pull request #36708, PyTorch 2.13, NCCL 2.30.7 installed with PyTorch |
 | Serve settings | `--tp-size 4`, `--chunked-prefill-size 8192`, `--max-running-requests 8`, `--context-length 262144`, `--kv-cache-dtype fp8_e4m3`, `--mem-fraction-static 0.8`, `--attention-backend triton`; speculative decoding: `--speculative-algorithm DFLASH`, 8 draft tokens per block |
 | NCCL | `NCCL_IB_HCA` with both RDMA devices; RoCE v2, traffic class 106 |
 | Network | 200 Gb/s: FS QDD-400G-2QPC01 (2 × 200G); 100 Gb/s: FS QDD-400G-4QPC02 (4 × 100G); MikroTik CRS804, RouterOS 7.24.4 |
@@ -839,11 +839,11 @@ For the TP4 measurements of Part III:
 - **NVFP4:** NVIDIA's 4-bit floating-point number format, with a scaling factor shared by each group of 16 values.
 - **Prefill:** The phase that processes the prompt before the first output token.
 - **QoS (quality of service):** Switch settings that sort traffic into classes and treat each class differently; here they keep RoCE traffic in its own class.
-- **Prefill chunk:** The part of a prompt processed in one forward pass (up to 4,096 tokens here).
+- **Prefill chunk:** The part of a prompt processed in one forward pass (up to 4,096 tokens in the TP8 configuration).
 - **RDMA:** Remote direct memory access: the network adapter reads and writes application memory directly, without the data passing through the operating system's network stack.
 - **Ring all-reduce:** An all-reduce in which devices pass segments of the data around a ring; each device sends 2 × (N − 1) / N times the data in total.
 - **RoCE v2:** RDMA over Converged Ethernet, version 2: RDMA packets carried inside UDP/IP over standard Ethernet.
-- **Tensor parallelism (TP):** Splitting every weight matrix of a model across several devices, which combine their partial results after each step.
+- **Tensor parallelism (TP):** Splitting a model’s tensor operations across several devices, which combine their partial results after each step.
 - **Tree all-reduce:** An all-reduce in which partial sums flow up a tree of devices to its root and the result flows back down; its fixed delays grow with log₂ N, but devices send different amounts. NCCL uses two such trees, each carrying half the data (a double binary tree).
 - **TTFT (time to first token):** The time from sending a request to receiving the first token of the answer.
 
@@ -887,7 +887,7 @@ For the TP4 measurements of Part III:
 
 ### Notes
 
-- **Estimates:** Sections 3–6 use only the model's configuration, the engine's settings and the link speed; the bounds are upper limits. The TP-size projection (Section 10) uses the measured TP8 baseline and is illustrative.
+- **Estimates:** Sections 3–6 use only the model's configuration, the engine's settings and the link speed; the bounds describe additional transfer time under the stated assumptions. The TP-size projection (Section 10) uses the measured TP8 baseline and is illustrative.
 - **Measurements:** All performance figures were measured on 8× DGX Spark with GLM-5.3 at TP8, as described in Section 7, and on 4× DGX Spark with GLM-5.3-Flash at TP4, as described in Section 12; network traffic was read from the ConnectX-7 RDMA counters of one Spark (Appendix A).
 - **Emulation:** At TP8, 100 Gb/s was emulated on the existing cables by restricting communication to one of the two network interfaces of each ConnectX-7 port, which carries up to 109 Gb/s; Section 9 converts the results to a real 100G cable, which carries 98 Gb/s. At TP4, real 100G cables were used.
 - **Currency:** Engine versions and settings change quickly; the results are valid for the versions listed, as of October 2026.
