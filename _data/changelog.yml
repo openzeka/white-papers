@@ -15,6 +15,14 @@
 # site features, fixes and corrections, renames, tooling. Running text names no company.
 # Check with: python3 _tools/check_changelog.py
 
+- date: 2026-11-27
+  type: benchmarks
+  run: inkling-2-mini_thor_mxfp8_vllm
+  text:
+    en: "Inkling-2-Mini on Thor: mixed MXFP8 and NVFP4 weights served with vLLM, with DSpark speculative decoding (k=7), measured from 1 to 16 concurrent requests with a 256K context."
+    tr: "Inkling-2-Mini, Thor üzerinde: MXFP8 ve NVFP4 karışık ağırlıklar vLLM ile sunuldu, DSpark spekülatif kod çözme (k=7) ile 256K bağlamda 1 ile 16 eşzamanlı istek arasında ölçüldü."
+    nl: "Inkling-2-Mini op Thor: gemengde MXFP8- en NVFP4-gewichten geserveerd met vLLM, met DSpark-speculatieve decodering (k=7), gemeten van 1 tot 16 gelijktijdige verzoeken met een context van 256K."
+
 - date: 2026-11-25
   type: benchmarks
   run: tencent-hy4-flash_b300_bf16_sglang_tp2_dfly

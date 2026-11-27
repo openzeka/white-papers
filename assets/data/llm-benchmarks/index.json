@@ -50,6 +50,11 @@
           "id": "qwen3-vl-30b-a3b-instruct_thor_fp8_vllm",
           "model": "Qwen3-VL-30B-A3B-Instruct",
           "path": "thor/qwen3-vl-30b-a3b-instruct_thor_fp8_vllm.json"
+        },
+        {
+          "id": "inkling-2-mini_thor_mxfp8_vllm",
+          "model": "Inkling-2-Mini",
+          "path": "thor/inkling-2-mini_thor_mxfp8_vllm.json"
         }
       ]
     },
