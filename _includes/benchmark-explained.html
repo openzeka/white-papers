@@ -5,11 +5,15 @@
   row is opened (explanation() in assets/js/benchmark-table.js), ending in a
   link to the run's permanent page (_plugins/benchmark-pages.rb). Must sit
   outside the [data-bt-src] element, whose content the widget replaces.
+  The data-bt-sentences script carries the same sentence templates, so the
+  widget can rewrite the text for the targets a reader chooses (the static
+  text here stays as it is, at the default targets, for search engines).
 
   Include as: {% include benchmark-explained.html %}
 {%- endcomment -%}
 {%- if site.data.oz_llm -%}
 <div class="bt-explained-src" hidden>
+<script type="application/json" data-bt-sentences>{"lang": {{ site.active_lang | jsonify }}, "t": {{ site.data[site.active_lang].strings.sentences | jsonify }}}</script>
 {%- for r in site.data.oz_llm.benchmarks %}
 <div data-bt-explained="{{ r.id }}">{% for p in r.oz_parts[site.active_lang] %}<p>{{ p }}</p>{% endfor %}{% if r.oz_permalink %}<p><a href="{{ r.oz_permalink | relative_url }}">{{ site.data[site.active_lang].strings.bench_page.permalink }}</a></p>{% endif %}</div>
 {%- endfor %}

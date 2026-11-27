@@ -95,10 +95,14 @@ are calculated*, below, explains both estimates in full.
 
 Click a row to see:
 
-- the full concurrency sweep, marked PASS or FAIL against your targets at every level;
+- your two speed targets, which you can change right there, and the full
+  concurrency sweep with every level checked against them — a level that
+  misses says which target it misses; it is a measurement that falls short
+  of your target, not a failed run;
 - a speed preview for any measured level, so C=1 and C=32 can be compared by eye;
 - a chart of per-request TPS, the speed each user sees, against aggregate TPS,
-  what the system produces in total — the trade-off capacity planning sits between;
+  what the system produces in total — the trade-off capacity planning sits between —
+  with your TPS target drawn as a dashed line;
 - a short capacity summary: what each limit allows and how much memory is left
   for the KV cache;
 - the run's notes: cache precision, kernels, memory settings, speculation depth.

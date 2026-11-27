@@ -101,11 +101,14 @@ anlatılıyor.
 
 Bir satıra tıkladığınızda şunları görürsünüz:
 
-- her seviyede hedeflerinize göre BAŞARILI ya da BAŞARISIZ olarak işaretlenmiş tüm eşzamanlılık taraması;
+- orada değiştirebileceğiniz iki hız hedefiniz ve her seviyesi bu hedeflerle
+  karşılaştırılan tüm eşzamanlılık taraması — hedefi karşılamayan bir seviye
+  hangi hedefi karşılamadığını gösterir; bu, başarısız bir çalıştırma değil,
+  hedefinizin altında kalan bir ölçümdür;
 - ölçülmüş herhangi bir seviyedeki hızın önizlemesi; böylece C=1 ile C=32'yi gözle karşılaştırabilirsiniz;
 - istek başına TPS'yi (her kullanıcının gördüğü hız) toplam TPS ile (sistemin
   toplamda ürettiği) karşılaştıran bir grafik — kapasite planlaması bu ikisi
-  arasındaki dengedir;
+  arasındaki dengedir; TPS hedefiniz grafikte kesikli çizgiyle gösterilir;
 - kısa bir kapasite özeti: her sınırın neye izin verdiği ve KV cache için ne
   kadar bellek kaldığı;
 - çalıştırmanın notları: cache hassasiyeti, kernel'lar, bellek ayarları,

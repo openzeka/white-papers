@@ -22,6 +22,7 @@
 # Published URLs are permanent — do not change how a slug is formed.
 
 require "cgi"
+require "json"
 
 module OzBenchPages
   BASE = "/llm-inference-benchmarks".freeze
@@ -89,7 +90,7 @@ module OzBenchPages
     out << "</tr></thead>\n<tbody>\n"
     (r["data_points"] || []).each do |p|
       out << "<tr><td>#{p['c']}</td><td>#{p['ttft_ms'].nil? ? '—' : p['ttft_ms'].round}</td>" \
-             "<td>#{format('%.2f', p['tps'].to_f)}</td><td>#{OzVisibility.meets(p, cfg) ? 'PASS' : 'FAIL'}</td></tr>\n"
+             "<td>#{format('%.2f', p['tps'].to_f)}</td><td>#{h status(p, cfg, b)}</td></tr>\n"
     end
     out << "</tbody>\n</table>\n"
     (r["oz_parts"] || {})[lang].to_a.each { |p| out << "<p>#{h p}</p>\n" }
@@ -97,7 +98,16 @@ module OzBenchPages
     out << "</div>\n"
   end
 
-  def self.page_html(r, cfg, b, lang)
+  # The opened row's wording: met, or the metric that misses its target.
+  def self.status(p, cfg, b)
+    return "✓ #{b['status_yes']}" if OzVisibility.meets(p, cfg)
+    miss = []
+    miss << "TTFT" unless !p["ttft_ms"].nil? && p["ttft_ms"] <= cfg["ttft_threshold_ms"]
+    miss << "TPS" unless !p["tps"].nil? && p["tps"] >= cfg["tps_threshold"]
+    "✗ #{miss.join(' + ')}"
+  end
+
+  def self.page_html(r, cfg, b, lang, t = nil)
     js = lang == "en" ? "benchmark-table.js" : "benchmark-table.#{lang}.js"
     out = +%(<p class="oz-crumb"><a href="#{BASE}/">#{h b['crumb']}</a></p>\n)
     out << "<h1>#{h title(r, b)}</h1>\n"
@@ -107,7 +117,10 @@ module OzBenchPages
     out << fallback(r, cfg, b, lang) << "</div>\n"
     out << %(<p class="bt-attribution">#{b['attribution']}</p>\n)
     # The widget reads the explanation from here, as on the explorer page.
-    out << %(<div class="bt-explained-src" hidden><div data-bt-explained="#{h r['id']}">)
+    out << %(<div class="bt-explained-src" hidden>)
+    # The sentence templates, so the widget can rewrite the text for the targets a reader chooses.
+    out << %(<script type="application/json" data-bt-sentences>#{JSON.generate('lang' => lang, 't' => t).gsub('</', '<\\/')}</script>) if t
+    out << %(<div data-bt-explained="#{h r['id']}">)
     (r["oz_parts"] || {})[lang].to_a.each { |p| out << "<p>#{h p}</p>" }
     out << "</div></div>\n"
     %w[https://cdn.jsdelivr.net/npm/chart.js@4 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2
@@ -275,7 +288,7 @@ module OzBenchPages
       b = (site.data[lang] || {}).dig("strings", "bench_page") or return
       rows.each do |r|
         add(site, r["oz_permalink"], OzBenchPages.title(r, b), ((r["oz_parts"] || {})[lang] || []).first.to_s,
-            lang, langs, OzBenchPages.page_html(r, llm["oz_config"], b, lang))
+            lang, langs, OzBenchPages.page_html(r, llm["oz_config"], b, lang, (site.data[lang] || {}).dig("strings", "sentences")))
       end
       cv_rows.each do |row|
         desc = (row["text"] || {})[lang].to_s.split(/(?<=\.) /).first.to_s

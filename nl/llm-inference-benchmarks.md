@@ -103,13 +103,15 @@ uit.
 
 Klik op een rij om het volgende te zien:
 
-- de volledige gelijktijdigheidsreeks, op elk niveau gemarkeerd als PASS of FAIL
-  ten opzichte van uw doelen;
+- uw twee snelheidsdoelen, die u daar direct kunt aanpassen, en de volledige
+  gelijktijdigheidsreeks waarin elk niveau daaraan wordt getoetst — een niveau
+  dat een doel niet haalt, vermeldt welk doel; het is een meting die onder uw
+  doel blijft, geen mislukte run;
 - een snelheidspreview voor elk gemeten niveau, zodat C=1 en C=32 met het oog
   kunnen worden vergeleken;
 - een grafiek van TPS per verzoek, de snelheid die elke gebruiker ziet, tegenover
   geaggregeerde TPS, wat het systeem in totaal produceert — de afweging waartussen
-  capaciteitsplanning zich beweegt;
+  capaciteitsplanning zich beweegt — met uw TPS-doel als stippellijn;
 - een korte capaciteitssamenvatting: wat elke limiet toelaat en hoeveel geheugen
   er overblijft voor de KV-cache;
 - de notities van de run: cacheprecisie, kernels, geheugeninstellingen,
