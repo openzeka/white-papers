@@ -15,6 +15,9 @@
   --bt-bg-hover: #eef5e6;
   --bt-text: #1a1a1a;
   --bt-text-muted: #525f7a;
+  /* A value that misses the reader's own target: amber, not error red,
+     because the measurement is fine — it just does not meet that target. */
+  --bt-miss: #b45309;
   --bt-radius: 6px;
 }
 
@@ -280,6 +283,30 @@
   border-bottom: 2px solid var(--bt-green);
 }
 
+/* Model names may wrap after a hyphen (the widget inserts <wbr>), so on a
+   window too narrow for the whole table this column gives up width first,
+   instead of the table needing a horizontal scrollbar. With room to spare
+   nothing wraps: table-layout: auto gives every column its full width then. */
+.bt-table > tbody > tr > td.bt-model {
+  white-space: normal;
+  min-width: 9em;
+}
+
+/* From 1710px the whole table fits on one line per row (it needs ~1276px plus
+   the side panel and gutters), so names never wrap there; without this the
+   browser would still share width out and wrap the longest names at 1920. */
+@media (min-width: 1710px) {
+  html:not([lang="nl"]) .bt-table > tbody > tr > td.bt-model { white-space: nowrap; }
+  /* Chrome still breaks at <wbr> under nowrap; removing it removes the break. */
+  html:not([lang="nl"]) .bt-table > tbody > tr > td.bt-model wbr { display: none; }
+}
+
+/* The Dutch headers are longer: its full table needs ~1331px. */
+@media (min-width: 1765px) {
+  html[lang="nl"] .bt-table > tbody > tr > td.bt-model { white-space: nowrap; }
+  html[lang="nl"] .bt-table > tbody > tr > td.bt-model wbr { display: none; }
+}
+
 .bt-table thead th:hover {
   background: #333;
 }
@@ -333,6 +360,12 @@
 
 .bt-table tbody td.bt-num.bt-bad {
   color: #c0392b;
+}
+
+/* LLM explorer only (the VLM and CV explorers keep red): a value that misses
+   the reader's target. */
+.bt-table tbody td.bt-num.bt-miss {
+  color: var(--bt-miss);
 }
 
 .bt-table tbody td.bt-muted {
@@ -407,6 +440,16 @@
 
 .bt-detail-table .bt-detail-fail {
   color: #c0392b;
+}
+
+.bt-detail-table .bt-detail-miss {
+  color: var(--bt-miss);
+  font-weight: 600;
+  text-align: left;
+}
+
+.bt-detail-table .bt-detail-pass {
+  text-align: left;
 }
 
 .bt-detail-table .bt-detail-pass {
@@ -811,6 +854,16 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
+/* ...except on the opened row's light targets row. */
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th .bt-tip {
+  color: var(--bt-text-muted);
+}
+
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th .bt-tip:hover,
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th .bt-tip:focus-visible {
+  color: var(--bt-green);
+}
+
 .bt-tip:hover,
 .bt-tip:focus-visible {
   color: var(--bt-green);
@@ -898,9 +951,31 @@
   color: var(--bt-green-dark, #5a8c00);
 }
 
+/* The opened row's preview names the row it plays in a chip framed like the
+   picked row (.bt-dp-active), with that row's TPS figure. */
+/* Bigger than the panel's preview heading: it says which row is playing. */
+.bt-detail-preview .bt-tps-preview-title {
+  font-size: 13px;
+}
+
+.bt-detail-preview .bt-preview-sub[data-rowsub] {
+  display: inline-block;
+  padding: 1px 10px;
+  font-size: 15px;
+  border: 2px solid var(--bt-green);
+  border-radius: 4px;
+  background: var(--bt-bg-hover);
+  font-weight: 700;
+  line-height: 1.6;
+}
+
 /* the picked speed misses the TPS target */
 .bt-preview-sub.bt-sub-bad {
   color: #c0392b;
+}
+
+.bt-preview-sub.bt-sub-miss {
+  color: var(--bt-miss);
 }
 
 .bt-preview-text {
@@ -1016,6 +1091,146 @@ details.bt-howto > summary:focus-visible {
 
 .bt-howto-example p:last-child { margin-bottom: 0; }
 
+/* ── Expanded row: the reader's speed targets, a second header row of the
+   sweep, each under the column it judges ── */
+
+.bt-detail-top .bt-sweep {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.bt-detail-top .bt-sweep .bt-detail-table {
+  margin-bottom: 0;
+}
+
+/* Wraps to the table's width instead of stretching it. */
+.bt-detail-top .bt-sweep .bt-preview-note {
+  width: 0;
+  min-width: 100%;
+  white-space: normal;
+}
+
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th {
+  background: var(--bt-bg-alt);
+  color: var(--bt-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: none;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--bt-border);
+  vertical-align: middle;
+  cursor: default;
+}
+
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th.bt-sweep-targets-label,
+.bt-table .bt-detail-table thead th.bt-sweep-status {
+  text-align: left;
+}
+
+/* The label is a caption for the fields, so smaller than the figures (a
+   wider rule gave it their 14px). */
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th.bt-sweep-targets-label {
+  font-size: 12px !important;
+}
+
+/* The target cells and their fields use exactly the size of the figures
+   below (.bt-detail-table tbody td), set here rather than on the field alone,
+   so the field takes it by inheritance and nothing can shrink it to the
+   12px of the row's label. */
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th.bt-sweep-target,
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th.bt-sweep-target input,
+.bt-table .bt-detail-table tbody td {
+  font-size: 14px !important;
+}
+
+.bt-table .bt-detail-table thead tr.bt-sweep-targets th.bt-sweep-target {
+  position: relative;
+  /* relative (for the sign) plus the header's z-index: 1 would paint these
+     cells over the main table's pinned header while scrolling */
+  z-index: 0;
+  padding: 5px 6px;
+}
+
+/* Inside the field's left edge, out of the flow, so the number stays centred
+   (left: half the cell minus half the field, plus a little). */
+.bt-sweep-sign {
+  position: absolute;
+  left: calc(50% - 2.8em + 7px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bt-text-muted);
+  pointer-events: none;
+}
+
+/* The field spans the column and centres the number, with equal padding on
+   both sides (room for the sign), so it lines up with the figures below. */
+.bt-sweep-targets input {
+  display: block;
+  /* Fixed, centred in the cell: width: 100% makes the browser size the
+     column from the field's own default width (~240px) instead. */
+  width: 5.6em;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 3px 18px;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: inherit;
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  color: var(--bt-text);
+  background: var(--bt-bg);
+  border: 1px solid var(--bt-border);
+  border-radius: 4px;
+}
+
+/* No spinner: it would take room on the right and pull the number off
+   centre. The arrow keys still step the value. */
+.bt-sweep-targets input::-webkit-inner-spin-button,
+.bt-sweep-targets input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.bt-sweep-targets input:focus {
+  outline: none;
+  border-color: var(--bt-green);
+  box-shadow: 0 0 0 2px rgba(118, 185, 0, 0.25);
+}
+
+.bt-sweep-reset {
+  margin-left: 4px;
+  padding: 0 4px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  color: var(--bt-green-dark);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.bt-sweep-reset:hover {
+  color: var(--bt-text);
+}
+
+/* The level that sets Max C, tagged in the sweep. */
+.bt-maxc-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 5px;
+  font-size: 10.5px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--bt-green-dark);
+  border: 1px solid var(--bt-green-dark);
+  border-radius: 3px;
+  vertical-align: 1px;
+}
+
 /* ── Expanded row: sweep table beside the speed preview ── */
 
 .bt-detail-top {
@@ -1056,14 +1271,19 @@ details.bt-howto > summary:focus-visible {
   flex: none;
 }
 
-/* The metric that caused a FAIL, marked on the number itself. Colour only —
-   the STATUS column keeps the bold, so the row still reads status-first. */
+/* The metric that misses a target, marked on the number itself (the VLM
+   explorer's red; the LLM explorer's amber is .bt-dp-miss). Colour only — the
+   status column says which target in words. */
 .bt-detail-table td.bt-dp-good {
   color: #2d8a2d;
 }
 
 .bt-detail-table td.bt-dp-bad {
   color: #c0392b;
+}
+
+.bt-detail-table td.bt-dp-miss {
+  color: var(--bt-miss);
 }
 
 /* measurement rows are pickable: each one drives the preview */
@@ -1089,6 +1309,10 @@ details.bt-howto > summary:focus-visible {
    on the row: with border-collapse a row border would shift the columns. */
 .bt-detail-table tbody tr.bt-dp-active > td {
   box-shadow: inset 0 2px 0 var(--bt-green), inset 0 -2px 0 var(--bt-green);
+}
+
+.bt-detail-table tbody tr.bt-dp-active > td.bt-dp-tps {
+  font-weight: 700;
 }
 
 .bt-detail-table tbody tr.bt-dp-active > td:first-child {

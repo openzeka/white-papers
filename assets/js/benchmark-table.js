@@ -58,7 +58,6 @@
     colModel: "Model",
     colParams: "Parameters",
     colIntel: "Intelligence Index",
-    colAgenticIdx: "Agentic Index",
     colDevice: "Device",
     colQuant: "Quantization",
     colTps: "TPS",
@@ -115,8 +114,16 @@
     unitModule: "module",
 
     /* Expanded row */
-    detailC: "C", detailTtft: "TTFT (ms)", detailTps: "TPS (tok/s)", detailStatus: "Status",
-    pass: "PASS", fail: "FAIL",
+    detailC: "C", detailTtft: "TTFT (ms)", detailTps: "TPS (tok/s)", detailStatus: "Meets targets",
+    statusMet: "Yes",
+    maxcTag: "Max C",
+    maxcTagTitle: "The highest measured level that meets your targets: this row's Max C.",
+    rowTargetsLabel: "Targets chosen",
+    rowTargetsTip: function (ttft, tps) { return "<strong>Targets chosen</strong><p>Every measured level is checked against these: the time to the first token at most this many milliseconds, and the speed of each request at least this many tokens per second. The defaults are " + ttft + " ms and " + tps + " tok/s.</p><p>Type a value and press Enter: Max C, the capacity figures, the explanation and the chart follow, and ↺ brings the defaults back.</p>"; },
+    rowTargetDefault: function (v, unit) { return "Default: " + v + " " + unit; },
+    rowTargetsReset: "Back to the default targets",
+    sweepNote: "Edit the targets to match your use; Max C and the capacity figures follow. A level that misses one is a measurement below your target, not a failed run.",
+    chartTarget: function (t) { return "Your TPS target: " + t + " tok/s"; },
     notes: "Notes:",
     downloadChart: "Download Chart",
     chartFileSuffix: "-chart.png",
@@ -132,8 +139,8 @@
     previewSubtitle: function (n) { return "sample text at approximately " + n + " tokens/s"; },
     previewStopped: "stopped — the TPS target is 0",
     previewRowHeading: "What this speed looks like",
-    previewRowSub: function (c, n) { return "C=" + c + " · approximately " + n + " tokens/s"; },
-    previewPick: "Pick any measured concurrency to preview the speed recorded there.",
+    previewRowSub: function (c, n) { return "▶ C=" + c + " · " + n + " tok/s"; },
+    previewPick: "The text streams at the TPS of the framed row. Click another row to compare its speed.",
     previewRowLabel: function (c) { return "Preview the speed measured at C=" + c; },
     previewDisclaimer: "This is an approximate simulation designed to visualize the selected TPS value. Actual response experience may vary depending on TTFT, output length, and application behavior.",
     sampleText: "Running a large language model on your own hardware means the response speed depends on the accelerator, the quantization format and how many people are using the system at the same time. At low token rates the text appears word by word and the wait becomes noticeable, so the interface feels like it is thinking out loud. As the rate increases the reply arrives faster than most people can read it, and the experience changes character entirely: instead of watching the answer being assembled, you simply read it. Somewhere between those two extremes is the point where a chat assistant stops feeling like a machine you are waiting on and starts feeling like a tool that keeps up with you. Where exactly that point falls depends on the task. Skimming a short answer tolerates far less speed than reading a long technical explanation, and a background job that nobody watches tolerates less still.",
@@ -142,8 +149,7 @@
     tip: {
       model: "<strong>Model</strong><p>The large language model being served.</p><p>A row is a whole deployment, so the same model appears in several rows with different hardware, format, engine or parallelism.</p>",
       params: "<strong>Parameters</strong><p>The model's total number of weights, as published.</p><p>For mixture-of-experts models this is the total, not the part active for each token, because all of it is held in memory.</p>",
-      intel: "<strong>Intelligence Index</strong><p>Artificial Analysis’ capability score, combining evaluations of reasoning, coding, science and long-context work. Higher is better.</p><p>It describes the model, not this run, so every row of the model shows the same value. Where several reasoning-effort settings are scored, the highest is shown; a dash means no score is published.</p><p>Source: Artificial Analysis.</p>",
-      agenticIdx: "<strong>Agentic Index</strong><p>Artificial Analysis’ score for agentic work: multi-step tasks, tool calls and staying on course without supervision. Higher is better.</p><p>It measures what the model can do; Agentic Capacity, further along the row, estimates how many people the hardware can serve. A dash means no score is published, which is common here.</p><p>Source: Artificial Analysis.</p>",
+      intel: "<strong>Intelligence Index</strong><p>A capability score from ai-leaderboard.dev, 0 to 100: 60% agentic coding (12 coding and agent benchmarks) and 40% scientific knowledge (7 reasoning, science and knowledge-work benchmarks). Higher is better. Benchmarks a model has not been tested on are estimated from the ones it has.</p><p>It describes the model, not this run, so every row of the model shows the same value. Where several reasoning-effort settings are scored, the highest is shown; a dash means no score is available.</p><p>Source: ai-leaderboard.dev.</p>",
       device: "<strong>Device</strong><p>The hardware the run used, and how many units served the model together.</p><p>4× DGX Spark means four machines serving one model as a single system.</p>",
       quant: "<strong>Quantization</strong><p>The number format the weights are stored in.</p><p>Fewer bits per weight means less memory and usually more speed, at some risk to quality. BF16 and FP16 are full precision, FP8 and MXFP8 use 8 bits, and NVFP4, MXFP4, FP4, INT4 and AWQ use 4.</p>",
       tps: "<strong>TPS — tokens per second</strong><p>How fast one request’s reply is produced at the selected concurrency. A token is about three quarters of a word.</p><p>Per request, not in total: at C=8, each of the eight requests gets this rate. Mean of ten rounds with 128-token prompts and replies. Higher is better.</p>",
@@ -599,9 +605,192 @@
      id), so the text is in the HTML for search engines and agents; the widget
      only moves it into view. A page without them — the openzeka.com embed —
      shows the capacity box alone. */
+  /* The row's explanation. The page carries it as static text at the default
+     targets (for search engines and /llms-full.txt, from _plugins/visibility.rb)
+     plus the sentence templates; the widget rewrites it from those templates
+     for the targets and assumptions in force, with the figures in bold. Without
+     the templates (an older page) the static text is shown as it is. */
   function explanation(entry) {
     var el = document.querySelector('[data-bt-explained="' + CSS.escape(entry.id) + '"]');
-    return el ? el.innerHTML : "";
+    if (!el) return "";
+    var d = sentenceData();
+    if (!d) return el.innerHTML;
+    var html = explainParts(entry, d).map(function (p) { return "<p>" + p + "</p>"; }).join("");
+    var link = el.querySelector("a");
+    if (link && link.parentNode) html += "<p>" + link.parentNode.innerHTML + "</p>";
+    return html;
+  }
+
+  var sentences;
+  function sentenceData() {
+    if (sentences !== undefined) return sentences;
+    var el = document.querySelector("script[data-bt-sentences]");
+    try { sentences = el ? JSON.parse(el.textContent) : null; } catch (e) { sentences = null; }
+    if (sentences && !sentences.t) sentences = null;
+    return sentences;
+  }
+
+  /* Half up on the value as written (its shortest decimal form), digit by
+     digit: 30.15 -> 30.2. toFixed() rounds the binary value (30.1), and the
+     build's round_half_up() in _plugins/visibility.rb is this function's twin,
+     so the text matches the page's static copy. */
+  function roundHalfUp(x, dec) {
+    var f = Number(x), s = String(Math.abs(f));
+    if (s.indexOf("e") > -1) return f.toFixed(dec);
+    var parts = s.split("."), whole = parts[0], frac = parts[1] || "", out;
+    if (frac.length <= dec) {
+      while (frac.length < dec) frac += "0";
+      out = dec ? whole + "." + frac : whole;
+    } else {
+      var digits = (whole + frac.slice(0, dec)).split("").map(Number);
+      if (Number(frac.charAt(dec)) >= 5) {
+        var i = digits.length - 1;
+        for (; i >= 0; i--) {
+          if (digits[i] === 9) digits[i] = 0;
+          else { digits[i] += 1; break; }
+        }
+        if (i < 0) digits.unshift(1);
+      }
+      var n = digits.join("");
+      out = dec ? n.slice(0, n.length - dec) + "." + n.slice(n.length - dec) : n;
+    }
+    return f < 0 && /[1-9]/.test(out) ? "-" + out : out;
+  }
+
+  /* A port of num() in _plugins/visibility.rb: Turkish groups with a dot and
+     uses a decimal comma; English and Dutch use 1,024 and 1.5. */
+  function numL(x, lang, dec) {
+    if (x === null || x === undefined) return "";
+    var v = !dec ? roundHalfUp(x, 0) : roundHalfUp(x, dec).replace(/\.?0+$/, "");
+    var neg = v.charAt(0) === "-";
+    if (neg) v = v.slice(1);
+    var parts = v.split(".");
+    var tr = lang === "tr";
+    var whole = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, tr ? "." : ",");
+    return (neg ? "-" : "") + whole + (parts[1] ? (tr ? "," : ".") + parts[1] : "");
+  }
+
+  /* Templates are site copy; values are escaped, and arrive as HTML. */
+  function fillT(t, vars) {
+    var out = escapeHTML(t || "");
+    for (var k in vars) if (vars.hasOwnProperty(k)) out = out.split("%" + k + "%").join(vars[k]);
+    return out;
+  }
+
+  function bold(v) { return "<strong>" + escapeHTML(v) + "</strong>"; }
+
+  /* A port of llm_text() in _plugins/visibility.rb — same sentences, same
+     choices — computed with the targets in force. "_set" templates say "your
+     chosen speed targets" once either target differs from the file's. */
+  function explainParts(entry, d) {
+    var t = d.t, lang = d.lang;
+    var par = [["TP", entry.tp], ["DP", entry.dp], ["PP", entry.pp]]
+      .filter(function (x) { return x[1] != null && x[1] !== 1; })
+      .map(function (x) { return x[0] + "=" + x[1]; }).join(", ");
+    var c1 = null;
+    entry.data_points.forEach(function (p) { if (p.c === 1) c1 = p; });
+    var params = lang === "tr" ? String(entry.params).replace(/(\d)\.(\d)/g, "$1,$2") : entry.params;
+    var out = [fillT(t.llm_run, {
+      model: escapeHTML(entry.model), params: escapeHTML(params), quant: escapeHTML(entry.quantization),
+      engine: escapeHTML(entry.engine), device: escapeHTML(entry.device),
+      spec: entry.mtp ? escapeHTML(t.llm_spec) : "",
+      par: par ? fillT(t.llm_par, { par: escapeHTML(par) }) : "",
+      ttft: c1 ? bold(numL(c1.ttft_ms, lang)) : "", tps: c1 ? bold(numL(c1.tps, lang, 1)) : ""
+    })];
+    var set = config.ttft_threshold_ms !== fileConfig.ttft_threshold_ms ||
+      config.tps_threshold !== fileConfig.tps_threshold;
+    var sfx = set && t.basis_both_set ? "_set" : "";
+    var tv = { ttft_t: bold(numL(config.ttft_threshold_ms, lang)), tps_t: bold(numL(config.tps_threshold, lang, 1)) };
+    var ch = capacity(entry, "chat"), ag = capacity(entry, "agentic");
+    function n(k) {
+      return k.atLeast ? fillT(t.cap_min_n, { n: bold(numL(k.shown, lang)) }) : bold(numL(k.shown, lang));
+    }
+    if (getMaxC(entry) === 0) {
+      out.push(fillT(t["cap_none" + sfx], tv));
+      return out;
+    }
+    var speedOnly = [ch, ag].some(function (k) { return k.limit !== "context" && k.mem === null; });
+    var basis = fillT(t[(speedOnly ? "basis_speed" : "basis_both") + sfx], tv);
+    if (ag.limit === "context") out.push(fillT(t.cap_chat_only, { basis: basis, chat: n(ch) }));
+    else if (ch.shown === ag.shown && ch.atLeast === ag.atLeast) out.push(fillT(t.cap_same, { basis: basis, chat: n(ch) }));
+    else out.push(fillT(t.cap_range, { basis: basis, chat: n(ch), agentic: n(ag) }));
+    if (ch.atLeast || ag.atLeast) out.push(escapeHTML(t.cap_min));
+    var cs = {};
+    entry.data_points.forEach(function (p) { cs[p.c] = true; });
+    if (Object.keys(cs).length === 1 && cs[1]) out.push(escapeHTML(t.cap_single));
+    return out;
+  }
+
+  /* The two speed targets as a second header row of the sweep, each under
+     the column it judges: the sweep is checked against them, and on a run's
+     own page (no targets panel) this is the only place to change them. Same
+     config as the panel, so changing either changes both. */
+  function sweepTargets() {
+    var changed = config.ttft_threshold_ms !== fileConfig.ttft_threshold_ms ||
+      config.tps_threshold !== fileConfig.tps_threshold;
+    function field(key, min, step, label, unit) {
+      return '<input type="number" data-row-target="' + key + '" value="' + shownTarget(key) +
+        '" min="' + min + '" step="' + step + '" size="4" inputmode="numeric" aria-label="' + escapeHTML(label) +
+        '" title="' + escapeHTML(S.rowTargetDefault(fileConfig[key], unit)) + '">';
+    }
+    return '<tr class="bt-sweep-targets"><th></th>' +
+      /* Each field spans its column with the number centred, so a target sits
+         right above that column's figures; the sign sits inside the field. */
+      '<th class="bt-sweep-target"><span class="bt-sweep-sign">≤</span>' +
+        field("ttft_threshold_ms", 0, 100, S.ttftThreshold, "ms") + "</th>" +
+      '<th class="bt-sweep-target"><span class="bt-sweep-sign">≥</span>' +
+        field("tps_threshold", 1, 1, S.tpsThreshold, "tok/s") + "</th>" +
+      /* The tip gives the defaults; ↺ appears once a target differs. */
+      '<th class="bt-sweep-targets-label">← ' + escapeHTML(S.rowTargetsLabel) +
+      tip(S.rowTargetsTip(fileConfig.ttft_threshold_ms, fileConfig.tps_threshold)) +
+      (changed ? ' <button type="button" class="bt-sweep-reset" title="' + escapeHTML(S.rowTargetsReset) +
+        '" aria-label="' + escapeHTML(S.rowTargetsReset) + '">↺</button>' : "") + "</th></tr>";
+  }
+
+  /* Applied on Enter or when the field is left, not on every keystroke:
+     renderTable() rebuilds the row, which would throw the cursor out of the
+     field halfway through typing "1500". Focus is put back afterwards. */
+  function wireRowTargets(entry, container) {
+    var box = container.querySelector('.bt-sweep[data-row="' + CSS.escape(entry.id) + '"]');
+    if (!box) return;
+    function refocus(sel) {
+      var nb = container.querySelector('.bt-sweep[data-row="' + CSS.escape(entry.id) + '"]');
+      var el = nb && nb.querySelector(sel);
+      if (el) el.focus({ preventScroll: true });
+    }
+    box.querySelectorAll("input[data-row-target]").forEach(function (input) {
+      var key = input.getAttribute("data-row-target");
+      function apply() {
+        if (!document.contains(input)) return;
+        var v = parseFloat(input.value);
+        if (isNaN(v) || v < 1 || v !== Math.floor(v)) { input.value = shownTarget(key); return; }
+        if (v === config[key]) return;
+        setSpeedTarget(container, key, v);
+        renderTable(container);
+        refocus('[data-row-target="' + key + '"]');
+      }
+      input.addEventListener("change", apply);
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); apply(); }
+      });
+    });
+    var reset = box.querySelector(".bt-sweep-reset");
+    if (reset) reset.addEventListener("click", function () {
+      setSpeedTarget(container, "ttft_threshold_ms", fileConfig.ttft_threshold_ms);
+      setSpeedTarget(container, "tps_threshold", fileConfig.tps_threshold);
+      renderTable(container);
+      refocus('[data-row-target="ttft_threshold_ms"]');
+    });
+  }
+
+  /* One speed target changed from inside a row: keep the targets panel's
+     field, and its speed preview, in step with it. */
+  function setSpeedTarget(container, key, v) {
+    config[key] = v;
+    var field = container.querySelector("#bt-assump-" + key);
+    if (field) field.value = shownTarget(key);
+    var body = container.querySelector("#bt-targets-body");
+    if (key === "tps_threshold" && body && !body.hidden) startPreview(container);
   }
 
   function detailPair(entry) {
@@ -1230,10 +1419,12 @@
       tr.classList.add("bt-dp-active");
       var tps = parseFloat(tr.getAttribute("data-tps"));
       var c = tr.getAttribute("data-c");
-      subEl.textContent = S.previewRowSub(c, Math.round(tps * 10) / 10);
+      /* The same figure, to the same decimals, as the framed row's TPS cell,
+         in a chip framed like that row: the link between the two is visible. */
+      subEl.textContent = S.previewRowSub(c, fmt(tps, 2));
       /* Match the colour of the TPS cell it came from, so the heading does not
          read as approval of a speed the table just marked red. */
-      subEl.classList.toggle("bt-sub-bad", !tpsMeets(tps));
+      subEl.classList.toggle("bt-sub-miss", !tpsMeets(tps));
       if (isNaN(tps) || tps <= 0) { stopStream(textEl); textEl.textContent = ""; return; }
       stream(textEl, tps);
     }
@@ -1351,10 +1542,10 @@
     });
   }
 
-  /* Artificial Analysis leaves both indexes null for models it has not scored,
-     and the Agentic Index is null far more often than the Intelligence one.
-     Render that as the same em dash the TP/DP/PP columns use for "not
-     applicable", rather than a 0 that would sort and read as a real score. */
+  /* The Intelligence Index is null for models ai-leaderboard.dev does not
+     track, or has too few scores for. Render that as the same em dash the
+     TP/DP/PP columns use for "not applicable", rather than a 0 that would sort
+     and read as a real score. */
   function idxCell(v) {
     return v == null ? '<span class="bt-muted">—</span>' : fmt(v, 1);
   }
@@ -1380,8 +1571,8 @@
         va = parseParams(a.params); vb = parseParams(b.params);
         if (va === null) va = -1;
         if (vb === null) vb = -1;
-      } else if (sortCol === "intelligence_index" || sortCol === "agentic_index") {
-        /* Null means Artificial Analysis publishes no score, which is not the
+      } else if (sortCol === "intelligence_index") {
+        /* Null means no score is available, which is not the
            same as zero. Sink those rows to the bottom in both directions, so
            flipping the sort never parks the blanks at the top. */
         va = a[sortCol]; vb = b[sortCol];
@@ -1429,7 +1620,6 @@
       { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false, left: true },
       { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true },
       { key: "intelligence_index", label: S.colIntel, t: S.tip.intel, sortable: true, num: true },
-      { key: "agentic_index",  label: S.colAgenticIdx, t: S.tip.agenticIdx, sortable: true, num: true },
       { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false, left: true },
       { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
       { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
@@ -1474,17 +1664,19 @@
         '<tr class="bt-row" data-id="' + escapeHTML(entry.id) + '" tabindex="0" role="button" aria-expanded="' +
         (isExpanded ? "true" : "false") + '" title="' + escapeHTML(S.viewDetails) + '">';
 
-      html += '<td class="bt-left">' + escapeHTML(entry.model) + "</td>";
+      /* A break opportunity after every hyphen: the Model column is the only
+         one that may wrap, and only when the window is too narrow for the
+         whole table (see .bt-model in the stylesheet). */
+      html += '<td class="bt-left bt-model">' + escapeHTML(entry.model).replace(/-/g, "-<wbr>") + "</td>";
       html += '<td class="bt-num">' + escapeHTML(entry.params) + "</td>";
       html += '<td class="bt-num">' + idxCell(entry.intelligence_index) + "</td>";
-      html += '<td class="bt-num">' + idxCell(entry.agentic_index) + "</td>";
       html += '<td class="bt-left">' + escapeHTML(entry.device) + "</td>";
       html += "<td>" + escapeHTML(entry.quantization) + "</td>";
 
       var tpsCls = "bt-num", tpsTitle = "";
       if (tps !== null) {
         var tpsOk = tpsMeets(tps);
-        tpsCls += tpsOk ? " bt-good" : " bt-bad";
+        tpsCls += tpsOk ? " bt-good" : " bt-miss";
         tpsTitle = ' title="' + escapeHTML(tpsOk ? S.targetMet : S.targetNotMet) + '"';
       }
       html += '<td class="' + tpsCls + '"' + tpsTitle + ">" + fmt(tps, 2) + "</td>";
@@ -1492,7 +1684,7 @@
       var ttftCls = "bt-num", ttftTitle = "";
       if (ttft !== null) {
         var ttftOk = ttftMeets(ttft);
-        ttftCls += ttftOk ? " bt-good" : " bt-bad";
+        ttftCls += ttftOk ? " bt-good" : " bt-miss";
         ttftTitle = ' title="' + escapeHTML(ttftOk ? S.targetMet : S.targetNotMet) + '"';
       }
       html += '<td class="' + ttftCls + '"' + ttftTitle + ">" + (ttft !== null ? fmt(ttft, 0) : "—") + "</td>";
@@ -1517,10 +1709,11 @@
         html += '<tr class="bt-detail-row"><td colspan="' + cols.length + '">';
         html += '<div class="bt-detail-content bt-visible">';
         html += '<div class="bt-detail-top">';
+        html += '<div class="bt-sweep" data-row="' + escapeHTML(entry.id) + '">';
         html += '<table class="bt-detail-table"><thead><tr>';
         html += "<th>" + escapeHTML(S.detailC) + "</th><th>" + escapeHTML(S.detailTtft) +
-                "</th><th>" + escapeHTML(S.detailTps) + "</th><th>" + escapeHTML(S.detailStatus) + "</th>";
-        html += "</tr></thead><tbody>";
+                "</th><th>" + escapeHTML(S.detailTps) + '</th><th class="bt-sweep-status">' + escapeHTML(S.detailStatus) + "</th>";
+        html += "</tr>" + sweepTargets() + "</thead><tbody>";
 
         entry.data_points.forEach(function (dp) {
           var passes = meetsTargets(dp);
@@ -1530,23 +1723,40 @@
           html += '<tr class="bt-dp-row" data-tps="' + dp.tps + '" data-c="' + dp.c +
             '" tabindex="0" role="button" aria-label="' +
             escapeHTML(S.previewRowLabel(dp.c)) + '">';
-          /* Colour each metric on its own, so a FAIL shows which of the two
-             caused it rather than only that one of them did. The title gives
-             the same answer in words, because colour alone would not. */
+          /* Colour each metric on its own, so a missed level shows which of
+             the two caused it. The status cell and the title say the same in
+             words, because colour alone would not. */
           var dpTtftOk = ttftMeets(dp.ttft_ms);
           var dpTpsOk = tpsMeets(dp.tps);
           html += "<td>" + dp.c + "</td>";
-          html += '<td class="' + (dpTtftOk ? "bt-dp-good" : "bt-dp-bad") + '" title="' +
+          html += '<td class="' + (dpTtftOk ? "bt-dp-good" : "bt-dp-miss") + '" title="' +
             escapeHTML(dpTtftOk ? S.targetMet : S.targetNotMet) + '">' +
             (dp.ttft_ms != null ? fmt(dp.ttft_ms, 0) : "—") + "</td>";
-          html += '<td class="' + (dpTpsOk ? "bt-dp-good" : "bt-dp-bad") + '" title="' +
+          html += '<td class="bt-dp-tps ' + (dpTpsOk ? "bt-dp-good" : "bt-dp-miss") + '" title="' +
             escapeHTML(dpTpsOk ? S.targetMet : S.targetNotMet) + '">' +
             fmt(dp.tps, 2) + "</td>";
-          html += '<td class="' + (passes ? "bt-detail-pass" : "bt-detail-fail") + '">' +
-            escapeHTML(passes ? S.pass : S.fail) + "</td></tr>";
+          /* Not PASS/FAIL: a level that misses is a measurement that does not
+             meet the reader's own targets, not a run that failed, so the cell
+             says which target it misses and by what bound. */
+          var status;
+          if (passes) {
+            status = "✓ " + escapeHTML(S.statusMet) + (dp.c === maxC ?
+              ' <span class="bt-maxc-tag" title="' + escapeHTML(S.maxcTagTitle) + '">' + escapeHTML(S.maxcTag) + "</span>" : "");
+          } else {
+            /* The target it misses sits right above, in that column's
+               header, so naming the metric is enough. */
+            var why = [];
+            if (!dpTtftOk) why.push("TTFT");
+            if (!dpTpsOk) why.push("TPS");
+            status = "✗ " + why.join(" + ");
+          }
+          html += '<td class="' + (passes ? "bt-detail-pass" : "bt-detail-miss") + '" title="' +
+            escapeHTML(passes ? S.targetMet : S.targetNotMet) + '">' + status + "</td></tr>";
         });
 
         html += "</tbody></table>";
+        html += '<p class="bt-preview-note">' + escapeHTML(S.sweepNote) + "</p>";
+        html += "</div>";
 
         /* The same speed preview as the targets panel, but driven by whichever
            measured point the reader picks — so the number in the table turns
@@ -1642,6 +1852,7 @@
       if (only || expanded[entry.id]) {
         renderChart(entry, container);
         wireRowPreview(entry, container);
+        wireRowTargets(entry, container);
       }
     });
 
@@ -1669,9 +1880,40 @@
 
     var tpsColor = "#2196F3";
     var aggColor = "#FF6D00";
+    var target = config.tps_threshold;
+
+    /* The reader's TPS target as a dashed line on the TPS axis, so "below the
+       target" can be read off the curve. The axis always reaches the target,
+       or a high target would simply not be drawn. */
+    var targetLine = {
+      id: "btTpsTarget",
+      afterDatasetsDraw: function (chart) {
+        var y = chart.scales.y_tps, a = chart.chartArea;
+        if (!y || !(target > 0)) return;
+        var py = y.getPixelForValue(target);
+        if (py < a.top || py > a.bottom) return;
+        var ctx = chart.ctx;
+        ctx.save();
+        ctx.strokeStyle = "#555555";
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(a.left, py);
+        ctx.lineTo(a.right, py);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#555555";
+        ctx.font = "600 11px " + (Chart.defaults.font.family || "sans-serif");
+        ctx.textAlign = "left";
+        ctx.textBaseline = "bottom";
+        ctx.fillText(S.chartTarget(target), a.left + 6, py - 3);
+        ctx.restore();
+      }
+    };
 
     chartInstances[entry.id] = new Chart(canvas, {
       type: "line",
+      plugins: [targetLine],
       data: {
         labels: cValues.map(function (c) { return "C=" + c; }),
         datasets: [
@@ -1687,7 +1929,7 @@
         interaction: { mode: "index", intersect: false },
         scales: {
           x: { type: "category", grid: { color: "#eeeeee" }, ticks: { font: { size: 12 } } },
-          y_tps: { position: "left", beginAtZero: true, ticks: { color: tpsColor, font: { size: 12 } },
+          y_tps: { position: "left", beginAtZero: true, suggestedMax: target > 0 ? target * 1.15 : undefined, ticks: { color: tpsColor, font: { size: 12 } },
                    grid: { color: "#eeeeee" }, title: { display: false } },
           y_agg: { position: "right", beginAtZero: true, ticks: { color: aggColor, font: { size: 12 } },
                    grid: { drawOnChartArea: false }, title: { display: false } }

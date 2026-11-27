@@ -110,9 +110,39 @@ module OzVisibility
   # Templates are _data/<lang>/strings.yml "sentences"; the wording follows the
   # explorers' own how-to sections. Numbers are formatted per language
   # (1,5 and 1.024 in Turkish; 1.5 and 1,024 in English).
-  def self.num(x, lang, dec = 0)
+  # Half up on the value as written (its shortest decimal form), digit by
+  # digit: 30.15 -> 30.2, 0.25 -> 0.3. format("%.1f") rounds the binary value,
+  # with exceptions of its own, and numL() in the LLM widget must give the
+  # identical string; this is its twin.
+  def self.round_half_up(x, dec)
+    f = x.to_f
+    s = f.abs.to_s
+    return format("%.#{dec}f", f) if s.include?("e")
+    int, frac = s.split(".")
+    frac = frac.to_s
+    if frac.length <= dec
+      out = dec.zero? ? int : "#{int}.#{frac.ljust(dec, '0')}"
+    else
+      digits = (int + frac[0, dec]).chars.map(&:to_i)
+      if frac[dec].to_i >= 5
+        i = digits.length - 1
+        while i >= 0
+          if digits[i] == 9 then digits[i] = 0; i -= 1 else digits[i] += 1; break end
+        end
+        digits.unshift(1) if i < 0
+      end
+      n = digits.join
+      out = dec.zero? ? n : "#{n[0...-dec]}.#{n[-dec..]}"
+    end
+    f.negative? && out =~ /[1-9]/ ? "-#{out}" : out
+  end
+
+  # half_up: the LLM explanation only (its widget rewrites the text in the
+  # browser); the VLM and CV texts keep format()'s rounding.
+  def self.num(x, lang, dec = 0, half_up: false)
     return "" if x.nil?
-    v = dec.zero? ? x.to_f.round.to_s : format("%.#{dec}f", x.to_f).sub(/\.?0+\z/, "")
+    v = if half_up then dec.zero? ? round_half_up(x, 0) : round_half_up(x, dec).sub(/\.?0+\z/, "")
+        else dec.zero? ? x.to_f.round.to_s : format("%.#{dec}f", x.to_f).sub(/\.?0+\z/, "") end
     int, frac = v.split(".")
     sep, dot = lang == "tr" ? [".", ","] : [",", "."]
     int = int.reverse.scan(/\d{1,3}/).join(sep).reverse.then { |i| v.start_with?("-") ? "-#{i}" : i }
@@ -136,14 +166,14 @@ module OzVisibility
     out = [fill(t["llm_run"], "model" => r["model"], "params" => params, "quant" => r["quantization"],
                 "engine" => r["engine"], "device" => r["device"],
                 "spec" => r["mtp"] ? t["llm_spec"] : "", "par" => par.empty? ? "" : fill(t["llm_par"], "par" => par),
-                "ttft" => num(c1["ttft_ms"], lang), "tps" => num(c1["tps"], lang, 1))]
-    tv = { "ttft_t" => num(cfg["ttft_threshold_ms"], lang), "tps_t" => num(cfg["tps_threshold"], lang, 1) }
+                "ttft" => num(c1["ttft_ms"], lang, half_up: true), "tps" => num(c1["tps"], lang, 1, half_up: true))]
+    tv = { "ttft_t" => num(cfg["ttft_threshold_ms"], lang, half_up: true), "tps_t" => num(cfg["tps_threshold"], lang, 1, half_up: true) }
     ch, ag = r["oz_chat"], r["oz_agentic"]
-    n = lambda { |k| k["at_least"] ? fill(t["cap_min_n"], "n" => num(k["shown"], lang)) : num(k["shown"], lang) }
+    n = lambda { |k| k["at_least"] ? fill(t["cap_min_n"], "n" => num(k["shown"], lang, half_up: true)) : num(k["shown"], lang, half_up: true) }
     if r["oz_max_c"].zero?
       out << fill(t["cap_none"], tv)
     else
-      basis = [ch, ag].any? { |k| k["limit"] != "context" && !k["mem_known"] } ? t["basis_speed"] : t["basis_both"]
+      basis = fill([ch, ag].any? { |k| k["limit"] != "context" && !k["mem_known"] } ? t["basis_speed"] : t["basis_both"], tv)
       out << if ag["limit"] == "context" then fill(t["cap_chat_only"], "basis" => basis, "chat" => n.call(ch))
              elsif ch["shown"] == ag["shown"] && ch["at_least"] == ag["at_least"] then fill(t["cap_same"], "basis" => basis, "chat" => n.call(ch))
              else fill(t["cap_range"], "basis" => basis, "chat" => n.call(ch), "agentic" => n.call(ag)) end

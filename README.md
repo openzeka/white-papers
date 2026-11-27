@@ -91,8 +91,8 @@ You set the targets, and the table answers:
   shows which limit applies. This is an estimate, not a measured user count.
 - **Full sweep per row** — TTFT, per-request TPS and aggregate throughput at
   every concurrency level, with pass/fail against your targets.
-- **Model capability context** — Intelligence and Agentic Index scores from
-  [Artificial Analysis](https://artificialanalysis.ai), next to the measured
+- **Model capability context** — Intelligence Index scores from
+  [ai-leaderboard.dev](https://www.ai-leaderboard.dev), next to the measured
   speed.
 
 Measurement protocol: [CordatusAI/llm-benchmark](https://github.com/CordatusAI/llm-benchmark),

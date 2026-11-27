@@ -32,7 +32,7 @@ two public pages with nothing in between to catch it. Work slowly, ask rather
 than guess, and never invent a value.
 
 **Never edit the store by hand.** `_tools/bench_import.py`, `_tools/kv_geometry.py`
-and `_tools/aa_index_fetch.py` read and write it through `_tools/bench_store.py`,
+and `_tools/ailb_index_fetch.py` read and write it through `_tools/bench_store.py`,
 which keeps the index, the device files and the run files consistent. The one
 exception is a new device's memory, below.
 
@@ -82,16 +82,18 @@ still missing. It never guesses a number.
 `inspect` matches the served repo against existing model names **exactly**, after
 stripping quantization and variant suffixes (`Inferact/GLM-5.3-NVFP4` → `GLM-5.3`).
 Substring matching is deliberately not used: `GLM-5.3-NVFP4` also contains
-`GLM-5`, and reusing that row's scores would publish the wrong capability numbers.
+`GLM-5`, and reusing that row's values would publish the wrong numbers.
 
-- **Model already in the file** → reuse `params`, `intelligence_index` and
-  `agentic_index` verbatim. They are properties of the *model*, not the run, so
-  every row for one model carries the same values — the validator fails if they
-  differ. Do not ask the user. The model's KV-cache fields are generated, not
-  reused by hand (step 4).
+- **Model already in the file** → reuse `params` verbatim. It is a property of
+  the *model*, not the run, so every row for one model carries the same value —
+  the validator fails if they differ. Do not ask the user. The model's KV-cache
+  fields are generated, not reused by hand (step 4).
 - **Ambiguous** → ask which model. Do not pick.
-- **New model** → ask for those three (step 3), and fetch its `config.json`
-  into the repo (step 4).
+- **New model** → ask for the parameter count (step 3), and fetch its
+  `config.json` into the repo (step 4).
+
+`intelligence_index` is never reused or typed: put `null` in the entry, and
+step 5b computes it for every row.
 
 ## 3. Ask the user
 
@@ -165,26 +167,8 @@ this list is recoverable from the folder.
    count: the column tracks weight memory, not per-token compute. It is now
    load-bearing — the memory limit multiplies it by the quantization's bytes
    per parameter to get the weight size — so a wrong figure moves a number.
-9. **Intelligence Index and Agentic Index** — from
-   [Artificial Analysis](https://artificialanalysis.ai). Tell the user:
-   - where AA lists several reasoning-effort variants of one model
-     (`(max)`, `(xhigh)`, `(high)`, `(Reasoning, Max Effort)`, `(Reasoning)`),
-     **use the highest-scoring one** — that is the rule the rest of the file
-     follows;
-   - `null` is the correct answer when AA publishes no score. It is not zero, and
-     the table renders it as an em dash. Many rows have no Agentic Index.
-   - Never invent or interpolate these. If the user is unsure, the supported
-     automated path is `python3 _tools/aa_index_fetch.py` (a dry run; add
-     `--write` to apply), which resolves every model and leaves anything
-     ambiguous untouched.
-   - It needs an Artificial Analysis API key, which the team has. Each person
-     keeps their own copy in `~/.aa_key` on their own machine — one line, the
-     key only, `chmod 600` — and the script reads it from there (or from
-     `AA_API_KEY` if set). Check the file exists before running; if it does
-     not, ask the user for the key and save it there. **Never write the key
-     into the repository, a commit, a PR, or any file that ships.**
-   - Attribution is a licensing condition. It already sits under the widget and
-     inside the store (`index.json`); do not remove it.
+
+Do not ask for the Intelligence Index: step 5b computes it.
 
 ## 4. Store the Hugging Face data, then generate the fields
 
@@ -269,7 +253,7 @@ followed.
 
 ## 5. Build the entry
 
-Every entry carries **all 24 keys in this order**, `null` where a value does not
+Every entry carries **all 23 keys in this order**, `null` where a value does not
 apply:
 
 | Field | Type | Source |
@@ -277,8 +261,7 @@ apply:
 | `id` | string | you construct it — see below |
 | `model` | string | display name; match an existing one exactly if the model is known |
 | `params` | string | user, or reused from a sibling row |
-| `intelligence_index` | number \| null | Artificial Analysis, or reused |
-| `agentic_index` | number \| null | Artificial Analysis, or reused |
+| `intelligence_index` | number \| null | `null` in the entry; set by step 5b |
 | `device` | string | user; one of the eight exact strings |
 | `quantization` | string | user; uppercase |
 | `engine` | string | user; `vLLM` or `SGLang` |
@@ -324,6 +307,49 @@ file's exact formatting so the diff is only the new entry. It refuses the entry
 if the model's or the checkpoint's Hugging Face data is not stored (step 4), or
 if `served_repo` disagrees with the folder's `models.json`; it then keeps that
 `models.json` under `_tools/model_meta/runs/` and fills in every generated field.
+
+## 5b. Refresh the Intelligence Index — every row
+
+```bash
+python3 _tools/ailb_index_fetch.py            # dry run: shows what would change
+python3 _tools/ailb_index_fetch.py --write    # only after the user approves the dry run
+```
+
+The Intelligence Index comes from [ai-leaderboard.dev](https://www.ai-leaderboard.dev).
+The script downloads the site's data, computes the index for **every** model in
+the store with a pinned copy of the site's method (60% Agentic Coding Index +
+40% Scientific Knowledge Index, missing benchmark scores estimated from the
+ones a model has), and rewrites the field on every row. Recomputing every row
+each time keeps all of them on one snapshot of the site, so rows you did not
+touch can move. That is expected; say so to the user.
+
+The script does all of the reading and all of the arithmetic. Your part is the
+judgement around it:
+
+- **Show the user the dry run**: the new model's value (or that it gets none),
+  the "No name match" list, and how many other rows change.
+- **"No name match"** means the cell will show a dash. If the new model is on
+  that list, look at its near misses. If one is the *same model* under another
+  name (an effort suffix such as `(max)`, or a size the site's name leaves out),
+  propose a `PINNED` entry in `_tools/ailb_index_fetch.py` and ask the user
+  before adding it. A different version, a preview against a release, or a
+  different size is **not** the same model: leave it. Never pick one yourself.
+- **STOP** means a safety check failed and nothing was written (the site's
+  structure changed, an anchor model is missing, too few models were read).
+  Report the message and the likely cause. Do not work around it.
+- **DRIFT** means the site's own displayed values no longer match our copy of
+  its method, so the site has changed its method. Show the list to the user;
+  only they decide between `--write --accept-drift` (keep our pinned method)
+  and having the method updated. Never change `METHOD`, the weights or the
+  constants in the script yourself. If the drift message says the site's
+  values could not be read, the site was slow or down: run the dry run again
+  later before offering `--accept-drift`.
+- **Never** read an index value off the site yourself, and never type an
+  `intelligence_index` into the store by hand.
+- The drift check renders the site with Chrome or Chromium. Without one it is
+  skipped with a note; tell the user it was skipped.
+- The attribution line under the widget and the `attribution` block in
+  `index.json` are a condition of using the data: do not remove them.
 
 ## 6. Validate
 
@@ -409,7 +435,8 @@ and say so when you report.
 Say plainly that the change is **local only**: the table on the live sites
 changes only once it is committed, reviewed and merged, and publishing new
 figures needs the author's approval. Never describe the row as "published". Then
-tell the user: the id added, the Max C the row will show at the default targets,
+tell the user: the id added, its Intelligence Index from step 5b (or why it has
+none) and how many other rows' values moved, the Max C the row will show at the default targets,
 its chat and agentic capacity **and which limit set each** (speed targets or KV
 cache memory — open the row on the page to read its Capacity summary), and every
 warning the validator raised with your reading of it.

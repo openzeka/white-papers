@@ -16,9 +16,9 @@ permalink: /llms.txt
 > {{ site.description | strip }} English at the root, Turkish under /tr/, Dutch under /nl/.
 
 Every benchmark figure is OpenZeka's own measurement on its own hardware. The
-Intelligence Index and Agentic Index fields in benchmarks.json are republished
-from Artificial Analysis (https://artificialanalysis.ai) and must be attributed
-to them wherever they are shown.
+intelligence_index field in benchmarks.json is computed from data published by
+ai-leaderboard.dev (https://www.ai-leaderboard.dev), with its method, and must be
+attributed to them wherever it is shown.
 
 ## Benchmark explorers
 

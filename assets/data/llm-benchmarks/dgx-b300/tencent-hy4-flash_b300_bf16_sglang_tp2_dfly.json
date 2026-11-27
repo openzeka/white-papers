@@ -3,7 +3,6 @@
   "model": "Tencent-Hy4-flash",
   "params": "220B",
   "intelligence_index": null,
-  "agentic_index": null,
   "device": "DGX B300",
   "quantization": "BF16",
   "engine": "SGLang",

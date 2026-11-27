@@ -3,7 +3,6 @@
   "model": "MiMo-V2.6-Flash-RL",
   "params": "310B",
   "intelligence_index": null,
-  "agentic_index": null,
   "device": "2× DGX Spark",
   "quantization": "FP4",
   "engine": "vLLM",
