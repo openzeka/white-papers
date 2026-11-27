@@ -75,7 +75,7 @@ module OzBenchPages
     dash = ->(v) { v && v != 1 ? v : "—" }
     facts = [
       [b["model"], r["model"]], [b["params"], r["params"]],
-      [b["intel"], r["intelligence_index"] || "—"], [b["agentic_idx"], r["agentic_index"] || "—"],
+      [b["intel"], r["intelligence_index"] || "—"],
       [b["device"], r["device"]], [b["quant"], r["quantization"]],
       [b["maxc"], "#{r['oz_max_c']}#{r['oz_max_c_open'] ? '+' : ''}"],
       [b["chat"], cap(r["oz_chat"])], [b["agentic"], cap(r["oz_agentic"])],

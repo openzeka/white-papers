@@ -58,7 +58,6 @@
     colModel: "Model",
     colParams: "Parameters",
     colIntel: "Intelligence Index",
-    colAgenticIdx: "Agentic Index",
     colDevice: "Apparaat",
     colQuant: "Kwantisatie",
     colTps: "TPS",
@@ -142,8 +141,7 @@
     tip: {
       model: "<strong>Model</strong><p>Het grote taalmodel dat wordt geserveerd.</p><p>Een rij is een volledige deployment, dus hetzelfde model komt in meerdere rijen voor met andere hardware, een ander formaat, een andere engine of ander parallellisme.</p>",
       params: "<strong>Parameters</strong><p>Het totale aantal gewichten van het model, zoals gepubliceerd.</p><p>Voor mixture-of-experts-modellen is dit het totaal, niet het deel dat per token actief is, omdat alles in het geheugen wordt gehouden.</p>",
-      intel: "<strong>Intelligence Index</strong><p>De vaardigheidsscore van Artificial Analysis, die evaluaties van redeneren, programmeren, wetenschap en werk met lange context combineert. Hoger is beter.</p><p>De score beschrijft het model, niet deze run, dus elke rij van het model toont dezelfde waarde. Waar meerdere instellingen voor redeneerinspanning zijn beoordeeld, wordt de hoogste getoond; een streepje betekent dat er geen score is gepubliceerd.</p><p>Bron: Artificial Analysis.</p>",
-      agenticIdx: "<strong>Agentic Index</strong><p>De score van Artificial Analysis voor agentisch werk: taken in meerdere stappen, tool calls en zonder toezicht op koers blijven. Hoger is beter.</p><p>De score meet wat het model kan; Agentische capaciteit, verderop in de rij, schat hoeveel personen de hardware kan bedienen. Een streepje betekent dat er geen score is gepubliceerd, wat hier vaak voorkomt.</p><p>Bron: Artificial Analysis.</p>",
+      intel: "<strong>Intelligence Index</strong><p>Een vaardigheidsscore van ai-leaderboard.dev, van 0 tot 100: 60% agentisch programmeren (12 benchmarks voor programmeren en agents) en 40% wetenschappelijke kennis (7 benchmarks voor redeneren, wetenschap en kenniswerk). Hoger is beter. Benchmarks waarop een model niet is getest, worden geschat uit de benchmarks waarop het wel is getest.</p><p>De score beschrijft het model, niet deze run, dus elke rij van het model toont dezelfde waarde. Waar meerdere instellingen voor redeneerinspanning zijn beoordeeld, wordt de hoogste getoond; een streepje betekent dat er geen score beschikbaar is.</p><p>Bron: ai-leaderboard.dev.</p>",
       device: "<strong>Apparaat</strong><p>De hardware die de run gebruikte, en hoeveel eenheden het model samen serveerden.</p><p>4× DGX Spark betekent vier machines die één model als één systeem serveren.</p>",
       quant: "<strong>Kwantisatie</strong><p>Het getalformaat waarin de gewichten zijn opgeslagen.</p><p>Minder bits per gewicht betekent minder geheugen en meestal meer snelheid, met enig risico voor de kwaliteit. BF16 en FP16 zijn volledige precisie, FP8 en MXFP8 gebruiken 8 bits, en NVFP4, MXFP4, FP4, INT4 en AWQ gebruiken er 4.</p>",
       tps: "<strong>TPS — tokens per seconde</strong><p>Hoe snel het antwoord op één verzoek wordt geproduceerd bij de gekozen gelijktijdigheid. Een token is ongeveer driekwart woord.</p><p>Per verzoek, niet in totaal: bij C=8 krijgt elk van de acht verzoeken deze snelheid. Gemiddelde van tien rondes met prompts en antwoorden van 128 tokens. Hoger is beter.</p>",
@@ -1351,10 +1349,10 @@
     });
   }
 
-  /* Artificial Analysis leaves both indexes null for models it has not scored,
-     and the Agentic Index is null far more often than the Intelligence one.
-     Render that as the same em dash the TP/DP/PP columns use for "not
-     applicable", rather than a 0 that would sort and read as a real score. */
+  /* The Intelligence Index is null for models ai-leaderboard.dev does not
+     track, or has too few scores for. Render that as the same em dash the
+     TP/DP/PP columns use for "not applicable", rather than a 0 that would sort
+     and read as a real score. */
   function idxCell(v) {
     return v == null ? '<span class="bt-muted">—</span>' : fmt(v, 1);
   }
@@ -1380,8 +1378,8 @@
         va = parseParams(a.params); vb = parseParams(b.params);
         if (va === null) va = -1;
         if (vb === null) vb = -1;
-      } else if (sortCol === "intelligence_index" || sortCol === "agentic_index") {
-        /* Null means Artificial Analysis publishes no score, which is not the
+      } else if (sortCol === "intelligence_index") {
+        /* Null means no score is available, which is not the
            same as zero. Sink those rows to the bottom in both directions, so
            flipping the sort never parks the blanks at the top. */
         va = a[sortCol]; vb = b[sortCol];
@@ -1429,7 +1427,6 @@
       { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false, left: true },
       { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true },
       { key: "intelligence_index", label: S.colIntel, t: S.tip.intel, sortable: true, num: true },
-      { key: "agentic_index",  label: S.colAgenticIdx, t: S.tip.agenticIdx, sortable: true, num: true },
       { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false, left: true },
       { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
       { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
@@ -1477,7 +1474,6 @@
       html += '<td class="bt-left">' + escapeHTML(entry.model) + "</td>";
       html += '<td class="bt-num">' + escapeHTML(entry.params) + "</td>";
       html += '<td class="bt-num">' + idxCell(entry.intelligence_index) + "</td>";
-      html += '<td class="bt-num">' + idxCell(entry.agentic_index) + "</td>";
       html += '<td class="bt-left">' + escapeHTML(entry.device) + "</td>";
       html += "<td>" + escapeHTML(entry.quantization) + "</td>";
 

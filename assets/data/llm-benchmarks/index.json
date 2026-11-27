@@ -1,8 +1,12 @@
 {
   "attribution": {
-    "intelligence_index": "Artificial Analysis — https://artificialanalysis.ai",
-    "agentic_index": "Artificial Analysis — https://artificialanalysis.ai",
-    "note": "The two index fields are republished from Artificial Analysis and require attribution wherever they are shown. Every other field is OpenZeka's own measurement."
+    "intelligence_index": "ai-leaderboard.dev — https://www.ai-leaderboard.dev",
+    "intelligence_index_snapshot": {
+      "fetched": "2026-11-26",
+      "script": "index-BgS9pzE5.js",
+      "method": "ai-leaderboard.dev method as of 2026-11-26"
+    },
+    "note": "The intelligence_index field is computed from data published by ai-leaderboard.dev, with its method, and requires attribution wherever it is shown. Every other field is OpenZeka's own measurement."
   },
   "config": {
     "ttft_threshold_ms": 1000,

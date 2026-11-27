@@ -133,8 +133,8 @@ karşılaştırın; böylece etki bir donanım değişikliğiyle karışmaz.
 başlayın, kalan modelleri yeteneğe ya da boyuta göre sıralayın ve ihtiyacınız
 olan TPS, TTFT veya kapasiteyle daraltın.
 
-**"Sınırlarımızı aşmadan hangi model yeterince yetenekli?"** Zekâ Endeksi,
-Agentic Endeksi veya parametre sayısına göre sıralayıp aday modelleri belirleyin,
+**"Sınırlarımızı aşmadan hangi model yeterince yetenekli?"** Zekâ Endeksi
+veya parametre sayısına göre sıralayıp aday modelleri belirleyin,
 sonra cihaz ve performans şartlarınızı uygulayın. Böylece en hızlı modelin en
 uygun model olduğunu varsaymak yerine model seçimini altyapı
 boyutlandırmasından ayrı tutarsınız.
@@ -176,19 +176,21 @@ geçişi kapsar. Düşük olması iyidir.
 modellerde, her token için etkin olan kısım değil toplam gösterilir, çünkü
 tamamının bellekte tutulması gerekir.
 
-**Zekâ Endeksi** ve **Agentic Endeksi** —
-[Artificial Analysis](https://artificialanalysis.ai) tarafından yayımlanan
-yetenek puanları; yüksek olan iyidir. İlki akıl yürütme, kodlama, bilim ve uzun
-bağlam değerlendirmelerini birleştirir; ikincisi araç çağrılı, çok adımlı işleri
-ölçer. İkisi de modeli tanımlar; bu yüzden bir modelin her satırı, donanım ne
-olursa olsun aynı iki değeri taşır. Birden fazla akıl yürütme seviyesi
-puanlanmışsa en yüksek olanı gösterilir; tire, puan yayımlanmadığı anlamına
-gelir. Değerler, 28 Eylül 2026'da alınan Intelligence Index v4.3 sürümündendir.
-Farklı endeks sürümlerinin puanları karşılaştırılamaz — v4.2 ve v4.3 daha zor
-görevler ekledi, bu yüzden her model v4.1'dekinden düşük puan alır — ve bazı
-eski modellerin henüz bir v4.3 Agentic Endeksi yoktur. Agentic Endeksi modelin
-ne yapabildiğini ölçer; satırın devamındaki
-Agentic Kapasitesi ise donanımın kaç kişiye hizmet edebileceğini tahmin eder.
+**Zekâ Endeksi** — [ai-leaderboard.dev](https://www.ai-leaderboard.dev)'in
+0–100 arası yetenek puanı; yüksek olan iyidir. %60 agentic kodlama (Terminal-Bench,
+DeepSWE ve SWE-bench Pro gibi 12 kodlama ve agent benchmark'ı) ile %40 bilimsel
+bilgiden (HLE-Diamond, GPQA Diamond ve GDPval gibi 7 akıl yürütme, bilim ve
+bilgi işi benchmark'ı) oluşur. Birleştirdiği benchmark sonuçları benchmark
+yayıncılarından ve model üreticilerinden gelir; bir modelin test edilmediği bir
+benchmark'taki puanı, test edildiği benchmark'lardan tahmin edilir. Modeli
+tanımlar; bu yüzden bir modelin her satırı, donanım ne olursa olsun aynı değeri
+taşır. Birden fazla akıl yürütme seviyesi puanlanmışsa en yüksek olanı
+gösterilir; tire, puan bulunmadığı anlamına gelir. Değerler, her yeni çalıştırma
+eklendiğinde sitenin verilerinin tek bir anlık görüntüsünden ve sitenin
+yöntemiyle tüm modeller için yeniden hesaplanır; bu yüzden sitenin daha sonra
+gösterdiğinden farklı olabilir. Endeks modelin ne yapabildiğini ölçer; satırın
+devamındaki Agentic Kapasitesi ise donanımın kaç kişiye hizmet edebileceğini
+tahmin eder.
 
 **Kuantizasyon** — ağırlıkların saklandığı sayı biçimi. Ağırlık başına daha az
 bit, daha az bellek ve genellikle daha çok hız demektir; çıktı kalitesinde bir
@@ -355,8 +357,8 @@ dayanan kapasite tahminleri var.
 <div data-bt-src="/assets/data/benchmarks.json"
      data-bt-logo="/assets/images/benchmark-logo.png"></div>
 
-<p class="bt-attribution">Zekâ Endeksi ve Agentic Endeksi değerleri
-<a href="https://artificialanalysis.ai" rel="noopener">Artificial Analysis</a>
+<p class="bt-attribution">Zekâ Endeksi değerleri
+<a href="https://www.ai-leaderboard.dev" rel="noopener">ai-leaderboard.dev</a>
 tarafından yayımlanmıştır ve kaynak belirtilerek burada aktarılmıştır. Diğer
 tüm sütunlar OpenZeka&rsquo;nın kendi ölçümleridir.</p>
 

@@ -126,7 +126,7 @@ filter, sort the remaining models by capability or size, and narrow with the TPS
 TTFT or capacity you need.
 
 **"Which model is capable enough without exceeding our limits?"** Sort by
-Intelligence Index, Agentic Index or parameter count to shortlist models, then
+Intelligence Index or parameter count to shortlist models, then
 apply your device and performance requirements. This keeps choosing a model
 separate from sizing the infrastructure, instead of assuming the fastest model is
 the most suitable.
@@ -168,19 +168,21 @@ model reads the whole prompt. Lower is better.
 mixture-of-experts model this is the total, not the part active for each token,
 because all of it has to be held in memory.
 
-**Intelligence Index** and **Agentic Index** — capability scores published by
-[Artificial Analysis](https://artificialanalysis.ai); higher is better. The first
-combines evaluations of reasoning, coding, science and long-context work; the
-second measures multi-step work with tool calls. Both describe the model, so
-every row of one model carries the same pair, whatever the hardware. Where
-several reasoning-effort settings are scored, the highest is shown, and a dash
-means no score has been published. The values are from Intelligence Index
-v4.3, retrieved on 28 September 2026. Scores from different index versions are
-not comparable — v4.2 and v4.3 added harder tasks, so every model scores lower
-than it did under v4.1 — and some older models have no v4.3 Agentic Index yet.
-The Agentic Index measures what the model can
-do; Agentic Capacity, further along the row, estimates how many people the
-hardware can serve.
+**Intelligence Index** — a capability score from
+[ai-leaderboard.dev](https://www.ai-leaderboard.dev), 0 to 100; higher is
+better. It is 60% agentic coding (12 benchmarks of coding and agent work, such
+as Terminal-Bench, DeepSWE and SWE-bench Pro) and 40% scientific knowledge (7
+benchmarks of reasoning, science and knowledge work, such as HLE-Diamond, GPQA
+Diamond and GDPval). The benchmark results it combines come from the benchmark
+publishers and the model makers; where a model has not been tested on a
+benchmark, that score is estimated from the ones it has. It describes the
+model, so every row of one model carries the same value, whatever the hardware.
+Where several reasoning-effort settings are scored, the highest is shown, and a
+dash means no score is available. The values are recomputed for every model
+whenever a run is added, from one snapshot of the site's data and with the
+site's method, so they can differ from what the site shows later. The index
+measures what the model can do; Agentic Capacity, further along the row,
+estimates how many people the hardware can serve.
 
 **Quantization** — the number format the weights are stored in. Fewer bits per
 weight means less memory and usually more speed, at some risk to output quality.
@@ -334,9 +336,9 @@ and capacity estimates based on measured latency, user think time and Little's L
 <div data-bt-src="/assets/data/benchmarks.json"
      data-bt-logo="/assets/images/benchmark-logo.png"></div>
 
-<p class="bt-attribution">Intelligence Index and Agentic Index values are
-published by <a href="https://artificialanalysis.ai" rel="noopener">Artificial
-Analysis</a> and are reproduced here with attribution. All other columns are
+<p class="bt-attribution">Intelligence Index values are published by
+<a href="https://www.ai-leaderboard.dev" rel="noopener">ai-leaderboard.dev</a>
+and are reproduced here with attribution. All other columns are
 OpenZeka&rsquo;s own measurements.</p>
 
 {% include benchmark-jsonld.html kind="llm" %}

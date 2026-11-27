@@ -211,8 +211,8 @@ existing Turkish pages use.
 
 Keep in English: interface labels of other tools as they appear on screen
 (GNOME's *Wired Settings*, *Apply*), tool output, the benchmark tool's metric
-names when quoted (*Throughput (RPS)*), PASS/FAIL, and the Artificial Analysis
-*Intelligence Index* / *Agentic Index*.
+names when quoted (*Throughput (RPS)*), PASS/FAIL, and the *Intelligence Index*
+(and, in papers that cite it, the Artificial Analysis *Intelligence Index*).
 
 **Headings and anchors:** avoid Dutch headings that start a compound with a
 dangling hyphen (*Systeem- en firmware-updates*): the site turns it into a

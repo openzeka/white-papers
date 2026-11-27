@@ -22,7 +22,7 @@ DATA = bench_store.LLM_DIR
 
 # The on-disk key order, identical in all existing entries. Keep it: a reordered
 # entry produces a needlessly large diff and hides the real change.
-FIELDS = ["id", "model", "params", "intelligence_index", "agentic_index",
+FIELDS = ["id", "model", "params", "intelligence_index",
           "device", "quantization", "engine", "mtp", "mtp_k", "tp",
           "notes", "sources", "data_points", "dp", "pp",
           "kv_bytes_per_token", "kv_window_bytes", "kv_heads", "model_context_length",
@@ -176,10 +176,10 @@ def cmd_inspect(a):
         print("  NOTE single measured level — the validator will warn that capacity "
               "figures come from one data point.")
 
-    # Does this model already exist? Then params and both indexes are settled.
+    # Does this model already exist? Then params is settled.
     # Matched exactly, never by substring: "GLM-5.3-NVFP4" contains "GLM-5" as
-    # well as "GLM-5.3", and reusing the wrong row's AA indexes would publish a
-    # wrong capability score for the model.
+    # well as "GLM-5.3", and reusing the wrong row's params would publish a
+    # wrong parameter count for the model.
     stem = strip_suffixes(repo) if repo else None
     exact = [e for e in entries if stem and norm_model(e["model"]) == stem]
     names = sorted({e["model"] for e in exact})
@@ -188,10 +188,10 @@ def cmd_inspect(a):
         e = exact[0]
         print(f"MODEL ALREADY IN THE FILE as {e['model']!r} ({len(exact)} row(s))")
         print(f"  params             {e['params']}")
-        print(f"  intelligence_index {e['intelligence_index']}")
-        print(f"  agentic_index      {e['agentic_index']}")
-        print("  -> Reuse these three verbatim. They are properties of the model, not")
-        print("     the run, so do NOT ask the user. The KV-cache fields are generated")
+        print("  -> Reuse params verbatim; it is a property of the model, not the run,")
+        print("     so do NOT ask the user. intelligence_index is never typed: leave it")
+        print("     null and run `python3 _tools/ailb_index_fetch.py`, which refreshes")
+        print("     every row. The KV-cache fields are generated")
         print("     by `python3 _tools/kv_geometry.py apply` — never type them.")
     elif len(names) > 1:
         print(f"AMBIGUOUS: {stem!r} matches more than one model: {names}")
@@ -203,7 +203,8 @@ def cmd_inspect(a):
         print(f"MODEL NOT FOUND in the file (looked for {stem!r})")
         if near:
             print(f"  similar existing names, NOT assumed to be the same model: {near}")
-        print("  -> params, intelligence_index and agentic_index must come from the user.")
+        print("  -> params must come from the user; intelligence_index comes from")
+        print("     `python3 _tools/ailb_index_fetch.py` (null in the entry until then).")
         print("  -> store the model's Hugging Face data (skill step 4b):")
         base = None
         if repo:
@@ -235,7 +236,7 @@ def cmd_inspect(a):
           f"{'suggests MTP' if mtp_hint else 'does not mention a mechanism'}")
     print("  tp / dp / pp  parallelism actually used — tp is 1, not null, on a single GPU")
     if len(names) != 1:
-        print("  params, intelligence_index, agentic_index  (model not resolved above)")
+        print("  params        (model not resolved above)")
     print("  notes         optional; unverified sibling results belong here")
     return 0
 

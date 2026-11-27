@@ -42,15 +42,17 @@ REQUIRED = ["id", "model", "device", "quantization", "engine",
             "kv_replicated_bytes_per_token", "kv_state_bytes", "served_repo", "weights_gb"]
 
 # Properties of the model, not the run: every row for one model must carry the
-# same values, exactly like params and the two AA indexes.
+# same values, exactly like params and the Intelligence Index.
 KV_FIELDS = ["kv_bytes_per_token", "kv_window_bytes", "kv_heads"]
 MODEL_FIELDS = KV_FIELDS + ["model_context_length", "kv_replicated_bytes_per_token", "kv_state_bytes"]
 
-# The two Artificial Analysis columns. Required so a new entry cannot ship with
-# the cells simply absent — `null` is the way to say "AA publishes no score",
-# and the widget renders that as an em dash. Refresh them with
-# `_tools/aa_index_fetch.py`, which fills both or leaves them alone.
-AA_INDEXES = ["intelligence_index", "agentic_index"]
+# The Intelligence Index column (ai-leaderboard.dev). Required so a new entry
+# cannot ship with the cell simply absent — `null` is the way to say "no score",
+# and the widget renders that as an em dash. Never typed: refresh every row with
+# `_tools/ailb_index_fetch.py --write`. agentic_index was removed on
+# 26 November 2026 and must not come back by accident.
+INDEX_FIELDS = ["intelligence_index"]
+REMOVED_FIELDS = ["agentic_index"]
 
 errors, warnings = [], []
 
@@ -127,10 +129,13 @@ def main():
             err(f"{eid}: unknown device {e.get('device')!r} — it will sort last "
                 f"in the filter row. Known values: {', '.join(sorted(KNOWN_DEVICES))}")
 
-        for field in AA_INDEXES:
+        for field in REMOVED_FIELDS:
+            if field in e:
+                err(f"{eid}: '{field}' is no longer part of the schema — remove it")
+        for field in INDEX_FIELDS:
             if field not in e:
-                err(f"{eid}: missing '{field}' — use null if Artificial Analysis "
-                    f"publishes no score, or run _tools/aa_index_fetch.py")
+                err(f"{eid}: missing '{field}' — run python3 _tools/ailb_index_fetch.py --write "
+                    f"(it sets null where the site has no score)")
             elif not isinstance(e[field], (int, float, type(None))) \
                     or isinstance(e[field], bool):
                 err(f"{eid}: {field} is {e[field]!r} — must be a number or null")

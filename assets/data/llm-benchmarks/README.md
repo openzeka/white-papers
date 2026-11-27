@@ -18,7 +18,7 @@ same as before the store was split.
 
 **Do not edit these files by hand.** Add runs with `_tools/bench_import.py`
 (procedure: `skills/add-benchmark/SKILL.md`); `_tools/kv_geometry.py apply`
-and `_tools/aa_index_fetch.py` update their fields. All of them go through
+and `_tools/ailb_index_fetch.py --write` update their fields. All of them go through
 `_tools/bench_store.py`, which keeps the index, the device files and the run
 files in step and removes the file of a run that is no longer listed. The one
 hand edit is a new device's `memory_gb` and `unified` in its `device.json`.

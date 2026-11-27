@@ -3,7 +3,6 @@
   "model": "Laguna-S-2.1",
   "params": "118B",
   "intelligence_index": null,
-  "agentic_index": null,
   "device": "Thor",
   "quantization": "NVFP4",
   "engine": "vLLM",

@@ -20,7 +20,7 @@ months: ["January", "February", "March", "April", "May", "June", "July", "August
 # _plugins/visibility.rb, shown in the opened row of the LLM explorer and
 # published in /llms-full.txt. %name% placeholders; numbers arrive formatted.
 sentences:
-  llm_intro: "Each entry below describes one serving configuration — a model on one device, in one number format, with one engine and one parallelism and speculative-decoding setting — measured by OpenZeka with the open-source CordatusAI LLM Benchmark Tool (128 input and 128 output tokens, prompts on different topics, ten rounds at each concurrency level C = 1, 2, 4, 8, 16, 32, 64, mean values). Max C is the highest measured concurrency meeting both targets; the capacity figures turn it into people and check it against the KV cache memory, taking the smaller of the two limits. Capacity is an estimate, not a measurement, and no substitute for a production load test. The Intelligence and Agentic Index values in the interactive table come from Artificial Analysis. The chat and agentic capacity estimates are the two ends of a range: for coding- and agent-heavy use the realistic figure is closer to the agentic estimate, for simple question-and-answer use closer to the chat estimate."
+  llm_intro: "Each entry below describes one serving configuration — a model on one device, in one number format, with one engine and one parallelism and speculative-decoding setting — measured by OpenZeka with the open-source CordatusAI LLM Benchmark Tool (128 input and 128 output tokens, prompts on different topics, ten rounds at each concurrency level C = 1, 2, 4, 8, 16, 32, 64, mean values). Max C is the highest measured concurrency meeting both targets; the capacity figures turn it into people and check it against the KV cache memory, taking the smaller of the two limits. Capacity is an estimate, not a measurement, and no substitute for a production load test. The Intelligence Index values in the interactive table come from ai-leaderboard.dev. The chat and agentic capacity estimates are the two ends of a range: for coding- and agent-heavy use the realistic figure is closer to the agentic estimate, for simple question-and-answer use closer to the chat estimate."
   llm_run: "In OpenZeka's measurement, %model% (%params% parameters), served in %quant% format with %engine%%spec% on %device%%par%, reached a generation speed of %tps% tok/s per request and a time to first token (TTFT) of %ttft% ms with a single request."
   llm_spec: " and speculative decoding"
   llm_par: " (%par%)"
@@ -60,11 +60,10 @@ bench_page:
   open_explorer: "Open this configuration in the LLM Inference Benchmark Explorer"
   permalink: "Permanent page for this configuration"
   spec_short: "speculative decoding"
-  attribution: "Intelligence Index and Agentic Index values are published by <a href=\"https://artificialanalysis.ai\" rel=\"noopener\">Artificial Analysis</a> and are reproduced here with attribution."
+  attribution: "Intelligence Index values are published by <a href=\"https://www.ai-leaderboard.dev\" rel=\"noopener\">ai-leaderboard.dev</a> and are reproduced here with attribution."
   model: "Model"
   params: "Parameters"
   intel: "Intelligence Index"
-  agentic_idx: "Agentic Index"
   device: "Device"
   quant: "Quantization"
   maxc: "Max C"

@@ -58,7 +58,6 @@
     colModel: "Model",
     colParams: "Parametre",
     colIntel: "Zekâ Endeksi",
-    colAgenticIdx: "Agentic Endeksi",
     colDevice: "Cihaz",
     colQuant: "Kuantizasyon",
     colTps: "TPS",
@@ -142,8 +141,7 @@
     tip: {
       model: "<strong>Model</strong><p>Sunulan büyük dil modeli.</p><p>Bir satır kurulumun tamamını anlatır; bu yüzden aynı model farklı donanım, biçim, engine ya da paralellikle birkaç satırda görünür.</p>",
       params: "<strong>Parametre Sayısı</strong><p>Modelin yayımlanan toplam ağırlık sayısı.</p><p>Uzman karışımı (MoE) modellerde, her token için etkin olan kısım değil toplam gösterilir; çünkü tamamı bellekte tutulur.</p>",
-      intel: "<strong>Zekâ Endeksi</strong><p>Artificial Analysis’in akıl yürütme, kodlama, bilim ve uzun bağlam değerlendirmelerini birleştiren yetenek puanı. Yüksek olan iyidir.</p><p>Bu çalıştırmayı değil modeli tanımlar; bu yüzden modelin her satırı aynı değeri gösterir. Birden fazla akıl yürütme seviyesi puanlanmışsa en yüksek olanı gösterilir; tire, puan yayımlanmadığı anlamına gelir.</p><p>Kaynak: Artificial Analysis.</p>",
-      agenticIdx: "<strong>Agentic Endeksi</strong><p>Artificial Analysis’in agentic çalışma puanı: çok adımlı görevler, araç çağrıları ve gözetim olmadan yolda kalma. Yüksek olan iyidir.</p><p>Modelin ne yapabildiğini ölçer; satırın devamındaki Agentic Kapasitesi ise donanımın kaç kişiye hizmet edebileceğini tahmin eder. Tire, puan yayımlanmadığı anlamına gelir ve burada sık görülür.</p><p>Kaynak: Artificial Analysis.</p>",
+      intel: "<strong>Zekâ Endeksi</strong><p>ai-leaderboard.dev’in 0–100 arası yetenek puanı: %60 agentic kodlama (12 kodlama ve agent benchmark’ı), %40 bilimsel bilgi (7 akıl yürütme, bilim ve bilgi işi benchmark’ı). Yüksek olan iyidir. Modelin test edilmediği benchmark’lar, test edildiklerinden tahmin edilir.</p><p>Bu çalıştırmayı değil modeli tanımlar; bu yüzden modelin her satırı aynı değeri gösterir. Birden fazla akıl yürütme seviyesi puanlanmışsa en yüksek olanı gösterilir; tire, puan bulunmadığı anlamına gelir.</p><p>Kaynak: ai-leaderboard.dev.</p>",
       device: "<strong>Cihaz</strong><p>Çalıştırmanın kullandığı donanım ve modeli birlikte sunan birim sayısı.</p><p>4× DGX Spark, tek bir modeli tek sistem olarak sunan dört makine demektir.</p>",
       quant: "<strong>Kuantizasyon</strong><p>Ağırlıkların saklandığı sayı biçimi.</p><p>Ağırlık başına daha az bit, daha az bellek ve genellikle daha çok hız demektir; kalitede bir miktar risk taşır. BF16 ve FP16 tam hassasiyettir, FP8 ve MXFP8 8 bit, NVFP4, MXFP4, FP4, INT4 ve AWQ 4 bit kullanır.</p>",
       tps: "<strong>TPS — saniyedeki token</strong><p>Seçili eşzamanlılıkta tek bir isteğin yanıtının üretilme hızı. Bir token kabaca bir kelimenin dörtte üçüdür.</p><p>Toplam değil, istek başınadır: C=8'de sekiz isteğin her biri bu hızı alır. 128 tokenlık istem ve yanıtlarla on turun ortalamasıdır. Yüksek olması iyidir.</p>",
@@ -1351,10 +1349,10 @@
     });
   }
 
-  /* Artificial Analysis leaves both indexes null for models it has not scored,
-     and the Agentic Index is null far more often than the Intelligence one.
-     Render that as the same em dash the TP/DP/PP columns use for "not
-     applicable", rather than a 0 that would sort and read as a real score. */
+  /* The Intelligence Index is null for models ai-leaderboard.dev does not
+     track, or has too few scores for. Render that as the same em dash the
+     TP/DP/PP columns use for "not applicable", rather than a 0 that would sort
+     and read as a real score. */
   function idxCell(v) {
     return v == null ? '<span class="bt-muted">—</span>' : fmt(v, 1);
   }
@@ -1380,8 +1378,8 @@
         va = parseParams(a.params); vb = parseParams(b.params);
         if (va === null) va = -1;
         if (vb === null) vb = -1;
-      } else if (sortCol === "intelligence_index" || sortCol === "agentic_index") {
-        /* Null means Artificial Analysis publishes no score, which is not the
+      } else if (sortCol === "intelligence_index") {
+        /* Null means no score is available, which is not the
            same as zero. Sink those rows to the bottom in both directions, so
            flipping the sort never parks the blanks at the top. */
         va = a[sortCol]; vb = b[sortCol];
@@ -1429,7 +1427,6 @@
       { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false, left: true },
       { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true },
       { key: "intelligence_index", label: S.colIntel, t: S.tip.intel, sortable: true, num: true },
-      { key: "agentic_index",  label: S.colAgenticIdx, t: S.tip.agenticIdx, sortable: true, num: true },
       { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false, left: true },
       { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
       { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
@@ -1477,7 +1474,6 @@
       html += '<td class="bt-left">' + escapeHTML(entry.model) + "</td>";
       html += '<td class="bt-num">' + escapeHTML(entry.params) + "</td>";
       html += '<td class="bt-num">' + idxCell(entry.intelligence_index) + "</td>";
-      html += '<td class="bt-num">' + idxCell(entry.agentic_index) + "</td>";
       html += '<td class="bt-left">' + escapeHTML(entry.device) + "</td>";
       html += "<td>" + escapeHTML(entry.quantization) + "</td>";
 

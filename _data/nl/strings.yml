@@ -20,7 +20,7 @@ months: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "august
 # _plugins/visibility.rb, shown in the opened row of the LLM explorer and
 # published in /llms-full.txt. %name% placeholders; numbers arrive formatted.
 sentences:
-  llm_intro: "Elk item hieronder beschrijft één serving-configuratie — een model op één apparaat, in één getalformaat, met één engine en één instelling voor parallellisme en speculatieve decodering — gemeten door OpenZeka met de open-source CordatusAI LLM Benchmark Tool (128 input- en 128 output-tokens, prompts over verschillende onderwerpen, tien rondes op elk gelijktijdigheidsniveau C = 1, 2, 4, 8, 16, 32, 64, gemiddelde waarden). Max C is de hoogste gemeten gelijktijdigheid die aan beide doelen voldoet; de capaciteitscijfers zetten die om in aantallen personen en toetsen die aan het KV-cachegeheugen, waarbij de kleinste van de twee limieten wordt genomen. Capaciteit is een schatting, geen meting, en geen vervanging voor een belastingstest in productie. De waarden van de Intelligence Index en de Agentic Index in de interactieve tabel zijn afkomstig van Artificial Analysis. De capaciteitsschattingen voor chat- en agentisch gebruik zijn de twee uitersten van een bereik: bij gebruik waarin programmeren en agents overheersen, ligt het realistische cijfer dichter bij de agentische schatting, bij eenvoudig vraag-en-antwoordgebruik dichter bij de chatschatting."
+  llm_intro: "Elk item hieronder beschrijft één serving-configuratie — een model op één apparaat, in één getalformaat, met één engine en één instelling voor parallellisme en speculatieve decodering — gemeten door OpenZeka met de open-source CordatusAI LLM Benchmark Tool (128 input- en 128 output-tokens, prompts over verschillende onderwerpen, tien rondes op elk gelijktijdigheidsniveau C = 1, 2, 4, 8, 16, 32, 64, gemiddelde waarden). Max C is de hoogste gemeten gelijktijdigheid die aan beide doelen voldoet; de capaciteitscijfers zetten die om in aantallen personen en toetsen die aan het KV-cachegeheugen, waarbij de kleinste van de twee limieten wordt genomen. Capaciteit is een schatting, geen meting, en geen vervanging voor een belastingstest in productie. De waarden van de Intelligence Index in de interactieve tabel zijn afkomstig van ai-leaderboard.dev. De capaciteitsschattingen voor chat- en agentisch gebruik zijn de twee uitersten van een bereik: bij gebruik waarin programmeren en agents overheersen, ligt het realistische cijfer dichter bij de agentische schatting, bij eenvoudig vraag-en-antwoordgebruik dichter bij de chatschatting."
   llm_run: "In de meting van OpenZeka bereikte %model% (%params% parameters), aangeboden in %quant%-formaat met %engine%%spec% op %device%%par%, met één verzoek een generatiesnelheid van %tps% tok/s per verzoek en een time to first token (TTFT) van %ttft% ms."
   llm_spec: " en speculatieve decodering"
   llm_par: " (%par%)"
@@ -60,11 +60,10 @@ bench_page:
   open_explorer: "Open deze configuratie in de LLM Inference Benchmark Explorer"
   permalink: "Permanente pagina van deze configuratie"
   spec_short: "speculatieve decodering"
-  attribution: "De waarden van Intelligence Index en Agentic Index worden gepubliceerd door <a href=\"https://artificialanalysis.ai\" rel=\"noopener\">Artificial Analysis</a> en worden hier met bronvermelding overgenomen."
+  attribution: "De waarden van de Intelligence Index worden gepubliceerd door <a href=\"https://www.ai-leaderboard.dev\" rel=\"noopener\">ai-leaderboard.dev</a> en worden hier met bronvermelding overgenomen."
   model: "Model"
   params: "Parameters"
   intel: "Intelligence Index"
-  agentic_idx: "Agentic Index"
   device: "Apparaat"
   quant: "Kwantisatie"
   maxc: "Max C"

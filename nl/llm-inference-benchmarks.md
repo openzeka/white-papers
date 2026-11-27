@@ -141,7 +141,7 @@ apparaatfilter, sorteer de overgebleven modellen op vaardigheid of grootte, en
 verfijn met de TPS, TTFT of capaciteit die u nodig hebt.
 
 **"Welk model is capabel genoeg zonder onze limieten te overschrijden?"** Sorteer
-op Intelligence Index, Agentic Index of aantal parameters om een shortlist van
+op Intelligence Index of aantal parameters om een shortlist van
 modellen te maken, en pas daarna uw apparaat- en prestatie-eisen toe. Zo blijft
 het kiezen van een model gescheiden van het dimensioneren van de infrastructuur,
 in plaats van aan te nemen dat het snelste model het meest geschikt is.
@@ -184,19 +184,23 @@ model de volledige prompt leest. Lager is beter.
 mixture-of-experts-model is dit het totaal, niet het deel dat per token actief
 is, omdat alles in het geheugen moet worden gehouden.
 
-**Intelligence Index** en **Agentic Index** — scores voor modelvaardigheid, gepubliceerd door
-[Artificial Analysis](https://artificialanalysis.ai); hoger is beter. De eerste
-combineert evaluaties van redeneren, programmeren, wetenschap en werk met lange
-context; de tweede meet meerstappenwerk met tool calls. Beide beschrijven het
-model, dus elke rij van één model draagt hetzelfde paar, ongeacht de hardware.
-Waar meerdere instellingen voor redeneerinspanning zijn gescoord, wordt de
-hoogste getoond, en een streepje betekent dat er geen score is gepubliceerd. De
-waarden komen uit Intelligence Index v4.3, opgehaald op 28 september 2026. Scores
-uit verschillende indexversies zijn niet vergelijkbaar — v4.2 en v4.3 voegden
-moeilijkere taken toe, waardoor elk model lager scoort dan onder v4.1 — en voor
-sommige oudere modellen is nog geen Agentic Index v4.3 beschikbaar. De Agentic
-Index meet wat het model kan; Agentische capaciteit, verderop in de rij, schat
-hoeveel mensen de hardware kan bedienen.
+**Intelligence Index** — een vaardigheidsscore van
+[ai-leaderboard.dev](https://www.ai-leaderboard.dev), van 0 tot 100; hoger is
+beter. De score bestaat voor 60% uit agentisch programmeren (12 benchmarks voor
+programmeren en agentwerk, zoals Terminal-Bench, DeepSWE en SWE-bench Pro) en
+voor 40% uit wetenschappelijke kennis (7 benchmarks voor redeneren, wetenschap
+en kenniswerk, zoals HLE-Diamond, GPQA Diamond en GDPval). De
+benchmarkresultaten die worden gecombineerd, komen van de uitgevers van de
+benchmarks en van de modelmakers; waar een model niet op een benchmark is
+getest, wordt die score geschat uit de benchmarks waarop het wel is getest. De
+score beschrijft het model, dus elke rij van één model draagt dezelfde waarde,
+ongeacht de hardware. Waar meerdere instellingen voor redeneerinspanning zijn
+gescoord, wordt de hoogste getoond, en een streepje betekent dat er geen score
+beschikbaar is. De waarden worden telkens wanneer er een run wordt toegevoegd
+voor alle modellen opnieuw berekend, uit één momentopname van de gegevens van de
+site en met de methode van de site; ze kunnen daarom afwijken van wat de site
+later toont. De index meet wat het model kan; Agentische capaciteit, verderop in
+de rij, schat hoeveel mensen de hardware kan bedienen.
 
 **Kwantisatie** — het getalformaat waarin de gewichten zijn opgeslagen. Minder
 bits per gewicht betekent minder geheugen en meestal meer snelheid, met enig
@@ -370,8 +374,8 @@ denktijd van gebruikers en de wet van Little.
 <div data-bt-src="/assets/data/benchmarks.json"
      data-bt-logo="/assets/images/benchmark-logo.png"></div>
 
-<p class="bt-attribution">De waarden van Intelligence Index en Agentic Index
-worden gepubliceerd door <a href="https://artificialanalysis.ai" rel="noopener">Artificial Analysis</a>
+<p class="bt-attribution">De waarden van de Intelligence Index
+worden gepubliceerd door <a href="https://www.ai-leaderboard.dev" rel="noopener">ai-leaderboard.dev</a>
 en worden hier met bronvermelding overgenomen. Alle andere kolommen zijn eigen metingen van OpenZeka.</p>
 
 {% include benchmark-jsonld.html kind="llm" %}

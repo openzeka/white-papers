@@ -3,7 +3,6 @@
   "model": "Ripple-65B-Preview",
   "params": "65B",
   "intelligence_index": null,
-  "agentic_index": null,
   "device": "DGX B300",
   "quantization": "NVFP4",
   "engine": "SGLang",

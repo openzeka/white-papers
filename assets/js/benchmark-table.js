@@ -58,7 +58,6 @@
     colModel: "Model",
     colParams: "Parameters",
     colIntel: "Intelligence Index",
-    colAgenticIdx: "Agentic Index",
     colDevice: "Device",
     colQuant: "Quantization",
     colTps: "TPS",
@@ -142,8 +141,7 @@
     tip: {
       model: "<strong>Model</strong><p>The large language model being served.</p><p>A row is a whole deployment, so the same model appears in several rows with different hardware, format, engine or parallelism.</p>",
       params: "<strong>Parameters</strong><p>The model's total number of weights, as published.</p><p>For mixture-of-experts models this is the total, not the part active for each token, because all of it is held in memory.</p>",
-      intel: "<strong>Intelligence Index</strong><p>Artificial Analysis’ capability score, combining evaluations of reasoning, coding, science and long-context work. Higher is better.</p><p>It describes the model, not this run, so every row of the model shows the same value. Where several reasoning-effort settings are scored, the highest is shown; a dash means no score is published.</p><p>Source: Artificial Analysis.</p>",
-      agenticIdx: "<strong>Agentic Index</strong><p>Artificial Analysis’ score for agentic work: multi-step tasks, tool calls and staying on course without supervision. Higher is better.</p><p>It measures what the model can do; Agentic Capacity, further along the row, estimates how many people the hardware can serve. A dash means no score is published, which is common here.</p><p>Source: Artificial Analysis.</p>",
+      intel: "<strong>Intelligence Index</strong><p>A capability score from ai-leaderboard.dev, 0 to 100: 60% agentic coding (12 coding and agent benchmarks) and 40% scientific knowledge (7 reasoning, science and knowledge-work benchmarks). Higher is better. Benchmarks a model has not been tested on are estimated from the ones it has.</p><p>It describes the model, not this run, so every row of the model shows the same value. Where several reasoning-effort settings are scored, the highest is shown; a dash means no score is available.</p><p>Source: ai-leaderboard.dev.</p>",
       device: "<strong>Device</strong><p>The hardware the run used, and how many units served the model together.</p><p>4× DGX Spark means four machines serving one model as a single system.</p>",
       quant: "<strong>Quantization</strong><p>The number format the weights are stored in.</p><p>Fewer bits per weight means less memory and usually more speed, at some risk to quality. BF16 and FP16 are full precision, FP8 and MXFP8 use 8 bits, and NVFP4, MXFP4, FP4, INT4 and AWQ use 4.</p>",
       tps: "<strong>TPS — tokens per second</strong><p>How fast one request’s reply is produced at the selected concurrency. A token is about three quarters of a word.</p><p>Per request, not in total: at C=8, each of the eight requests gets this rate. Mean of ten rounds with 128-token prompts and replies. Higher is better.</p>",
@@ -1351,10 +1349,10 @@
     });
   }
 
-  /* Artificial Analysis leaves both indexes null for models it has not scored,
-     and the Agentic Index is null far more often than the Intelligence one.
-     Render that as the same em dash the TP/DP/PP columns use for "not
-     applicable", rather than a 0 that would sort and read as a real score. */
+  /* The Intelligence Index is null for models ai-leaderboard.dev does not
+     track, or has too few scores for. Render that as the same em dash the
+     TP/DP/PP columns use for "not applicable", rather than a 0 that would sort
+     and read as a real score. */
   function idxCell(v) {
     return v == null ? '<span class="bt-muted">—</span>' : fmt(v, 1);
   }
@@ -1380,8 +1378,8 @@
         va = parseParams(a.params); vb = parseParams(b.params);
         if (va === null) va = -1;
         if (vb === null) vb = -1;
-      } else if (sortCol === "intelligence_index" || sortCol === "agentic_index") {
-        /* Null means Artificial Analysis publishes no score, which is not the
+      } else if (sortCol === "intelligence_index") {
+        /* Null means no score is available, which is not the
            same as zero. Sink those rows to the bottom in both directions, so
            flipping the sort never parks the blanks at the top. */
         va = a[sortCol]; vb = b[sortCol];
@@ -1429,7 +1427,6 @@
       { key: "model",        label: S.colModel,   t: S.tip.model,   sortable: true,  num: false, left: true },
       { key: "params",       label: S.colParams,  t: S.tip.params,  sortable: true,  num: true },
       { key: "intelligence_index", label: S.colIntel, t: S.tip.intel, sortable: true, num: true },
-      { key: "agentic_index",  label: S.colAgenticIdx, t: S.tip.agenticIdx, sortable: true, num: true },
       { key: "device",       label: S.colDevice,  t: S.tip.device,  sortable: true,  num: false, left: true },
       { key: "quantization", label: S.colQuant,   t: S.tip.quant,   sortable: true,  num: false },
       { key: "tps",          label: S.colTps + " @ C=" + c,  t: S.tip.tps,  sortable: true, num: true },
@@ -1477,7 +1474,6 @@
       html += '<td class="bt-left">' + escapeHTML(entry.model) + "</td>";
       html += '<td class="bt-num">' + escapeHTML(entry.params) + "</td>";
       html += '<td class="bt-num">' + idxCell(entry.intelligence_index) + "</td>";
-      html += '<td class="bt-num">' + idxCell(entry.agentic_index) + "</td>";
       html += '<td class="bt-left">' + escapeHTML(entry.device) + "</td>";
       html += "<td>" + escapeHTML(entry.quantization) + "</td>";
 
